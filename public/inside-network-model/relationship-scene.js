@@ -108,7 +108,7 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
    if(n.action){el.type='button';el.onclick=()=>{onSelect(n.action);$('[data-relationship-title]').focus({preventScroll:true});};}
    links.append(el);
   });
-  const description=$('[data-relationship-description]');description.textContent=model.edges.map(e=>`${model.nodes.find(n=>n.key===e.from).label} to ${model.nodes.find(n=>n.key===e.to).label}: ${e.label}; ${e.kind==='association'?'association':e.kind==='traffic'?'permitted service request':e.kind==='manual'?'manual process':e.kind==='pending'?'blocked pending validation':'denied'}.`).join(' ');
+  const description=$('[data-relationship-description]');description.textContent=model.edges.map(e=>`${model.nodes.find(n=>n.key===e.from).label} to ${model.nodes.find(n=>n.key===e.to).label}: ${e.label}; ${e.kind==='association'?'association':e.kind==='traffic'?'permitted service request':e.kind==='manual'?'manual process':e.kind==='pending'?'blocked pending validation':e.kind==='failed'?'permitted, but the connection fails':'denied'}.`).join(' ');
   if(!renderer)return;
   disposeContent();content=new THREE.Group();scene.add(content);
   const grid=new THREE.GridHelper(11,16,'#254457','#163244');grid.position.y=-.02;content.add(grid);

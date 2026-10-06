@@ -60,6 +60,20 @@ export default function InsideTheNetworkPage() {
         </details>
 
         <details>
+          <summary>What if… <span>{network.whatIfs.length} scenarios</span></summary>
+          {network.whatIfs.map(scenario => <section key={scenario.id} className="network-text-process">
+            <h3>{scenario.label}: {scenario.title}</h3>
+            <p>{scenario.caption}</p>
+            <ol>
+              {scenario.steps.map(step => <li key={step.title}>
+                <strong>{step.title}</strong> <span className="network-text-meta">{step.from} → {step.to} · {step.protocol}</span>
+                <p>{step.description}</p>
+              </li>)}
+            </ol>
+          </section>)}
+        </details>
+
+        <details>
           <summary>Protocol reference <span>{network.protocols.length} entries</span></summary>
           <div className="network-text-table">
             <table>

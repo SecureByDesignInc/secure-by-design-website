@@ -8,7 +8,8 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, normalize, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { protocols, scenarios } from '../public/inside-network-model/technical.js';
+import { protocols, scenarios, whatIfs } from '../public/inside-network-model/technical.js';
+import { knowledgeChecks } from '../public/inside-network-model/knowledge-checks.js';
 
 let playwright;
 try { playwright = await import(process.env.PLAYWRIGHT_MODULE || 'playwright'); }
@@ -36,7 +37,7 @@ async function open(viewport, options = {}) {
   // Without WebGL, Three.js and the model log the expected renderer failure to the console.
   if (!options.noWebGL) page.on('console', message => { if (['error', 'warning'].includes(message.type())) problems.push(`${label} console ${message.type()}: ${message.text()}`); });
   page.on('response', response => { if (response.status() >= 400) problems.push(`${label} HTTP ${response.status()}: ${response.url()}`); });
-  await page.goto(url);
+  await page.goto(url + (options.hash || ''));
   await page.waitForTimeout(1500);
   return { context, page };
 }
@@ -53,6 +54,20 @@ try {
       for (let step = 0; step < scenario.steps.length; step++) await page.locator('#steps button').nth(step).click();
       assert.equal(await page.locator('#stepCounter').textContent(), `Step ${scenario.steps.length} of ${scenario.steps.length}`);
     }
+    // Motion and labels follow the policy register.
+    await page.locator('#scenarioButtons button').nth(0).click();await page.locator('#steps button').nth(0).click();
+    assert.equal(await page.locator('#stageKind').textContent(), 'BLOCKED PENDING VALIDATION', 'Pending DHCP relay is shown as blocked');
+    assert.equal(await page.locator('#whatIfButtons button').count(), whatIfs.length);
+    for (let i = 0; i < whatIfs.length; i++) {
+      await page.locator('#whatIfButtons button').nth(i).click();
+      for (let step = 0; step < whatIfs[i].steps.length; step++) await page.locator('#steps button').nth(step).click();
+    }
+    assert.equal(await page.locator('#stageKind').textContent(), 'DENIED BY POLICY', 'Peer remote desktop is denied');
+    // Knowledge check for the web process.
+    await page.locator('#scenarioButtons button').nth(scenarios.findIndex(s => s.id === 'web')).click();
+    await page.locator('#knowledgeCheck summary').click();
+    for (const [i, q] of knowledgeChecks.web.entries()) await page.locator(`input[name="kc-web-${i}"][value="${q.correct}"]`).check();
+    assert.equal(await page.locator('#knowledgeStatus').textContent(), `${knowledgeChecks.web.length} of ${knowledgeChecks.web.length} correct`);
     const systems = await page.locator('#systemSelect option').evaluateAll(options => options.map(option => option.value));
     for (const id of systems) { await page.selectOption('#systemSelect', id); assert((await page.locator('#systemContent h2').textContent()).length > 0); }
     for (let i = 0; i < await page.locator('#vlanLegend button').count(); i++) {
@@ -67,6 +82,22 @@ try {
     const png = await readFile(await download.path());
     assert.equal(png.readUInt32BE(16), 3840, 'Export width'); assert.equal(png.readUInt32BE(20), 2160, 'Export height');
     await page.waitForFunction(() => document.getElementById('toast').textContent === '4K image downloaded');
+    // Record a one-step clip and confirm a real video file downloads.
+    await page.locator('#record').click();
+    await page.selectOption('#clipProcess', String(scenarios.findIndex(s => s.id === 'license')));
+    const [clip] = await Promise.all([page.waitForEvent('download', { timeout: 120000 }), page.locator('#clipStart').click()]);
+    const video = await readFile(await clip.path());
+    assert(video.readUInt32BE(0) === 0x1A45DFA3 || video.toString('latin1', 4, 8) === 'ftyp', 'Clip is a WebM or MP4 file');
+    assert(video.length > 20000, 'Clip contains video frames');
+    await page.waitForFunction(() => /^Clip downloaded/.test(document.getElementById('toast').textContent));
+    assert.equal(await page.evaluate(() => document.body.classList.contains('recording')), false, 'Recording ends after the sequence');
+    await context.close();
+  }
+  // Shareable links open the linked step.
+  {
+    const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2' });
+    assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 3');
+    assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
     await context.close();
   }
   // Mobile layout stays within the viewport.
@@ -90,7 +121,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: ${scenarios.length} processes, every system and VLAN, protocol reference, 4K export, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs, policy-matched motion, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();

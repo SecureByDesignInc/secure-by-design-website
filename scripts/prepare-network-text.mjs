@@ -3,7 +3,7 @@
 import { writeFileSync } from 'node:fs';
 import { inventory } from '../public/inside-network-model/inventory.js';
 import { vlans, buildArchitectureNodes, additionalControls } from '../public/inside-network-model/architecture.js';
-import { scenarios, technical, protocols } from '../public/inside-network-model/technical.js';
+import { scenarios, whatIfs, technical, protocols } from '../public/inside-network-model/technical.js';
 
 const controls = { ...inventory.controls, ...additionalControls };
 const nodes = buildArchitectureNodes(inventory.nodes);
@@ -44,7 +44,7 @@ const segments = vlans.map(vlan => ({
   controls: vlan.controls.map(control),
 }));
 
-const processes = scenarios.map(scenario => ({
+const sequenceText = scenario => ({
   id: scenario.id,
   label: scenario.label,
   title: scenario.title,
@@ -56,11 +56,13 @@ const processes = scenarios.map(scenario => ({
     protocol: step.protocol,
     description: step.description,
   })),
-}));
+});
+const processes = scenarios.map(sequenceText);
+const whatIfText = whatIfs.map(sequenceText);
 
 const reference = protocols.map(([service, transport, meaning]) => ({ service, transport, meaning }));
 
 const offline = systems.filter(system => !vlanFor(system.id)).map(system => system.name);
-const text = { systems, segments, processes, protocols: reference, offline, controlCount: Object.keys(controls).length };
+const text = { systems, segments, processes, whatIfs: whatIfText, protocols: reference, offline, controlCount: Object.keys(controls).length };
 writeFileSync(new URL('../content/inside-the-network.json', import.meta.url), JSON.stringify(text, null, 2) + '\n');
 console.log(`Prepared Inside the Network text: ${systems.length} systems, ${segments.length} VLANs, ${processes.length} traffic processes.`);

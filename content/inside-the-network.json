@@ -1235,6 +1235,89 @@
       ]
     }
   ],
+  "whatIfs": [
+    {
+      "id": "dc-down",
+      "label": "DC01 is down",
+      "title": "One domain controller fails.",
+      "caption": "The client turns to SBD-DC02 for DNS and authentication.",
+      "steps": [
+        {
+          "title": "Query SBD-DC01",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The workstation sends its DNS query to its first configured DNS server. SBD-DC01 is offline, so no reply comes back."
+        },
+        {
+          "title": "Retry with SBD-DC02",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC02",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The client retries with its next configured DNS server. SBD-DC02 also provides DNS for the domain and answers."
+        },
+        {
+          "title": "Authenticate with SBD-DC02",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC02",
+          "protocol": "Kerberos · TCP / UDP 88",
+          "description": "DNS service records list both domain controllers, and the client’s domain controller locator finds SBD-DC02 responding. SBD-DC02’s Key Distribution Center issues the ticket-granting ticket."
+        }
+      ]
+    },
+    {
+      "id": "cert-expired",
+      "label": "Certificate expired",
+      "title": "The browser refuses an expired certificate.",
+      "caption": "Trust checks fail before any application data is sent.",
+      "steps": [
+        {
+          "title": "Resolve the web server",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The browser resolves the web service’s internal name, exactly as on a normal day."
+        },
+        {
+          "title": "Present an expired certificate",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "SBD-WEB01 presents a certificate whose validity period has ended. The browser checks the dates, stops the connection, and shows a certificate error."
+        }
+      ]
+    },
+    {
+      "id": "pc-to-sql",
+      "label": "A PC tries SQL",
+      "title": "Default deny stops a direct database connection.",
+      "caption": "No exception exists for workstation-to-SQL traffic.",
+      "steps": [
+        {
+          "title": "Connect straight to SBD-SQL01",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-SQL01",
+          "protocol": "SQL · TCP 1433",
+          "description": "A workstation tries to reach the database server directly. The core finds no matching exception, so default deny drops the session."
+        }
+      ]
+    },
+    {
+      "id": "peer-rdp",
+      "label": "PC-to-PC remote desktop",
+      "title": "Host firewalls stop lateral movement.",
+      "caption": "One workstation tries remote desktop to another.",
+      "steps": [
+        {
+          "title": "Open remote desktop to another PC",
+          "from": "50 Windows 11 PCs",
+          "to": "50 Windows 11 PCs",
+          "protocol": "RDP · TCP / UDP 3389",
+          "description": "A workstation tries a remote desktop session to a peer on the same VLAN. The destination’s host firewall refuses it."
+        }
+      ]
+    }
+  ],
   "protocols": [
     {
       "service": "DNS",
