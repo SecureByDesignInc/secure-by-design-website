@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Risk Management Framework, Body of Evidence &amp; Authorization to Operate | Secure By Design</title>
+  <link rel="canonical" href="https://securebydesigninc.com/training/rmf/index.html">
+  <meta name="description" content="Apply the Risk Management Framework to the Inside the Network build, develop its Body of Evidence, and prepare its Authorization to Operate package.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307192b'/%3E%3Cpath d='M9 7h14v18H9zM13 12h6m-6 4h6m-6 4h4' fill='none' stroke='%2379dceb' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="../guide-share.css"><script src="../guide-share.js" defer></script>
+  <script defer src="catalog-data.js"></script><script defer src="learning-data.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to learning content</a>
+<header class="site-head">
+  <div class="head-inner">
+    <a class="brand" href="https://securebydesigninc.com/" aria-label="Secure By Design home"><img src="/brand-lock.svg" alt="" width="88" height="88"><span><strong>Secure</strong> By Design<small>EDUCATE. EMPOWER. SECURE THE FUTURE.</small></span></a>
+    <div class="edition"><span class="review-label">TRAINING CATALOG</span><span>Training catalog · Edition 1.0</span></div>
+  </div>
+</header>
+<section class="intro" aria-labelledby="course-title">
+  <div class="intro-inner">
+    <div><p class="eyebrow">FROM THE NETWORK BUILD TO AUTHORIZATION</p><h1 id="course-title">Risk Management Framework,<br>Body of Evidence &amp;<br>Authorization to Operate.</h1><p class="intro-copy">The previous training grows with the steps used to build <a href="/inside-the-network">Inside the Network</a>. This course follows that same system: apply the framework, develop its evidence, and prepare its authorization package.</p></div>
+    <div class="course-facts"><div><strong>12</strong><span>modules</span></div><div><strong>36</strong><span>lesson topics</span></div><div><strong>24<span>h</span></strong><span>estimated study</span></div><p>Learn how to prepare the network for assessment and an Authorizing Official’s decision, then maintain its evidence through continuous monitoring.</p><a class="download-link" href="Secure_By_Design_RMF_Training_Catalog.docx" download>Download the full catalog</a></div>
+  </div>
+</section>
+<nav class="section-nav" aria-label="Training sections"><div>
+  <a href="#catalog" data-view="catalog">Learning catalog</a><a href="#evidence" data-view="evidence">Body of Evidence</a><a href="#capstone" data-view="capstone">Authorization to Operate capstone</a><a href="#sources" data-view="sources">Source documents</a>
+</div></nav>
+<main id="main" tabindex="-1"></main>
+<aside id="learning-share-note" class="training-end-note" data-learning-share aria-label="Pass your learning on" hidden></aside>
+<footer><div><strong>Secure By Design</strong><span>Risk Management Framework training · October 2026</span></div><p>RMF lessons, evidence examples, and authorization package practice. Exercise records are fictional.</p><a href="/videos#episode-library">Back to the Training Library</a></footer>
+<div id="status" role="status" aria-live="polite" class="sr-only"></div>
+<noscript><p class="no-script">Enable JavaScript to explore the modules and evidence examples. You can also <a href="Secure_By_Design_RMF_Training_Catalog.docx">download the complete Word catalog</a>.</p></noscript>
+<script src="/training/account-progress.js" defer></script></body></html>

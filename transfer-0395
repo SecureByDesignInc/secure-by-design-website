@@ -1,0 +1,67 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {inventory} from '../public/inside-network-model/inventory.js';
+import {vlans,buildArchitectureNodes,additionalControls,facilities} from '../public/inside-network-model/architecture.js';
+import {scenarios} from '../public/inside-network-model/technical.js';
+import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
+import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances} from '../public/inside-network-model/security.js';
+
+const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
+const controls={...inventory.controls,...additionalControls};
+assert.equal(byId.size,nodes.length,'System IDs must be unique');
+assert.equal(vlans.length,8);
+const memberships=vlans.flatMap(v=>v.ids);
+assert.equal(new Set(memberships).size,memberships.length,'Each system has one VLAN');
+const addresses=new Set();
+for(const v of vlans)for(const id of v.ids){
+ const n=byId.get(id);assert(n,`Unknown system ${id}`);
+ assert.equal(n.zone,v.id);assert(n.address.startsWith(`10.0.${v.number}.`));
+ assert(!addresses.has(n.address),'Duplicate address');addresses.add(n.address);
+}
+assert(!memberships.includes('root'),'Offline root cannot belong to a routed VLAN');
+assert.equal(byId.get('root').address,null);
+assert.equal(byId.get('workstations').zone,'v80');
+assert.equal(byId.get('workstations').address,'10.0.80.100–149');
+for(const item of [...nodes,...vlans,...facilities])for(const id of item.controls)assert(controls[id],`Unknown control ${id}`);
+for(const scenario of scenarios){
+ for(const id of scenario.dependencies)assert(byId.has(id));
+ for(const step of scenario.steps){
+  assert(byId.has(step.to));if(step.from)assert(byId.has(step.from));
+  if(step.to==='root'||step.from==='root')assert(step.manual,'No packets to the offline root');
+ }
+}
+const html=readFileSync(new URL('../public/inside-network-model/model.html',import.meta.url),'utf8');
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size,'Unique UI targets');
+console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences, and offline-root isolation.`);
+const designIds=new Set([...byId.keys(),...facilities.map(f=>f.id)]);
+for(const p of securityPractices){for(const id of p.ids)assert(designIds.has(id));for(const c of p.controls)assert(controls[c],`Unknown security control ${c}`);assert(p.tests.length&&p.evidence.length);}
+for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id),`Unknown policy endpoint ${id}`);
+assert.equal(new Set(trafficRules.map(r=>r.id)).size,trafficRules.length);
+for(const id of singleInstances)assert.equal(nodes.filter(n=>n.id===id).length,1);
+assert.equal(evaluateFlow('workstations','fs','SMB').status,'permit');
+assert.equal(evaluateFlow('workstations','workstations','SMB').status,'deny');
+assert.equal(evaluateFlow('workstations','workstations','RDP').status,'deny');
+assert.equal(evaluateFlow('workstations','sql','SQL').status,'deny');
+assert.equal(evaluateFlow('web','sql','SQL').status,'pending');
+assert.equal(evaluateFlow('jump2','dc1','Management').status,'deny');
+assert.equal(evaluateFlow('jump','workstations','Management').status,'deny');
+assert.equal(evaluateFlow('jump1','dc1','Management').status,'deny');
+assert(!adminMatrix.find(r=>r.id==='servers').targets.includes('audit'));
+for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
+console.log('Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.');
+
+const room=dataCenterLayout(vlans),positions=new Set();
+assert.deepEqual(new Set(room.flatMap(zone=>zone.ids)),new Set(memberships),'Every networked system appears in the data center');
+for(const zone of room){
+ assert(zone.ids.length<=(zone.kind==='rack'?4:50),'Equipment fits its cabinet');
+ for(const [index,id]of zone.ids.entries()){
+  const point=equipmentPosition(zone,index);
+  assert(point.every(Number.isFinite),`Valid equipment position for ${id}`);
+  assert(point.every((value,axis)=>value>=roomBounds.min[axis]&&value<=roomBounds.max[axis]),`${id} stays inside the room`);
+  assert(!positions.has(point.join(',')),`No overlapping equipment for ${id}`);positions.add(point.join(','));
+ }
+}
+assert(!room.some(zone=>zone.ids.includes('root')),'Offline root is outside the cabled rack layout');
+assert(offlinePosition[0]>Math.max(...room.filter(zone=>zone.kind==='rack').map(zone=>zone.x+zone.w/2)),'Offline root stays separate from the server racks');
+for(const id of ['core','media','backup'])assert(facilityPositions[id]?.every(Number.isFinite));
+console.log('Data-center checks passed: all systems represented, distinct equipment positions, valid room bounds, and a separate offline bay.');

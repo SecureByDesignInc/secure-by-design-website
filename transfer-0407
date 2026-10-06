@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Community | Secure By Design</title>
+    <meta
+      name="description"
+      content="Talk about your career, discover cybersecurity resources, or contribute to the community."
+    />
+    <link rel="icon" href="/brand-lock.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/career.css" />
+    <link rel="stylesheet" href="/career-shell.css" />
+  <script defer src="/social-analytics.js"></script><script defer src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"></script></head>
+  <body class="site-editorial career-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header container">
+      <div class="site-header-identity">
+        <a href="/" class="brand" aria-label="Secure By Design home"
+          ><img
+            class="brand-logo"
+            src="/brand-lock.svg"
+            width="72"
+            height="72"
+            alt=""
+          /><span class="brand-wordmark"
+            ><span><strong>Secure</strong> By Design</span
+            ><small>Educate. Empower. Secure the future.</small></span
+          ></a
+        >
+        <div class="header-connect"><section class="header-app-stores" aria-label="App availability"><div class="app-store-heading"><strong>App availability</strong></div><div class="app-store-badges"><div class="app-store-item app-store-app-store"><button class="app-store-badge" type="button" disabled aria-disabled="true" aria-label="App Store for iPhone &amp; iPad — Invitation-only testing; public App Store release coming soon"><img src="/app-stores/app-store.svg" alt="App Store" height="40"></button><span>iPhone &amp; iPad</span><small class="app-store-availability" title="Invitation-only testing; public App Store release coming soon">iOS beta · TestFlight</small></div><div class="app-store-item app-store-google-play"><button class="app-store-badge" type="button" disabled aria-disabled="true" aria-label="Google Play for Android — Public Google Play release coming soon"><img src="/app-stores/google-play.png" alt="Google Play" height="40"></button><span>Android</span><small class="app-store-availability" title="Public Google Play release coming soon">Coming soon</small></div></div></section><nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along</span><div><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=YouTube plausible-event-placement=header" href="https://www.youtube.com/channel/UCItxo3KJms-IuQKdFzFXqRg" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on YouTube (opens in a new tab)"><img class="header-social-icon" src="/social/youtube-sbd.svg" width="22" height="22" alt="">YouTube</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=TikTok plausible-event-placement=header" href="https://www.tiktok.com/@jon_sbd" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on TikTok (opens in a new tab)"><img class="header-social-icon" src="/social/tiktok-sbd.svg" width="22" height="22" alt="">TikTok</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=Instagram plausible-event-placement=header" href="https://www.instagram.com/securebydesigninc/" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on Instagram (opens in a new tab)"><img class="header-social-icon" src="/social/instagram-sbd.svg" width="22" height="22" alt="">Instagram</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=Discord plausible-event-placement=header" href="https://discord.gg/MDrGbP4cAY" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on Discord (opens in a new tab)"><img class="header-social-icon" src="/social/discord-sbd.svg" width="22" height="22" alt="">Discord</a></div></nav></div>
+      </div>
+      <nav aria-label="Main navigation"><a href="/" class="nav-link">Home</a><a href="/inside-the-network" class="nav-link">Inside the Network</a><a href="/videos" class="nav-link">Training Library</a><a href="/careers" class="nav-link" aria-current="page">Community</a><a href="/cyber-range" class="nav-link">Cyber Range</a><a href="/my-progress" class="nav-link">My Account</a></nav>
+    </header>
+    <main id="main" class="career-hub">
+      <div class="career-intro">
+        <div class="eyebrow">COMMUNITY / CHOOSE HOW TO TAKE PART</div>
+        <h1>Bring your questions.<br />Bring what you’ve learned.</h1>
+        <p class="intro">
+          Community can mean getting help, finding the right resource, or making
+          the path easier for someone else. Start with what you need—or what
+          you’re ready to share.
+        </p>
+      </div>
+      <p class="community-path-intro">
+        Choose a path. Each space has its own purpose, and the hub can grow as
+        new ways to participate become available.
+      </p>
+      <nav class="career-tabs" aria-label="Community paths">
+        <a
+          href="#goals"
+          id="career-goals-link"
+          data-community-panel="goals-panel"
+          aria-current="page"
+        >
+          <span>PATH 01</span>
+          <b>Career Goals &amp; Support</b>
+          <small>Turn where you are into a useful next step.</small>
+        </a>
+        <a
+          href="#resources"
+          id="resource-link"
+          data-community-panel="resource-panel"
+        >
+          <span>PATH 02</span>
+          <b>Cybersecurity Resources</b>
+          <small>Find practical material worth your time.</small>
+        </a>
+        <a
+          href="#contribute"
+          id="contribute-link"
+          data-community-panel="contribute-panel"
+        >
+          <span>PATH 03</span>
+          <b>Share What You Know</b>
+          <small>Contribute a resource, lesson, or idea.</small>
+        </a>
+      </nav>
+      <section id="goals-panel" aria-labelledby="goals-heading">
+        <div class="resource-copy">
+          <h2 id="goals-heading">Start with what you want to work toward</h2>
+          <p>
+            You do not need a finished career plan. Capture where you would like
+            to go, what kind of help would be useful, and the next step you are
+            considering—even if your answer is “I’m not sure yet.”
+          </p>
+          <p class="small">
+            Your answers remain private until you choose to send them to Secure
+            By Design.
+          </p>
+        </div>
+        <div class="form-section community-goals-card">
+          <div class="eyebrow">CAREER WORKSHEET</div>
+          <h2>Put your goals into words.</h2>
+          <p>
+            Build a short worksheet you can review, download, print, or use to
+            start a career conversation.
+          </p>
+          <ul>
+            <li>Describe the direction you are considering.</li>
+            <li>Identify the help or clarity you need.</li>
+            <li>Choose whether to keep it or request support.</li>
+          </ul>
+          <a class="community-primary-link" href="/career-goals"
+            >Open the career worksheet <span aria-hidden="true">→</span></a
+          >
+        </div>
+      </section>
+      <section
+        id="resource-panel"
+        aria-labelledby="resource-heading"
+        hidden
+      >
+        <div class="resource-copy">
+          <h2 id="resource-heading">Cybersecurity resources worth your time</h2>
+          <p><a href="/career-explorer/roles">Explore the career role directory →</a> Understand the work, skills, and qualification options across 58 roles.</p>
+          <p>
+            Sign up for resources selected by Secure By Design, with a short
+            note about why they’re worth a look. Expect links to guides, tools,
+            and learning material that can help you keep building your
+            knowledge.
+          </p>
+          <p class="small">
+            You don’t need to book a career conversation to join. Resource
+            emails arrive when there’s something useful to share.
+          </p>
+        </div>
+        <form id="resource-form" class="form-section">
+          <div class="resource-fields">
+            <div class="form-field">
+              <label for="resource-name"
+                >Name <span class="optional-label">(optional)</span></label
+              ><input
+                id="resource-name"
+                name="resourceName"
+                autocomplete="given-name"
+                maxlength="120"
+              />
+            </div>
+            <div class="form-field">
+              <label for="resource-email">Email address</label
+              ><input
+                id="resource-email"
+                name="resourceEmail"
+                type="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+              />
+            </div>
+          </div>
+          <div class="website-field" aria-hidden="true">
+            <label for="resource-website">Website</label
+            ><input
+              id="resource-website"
+              name="resourceWebsite"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+          <label class="acknowledgement"
+            ><input type="checkbox" name="resourceConsent" required /><span
+              >I would like to receive cybersecurity resources from Secure By
+              Design. I can unsubscribe at any time.</span
+            ></label
+          >
+          <p class="small">
+            Submitting your email automatically enrolls you in Community. No payment details required.
+            Secure By Design keeps your name, email address, and signup
+            preferences for this resource list. Confirm your email to receive resource emails. This
+            won’t create a career conversation record.
+          </p>
+          <button type="submit">Send my confirmation email</button>
+          <p id="resource-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+      <section
+        id="contribute-panel"
+        aria-labelledby="contribute-heading"
+        hidden
+      >
+        <div class="resource-copy">
+          <h2 id="contribute-heading">Share something that helped you</h2>
+          <p>
+            A helpful guide, a lesson from your work, or an idea for an article
+            can make a difference to someone else. Share what you’ve learned or
+            suggest a way to contribute.
+          </p>
+          <p class="small">
+            Submissions stay private during review. Secure By Design may follow
+            up with you before sharing a contribution publicly.
+          </p>
+          <p class="small">
+            Sharing here won’t sign you up for resource emails or create a
+            career conversation record.
+          </p>
+        </div>
+        <form id="contribution-form" class="form-section">
+          <div class="resource-fields">
+            <div class="form-field">
+              <label for="contributor-name">Name</label
+              ><input
+                id="contributor-name"
+                name="name"
+                autocomplete="name"
+                maxlength="120"
+                required
+              />
+            </div>
+            <div class="form-field">
+              <label for="contributor-email">Email address</label
+              ><input
+                id="contributor-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="contribution-kind"
+              >How would you like to contribute?</label
+            ><select id="contribution-kind" name="kind">
+              <option value="resource">Share a useful resource</option>
+              <option value="article">
+                Offer an article or practical experience
+              </option>
+              <option value="other">Suggest another way to help</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="contribution-url"
+              >Resource link
+              <span id="contribution-url-hint" class="optional-label"
+                >(required for a resource)</span
+              ></label
+            ><input
+              id="contribution-url"
+              name="resourceUrl"
+              type="url"
+              placeholder="https://"
+              maxlength="2000"
+              aria-describedby="contribution-url-hint"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label for="contribution-message">Tell us about it</label>
+            <p class="hint" id="contribution-message-hint">
+              What would you like to share, and who could it help? If it’s your
+              work or you’re connected to it, include that context.
+            </p>
+            <textarea
+              id="contribution-message"
+              name="message"
+              rows="5"
+              maxlength="5000"
+              aria-describedby="contribution-message-hint"
+              required
+            ></textarea>
+          </div>
+          <div class="website-field" aria-hidden="true">
+            <label for="contribution-website">Website</label
+            ><input
+              id="contribution-website"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+          <label class="acknowledgement"
+            ><input name="consent" type="checkbox" required /><span
+              >Secure By Design may keep my submission and contact details to
+              review my contribution and contact me about it.</span
+            ></label
+          ><p class="small">Submitting your email automatically enrolls you in Community. No payment details required.</p><button type="submit">Send my contribution</button>
+          <p id="contribution-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+    <footer class="site-footer container"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a><div class="footer-partners" role="group" aria-label="Partner programs"><span class="footer-partner"><span class="footer-partner-logo"><img src="/partners/tenable-light.svg" width="154" height="53" alt=""></span><span class="footer-partner-name">Tenable Partner</span></span><span class="footer-partner"><span class="footer-partner-logo"><img src="/partners/red-hat-light.svg" width="613" height="145" alt=""></span><span class="footer-partner-name">Red Hat Partner</span></span></div><div class="footer-actions"><a href="/#about">About Secure By Design</a><div class="footer-share" data-footer-share>
+    <button type="button" class="footer-share-button" data-share-action title="Share Secure By Design">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+      Pass it on
+    </button>
+    <output class="footer-share-status" aria-live="polite" aria-atomic="true"></output>
+    <div class="footer-share-manual" hidden>
+      <label for="footer-share-link">Secure By Design homepage</label>
+      <input id="footer-share-link" type="text" readonly>
+      <button type="button" class="footer-share-button" data-copy-action>Copy link</button>
+    </div>
+  </div></div></footer>
+    <script type="module" src="/resource-signup.js"></script>
+    <script type="module" src="/community-contribution.js"></script>
+  <script type="module" src="/footer-share-boot.mjs"></script></body>
+</html>

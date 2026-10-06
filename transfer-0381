@@ -1,0 +1,75 @@
+{
+  "package": "Secure By Design DC01 DC02 learning companion",
+  "version": "0.3.0",
+  "entryPoint": "index.html",
+  "copyrightOwner": "Secure By Design Team LLC",
+  "copyrightYear": 2026,
+  "materialsEdition": "0.3",
+  "updated": "2026-10-04",
+  "components": {
+    "interactiveLesson": {
+      "version": "0.1.0"
+    },
+    "workbook": {
+      "edition": "Materials edition 0.3",
+      "pages": 12
+    }
+  },
+  "files": [
+    {
+      "name": "index.html",
+      "bytes": 3327536,
+      "sha256": "66536a3184fc3c64473aa44b4d3073a9b56e5219611c7e90940f903a761b0572"
+    },
+    {
+      "name": "lesson.json",
+      "bytes": 28887,
+      "sha256": "c61a2f6b461a688d4fe8d5a90856b90362755260d65e69e9dda7c555ff065d67"
+    },
+    {
+      "name": "SecureByDesign-DC01-DC02-Workbook.docx",
+      "bytes": 313098,
+      "sha256": "1cab4ca47e0dfe6fae1a879c07d434e4d4d59af6641d97720315454b9536e9bf"
+    },
+    {
+      "name": "SecureByDesign-DC01-DC02-Workbook.pdf",
+      "bytes": 256137,
+      "sha256": "6ce5f43b9ab5ff85393da5ba30a610fb2e8a858e8c469daab74a9f8956a6395f"
+    },
+    {
+      "name": "START-HERE.txt",
+      "bytes": 3013,
+      "sha256": "20fd03bab83535e3fdc6a95f405c995bf10f33a5dec1a13fc2139c0394f04c85"
+    },
+    {
+      "name": "THREE-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "name": "Verification-Commands.txt",
+      "bytes": 2535,
+      "sha256": "1c875d8ab2d94849ff24eec8c8e581911afed58e432a854fe0eaf24cef5b7060"
+    },
+    {
+      "name": "notices.html",
+      "bytes": 3997,
+      "sha256": "e2c01c2cc31716574091634518a1b8388ad649bdef504fa6ec217392808eb845"
+    },
+    {
+      "name": "account-progress.js",
+      "bytes": 4249,
+      "sha256": "ebfd6b40e8f3c3ac1ab4bacb07c5bdab7d2402e7efe45b1722f459fdae79e7c9"
+    },
+    {
+      "name": "guide-share.js",
+      "bytes": 3739,
+      "sha256": "f11caad4bf7e4b5fe674dc61861716a03d06e90d1e3c62dd0a64aa9a0fdf8949"
+    },
+    {
+      "name": "guide-share.css",
+      "bytes": 1947,
+      "sha256": "73a0cd255443e848da9254c8c07fb51cf33d4b516dee4b2e3c1425986f604f37"
+    }
+  ]
+}

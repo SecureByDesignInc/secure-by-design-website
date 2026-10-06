@@ -1,0 +1,197 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Career Explorer | Secure By Design</title><meta name="description" content="Find your cybersecurity direction and compare jobs, salaries, outlook, and resources by state."><link rel="icon" href="/brand-lock.svg" type="image/svg+xml"><link rel="stylesheet" href="/career-shell.css"><link rel="stylesheet" href="/career-explorer/explorer.css"><script defer src="/social-analytics.js"></script><script defer src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"></script></head><body class="site-editorial career-explorer-page"><a class="skip-link" href="#main">Skip to content</a><header class="site-header container"><div class="site-header-identity"><a href="/" class="brand" aria-label="Secure By Design home"><img class="brand-logo" src="/brand-lock.svg" width="72" height="72" alt=""><span class="brand-wordmark"><span><strong>Secure</strong> By Design</span><small>Educate. Empower. Secure the future.</small></span></a><div class="header-connect"><section class="header-app-stores" aria-label="App availability"><div class="app-store-heading"><strong>App availability</strong></div><div class="app-store-badges"><div class="app-store-item app-store-app-store"><button class="app-store-badge" type="button" disabled aria-disabled="true" aria-label="App Store for iPhone &amp; iPad — Invitation-only testing; public App Store release coming soon"><img src="/app-stores/app-store.svg" alt="App Store" height="40"></button><span>iPhone &amp; iPad</span><small class="app-store-availability" title="Invitation-only testing; public App Store release coming soon">iOS beta · TestFlight</small></div><div class="app-store-item app-store-google-play"><button class="app-store-badge" type="button" disabled aria-disabled="true" aria-label="Google Play for Android — Public Google Play release coming soon"><img src="/app-stores/google-play.png" alt="Google Play" height="40"></button><span>Android</span><small class="app-store-availability" title="Public Google Play release coming soon">Coming soon</small></div></div></section><nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along</span><div><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=YouTube plausible-event-placement=header" href="https://www.youtube.com/channel/UCItxo3KJms-IuQKdFzFXqRg" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on YouTube (opens in a new tab)"><img class="header-social-icon" src="/social/youtube-sbd.svg" width="22" height="22" alt="">YouTube</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=TikTok plausible-event-placement=header" href="https://www.tiktok.com/@jon_sbd" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on TikTok (opens in a new tab)"><img class="header-social-icon" src="/social/tiktok-sbd.svg" width="22" height="22" alt="">TikTok</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=Instagram plausible-event-placement=header" href="https://www.instagram.com/securebydesigninc/" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on Instagram (opens in a new tab)"><img class="header-social-icon" src="/social/instagram-sbd.svg" width="22" height="22" alt="">Instagram</a><a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=Discord plausible-event-placement=header" href="https://discord.gg/MDrGbP4cAY" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on Discord (opens in a new tab)"><img class="header-social-icon" src="/social/discord-sbd.svg" width="22" height="22" alt="">Discord</a></div></nav></div></div><nav aria-label="Main navigation"><a href="/" class="nav-link">Home</a><a href="/inside-the-network" class="nav-link">Inside the Network</a><a href="/videos" class="nav-link">Training Library</a><a href="/careers" class="nav-link" aria-current="page">Community</a><a href="/cyber-range" class="nav-link">Cyber Range</a><a href="/my-progress" class="nav-link">My Account</a></nav></header><main id="main" class="career-explorer-content">
+    <section class="role-directory-intro" aria-labelledby="role-directory-title"><div><span>EXPLORE THE WORK</span><h1 id="role-directory-title">Find the role that interests you.</h1><p>Explore 58 cybersecurity and technology roles, with responsibilities, skills, and qualification options.</p></div><a href="/career-explorer/roles">Browse the role directory →</a></section>
+    <section class="journey-section direction-section" id="direction" aria-labelledby="direction-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-number">01</span>
+          <h2 id="direction-title">Find your direction.</h2>
+        </div>
+        <p>Start with your current situation—or compare the work itself.</p>
+      </div>
+
+      <div class="direction-switch" role="tablist" aria-label="Choose how to find your direction">
+        <button class="direction-tab active" id="journey-view-tab" role="tab" aria-selected="true" aria-controls="journey-view" data-direction-view="journey-view">
+          <span>PATH 01</span><b>Where am I now?</b><small>Get next steps for your current stage.</small>
+        </button>
+        <button class="direction-tab" id="careers-view-tab" role="tab" aria-selected="false" aria-controls="careers-view" data-direction-view="careers-view">
+          <span>PATH 02</span><b>Which work fits me?</b><small>Compare career families before choosing.</small>
+        </button>
+      </div>
+
+      <div class="direction-view active" id="journey-view" role="tabpanel" aria-labelledby="journey-view-tab">
+        <div class="view-heading">
+          <span>START WITH YOUR SITUATION</span>
+          <div><h3>Where are you in your journey?</h3><p>Choose the statement that sounds most like you. Your selection opens a focused plan, realistic practice, and a readiness check.</p></div>
+        </div>
+        <div class="journey-layout">
+        <div class="stage-list" role="tablist" aria-label="Cybersecurity journey stages">
+          <button class="stage active" role="tab" aria-selected="true" aria-controls="stage-panel" data-stage="exploring">
+            <span class="stage-index">01</span><span><b>I’m exploring cybersecurity</b><small>I want to know if this industry fits me.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="stage" role="tab" aria-selected="false" aria-controls="stage-panel" data-stage="choosing">
+            <span class="stage-index">02</span><span><b>I don’t know which role fits</b><small>I need to understand the career paths.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="stage" role="tab" aria-selected="false" aria-controls="stage-panel" data-stage="learning">
+            <span class="stage-index">03</span><span><b>I’m ready to start learning</b><small>I need a roadmap, not random courses.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="stage" role="tab" aria-selected="false" aria-controls="stage-panel" data-stage="experience">
+            <span class="stage-index">04</span><span><b>I need hands-on experience</b><small>I want projects that resemble real work.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="stage" role="tab" aria-selected="false" aria-controls="stage-panel" data-stage="applying">
+            <span class="stage-index">05</span><span><b>I’m preparing to apply</b><small>I want to prove I can do the job.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="stage" role="tab" aria-selected="false" aria-controls="stage-panel" data-stage="newjob">
+            <span class="stage-index">06</span><span><b>I just landed my first role</b><small>I want a strong first 90 days.</small></span><span class="stage-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <article class="stage-panel" id="stage-panel" role="tabpanel" tabindex="0" aria-live="polite">
+          <header class="panel-intro">
+            <div class="panel-kicker" id="panel-kicker">Your starting point</div>
+            <h3 id="panel-title">Explore the work before choosing the path.</h3>
+            <p class="panel-summary" id="panel-summary">Cybersecurity is a collection of very different jobs. Start by understanding the problems security teams solve and what the work feels like day to day.</p>
+            <div class="stage-meta" aria-label="Stage details">
+              <span><small>ESTIMATED FOCUS</small><b id="panel-duration">2–4 weeks</b></span>
+              <span><small>YOU ARE READY WHEN</small><b id="panel-outcome">You can choose what to explore next</b></span>
+            </div>
+          </header>
+          <div class="depth-tabs" role="tablist" aria-label="Selected stage details">
+            <button class="depth-tab active" role="tab" aria-selected="true" data-view="focus">What to figure out</button>
+            <button class="depth-tab" role="tab" aria-selected="false" data-view="plan">Your action plan</button>
+            <button class="depth-tab" role="tab" aria-selected="false" data-view="practice">See the real work</button>
+            <button class="depth-tab" role="tab" aria-selected="false" data-view="ready">Am I ready?</button>
+          </div>
+          <div class="depth-view" id="depth-view"></div>
+          <div class="resource-strip">
+            <span>Useful at this stage</span>
+            <div id="panel-resources"></div>
+          </div>
+        </article>
+        </div>
+      </div>
+
+      <div class="direction-view careers-view" id="careers-view" role="tabpanel" aria-labelledby="careers-view-tab" hidden>
+        <div class="view-heading">
+          <span>START WITH THE WORK</span>
+          <div><h3>What kind of problems do you want to solve?</h3><p>Compare the daily work, foundations, progression, tools, and proof-of-work for four major career families.</p></div>
+        </div>
+        <div class="role-family-tabs" role="tablist" aria-label="Cybersecurity career families">
+          <button class="role-family active" role="tab" aria-selected="true" data-family="operations"><span>DEFEND</span><b>Security Operations</b><small>Investigate and respond</small></button>
+          <button class="role-family" role="tab" aria-selected="false" data-family="engineering"><span>BUILD</span><b>Security Engineering</b><small>Design and operate</small></button>
+          <button class="role-family" role="tab" aria-selected="false" data-family="offensive"><span>ASSESS</span><b>Offensive &amp; Testing</b><small>Find and prove weaknesses</small></button>
+          <button class="role-family" role="tab" aria-selected="false" data-family="grc"><span>GOVERN</span><b>Risk &amp; Compliance</b><small>Translate and assure</small></button>
+        </div>
+        <article class="role-detail" id="role-detail" role="tabpanel" aria-live="polite">
+          <header class="role-detail-head">
+            <div><span class="role-code" id="role-code">DEFEND</span><h3 id="role-title">Security Operations</h3><p id="role-summary"></p></div>
+            <div class="role-title-list"><span>COMMON TITLES</span><p id="role-titles"></p></div>
+          </header>
+          <div class="role-facts" id="role-facts"></div>
+          <div class="role-body-grid">
+            <section><span class="role-label">What the work actually includes</span><ul class="role-list" id="role-work"></ul></section>
+            <section><span class="role-label">Foundations employers expect</span><ul class="role-list skill-list" id="role-foundations"></ul></section>
+          </div>
+          <section class="role-progression">
+            <div class="role-subhead"><span class="role-label">A realistic progression</span><p>Not every career is linear. This shows one common route—not a mandatory sequence.</p></div>
+            <ol id="role-path"></ol>
+          </section>
+          <div class="role-lower-grid">
+            <section class="role-tools"><span class="role-label">Technology categories you’ll encounter</span><div id="role-tools"></div><p>Learn what each category does before memorizing individual products.</p></section>
+            <section class="role-fit"><span class="role-label">Questions to test your fit</span><ul id="role-fit"></ul></section>
+          </div>
+          <section class="role-simulation">
+            <div><span class="role-label">Try the work before committing</span><h4 id="simulation-title"></h4><p id="simulation-copy"></p></div>
+            <div class="simulation-output"><span>BUILD THIS EVIDENCE</span><b id="simulation-output"></b></div>
+          </section>
+        </article>
+        <div class="role-caution">
+          <b>A note about “entry level”</b>
+          <p>Entry level describes your experience in a security specialty—not always your experience with technology. Support, systems administration, networking, software, audit, and military experience can all be valid feeder paths.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="market-section" id="market" aria-labelledby="market-title">
+      <div class="section-heading market-heading">
+        <div><span class="section-number">02</span><h2 id="market-title">What does the market look like where you live?</h2></div>
+        <p>Compare employment and pay by state—then use the numbers to ask better career questions.</p>
+      </div>
+      <div class="market-controls">
+        <label><span>STATE OR DISTRICT</span><select id="state-select" aria-label="Choose a state"></select></label>
+        <label><span>OCCUPATION</span><select id="occupation-select" aria-label="Choose an occupation"></select></label>
+        <div class="data-date"><span class="data-dot"></span><div><b>Official estimate</b><small id="data-period">May 2025 OEWS</small></div></div>
+      </div>
+
+      <div class="market-dashboard" id="market-dashboard">
+        <header class="market-result-head">
+          <div><span class="mini-label" id="market-family">Security operations &amp; analysis</span><h3><span id="market-state">Utah</span> · <span id="market-role">Information Security Analyst</span></h3><p id="market-titles">Related titles: SOC Analyst · Cybersecurity Analyst · Vulnerability Analyst</p></div>
+          <div class="market-signal"><span>MARKET SIGNAL</span><b id="market-signal">Near national concentration</b></div>
+        </header>
+
+        <div class="metric-grid">
+          <article><span>MEDIAN ANNUAL PAY</span><strong id="metric-median">—</strong><small id="metric-median-compare">State estimate</small></article>
+          <article><span>ESTIMATED EMPLOYMENT</span><strong id="metric-employment">—</strong><small>Workers, not open postings</small></article>
+          <article><span>JOBS PER 1,000</span><strong id="metric-density">—</strong><small>Across the state workforce</small></article>
+          <article><span>LOCATION QUOTIENT</span><strong id="metric-lq">—</strong><small>1.00 equals U.S. concentration</small></article>
+        </div>
+
+        <div class="career-context-grid">
+          <article class="outlook-card">
+            <div><span class="mini-label">State outlook</span><h4 id="projection-period">Long-term projection</h4></div>
+            <div class="outlook-numbers"><span><strong id="projection-growth">—</strong><small>Projected growth</small></span><span><strong id="annual-openings">—</strong><small>Average annual openings</small></span><span><strong id="projected-jobs">—</strong><small>Projected employment</small></span></div>
+            <p>Annual openings include growth and replacement needs. They are projections—not current advertisements.</p>
+          </article>
+          <article class="buying-power-card">
+            <div><span class="mini-label">Cost-of-living context</span><h4>What the median may buy locally</h4></div>
+            <div class="buying-power-number"><strong id="real-median">—</strong><span>National-price equivalent</span></div>
+            <div class="rpp-line"><span>Regional price parity</span><b id="rpp-value">—</b></div>
+            <p id="rpp-explainer">A price parity of 100 matches the national price level.</p>
+          </article>
+        </div>
+
+        <div class="market-detail-grid">
+          <article class="pay-card">
+            <div class="card-title"><div><span class="mini-label">Pay distribution</span><h4>What workers earn across the range</h4></div><small>Annual wages</small></div>
+            <div class="wage-scale" id="wage-scale">
+              <div class="wage-line"><span id="wage-fill"></span><i id="median-pin"></i></div>
+              <div class="wage-labels"><span><small>10th</small><b id="wage-p10">—</b></span><span><small>25th</small><b id="wage-p25">—</b></span><span class="median"><small>Median</small><b id="wage-median">—</b></span><span><small>75th</small><b id="wage-p75">—</b></span><span><small>90th</small><b id="wage-p90">—</b></span></div>
+            </div>
+            <p class="data-explainer">The 25th percentile is not an “entry-level salary.” Experience, industry, metro area, clearance, education, and responsibilities all affect pay.</p>
+          </article>
+          <article class="rank-card">
+            <div class="card-title"><div><span class="mini-label">National context</span><h4>How this state compares</h4></div></div>
+            <div class="compare-row"><span>Median pay</span><div><i id="pay-compare-bar"></i></div><b id="pay-rank">—</b></div>
+            <div class="compare-row"><span>Job concentration</span><div><i id="lq-compare-bar"></i></div><b id="lq-rank">—</b></div>
+            <div class="national-baseline"><span>U.S. median</span><b id="national-median">—</b><span>U.S. employment</span><b id="national-employment">—</b></div>
+          </article>
+        </div>
+
+        <article class="metro-card">
+          <div class="card-title"><div><span class="mini-label">Inside the state</span><h4>Leading metropolitan areas by estimated employment</h4></div><small>May 2025 OEWS</small></div>
+          <div class="metro-table" role="table" aria-label="Leading metropolitan areas">
+            <div class="metro-row metro-header" role="row"><span role="columnheader">Metro area</span><span role="columnheader">Workers</span><span role="columnheader">Median pay</span><span role="columnheader">Concentration</span></div>
+            <div id="metro-rows"></div>
+          </div>
+          <p class="metro-note">Metropolitan areas are grouped under their BLS primary state; some labor markets cross state lines.</p>
+        </article>
+
+        <div class="market-lower-grid">
+          <article class="leaders-card"><div class="card-title"><div><span class="mini-label">Explore alternatives</span><h4>Leading states for this occupation</h4></div><div class="leader-toggle" role="group" aria-label="Rank states by"><button class="active" data-rank="pay">Pay</button><button data-rank="concentration">Concentration</button></div></div><ol id="leader-list"></ol></article>
+          <article class="resources-card"><span class="mini-label">Live searches &amp; local help</span><h4>Move from market data to actual opportunities.</h4><p>Open current searches for the selected occupation and state, then compare the recurring responsibilities—not just the job titles. Listing totals can change throughout the day.</p><div class="market-links"><a id="usajobs-link" target="_blank" rel="noreferrer">Current federal roles <span>↗</span></a><a href="https://www.careeronestop.org/Toolkit/Jobs/find-jobs.aspx" target="_blank" rel="noreferrer">Current CareerOneStop roles <span>↗</span></a><a id="state-lmi-link" target="_blank" rel="noreferrer">State labor-market office <span>↗</span></a><a href="https://www.careeronestop.org/LocalHelp/AmericanJobCenters/american-job-centers.aspx" target="_blank" rel="noreferrer">Local American Job Centers <span>↗</span></a><a href="https://niccs.cisa.gov/education-training/catalog" target="_blank" rel="noreferrer">Cybersecurity training catalog <span>↗</span></a><a href="https://www.bls.gov/oes/tables.htm" target="_blank" rel="noreferrer">BLS source data <span>↗</span></a></div></article>
+        </div>
+        <div class="data-note"><b>About this data</b><p id="data-note-copy">Wages, employment, and metro estimates: BLS OEWS, May 2025. Cost context: BEA 2024 Regional Price Parities. Outlook: state labor-market offices through Projections Central; projection periods vary. Current-search links lead to external services and are not counted in the historical estimates.</p></div>
+      </div>
+    </section>
+
+  </main><footer class="site-footer container"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a><div class="footer-partners" role="group" aria-label="Partner programs"><span class="footer-partner"><span class="footer-partner-logo"><img src="/partners/tenable-light.svg" width="154" height="53" alt=""></span><span class="footer-partner-name">Tenable Partner</span></span><span class="footer-partner"><span class="footer-partner-logo"><img src="/partners/red-hat-light.svg" width="613" height="145" alt=""></span><span class="footer-partner-name">Red Hat Partner</span></span></div><div class="footer-actions"><a href="/#about">About Secure By Design</a><div class="footer-share" data-footer-share>
+    <button type="button" class="footer-share-button" data-share-action title="Share Secure By Design">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+      Pass it on
+    </button>
+    <output class="footer-share-status" aria-live="polite" aria-atomic="true"></output>
+    <div class="footer-share-manual" hidden>
+      <label for="footer-share-link">Secure By Design homepage</label>
+      <input id="footer-share-link" type="text" readonly>
+      <button type="button" class="footer-share-button" data-copy-action>Copy link</button>
+    </div>
+  </div></div></footer><script src="/career-explorer/job-data.js"></script><script src="/career-explorer/app.js"></script><script src="/career-explorer/career-market.js"></script><script src="/career-explorer/roles.js"></script><script src="/career-explorer/direction.js"></script><script type="module" src="/footer-share-boot.mjs"></script></body></html>

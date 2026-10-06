@@ -1,0 +1,25 @@
+import {contributionsApi} from './contributions.js';
+import {resourcesApi} from './resources.js';
+import website from 'vinext/server/fetch-handler';
+import {api} from './careers.js';
+import {careerPage} from './career-pages.js';
+import {careerRolePage} from './career-role-pages.js';
+import {readerProgressApi} from './reader-progress.js';
+import {readerAuthApi} from './reader-auth.js';
+import {nativeProgressApi} from './native-progress.js';
+import {nativeActivityApi} from './native-activity.js';
+import {nativeAuthApi} from './native-auth.js';
+import {nativeOnboardingApi} from './native-onboarding.js';
+export default {async fetch(request,env,ctx){
+ const path=new URL(request.url).pathname;
+ if(/^\/api\/native-activity(\/|$)/.test(path))return nativeActivityApi(request,env);
+ if(/^\/api\/native-progress(\/|$)/.test(path))return nativeProgressApi(request,env);
+ if(/^\/api\/native-auth(\/|$)/.test(path))return nativeAuthApi(request,env);
+ if(path==='/api/native-onboarding')return nativeOnboardingApi(request,env);
+ if(/^\/api\/reader-auth(\/|$)/.test(path))return readerAuthApi(request,env);
+ if(/^\/api\/reader-progress(\/|$)/.test(path))return readerProgressApi(request,env);
+ if(/^\/api\/community-contributions(\/|$)/.test(path))return contributionsApi(request,env,ctx);
+ if(/^\/api\/resource-(signups|subscribers|preferences)(\/|$)/.test(path))return resourcesApi(request,env);
+ if(/^\/api\/career-(submissions|records|notifications)(\/|$)/.test(path))return api(request,env,ctx);
+ return careerRolePage(request)||careerPage(request,env)||website.fetch(request,env,ctx);
+}};

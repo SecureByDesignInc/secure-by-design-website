@@ -1,0 +1,55 @@
+SECURE BY DESIGN
+BUILD THE IDENTITY FOUNDATION
+Windows Server 2025 - DC01 and DC02
+Episode 01 | Materials edition 0.3 | Updated 4 October 2026
+© 2026 Secure By Design Team LLC.
+
+1. Extract this entire folder from the ZIP.
+2. Open index.html in a current Chrome, Edge, Firefox, or Safari browser.
+3. Choose a chapter. The 3D network follows your place in the lesson.
+4. Try Security reasoning and My evidence. Enter observations, check the
+   three items, answer the question, and mark the chapter complete.
+5. Export your record before changing browsers or devices. Import that JSON
+   record to resume in a different browser. You can also copy the record
+   from its preview and paste it into Import record. Readable notes export
+   as text.
+
+WORKBOOK AND NOTICES
+The 12-page workbook includes foundations, configuration steps, verification
+prompts, evidence questions, and Notices and permissions on page 12.
+The table of contents links directly to each section. The guide footer links
+to notices.html, which includes the rights notice and software license link.
+
+INCLUDED
+index.html                            Interactive lesson and 3D network
+SecureByDesign-DC01-DC02-Workbook.pdf   Branded companion workbook
+SecureByDesign-DC01-DC02-Workbook.docx  Editable companion workbook
+Verification-Commands.txt              Read-only configuration checks
+lesson.json                           Shared chapter content
+notices.html                          Copyright and third-party notices
+THREE-LICENSE.txt                      License for the bundled 3D library
+guide-share.js / guide-share.css       Optional end-of-guide sharing controls
+
+The lesson code and 3D assets are bundled without external dependencies. The workbook links
+need the files to stay beside index.html. Journal articles and source links
+need an internet connection. Some mobile file viewers restrict local HTML;
+open it in a full browser or use the published guide on securebydesigninc.com.
+
+This proof of concept contains sample values and source-checked lesson
+content. It has not been validated on your Windows Server environment. Your recorded
+video, original screenshots, and timestamps are not included yet. The video
+area intentionally describes the upcoming recording rather than pretending
+to play a video. The app view is a responsive browser presentation, not an
+installed native app. Progress is local; no account or cloud sync is used.
+
+The scene illustrates chapter states. It does not connect to your VMs, run
+commands, or validate your server configuration. Completion records your
+learning activity. Keep credentials out of notes and evidence exports.
+
+WEBSITE AND APP DELIVERY
+This package demonstrates the lesson content and interactions. A published
+edition can connect the video chapters, shared lesson content, and network
+states to the website and app, then use the account service for progress.
+Each episode can connect viewers to the same companion and its chapters.
+
+Secure By Design | https://securebydesigninc.com/
