@@ -73,7 +73,7 @@ function flowView(context){
  const rules=trafficRules.filter(r=>r.from.includes(from)&&r.to.includes(to));
  // The existing policy register may block a protocol shown in a teaching sequence.
  const protocol=step.protocol.toLowerCase();
- const service=protocol.includes('kerberos')?'Kerberos':protocol.includes('dns')?'DNS':protocol.includes('dhcp')?'DHCP':protocol.includes('ldap')?'Directory':protocol.includes('smb')?'SMB':protocol.includes('wsus')||to==='wsus'?'WSUS':protocol.includes('syslog')?'Syslog TLS':null;
+ const service=protocol.includes('kerberos')?'Kerberos':protocol.includes('dns')?'DNS':protocol.includes('dhcp')?'DHCP':protocol.includes('ldap')?'Directory':protocol.includes('smb')?'SMB':protocol.includes('wsus')||to==='wsus'?'WSUS':protocol.includes('syslog')?'Syslog TLS':protocol.includes('https')?'HTTPS':null;
  const rule=rules.find(r=>r.service===service)||(rules.length===1?rules[0]:null);
  const kind=step.manual||from==='root'||to==='root'?'manual':step.unverified||!rule||rule.status==='pending'?'pending':rule.status==='deny'?'deny':'traffic';
  const legend=kind==='manual'?'Manual handling · no network connection':kind==='traffic'?'Moving markers show the service request':kind==='pending'?'Service relationship · blocked pending validation':'Denied by policy';

@@ -406,12 +406,12 @@
       "role": "Internal Apache web server",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.40",
-      "purpose": "Internal web services. Define application listeners, certificate use, and database dependencies.",
+      "purpose": "Serve approved internal web applications over HTTPS.",
       "services": [
         {
-          "name": "Internal Apache web server",
-          "port": "Listeners to define",
-          "note": ""
+          "name": "HTTPS",
+          "port": "TCP 443",
+          "note": "Server certificate issued by the internal issuing CA."
         }
       ],
       "controls": [
@@ -1204,6 +1204,35 @@
           "description": "Return approved certificate and revocation artifacts through the documented offline transfer process. Define the issuing CA’s enrollment and publication design separately."
         }
       ]
+    },
+    {
+      "id": "web",
+      "label": "Use a web app",
+      "title": "A browser trusts the internal web service.",
+      "caption": "Name resolution, certificate trust, and an encrypted session.",
+      "steps": [
+        {
+          "title": "Resolve the web server",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The browser resolves the web service’s internal name before connecting. DNS returns SBD-WEB01’s address on VLAN 40."
+        },
+        {
+          "title": "Verify the server certificate",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "The browser opens a TLS session. SBD-WEB01 presents a certificate from the internal issuing CA, and the client checks the name, validity dates, and chain to the trusted offline root."
+        },
+        {
+          "title": "Request the application",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "Inside the encrypted session, the browser sends HTTP requests and receives the application’s responses. The application decides what the signed-in user may see."
+        }
+      ]
     }
   ],
   "protocols": [
@@ -1276,6 +1305,11 @@
       "service": "Syslog over TLS",
       "transport": "TCP 6514",
       "meaning": "Configured sender initiates to the TLS receiver."
+    },
+    {
+      "service": "HTTPS",
+      "transport": "TCP 443",
+      "meaning": "Internal web applications over TLS; server certificates come from the internal issuing CA."
     },
     {
       "service": "SQL Server",
