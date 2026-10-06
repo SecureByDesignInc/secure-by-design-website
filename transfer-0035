@@ -1,0 +1,5 @@
+.inside-network-page{width:100%;margin:0;background:#070d19}
+.inside-network-frame{display:block;width:100%;height:max(1050px,100dvh);border:0;background:#070d19;color-scheme:dark}
+.network-fallback{margin:0;padding:24px;color:#d7e8ff}
+.network-fallback a{color:#a5c7ff}
+@media(max-width:780px){.inside-network-frame{height:2000px}}
