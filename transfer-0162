@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "what-is-active-directory",
+    "title": "What Is Active Directory?"
+  },
+  {
+    "slug": "active-directory-certificate-services",
+    "title": "What Is Active Directory Certificate Services (AD CS)?"
+  },
+  {
+    "slug": "domains-forests-ous-and-trusts",
+    "title": "Understanding Domains, Forests, OUs, and Trusts"
+  },
+  {
+    "slug": "users-groups-and-permissions",
+    "title": "Users, Groups, and Permissions: How Access Works"
+  },
+  {
+    "slug": "understanding-group-policy",
+    "title": "Group Policy: How Settings Reach Users and Systems"
+  },
+  {
+    "slug": "replication-and-fsmo-roles",
+    "title": "Replication and FSMO Roles: Keeping AD Working Together"
+  },
+  {
+    "slug": "securing-active-directory",
+    "title": "Securing Active Directory: Building on the Fundamentals"
+  }
+]

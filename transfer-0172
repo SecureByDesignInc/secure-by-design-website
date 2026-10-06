@@ -1,0 +1,48 @@
+{
+  "currency": "USD",
+  "creatorNote": "Start learning with what's here. If it helps you, pay us back by sharing our content. When you're ready to go deeper, we'll help you take the next step.",
+  "plans": [
+    {
+      "id": "community",
+      "name": "Community",
+      "tagline": "Build a daily learning habit.",
+      "monthlyPrice": 0,
+      "annualPrice": null,
+      "available": true,
+      "features": [
+        "Current learning paths and courses",
+        "Existing downloads and references",
+        "Streaks, XP, quests and achievements in the app",
+        "Progress sync with an optional account"
+      ]
+    },
+    {
+      "id": "builder",
+      "name": "Builder",
+      "tagline": "Turn lessons into projects.",
+      "monthlyPrice": 20,
+      "annualPrice": 180,
+      "available": false,
+      "features": [
+        "Everything in Community",
+        "New guided project packs for your own lab",
+        "New Risk Management Framework workbooks and practice assessments",
+        "Portfolio walkthroughs and documentation templates"
+      ]
+    },
+    {
+      "id": "guided",
+      "name": "Guided",
+      "tagline": "Get feedback on your work.",
+      "monthlyPrice": 99,
+      "annualPrice": null,
+      "available": false,
+      "features": [
+        "Everything in Builder",
+        "One 30-minute coaching call per month",
+        "One project review per month, up to 10 pages",
+        "Written feedback and next steps"
+      ]
+    }
+  ]
+}

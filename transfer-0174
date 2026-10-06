@@ -1,0 +1,20 @@
+[
+  {
+    "id": "tenable",
+    "label": "Tenable Partner",
+    "topic": "Vulnerability & exposure management",
+    "logo": "/partners/tenable-light.svg",
+    "width": 154,
+    "height": 53,
+    "profileUrl": null
+  },
+  {
+    "id": "red-hat",
+    "label": "Red Hat Partner",
+    "topic": "Enterprise Linux & automation",
+    "logo": "/partners/red-hat-light.svg",
+    "width": 613,
+    "height": 145,
+    "profileUrl": null
+  }
+]

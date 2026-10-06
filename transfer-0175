@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "active-directory-certificate-services",
+    "file": "active-directory-certificate-services.md",
+    "title": "What Is Active Directory Certificate Services (AD CS)?",
+    "description": "Jon sets up an internal portal. Let’s follow the certificates, keys, and trust decisions that let Dylan connect securely.",
+    "question": "How do certificates establish trust, and who controls what gets issued?",
+    "topic": "Certificates & trust",
+    "cisspDomain": 3,
+    "draft": true
+  }
+]

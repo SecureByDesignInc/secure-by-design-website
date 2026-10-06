@@ -1,0 +1,6 @@
+.career-explorer-content .role-directory-intro{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:48px max(32px,calc((100% - 1180px)/2));background:#050b14;color:#f4f8fd;border-bottom:1px solid #263b52}
+.career-explorer-content .role-directory-intro span{font-size:12px;letter-spacing:2px;color:#b5e7ff}
+.career-explorer-content .role-directory-intro h1{font-family:var(--font-geist-sans),Arial,sans-serif;font-size:clamp(30px,4vw,46px);font-weight:500;letter-spacing:-1.2px;line-height:1.12;margin:14px 0}
+.career-explorer-content .role-directory-intro p{color:#a8bbd0;max-width:640px;font-size:16px;line-height:1.7;margin:0}
+.career-explorer-content .role-directory-intro>a{flex-shrink:0;padding:14px 20px;background:#b5e7ff;border:1px solid #b5e7ff;color:#08182a;border-radius:9px;font-size:15px;text-decoration:none}
+@media(max-width:760px){.career-explorer-content .role-directory-intro{padding:32px 20px;align-items:start;flex-direction:column;gap:22px}}

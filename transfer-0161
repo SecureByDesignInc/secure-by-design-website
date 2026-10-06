@@ -1,0 +1,26 @@
+{
+  "enabled": false,
+  "stores": [
+    {
+      "id": "app-store",
+      "name": "App Store",
+      "platform": "iPhone & iPad",
+      "badge": "/app-stores/app-store.svg",
+      "storeUrl": "https://apps.apple.com/",
+      "listingUrl": "",
+      "availability": "iOS beta \u00b7 TestFlight",
+      "availabilityDetail": "Invitation-only testing; public App Store release coming soon"
+    },
+    {
+      "id": "google-play",
+      "name": "Google Play",
+      "platform": "Android",
+      "badge": "/app-stores/google-play.png",
+      "storeUrl": "https://play.google.com/store/apps",
+      "listingUrl": "",
+      "availability": "Coming soon",
+      "availabilityDetail": "Public Google Play release coming soon"
+    }
+  ],
+  "heading": "App availability"
+}
