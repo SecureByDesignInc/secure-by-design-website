@@ -2,6 +2,7 @@ export const sources = {
  dns:['Microsoft · DNS and Active Directory','https://learn.microsoft.com/windows-server/networking/dns/dns-top'],
  auth:['Microsoft · Kerberos authentication','https://learn.microsoft.com/en-us/windows-server/security/kerberos/kerberos-authentication-overview'],
  ad:['Microsoft · Active Directory port reference','https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/config-firewall-for-ad-domains-and-trusts'],
+ services:['Microsoft · Windows service and port requirements','https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements'],
  dhcp:['Microsoft · DHCP troubleshooting','https://learn.microsoft.com/en-us/windows-server/troubleshoot/troubleshoot-dhcp-issue'],
  wsus:['Microsoft · WSUS client connections and TLS','https://learn.microsoft.com/en-us/windows-server/administration/windows-server-update-services/deploy/2-configure-wsus'],
  syslog:['RFC 5425 · Syslog over TLS','https://www.rfc-editor.org/rfc/rfc5425'],
@@ -41,9 +42,20 @@ export const scenarios=[
  ]}
 ];
 const service=(name,port,note='')=>({name,port,note});
+// Core client-to-domain-controller services from Microsoft's port references (sources.ad, sources.services).
+const domainControllerServices=[
+ service('DNS','TCP / UDP 53'),
+ service('Kerberos KDC','TCP / UDP 88','Password changes use TCP / UDP 464.'),
+ service('Directory access','LDAP TCP / UDP 389 · LDAPS TCP 636','UDP 389 carries the domain controller locator ping. Client and protection settings determine the binding.'),
+ service('Global catalog','TCP 3268 · TLS TCP 3269'),
+ service('Group Policy and SYSVOL','SMB · TCP 445'),
+ service('RPC services','TCP 135 · dynamic TCP 49152–65535','NetLogon, LSA, and SAM use the dynamic range after the endpoint mapper.'),
+ service('Domain time','W32Time · UDP 123','Members follow the domain time hierarchy.'),
+ service('AD Web Services','TCP 9389','Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations.')
+];
 export const technical={
- dc1:{purpose:'Find services, authenticate identities, and answer directory requests.',services:[service('DNS','TCP / UDP 53'),service('Kerberos KDC','TCP / UDP 88'),service('Directory access','LDAP 389 / LDAPS 636','Client and protection settings determine the binding.')],depends:['dc2'],dependencyText:'Check DNS, time, replication, and recovery design together. “Primary” is the supplied label, not proof of FSMO ownership.',verify:['DNS and directory discovery from a client.','Replication health and protected restore procedures.'],source:'ad'},
- dc2:{purpose:'Provide another AD DS and DNS service point.',services:[service('DNS','TCP / UDP 53'),service('Kerberos KDC','TCP / UDP 88'),service('Directory access','LDAP 389 / LDAPS 636')],depends:['dc1'],dependencyText:'Another domain controller is not merely a passive standby. Confirm site placement, replication, DNS behavior, and role ownership.',verify:['Client behavior when one DC is unavailable.','Replication and directory recovery tests.'],source:'ad'},
+ dc1:{purpose:'Find services, authenticate identities, and answer directory requests.',services:domainControllerServices,depends:['dc2'],dependencyText:'Check DNS, time, replication, and recovery design together. “Primary” is the supplied label, not proof of FSMO ownership.',verify:['DNS and directory discovery from a client.','Replication health and protected restore procedures.'],source:'ad'},
+ dc2:{purpose:'Provide another AD DS and DNS service point.',services:domainControllerServices,depends:['dc1'],dependencyText:'Another domain controller is not merely a passive standby. Confirm site placement, replication, DNS behavior, and role ownership.',verify:['Client behavior when one DC is unavailable.','Replication and directory recovery tests.'],source:'ad'},
  dhcp:{purpose:'Provide client lease settings for the approved address space.',services:[service('DHCPv4','UDP 67 server / 68 client','An initial broadcast may require a relay across subnets.')],depends:[],dependencyText:'Scopes, address options, leases, relay placement, and failover need an explicit design.',verify:['Lease acquisition and renewal.','Configured DNS options and relay behavior.'],source:'dhcp'},
  fs:{purpose:'Serve shared files while enforcing resource permissions.',services:[service('SMB','TCP 445','Reference service port; share and encryption policies are unspecified.')],depends:['dc1','dc2'],dependencyText:'Use domain-based identity and name resolution. Define share names, access groups, and data sensitivity.',verify:['Allowed and denied access by role.','File, permission, and encryption-key restoration.'],source:'ad'},
  apps:{purpose:'Answer requests for the supplied licensing role.',services:[service('License manager','Vendor-specific','Confirm product, ports, direction, and client population.')],depends:[],dependencyText:'No application-hosting role or SQL dependency is inferred from this hostname.',verify:['Vendor connection matrix and entitlement behavior.','License backup and recovery procedure.']},
@@ -52,7 +64,7 @@ export const technical={
  splunk:{purpose:'Single server instance; no cluster or standby. Index and investigate the security events that are actually collected.',services:[service('Splunk ingestion','Input-dependent','Choose the approved forwarder, input, or API design.')],depends:['syslog'],dependencyText:'The collector is one proposed source. Indexing, storage, parsing, time handling, and detection coverage remain to be configured.',verify:['Searchable source events and parsing.','Detection tests and investigation workflow.']},
  audit:{purpose:'Retain security records under the approved retention policy.',services:[service('Audit ingestion','Method to define','No listener, storage protocol, or immutable mode is assumed.')],depends:['syslog'],dependencyText:'An archive copy is proposed from the collector. Retention, integrity, access separation, and backup design must be established.',verify:['Record retrieval across the retention period.','Unauthorized-change prevention and recovery.']},
  wsus:{purpose:'Distribute approved Windows updates inside the air gap.',services:[service('Update metadata','HTTPS 8531'),service('Signed update payloads','HTTP 8530','WSUS uses separate metadata and payload connections.')],depends:['workstations'],dependencyText:'Clients are the illustrated consumers. Content arrives through a human-controlled boundary transfer; no live upstream path is drawn.',verify:['Client policy, certificate trust, and approvals.','Payload signatures and installation results.'],source:'wsus'},
- repo:{purpose:'Single Trellix ePO/DLP server instance; no cluster or standby. Serve the approved Linux package collection.',services:[service('Package repository','Transport to define','Choose the repository server, listener, and consumers.'),service('Log forwarding','TLS 6514','Chosen only for the log scenario.')],depends:['syslog'],dependencyText:'Linux package consumers were not supplied. Import and publication need approved media handling and signing-key controls.',verify:['Package signature validation and allowed publishers.','Repository content and log delivery.']},
+ repo:{purpose:'Serve the approved Linux package collection.',services:[service('Package repository','Transport to define','Choose the repository server, listener, and consumers.'),service('Log forwarding','TLS 6514','Chosen only for the log scenario.')],depends:['syslog'],dependencyText:'Linux package consumers were not supplied. Import and publication need approved media handling and signing-key controls.',verify:['Package signature validation and allowed publishers.','Repository content and log delivery.']},
  subca:{purpose:'Issue certificates under the approved subordinate CA policy.',services:[service('Certificate enrollment','Transport to define'),service('CRL / AIA publication','Endpoints to define')],depends:['root'],dependencyText:'Root trust is a certificate relationship and controlled offline process, not a network dependency. Templates, CA type, and domain membership are unknown.',verify:['Enrollment permissions and certificate purpose.','Revocation publication and CA recovery.']},
  root:{purpose:'Protect the trust anchor and perform authorized offline ceremonies.',services:[service('Live network listeners','None represented','Offline and non-domain-joined.'),service('Subordinate signing / root CRL','Offline ceremony')],depends:[],dependencyText:'Signing and publication artifacts are handled through a controlled manual process. No network scan or remote administration path exists in this model.',verify:['Private-key custody and physical access.','Ceremony records and tested recovery.']},
  epo:{purpose:'Single Trellix ePO/DLP server instance; no cluster or standby. Manage the chosen endpoint protection and DLP policies.',services:[service('Agent management / policy','Product-dependent','Confirm deployed modules, agent versions, and listener configuration.')],depends:['workstations'],dependencyText:'The workstation group is an intended policy audience. Verify agent deployment, applied policies, management transport, and database requirements.',verify:['Agent inventory and policy application.','Tamper controls and protection alerts.']},
@@ -64,7 +76,13 @@ export const protocols=[
  ['DNS','TCP / UDP 53','Name and service discovery; resolver order must be configured.','ad'],
  ['DHCPv4','UDP 67 / 68','Server / client exchange. Relay requirements depend on subnet design.','dhcp'],
  ['Kerberos','TCP / UDP 88','KDC authentication and ticket requests.','ad'],
- ['Directory access','TCP 389 / 636','LDAP / LDAPS; validate binding and protections.','ad'],
+ ['Kerberos password change','TCP / UDP 464','Password changes and resets.','ad'],
+ ['Directory access','TCP / UDP 389 · TCP 636','LDAP / LDAPS. UDP 389 carries the domain controller locator ping; validate binding and protections.','ad'],
+ ['Global catalog','TCP 3268 / 3269','Forest-wide directory searches; 3269 uses TLS.','ad'],
+ ['Group Policy and SYSVOL','TCP 445','Domain members read policies and scripts from domain controller shares over SMB; Group Policy also uses LDAP and RPC.','services'],
+ ['RPC services','TCP 135 · TCP 49152–65535','Endpoint mapper, then the dynamic range for NetLogon, LSA, and SAM.','ad'],
+ ['Domain time','UDP 123','W32Time. Domain members follow the domain time hierarchy.','ad'],
+ ['AD Web Services','TCP 9389','Active Directory PowerShell and Administrative Center. Needed from administration hosts, not user workstations.','services'],
  ['SMB','TCP 445','Client request to the file service.','ad'],
  ['WSUS metadata','HTTPS 8531','TLS metadata connection.','wsus'],
  ['WSUS content','HTTP 8530','Signed payloads use the separate content connection.','wsus'],

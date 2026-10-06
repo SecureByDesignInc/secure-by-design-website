@@ -130,8 +130,11 @@ function reportHeight(){
 new ResizeObserver(reportHeight).observe(document.body);
 window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===window.location.origin&&event.data?.type==='sbd-network-request-height')reportHeight();});
 window.addEventListener('resize',reportHeight);reportHeight();
-$('export').onclick=()=>{
- try{if(!scene)throw new Error('No graphics');scene.exportImage();$('toast').textContent='4K image saved';}
- catch{$('toast').textContent='Image export unavailable. Try presentation mode.';}
- setTimeout(()=>$('toast').textContent='',3500);
+let exporting=false,toastTimer;
+function toast(message,clearAfter=3500){clearTimeout(toastTimer);$('toast').textContent=message;if(clearAfter)toastTimer=setTimeout(()=>$('toast').textContent='',clearAfter);}
+$('export').onclick=async()=>{
+ if(exporting)return;exporting=true;$('export').setAttribute('aria-busy','true');toast('Preparing 4K image…',0);
+ try{if(!scene)throw new Error('No graphics');await scene.exportImage();toast('4K image downloaded');}
+ catch{toast('Image export unavailable. Try presentation mode.');}
+ finally{exporting=false;$('export').removeAttribute('aria-busy');}
 };

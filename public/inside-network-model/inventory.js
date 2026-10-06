@@ -22,7 +22,7 @@ export const inventory = {
       "Identify and authenticate organizational users."
     ],
     "IA-2(1)": [
-      "MFA to Privileged Accounts",
+      "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts",
       "Require multiple factors for privileged account access."
     ],
     "SC-7": [
@@ -30,16 +30,16 @@ export const inventory = {
       "Monitor and control communications at managed boundaries."
     ],
     "SC-7(5)": [
-      "Deny by Default — Allow by Exception",
+      "Boundary Protection | Deny by Default — Allow by Exception",
       "Allow documented traffic exceptions and deny other network traffic."
     ],
     "SC-7(15)": [
-      "Networked Privileged Accesses",
+      "Boundary Protection | Networked Privileged Accesses",
       "Use a dedicated managed interface for privileged network access."
     ],
     "SC-8(1)": [
-      "Cryptographic Protection in Transit",
-      "Protect transmission confidentiality and/or integrity as selected."
+      "Transmission Confidentiality and Integrity | Cryptographic Protection",
+      "Use cryptography to protect transmitted information's confidentiality and/or integrity, as selected."
     ],
     "SC-12": [
       "Cryptographic Key Establishment and Management",
@@ -50,8 +50,8 @@ export const inventory = {
       "Issue and manage certificates under a defined certificate policy."
     ],
     "SC-28(1)": [
-      "Cryptographic Protection at Rest",
-      "Cryptographically protect designated stored information."
+      "Protection of Information at Rest | Cryptographic Protection",
+      "Use cryptography to protect designated information at rest."
     ],
     "AU-6": [
       "Audit Record Review, Analysis, and Reporting",
@@ -94,7 +94,7 @@ export const inventory = {
       "Back up required information and protect the backup copies."
     ],
     "CP-9(1)": [
-      "Testing for Reliability and Integrity",
+      "System Backup | Testing for Reliability and Integrity",
       "Test backup reliability and information integrity."
     ]
   },

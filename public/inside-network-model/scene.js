@@ -12,7 +12,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{}){
  const layout=dataCenterLayout(vlans);
  const scene=new THREE.Scene();scene.background=new THREE.Color('#081522');scene.fog=new THREE.FogExp2('#081522',.004);
  const camera=new THREE.PerspectiveCamera(39,1,.1,900);
- const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.shadowMap.enabled=container.clientWidth>=720;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.shadowMap.enabled=container.clientWidth>=720;renderer.shadowMap.type=THREE.PCFShadowMap;
  container.prepend(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','3D data center with server racks, network switches, workstations, and offline equipment. Drag to orbit, scroll to zoom, or select a system. Arrow keys rotate; Home shows the full network.');
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=!reduced;orbit.dampingFactor=.075;orbit.minDistance=10;orbit.maxDistance=500;orbit.maxPolarAngle=Math.PI*.47;orbit.minPolarAngle=.09;orbit.enablePan=true;
  orbit.addEventListener('start',()=>{transition=null;drift=null;onInteract();});
@@ -27,8 +27,9 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{}){
   const c=document.createElement('canvas');c.width=768;c.height=sub?190:110;const ctx=c.getContext('2d');
   if(!plane){ctx.fillStyle='rgba(5,17,30,.91)';ctx.beginPath();ctx.roundRect(1,1,766,c.height-2,14);ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();}
   ctx.fillStyle=plane?color:'#e4f5ff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 63px Segoe UI,Arial';ctx.fillText(text,384,sub?64:55,710);
-  if(sub){ctx.font='38px Segoe UI,Arial';ctx.fillStyle=color;ctx.fillText(sub,384,139,710);}
-  const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.minFilter=THREE.LinearFilter;
+  if(sub){ctx.font='600 44px Segoe UI,Arial';ctx.fillStyle=color;ctx.fillText(sub,384,139,710);}
+  // Mipmaps and anisotropic filtering keep small, distant labels smooth instead of shimmering.
+  const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=true;texture.minFilter=THREE.LinearMipmapLinearFilter;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
   const o=plane?new THREE.Mesh(new THREE.PlaneGeometry(width,width*c.height/768),new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false,side:THREE.DoubleSide})):new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false,depthTest:false}));
   if(plane)o.rotation.x=-Math.PI/2;else{o.scale.set(width,width*c.height/768,1);o.renderOrder=20;}
   return o;
@@ -146,11 +147,13 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{}){
   orbit.update(dt);renderer.render(scene,camera);
  });
  function exportImage(){
-  const size=renderer.getSize(new THREE.Vector2()),ratio=renderer.getPixelRatio(),aspect=camera.aspect;
+  const size=renderer.getSize(new THREE.Vector2()),ratio=renderer.getPixelRatio(),aspect=camera.aspect;let encoded;
   try{
    renderer.setPixelRatio(1);renderer.setSize(3840,2160,false);camera.aspect=16/9;camera.updateProjectionMatrix();renderer.render(scene,camera);
-   const link=document.createElement('a');link.download='inside-the-network-4k.png';link.href=renderer.domElement.toDataURL('image/png');link.click();
+   // toBlob copies the rendered frame immediately. A Blob URL avoids browser size limits on large data URLs.
+   encoded=new Promise((resolve,reject)=>renderer.domElement.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG encoding failed')),'image/png'));
   }finally{renderer.setPixelRatio(ratio);renderer.setSize(size.x,size.y,false);camera.aspect=aspect;camera.updateProjectionMatrix();renderer.render(scene,camera);}
+  return encoded.then(blob=>{const url=URL.createObjectURL(blob),link=document.createElement('a');link.download='inside-the-network-4k.png';link.href=url;link.hidden=true;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);});
  }
  function highlight(ids=[]){clearFlow();activeIds=ids;selection='';selectionRing.visible=false;for(const [id,o]of objects){o.label.material.opacity=!ids.length||ids.includes(id)?1:.2;o.label.visible=labelsVisible&&(ids.includes(id)||facilities.some(f=>f.id===id));}for(const {zone,outline,halo}of zones){const active=!ids.length||zone.ids.some(id=>ids.includes(id));outline.material.opacity=active?.8:.18;if(halo)halo.material.opacity=active?.1:.025;}fit(ids.length?ids:null);}
  return {showStep,select,highlight,exportImage,overview:()=>highlight(),frame:(ids)=>fit(ids),setLabels(on){labelsVisible=on;for(const label of labels)label.visible=on;for(const [id,o] of objects)o.label.visible=on&&(activeIds.includes(id)||selection===id||facilities.some(f=>f.id===id));},setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;}},resize,dispose(){observer.disconnect();orbit.dispose();renderer.setAnimationLoop(null);const geometries=new Set(),materials=new Set(),textures=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:o.material?[o.material]:[]){materials.add(m);if(m.map)textures.add(m.map);}});for(const t of textures)t.dispose();for(const m of materials)m.dispose();for(const g of geometries)g.dispose();renderer.dispose();renderer.domElement.remove();}};

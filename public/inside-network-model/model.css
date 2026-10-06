@@ -170,3 +170,7 @@ span.relationship-node{border-color:transparent;background:transparent;color:#94
 .relationship-choice span{font-size:12px;font-weight:400;color:#9fbdce;line-height:1.6}
 .relationship-choice:hover{background:#193648;border-color:#6da5b8}
 @media(max-width:780px){.relationship-explorer-heading>button{min-height:44px}.relationship-choices{max-height:340px}}
+
+/* October 6, 2026: keep standalone source links at least 24px tall for touch use (WCAG 2.2 target size). */
+.source-link,#sourceLinks a{display:inline-block;min-height:24px;padding-block:4px}
+#protocolRows .source-link{display:block;width:fit-content;margin-top:6px}
