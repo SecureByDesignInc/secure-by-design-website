@@ -1,0 +1,35 @@
+# Training Library and companion materials
+
+The Training Library at `/videos` presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package covers DC01 and DC02 on Windows Server 2025. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
+
+## Content
+
+`content/videos.json` retains `platforms` for the shared social links and defines `episodes` for the catalog. Each episode contains its title, subtitle, description, tags, display number, system labels, chapters, and training asset paths. It also provides `outcomeSummary` and `outcomes` for the learning objectives, plus optional `scene` and `networkLabel` fields. Keep episode IDs unique, chapter IDs nonempty and unique within each episode, and workbook page counts positive integers. Add only real, prepared entries; do not fill the catalog with invented future episodes.
+
+The supported `scene` value is `identity-dc`, which uses the DC01/DC02 topology and requires exactly five ordered chapter IDs: `prepare`, `dc01`, `dc02`, `verify`, and `evidence`. Both the tile's 3D label and scene mounting use this validated mapping. A different topology or chapter-to-scene mapping needs its own scene implementation. An omitted or unsupported scene value, or an incompatible chapter sequence, displays the written chapter explorer without mounting this identity model. Its video and training materials remain available.
+
+Leave `youtubeId` null until the recording is published. Then add the verified 11-character YouTube ID, and set chapter timestamps to verified nonnegative offsets in seconds. The page embeds the video using YouTube's privacy-enhanced iframe and chapter start parameters. No autoplay is requested. Unknown or invalid IDs display the coming-soon panel. No fake durations or timestamps are shown. Embedded-video reference: https://developers.google.com/youtube/player_parameters
+
+Training assets live in `public/training/dc01-dc02/`: the interactive HTML guide, updated white 11-page PDF and Word workbooks, verification commands, lesson data, license, and complete ZIP. The cover image is rendered from the real workbook. Replace the files together when revising an episode, and regenerate the download package and its manifest. The workbook omits the reading recommendations and closing note removed by the user.
+
+## Interactions
+
+Collapsed tiles use five desktop columns, then four, three, two, and one as the viewport narrows. Their artwork is 124px tall, mobile tile width is capped at 240px, and the opening control remains at least 44px tall. The latest desktop check measured a tile at approximately 222 by 335px, 21% narrower and 23% shorter than the preceding revision. Tags and the full description remain in the expanded view.
+
+`video-hub.tsx` owns the catalog, search, topic selection, and expanded episode. Search is case-insensitive and matches every whitespace-separated query token across title, subtitle, description, tags, and system names. Topic choices are sorted unique tags from the real catalog; the selected topic uses an exact tag match. Search and topic filters combine. The first 12 matching episodes are shown in editorial order, and Show more episodes adds another 12. A result count and clear-filter empty state help readers recover from searches with no matches.
+
+Explore episode opens the complete experience inside that tile. Only one tile can be expanded at a time. Opening another tile or closing the current one unmounts the previous experience, including its scene, video iframe, and chapter timer. Search, topic changes, and filter resets also close the expanded episode and reset the visible count to 12. Clear filters returns focus to search; the bottom Close episode control returns focus to its tile's opener. Reopening an episode starts a fresh explorer session.
+
+`episode-experience.tsx` owns the active episode's chapter and motion state. The chapter buttons select the build state. In the identity scene, selecting a server, client, or evidence record selects the corresponding chapter. Drag rotates, scroll zooms, arrow keys rotate the focused scene, and Home or Reset view restores the camera. DNS chapters offer both query paths. Play the build story advances the chapters until paused or manually selected. Ambient motion can be paused independently; reduced-motion preferences start it paused. The scene releases graphics resources on unmount and pauses rendering when out of view. If graphics fail, the chapter navigation and written explanation remain usable.
+
+An explicit chapter selection or system selection sets the video's chapter start offset when a verified timestamp is available. Automatic build-story playback changes only the chapter and 3D view; it does not seek or reload the embedded video.
+
+The chapter controls also provide a keyboard-accessible equivalent to 3D selection. At mobile widths the inspector follows the stage, and video and training materials stack vertically. The companion guide maintains its existing browser-local progress; this catalog does not add account synchronization.
+
+## Checks
+
+Run `node --test tests/video-catalog.test.mjs` to check query fields, combined filtering, sorted topics, no-match recovery data, and ordering across 240 synthetic entries, along with publication state, embed URL validation, timestamps, and training asset existence. Synthetic entries exist only in the tests. Resource validation allows different chapter counts and workbook lengths for future episodes.
+
+Run the repository lint command against `app/videos`. During manual QA, check the rendered page on desktop and at 390px; open, close, and reopen tiles; confirm only one canvas and iframe can mount; verify search, topics, pagination, empty states, and keyboard focus. Check chapter changes, DNS path selection, pause, the guided story, keyboard camera controls, and training links inside the expanded tile. Use synthetic data outside the published catalog to inspect long titles and a multi-row library. Record production build results, browser QA results, and unrelated repository diagnostics separately in the task handoff. The October 4 tile revision passed its production build, scoped video lint, and all nine catalog tests. Desktop and 390px browser checks covered expanding/reopening, focus restoration, chapter/DNS controls, search and empty states, and a temporary 25-entry catalog for pagination, long titles, fallback, and switching between active scenes. The temporary route was removed before the production build. Exactly one canvas was observed when an episode was open and zero after closing or filtering. The recording remains unpublished, so real video playback was not tested.
+
+The repository-wide TypeScript check still reports the three previously confirmed `result`-is-unknown errors in `app/career-goals/worksheet.tsx`; no video-catalog errors were reported. The build retains its existing large-chunk warning for graphics code.

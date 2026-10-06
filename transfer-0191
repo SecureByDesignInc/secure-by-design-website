@@ -1,0 +1,418 @@
+{
+  "checked": "2026-09-15",
+  "reference": "DON COOL / DoD Cyber Workforce Framework",
+  "private": true,
+  "sources": [
+    {
+      "code": "111",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_asa_111",
+      "referenceId": "8937",
+      "qualificationRecords": 17,
+      "pending": true
+    },
+    {
+      "code": "211",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_fa_211",
+      "referenceId": "8938",
+      "qualificationRecords": 681,
+      "pending": false
+    },
+    {
+      "code": "212",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cdfa_212",
+      "referenceId": "8939",
+      "qualificationRecords": 62,
+      "pending": false
+    },
+    {
+      "code": "221",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cci_221",
+      "referenceId": "8940",
+      "qualificationRecords": 681,
+      "pending": false
+    },
+    {
+      "code": "332",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cop_332",
+      "referenceId": "8941",
+      "qualificationRecords": 15,
+      "pending": true
+    },
+    {
+      "code": "411",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_tss_411",
+      "referenceId": "8942",
+      "qualificationRecords": 127,
+      "pending": false
+    },
+    {
+      "code": "421",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_da_421",
+      "referenceId": "8943",
+      "qualificationRecords": 101,
+      "pending": false
+    },
+    {
+      "code": "431",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_km_431",
+      "referenceId": "8945",
+      "qualificationRecords": 64,
+      "pending": false
+    },
+    {
+      "code": "441",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_nos_441",
+      "referenceId": "8946",
+      "qualificationRecords": 129,
+      "pending": false
+    },
+    {
+      "code": "451",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_sa_451",
+      "referenceId": "8947",
+      "qualificationRecords": 148,
+      "pending": false
+    },
+    {
+      "code": "511",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cda_511",
+      "referenceId": "8949",
+      "qualificationRecords": 102,
+      "pending": false
+    },
+    {
+      "code": "521",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cdiss_521",
+      "referenceId": "8950",
+      "qualificationRecords": 91,
+      "pending": false
+    },
+    {
+      "code": "531",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cdir_531",
+      "referenceId": "8951",
+      "qualificationRecords": 99,
+      "pending": false
+    },
+    {
+      "code": "541",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_vaa_541",
+      "referenceId": "8952",
+      "qualificationRecords": 100,
+      "pending": false
+    },
+    {
+      "code": "611",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ao_611",
+      "referenceId": "8953",
+      "qualificationRecords": 77,
+      "pending": false
+    },
+    {
+      "code": "612",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_sca_612",
+      "referenceId": "8954",
+      "qualificationRecords": 91,
+      "pending": false
+    },
+    {
+      "code": "622",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ssa_622",
+      "referenceId": "8956",
+      "qualificationRecords": 52,
+      "pending": false
+    },
+    {
+      "code": "631",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_issd_631",
+      "referenceId": "8957",
+      "qualificationRecords": 64,
+      "pending": false
+    },
+    {
+      "code": "632",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_sd_632",
+      "referenceId": "8958",
+      "qualificationRecords": 70,
+      "pending": false
+    },
+    {
+      "code": "641",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_srp_641",
+      "referenceId": "8959",
+      "qualificationRecords": 83,
+      "pending": false
+    },
+    {
+      "code": "651",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ea_651",
+      "referenceId": "8960",
+      "qualificationRecords": 92,
+      "pending": false
+    },
+    {
+      "code": "652",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_sa_652",
+      "referenceId": "8961",
+      "qualificationRecords": 82,
+      "pending": false
+    },
+    {
+      "code": "661",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_rds_661",
+      "referenceId": "8962",
+      "qualificationRecords": 79,
+      "pending": false
+    },
+    {
+      "code": "671",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_stes_671",
+      "referenceId": "8963",
+      "qualificationRecords": 92,
+      "pending": false
+    },
+    {
+      "code": "711",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cicd_711",
+      "referenceId": "8964",
+      "qualificationRecords": 681,
+      "pending": false
+    },
+    {
+      "code": "712",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ci_712",
+      "referenceId": "8965",
+      "qualificationRecords": 681,
+      "pending": false
+    },
+    {
+      "code": "722",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_issm_722",
+      "referenceId": "8966",
+      "qualificationRecords": 96,
+      "pending": false
+    },
+    {
+      "code": "723",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cm_723",
+      "referenceId": "8967",
+      "qualificationRecords": 74,
+      "pending": false
+    },
+    {
+      "code": "731",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cla_731",
+      "referenceId": "8968",
+      "qualificationRecords": 682,
+      "pending": false
+    },
+    {
+      "code": "751",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cwdm_751",
+      "referenceId": "8969",
+      "qualificationRecords": 683,
+      "pending": false
+    },
+    {
+      "code": "752",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cpsp_752",
+      "referenceId": "8970",
+      "qualificationRecords": 683,
+      "pending": false
+    },
+    {
+      "code": "801",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_pm_801",
+      "referenceId": "8971",
+      "qualificationRecords": 688,
+      "pending": false
+    },
+    {
+      "code": "802",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_itpm_802",
+      "referenceId": "8972",
+      "qualificationRecords": 688,
+      "pending": false
+    },
+    {
+      "code": "803",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_psm_803",
+      "referenceId": "8973",
+      "qualificationRecords": 688,
+      "pending": false
+    },
+    {
+      "code": "804",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_itipm_804",
+      "referenceId": "8974",
+      "qualificationRecords": 688,
+      "pending": false
+    },
+    {
+      "code": "805",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_itpa_805",
+      "referenceId": "8975",
+      "qualificationRecords": 688,
+      "pending": false
+    },
+    {
+      "code": "901",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ecl_901",
+      "referenceId": "8976",
+      "qualificationRecords": 685,
+      "pending": false
+    },
+    {
+      "code": "121",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_exp_121",
+      "referenceId": "10727",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "131",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_jta_131",
+      "referenceId": "10728",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "132",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_tdna_132",
+      "referenceId": "10729",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "151",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_lang_151",
+      "referenceId": "10731",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "311",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_asm_311",
+      "referenceId": "10732",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "312",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_asrm_312",
+      "referenceId": "10733",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "331",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cip_331",
+      "referenceId": "10734",
+      "qualificationRecords": 15,
+      "pending": true
+    },
+    {
+      "code": "732",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_pcm_732",
+      "referenceId": "10736",
+      "qualificationRecords": 683,
+      "pending": false
+    },
+    {
+      "code": "321",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ano_321",
+      "referenceId": "10933",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "462",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_csss_462",
+      "referenceId": "13507",
+      "qualificationRecords": 32,
+      "pending": false
+    },
+    {
+      "code": "122",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_dnea_122",
+      "referenceId": "13933",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "133",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_tar_133",
+      "referenceId": "13934",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "322",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_cyop_322",
+      "referenceId": "13936",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "341",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ccd_341",
+      "referenceId": "13937",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "442",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_nt_442",
+      "referenceId": "13938",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "443",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_na_443",
+      "referenceId": "13939",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "463",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_ha_463",
+      "referenceId": "13940",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "452",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_scs_452",
+      "referenceId": "14071",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "633",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_sse_633",
+      "referenceId": "14072",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "551",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_rts_551",
+      "referenceId": "14073",
+      "qualificationRecords": 0,
+      "pending": true
+    },
+    {
+      "code": "721",
+      "url": "https://www.cool.osd.mil/don/cswf/matrix.html?moc=cswf_isso_721",
+      "referenceId": "14124",
+      "qualificationRecords": 0,
+      "pending": true
+    }
+  ],
+  "snapshots": {
+    "basic-info.json": "dd96678d7b056b52ede73fac0eb16b58a37a279a04e904823ff82b9133d2393b",
+    "qualifications.json": "baeab614bcf58aece668b6ac4b3c239dff3b5cd271c2ac3e722baca330a615f3",
+    "tksa.json": "a2f36aa87d36b817512268654c0161c284414fa15e89a83778c31f52e438fdcd"
+  }
+}

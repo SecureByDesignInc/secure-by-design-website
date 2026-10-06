@@ -1,0 +1,9 @@
+# Community
+
+The existing /careers URL is the combined Community and Career Explorer destination; its single site-wide navigation label is Community. Community content comes first, followed by the role-directory entry, career planning, and job-market tools. On-page links jump between Community and Career Explorer. The original templates are composed by `server/community-page.js`, retaining one shared header, main landmark, and footer.
+
+Three keyboard-accessible Community paths support career goals, independent confirmed resource emails, and private contributions. Direct links use #goals, #resources, and #contribute; #conversation remains a legacy alias for #goals. Explorer anchors include #career-explorer, #direction, and #market. The old /career-explorer root permanently redirects to /careers, preserving query parameters and inherited browser fragments. Role-directory and detail routes remain under /career-explorer/roles and link back to the combined page.
+
+Contributions require name, email, type, message, and consent to retain/contact; resource submissions require an HTTPS URL. URLs are stored, never fetched or published automatically. Submissions are saved before a notification to support@securebydesigninc.com is attempted through the existing Resend configuration. UUID idempotency and five submissions per source per day reduce duplicates and abuse. Notification failures do not discard the contribution; the private queue shows state and offers bounded retry within the provider deduplication window.
+
+Owner-only /community-contributions lists submissions with new/reviewing/closed review status. No status publishes content or contacts the contributor. Resource subscriptions and career records are unchanged. Existing authentication, DB, sender, recipient, and secrets are reused; additive migration 0002 creates contribution records, notification state and rate limits. No new third-party service or secret is needed.

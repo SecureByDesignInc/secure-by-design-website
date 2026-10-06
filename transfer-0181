@@ -1,0 +1,57 @@
+[
+  {
+    "slug": "what-is-active-directory",
+    "file": "active-directory.md",
+    "title": "What Is Active Directory?",
+    "description": "Let’s work through what AD does and follow the identities, systems, and services behind Dylan’s workday.",
+    "question": "What does AD actually do, and how does it all fit together?",
+    "topic": "The foundations",
+    "cisspDomain": 5,
+    "draft": true
+  },
+  {
+    "slug": "domains-forests-ous-and-trusts",
+    "file": "domains-forests-ous-and-trusts.md",
+    "title": "Understanding Domains, Forests, OUs, and Trusts",
+    "description": "Let’s figure out where the accounts belong, who manages them, and what those boundaries really mean.",
+    "question": "How should we organize this, and who needs to trust whom?",
+    "topic": "The structure",
+    "cisspDomain": 5
+  },
+  {
+    "slug": "users-groups-and-permissions",
+    "file": "users-groups-and-permissions.md",
+    "title": "Users, Groups, and Permissions: How Access Works",
+    "description": "Dylan can sign in, but he can’t open the folder. Let’s follow the permissions and find out why.",
+    "question": "How does Dylan get the access he needs?",
+    "topic": "Identity & access",
+    "cisspDomain": 5
+  },
+  {
+    "slug": "understanding-group-policy",
+    "file": "understanding-group-policy.md",
+    "title": "Group Policy: How Settings Reach Users and Systems",
+    "description": "Jon changes a setting. Now let’s see how it gets to Dylan’s workstation and whether it worked.",
+    "question": "How do we get the right settings onto the right machines?",
+    "topic": "Configuration",
+    "cisspDomain": 7
+  },
+  {
+    "slug": "replication-and-fsmo-roles",
+    "file": "replication-and-fsmo-roles.md",
+    "title": "Replication and FSMO Roles: Keeping AD Working Together",
+    "description": "Jon makes a change on one controller. Let’s see how the other catches up and who handles the special jobs.",
+    "question": "How do the controllers share changes and split up the work?",
+    "topic": "Reliability",
+    "cisspDomain": 7
+  },
+  {
+    "slug": "securing-active-directory",
+    "file": "securing-active-directory.md",
+    "title": "Securing Active Directory: Building on the Fundamentals",
+    "description": "Now that the setup makes sense, let’s talk about who can change it, how we notice problems, and how we recover.",
+    "question": "What do we need to protect, check, and be ready to recover?",
+    "topic": "Security",
+    "cisspDomain": 7
+  }
+]

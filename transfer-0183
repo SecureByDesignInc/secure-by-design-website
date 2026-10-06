@@ -1,0 +1,110 @@
+[
+  {
+    "id": "dc-guide",
+    "title": "Interactive build guide",
+    "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "description": "Explore the build and keep your evidence record.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dc-pdf",
+    "title": "Companion workbook · PDF",
+    "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf",
+    "description": "12 pages · edition 0.3",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dc-word",
+    "title": "Editable workbook · Word",
+    "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dc-package",
+    "title": "Complete learning package · ZIP",
+    "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
+    "description": "Guide, workbooks, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dns-configuration-guide",
+    "title": "Configure DNS · Interactive guide",
+    "url": "https://securebydesigninc.com/training/dns-configuration",
+    "description": "Zones, records, replication & troubleshooting",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dns-configuration-checklist",
+    "title": "Configure DNS · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/dns-configuration/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "two-tier-pki-guide",
+    "title": "Configure a Root CA & issuing CA · Interactive guide",
+    "url": "https://securebydesigninc.com/training/two-tier-pki",
+    "description": "Offline root + subordinate CA / Two-tier PKI",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "two-tier-pki-checklist",
+    "title": "Configure a Root CA & issuing CA · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/two-tier-pki/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-guide",
+    "title": "Interactive authorization course",
+    "url": "https://securebydesigninc.com/training/rmf/index.html",
+    "description": "Lessons, evidence examples, and the capstone.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-word",
+    "title": "Full training catalog · Word",
+    "url": "https://securebydesigninc.com/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
+    "description": "Edition 1.0 · 12 modules",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-evidence",
+    "title": "Body of Evidence examples and starters",
+    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence",
+    "description": "Ten examples with editable Markdown and CSV starters.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-capstone",
+    "title": "Authorization package capstone",
+    "url": "https://securebydesigninc.com/training/rmf/index.html#capstone",
+    "description": "Assemble, defend, and maintain the practice package.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  }
+]

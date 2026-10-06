@@ -1,0 +1,170 @@
+[
+  {
+    "id": "training:dc01-dc02:prepare",
+    "title": "Give every system a purpose",
+    "href": "/training/dc01-dc02/index.html#prepare",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dc01-dc02:dc01",
+    "title": "Create the first domain controller",
+    "href": "/training/dc01-dc02/index.html#dc01",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dc01-dc02:dc02",
+    "title": "Give the domain a second service point",
+    "href": "/training/dc01-dc02/index.html#dc02",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dc01-dc02:verify",
+    "title": "Ask the services to prove they work",
+    "href": "/training/dc01-dc02/index.html#verify",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dc01-dc02:evidence",
+    "title": "Leave a build someone else can understand",
+    "href": "/training/dc01-dc02/index.html#evidence",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dns-configuration:plan",
+    "title": "Map names to the network",
+    "href": "/training/dns-configuration#plan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dns-configuration:zones",
+    "title": "Configure forward and reverse zones",
+    "href": "/training/dns-configuration#zones",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dns-configuration:records",
+    "title": "Create and maintain service records",
+    "href": "/training/dns-configuration#records",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dns-configuration:verify",
+    "title": "Prove resolution and directory discovery",
+    "href": "/training/dns-configuration#verify",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dns-configuration:troubleshoot",
+    "title": "Find the fault and record the fix",
+    "href": "/training/dns-configuration#troubleshoot",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:design",
+    "title": "Design the two-tier trust hierarchy",
+    "href": "/training/two-tier-pki#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:root",
+    "title": "Configure the offline Root CA",
+    "href": "/training/two-tier-pki#root",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:request",
+    "title": "Create the issuing CA request",
+    "href": "/training/two-tier-pki#request",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:sign",
+    "title": "Sign through the offline ceremony",
+    "href": "/training/two-tier-pki#sign",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:publish",
+    "title": "Activate issuance and publish trust data",
+    "href": "/training/two-tier-pki#publish",
+    "group": "Network build"
+  },
+  {
+    "id": "training:two-tier-pki:validate",
+    "title": "Validate enrollment, revocation, and recovery",
+    "href": "/training/two-tier-pki#validate",
+    "group": "Network build"
+  },
+  {
+    "id": "training:rmf-boe-ato:01",
+    "title": "01 · RMF and authorization fundamentals",
+    "href": "/training/rmf/index.html#catalog/01",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:02",
+    "title": "02 · Prepare and define the system",
+    "href": "/training/rmf/index.html#catalog/02",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:03",
+    "title": "03 · Categorize information and impacts",
+    "href": "/training/rmf/index.html#catalog/03",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:04",
+    "title": "04 · Select and tailor controls",
+    "href": "/training/rmf/index.html#catalog/04",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:05",
+    "title": "05 · Write the system security plan",
+    "href": "/training/rmf/index.html#catalog/05",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:06",
+    "title": "06 · Connect implementation to proof",
+    "href": "/training/rmf/index.html#catalog/06",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:07",
+    "title": "07 · Organize the Body of Evidence",
+    "href": "/training/rmf/index.html#catalog/07",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:08",
+    "title": "08 · Plan and perform assessment",
+    "href": "/training/rmf/index.html#catalog/08",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:09",
+    "title": "09 · Manage findings and residual risk",
+    "href": "/training/rmf/index.html#catalog/09",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:10",
+    "title": "10 · Assemble the authorization package",
+    "href": "/training/rmf/index.html#catalog/10",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:11",
+    "title": "11 · Present the authorization decision",
+    "href": "/training/rmf/index.html#catalog/11",
+    "group": "Network authorization"
+  },
+  {
+    "id": "training:rmf-boe-ato:12",
+    "title": "12 · Monitor and maintain authorization",
+    "href": "/training/rmf/index.html#catalog/12",
+    "group": "Network authorization"
+  }
+]

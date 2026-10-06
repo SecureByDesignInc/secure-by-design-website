@@ -1,0 +1,484 @@
+{
+  "platforms": [
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "channelUrl": "https://www.youtube.com/channel/UCItxo3KJms-IuQKdFzFXqRg"
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "channelUrl": "https://www.tiktok.com/@jon_sbd"
+    },
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "channelUrl": "https://www.instagram.com/securebydesigninc/"
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "channelUrl": "https://discord.gg/MDrGbP4cAY"
+    }
+  ],
+  "episodes": [
+    {
+      "id": "dc01-dc02",
+      "number": "01",
+      "title": "Build the identity foundation",
+      "subtitle": "DC01 + DC02 / Active Directory & DNS",
+      "description": "Configure Active Directory and DNS on Windows Server 2025, understand why two controllers matter, and keep a record of the build.",
+      "tags": [
+        "Windows Server 2025",
+        "Active Directory",
+        "DNS"
+      ],
+      "youtubeId": null,
+      "systems": [
+        "DC01",
+        "DC02"
+      ],
+      "training": {
+        "guide": "/training/dc01-dc02/index.html",
+        "pdf": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf",
+        "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
+        "package": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
+        "cover": "/training/dc01-dc02/workbook-cover.webp",
+        "pages": 12,
+        "materialsEdition": "0.3",
+        "updated": "4 October 2026",
+        "copyrightOwner": "Secure By Design Team LLC",
+        "copyrightYear": 2026,
+        "notices": "/training/dc01-dc02/notices.html"
+      },
+      "chapters": [
+        {
+          "id": "prepare",
+          "label": "Plan the build",
+          "title": "Give every system a purpose",
+          "description": "Understand AD and DNS before choosing names, addresses, and the starting configuration.",
+          "network": "DC01 and DC02 are planned. The connections show where identity services will take shape.",
+          "timestamp": null
+        },
+        {
+          "id": "dc01",
+          "label": "Configure DC01",
+          "title": "Create the first service point",
+          "description": "Create the forest and bring Active Directory Domain Services and DNS online on DC01.",
+          "network": "DC01 is configured. DC02 remains a planned system until it joins this same domain.",
+          "timestamp": null
+        },
+        {
+          "id": "dc02",
+          "label": "Bring in DC02",
+          "title": "Give the domain a second home",
+          "description": "Add a second writable controller and understand the availability it provides.",
+          "network": "Both controllers serve the domain. The moving connection follows directory replication.",
+          "timestamp": null
+        },
+        {
+          "id": "verify",
+          "label": "Verify DNS",
+          "title": "Follow the discovery path",
+          "description": "Query each DNS server and compare the returned service records and addresses with your plan.",
+          "network": "Select either controller below to trace a DNS query from the client through the switch.",
+          "timestamp": null
+        },
+        {
+          "id": "evidence",
+          "label": "Keep evidence",
+          "title": "Leave a build you can explain",
+          "description": "Record the configuration, observed results, and follow-up work in your training companion.",
+          "network": "Identity and DNS now have two service points. Your build record connects choices with evidence.",
+          "timestamp": null
+        }
+      ],
+      "scene": "identity-dc",
+      "networkLabel": "VLAN 10 / IDENTITY",
+      "outcomeSummary": "One domain. Two writable controllers. DNS discovery and replication you can explain and verify.",
+      "outcomes": [
+        "Understand AD & DNS",
+        "Configure both controllers",
+        "Verify and keep evidence"
+      ],
+      "categoryId": "network-build",
+      "categoryOrder": 1
+    }
+  ],
+  "courses": [
+    {
+      "id": "rmf-boe-ato",
+      "number": "02A",
+      "afterEpisode": "dc01-dc02",
+      "title": "Risk Management Framework",
+      "subtitle": "Scope, categorization, and control selection",
+      "description": "Apply the Risk Management Framework (RMF) to the system built in Inside the Network. Establish responsibilities and boundaries, justify mission impacts, and select a defensible control set before developing its Body of Evidence.",
+      "tags": [
+        "Risk Management Framework",
+        "RMF",
+        "Categorization",
+        "Control selection"
+      ],
+      "systems": [],
+      "moduleCount": 4,
+      "lessonCount": 12,
+      "estimatedHours": 6,
+      "outcomes": [
+        "Explain the RMF lifecycle and authorization responsibilities.",
+        "Define and categorize the Inside the Network practice system.",
+        "Select and tailor controls with documented ownership and rationale."
+      ],
+      "stages": [
+        {
+          "number": "01",
+          "title": "RMF and authorization fundamentals",
+          "detail": "Explain the relationship between the RMF lifecycle, the Body of Evidence, the authorization package, and the authorization decision.",
+          "href": "/training/rmf/index.html#catalog/01"
+        },
+        {
+          "number": "02",
+          "title": "Prepare and define the system",
+          "detail": "Establish what is being authorized, why it exists, and which organizational and system preparation decisions must be made before documentation expands.",
+          "href": "/training/rmf/index.html#catalog/02"
+        },
+        {
+          "number": "03",
+          "title": "Categorize information and impacts",
+          "detail": "Justify confidentiality, integrity, and availability impacts using information types and mission consequences. Treat privacy applicability as an explicit decision.",
+          "href": "/training/rmf/index.html#catalog/03"
+        },
+        {
+          "number": "04",
+          "title": "Select and tailor controls",
+          "detail": "Translate the approved categorization and applicable requirements into a justified, assignable control set. Distinguish the control catalog from a selected baseline.",
+          "href": "/training/rmf/index.html#catalog/04"
+        }
+      ],
+      "training": {
+        "guide": "/training/rmf/index.html#catalog/01",
+        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
+        "pages": 11,
+        "materialsEdition": "1.0",
+        "updated": "4 October 2026",
+        "relatedResources": []
+      },
+      "categoryId": "network-authorization",
+      "categoryOrder": 1,
+      "artLabels": [
+        "Scope + responsibilities",
+        "Categorize the system",
+        "Select + tailor controls"
+      ],
+      "kind": "authorization",
+      "seriesPart": 1,
+      "moduleIds": [
+        "01",
+        "02",
+        "03",
+        "04"
+      ]
+    },
+    {
+      "id": "rmf-body-of-evidence",
+      "number": "02B",
+      "afterEpisode": "dc01-dc02",
+      "title": "Body of Evidence",
+      "subtitle": "Document, demonstrate, and assess the network",
+      "description": "Develop the Body of Evidence for the same Inside the Network build. Write the System Security Plan, connect implementation to proof, organize evidence, and assess findings and residual risk for authorization review.",
+      "tags": [
+        "Body of Evidence",
+        "SSP",
+        "Assessment",
+        "POA&M"
+      ],
+      "systems": [],
+      "moduleCount": 5,
+      "lessonCount": 15,
+      "estimatedHours": 9,
+      "outcomes": [
+        "Write specific implementation statements for the practice system.",
+        "Organize traceable, current technical and operational evidence.",
+        "Assess selected objectives and document findings, risk, and corrective actions."
+      ],
+      "stages": [
+        {
+          "number": "05",
+          "title": "Write the system security plan",
+          "detail": "Write a System Security Plan (SSP) that describes the actual system and explains how selected controls are implemented.",
+          "href": "/training/rmf/index.html#catalog/05"
+        },
+        {
+          "number": "06",
+          "title": "Connect implementation to proof",
+          "detail": "Collect technical and operational evidence that addresses the selected requirement and can support an assessment.",
+          "href": "/training/rmf/index.html#catalog/06"
+        },
+        {
+          "number": "07",
+          "title": "Organize the Body of Evidence",
+          "detail": "Make evidence easy to retrieve, trace, and maintain across system changes and assessment cycles.",
+          "href": "/training/rmf/index.html#catalog/07"
+        },
+        {
+          "number": "08",
+          "title": "Plan and perform assessment",
+          "detail": "Turn implementation claims into assessable objectives and distinguish a planned test from an observed result.",
+          "href": "/training/rmf/index.html#catalog/08"
+        },
+        {
+          "number": "09",
+          "title": "Manage findings and residual risk",
+          "detail": "Translate weaknesses into mission-relevant risk and an accountable response. Explain the difference between technical severity and contextual risk.",
+          "href": "/training/rmf/index.html#catalog/09"
+        }
+      ],
+      "training": {
+        "guide": "/training/rmf/index.html#catalog/05",
+        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
+        "pages": 11,
+        "materialsEdition": "1.0",
+        "updated": "4 October 2026",
+        "relatedResources": [
+          {
+            "title": "Open the Body of Evidence workspace",
+            "detail": "Ten examples with editable Markdown and CSV starters",
+            "href": "/training/rmf/index.html#evidence"
+          }
+        ]
+      },
+      "categoryId": "network-authorization",
+      "categoryOrder": 2,
+      "artLabels": [
+        "Write the security plan",
+        "Collect + organize proof",
+        "Assess + manage findings"
+      ],
+      "kind": "authorization",
+      "seriesPart": 2,
+      "moduleIds": [
+        "05",
+        "06",
+        "07",
+        "08",
+        "09"
+      ]
+    },
+    {
+      "id": "rmf-authorization-to-operate",
+      "number": "02C",
+      "afterEpisode": "dc01-dc02",
+      "title": "Authorization to Operate",
+      "subtitle": "Assemble, brief, and maintain the authorization package",
+      "description": "Turn the network’s Body of Evidence into a reviewable Authorization to Operate (ATO) package. Assemble the submission, brief the Authorizing Official on supported conclusions and remaining risk, and maintain evidence after the decision. Complete the shared course with the package capstone.",
+      "tags": [
+        "Authorization to Operate",
+        "ATO",
+        "Authorization package",
+        "Continuous monitoring"
+      ],
+      "systems": [],
+      "moduleCount": 3,
+      "lessonCount": 9,
+      "estimatedHours": 9,
+      "outcomes": [
+        "Assemble a consistent authorization package for the practice system.",
+        "Present supported conclusions and residual risk for the Authorizing Official’s decision.",
+        "Complete the package capstone and plan ongoing monitoring."
+      ],
+      "stages": [
+        {
+          "number": "10",
+          "title": "Assemble the authorization package",
+          "detail": "Build a reviewable package whose claims, assessment results, and open risks agree across documents.",
+          "href": "/training/rmf/index.html#catalog/10"
+        },
+        {
+          "number": "11",
+          "title": "Present the authorization decision",
+          "detail": "Communicate mission need, the assessed security posture, unresolved risk, and proposed risk responses to the decision maker.",
+          "href": "/training/rmf/index.html#catalog/11"
+        },
+        {
+          "number": "12",
+          "title": "Monitor and maintain authorization",
+          "detail": "Keep the authorization evidence useful as the system, threats, personnel, and dependencies change.",
+          "href": "/training/rmf/index.html#catalog/12"
+        }
+      ],
+      "training": {
+        "guide": "/training/rmf/index.html#catalog/10",
+        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
+        "pages": 11,
+        "materialsEdition": "1.0",
+        "updated": "4 October 2026",
+        "relatedResources": [
+          {
+            "title": "Open the authorization package capstone",
+            "detail": "Four hour exercise · Assemble, defend, and maintain the practice package",
+            "href": "/training/rmf/index.html#capstone"
+          },
+          {
+            "title": "Open the package manifest",
+            "detail": "Organize the evidence and submission records",
+            "href": "/training/rmf/index.html#evidence/manifest"
+          }
+        ]
+      },
+      "categoryId": "network-authorization",
+      "categoryOrder": 3,
+      "artLabels": [
+        "Assemble the package",
+        "Brief the risk decision",
+        "Monitor + maintain"
+      ],
+      "kind": "authorization",
+      "seriesPart": 3,
+      "moduleIds": [
+        "10",
+        "11",
+        "12"
+      ],
+      "capstoneHours": 4
+    },
+    {
+      "id": "dns-configuration",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "categoryOrder": 2,
+      "kind": "configuration",
+      "moduleCount": 5,
+      "lessonCount": 5,
+      "estimatedHours": 1.5,
+      "stages": [
+        {
+          "title": "Map names to the network",
+          "detail": "A DNS plan explains which server owns a name and how a client finds that server. Begin with the working directory build, then extend it deliberately."
+        },
+        {
+          "title": "Configure forward and reverse zones",
+          "detail": "Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers."
+        },
+        {
+          "title": "Create and maintain service records",
+          "detail": "Build a small, intentional record set. A host record identifies a machine; an alias provides a stable service name without making that alias a separate server."
+        },
+        {
+          "title": "Prove resolution and directory discovery",
+          "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records."
+        },
+        {
+          "title": "Find the fault and record the fix",
+          "detail": "Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name."
+        }
+      ],
+      "training": {
+        "guide": "/training/dns-configuration",
+        "checklist": "/training/dns-configuration/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "5 October 2026"
+      },
+      "number": "03",
+      "title": "Configure DNS",
+      "subtitle": "Zones, records, replication & troubleshooting",
+      "description": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
+      "tags": [
+        "Windows Server 2025",
+        "DNS",
+        "Name resolution"
+      ],
+      "systems": [
+        "SBD-DC01",
+        "SBD-DC02"
+      ],
+      "artLabels": [
+        "Forward + reverse zones",
+        "Records + replication",
+        "Verify name resolution"
+      ],
+      "outcomes": [
+        "Plan authoritative internal DNS and client settings.",
+        "Configure secure AD-integrated zones and maintain records.",
+        "Test both resolvers, directory discovery, and client fallback."
+      ]
+    },
+    {
+      "id": "two-tier-pki",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "categoryOrder": 3,
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "estimatedHours": 2.7,
+      "stages": [
+        {
+          "title": "Design the two-tier trust hierarchy",
+          "detail": "The root establishes trust. The subordinate, also called the issuing CA in this design, handles approved end-entity certificates. Keeping these roles separate protects the root from daily network exposure."
+        },
+        {
+          "title": "Configure the offline Root CA",
+          "detail": "Treat root installation as a controlled event. Its private key is the highest-value secret in the hierarchy, and its configuration shapes the subordinate certificate it will sign."
+        },
+        {
+          "title": "Create the issuing CA request",
+          "detail": "Prepare the online issuing server, but keep issuance paused until its CA certificate has been signed and installed. The request carries the public key; the private key stays protected on the issuing system or its approved key provider."
+        },
+        {
+          "title": "Sign through the offline ceremony",
+          "detail": "A signing ceremony connects an approved request to an approved CA identity. A matching filename alone is not proof that the root should trust the request."
+        },
+        {
+          "title": "Activate issuance and publish trust data",
+          "detail": "A running CA is only one part of a working PKI. Clients also need the approved trust anchor, the intermediate certificate, and current revocation information at the advertised locations."
+        },
+        {
+          "title": "Validate enrollment, revocation, and recovery",
+          "detail": "Finish from a clean domain client. Verify the experience of a relying system, including what happens when a certificate is no longer trusted."
+        }
+      ],
+      "training": {
+        "guide": "/training/two-tier-pki",
+        "checklist": "/training/two-tier-pki/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "5 October 2026"
+      },
+      "number": "04",
+      "title": "Configure a Root CA & issuing CA",
+      "subtitle": "Offline root + subordinate CA / Two-tier PKI",
+      "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
+      "tags": [
+        "Windows Server 2025",
+        "PKI",
+        "Root CA",
+        "Subordinate CA",
+        "AD CS"
+      ],
+      "systems": [
+        "SBD-ROOTCA01",
+        "SBD-SUBCA01"
+      ],
+      "artLabels": [
+        "Offline Root CA",
+        "Subordinate / issuing CA",
+        "Trust + revocation"
+      ],
+      "outcomes": [
+        "Design the CA hierarchy and its publication dependencies.",
+        "Configure the offline root and sign an issuing CA request through controlled media transfer.",
+        "Publish trust data and prove certificate enrollment and revocation."
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "network-build",
+      "title": "Build the Network",
+      "description": "Build identity, name resolution, and certificate trust with Active Directory, DNS, and PKI."
+    },
+    {
+      "id": "network-authorization",
+      "title": "Network Authorization",
+      "description": "Prepare the network’s Body of Evidence and Authorization to Operate package."
+    }
+  ]
+}
