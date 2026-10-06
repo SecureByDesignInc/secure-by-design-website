@@ -1,0 +1,239 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Secure By Design one-user disposable cyber lab proof of concept.
+
+Parameters:
+  LabName:
+    Type: String
+    Default: sbd-one-user-lab
+    AllowedPattern: '[a-zA-Z0-9-]+'
+  LabDurationMinutes:
+    Type: Number
+    Default: 120
+    MinValue: 30
+    MaxValue: 480
+  AttackBoxInstanceType:
+    Type: String
+    Default: t3.small
+    AllowedValues: [t3.micro, t3.small, t3.medium]
+  TargetInstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small]
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Resources:
+  LabVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.40.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-vpc'
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-igw'
+
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref LabVpc
+      InternetGatewayId: !Ref InternetGateway
+
+  LabSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref LabVpc
+      CidrBlock: 10.40.10.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-subnet'
+
+  LabRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref LabVpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-routes'
+
+  DefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachment
+    Properties:
+      RouteTableId: !Ref LabRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  SubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref LabSubnet
+      RouteTableId: !Ref LabRouteTable
+
+  AttackBoxSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: No inbound access; learner connects through SSM Session Manager.
+      VpcId: !Ref LabVpc
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-attackbox-sg'
+
+  TargetSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Target accepts lab traffic only from the AttackBox.
+      VpcId: !Ref LabVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref AttackBoxSecurityGroup
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          SourceSecurityGroupId: !Ref AttackBoxSecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-target-sg'
+
+  LabInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: Project
+          Value: !Ref LabName
+
+  LabInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref LabInstanceRole
+
+  AttackBox:
+    Type: AWS::EC2::Instance
+    DependsOn: DefaultRoute
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref AttackBoxInstanceType
+      IamInstanceProfile: !Ref LabInstanceProfile
+      SubnetId: !Ref LabSubnet
+      SecurityGroupIds:
+        - !Ref AttackBoxSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 12
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          systemd-run --unit=sbd-lab-autostop --on-active=${LabDurationMinutes}m /usr/bin/systemctl poweroff
+          dnf install -y nmap jq bind-utils
+          cat >/etc/motd <<'EOF'
+          Secure By Design - One User Lab
+
+          Goal: enumerate the web target and retrieve the flag.
+          Start with the TARGET_PRIVATE_IP shown in the CloudFormation Outputs tab.
+          Suggested tools: ping, nmap, curl
+          EOF
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-attackbox'
+        - Key: Project
+          Value: !Ref LabName
+        - Key: Role
+          Value: attackbox
+
+  Target:
+    Type: AWS::EC2::Instance
+    DependsOn: DefaultRoute
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref TargetInstanceType
+      IamInstanceProfile: !Ref LabInstanceProfile
+      SubnetId: !Ref LabSubnet
+      SecurityGroupIds:
+        - !Ref TargetSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 8
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          systemd-run --unit=sbd-lab-autostop --on-active=${LabDurationMinutes}m /usr/bin/systemctl poweroff
+          dnf install -y nginx
+          mkdir -p /usr/share/nginx/html/backup
+          cat >/usr/share/nginx/html/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en"><head><meta charset="utf-8"><title>SBD Lab</title></head>
+          <body><h1>Secure By Design Lab</h1><p>Linux web enumeration target.</p></body></html>
+          EOF
+          cat >/usr/share/nginx/html/robots.txt <<'EOF'
+          User-agent: *
+          Disallow: /backup/
+          EOF
+          cat >/usr/share/nginx/html/backup/notes.txt <<'EOF'
+          Training note: sensitive backups should never be stored beneath the web root.
+          FLAG{SBD_ENUMERATION_COMPLETE}
+          EOF
+          cat >/etc/nginx/default.d/lab-header.conf <<'EOF'
+          add_header X-Lab-Clue "Check-/robots.txt" always;
+          EOF
+          systemctl enable --now nginx
+      Tags:
+        - Key: Name
+          Value: !Sub '${LabName}-target'
+        - Key: Project
+          Value: !Ref LabName
+        - Key: Role
+          Value: target
+
+Outputs:
+  AttackBoxInstanceId:
+    Description: Select this instance in Systems Manager Session Manager to open the learner terminal.
+    Value: !Ref AttackBox
+  TargetPrivateIp:
+    Description: Address the learner should enumerate from the AttackBox.
+    Value: !GetAtt Target.PrivateIp
+  SessionManagerUrl:
+    Description: Browser terminal entry point. Choose Start session, then select the AttackBox instance.
+    Value: !Sub 'https://${AWS::Region}.console.aws.amazon.com/systems-manager/session-manager/start-session?region=${AWS::Region}'
+  FirstCommand:
+    Description: Suggested first learner command.
+    Value: !Sub 'nmap -sV ${Target.PrivateIp}'
+  Expiration:
+    Description: Instances power off automatically after this many minutes. Delete the stack after testing to remove storage and networking.
+    Value: !Ref LabDurationMinutes

@@ -1,0 +1,12 @@
+main.community-career-page{max-width:none;margin:0;padding:0}
+.community-career-page>.career-hub{max-width:1180px;margin:0 auto;padding:30px 28px 52px}
+.community-section-links{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+.community-section-links a{display:inline-flex;align-items:center;gap:16px;padding:10px 18px;border:1px solid #adc9dc;border-radius:999px;background:#fff;color:#163d58;font-size:14px;font-weight:650;text-decoration:none}
+.community-section-links a:first-child{background:#11364d;color:#e2f7ff;border-color:#11364d}
+.community-section-links a:hover{background:#dceefa;color:#102d43}
+.community-section-links a:focus-visible{outline:3px solid #1269b9;outline-offset:4px}
+#community,#career-explorer{scroll-margin-top:20px}
+.community-career-page>.career-explorer-content{border-top:1px solid #bad2e1}
+.community-career-page .role-directory-intro h2{font-family:var(--font-geist-sans),Arial,sans-serif;font-size:clamp(30px,4vw,46px);font-weight:500;letter-spacing:-1.2px;line-height:1.12;margin:14px 0;color:#f4f8fd}
+.community-career-page .career-explorer-content :is(input,select,button){box-shadow:none}
+@media(max-width:760px){.community-career-page>.career-hub{padding:22px 18px 36px}.community-section-links{gap:8px;margin-bottom:18px}.community-section-links a{padding:10px 14px;font-size:13px}}
