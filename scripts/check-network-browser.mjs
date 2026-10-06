@@ -23,7 +23,8 @@ const server = createServer(async (req, res) => {
   catch { res.writeHead(404); res.end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-const url = `http://127.0.0.1:${server.address().port}/inside-network-model/model.html`;
+// ?qa exposes read-only test helpers (packet, equipment, and label positions); nothing else uses it.
+const url = `http://127.0.0.1:${server.address().port}/inside-network-model/model.html?qa`;
 let browser;
 try { browser = await playwright.chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }); }
 catch (error) { server.close(); console.log(`Browser checks skipped: Chromium could not start (${error.message.split('\n')[0]}).`); process.exit(0); }
@@ -68,6 +69,57 @@ try {
     await page.locator('#knowledgeCheck summary').click();
     for (const [i, q] of knowledgeChecks.web.entries()) await page.locator(`input[name="kc-web-${i}"][value="${q.correct}"]`).check();
     assert.equal(await page.locator('#knowledgeStatus').textContent(), `${knowledgeChecks.web.length} of ${knowledgeChecks.web.length} correct`);
+    // The attack drill replays the acceptance tests; every attempt is stopped.
+    const drillIndex = whatIfs.findIndex(s => s.drill);
+    await page.locator('#whatIfButtons button').nth(drillIndex).click();
+    assert.equal(await page.locator('#steps button').count(), whatIfs[drillIndex].steps.length);
+    await page.locator('#flowTab').click();
+    assert.match(await page.locator('.drill-summary').textContent(), /6 of 6/, 'Drill scorecard');
+    // Inspect a packet with the keyboard-accessible button, then by selecting one in the 3D view.
+    await page.locator('#scenarioButtons button').nth(0).click();
+    await page.locator('#steps button').nth(1).click();
+    await page.locator('#flowTab').click();
+    await page.locator('[data-inspect=request]').click();
+    assert.equal(await page.locator('#packetCard').isVisible(), true, 'Packet card opens');
+    assert.equal(await page.locator('#packetTitle').textContent(), 'Domain Name System (DNS)');
+    assert.match(await page.locator('#packetCard').textContent(), /10\.0\.10\.10[\s\S]*READABLE ON THE WIRE[\s\S]*F01/, 'Packet card shows addresses, what is readable, and the policy decision');
+    await page.locator('.packet-close').click();
+    assert.equal(await page.locator('#packetCard').isVisible(), false, 'Packet card closes');
+    await page.locator('#motion').click();
+    await page.evaluate(() => scrollTo(0, 0));
+    const packet = (await page.evaluate(() => window.insideNetworkQA.packets()))[0];
+    await page.mouse.click(packet.x, packet.y);
+    assert.equal(await page.locator('#packetCard').isVisible(), true, 'Selecting a packet in the 3D view inspects it');
+    await page.keyboard.press('Escape');
+    await page.locator('.packet-close').click().catch(() => {});
+    await page.locator('#motion').click();
+    // Hover highlights equipment and names it.
+    await page.locator('#overview').click();
+    await page.waitForTimeout(2600);
+    await page.evaluate(() => scrollTo(0, 0));
+    const pcs = await page.evaluate(() => window.insideNetworkQA.project('workstations'));
+    await page.mouse.move(pcs.x, pcs.y);
+    assert.match(await page.locator('#hoverTip').textContent(), /50 Windows 11 PCs/, 'Hover tooltip');
+    await page.mouse.move(2, 2);
+    // Rack names are readable in the full-room view.
+    const zoneLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'zone' && l.show).length);
+    assert(zoneLabels >= 6, `Most rack names show in the full-room view (${zoneLabels} of 8)`);
+    // Connection map for one system.
+    await page.selectOption('#systemSelect', 'dc1');
+    await page.locator('#connectionsToggle').click();
+    assert.equal(await page.locator('#connectionsToggle').getAttribute('aria-pressed'), 'true');
+    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*Pending[\s\S]*F03/, 'Connections list every rule for the system');
+    await page.locator('#connectionsToggle').click();
+    // Logical view (with a shareable link) and the cinematic look.
+    await page.locator('#viewToggle').click();
+    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true');
+    await page.waitForFunction(() => location.hash.includes('layout=logical'));
+    await page.waitForTimeout(1800);
+    await page.locator('#viewToggle').click();
+    await page.locator('#lookToggle').click();
+    assert.equal(await page.locator('#lookToggle').getAttribute('aria-pressed'), 'true');
+    await page.waitForTimeout(1500);
+    await page.locator('#lookToggle').click();
     const systems = await page.locator('#systemSelect option').evaluateAll(options => options.map(option => option.value));
     for (const id of systems) { await page.selectOption('#systemSelect', id); assert((await page.locator('#systemContent h2').textContent()).length > 0); }
     for (let i = 0; i < await page.locator('#vlanLegend button').count(); i++) {
@@ -95,9 +147,10 @@ try {
   }
   // Shareable links open the linked step.
   {
-    const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2' });
+    const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2&layout=logical' });
     assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 3');
     assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
+    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Links can open the logical view');
     await context.close();
   }
   // Mobile layout stays within the viewport.
@@ -121,7 +174,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs, policy-matched motion, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();

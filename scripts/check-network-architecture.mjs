@@ -3,7 +3,8 @@ import {readFileSync} from 'node:fs';
 import {inventory} from '../public/inside-network-model/inventory.js';
 import {vlans,buildArchitectureNodes,additionalControls,facilities} from '../public/inside-network-model/architecture.js';
 import {scenarios,whatIfs,sequences} from '../public/inside-network-model/technical.js';
-import {stepPolicy} from '../public/inside-network-model/flow-policy.js';
+import {stepPolicy,serviceFor} from '../public/inside-network-model/flow-policy.js';
+import {packetProfiles,describePacket} from '../public/inside-network-model/packets.js';
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
 import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
@@ -49,15 +50,32 @@ assert.equal(outcome('pc-to-sql'),'deny');
 assert.equal(outcome('peer-rdp'),'deny');
 assert.equal(stepPolicy(sequences.find(s=>s.id==='peer-rdp').steps[0]).rule.id,'D02');
 assert.equal(outcome('signin'),'pending,traffic,traffic,pending','Pending DHCP relay and directory profile stay blocked in the motion');
+// The attack drill replays the design's acceptance tests: every attempt is stopped by the rule that test names.
+const drill=sequences.find(s=>s.id==='drill');
+assert(drill?.drill&&drill.whatIf,'Attack drill is listed with the what-ifs');
+assert.equal(outcome('drill'),'deny,deny,deny,deny,pending,deny','Every drill attempt is stopped');
+assert.deepEqual(drill.steps.map(step=>stepPolicy(step).rule.id),['DEFAULT-DENY','DEFAULT-DENY','D01','D02','F14','DEFAULT-DENY']);
+assert.equal(serviceFor(drill.steps[5]),'Management');
+for(const step of drill.steps)assert(securityPractices.some(p=>p.tests.includes(step.test)),`Drill step "${step.short}" replays a documented acceptance test`);
+// Packet inspection covers every networked step, for requests and replies.
+for(const scenario of sequences)scenario.steps.forEach((step,index)=>{
+ if(step.manual)return;
+ assert(packetProfiles[`${scenario.id}:${index}`],`${scenario.id} step ${index+1}: packet profile`);
+ for(const kind of ['request','reply']){
+  const card=describePacket({sequence:scenario,stepIndex:index,step,policy:stepPolicy(step),info:{kind,where:'core'},name:id=>byId.get(id).name,address:id=>byId.get(id).address,sameVlan:step.from===step.to});
+  assert(card.layers.length===3&&card.readable&&card.protectedText&&card.decision,`${scenario.id} step ${index+1}: packet card`);
+ }
+});
+assert.equal(Object.keys(packetProfiles).length,sequences.flatMap(s=>s.steps.filter(step=>!step.manual)).length,'No stale packet profiles');
 for(const [id,keys] of Object.entries({...systemCourses,...processCourses}))for(const key of keys)assert(courses[key]&&(byId.has(id)||sequences.some(s=>s.id===id)),`Course link ${id} → ${key}`);
 for(const course of Object.values(courses))assert(/^\/training\//.test(course.href),'Course links stay on this site');
-for(const scenario of scenarios){
+for(const scenario of [...scenarios,drill]){
  const checks=knowledgeChecks[scenario.id];assert(checks?.length>=2,`${scenario.id}: knowledge check`);
  for(const q of checks){assert(q.question&&q.explanation&&q.answers.length>=3);assert(Number.isInteger(q.correct)&&q.correct>=0&&q.correct<q.answers.length);assert.equal(new Set(q.answers).size,q.answers.length);}
 }
 const html=readFileSync(new URL('../public/inside-network-model/model.html',import.meta.url),'utf8');
 const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size,'Unique UI targets');
-console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences plus ${whatIfs.length} what-ifs, policy-matched motion, course links, knowledge checks, and offline-root isolation.`);
+console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences plus ${whatIfs.length} what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.`);
 const designIds=new Set([...byId.keys(),...facilities.map(f=>f.id)]);
 for(const p of securityPractices){for(const id of p.ids)assert(designIds.has(id));for(const c of p.controls)assert(controls[c],`Unknown security control ${c}`);assert(p.tests.length&&p.evidence.length);}
 for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id),`Unknown policy endpoint ${id}`);

@@ -68,6 +68,7 @@ export default function InsideTheNetworkPage() {
               {scenario.steps.map(step => <li key={step.title}>
                 <strong>{step.title}</strong> <span className="network-text-meta">{step.from} → {step.to} · {step.protocol}</span>
                 <p>{step.description}</p>
+                {step.test ? <p className="network-text-meta">Acceptance test: {step.test}</p> : null}
               </li>)}
             </ol>
           </section>)}

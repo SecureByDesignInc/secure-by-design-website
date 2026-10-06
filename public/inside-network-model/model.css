@@ -236,3 +236,71 @@ body.recording .stage-heading,body.recording .flow-caption,body.recording .scene
  .whatif-row{gap:8px}
  .scenarios #whatIfButtons button{font-size:11px;padding:6px 11px}
 }
+/* October 6, 2026 (round 3): hover tooltips, packet inspection, connection map, attack drill, logical view, cinematic look, and clip options. */
+.hover-tip{position:absolute;left:0;top:0;z-index:5;display:grid;gap:3px;max-width:260px;padding:9px 12px;border:1px solid #3d6a80;border-radius:8px;background:#071524f2;box-shadow:0 10px 30px #0008;pointer-events:none;font-size:12px;line-height:1.4;color:#c9deeb}
+.hover-tip[hidden]{display:none}
+.hover-tip strong{font-size:13px;color:#f0f9ff}
+.hover-tip code{font:600 12px/1.4 Consolas,monospace;color:#8fe6f0}
+.hover-tip span{color:#a5c1d3}
+.packet-card{position:absolute;right:18px;top:74px;z-index:6;width:min(390px,calc(100% - 36px));max-height:calc(100% - 150px);overflow:auto;padding:16px 18px;border:1px solid #4a7d92;border-left:3px solid #fff1c2;border-radius:10px;background:#071627f5;box-shadow:0 20px 60px #000a;color:#cfe3ef;font-size:13px;line-height:1.55;scrollbar-color:#3b566e #071627}
+.packet-card[hidden]{display:none}
+.packet-card:focus-visible{outline:3px solid #eacb8f;outline-offset:2px}
+.packet-card-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.packet-card h2{margin:6px 0 0;font-size:16px;line-height:1.35;font-weight:600;color:#f3f9ff}
+.packet-close{flex:none;min-height:32px;width:32px;padding:0;font-size:14px}
+.packet-where{margin:10px 0 12px;color:#fff1c2;font-size:12px;font-weight:600}
+.packet-layers{display:grid;gap:8px;margin:0}
+.packet-layer{padding:9px 11px;border:1px solid #24445a;border-radius:7px;background:#0b1e30}
+.packet-layer dt{font-size:11px;font-weight:650;letter-spacing:.4px;color:#8fd9e6;margin-bottom:5px}
+.packet-layer dd{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px;margin:3px 0 0}
+.packet-layer dd span{color:#8eabc2;font-size:12px}
+.packet-layer dd code{font:12px/1.5 Consolas,monospace;color:#e2f3fb;overflow-wrap:anywhere}
+.packet-wire{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.packet-wire span,.packet-decision span{display:block;font-size:10px;font-weight:650;letter-spacing:1.2px;color:#8eabc2;margin-bottom:4px}
+.packet-wire p{margin:0;font-size:12px;color:#c3d8e6}
+.packet-decision{margin:12px 0 0;padding:10px 12px;border-radius:7px;background:#0e2a28;color:#bdf3dc;font-size:12px}
+.packet-decision.pending{background:#33280f;color:#f4dca9}.packet-decision.deny,.packet-decision.unreachable,.packet-decision.rejected{background:#3a1b22;color:#f6c6cc}
+.packet-note{margin:10px 0 0;font-size:12px;color:#a8c3d5}
+.packet-actions{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 16px}
+.packet-actions button{min-height:40px;padding:8px 13px;border-color:#5f8fa3;background:#12324a;color:#d8f6ff}
+.drill-test{display:grid;gap:5px;margin:4px 0 16px;padding:12px 14px;border:1px solid #6b3a44;border-left:3px solid #ee9294;border-radius:8px;background:#2a141a}
+.drill-test span{font-size:10px;font-weight:650;letter-spacing:1.2px;color:#f0b3b8}
+.drill-test strong{font-size:13px;font-weight:600;color:#ffe3e5;line-height:1.5}
+.drill-summary strong{color:#7fe0b7}
+.drill-scorecard{display:grid;gap:6px;margin:0;padding:0!important;list-style:none}
+.drill-scorecard li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:9px 11px;margin:0;border:1px solid #2b4a60;border-radius:7px;background:#0b1e30;font-size:12px;line-height:1.45}
+.drill-scorecard li[aria-current=step]{border-color:#ee9294;background:#2a141a}
+.drill-scorecard strong{font-size:11px;color:#ee9294;text-align:right}.drill-scorecard li.pending strong{color:#e6bc82}
+.drill-scorecard small{grid-column:1/-1;color:#8eabc2;font-size:11px}
+.scenarios #whatIfButtons .drill-button{border-color:#7a3c46;background:#2a141a;color:#ffd5d8}
+.scenarios #whatIfButtons .drill-button[aria-current=true]{background:#3a1b22;border-color:#ee9294;color:#ffe3e5}
+.connections{display:grid;gap:8px}
+.connections-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#systemContent .connections-head p{margin:0;font-size:14px;line-height:1.5}
+.connections-head button{flex:none;min-height:40px}
+.connections-group{margin:10px 0 2px;font-size:12px;letter-spacing:.4px;color:#7fe0b7}
+.connections-group.pending{color:#e6bc82}.connections-group.deny{color:#ee9294}
+.connections-group span{font-weight:400;color:#8eabc2}
+.connections-list{display:grid;gap:6px;margin:0;padding:0!important;list-style:none}
+#systemContent .connections-list li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:2px 10px;margin:0;padding:9px 11px;border:1px solid #24445a;border-left:3px solid #7fe0b7;border-radius:7px;background:#0b1e30;font-size:13px;line-height:1.45}
+#systemContent .connections-list li.pending{border-left-color:#e6bc82}#systemContent .connections-list li.deny{border-left-color:#ee9294}
+.connections-list b{grid-row:span 2;font:600 13px/1.4 Consolas,monospace;color:#e2f3fb}
+.connections-list small{color:#8eabc2;font-size:12px}
+body.look-cinematic .stage{background:#03070d}
+.clip-options{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start}
+.clip-extras{margin:0;padding:0;border:0;display:grid;gap:2px}
+.clip-extras legend{margin-bottom:4px;font-size:13px;font-weight:600;color:#cfe3ef}
+@media(max-width:780px){
+ .packet-card{top:auto;bottom:12px;right:12px;left:12px;width:auto;max-height:70%}
+ .packet-wire{grid-template-columns:1fr}
+ .packet-layer dd{grid-template-columns:96px minmax(0,1fr)}
+ .clip-options{grid-template-columns:1fr}
+ .connections-head{flex-wrap:wrap}
+}
+.packet-card{padding:14px 16px}
+.packet-layer{padding:8px 10px}
+.packet-layer dd{grid-template-columns:100px minmax(0,1fr)}
+@media(min-width:781px){.packet-card.left{right:auto;left:18px;top:150px;max-height:calc(100% - 230px)}}
+/* Phones: short tool names keep the scene tools on one row (accessible names stay in full). */
+.tool-short{display:none}
+@media(max-width:780px){.tool-long{display:none}.tool-short{display:inline}.scene-tools{gap:4px}.scene-tools button{padding:6px 7px}.packet-layer dd{grid-template-columns:96px minmax(0,1fr)}}

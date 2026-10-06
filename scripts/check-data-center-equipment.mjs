@@ -9,7 +9,8 @@ import {dataCenterLayout,equipmentPosition} from '../public/inside-network-model
 // A minimal canvas surface lets CanvasTexture objects exist without a renderer.
 globalThis.document={createElement(name){
  assert.equal(name,'canvas');
- return {width:0,height:0,getContext(){return {fillRect(){},fillText(){}};}};
+ // Any 2D drawing call (labels, role icons) is a no-op here.
+ return {width:0,height:0,getContext(){return new Proxy({},{get:(target,key)=>key in target?target[key]:()=>{},set:(target,key,value)=>{target[key]=value;return true;}});}};
 }};
 const scene=new THREE.Scene(),lights=[],kit=createEquipment(lights);
 kit.room(scene);

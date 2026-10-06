@@ -4,6 +4,7 @@ import {trafficRules,evaluateFlow,policyStatus} from './security.js';
 
 export function serviceFor(step){
  const protocol=step.protocol.toLowerCase();
+ if(protocol.includes('management'))return 'Management';
  if(protocol.includes('kerberos'))return 'Kerberos';
  if(protocol.includes('dns'))return 'DNS';
  if(protocol.includes('dhcp'))return 'DHCP';

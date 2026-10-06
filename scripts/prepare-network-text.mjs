@@ -55,6 +55,8 @@ const sequenceText = scenario => ({
     to: name(step.to),
     protocol: step.protocol,
     description: step.description,
+    // Attack-drill steps name the acceptance test they replay; other steps leave this empty.
+    test: step.test ?? '',
   })),
 });
 const processes = scenarios.map(sequenceText);
