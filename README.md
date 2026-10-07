@@ -29,7 +29,7 @@ The `/cyber-range` page combines planned walkthroughs and sandbox exercises, reu
 - `app/cyber-range/page.tsx` and `app/cyber-range/lab-access.tsx`: Cyber Range description and local login preview.
 - `app/rmf-series/` and `content/rmf.ts`: RMF chapters and the system profile.
 - `app/rmf-series/phases-and-evidence/` and `content/rmf-evidence.ts`: consolidated phase, artifact, responsibility, authorization-package, and evidence-maintenance guide.
-- `app/videos/page.tsx` and `content/videos.json`: Training Library and editable training/channel catalog. The navigation and blog sidebar link to `/videos`.
+- `app/training/page.tsx` and `content/videos.json`: Training Library at `/training` (the old `/videos` route redirects) and the editable training/channel catalog.
 
 ## Adding videos
 

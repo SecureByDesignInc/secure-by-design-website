@@ -24,7 +24,7 @@
   "episodes": [
     {
       "id": "dc01-dc02",
-      "number": "01",
+      "number": "1.1",
       "title": "Build the identity foundation",
       "subtitle": "DC01 + DC02 / Active Directory & DNS",
       "description": "Configure Active Directory and DNS on Windows Server 2025, understand why two controllers matter, and keep a record of the build.",
@@ -108,7 +108,7 @@
   "courses": [
     {
       "id": "rmf-boe-ato",
-      "number": "02A",
+      "number": "2.1",
       "afterEpisode": "dc01-dc02",
       "title": "Risk Management Framework",
       "subtitle": "Scope, categorization, and control selection",
@@ -180,7 +180,7 @@
     },
     {
       "id": "rmf-body-of-evidence",
-      "number": "02B",
+      "number": "2.2",
       "afterEpisode": "dc01-dc02",
       "title": "Body of Evidence",
       "subtitle": "Document, demonstrate, and assess the network",
@@ -265,7 +265,7 @@
     },
     {
       "id": "rmf-authorization-to-operate",
-      "number": "02C",
+      "number": "2.3",
       "afterEpisode": "dc01-dc02",
       "title": "Authorization to Operate",
       "subtitle": "Assemble, brief, and maintain the authorization package",
@@ -375,9 +375,10 @@
         "guide": "/training/dns-configuration",
         "checklist": "/training/dns-configuration/configuration-checklist.md",
         "materialsEdition": "1.0",
-        "updated": "5 October 2026"
+        "updated": "5 October 2026",
+        "checklistPage": "/training/dns-configuration/checklist"
       },
-      "number": "03",
+      "number": "1.2",
       "title": "Configure DNS",
       "subtitle": "Zones, records, replication & troubleshooting",
       "description": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
@@ -440,9 +441,10 @@
         "guide": "/training/two-tier-pki",
         "checklist": "/training/two-tier-pki/configuration-checklist.md",
         "materialsEdition": "1.0",
-        "updated": "5 October 2026"
+        "updated": "5 October 2026",
+        "checklistPage": "/training/two-tier-pki/checklist"
       },
-      "number": "04",
+      "number": "1.3",
       "title": "Configure a Root CA & issuing CA",
       "subtitle": "Offline root + subordinate CA / Two-tier PKI",
       "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
@@ -473,12 +475,12 @@
     {
       "id": "network-build",
       "title": "Build the Network",
-      "description": "Build identity, name resolution, and certificate trust with Active Directory, DNS, and PKI."
+      "description": "Build identity, name resolution, and certificate trust with Active Directory, DNS, and PKI. Follow the courses in order, starting with 1.1."
     },
     {
       "id": "network-authorization",
       "title": "Network Authorization",
-      "description": "Prepare the network’s Body of Evidence and Authorization to Operate package."
+      "description": "Prepare the network’s Body of Evidence and Authorization to Operate package. Start after the network build, with course 2.1."
     }
   ]
 }

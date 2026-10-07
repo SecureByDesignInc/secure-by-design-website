@@ -1,141 +1,763 @@
 [
   {
     "id": "dns-configuration",
-    "prerequisites": ["Complete the DC01 + DC02 identity build with both domain controllers healthy.", "Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.", "Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24."],
+    "prerequisites": [
+      "Complete the DC01 + DC02 identity build with both domain controllers healthy.",
+      "Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.",
+      "Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24."
+    ],
     "labNote": "The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS dependency.",
     "sources": [
-      {"id":"install","title":"Microsoft · Install and configure DNS Server","url":"https://learn.microsoft.com/en-us/windows-server/networking/dns/quickstart-install-configure-dns-server"},
-      {"id":"zones","title":"Microsoft · Manage DNS zones","url":"https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-dns-zones"},
-      {"id":"records","title":"Microsoft · Manage DNS resource records","url":"https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records"},
-      {"id":"resolve","title":"Microsoft · Resolve-DnsName","url":"https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname"},
-      {"id":"dcdiag","title":"Microsoft · Dcdiag","url":"https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag"}
+      {
+        "id": "install",
+        "title": "Microsoft · Install and configure DNS Server",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/quickstart-install-configure-dns-server"
+      },
+      {
+        "id": "zones",
+        "title": "Microsoft · Manage DNS zones",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-dns-zones"
+      },
+      {
+        "id": "records",
+        "title": "Microsoft · Manage DNS resource records",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records"
+      },
+      {
+        "id": "resolve",
+        "title": "Microsoft · Resolve-DnsName",
+        "url": "https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname"
+      },
+      {
+        "id": "dcdiag",
+        "title": "Microsoft · Dcdiag",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag"
+      }
     ],
     "lessons": [
       {
-        "id":"plan","title":"Map names to the network","minutes":15,
-        "summary":"A DNS plan explains which server owns a name and how a client finds that server. Begin with the working directory build, then extend it deliberately.",
-        "steps":["Record the domain, each subnet, both DNS addresses, and the owner of each service name. Keep host records and service aliases distinguishable.","On each domain controller, open DNS Manager and review the existing sbd.test and _msdcs zones. Promotion may already have created them; do not create duplicate zones.","Check the DNS role and static network settings. Domain members must use internal DNS servers that resolve the AD namespace; a public resolver is not an alternate for this environment.","Decide whether any separate internal namespace needs a conditional forwarder. With no recursive dependencies, document a no-recursion design; do not add internet forwarders or delete every root hint as a shortcut."],
-        "command":"Get-WindowsFeature DNS\nGet-DnsClientServerAddress -AddressFamily IPv4\nGet-DnsServerZone -ComputerName SBD-DC01",
-        "check":"Both servers and the client point to the intended internal DNS service. Existing AD zones and the forwarding/recursion decision are recorded.",
-        "evidence":"Save the address/name worksheet and the initial zone inventory before changing anything.",
-        "quiz":{"question":"Which DNS servers should a domain member use in this lab?","answers":["The internal DNS servers that resolve sbd.test","A public resolver whenever the first DC is unavailable","The offline Root CA"],"correct":0,"explanation":"AD clients need the internal namespace and its service records. Internet reachability would not replace that requirement."},
-        "sources":["install"]
+        "id": "plan",
+        "title": "Map names to the network",
+        "minutes": 15,
+        "summary": "A DNS plan explains which server owns a name and how a client finds that server. Begin with the working directory build, then extend it deliberately.",
+        "steps": [
+          "Record the domain, each subnet, both DNS addresses, and the owner of each service name. Keep host records and service aliases distinguishable.",
+          "On each domain controller, open DNS Manager and review the existing sbd.test and _msdcs zones. Promotion may already have created them; do not create duplicate zones.",
+          "Check the DNS role and static network settings. Domain members must use internal DNS servers that resolve the AD namespace; a public resolver is not an alternate for this environment.",
+          "Decide whether any separate internal namespace needs a conditional forwarder. With no recursive dependencies, document a no-recursion design; do not add internet forwarders or delete every root hint as a shortcut."
+        ],
+        "command": "Get-WindowsFeature DNS\nGet-DnsClientServerAddress -AddressFamily IPv4\nGet-DnsServerZone -ComputerName SBD-DC01",
+        "check": "Both servers and the client point to the intended internal DNS service. Existing AD zones and the forwarding/recursion decision are recorded.",
+        "evidence": "Save the address/name worksheet and the initial zone inventory before changing anything.",
+        "sources": [
+          "install"
+        ],
+        "objectives": [
+          "Explain which DNS servers a domain member must use in this lab and why.",
+          "Inventory the existing sbd.test and _msdcs zones without creating duplicates.",
+          "Document the forwarding and recursion decision for an air-gapped network."
+        ],
+        "quizzes": [
+          {
+            "question": "Which DNS servers should a domain member use in this lab?",
+            "answers": [
+              "The internal DNS servers that resolve sbd.test",
+              "A public resolver whenever the first DC is unavailable",
+              "The offline Root CA"
+            ],
+            "correct": 0,
+            "explanation": "AD clients need the internal namespace and its service records. Internet reachability would not replace that requirement."
+          },
+          {
+            "question": "Promotion already created the sbd.test and _msdcs zones. What should you do?",
+            "answers": [
+              "Delete them and start from a clean zone list",
+              "Review and record them without creating duplicate zones",
+              "Create a second sbd.test zone for DC02"
+            ],
+            "correct": 1,
+            "explanation": "Promotion builds the zones Active Directory needs. Duplicating or recreating them breaks the record you are trying to verify."
+          },
+          {
+            "question": "Why does this design document a no-recursion decision instead of adding internet forwarders?",
+            "answers": [
+              "Forwarders are always a security violation",
+              "Root hints make zones replicate faster",
+              "The network has no recursive dependencies, so the decision is recorded deliberately"
+            ],
+            "correct": 2,
+            "explanation": "In an air-gapped lab there is nothing to forward to. Writing the decision down keeps the design intentional rather than accidental."
+          }
+        ],
+        "recap": [
+          "Domain members point only at the internal DNS servers that resolve sbd.test.",
+          "The existing AD zones are inventoried, not recreated.",
+          "The forwarding and recursion decision is written down before anything changes."
+        ],
+        "next": "Lesson 2 turns this plan into AD-integrated forward and reverse zones."
       },
       {
-        "id":"zones","title":"Configure forward and reverse zones","minutes":20,
-        "summary":"Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers.",
-        "steps":["In DNS Manager, inspect sbd.test Properties. Confirm that it is AD-integrated and choose the domain or forest replication scope that matches the DNS servers intended to host it.","Use secure dynamic updates for the AD-integrated zone. Review delegation and permissions before broadening who can change records.","Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist. Select the approved replication scope and secure updates.","Review zone-transfer settings. AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly."],
-        "command":"Get-DnsServerZone -ComputerName SBD-DC01 |\n  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope\nGet-DnsServerZone -ComputerName SBD-DC02",
-        "check":"The intended forward and reverse zones appear on both DNS hosts after replication. The reverse zone for this /24 is 10.0.10.in-addr.arpa.",
-        "evidence":"Capture the zone type, update policy, replication scope, and transfer policy for each zone.",
-        "quiz":{"question":"How does an AD-integrated zone reach the other DNS-enabled domain controller in its replication scope?","answers":["An unrestricted zone transfer to every client","Active Directory replication","A manual copy of the DNS cache"],"correct":1,"explanation":"AD-integrated zone data follows directory replication. A conventional secondary zone uses a different transfer mechanism."},
-        "sources":["zones"]
+        "id": "zones",
+        "title": "Configure forward and reverse zones",
+        "minutes": 20,
+        "summary": "Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers.",
+        "steps": [
+          "In DNS Manager, inspect sbd.test Properties. Confirm that it is AD-integrated and choose the domain or forest replication scope that matches the DNS servers intended to host it.",
+          "Use secure dynamic updates for the AD-integrated zone. Review delegation and permissions before broadening who can change records.",
+          "Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist. Select the approved replication scope and secure updates.",
+          "Review zone-transfer settings. AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly."
+        ],
+        "command": "Get-DnsServerZone -ComputerName SBD-DC01 |\n  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope\nGet-DnsServerZone -ComputerName SBD-DC02",
+        "check": "The intended forward and reverse zones appear on both DNS hosts after replication. The reverse zone for this /24 is 10.0.10.in-addr.arpa.",
+        "evidence": "Capture the zone type, update policy, replication scope, and transfer policy for each zone.",
+        "sources": [
+          "zones"
+        ],
+        "objectives": [
+          "Confirm sbd.test is AD-integrated with the intended replication scope.",
+          "Create a secure, AD-integrated reverse zone for 10.0.10.0/24.",
+          "Explain how zone data moves between the two DNS hosts."
+        ],
+        "quizzes": [
+          {
+            "question": "How does an AD-integrated zone reach the other DNS-enabled domain controller in its replication scope?",
+            "answers": [
+              "An unrestricted zone transfer to every client",
+              "Active Directory replication",
+              "A manual copy of the DNS cache"
+            ],
+            "correct": 1,
+            "explanation": "AD-integrated zone data follows directory replication. A conventional secondary zone uses a different transfer mechanism."
+          },
+          {
+            "question": "What is the reverse lookup zone for the 10.0.10.0/24 network?",
+            "answers": [
+              "10.0.10.in-addr.arpa",
+              "sbd.test.reverse",
+              "arpa.10.0.10"
+            ],
+            "correct": 0,
+            "explanation": "IPv4 reverse zones place the reversed network octets under in-addr.arpa, so this /24 becomes 10.0.10.in-addr.arpa."
+          },
+          {
+            "question": "Why choose secure dynamic updates for the AD-integrated zone?",
+            "answers": [
+              "It makes lookups return faster",
+              "It removes the need for a reverse zone",
+              "Only authenticated computers can register or change their records"
+            ],
+            "correct": 2,
+            "explanation": "Secure updates tie record changes to directory authentication, which keeps the zone’s contents accountable."
+          }
+        ],
+        "recap": [
+          "Forward and reverse zones are AD-integrated with a deliberate replication scope.",
+          "Dynamic updates are secure-only.",
+          "Zone transfers stay restricted; directory replication moves the data."
+        ],
+        "next": "Lesson 3 builds the record set your services will actually use."
       },
       {
-        "id":"records","title":"Create and maintain service records","minutes":20,
-        "summary":"Build a small, intentional record set. A host record identifies a machine; an alias provides a stable service name without making that alias a separate server.",
-        "steps":["Review the DC A and PTR records first. Correct mismatches through the owning host and DNS administration process rather than blindly adding another record with the same name.","Choose one approved service host from your address plan. In sbd.test, use New Host (A or AAAA), enter its actual name and address, and select the associated PTR option when the reverse zone is ready.","For a service alias, use New Alias (CNAME) and select the intended fully qualified host. For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.","Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete. An alias cannot coexist with other record types at the same name."],
-        "command":"Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test\nResolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10\nResolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10",
-        "check":"Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.",
-        "evidence":"Keep a record table with owner, type, target, time to live, and reason for the change.",
-        "quiz":{"question":"What does creating pki.sbd.test as an alias accomplish?","answers":["It publishes every certificate automatically","It connects the offline root to the network","It points a service name at the selected host"],"correct":2,"explanation":"DNS supplies name resolution. The publication service, files, access, and certificate URLs still need configuration."},
-        "sources":["records"]
+        "id": "records",
+        "title": "Create and maintain service records",
+        "minutes": 20,
+        "summary": "Build a small, intentional record set. A host record identifies a machine; an alias provides a stable service name without making that alias a separate server.",
+        "steps": [
+          "Review the DC A and PTR records first. Correct mismatches through the owning host and DNS administration process rather than blindly adding another record with the same name.",
+          "Choose one approved service host from your address plan. In sbd.test, use New Host (A or AAAA), enter its actual name and address, and select the associated PTR option when the reverse zone is ready.",
+          "For a service alias, use New Alias (CNAME) and select the intended fully qualified host. For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.",
+          "Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete. An alias cannot coexist with other record types at the same name."
+        ],
+        "command": "Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test\nResolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10\nResolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10",
+        "check": "Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.",
+        "evidence": "Keep a record table with owner, type, target, time to live, and reason for the change.",
+        "sources": [
+          "records"
+        ],
+        "objectives": [
+          "Distinguish host records (A and PTR) from service aliases (CNAME).",
+          "Create a host record with its PTR and a service alias that match the plan.",
+          "Maintain records with recorded ownership, lifetimes, and reasons."
+        ],
+        "quizzes": [
+          {
+            "question": "What does creating pki.sbd.test as an alias accomplish?",
+            "answers": [
+              "It publishes every certificate automatically",
+              "It connects the offline root to the network",
+              "It points a service name at the selected host"
+            ],
+            "correct": 2,
+            "explanation": "DNS supplies name resolution. The publication service, files, access, and certificate URLs still need configuration."
+          },
+          {
+            "question": "A CNAME already exists at a name. What else can live at that same name?",
+            "answers": [
+              "Any A record",
+              "No other record types",
+              "A second CNAME"
+            ],
+            "correct": 1,
+            "explanation": "An alias cannot coexist with other record types at the same name — one reason service aliases are planned deliberately."
+          },
+          {
+            "question": "Forward and reverse answers disagree for a domain controller. What is the right fix?",
+            "answers": [
+              "Correct it through the owning host and the DNS administration process",
+              "Add another record with the same name",
+              "Delete the reverse zone"
+            ],
+            "correct": 0,
+            "explanation": "Mismatches get fixed at the owner, not papered over with duplicates that make troubleshooting harder."
+          }
+        ],
+        "recap": [
+          "Host records identify machines; aliases provide stable service names.",
+          "pki.sbd.test is reserved for the internal publication host, never the offline root.",
+          "Every record carries an owner, a lifetime, and a reason."
+        ],
+        "next": "Lesson 4 proves that both resolvers and directory discovery actually work."
       },
       {
-        "id":"verify","title":"Prove resolution and directory discovery","minutes":20,
-        "summary":"Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records.",
-        "steps":["From a domain client, query each DNS server for the same host and reverse record. Record the server queried and the returned data.","Query the AD LDAP service records below against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove that discovery works.","Run the DNS diagnostics and directory replication checks on a domain controller. Investigate failures in context, including the intentionally isolated network design.","During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise."],
-        "command":"Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.11\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.10\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.11\ndcdiag /test:dns /v\nrepadmin /replsummary",
-        "check":"Both DNS servers return the expected host and AD service records, replication is healthy, and the client still resolves internal names when either resolver is unavailable.",
-        "evidence":"Keep paired lookup results, diagnostic output, and the failover test record with start, restore, and final verification times.",
-        "quiz":{"question":"Why query each DNS server directly?","answers":["To distinguish a healthy pair from a single working resolver or cached answer","To permanently bypass the client's DNS configuration","To generate a certificate request"],"correct":0,"explanation":"Explicit server queries expose differences between resolvers before client caching and fallback obscure the result."},
-        "sources":["resolve","dcdiag"]
+        "id": "verify",
+        "title": "Prove resolution and directory discovery",
+        "minutes": 20,
+        "summary": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records.",
+        "steps": [
+          "From a domain client, query each DNS server for the same host and reverse record. Record the server queried and the returned data.",
+          "Query the AD LDAP service records below against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove that discovery works.",
+          "Run the DNS diagnostics and directory replication checks on a domain controller. Investigate failures in context, including the intentionally isolated network design.",
+          "During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise."
+        ],
+        "command": "Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.11\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.10\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.11\ndcdiag /test:dns /v\nrepadmin /replsummary",
+        "check": "Both DNS servers return the expected host and AD service records, replication is healthy, and the client still resolves internal names when either resolver is unavailable.",
+        "evidence": "Keep paired lookup results, diagnostic output, and the failover test record with start, restore, and final verification times.",
+        "sources": [
+          "resolve",
+          "dcdiag"
+        ],
+        "objectives": [
+          "Query each DNS server explicitly instead of trusting cached answers.",
+          "Verify the LDAP service records that let clients discover domain controllers.",
+          "Run a controlled failover test and record the result."
+        ],
+        "quizzes": [
+          {
+            "question": "Why query each DNS server directly?",
+            "answers": [
+              "To distinguish a healthy pair from a single working resolver or cached answer",
+              "To permanently bypass the client's DNS configuration",
+              "To generate a certificate request"
+            ],
+            "correct": 0,
+            "explanation": "Explicit server queries expose differences between resolvers before client caching and fallback obscure the result."
+          },
+          {
+            "question": "Which record type lets a client discover domain controllers?",
+            "answers": [
+              "PTR records in the reverse zone",
+              "CNAME aliases such as pki.sbd.test",
+              "SRV records such as _ldap._tcp.dc._msdcs.sbd.test"
+            ],
+            "correct": 2,
+            "explanation": "Service (SRV) records advertise the directory service. An ordinary host lookup does not prove discovery works."
+          },
+          {
+            "question": "During the failover exercise, what belongs in the evidence record?",
+            "answers": [
+              "Only a screenshot of one successful lookup",
+              "Start, restore, and final verification times with the paired lookup results",
+              "The DNS service account password"
+            ],
+            "correct": 1,
+            "explanation": "A dated failover record shows redundancy was proven, not assumed — and secrets never belong in evidence."
+          }
+        ],
+        "recap": [
+          "Both resolvers answer the host and SRV queries correctly.",
+          "dcdiag and repadmin confirm DNS and replication health.",
+          "The failover test is documented with times, not just a passing screenshot."
+        ],
+        "next": "The final lesson practices finding and documenting a DNS fault."
       },
       {
-        "id":"troubleshoot","title":"Find the fault and record the fix","minutes":15,
-        "summary":"Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name.",
-        "steps":["For a failing lookup, record the exact name, record type, client, resolver, timestamp, and error. Compare the fully qualified name with any short-name search behavior.","Query both servers directly. If they disagree, inspect zone scope and replication. If both are correct but the client is not, inspect client DNS settings and cached data.","Distinguish a missing name (NXDOMAIN) from a timeout or service failure. Fix the owning configuration first, then use Clear-DnsClientCache on the test client if stale cache remains relevant.","Repeat the original test and the redundancy checks. Record what changed and the rollback method. Review aging/scavenging separately against DHCP, static records, and backup practices before enabling automatic deletion."],
-        "command":"Get-DnsClientServerAddress -AddressFamily IPv4\nGet-DnsClientCache\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.11",
-        "check":"The original failure is reproducibly resolved, both resolvers agree, and the change record explains the cause rather than only showing a passing screenshot.",
-        "evidence":"Complete the DNS checklist and retain the before/after lookup results with the configuration owner.",
-        "quiz":{"question":"Both DNS servers return the correct address, but one client keeps using the old address. What should you inspect next?","answers":["The Root CA private key","The client resolver configuration and cache","Every zone's transfer policy at once"],"correct":1,"explanation":"Narrow the investigation to the failing client before changing otherwise consistent authoritative data."},
-        "sources":["resolve","records"]
+        "id": "troubleshoot",
+        "title": "Find the fault and record the fix",
+        "minutes": 15,
+        "summary": "Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name.",
+        "steps": [
+          "For a failing lookup, record the exact name, record type, client, resolver, timestamp, and error. Compare the fully qualified name with any short-name search behavior.",
+          "Query both servers directly. If they disagree, inspect zone scope and replication. If both are correct but the client is not, inspect client DNS settings and cached data.",
+          "Distinguish a missing name (NXDOMAIN) from a timeout or service failure. Fix the owning configuration first, then use Clear-DnsClientCache on the test client if stale cache remains relevant.",
+          "Repeat the original test and the redundancy checks. Record what changed and the rollback method. Review aging/scavenging separately against DHCP, static records, and backup practices before enabling automatic deletion."
+        ],
+        "command": "Get-DnsClientServerAddress -AddressFamily IPv4\nGet-DnsClientCache\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.11",
+        "check": "The original failure is reproducibly resolved, both resolvers agree, and the change record explains the cause rather than only showing a passing screenshot.",
+        "evidence": "Complete the DNS checklist and retain the before/after lookup results with the configuration owner.",
+        "sources": [
+          "resolve",
+          "records"
+        ],
+        "objectives": [
+          "Isolate a DNS failure one layer at a time.",
+          "Distinguish a missing name (NXDOMAIN) from timeouts and service failures.",
+          "Record the cause, the fix, and the rollback — not just a passing result."
+        ],
+        "quizzes": [
+          {
+            "question": "Both DNS servers return the correct address, but one client keeps using the old address. What should you inspect next?",
+            "answers": [
+              "The Root CA private key",
+              "The client resolver configuration and cache",
+              "Every zone's transfer policy at once"
+            ],
+            "correct": 1,
+            "explanation": "Narrow the investigation to the failing client before changing otherwise consistent authoritative data."
+          },
+          {
+            "question": "A lookup returns NXDOMAIN from both servers. What does that tell you?",
+            "answers": [
+              "The name does not exist in the authoritative data",
+              "The DNS service is stopped",
+              "The client cache is corrupted"
+            ],
+            "correct": 0,
+            "explanation": "NXDOMAIN is an authoritative answer that the name is missing — a different problem from a timeout or an unreachable service."
+          },
+          {
+            "question": "When is Clear-DnsClientCache the right step?",
+            "answers": [
+              "As the first step for every DNS problem",
+              "After the owning configuration is fixed, when stale cached data remains relevant",
+              "Instead of checking the authoritative servers"
+            ],
+            "correct": 1,
+            "explanation": "Clearing the cache hides symptoms if the authoritative data is still wrong. Fix the owner first, then clear what is stale."
+          }
+        ],
+        "recap": [
+          "Troubleshoot client settings, reachability, authoritative data, replication, then the application.",
+          "NXDOMAIN, timeouts, and service failures point at different owners.",
+          "The change record explains the cause and the rollback."
+        ],
+        "next": "That completes Configure DNS. Course 1.3 builds certificate trust on top of this name resolution."
       }
     ]
   },
   {
-    "id":"two-tier-pki",
-    "prerequisites":["Complete the identity and DNS courses; verify domain health and internal name resolution.","Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup and SBD-SUBCA01 joined to sbd.test.","Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation."],
-    "labNote":"This course chooses a standalone offline Root CA and an enterprise subordinate/issuing CA for the training build. The root stays disconnected; approved removable media carries requests and public artifacts. The internal publication service must be provisioned separately.",
-    "sources":[
-      {"id":"design","title":"Microsoft · PKI design considerations","url":"https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations"},
-      {"id":"policy","title":"Microsoft · CAPolicy.inf syntax","url":"https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/prepare-the-capolicy-inf-file"},
-      {"id":"root","title":"Microsoft · Install the offline root","url":"https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/2-install-offline-root"},
-      {"id":"issuing","title":"Microsoft · Deploy the issuing CA role","url":"https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/3-deploy-issuing-certification-authority-role"},
-      {"id":"ceremony","title":"Microsoft · Perform the offline root signing ceremony","url":"https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/4-perform-offline-root-signing-ceremony"},
-      {"id":"publish","title":"Microsoft · Publish trust data and validate clients","url":"https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/6-publish-trust-data-validate-clients"},
-      {"id":"certutil","title":"Microsoft · Certutil reference","url":"https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"}
+    "id": "two-tier-pki",
+    "prerequisites": [
+      "Complete the identity and DNS courses; verify domain health and internal name resolution.",
+      "Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup and SBD-SUBCA01 joined to sbd.test.",
+      "Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation."
     ],
-    "lessons":[
+    "labNote": "This course chooses a standalone offline Root CA and an enterprise subordinate/issuing CA for the training build. The root stays disconnected; approved removable media carries requests and public artifacts. The internal publication service must be provisioned separately.",
+    "sources": [
       {
-        "id":"design","title":"Design the two-tier trust hierarchy","minutes":20,
-        "summary":"The root establishes trust. The subordinate, also called the issuing CA in this design, handles approved end-entity certificates. Keeping these roles separate protects the root from daily network exposure.",
-        "steps":["Draw the hierarchy: offline standalone root → enterprise issuing CA → approved server/client certificates. There is no network connection to the root.","Record final host and CA names, key provider, algorithm, key sizes, hashes, validity periods, renewal owners, and recovery arrangements. Avoid treating example lifetimes as universal requirements.","Plan a stable internal publication name such as pki.sbd.test. The Authority Information Access (AIA) location supplies issuer certificates; the CRL Distribution Point (CDP) supplies certificate revocation lists.","Choose the publication host, paths, access rules, and refresh schedule before issuing certificates. Clients inside this air-gapped network must reach those locations without relying on the public internet."],
-        "command":"# Run on the future issuing CA, not the offline root.\nGet-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain\nResolve-DnsName SBD-DC01.sbd.test\nResolve-DnsName SBD-DC02.sbd.test",
-        "check":"The written plan separates trust, issuance, publication, and administration. It identifies who renews CRLs before they expire.",
-        "evidence":"Keep the approved hierarchy and a worksheet mapping every certificate/CRL URL to its actual publisher and file.",
-        "quiz":{"question":"Which role issues routine server certificates in this design?","answers":["The offline root for every request","The enterprise issuing CA","The DNS server"],"correct":1,"explanation":"The issuing CA handles end-entity enrollment while the offline root signs the approved subordinate CA certificate."},
-        "sources":["design"]
+        "id": "design",
+        "title": "Microsoft · PKI design considerations",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations"
       },
       {
-        "id":"root","title":"Configure the offline Root CA","minutes":30,
-        "summary":"Treat root installation as a controlled event. Its private key is the highest-value secret in the hierarchy, and its configuration shapes the subordinate certificate it will sign.",
-        "steps":["Verify SBD-ROOTCA01 is in a workgroup with no active network path. Prepare approved installation media, protected administration, correct time, and backup storage.","Place the reviewed CAPolicy.inf in %SystemRoot% before configuration. Tailor it to the root role; a self-signed root's own CDP/AIA choices differ from the extensions the root places into issued subordinate certificates.","Install the Certification Authority role with management tools. In the AD CS Configuration wizard choose Standalone CA, Root CA, and a new private key, then apply the approved provider, cryptography, CA name, validity, database, and log settings.","Before signing anything, configure the root's issued-certificate AIA/CDP settings, subordinate validity policy, and base-CRL schedule. Hold requests for explicit approval. Produce and inspect a current root CRL, then capture a protected CA backup."],
-        "command":"# Inspect locally on SBD-ROOTCA01 during the approved root session.\nGet-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain\nGet-Service CertSvc\ncertutil -getreg CA\\CRLPublicationURLs\ncertutil -getreg CA\\CACertPublicationURLs",
-        "check":"The host remains disconnected, the CA is standalone/root, requests require approval, and the planned subordinate URLs are configured before signing.",
-        "evidence":"Record the root certificate identity, policy file, publication settings, CRL dates, backup location, and operator sign-off. Protect backups containing private keys.",
-        "quiz":{"question":"When must the root's issued-certificate publication URLs be configured?","answers":["After clients have enrolled","Only after the first CRL expires","Before signing the subordinate CA certificate"],"correct":2,"explanation":"Issued certificates retain their extensions. Changing the CA configuration later does not rewrite existing certificates."},
-        "sources":["root","policy"]
+        "id": "policy",
+        "title": "Microsoft · CAPolicy.inf syntax",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/prepare-the-capolicy-inf-file"
       },
       {
-        "id":"request","title":"Create the issuing CA request","minutes":25,
-        "summary":"Prepare the online issuing server, but keep issuance paused until its CA certificate has been signed and installed. The request carries the public key; the private key stays protected on the issuing system or its approved key provider.",
-        "steps":["Confirm SBD-SUBCA01 has its final hostname, domain membership, static address, internal DNS, and correct time. Use a dedicated host and the privileges approved for enterprise CA configuration.","Prepare its role-specific CAPolicy.inf and protected request directory. Decide which templates may later be published instead of enabling a broad default enrollment set.","Install the CA role and management tools. In the AD CS Configuration wizard choose Enterprise CA, Subordinate CA, and the approved new-key/provider settings. Enter the planned CA identity and storage locations.","Choose Save a certificate request to file. Inspect the resulting request's subject, public key, and CA constraints; record its SHA-256 hash before handing it to the media custodian."],
-        "command":"# Use the actual request path chosen in the wizard.\ncertutil -dump C:\\CAConfig\\IssuingCA.req\nGet-FileHash -Algorithm SHA256 C:\\CAConfig\\IssuingCA.req",
-        "check":"The request matches the approved issuing identity and key profile. The CA is waiting for its signed certificate; do not troubleshoot that expected state by installing another CA.",
-        "evidence":"Retain the request, its reviewed fields and hash, and the request-transfer record. Do not place private keys in the transfer package.",
-        "quiz":{"question":"What moves to the offline root for signing?","answers":["The issuing CA's certificate request","The issuing CA's private key","A network cable connected to the domain"],"correct":0,"explanation":"The signed request contains the public key. Root signing does not require exporting the issuing CA private key."},
-        "sources":["issuing"]
+        "id": "root",
+        "title": "Microsoft · Install the offline root",
+        "url": "https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/2-install-offline-root"
       },
       {
-        "id":"sign","title":"Sign through the offline ceremony","minutes":30,
-        "summary":"A signing ceremony connects an approved request to an approved CA identity. A matching filename alone is not proof that the root should trust the request.",
-        "steps":["Use approved removable media and custody procedures to bring the request to the root. Recalculate its hash and compare it with the independently recorded value; inspect the request before submission.","Verify the root's issued-certificate validity policy and publication extensions. In Certification Authority, submit the request, review its pending entry, and issue it only after the required approval.","Export the subordinate certificate, root certificate, and current root CRL. Check identities, constraints, validity, signatures, URLs, and revocation data against the approved hierarchy. Record file hashes and the request ID.","Transfer only the approved public artifacts back to the connected environment. Match published filenames to the URLs embedded in certificates, retain the ceremony record and protected backup, then shut down and secure the root."],
-        "command":"# Inspect public artifacts; use your actual approved paths.\ncertutil -dump C:\\CAConfig\\IssuingCA.cer\ncertutil -dump C:\\CAConfig\\RootCA.crl\nGet-FileHash -Algorithm SHA256 C:\\CAConfig\\IssuingCA.cer, C:\\CAConfig\\RootCA.cer, C:\\CAConfig\\RootCA.crl",
-        "check":"Artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.",
-        "evidence":"Keep approval, request ID, artifact hashes, verified certificate/CRL properties, media custody, and root shutdown evidence together.",
-        "quiz":{"question":"Which transfer preserves the root boundary?","answers":["An automated shared folder on the root","Approved removable media carrying the reviewed request and public artifacts","Temporary direct internet access"],"correct":1,"explanation":"This training architecture uses manual, human-controlled transfer. It never adds a live link to the root."},
-        "sources":["ceremony"]
+        "id": "issuing",
+        "title": "Microsoft · Deploy the issuing CA role",
+        "url": "https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/3-deploy-issuing-certification-authority-role"
       },
       {
-        "id":"publish","title":"Activate issuance and publish trust data","minutes":30,
-        "summary":"A running CA is only one part of a working PKI. Clients also need the approved trust anchor, the intermediate certificate, and current revocation information at the advertised locations.",
-        "steps":["Verify the returned artifacts and import the approved root certificate into the issuing server's trusted root store. Complete CA certificate installation through Certification Authority and start Certificate Services.","Configure the issuing CA's AIA/CDP settings before issuing test certificates. Publish current root and issuing certificates and CRLs to the planned internal locations, preserving the actual filenames referenced by their extensions.","Distribute the approved root trust through the managed domain policy and arrange the required intermediate/directory publication with delegated administrators. Public CA certificates and CRLs may be readable to clients; private keys and backups must never enter that web directory.","Publish only the certificate templates required for the lab. Review purpose, subject construction, key settings, validity, and enrollment permissions; grant a small test group the minimum enrollment rights first."],
-        "command":"# Inspect the issuing CA after installation and publication.\nGet-Service CertSvc\ncertutil -getreg CA\\CRLPublicationURLs\ncertutil -getreg CA\\CACertPublicationURLs\ncertutil -store Root\ncertutil -store CA",
-        "check":"Issuance is configured, the approved trust chain reaches the client, and the exact published URLs return the current files from the internal network.",
-        "evidence":"Keep publication mappings, permissions, template settings, trust-distribution policy, and retrieval results.",
-        "quiz":{"question":"Which files belong in the client-readable PKI publication directory?","answers":["Root and issuing private-key backups","Administrator passwords and recovery keys","Approved public CA certificates and CRLs"],"correct":2,"explanation":"Clients need public trust and revocation artifacts. Publication must not expose CA secrets or recovery material."},
-        "sources":["publish","certutil"]
+        "id": "ceremony",
+        "title": "Microsoft · Perform the offline root signing ceremony",
+        "url": "https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/4-perform-offline-root-signing-ceremony"
       },
       {
-        "id":"validate","title":"Validate enrollment, revocation, and recovery","minutes":25,
-        "summary":"Finish from a clean domain client. Verify the experience of a relying system, including what happens when a certificate is no longer trusted.",
-        "steps":["Enroll a disposable test certificate using the approved template. Export only its public certificate as test.cer and inspect the subject, purpose, issuer, and validity.","On a clean validation client, verify the chain and retrieval using the command below. Inspect each AIA/CDP URL and current CRL dates; cached success is insufficient evidence of publication reachability.","Revoke only the disposable test certificate, publish an updated issuing CRL, and verify that a fresh client evaluation detects revocation. Diagnose retrieval or stale-publication problems rather than turning off revocation checks.","Record owners and reminders for root/issuing CRL publication, certificate renewal, backup, and an isolated recovery rehearsal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry."],
-        "command":"# On the validation client; test.cer is the disposable public certificate.\ncertutil -dump test.cer\ncertutil -urlfetch -verify test.cer",
-        "check":"A valid test certificate chains to the approved root and retrieves current revocation data. After revocation and publication, the test certificate is rejected for the expected reason.",
-        "evidence":"Finish the PKI checklist with enrollment, retrieval and revocation results, renewal dates, backup verification, and recovery ownership.",
-        "quiz":{"question":"A valid certificate fails because its CRL cannot be retrieved. What is the next step?","answers":["Fix and retest the publication or reachability problem","Disable revocation checking for all clients","Copy the root private key to the client"],"correct":0,"explanation":"Reliable revocation publication is part of the service. Bypassing the check conceals the failed dependency."},
-        "sources":["publish","certutil"]
+        "id": "publish",
+        "title": "Microsoft · Publish trust data and validate clients",
+        "url": "https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/6-publish-trust-data-validate-clients"
+      },
+      {
+        "id": "certutil",
+        "title": "Microsoft · Certutil reference",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design the two-tier trust hierarchy",
+        "minutes": 20,
+        "summary": "The root establishes trust. The subordinate, also called the issuing CA in this design, handles approved end-entity certificates. Keeping these roles separate protects the root from daily network exposure.",
+        "steps": [
+          "Draw the hierarchy: offline standalone root → enterprise issuing CA → approved server/client certificates. There is no network connection to the root.",
+          "Record final host and CA names, key provider, algorithm, key sizes, hashes, validity periods, renewal owners, and recovery arrangements. Avoid treating example lifetimes as universal requirements.",
+          "Plan a stable internal publication name such as pki.sbd.test. The Authority Information Access (AIA) location supplies issuer certificates; the CRL Distribution Point (CDP) supplies certificate revocation lists.",
+          "Choose the publication host, paths, access rules, and refresh schedule before issuing certificates. Clients inside this air-gapped network must reach those locations without relying on the public internet."
+        ],
+        "command": "# Run on the future issuing CA, not the offline root.\nGet-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain\nResolve-DnsName SBD-DC01.sbd.test\nResolve-DnsName SBD-DC02.sbd.test",
+        "check": "The written plan separates trust, issuance, publication, and administration. It identifies who renews CRLs before they expire.",
+        "evidence": "Keep the approved hierarchy and a worksheet mapping every certificate/CRL URL to its actual publisher and file.",
+        "sources": [
+          "design"
+        ],
+        "objectives": [
+          "Explain why the root stays offline while the issuing CA handles enrollment.",
+          "Record the CA identities, cryptography, and validity decisions before installation.",
+          "Plan AIA and CDP publication locations that clients can reach inside the air gap."
+        ],
+        "quizzes": [
+          {
+            "question": "Which role issues routine server certificates in this design?",
+            "answers": [
+              "The offline root for every request",
+              "The enterprise issuing CA",
+              "The DNS server"
+            ],
+            "correct": 1,
+            "explanation": "The issuing CA handles end-entity enrollment while the offline root signs the approved subordinate CA certificate."
+          },
+          {
+            "question": "What do the AIA and CDP locations supply?",
+            "answers": [
+              "Private keys for backup",
+              "DNS zone transfers",
+              "Issuer certificates and certificate revocation lists"
+            ],
+            "correct": 2,
+            "explanation": "Authority Information Access serves issuer certificates; CRL Distribution Points serve revocation lists. Clients must be able to reach both."
+          },
+          {
+            "question": "Why is pki.sbd.test planned before any CA is installed?",
+            "answers": [
+              "Issued certificates embed these URLs, so the publication name must be stable first",
+              "The root cannot be installed without it",
+              "DNS requires a CNAME before zones replicate"
+            ],
+            "correct": 0,
+            "explanation": "Certificates keep the extensions they were issued with. A stable publication name avoids reissuing everything later."
+          }
+        ],
+        "recap": [
+          "Trust, issuance, publication, and administration are separated in writing.",
+          "Cryptography, names, and validity periods are approved before installation.",
+          "CRL renewal has a named owner and a date."
+        ],
+        "next": "Lesson 2 performs the controlled offline root installation."
+      },
+      {
+        "id": "root",
+        "title": "Configure the offline Root CA",
+        "minutes": 30,
+        "summary": "Treat root installation as a controlled event. Its private key is the highest-value secret in the hierarchy, and its configuration shapes the subordinate certificate it will sign.",
+        "steps": [
+          "Verify SBD-ROOTCA01 is in a workgroup with no active network path. Prepare approved installation media, protected administration, correct time, and backup storage.",
+          "Place the reviewed CAPolicy.inf in %SystemRoot% before configuration. Tailor it to the root role; a self-signed root's own CDP/AIA choices differ from the extensions the root places into issued subordinate certificates.",
+          "Install the Certification Authority role with management tools. In the AD CS Configuration wizard choose Standalone CA, Root CA, and a new private key, then apply the approved provider, cryptography, CA name, validity, database, and log settings.",
+          "Before signing anything, configure the root's issued-certificate AIA/CDP settings, subordinate validity policy, and base-CRL schedule. Hold requests for explicit approval. Produce and inspect a current root CRL, then capture a protected CA backup."
+        ],
+        "command": "# Inspect locally on SBD-ROOTCA01 during the approved root session.\nGet-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain\nGet-Service CertSvc\ncertutil -getreg CA\\CRLPublicationURLs\ncertutil -getreg CA\\CACertPublicationURLs",
+        "check": "The host remains disconnected, the CA is standalone/root, requests require approval, and the planned subordinate URLs are configured before signing.",
+        "evidence": "Record the root certificate identity, policy file, publication settings, CRL dates, backup location, and operator sign-off. Protect backups containing private keys.",
+        "sources": [
+          "root",
+          "policy"
+        ],
+        "objectives": [
+          "Verify the disconnected workgroup host before installing the role.",
+          "Install a standalone root CA with the approved CAPolicy.inf and settings.",
+          "Configure publication URLs and the CRL schedule before signing anything."
+        ],
+        "quizzes": [
+          {
+            "question": "When must the root's issued-certificate publication URLs be configured?",
+            "answers": [
+              "After clients have enrolled",
+              "Only after the first CRL expires",
+              "Before signing the subordinate CA certificate"
+            ],
+            "correct": 2,
+            "explanation": "Issued certificates retain their extensions. Changing the CA configuration later does not rewrite existing certificates."
+          },
+          {
+            "question": "Why is the root a standalone CA rather than an enterprise CA?",
+            "answers": [
+              "Standalone CAs use stronger cryptography",
+              "It is not domain-joined and must work disconnected from the directory",
+              "Enterprise CAs cannot sign subordinate certificates"
+            ],
+            "correct": 1,
+            "explanation": "An enterprise CA depends on Active Directory. The offline root lives in a workgroup with no network path, so it must be standalone."
+          },
+          {
+            "question": "Where does CAPolicy.inf belong before configuration?",
+            "answers": [
+              "The domain SYSVOL share",
+              "The removable media only",
+              "%SystemRoot% on the CA host"
+            ],
+            "correct": 2,
+            "explanation": "Setup reads CAPolicy.inf from %SystemRoot% during configuration. Placing it afterward does not change the installed CA."
+          }
+        ],
+        "recap": [
+          "The root host stays disconnected, with controlled media, administration, and time.",
+          "CAPolicy.inf is in place before the role is configured.",
+          "Publication URLs, validity policy, the CRL schedule, and a protected backup exist before any signing."
+        ],
+        "next": "Lesson 3 prepares the online issuing CA and its certificate request."
+      },
+      {
+        "id": "request",
+        "title": "Create the issuing CA request",
+        "minutes": 25,
+        "summary": "Prepare the online issuing server, but keep issuance paused until its CA certificate has been signed and installed. The request carries the public key; the private key stays protected on the issuing system or its approved key provider.",
+        "steps": [
+          "Confirm SBD-SUBCA01 has its final hostname, domain membership, static address, internal DNS, and correct time. Use a dedicated host and the privileges approved for enterprise CA configuration.",
+          "Prepare its role-specific CAPolicy.inf and protected request directory. Decide which templates may later be published instead of enabling a broad default enrollment set.",
+          "Install the CA role and management tools. In the AD CS Configuration wizard choose Enterprise CA, Subordinate CA, and the approved new-key/provider settings. Enter the planned CA identity and storage locations.",
+          "Choose Save a certificate request to file. Inspect the resulting request's subject, public key, and CA constraints; record its SHA-256 hash before handing it to the media custodian."
+        ],
+        "command": "# Use the actual request path chosen in the wizard.\ncertutil -dump C:\\CAConfig\\IssuingCA.req\nGet-FileHash -Algorithm SHA256 C:\\CAConfig\\IssuingCA.req",
+        "check": "The request matches the approved issuing identity and key profile. The CA is waiting for its signed certificate; do not troubleshoot that expected state by installing another CA.",
+        "evidence": "Retain the request, its reviewed fields and hash, and the request-transfer record. Do not place private keys in the transfer package.",
+        "sources": [
+          "issuing"
+        ],
+        "objectives": [
+          "Prepare the domain-joined issuing host with its final identity.",
+          "Generate the subordinate CA request without exposing the private key.",
+          "Verify and hash the request before it travels to the root."
+        ],
+        "quizzes": [
+          {
+            "question": "What moves to the offline root for signing?",
+            "answers": [
+              "The issuing CA's certificate request",
+              "The issuing CA's private key",
+              "A network cable connected to the domain"
+            ],
+            "correct": 0,
+            "explanation": "The signed request contains the public key. Root signing does not require exporting the issuing CA private key."
+          },
+          {
+            "question": "Why record the request’s SHA-256 hash before the media transfer?",
+            "answers": [
+              "So the root operator can confirm the file was not altered in transit",
+              "It encrypts the request",
+              "The configuration wizard requires it to continue"
+            ],
+            "correct": 0,
+            "explanation": "An independently recorded hash lets the ceremony verify integrity. It does not encrypt anything — it proves the same file arrived."
+          },
+          {
+            "question": "The new issuing CA is waiting with its service stopped. What is correct?",
+            "answers": [
+              "Reinstall the role until the service starts",
+              "That is the expected state until the signed certificate is installed",
+              "Join the root to the domain to finish the setup"
+            ],
+            "correct": 1,
+            "explanation": "A subordinate CA cannot run before its CA certificate exists. The waiting state is normal, not a failure to fix."
+          }
+        ],
+        "recap": [
+          "The issuing host has its final name, addressing, DNS, and time before the role install.",
+          "The request file carries the public key only.",
+          "The request’s fields and hash are reviewed and recorded before transfer."
+        ],
+        "next": "Lesson 4 walks the request through the offline signing ceremony."
+      },
+      {
+        "id": "sign",
+        "title": "Sign through the offline ceremony",
+        "minutes": 30,
+        "summary": "A signing ceremony connects an approved request to an approved CA identity. A matching filename alone is not proof that the root should trust the request.",
+        "steps": [
+          "Use approved removable media and custody procedures to bring the request to the root. Recalculate its hash and compare it with the independently recorded value; inspect the request before submission.",
+          "Verify the root's issued-certificate validity policy and publication extensions. In Certification Authority, submit the request, review its pending entry, and issue it only after the required approval.",
+          "Export the subordinate certificate, root certificate, and current root CRL. Check identities, constraints, validity, signatures, URLs, and revocation data against the approved hierarchy. Record file hashes and the request ID.",
+          "Transfer only the approved public artifacts back to the connected environment. Match published filenames to the URLs embedded in certificates, retain the ceremony record and protected backup, then shut down and secure the root."
+        ],
+        "command": "# Inspect public artifacts; use your actual approved paths.\ncertutil -dump C:\\CAConfig\\IssuingCA.cer\ncertutil -dump C:\\CAConfig\\RootCA.crl\nGet-FileHash -Algorithm SHA256 C:\\CAConfig\\IssuingCA.cer, C:\\CAConfig\\RootCA.cer, C:\\CAConfig\\RootCA.crl",
+        "check": "Artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.",
+        "evidence": "Keep approval, request ID, artifact hashes, verified certificate/CRL properties, media custody, and root shutdown evidence together.",
+        "sources": [
+          "ceremony"
+        ],
+        "objectives": [
+          "Verify request integrity at the root before submission.",
+          "Issue the subordinate certificate under the approved validity policy.",
+          "Export and verify the public artifacts, then return the root to a secured state."
+        ],
+        "quizzes": [
+          {
+            "question": "Which transfer preserves the root boundary?",
+            "answers": [
+              "An automated shared folder on the root",
+              "Approved removable media carrying the reviewed request and public artifacts",
+              "Temporary direct internet access"
+            ],
+            "correct": 1,
+            "explanation": "This training architecture uses manual, human-controlled transfer. It never adds a live link to the root."
+          },
+          {
+            "question": "What leaves the root environment after the ceremony?",
+            "answers": [
+              "The root’s private-key backup",
+              "A live network share for future requests",
+              "Only approved public artifacts: the subordinate certificate, root certificate, and current CRL"
+            ],
+            "correct": 2,
+            "explanation": "The boundary stays intact: public artifacts travel on approved media; keys and live connections never do."
+          },
+          {
+            "question": "The request’s recalculated hash does not match the recorded value. What now?",
+            "answers": [
+              "Stop and investigate; do not submit the request",
+              "Submit it anyway and compare afterward",
+              "Regenerate the hash until it matches"
+            ],
+            "correct": 0,
+            "explanation": "A hash mismatch means the file is not the one that was approved. Submitting it would sign an unverified request."
+          }
+        ],
+        "recap": [
+          "Integrity is verified before submission, and issuance follows explicit approval.",
+          "Artifact identities, validity, and URLs are checked against the plan.",
+          "The ceremony record, hashes, and root shutdown are all evidence."
+        ],
+        "next": "Lesson 5 brings the issuing CA online and publishes the trust data."
+      },
+      {
+        "id": "publish",
+        "title": "Activate issuance and publish trust data",
+        "minutes": 30,
+        "summary": "A running CA is only one part of a working PKI. Clients also need the approved trust anchor, the intermediate certificate, and current revocation information at the advertised locations.",
+        "steps": [
+          "Verify the returned artifacts and import the approved root certificate into the issuing server's trusted root store. Complete CA certificate installation through Certification Authority and start Certificate Services.",
+          "Configure the issuing CA's AIA/CDP settings before issuing test certificates. Publish current root and issuing certificates and CRLs to the planned internal locations, preserving the actual filenames referenced by their extensions.",
+          "Distribute the approved root trust through the managed domain policy and arrange the required intermediate/directory publication with delegated administrators. Public CA certificates and CRLs may be readable to clients; private keys and backups must never enter that web directory.",
+          "Publish only the certificate templates required for the lab. Review purpose, subject construction, key settings, validity, and enrollment permissions; grant a small test group the minimum enrollment rights first."
+        ],
+        "command": "# Inspect the issuing CA after installation and publication.\nGet-Service CertSvc\ncertutil -getreg CA\\CRLPublicationURLs\ncertutil -getreg CA\\CACertPublicationURLs\ncertutil -store Root\ncertutil -store CA",
+        "check": "Issuance is configured, the approved trust chain reaches the client, and the exact published URLs return the current files from the internal network.",
+        "evidence": "Keep publication mappings, permissions, template settings, trust-distribution policy, and retrieval results.",
+        "sources": [
+          "publish",
+          "certutil"
+        ],
+        "objectives": [
+          "Install the signed certificate and start Certificate Services.",
+          "Publish certificates and CRLs at the exact advertised URLs.",
+          "Publish only the certificate templates the lab requires."
+        ],
+        "quizzes": [
+          {
+            "question": "Which files belong in the client-readable PKI publication directory?",
+            "answers": [
+              "Root and issuing private-key backups",
+              "Administrator passwords and recovery keys",
+              "Approved public CA certificates and CRLs"
+            ],
+            "correct": 2,
+            "explanation": "Clients need public trust and revocation artifacts. Publication must not expose CA secrets or recovery material."
+          },
+          {
+            "question": "Why must published filenames match the URLs embedded in certificates?",
+            "answers": [
+              "The CA service will not start otherwise",
+              "Clients fetch exactly those URLs; a renamed file breaks chain building and revocation checks",
+              "Filenames control template permissions"
+            ],
+            "correct": 1,
+            "explanation": "Chain building and revocation checking follow the embedded AIA and CDP URLs literally. Publication must serve those names."
+          },
+          {
+            "question": "How does the approved root certificate reach domain clients?",
+            "answers": [
+              "Each user imports it manually from email",
+              "It replicates automatically through DNS",
+              "Through the managed domain policy trust distribution"
+            ],
+            "correct": 2,
+            "explanation": "Group Policy distributes the trusted root deliberately and reversibly, which keeps trust decisions managed."
+          }
+        ],
+        "recap": [
+          "The trust chain and current CRLs are reachable at the advertised internal URLs.",
+          "Root trust distributes through managed domain policy.",
+          "Only required templates are published, with minimal enrollment rights."
+        ],
+        "next": "The final lesson validates the whole system from a client’s point of view."
+      },
+      {
+        "id": "validate",
+        "title": "Validate enrollment, revocation, and recovery",
+        "minutes": 25,
+        "summary": "Finish from a clean domain client. Verify the experience of a relying system, including what happens when a certificate is no longer trusted.",
+        "steps": [
+          "Enroll a disposable test certificate using the approved template. Export only its public certificate as test.cer and inspect the subject, purpose, issuer, and validity.",
+          "On a clean validation client, verify the chain and retrieval using the command below. Inspect each AIA/CDP URL and current CRL dates; cached success is insufficient evidence of publication reachability.",
+          "Revoke only the disposable test certificate, publish an updated issuing CRL, and verify that a fresh client evaluation detects revocation. Diagnose retrieval or stale-publication problems rather than turning off revocation checks.",
+          "Record owners and reminders for root/issuing CRL publication, certificate renewal, backup, and an isolated recovery rehearsal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry."
+        ],
+        "command": "# On the validation client; test.cer is the disposable public certificate.\ncertutil -dump test.cer\ncertutil -urlfetch -verify test.cer",
+        "check": "A valid test certificate chains to the approved root and retrieves current revocation data. After revocation and publication, the test certificate is rejected for the expected reason.",
+        "evidence": "Finish the PKI checklist with enrollment, retrieval and revocation results, renewal dates, backup verification, and recovery ownership.",
+        "sources": [
+          "publish",
+          "certutil"
+        ],
+        "objectives": [
+          "Enroll and inspect a disposable test certificate.",
+          "Verify chain building and revocation retrieval from a clean client.",
+          "Prove revocation works, and schedule the renewals that keep the PKI alive."
+        ],
+        "quizzes": [
+          {
+            "question": "A valid certificate fails because its CRL cannot be retrieved. What is the next step?",
+            "answers": [
+              "Fix and retest the publication or reachability problem",
+              "Disable revocation checking for all clients",
+              "Copy the root private key to the client"
+            ],
+            "correct": 0,
+            "explanation": "Reliable revocation publication is part of the service. Bypassing the check conceals the failed dependency."
+          },
+          {
+            "question": "What does certutil -urlfetch -verify prove that a plain certificate inspection does not?",
+            "answers": [
+              "That the private key is backed up",
+              "That the AIA and CDP URLs are reachable and return current data",
+              "That the root is still offline"
+            ],
+            "correct": 1,
+            "explanation": "The -urlfetch option follows the embedded URLs live, exposing publication or reachability failures that cached checks hide."
+          },
+          {
+            "question": "Why schedule offline root ceremonies ahead of CRL expiry?",
+            "answers": [
+              "A replacement CRL must be transferred and published before the old one expires",
+              "The root certificate expires monthly",
+              "Clients delete their trust store on expiry"
+            ],
+            "correct": 0,
+            "explanation": "If the root CRL lapses, revocation checking fails across the hierarchy. Manual transfer takes lead time, so it is scheduled early."
+          }
+        ],
+        "recap": [
+          "A clean client builds the chain and retrieves live revocation data.",
+          "A revoked test certificate is rejected for the expected reason.",
+          "Renewal, backup, and recovery each have an owner and a date."
+        ],
+        "next": "That completes the Build the Network path. Path 2 prepares this same network for authorization, starting with course 2.1."
       }
     ]
   }

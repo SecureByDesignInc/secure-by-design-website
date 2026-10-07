@@ -108,7 +108,15 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
     for (const lesson of configuration.lessons) {
       assert.ok(lesson.steps.length >= 3);
       assert.ok(lesson.check && lesson.evidence && lesson.command);
-      assert.ok(lesson.quiz.correct >= 0 && lesson.quiz.correct < lesson.quiz.answers.length);
+      assert.ok(Number.isInteger(lesson.minutes) && lesson.minutes > 0);
+      assert.ok(lesson.objectives.length >= 3, `${lesson.id} states its learning objectives`);
+      assert.ok(lesson.recap.length >= 2 && lesson.next, `${lesson.id} ends with a recap and a next step`);
+      assert.ok(lesson.quizzes.length >= 3, `${lesson.id} has enough knowledge checks`);
+      for (const quiz of lesson.quizzes) {
+        assert.ok(quiz.correct >= 0 && quiz.correct < quiz.answers.length);
+        assert.ok(quiz.explanation, `${lesson.id} explains each answer`);
+      }
+      assert.ok(new Set(lesson.quizzes.map(quiz => quiz.correct)).size > 1, `${lesson.id} varies the correct answer position`);
       assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && source.url.startsWith('https://learn.microsoft.com/'))));
       assert.ok(checklist.includes(lesson.title));
       const entry = progress.find(item => item.id === `training:${course.id}:${lesson.id}`);

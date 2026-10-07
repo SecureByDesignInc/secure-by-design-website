@@ -51,7 +51,7 @@
         <div class="module-heading"><div><p class="module-meta">MODULE ${id} / 12 · ${esc(m.phase)}</p><h2 id="module-title">${esc(m.title)}</h2></div><span class="time-tag">${esc(m.hours)} ${Number(m.hours) === 1 ? 'hour' : 'hours'}</span></div>
         <p class="module-outcome">${esc(m.outcome)}</p>
         <div class="step-track" aria-label="Lesson sequence">${['Learn','See','Build','Prove'].map((s,i) => `<div><b>${i+1}</b>${s}</div>`).join('')}</div>
-        <section class="panel" aria-labelledby="learn-heading"><p class="section-label"><span>1</span> Learn</p><h3 id="learn-heading">Three lesson topics</h3><p class="muted">Read the concept primers, then work through the example and practice task.</p>
+        <section class="panel" aria-labelledby="learn-heading"><p class="section-label"><span>1</span> Learn</p><h3 id="learn-heading">Three lessons</h3><p class="muted">Read the concept primers, then work through the example and practice task.</p>
           <div class="lesson-tabs" role="tablist" aria-label="Module ${id} lessons">${m.lessons.map((label,i) => `<button type="button" role="tab" id="lesson-${i}" data-lesson="${i}" aria-selected="${i === tab}" aria-controls="lesson-panel" tabindex="${i === tab ? '0' : '-1'}"><small>LESSON ${esc(label.split(' ')[0])}</small>${esc(label.slice(label.indexOf(' ') + 1))}</button>`).join('')}</div>
           <div class="lesson-body" role="tabpanel" id="lesson-panel" aria-labelledby="lesson-${tab}" tabindex="0">${lessonBody(index, tab)}</div><p class="source-note">Source references ${esc(m.sources)} · <a href="#sources">View source documents</a></p>
         </section>

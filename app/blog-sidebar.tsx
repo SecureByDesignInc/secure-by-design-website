@@ -14,10 +14,10 @@ export default function BlogSidebar() {
     <section className="sidebar-section">
       <h2>Keep learning</h2>
       <ul className="sidebar-plans">
-        <li><a href="/cyber-range">Cyber Range</a><p>Guided walkthroughs and hands-on labs for systems and security tools.</p></li>
-        <li><a href="/videos">Training Library</a><p>Explore network builds with interactive 3D scenes, guides, and companion training materials.</p></li>
+        <li><a href="/inside-the-network">Inside the Network</a><p>Explore the complete training network in 3D and see how each build connects.</p></li>
+        <li><a href="/training">Training Library</a><p>Explore network builds with interactive 3D scenes, guides, and companion training materials.</p></li>
       </ul>
-      <p className="sidebar-status">Training materials are available now. Video walkthroughs are coming soon.</p>
+      <p className="sidebar-status">Training materials are available now. Video walkthroughs are in production.</p>
     </section>
 
   </aside>;

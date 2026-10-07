@@ -1,7 +1,7 @@
 SECURE BY DESIGN
 BUILD THE IDENTITY FOUNDATION
 Windows Server 2025 - DC01 and DC02
-Episode 01 | Materials edition 0.3 | Updated 4 October 2026
+Course 1.1 | Materials edition 0.3 | Updated 4 October 2026
 © 2026 Secure By Design Team LLC.
 
 1. Extract this entire folder from the ZIP.
