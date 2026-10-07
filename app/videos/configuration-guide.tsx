@@ -39,6 +39,8 @@ export default function ConfigurationGuide({ course, configuration, standalone =
       <div><p className="vc-kicker">COURSE {course.number} · BUILD THE NETWORK · WINDOWS SERVER 2025</p><h2>{course.title}</h2><p>{course.description}</p><p className="vc-config-meta">{configuration.lessons.length} lessons · ~{course.estimatedHours}h · Self-paced · Written edition</p></div>
       <div className="vc-config-links">
         {!standalone && <a href={course.training.guide}><BookOpen size={18} />Open full guide</a>}
+        {course.training.pdf && <a href={course.training.pdf} download><Download size={18} />Workbook (PDF{course.training.pages ? ` · ${course.training.pages} pages` : ''})</a>}
+        {course.training.word && <a href={course.training.word} download><Download size={18} />Workbook (Word, editable)</a>}
         {course.training.checklistPage && <a href={course.training.checklistPage}><ClipboardList size={18} />Open the checklist</a>}
         {course.training.checklist && <a href={course.training.checklist} download><Download size={18} />Checklist (Markdown)</a>}
         <a href="/inside-the-network">See the complete network <ArrowRight size={16} /></a>

@@ -136,7 +136,7 @@ function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {course && episode.kind === 'configuration' ? 'Guide + checklist' : 'Guide + workbooks'}<span>·</span>Pay it forward
+              {course && episode.kind === 'configuration' ? 'Guide + workbook + checklist' : 'Guide + workbooks'}<span>·</span>Pay it forward
             </p>
           </div>
         </div>

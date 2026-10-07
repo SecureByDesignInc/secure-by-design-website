@@ -376,7 +376,10 @@
         "checklist": "/training/dns-configuration/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "5 October 2026",
-        "checklistPage": "/training/dns-configuration/checklist"
+        "checklistPage": "/training/dns-configuration/checklist",
+        "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
+        "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
+        "pages": 14
       },
       "number": "1.2",
       "title": "Configure DNS",
@@ -442,7 +445,10 @@
         "checklist": "/training/two-tier-pki/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "5 October 2026",
-        "checklistPage": "/training/two-tier-pki/checklist"
+        "checklistPage": "/training/two-tier-pki/checklist",
+        "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
+        "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
+        "pages": 16
       },
       "number": "1.4",
       "title": "Configure a Root CA & issuing CA",
@@ -510,7 +516,10 @@
         "checklist": "/training/harden-baseline/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/harden-baseline/checklist"
+        "checklistPage": "/training/harden-baseline/checklist",
+        "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
+        "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
+        "pages": 16
       },
       "number": "1.3",
       "title": "Harden the baseline",
@@ -578,7 +587,10 @@
         "checklist": "/training/connect-segment/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/connect-segment/checklist"
+        "checklistPage": "/training/connect-segment/checklist",
+        "pdf": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
+        "word": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
+        "pages": 16
       },
       "number": "1.5",
       "title": "Connect and segment the network",
@@ -667,7 +679,10 @@
         "checklist": "/training/pki-services/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/pki-services/checklist"
+        "checklistPage": "/training/pki-services/checklist",
+        "pdf": "/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
+        "word": "/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
+        "pages": 14
       }
     },
     {
@@ -737,7 +752,10 @@
         "checklist": "/training/tiered-admin/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/tiered-admin/checklist"
+        "checklistPage": "/training/tiered-admin/checklist",
+        "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
+        "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
+        "pages": 16
       }
     },
     {
@@ -806,7 +824,10 @@
         "checklist": "/training/logging-pipeline/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/logging-pipeline/checklist"
+        "checklistPage": "/training/logging-pipeline/checklist",
+        "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
+        "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
+        "pages": 16
       }
     },
     {
@@ -875,7 +896,10 @@
         "checklist": "/training/workstation-fleet/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/workstation-fleet/checklist"
+        "checklistPage": "/training/workstation-fleet/checklist",
+        "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
+        "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
+        "pages": 16
       }
     },
     {
@@ -946,7 +970,10 @@
         "checklist": "/training/patch-protect/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/patch-protect/checklist"
+        "checklistPage": "/training/patch-protect/checklist",
+        "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
+        "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
+        "pages": 16
       }
     },
     {
@@ -1012,7 +1039,10 @@
         "checklist": "/training/business-services/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/business-services/checklist"
+        "checklistPage": "/training/business-services/checklist",
+        "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
+        "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
+        "pages": 14
       }
     },
     {
@@ -1078,7 +1108,10 @@
         "checklist": "/training/prove-recovery/configuration-checklist.md",
         "materialsEdition": "1.0",
         "updated": "7 October 2026",
-        "checklistPage": "/training/prove-recovery/checklist"
+        "checklistPage": "/training/prove-recovery/checklist",
+        "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
+        "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
+        "pages": 14
       }
     }
   ],

@@ -104,6 +104,11 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
     assert.equal(course.lessonCount, configuration.lessons.length);
     assert.equal(course.training.guide, `/training/${configuration.id}`);
     const checklist = readFileSync(new URL('../public' + course.training.checklist, import.meta.url), 'utf8');
+    for (const key of ['pdf', 'word']) {
+      assert.match(course.training[key], new RegExp(`^/training/${configuration.id}/SecureByDesign-${configuration.id}-Workbook\\.(pdf|docx)$`));
+      assert.ok(existsSync(new URL('../public' + course.training[key], import.meta.url)), `${configuration.id} ${key} workbook exists`);
+    }
+    assert.ok(Number.isInteger(course.training.pages) && course.training.pages > 0);
     assert.ok(resources.some(resource => resource.url === 'https://securebydesigninc.com' + course.training.guide));
     for (const lesson of configuration.lessons) {
       assert.ok(lesson.steps.length >= 3);
