@@ -1608,5 +1608,2703 @@
         ]
       }
     ]
+  },
+  {
+    "id": "pki-services",
+    "prerequisites": [
+      "Complete courses 1.4 and 1.5: a working two-tier PKI and the routed, default-deny network with pki.sbd.test reachable over HTTP per the register.",
+      "Build SBD-PKI-MGMT01 as a hardened Windows Server 2025 member server at 10.0.30.30 in the Servers OU.",
+      "Have the issuing CA's AIA and CDP URL plan from course 1.4 at hand — the filenames published here must match those embedded URLs exactly."
+    ],
+    "labNote": "This course finishes the PKI chapter: the pki.sbd.test publication site goes live on SBD-PKI-MGMT01, and certificate template administration moves to that host, off the issuing CA. Publication stays plain HTTP by design — clients must be able to fetch revocation data before they can validate any certificate.",
+    "sources": [
+      {
+        "id": "design",
+        "title": "Microsoft · PKI design considerations",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations"
+      },
+      {
+        "id": "templates",
+        "title": "Microsoft · Manage certificate templates",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/manage-certificate-templates"
+      },
+      {
+        "id": "autoenroll",
+        "title": "Microsoft · Configure certificate autoenrollment",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment"
+      },
+      {
+        "id": "certutil",
+        "title": "Microsoft · Certutil reference",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "publication",
+        "title": "Build the pki.sbd.test publication site",
+        "minutes": 30,
+        "summary": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network.",
+        "objectives": [
+          "Stand up the HTTP publication site on SBD-PKI-MGMT01.",
+          "Confirm the DNS alias from course 1.2 points at the publication host.",
+          "Explain why CDP and AIA publication uses HTTP, not HTTPS."
+        ],
+        "steps": [
+          "On SBD-PKI-MGMT01, install the Web Server role and create a site (or virtual directory) whose folder will hold the published certificates and revocation lists. Serve .cer, .crt, and .crl files; nothing else belongs in this directory.",
+          "Confirm the pki.sbd.test alias from course 1.2 resolves to 10.0.30.30 from a client in another VLAN, and that the register's HTTP row from course 1.5 permits the path.",
+          "Leave the site on plain HTTP. Revocation checking has to work before any certificate can be trusted — putting the CRL behind HTTPS creates a loop where validating the site needs the very file it serves.",
+          "Restrict who can write to the publication folder: the CA's publishing process and the PKI administrators, nobody else. Clients read; they never write."
+        ],
+        "command": "Resolve-DnsName pki.sbd.test\nTest-NetConnection pki.sbd.test -Port 80\nGet-Website | Select-Object Name, State, PhysicalPath",
+        "check": "pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80, and the publication folder's permissions separate writers from readers.",
+        "evidence": "Record the site configuration, folder permissions, the DNS resolution output from a cross-VLAN client, and the register row that permits the path.",
+        "quizzes": [
+          {
+            "question": "Why does the publication site stay on plain HTTP?",
+            "answers": [
+              "HTTPS licenses cost money",
+              "Clients need the CRL to validate certificates — serving it over HTTPS creates a dependency loop",
+              "HTTP is faster than HTTPS in every case"
+            ],
+            "correct": 1,
+            "explanation": "Revocation data must be reachable before trust can be evaluated. The files are public and signed; integrity comes from the signatures, not the transport."
+          },
+          {
+            "question": "What belongs in the publication directory?",
+            "answers": [
+              "Public CA certificates and CRLs only",
+              "The issuing CA's private key backup",
+              "Administrator scripts and passwords"
+            ],
+            "correct": 0,
+            "explanation": "The same rule as course 1.4: clients need the public trust artifacts; secrets never enter a client-readable path."
+          },
+          {
+            "question": "Which earlier work made this lesson a one-page job?",
+            "answers": [
+              "Nothing — it stands alone",
+              "Course 1.1's DSRM password",
+              "The DNS alias reserved in 1.2 and the HTTP register row from 1.5"
+            ],
+            "correct": 2,
+            "explanation": "pki.sbd.test was reserved two courses ago and the path through the boundary was registered in 1.5 — the sequence pays off here."
+          }
+        ],
+        "recap": [
+          "pki.sbd.test now answers from SBD-PKI-MGMT01 over HTTP.",
+          "Only public artifacts live in the folder; only PKI processes write to it.",
+          "The transport is HTTP on purpose — revocation precedes trust."
+        ],
+        "next": "Lesson 2 fills the site with the real trust data and proves the embedded URLs work.",
+        "sources": [
+          "design",
+          "certutil"
+        ]
+      },
+      {
+        "id": "publish-trust",
+        "title": "Publish the trust data at its advertised URLs",
+        "minutes": 25,
+        "summary": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything.",
+        "objectives": [
+          "Publish the root and issuing certificates and current CRLs at the exact embedded URLs.",
+          "Configure the issuing CA to refresh its published files automatically.",
+          "Prove live retrieval and chain building from a cross-VLAN client."
+        ],
+        "steps": [
+          "Compare the issuing CA's configured AIA and CDP URLs against the publication folder's layout. Every embedded URL must map to a real file path on the site — the filenames are not yours to improve.",
+          "Copy the current root certificate, root CRL, issuing certificate, and issuing CRL into the folder. The root's files still arrive by approved media; the issuing CA's can be written directly by its publishing process.",
+          "Configure the issuing CA's CRL publication to write into the site's folder on its schedule, so each new CRL replaces the old file at the same name before it expires.",
+          "From a clean client in another VLAN, fetch each URL and run the full verification: the chain must build and revocation data must come from the live site, not a cache."
+        ],
+        "command": "certutil -verify -urlfetch C:\\Evidence\\pki\\test.cer\ncertutil -URL http://pki.sbd.test/RootCA.crl\nGet-ChildItem C:\\inetpub\\pkiroot | Select-Object Name, LastWriteTime",
+        "check": "Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.",
+        "evidence": "Keep the URL-to-file mapping table, the folder listing with timestamps, and the urlfetch output from the clean client.",
+        "quizzes": [
+          {
+            "question": "Why can't the published filenames be renamed to something tidier?",
+            "answers": [
+              "The web server forbids renames",
+              "Issued certificates already embed the exact URLs; clients fetch those literally",
+              "DISA assigns the filenames"
+            ],
+            "correct": 1,
+            "explanation": "The same lesson course 1.4 taught at signing time: extensions are fixed at issuance, so publication conforms to them, never the reverse."
+          },
+          {
+            "question": "How do new root CRLs reach the site in this lab?",
+            "answers": [
+              "By approved removable media from the offline ceremony",
+              "Over a direct network share from the root",
+              "They never need refreshing"
+            ],
+            "correct": 0,
+            "explanation": "The root has no network path. Its refreshed CRL travels like everything else that crosses that boundary — reviewed, hashed, carried."
+          },
+          {
+            "question": "What does certutil -verify -urlfetch add over opening the certificate?",
+            "answers": [
+              "It prints the certificate in color",
+              "Nothing",
+              "It follows the embedded URLs live, proving publication and reachability rather than cached trust"
+            ],
+            "correct": 2,
+            "explanation": "The -urlfetch option is the end-to-end test: chain building plus live AIA and CDP retrieval through the routed network."
+          }
+        ],
+        "recap": [
+          "Published filenames mirror the embedded URLs exactly.",
+          "The issuing CA refreshes its files on schedule; the root's arrive by media.",
+          "A clean cross-VLAN client proves the chain and live revocation."
+        ],
+        "next": "Lesson 3 moves template administration off the CA and onto this host.",
+        "sources": [
+          "certutil",
+          "design"
+        ]
+      },
+      {
+        "id": "template-admin",
+        "title": "Separate template administration",
+        "minutes": 25,
+        "summary": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open.",
+        "objectives": [
+          "Establish SBD-PKI-MGMT01 as the only administration seat for templates.",
+          "Delegate template permissions to a named PKI administrators group.",
+          "Record the template change process before any template changes."
+        ],
+        "steps": [
+          "Install the certificate management tools on SBD-PKI-MGMT01 and confirm the Certificate Templates console can read the directory's template store from there.",
+          "Create a PKI administrators group in the directory, place it under the Admin OU from course 1.3, and delegate the template permissions to that group — membership is the record of who may change what the CA signs.",
+          "Remove day-to-day template editing from everywhere else: the issuing CA's console stays for CA operations, not template design, and no Tier-0 account edits templates as routine work.",
+          "Write the change process: a template change names its requester, its reviewer, the versioning action (edit, duplicate, or supersede), and lands in the evidence record like any other configuration change."
+        ],
+        "command": "Get-ADGroup 'SBD PKI Admins' -Properties Members | Select-Object Name, Members\ncertutil -template | Select-String 'TemplatePropCommonName' | Select-Object -First 10",
+        "check": "The templates console works from SBD-PKI-MGMT01, the PKI administrators group holds the delegated permissions, and the written change process names requester, reviewer, and versioning action.",
+        "evidence": "Keep the delegation record, the group membership listing, and the signed-off template change process.",
+        "quizzes": [
+          {
+            "question": "Why do certificate templates deserve their own administration seat?",
+            "answers": [
+              "Templates are directory objects that define what the CA will sign — editing them is a trust decision",
+              "The CA console cannot display templates",
+              "Templates take too much disk space on the CA"
+            ],
+            "correct": 0,
+            "explanation": "A template edit changes what enrollment can produce. Separating the seat and naming the editors makes that power visible and auditable."
+          },
+          {
+            "question": "Where does the PKI administrators group live?",
+            "answers": [
+              "The default Users container",
+              "Under the Admin OU from course 1.3, with the other privileged groups",
+              "On the offline root"
+            ],
+            "correct": 1,
+            "explanation": "The OU design already has a home for privileged identity — this group joins it so delegation and policy follow the same structure."
+          },
+          {
+            "question": "A template needs a change. What is the first artifact?",
+            "answers": [
+              "The edited template itself",
+              "A restart of Certificate Services",
+              "The change record: requester, reviewer, and the versioning action"
+            ],
+            "correct": 2,
+            "explanation": "The record precedes the change, the same discipline as the ACL register — configuration follows documentation, not the other way around."
+          }
+        ],
+        "recap": [
+          "SBD-PKI-MGMT01 is the template administration seat.",
+          "A named group under the Admin OU holds the delegated power.",
+          "Template changes have a written process before they have edits."
+        ],
+        "next": "Lesson 4 uses that process to publish the lab's first working templates.",
+        "sources": [
+          "templates",
+          "design"
+        ]
+      },
+      {
+        "id": "first-templates",
+        "title": "Publish the first working templates",
+        "minutes": 25,
+        "summary": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those.",
+        "objectives": [
+          "Duplicate and configure the computer and web server templates against the approved plan.",
+          "Set key sizes and validity that satisfy the Windows Server 2025 minimums.",
+          "Publish only the needed templates, scoped to a pilot group first."
+        ],
+        "steps": [
+          "From the administration seat, duplicate the Computer template as SBD Computer Authentication. Set the approved key provider, a key size of at least 2,048 bits, subject built from directory information, and autoenrollment permission for a pilot computer group only.",
+          "Duplicate the Web Server template as SBD Server Authentication for the services wave ahead: enrollment permission for the server administrators, no autoenrollment, and exportable keys only if the recovery plan explicitly says so.",
+          "Record each template's version, settings, and justification through the lesson-3 change process before publishing.",
+          "Publish exactly these two templates on the issuing CA and remove any default template the plan does not call for — an unpublished template cannot be mis-enrolled."
+        ],
+        "command": "certutil -CATemplates -config 'SBD-SUBCA01\\SBD Issuing CA'\ncertutil -template 'SBDComputerAuthentication' | Select-String 'msPKI-Certificate-Name-Flag','msPKI-Minimal-Key-Size'",
+        "check": "The CA publishes exactly the two planned templates, each shows the approved key size and permissions, and both carry a completed change record.",
+        "evidence": "Keep each template's configuration export, its change record, and the CA's published-template listing.",
+        "quizzes": [
+          {
+            "question": "Why duplicate the built-in templates instead of editing them?",
+            "answers": [
+              "Built-ins cannot be published at all",
+              "Duplication preserves the originals and gives your version its own name, version, and record",
+              "Duplicates issue faster"
+            ],
+            "correct": 1,
+            "explanation": "Working on a named copy keeps the baseline intact and makes your settings — and their history — unmistakably yours."
+          },
+          {
+            "question": "What floor applies to the template key sizes on this network?",
+            "answers": [
+              "512 bits for speed",
+              "1,024 bits",
+              "2,048-bit RSA at minimum — Windows Server 2025 enforces it for TLS server authentication"
+            ],
+            "correct": 2,
+            "explanation": "The accuracy review flagged it and the OS now enforces it: a plan below 2,048 bits produces certificates the platform itself will reject."
+          },
+          {
+            "question": "Why publish to a pilot group before the whole domain?",
+            "answers": [
+              "A small blast radius proves the template before autoenrollment touches fifty machines in course 1.9",
+              "Pilots are a licensing requirement",
+              "Templates expire if unused"
+            ],
+            "correct": 0,
+            "explanation": "The fleet course will turn autoenrollment loose at scale. Proving the template on a pilot first is the same test-then-widen habit as the GPO work."
+          }
+        ],
+        "recap": [
+          "Two named templates exist, configured on purpose, nothing else published.",
+          "Key sizes meet the 2025 floor; permissions are pilot-scoped.",
+          "Every template carries its change record."
+        ],
+        "next": "The final lesson proves enrollment end to end and runs the delta scans.",
+        "sources": [
+          "templates",
+          "autoenroll",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "validate",
+        "title": "Validate enrollment and delta scan",
+        "minutes": 15,
+        "summary": "Close the loop the way course 1.4 did, but now across the routed network: a pilot machine enrolls automatically, validates against the live publication site, and the change-triggered scans record what this course did.",
+        "objectives": [
+          "Prove pilot autoenrollment through the published template.",
+          "Verify chain and revocation against pki.sbd.test from the enrolled client.",
+          "Run the course's delta scans and file the evidence."
+        ],
+        "steps": [
+          "Enable the autoenrollment policy for the pilot computer group, refresh policy on a pilot machine, and confirm it receives an SBD Computer Authentication certificate without a human touching the request.",
+          "On that machine, run the full verification: the chain must reach the approved root and every revocation URL must answer from pki.sbd.test across the boundary.",
+          "Rescan SBD-SUBCA01 and take SBD-PKI-MGMT01's first baseline with the same benchmark and tool versions as always; the publication site and template changes are the expected deltas.",
+          "File the course evidence: enrollment output, urlfetch results, template records, and the scan set — wave 2 is complete and the PKI chapter is finished."
+        ],
+        "command": "gpupdate /force\ncertutil -pulse\nGet-ChildItem Cert:\\LocalMachine\\My | Select-Object Subject, NotAfter, Thumbprint\ncertutil -verify -urlfetch C:\\Evidence\\pki\\pilot.cer",
+        "check": "The pilot enrolls hands-free, verification passes with live retrieval from pki.sbd.test, and both VLAN 30 hosts have current, attributed scan results.",
+        "evidence": "Keep the pilot's certificate details, the urlfetch output, and the delta-scan comparison for SUBCA01 plus the PKI-MGMT01 baseline.",
+        "quizzes": [
+          {
+            "question": "What does a hands-free pilot enrollment prove?",
+            "answers": [
+              "Template permissions, autoenrollment policy, the CA, DNS, and the routed path all agree — the whole chain works",
+              "Only that Group Policy refreshed",
+              "That the root CA is online"
+            ],
+            "correct": 0,
+            "explanation": "Autoenrollment succeeds only when every layer this path has built cooperates — which is exactly why it is the closing test."
+          },
+          {
+            "question": "Which hosts get scanned at the end of this course?",
+            "answers": [
+              "Only the pilot workstation",
+              "SBD-SUBCA01 (rescan) and SBD-PKI-MGMT01 (first baseline)",
+              "The offline root over the network"
+            ],
+            "correct": 1,
+            "explanation": "The cadence is change-triggered: the CA changed and a new host joined, so one rescan and one baseline."
+          },
+          {
+            "question": "What makes this course 'wave 2 complete'?",
+            "answers": [
+              "The 3D model updates itself",
+              "Fifty workstations are joined",
+              "Publication, template administration, and working enrollment — the PKI chapter's remaining pieces — are all in evidence"
+            ],
+            "correct": 2,
+            "explanation": "Course 1.4 built the hierarchy; this course finished its services. The next wave can rely on certificates as a solved problem."
+          }
+        ],
+        "recap": [
+          "Pilot autoenrollment works end to end across the routed network.",
+          "Live revocation retrieval from pki.sbd.test is proven, not assumed.",
+          "Delta scans and evidence close the PKI chapter."
+        ],
+        "next": "That completes course 1.6. Course 1.7 brings DHCP and the tiered administration plane online before any fleet exists.",
+        "sources": [
+          "autoenroll",
+          "certutil"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tiered-admin",
+    "prerequisites": [
+      "Complete course 1.5: the routed network with its ACL register, and course 1.3's OU structure with the Admin OU in place.",
+      "Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the three administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30).",
+      "Decide the privileged accounts: separate admin identities per tier, never daily-driver accounts with admin rights."
+    ],
+    "labNote": "This course builds the control plane before the fleet exists: DHCP for the workstation VLAN, and a tiered administration model where privileged sessions only ever start from dedicated hosts. The model's rule is strict — the jump systems administer; they browse nothing, read no mail, and accept no inbound sessions from user space.",
+    "sources": [
+      {
+        "id": "dhcp",
+        "title": "Microsoft · Dynamic Host Configuration Protocol (DHCP)",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/dhcp/dhcp-top"
+      },
+      {
+        "id": "paw",
+        "title": "Microsoft · Privileged access workstations and the access model",
+        "url": "https://learn.microsoft.com/en-us/security/privileged-access-workstations/overview"
+      },
+      {
+        "id": "fw",
+        "title": "Microsoft · Configure a firewall for Active Directory domains",
+        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/config-firewall-for-ad-domains-and-trusts"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design the tiers and the address plan",
+        "minutes": 20,
+        "summary": "Tiering is one sentence with teeth: credentials that control a tier never touch a less-trusted one. Write that policy against the OU structure, then plan the DHCP scope the fleet will live in — both before any host is built.",
+        "objectives": [
+          "Define the tiers and map each to systems, OUs, and admin accounts.",
+          "Write the credential rule each tier enforces.",
+          "Plan the VLAN 80 DHCP scope, options, and relay."
+        ],
+        "steps": [
+          "Define three tiers against what exists: Tier 0 is the identity and trust fabric (DCs, both CAs, PKI-MGMT01), Tier 1 the member servers, Tier 2 the user endpoints. Map each tier to its OU from course 1.3 and to the admin system that will manage it.",
+          "Write the credential rule per tier: a Tier 0 account signs in only on Tier 0 systems and AdminJumpBox01; Tier 1 admins work from SBD-ADMIN-SRV01; Tier 2 from SBD-ADMIN-PC01. Each administrator gets separate per-tier accounts — the daily account holds no admin rights anywhere.",
+          "Plan the DHCP design: scope 10.0.80.100–149 for the workstation VLAN, options for router 10.0.80.1, the two DCs as DNS, and the sbd.test domain; the core router relays VLAN 80 broadcasts to SBD-DHCP01; everything else stays static.",
+          "Add the register rows this course needs: VLAN 60 to each tier's management ports, DHCP relay from the core to SBD-DHCP01, and explicit denies from VLAN 80 into VLAN 60 — user space never initiates toward the admin plane."
+        ],
+        "command": "# Capture the design inputs: OU targets and current account separation.\nGet-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName\nGet-ADGroupMember 'Domain Admins' | Select-Object Name, SamAccountName",
+        "check": "The tier map names systems, OUs, admin hosts, and accounts for every tier; the DHCP plan is written; and the register has the new permit and deny rows with owners.",
+        "evidence": "Keep the tier access matrix, the per-administrator account plan, the DHCP scope design, and the updated register rows.",
+        "quizzes": [
+          {
+            "question": "What is the one-sentence tiering rule?",
+            "answers": [
+              "Admins should use strong passwords",
+              "Credentials that control a tier never sign in to a less-trusted tier",
+              "Every admin needs Domain Admin rights"
+            ],
+            "correct": 1,
+            "explanation": "Everything else in the model — hosts, OUs, logon policies — exists to enforce that single sentence."
+          },
+          {
+            "question": "Why does each administrator get separate per-tier accounts?",
+            "answers": [
+              "So a credential captured on a lower tier cannot open a higher one",
+              "Licensing counts accounts per tier",
+              "Password policies require it"
+            ],
+            "correct": 0,
+            "explanation": "Credential theft travels with sign-ins. Separate accounts bound what any one capture is worth."
+          },
+          {
+            "question": "Which direction does the register explicitly deny?",
+            "answers": [
+              "Admin VLAN to the tiers it manages",
+              "DCs to anything",
+              "User VLAN 80 initiating into the admin VLAN 60"
+            ],
+            "correct": 2,
+            "explanation": "The admin plane reaches down to manage; user space never reaches up. The deny row makes that a logged fact, not an intention."
+          }
+        ],
+        "recap": [
+          "Three tiers, each with its systems, OU, admin host, and accounts.",
+          "The credential rule is written before any host enforces it.",
+          "DHCP scope, options, relay, and register rows are planned."
+        ],
+        "next": "Lesson 2 builds the DHCP service the fleet will depend on.",
+        "sources": [
+          "paw",
+          "dhcp",
+          "controls"
+        ]
+      },
+      {
+        "id": "dhcp",
+        "title": "Build SBD-DHCP01 and the relay",
+        "minutes": 25,
+        "summary": "Addressing is the first service fifty machines will ask for. Build the DHCP server, authorize it in the directory so rogue servers stand out, and relay VLAN 80's broadcasts through the core.",
+        "objectives": [
+          "Install and authorize the DHCP role on SBD-DHCP01.",
+          "Create the VLAN 80 scope with the planned options.",
+          "Configure the core relay and prove a lease end to end."
+        ],
+        "steps": [
+          "Install the DHCP role on SBD-DHCP01 in the Servers OU and complete directory authorization — an unauthorized Windows DHCP server refuses to serve domain networks, which is the built-in rogue check worth explaining on camera.",
+          "Create the IPv4 scope 10.0.80.100–149 with the planned options: router 10.0.80.1, DNS 10.0.10.10 and 10.0.10.11, domain sbd.test. Leave every other VLAN static as designed.",
+          "Configure dynamic DNS updates using a dedicated low-privilege credential so client records register securely in the sbd.test zone from course 1.2.",
+          "Enable the DHCP relay on the core router's VLAN 80 interface toward 10.0.20.10, confirm the register row permits it, then pull a lease with a temporary test VM in VLAN 80 and watch its A record appear."
+        ],
+        "command": "Get-DhcpServerInDC\nGet-DhcpServerv4Scope | Select-Object ScopeId, StartRange, EndRange, State\nGet-DhcpServerv4OptionValue -ScopeId 10.0.80.0 | Select-Object OptionId, Value\nResolve-DnsName sbd-test80.sbd.test",
+        "check": "The server shows as authorized, the scope serves the planned range and options through the relay, and the test client's secure dynamic DNS record exists on both DCs.",
+        "evidence": "Record the authorization output, scope and option configuration, the relay setting on the core, and the test lease with its DNS registration.",
+        "quizzes": [
+          {
+            "question": "What does directory authorization of a DHCP server give you?",
+            "answers": [
+              "Faster leases",
+              "A built-in check that makes unauthorized Windows DHCP servers refuse to serve the domain",
+              "Larger scopes"
+            ],
+            "correct": 1,
+            "explanation": "Authorization is the directory's rogue-DHCP control — a one-click setting with a real security story behind it."
+          },
+          {
+            "question": "Why does the relay exist at all?",
+            "answers": [
+              "DHCP broadcasts do not cross the router, so the core forwards VLAN 80's requests to the server in VLAN 20",
+              "It encrypts DHCP traffic",
+              "Relays make addresses permanent"
+            ],
+            "correct": 0,
+            "explanation": "Broadcasts stop at the VLAN boundary. The relay is the deliberate, registered exception that carries them to SBD-DHCP01."
+          },
+          {
+            "question": "Why use a dedicated credential for dynamic DNS updates?",
+            "answers": [
+              "The server cannot update DNS otherwise",
+              "It speeds up record creation",
+              "Record ownership and updates trace to one low-privilege identity instead of a powerful computer account"
+            ],
+            "correct": 2,
+            "explanation": "Secure updates from course 1.2 are only as accountable as the identity writing them — a scoped credential keeps that clean."
+          }
+        ],
+        "recap": [
+          "SBD-DHCP01 is authorized, scoped, and serving through the relay.",
+          "Options hand out the gateway, both DCs, and the domain.",
+          "A test lease proved addressing and secure DNS registration together."
+        ],
+        "next": "Lesson 3 builds the three systems the administrators will work from.",
+        "sources": [
+          "dhcp",
+          "fw"
+        ]
+      },
+      {
+        "id": "admin-hosts",
+        "title": "Build the administration systems",
+        "minutes": 30,
+        "summary": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration — each in the Admin OU, each doing nothing else.",
+        "objectives": [
+          "Build the three VLAN 60 systems into the Admin OU.",
+          "Keep them single-purpose: hardened, minimal, no user-space services.",
+          "Register and restrict their management paths."
+        ],
+        "steps": [
+          "Build AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs, joined into an Admin OU sub-structure so course 1.3's hardening GPOs apply from first boot.",
+          "Strip them to purpose: no browsing to anything but internal admin interfaces, no mail, no file shares hosted, and the management tools for exactly their tier — RSAT on the server seats, endpoint tooling on the PC seat.",
+          "Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986) from the specific admin host each tier allows, and keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.",
+          "Require the admin hosts' own local firewalls to accept management inbound from nowhere — sessions originate here, they never terminate here."
+        ],
+        "command": "Get-ADComputer -SearchBase 'OU=Admin,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName\nTest-NetConnection SBD-DC01.sbd.test -Port 5985\ngpresult /r /scope:computer",
+        "check": "All three hosts sit in the Admin OU with the hardening GPOs applied, management ports answer from the correct admin host per tier, and nothing in user space can open a session toward VLAN 60.",
+        "evidence": "Record each host's build sheet, OU placement, gpresult output, and the register rows for its permitted management paths.",
+        "quizzes": [
+          {
+            "question": "Why do the admin hosts run nothing but administration?",
+            "answers": [
+              "Extra software costs licenses",
+              "Every extra capability — mail, browsing, documents — is a way to phish or poison the most valuable sessions on the network",
+              "Admin tools conflict with browsers"
+            ],
+            "correct": 1,
+            "explanation": "These hosts carry privileged credentials. Minimizing what runs on them minimizes what can steal from them."
+          },
+          {
+            "question": "Which way do management sessions flow?",
+            "answers": [
+              "From the admin hosts outward to their tier — never inbound to the admin hosts",
+              "In both directions equally",
+              "From workstations to the jump box"
+            ],
+            "correct": 0,
+            "explanation": "The admin plane originates; it never serves. Inbound-nothing is what keeps a compromised endpoint from riding into VLAN 60."
+          },
+          {
+            "question": "Why join the admin hosts into the Admin OU immediately?",
+            "answers": [
+              "They cannot join elsewhere",
+              "The OU name sounds right",
+              "Course 1.3's hardening GPOs link there, so they are STIG-configured from first boot"
+            ],
+            "correct": 2,
+            "explanation": "The OU structure keeps paying off: landing in the right OU means policy applies before the host ever does privileged work."
+          }
+        ],
+        "recap": [
+          "Three single-purpose admin seats, hardened from first boot.",
+          "Management flows outward only; VLAN 60 accepts nothing inbound.",
+          "Every management path is a register row."
+        ],
+        "next": "Lesson 4 makes the credential rule something the directory enforces.",
+        "sources": [
+          "paw",
+          "fw"
+        ]
+      },
+      {
+        "id": "logon-restrictions",
+        "title": "Restrict where privilege can sign in",
+        "minutes": 30,
+        "summary": "The tier rule becomes real when the directory refuses the wrong sign-in. Deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log.",
+        "objectives": [
+          "Enforce per-tier sign-in restrictions with Group Policy logon rights.",
+          "Add the strongest protections to Tier 0 accounts.",
+          "Prove a cross-tier sign-in is denied and logged."
+        ],
+        "steps": [
+          "Create tier logon GPOs: on the Workstations and Servers OUs, deny interactive, remote desktop, and network logon to the Tier 0 admin group; on the Workstations OU, deny the Tier 1 group the same — each tier's credentials simply stop working below their tier.",
+          "Add Tier 0 administrators to the Protected Users group so the domain refuses their weaker authentication paths, and note the Windows Server 2025 behavior that supports this design: RC4 ticket-granting tickets are gone and legacy remote password changes are blocked for protected accounts.",
+          "Keep the built-in safety valves: one documented break-glass account, excluded from the deny policies, with its password sealed and its every use alarmed in a later logging course.",
+          "Record the multifactor decision the model calls for on VLAN 60 — smart card or certificate-based sign-in for privileged accounts is the natural follow-on to course 1.6's templates; write the decision and its target date even if implementation waits."
+        ],
+        "command": "gpresult /r /scope:computer\nGet-ADGroupMember 'Protected Users' | Select-Object Name\nwhoami /priv | Select-String 'SeDenyInteractiveLogonRight' -Quiet",
+        "check": "A Tier 0 account's sign-in attempt on a Tier 2 test machine is refused by policy and produces the matching denial event; Protected Users contains the Tier 0 admins; the break-glass and MFA decisions are written.",
+        "evidence": "Keep the logon-rights GPO reports, the refused sign-in's event capture, the Protected Users membership, and the break-glass and MFA decision records.",
+        "quizzes": [
+          {
+            "question": "What turns the tier rule from policy into enforcement?",
+            "answers": [
+              "An email to administrators",
+              "Deny-logon rights applied by GPO at each lower tier's OU",
+              "Renaming the admin accounts"
+            ],
+            "correct": 1,
+            "explanation": "The OU-linked deny rights are the mechanism: the directory itself refuses the out-of-tier sign-in."
+          },
+          {
+            "question": "What does Protected Users membership buy a Tier 0 account?",
+            "answers": [
+              "Faster sign-ins",
+              "Exemption from password changes",
+              "The domain refuses its weaker authentication paths, shrinking what a credential thief can replay"
+            ],
+            "correct": 2,
+            "explanation": "Protected Users trades convenience for resistance — appropriate exactly for the accounts whose theft ends the network."
+          },
+          {
+            "question": "Why does a break-glass account exist outside the deny policies?",
+            "answers": [
+              "So a policy mistake cannot lock every administrator out — and its sealed, alarmed use keeps the exception honest",
+              "Because every admin wants one",
+              "Deny policies cannot apply to more than ten accounts"
+            ],
+            "correct": 0,
+            "explanation": "Strict tiering needs one documented escape hatch. Sealing and alarming it is what keeps the hatch from becoming a habit."
+          }
+        ],
+        "recap": [
+          "Lower tiers refuse higher-tier credentials by policy, with events to prove it.",
+          "Tier 0 accounts sit in Protected Users, backed by 2025's stricter defaults.",
+          "Break-glass and MFA are written decisions, not loose ends."
+        ],
+        "next": "Lesson 5 tests the whole plane — the paths that must work and the sign-ins that must fail.",
+        "sources": [
+          "paw",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "prove",
+        "title": "Prove the tiers and the addressing",
+        "minutes": 25,
+        "summary": "Run the matrix: every tier's administration works from its seat, every cross-tier attempt fails with an event, and the addressing service behaves exactly as registered.",
+        "objectives": [
+          "Verify each tier's management path from its designated seat.",
+          "Capture the denial evidence for out-of-tier attempts.",
+          "Re-prove DHCP, relay, and dynamic DNS under the finished rules."
+        ],
+        "steps": [
+          "From AdminJumpBox01, manage a DC with a Tier 0 account; from SBD-ADMIN-SRV01, manage SBD-DHCP01 with a Tier 1 account; from SBD-ADMIN-PC01, manage the VLAN 80 test client with a Tier 2 account. Record each success with its session details.",
+          "Attempt the forbidden combinations — Tier 0 credentials at the test client, a session from VLAN 80 toward VLAN 60 — and capture both the refusal the user sees and the event or deny-log entry the infrastructure writes.",
+          "Renew the test client's lease and confirm options, registration, and the relay still behave with all restrictions active; the control plane must not have broken the service plane.",
+          "Reconcile the tier access matrix against what you just proved and file it with the register — the two documents together are the admin plane's assessable record."
+        ],
+        "command": "Enter-PSSession SBD-DHCP01.sbd.test   # from SBD-ADMIN-SRV01, Tier 1 account\nipconfig /renew   # on the VLAN 80 test client\nGet-WinEvent -LogName Security -MaxEvents 5 | Where-Object Id -in 4625,4672 | Select-Object TimeCreated, Id",
+        "check": "Every in-tier path succeeds, every tested out-of-tier path fails with captured evidence, and DHCP with dynamic DNS still works end to end under the full rule set.",
+        "evidence": "Keep the completed tier matrix with timestamps, the denial captures, and the post-restriction lease and registration proof.",
+        "quizzes": [
+          {
+            "question": "What pairs make the denial evidence complete?",
+            "answers": [
+              "Two screenshots of the same error",
+              "The user-visible refusal plus the infrastructure's event or deny-log entry",
+              "A verbal report"
+            ],
+            "correct": 1,
+            "explanation": "Same standard as course 1.5: the client's view shows the attempt, the log shows the boundary deciding — together they prove enforcement."
+          },
+          {
+            "question": "Why re-test DHCP after the restrictions landed?",
+            "answers": [
+              "Hardening the control plane can accidentally break the service plane — proving both still work is the point",
+              "Leases expire during lessons",
+              "The relay resets daily"
+            ],
+            "correct": 0,
+            "explanation": "Every tightening risks collateral damage. The matrix ends with services proven healthy, not presumed."
+          },
+          {
+            "question": "What is the admin plane's assessable record?",
+            "answers": [
+              "The jump box's wallpaper",
+              "A list of administrator names",
+              "The tier access matrix reconciled with the ACL register"
+            ],
+            "correct": 2,
+            "explanation": "Who may manage what, from where, over which path — matrix plus register answers it in a form an assessor can test."
+          }
+        ],
+        "recap": [
+          "In-tier works, out-of-tier fails, and both are on record.",
+          "Addressing and registration survived the restrictions.",
+          "Matrix and register reconcile as one assessable story."
+        ],
+        "next": "The final lesson runs the scans and hands a managed, addressable network to the logging wave.",
+        "sources": [
+          "paw",
+          "fw"
+        ]
+      },
+      {
+        "id": "scan",
+        "title": "Delta scan and hand off",
+        "minutes": 20,
+        "summary": "Four new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe.",
+        "objectives": [
+          "Baseline the four new hosts and rescan the changed ones.",
+          "Fold the course's decisions into the standing records.",
+          "Write the handoff the logging wave builds on."
+        ],
+        "steps": [
+          "Run first baselines on SBD-DHCP01 and the three admin hosts with the standard benchmark and tool versions, and rescan the domain controllers — the logon-rights GPOs are the expected delta there.",
+          "Add this course's rows to the living records: the deny-logon and Protected Users decisions into the exception record where they interact with STIG values, and the new permit and deny rows into the register with owners.",
+          "Confirm the admin hosts appear in the hardening course's quarterly cadence; privileged seats are rescanned first from now on, not last.",
+          "Write the handoff: administration now has a home, which means the logging course can require that SIEM consoles and collectors are managed only from VLAN 60 — say so explicitly for course 1.8."
+        ],
+        "command": "Get-ChildItem C:\\Evidence\\tiered-admin -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\tiered-admin\\*",
+        "check": "Four baselines and the DC rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.",
+        "evidence": "Finish the checklist: scan set, updated records, the tier matrix, and the handoff note.",
+        "quizzes": [
+          {
+            "question": "Which systems are rescanned, not baselined, this time?",
+            "answers": [
+              "The domain controllers — their logon policy changed",
+              "The brand-new admin hosts",
+              "The offline root"
+            ],
+            "correct": 0,
+            "explanation": "New host, new baseline; changed host, rescan. The DCs changed through the tier GPOs, so they get the comparison treatment."
+          },
+          {
+            "question": "Why do the privileged seats move to the front of the quarterly cadence?",
+            "answers": [
+              "They have the fastest disks",
+              "They carry the credentials that control everything else — drift there costs the most",
+              "DISA scans alphabetically"
+            ],
+            "correct": 1,
+            "explanation": "Scan priority follows consequence. The hosts that hold Tier 0 sessions earn the first look every quarter."
+          },
+          {
+            "question": "What does this course hand the logging wave?",
+            "answers": [
+              "Fifty workstations",
+              "The business services",
+              "A safe management plane — collectors and SIEM consoles can now be administered only from VLAN 60"
+            ],
+            "correct": 2,
+            "explanation": "Logging infrastructure is a target; building it after the admin plane means it is managed safely from day one."
+          }
+        ],
+        "recap": [
+          "Baselines, rescans, and attributed deltas are on file.",
+          "Exception record and register absorbed the course's decisions.",
+          "The logging wave inherits a managed, addressable network."
+        ],
+        "next": "That completes course 1.7. Course 1.8 builds the logging pipeline — collect, protect, analyze — before the fleet arrives to be watched.",
+        "sources": [
+          "controls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "logging-pipeline",
+    "prerequisites": [
+      "Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.",
+      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, and SBD-AUDIT01 (10.0.50.40) and SBD-SPLUNK01 (10.0.50.10) per your platform plan for the repository and analysis roles.",
+      "Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system."
+    ],
+    "labNote": "This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.",
+    "sources": [
+      {
+        "id": "wef",
+        "title": "Microsoft · Use Windows Event Forwarding to help with intrusion detection",
+        "url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+      },
+      {
+        "id": "wecutil",
+        "title": "Microsoft · Wecutil (Windows Event Collector)",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wecutil"
+      },
+      {
+        "id": "auditpol",
+        "title": "Microsoft · Auditpol",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/auditpol"
+      },
+      {
+        "id": "splunkdocs",
+        "title": "Splunk · product documentation",
+        "url": "https://docs.splunk.com/Documentation"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls (AU family)",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design collect, protect, analyze",
+        "minutes": 20,
+        "summary": "Three systems, three distinct jobs: SBD-SYSLOG01 gathers, SBD-AUDIT01 preserves, SBD-SPLUNK01 answers questions. Decide what is collected first, how long it lives, and who may touch which stage — before a single event flows.",
+        "objectives": [
+          "Assign the three roles and the first collection scope.",
+          "Decide retention, protection, and access per stage.",
+          "Register the pipeline's network paths."
+        ],
+        "steps": [
+          "Write the role sentence for each host: the collector receives Windows events and the core router's syslog; the repository holds the protected, long-retention copy; the analysis system indexes a working copy for search and alerting. One copy to keep, one copy to question.",
+          "Scope the first collection to what already produces evidence: both DCs' Security logs, the core router's deny log from course 1.5, and the admin hosts' sign-in events — the fleet joins this scope in the next course, not now.",
+          "Decide the AU-family answers and write them down: retention length per stage, who may read each stage, and that nobody — including administrators — writes or deletes in the repository outside the archival process (that is the AU-9 protection story).",
+          "Add the register rows: DC and admin-host event forwarding to the collector (WinRM 5985), router syslog UDP 514 to the collector, and the forwarder path from collector to the analysis system; all three systems are managed only from VLAN 60 per course 1.7's handoff."
+        ],
+        "command": "# Capture the before state: what the DCs currently audit and where nothing is forwarded yet.\nauditpol /get /category:* | Select-String 'Logon|Account Management|Directory Service|Policy Change'\nGet-Service Wecsvc -ComputerName SBD-SYSLOG01",
+        "check": "The design names each stage's job, scope, retention, and readers; the repository's no-delete rule is written; and the register carries the three pipeline paths with owners.",
+        "evidence": "Keep the pipeline design sheet, the retention and access table, and the new register rows.",
+        "quizzes": [
+          {
+            "question": "Why separate the repository from the analysis system?",
+            "answers": [
+              "The protected record and the working copy have different jobs — tampering with searches must never mean tampering with evidence",
+              "Splunk cannot store data",
+              "Two systems are cheaper than one"
+            ],
+            "correct": 0,
+            "explanation": "Analysis needs flexibility; the record needs integrity. Splitting them means a compromised search tier still leaves the evidence intact."
+          },
+          {
+            "question": "What is in the first collection scope?",
+            "answers": [
+              "Every system including the unbuilt fleet",
+              "The sources that already produce evidence: DC Security logs, the router's deny log, and admin-host sign-ins",
+              "Only the collector's own log"
+            ],
+            "correct": 1,
+            "explanation": "Collect what exists and matters most. The fleet widens the scope in course 1.9 — into a pipeline already proven."
+          },
+          {
+            "question": "Who may delete from SBD-AUDIT01?",
+            "answers": [
+              "Any Domain Admin",
+              "The analysis system automatically",
+              "Nobody outside the written archival process — that restriction is the protection control"
+            ],
+            "correct": 2,
+            "explanation": "AU-9 in one sentence: the record survives its administrators. Deletion happens only by the documented retention process."
+          }
+        ],
+        "recap": [
+          "Collector gathers, repository preserves, analysis answers.",
+          "Scope starts with the DCs, the router denies, and the admin plane.",
+          "Retention, readers, and the no-delete rule are written; paths are registered."
+        ],
+        "next": "Lesson 2 makes sure the right events exist before anything forwards them.",
+        "sources": [
+          "controls",
+          "wef"
+        ]
+      },
+      {
+        "id": "auditing",
+        "title": "Turn on the right auditing",
+        "minutes": 25,
+        "summary": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written.",
+        "objectives": [
+          "Apply the advanced audit policy categories the design needs.",
+          "Reconcile audit settings with the course 1.3 STIG values.",
+          "Verify effective auditing on the DCs and admin hosts."
+        ],
+        "steps": [
+          "Review what the DISA GPOs from course 1.3 already audit — much of the advanced audit policy arrived with the STIGs. This lesson reconciles and fills gaps rather than starting over.",
+          "Confirm the categories the design depends on are at least at the STIG values on the DCs: Logon/Logoff, Account Management, Directory Service Changes, and Policy Change — success and failure where the design says so.",
+          "Extend the same policy to the admin hosts' OU so privileged sessions write the sign-in trail lesson 5 of course 1.7 started capturing by hand.",
+          "Any place this course wants more auditing than the STIG sets, make it a documented addition in the GPO structure — never a local, invisible tweak — and note it in the exception/addition record."
+        ],
+        "command": "auditpol /get /subcategory:'Logon','User Account Management','Directory Service Changes','Audit Policy Change'\ngpresult /r /scope:computer",
+        "check": "Effective audit policy on the DCs and admin hosts covers the designed categories at or above the STIG values, applied through GPO, with any additions documented.",
+        "evidence": "Keep the auditpol output per host class, the GPO report, and the documented additions.",
+        "quizzes": [
+          {
+            "question": "Why start from the course 1.3 GPOs instead of a fresh audit policy?",
+            "answers": [
+              "Fresh policies are forbidden",
+              "The STIGs already set most of it — reconciling avoids conflicts and double-maintenance",
+              "auditpol cannot show existing settings"
+            ],
+            "correct": 1,
+            "explanation": "The hardening baseline was the first word on auditing. This lesson's job is alignment and gaps, not a rival policy."
+          },
+          {
+            "question": "Where do audit-policy additions get made?",
+            "answers": [
+              "In the GPO structure, documented — never as local tweaks",
+              "Directly in each server's local policy",
+              "In the collector's configuration"
+            ],
+            "correct": 0,
+            "explanation": "Local tweaks drift and hide. Policy through GPO keeps the audit posture visible, scanned, and reproducible."
+          },
+          {
+            "question": "Which event families does the design treat as the core story?",
+            "answers": [
+              "Print spooler events",
+              "Disk defragmentation logs",
+              "Sign-ins, account management, directory changes, and policy changes"
+            ],
+            "correct": 2,
+            "explanation": "Who authenticated, who changed an account, who touched the directory, who altered policy — that is the identity network's narrative."
+          }
+        ],
+        "recap": [
+          "Audit policy is reconciled with the STIG baseline, not reinvented.",
+          "DCs and admin hosts write the designed event families.",
+          "Additions are GPO-visible and documented."
+        ],
+        "next": "Lesson 3 builds the collector those events will flow to.",
+        "sources": [
+          "auditpol",
+          "wef"
+        ]
+      },
+      {
+        "id": "collector",
+        "title": "Build the collector",
+        "minutes": 30,
+        "summary": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings the DC and admin-host events in by subscription, and the core router's denies arrive as syslog — one host where the network's record first lands.",
+        "objectives": [
+          "Configure the Windows Event Collector service and subscription.",
+          "Point the source hosts at the collector by GPO.",
+          "Receive the router's syslog deny stream."
+        ],
+        "steps": [
+          "On SBD-SYSLOG01, enable the Windows Event Collector service and create a source-initiated subscription for the designed event IDs from the DCs and admin hosts, delivered into the Forwarded Events log.",
+          "By GPO on the relevant OUs, set the subscription manager to the collector and grant the Network Service read access to the Security log — the sources push; the collector never reaches into them.",
+          "Add a syslog intake on the collector for UDP 514 and point the core router's deny logging at it, so course 1.5's boundary decisions land beside the Windows record.",
+          "Confirm the register rows are the only paths in use: WinRM from the source OUs to the collector, syslog from the core, and nothing listening that the design didn't ask for."
+        ],
+        "command": "wecutil es\nwecutil gs SBD-ForwardedSecurity\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, Id, MachineName",
+        "check": "The subscription is active, events from both DCs and the admin hosts appear in Forwarded Events with correct source machine names, and router deny entries arrive on the syslog intake.",
+        "evidence": "Record the subscription configuration, the GPO that enrolls sources, the first forwarded events per source, and a received router deny entry.",
+        "quizzes": [
+          {
+            "question": "Why source-initiated subscriptions rather than the collector pulling?",
+            "answers": [
+              "Pulling is impossible on Windows",
+              "Sources push to one known collector, so no account with read-everything rights roams the network",
+              "Push is the only mode GPO supports"
+            ],
+            "correct": 1,
+            "explanation": "Collector-initiated collection needs a credential that can read every source — exactly the kind of credential tiering just eliminated."
+          },
+          {
+            "question": "What joins the Windows events on this host?",
+            "answers": [
+              "Internet threat feeds",
+              "The workstation fleet's browsing history",
+              "The core router's deny log over syslog"
+            ],
+            "correct": 2,
+            "explanation": "The boundary's refusals are evidence too. Landing them beside the sign-in record lets analysis correlate both views."
+          },
+          {
+            "question": "How do you know a forwarded event really came from DC02?",
+            "answers": [
+              "The MachineName on the event record in Forwarded Events",
+              "All events look identical",
+              "The collector renames events randomly"
+            ],
+            "correct": 0,
+            "explanation": "Forwarded events keep their source identity — which is what makes the central copy usable as a record at all."
+          }
+        ],
+        "recap": [
+          "Sources push by subscription; the collector reaches into nothing.",
+          "DC, admin-host, and router records land in one place.",
+          "Only registered paths carry the pipeline."
+        ],
+        "next": "Lesson 4 gives the record its protected home.",
+        "sources": [
+          "wecutil",
+          "wef"
+        ]
+      },
+      {
+        "id": "protect",
+        "title": "Protect the record on SBD-AUDIT01",
+        "minutes": 25,
+        "summary": "The repository is where the record outlives mistakes and attackers alike: scheduled archives from the collector, hashed on arrival, readable by few, deletable by process only.",
+        "objectives": [
+          "Archive the collector's logs to the repository on schedule.",
+          "Hash and catalog every archive on arrival.",
+          "Enforce the read-few, delete-by-process-only access model."
+        ],
+        "steps": [
+          "Create the archival job: on schedule, the collector exports its Forwarded Events and syslog intake to dated archive files and transfers them to SBD-AUDIT01's repository share — the only inbound write path the repository allows.",
+          "On arrival, hash each archive and append the hash to a catalog kept with the archives; an archive whose hash no longer matches is a finding, not a file.",
+          "Set the permissions to match lesson 1's decision: the archival process writes, a named auditors group reads, and no interactive account holds delete rights — retention-driven deletion runs as its own documented, logged process.",
+          "Fill in the AU table with what now exists: where each stage's data lives, its retention clock, and who can touch it — this table is the artifact course 2.2 will file."
+        ],
+        "command": "Get-ChildItem \\\\SBD-AUDIT01\\LogArchive | Select-Object Name, Length, LastWriteTime -First 5\nGet-FileHash -Algorithm SHA256 \\\\SBD-AUDIT01\\LogArchive\\*.evtx | Select-Object -First 3\nicacls \\\\SBD-AUDIT01\\LogArchive",
+        "check": "Dated archives arrive on schedule with catalog hashes that verify, the permission listing matches the access model exactly, and the AU table reflects reality.",
+        "evidence": "Keep the archival job definition, the hash catalog excerpt, the permissions output, and the completed AU table.",
+        "quizzes": [
+          {
+            "question": "What does the hash catalog actually protect against?",
+            "answers": [
+              "Disk space exhaustion",
+              "Silent modification — an archive that no longer matches its recorded hash announces itself as tampered or corrupted",
+              "Slow searches"
+            ],
+            "correct": 1,
+            "explanation": "Integrity is only provable if you recorded what intact looked like. The catalog is that record."
+          },
+          {
+            "question": "How does anything ever get deleted from the repository?",
+            "answers": [
+              "Any administrator's right-click",
+              "The analysis system prunes it",
+              "Only the documented, logged retention process"
+            ],
+            "correct": 2,
+            "explanation": "The point of the repository is surviving its administrators. Deletion exists — as a process with a log, never a privilege."
+          },
+          {
+            "question": "Which later course consumes the AU table directly?",
+            "answers": [
+              "Course 2.2, as a Body of Evidence artifact for the audit controls",
+              "Course 1.1, retroactively",
+              "No course — it is decorative"
+            ],
+            "correct": 0,
+            "explanation": "Where the records live, how long, and who reads them is precisely what the audit control family asks an assessor to verify."
+          }
+        ],
+        "recap": [
+          "Archives land on schedule and prove their own integrity.",
+          "Readers are named; deletion is a process, not a right.",
+          "The AU table is written for the authorization path."
+        ],
+        "next": "Lesson 5 puts a working copy in front of an analyst.",
+        "sources": [
+          "controls",
+          "wecutil"
+        ]
+      },
+      {
+        "id": "analyze",
+        "title": "Analyze in SBD-SPLUNK01",
+        "minutes": 30,
+        "summary": "Analysis earns its place with three working searches and one alert: failed privileged sign-ins, the boundary's denies, and the health of time — questions this network can already answer about itself.",
+        "objectives": [
+          "Index the collector's streams into the analysis system.",
+          "Build the first three searches against real events.",
+          "Create one alert with a named responder."
+        ],
+        "steps": [
+          "Install the analysis platform on SBD-SPLUNK01 and bring in the collector's two streams — the forwarded Windows events and the router syslog — over the registered forwarder path; the repository stays out of this flow by design.",
+          "Build search one: failed sign-ins (event 4625) involving the tier admin accounts, grouped by source host — the tiering course's denials now have a dashboard.",
+          "Build search two: router denies by source VLAN and destination port — course 1.5's boundary, now trending; and search three: time-service events and offsets, so clock drift surfaces before Kerberos complains.",
+          "Turn the first search into an alert with a threshold, a named responder from the admin plane, and a written first-response step — an alert nobody owns is a log entry with extra steps. Console access to all of this: VLAN 60 only, per the handoff."
+        ],
+        "command": "Test-NetConnection SBD-SPLUNK01.sbd.test -Port 9997\n# In the analysis console, confirm the three saved searches return today's events\nGet-WinEvent -FilterHashtable @{LogName='Security';Id=4625} -MaxEvents 3 | Select-Object TimeCreated, MachineName",
+        "check": "Both streams index with correct timestamps, the three searches return real current events, and the alert fires in a test with its responder and first step documented.",
+        "evidence": "Record the input configuration, each search with a result sample, and the alert definition with its responder.",
+        "quizzes": [
+          {
+            "question": "Why does the repository stay out of the analysis flow?",
+            "answers": [
+              "The protected copy's integrity never depends on the search tier — analysis reads the working stream, not the record",
+              "Splunk cannot read archives",
+              "Repositories are read-only hardware"
+            ],
+            "correct": 0,
+            "explanation": "Lesson 1's separation, now visible in the plumbing: question the working copy freely; the record stays untouched."
+          },
+          {
+            "question": "What makes an alert real rather than decorative?",
+            "answers": [
+              "A red icon",
+              "A named responder and a written first step",
+              "Firing at least hourly"
+            ],
+            "correct": 1,
+            "explanation": "Detection without ownership is noise. The responder and the first step are what turn a search into a control."
+          },
+          {
+            "question": "Why is a time-health search in the first three?",
+            "answers": [
+              "Clocks are easy to chart",
+              "Dashboards need a third panel",
+              "Drift breaks Kerberos quietly — course 1.5 built the clock, this search watches it"
+            ],
+            "correct": 2,
+            "explanation": "The pipeline watches the dependencies the network actually has. Time is one failure that looks like everything else until you chart it."
+          }
+        ],
+        "recap": [
+          "Two streams indexed; the protected record untouched.",
+          "Three searches answer real questions from day one.",
+          "One alert, one responder, one written first step."
+        ],
+        "next": "The final lesson proves the chain end to end and runs the scans.",
+        "sources": [
+          "splunkdocs",
+          "wef"
+        ]
+      },
+      {
+        "id": "prove",
+        "title": "Prove the chain and delta scan",
+        "minutes": 20,
+        "summary": "One deliberate event, followed all the way: a failed privileged sign-in should appear on the source, the collector, the repository's next archive, and the analyst's screen — then the cadence scans close the course.",
+        "objectives": [
+          "Trace a test event through all three stages.",
+          "Verify the router-deny stream the same way.",
+          "Baseline the new hosts and file the course evidence."
+        ],
+        "steps": [
+          "Generate the test event: one failed sign-in with a (disabled-password) tier account on a DC. Find it in the DC's Security log, in Forwarded Events on the collector, flag it for the next archive's verification on the repository, and watch the alert fire in analysis.",
+          "Repeat with the boundary: probe one unregistered port, then find that deny in the syslog stream and in search two — course 1.5's evidence pair now assembles itself.",
+          "Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, and SBD-SPLUNK01 (Windows hosts with the standard benchmark; a non-Windows analysis host gets its config export + hash treatment like the router), plus a DC rescan for the audit-policy deltas.",
+          "File the end-to-end trace as this course's signature evidence and write the handoff: the fleet course inherits a pipeline that will see its first domain join happen."
+        ],
+        "command": "Get-WinEvent -LogName ForwardedEvents -MaxEvents 10 | Where-Object Id -eq 4625 | Select-Object TimeCreated, MachineName\nGet-ChildItem C:\\Evidence\\logging-pipeline -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\logging-pipeline\\*",
+        "check": "The test event appears at every stage with consistent timestamps, the deny trace matches, the new hosts have baselines, and the DC rescan deltas are attributed to the audit policy.",
+        "evidence": "Keep the four-stage trace of the test event, the deny trace, the scan set, and the handoff note to course 1.9.",
+        "quizzes": [
+          {
+            "question": "What does the single traced event prove that stage-by-stage checks don't?",
+            "answers": [
+              "That events have timestamps",
+              "That the stages connect — one real event surviving source to analyst is the pipeline working as a system",
+              "That 4625 exists"
+            ],
+            "correct": 1,
+            "explanation": "Components can each pass while the chain fails. The traced event is the integration test."
+          },
+          {
+            "question": "How is a non-Windows analysis host scanned in this lab?",
+            "answers": [
+              "It is exempt from evidence",
+              "With the Windows Server benchmark anyway",
+              "Like the router: hashed configuration export standing as its assessable record"
+            ],
+            "correct": 2,
+            "explanation": "The pattern from course 1.5 generalizes: no SCAP content means the record is the verified configuration, not nothing."
+          },
+          {
+            "question": "Why insist the pipeline exists before the fleet course?",
+            "answers": [
+              "So fifty domain joins happen on camera — observed from the first boot instead of retrofitted later",
+              "Fleets cannot join without Splunk",
+              "DHCP requires a SIEM"
+            ],
+            "correct": 0,
+            "explanation": "The ordering argument of this whole path: build the watcher, then the watched. Course 1.9 arrives to a network already paying attention."
+          }
+        ],
+        "recap": [
+          "One event, four stages, consistent timestamps — the chain is real.",
+          "Boundary denies assemble their own evidence now.",
+          "Baselines, rescans, and the handoff close wave 4a."
+        ],
+        "next": "That completes course 1.8. Course 1.9 brings in the fifty-workstation fleet — watched, addressed, and policy-managed from first boot.",
+        "sources": [
+          "controls",
+          "wecutil"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "workstation-fleet",
+    "prerequisites": [
+      "Complete courses 1.5–1.8: routed network, working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline.",
+      "Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
+      "Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link."
+    ],
+    "labNote": "Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.",
+    "sources": [
+      {
+        "id": "laps",
+        "title": "Microsoft · Windows LAPS overview",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview"
+      },
+      {
+        "id": "autoenroll",
+        "title": "Microsoft · Configure certificate autoenrollment",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment"
+      },
+      {
+        "id": "disa-gpo",
+        "title": "DISA · STIG Group Policy Objects package",
+        "url": "https://www.cyber.mil/stigs/gpo"
+      },
+      {
+        "id": "wef",
+        "title": "Microsoft · Use Windows Event Forwarding to help with intrusion detection",
+        "url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "prepare",
+        "title": "Prepare the fleet rollout",
+        "minutes": 25,
+        "summary": "Fifty of anything needs a factory, not fifty craft projects. Settle the image, the names, the join account, and the policy links so every endpoint is born identical — then prove it on paper before proving it on metal.",
+        "objectives": [
+          "Finalize the reference image and naming plan for fifty endpoints.",
+          "Create a least-privilege join account scoped to the Workstations OU.",
+          "Link the Windows 11 STIG policies to the Workstations OU before any join."
+        ],
+        "steps": [
+          "Finalize the Windows 11 reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.",
+          "Write the naming and rollout plan: SBD-PC01–SBD-PC50, addressed by the course 1.7 DHCP scope, joined in waves (pilot of three, then batches) rather than all fifty at once.",
+          "Create a dedicated domain-join account delegated only the create-computer-objects right on the Workstations OU — no broader privilege rides along with fifty join operations. The course 1.3 redirect already guarantees machines land in that OU.",
+          "Link the DISA Windows 11 STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that Windows 11's own secure defaults will already satisfy some checks, just as Server 2025 did."
+        ],
+        "command": "Get-FileHash -Algorithm SHA256 C:\\Staging\\Win11-Reference.vhdx\nGet-ADOrganizationalUnit -Identity 'OU=Workstations,OU=SBD,DC=sbd,DC=test'\nGet-GPInheritance -Target 'OU=Workstations,OU=SBD,DC=sbd,DC=test'",
+        "check": "The image is hashed and recorded, the join account holds only the delegated right on the Workstations OU, and the STIG links show on that OU before any machine exists in it.",
+        "evidence": "Keep the image record with its hash, the naming and wave plan, the delegation report for the join account, and the OU's GPO inheritance output.",
+        "quizzes": [
+          {
+            "question": "Why does the join account get only create-computer rights on one OU?",
+            "answers": [
+              "Join operations fail with more rights",
+              "Fifty joins should carry the least privilege possible — a stolen join credential then creates computer objects, nothing more",
+              "Delegation is faster than Domain Admin"
+            ],
+            "correct": 1,
+            "explanation": "Scale multiplies exposure. Scoping the account bounds what the rollout's most-used credential is worth to an attacker."
+          },
+          {
+            "question": "Why link the STIG policies before the first machine joins?",
+            "answers": [
+              "So every endpoint's first boot is already the hardened state — no window where an unmanaged machine exists",
+              "GPO links expire if unused",
+              "The OU cannot be created otherwise"
+            ],
+            "correct": 0,
+            "explanation": "The redirect lands them in the OU, and the pre-linked policy means compliance from minute one — the course 1.3 design, now paying off at scale."
+          },
+          {
+            "question": "What makes the reference image part of the evidence?",
+            "answers": [
+              "Images are always evidence",
+              "It contains the domain password",
+              "Its recorded version and hash are what make fifty 'identical' endpoints a claim you can verify"
+            ],
+            "correct": 2,
+            "explanation": "A configuration record for the fleet starts with the common ancestor. The hash is how an assessor — or future you — confirms descent."
+          }
+        ],
+        "recap": [
+          "One hashed image, one naming plan, waves instead of a big bang.",
+          "The join credential can create computer objects and nothing else.",
+          "The Workstations OU is armed with policy before it holds a machine."
+        ],
+        "next": "Lesson 2 joins the pilot and inspects everything a first boot should bring.",
+        "sources": [
+          "disa-gpo",
+          "controls"
+        ]
+      },
+      {
+        "id": "pilot",
+        "title": "Join the pilot and inspect first boot",
+        "minutes": 30,
+        "summary": "Three machines go first, and everything the path has built shows up at once: a DHCP lease through the relay, an OU landing, STIG policy, a DNS record — and the join itself appearing on the analyst's screen.",
+        "objectives": [
+          "Join a three-machine pilot with the scoped account.",
+          "Verify lease, OU placement, policy, and DNS registration per machine.",
+          "Confirm the joins appear in the logging pipeline."
+        ],
+        "steps": [
+          "Deploy SBD-PC01 through SBD-PC03 from the image into VLAN 80, let each take its DHCP lease, and join sbd.test with the delegated account — nothing about the join should require a privileged credential.",
+          "Per machine, verify the inheritance chain: the computer object sits in the Workstations OU (the redirect working), gpresult shows the STIG policies applied, and the secure dynamic DNS record exists on both DCs.",
+          "Confirm the deny side still holds: a pilot machine cannot reach another pilot machine's SMB or RDP, and cannot open anything toward VLAN 60 — the course 1.5 rules apply to the fleet automatically.",
+          "Find the three joins in the logging pipeline: the domain controller events for the computer-account creations should already be on the collector and searchable in analysis — the first machines this network has watched arrive."
+        ],
+        "command": "Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName\ngpresult /r /scope:computer\nResolve-DnsName SBD-PC01.sbd.test\nTest-NetConnection SBD-PC02.sbd.test -Port 445   # expected: TcpTestSucceeded False",
+        "check": "All three pilots sit in the Workstations OU with STIG policy applied and DNS registered, peer SMB/RDP fails as designed, and the join events are visible in analysis.",
+        "evidence": "Keep each pilot's placement, gpresult, and DNS proof; the peer-deny output; and the analysis search showing the three computer-account creations.",
+        "quizzes": [
+          {
+            "question": "How does a brand-new machine end up hardened without anyone touching it?",
+            "answers": [
+              "Windows 11 hardens itself completely",
+              "Redirect lands it in the Workstations OU, where the pre-linked STIG policies apply at first boot",
+              "The DHCP server pushes the STIG"
+            ],
+            "correct": 1,
+            "explanation": "Three courses cooperate in that one moment: the 1.3 redirect, the 1.3 GPO package, and this lesson's pre-linked OU."
+          },
+          {
+            "question": "Why test pilot-to-pilot SMB and expect failure?",
+            "answers": [
+              "SMB is removed from Windows 11",
+              "The pilots are in different domains",
+              "The model's VLAN 80 design denies peer traffic — endpoint-to-endpoint lateral movement is cut at the boundary"
+            ],
+            "correct": 2,
+            "explanation": "The register's deny rows from 1.5 were written for this moment: workstations talk to services, not to each other."
+          },
+          {
+            "question": "What does seeing the joins in analysis demonstrate?",
+            "answers": [
+              "The ordering worked — the pipeline built in 1.8 observed the fleet's very first machines arriving",
+              "That Splunk licenses cover 50 hosts",
+              "Nothing; joins are not logged"
+            ],
+            "correct": 0,
+            "explanation": "Build the watcher, then the watched. The pilot's appearance on the analyst's screen is the sequencing argument made visible."
+          }
+        ],
+        "recap": [
+          "Three pilots: leased, landed, hardened, registered — untouched by hand.",
+          "Peer traffic fails by design; the denies are the fleet's first evidence.",
+          "The pipeline watched the fleet being born."
+        ],
+        "next": "Lesson 3 gives every endpoint a managed local administrator.",
+        "sources": [
+          "autoenroll",
+          "wef",
+          "disa-gpo"
+        ]
+      },
+      {
+        "id": "laps",
+        "title": "Manage local administrators with Windows LAPS",
+        "minutes": 25,
+        "summary": "Fifty identical machines must not share one local administrator password. Windows LAPS gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it.",
+        "objectives": [
+          "Prepare the directory schema and permissions for Windows LAPS.",
+          "Apply the LAPS policy to the Workstations OU.",
+          "Retrieve and rotate a managed password under the tier rules."
+        ],
+        "steps": [
+          "Extend the directory schema for Windows LAPS (Update-LapsADSchema) and grant the Workstations OU's computers the right to update their own password attributes — a one-time Tier 0 action, performed from the jump host and recorded like any schema change.",
+          "Grant read access on the managed passwords to the Tier 2 admin group only — exactly the people SBD-ADMIN-PC01 exists for — and nobody else; the tier model decides who may know an endpoint's local secret.",
+          "Create the LAPS GPO on the Workstations OU: managed built-in administrator, the password complexity and age the plan sets, and post-authentication reset so a used password does not live on.",
+          "On a pilot, confirm the policy applied, retrieve the password from the admin seat, use it once, and watch rotation — one cycle, fully observed, is the proof the other forty-nine inherit."
+        ],
+        "command": "Get-LapsADPassword -Identity SBD-PC01 -AsPlainText   # from SBD-ADMIN-PC01, Tier 2 admin\nGet-ADComputer SBD-PC01 -Properties msLAPS-PasswordExpirationTime | Select-Object Name, msLAPS-PasswordExpirationTime\ngpresult /r /scope:computer",
+        "check": "The schema holds the LAPS attributes, only the Tier 2 group can read passwords, the policy shows on the pilots, and one retrieve-use-rotate cycle is recorded.",
+        "evidence": "Keep the schema-change record, the permission delegation, the LAPS policy report, and the observed rotation cycle.",
+        "quizzes": [
+          {
+            "question": "What problem does LAPS remove from a fifty-machine fleet?",
+            "answers": [
+              "Slow sign-ins",
+              "One shared local administrator password — where a single capture would open every endpoint",
+              "Password complexity rules"
+            ],
+            "correct": 1,
+            "explanation": "Identical images tempt identical secrets. Per-machine rotating passwords make one compromised endpoint worth exactly one endpoint."
+          },
+          {
+            "question": "Who may read a managed endpoint password?",
+            "answers": [
+              "Any authenticated user",
+              "The machine's primary user",
+              "The Tier 2 admin group, from its admin seat — the tier model decides"
+            ],
+            "correct": 2,
+            "explanation": "LAPS storage is directory data; the reading right is a tiering decision, which course 1.7 already made."
+          },
+          {
+            "question": "Why does post-authentication reset matter?",
+            "answers": [
+              "A password that was just used stops being valid — whoever saw it holds an expired secret",
+              "It makes passwords longer",
+              "It disables the account"
+            ],
+            "correct": 0,
+            "explanation": "The rotation on use closes the window between 'retrieved for support' and 'floating around in a notes file.'"
+          }
+        ],
+        "recap": [
+          "Every endpoint owns its own rotating local secret.",
+          "Reading rights follow the tier model, from the Tier 2 seat.",
+          "One full cycle is observed and on record."
+        ],
+        "next": "Lesson 4 hands the fleet its certificates.",
+        "sources": [
+          "laps",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "certificates",
+        "title": "Autoenroll the fleet's certificates",
+        "minutes": 25,
+        "summary": "Course 1.6 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary.",
+        "objectives": [
+          "Widen the computer template's autoenrollment to the fleet.",
+          "Confirm hands-free enrollment at Group Policy refresh.",
+          "Verify chain and live revocation from an endpoint."
+        ],
+        "steps": [
+          "Through the course 1.6 change process, update the SBD Computer Authentication template's autoenrollment permission from the pilot group to the Workstations OU's computers — the change record names the widening and its approver.",
+          "Confirm the autoenrollment policy already applies through the Workstations OU, refresh policy on the pilots, and watch certificates arrive with no human in the loop.",
+          "On an enrolled endpoint, run the full verification: the chain must reach the approved root, and the AIA and CDP fetches must answer live from pki.sbd.test through the course 1.5 register row.",
+          "Record the issuing CA's view: the issued-certificate log now shows the fleet enrolling — volume the CA was designed for, finally arriving, and itself a record worth sampling into evidence."
+        ],
+        "command": "gpupdate /force\nGet-ChildItem Cert:\\LocalMachine\\My | Select-Object Subject, NotAfter\ncertutil -verify -urlfetch C:\\Evidence\\fleet\\SBD-PC01.cer",
+        "check": "Pilot endpoints enroll hands-free at policy refresh, verification passes with live publication retrieval, and the CA's issued log reflects the fleet with the widened template version.",
+        "evidence": "Keep the template change record, an endpoint's certificate details, the urlfetch output, and a sample of the CA's issued log.",
+        "quizzes": [
+          {
+            "question": "What governs widening the template from pilot to fleet?",
+            "answers": [
+              "The course 1.6 change process — requester, reviewer, versioning, record",
+              "A quick edit on the CA console",
+              "Nothing; templates are self-service"
+            ],
+            "correct": 0,
+            "explanation": "The pilot-then-widen plan was written into the template's own record. Scaling it is a change like any other — documented, not improvised."
+          },
+          {
+            "question": "What does the endpoint's urlfetch verification exercise, end to end?",
+            "answers": [
+              "Only the local certificate store",
+              "Template, CA, DNS alias, publication site, and the registered HTTP path — five courses in one command",
+              "The DHCP relay"
+            ],
+            "correct": 1,
+            "explanation": "One passing verification on a fleet machine is the integration test for everything the PKI path built."
+          },
+          {
+            "question": "Why sample the CA's issued-certificate log into evidence?",
+            "answers": [
+              "Logs expire otherwise",
+              "The CA deletes it weekly",
+              "What the CA actually signed — and under which template version — is the PKI's ground-truth record"
+            ],
+            "correct": 2,
+            "explanation": "Enrollment at scale is where template mistakes would surface. The issued log is where you would see it, so it joins the record."
+          }
+        ],
+        "recap": [
+          "The widening went through the change process, not around it.",
+          "Enrollment is hands-free and verified live across the boundary.",
+          "The CA's issued log joins the evidence."
+        ],
+        "next": "Lesson 5 scales from three machines to fifty — by sampling, not by faith.",
+        "sources": [
+          "autoenroll",
+          "controls"
+        ]
+      },
+      {
+        "id": "scale",
+        "title": "Scale to fifty and prove by sample",
+        "minutes": 25,
+        "summary": "Roll the remaining waves, then prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means.",
+        "objectives": [
+          "Roll out the remaining endpoints in planned waves.",
+          "Verify a defined sample against the pilot's full check set.",
+          "Widen event forwarding to cover the fleet."
+        ],
+        "steps": [
+          "Deploy the remaining machines in the planned waves, watching the DHCP scope's utilization and the join events arriving in analysis as each wave lands — the pipeline is now the rollout's progress bar.",
+          "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, peer-deny).",
+          "Write the sample rule down: one failed check in the sample widens the sample; a repeated failure stops the rollout and becomes a finding. A sample without a failure rule is a formality.",
+          "Extend the course 1.8 forwarding subscription to the Workstations OU so all fifty endpoints report their security events — and confirm fleet sign-ins now appear in the analyst's searches."
+        ],
+        "command": "(Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter *).Count\nGet-DhcpServerv4ScopeStatistics -ScopeId 10.0.80.0 | Select-Object PercentageInUse, AddressesInUse\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object MachineName, Id",
+        "check": "Fifty computer objects sit in the Workstations OU, scope utilization matches the rollout, every sampled host passes the full check set, and fleet events flow through the pipeline.",
+        "evidence": "Keep the wave log, the sample definition with its failure rule, the per-sample check results, and the widened subscription proof.",
+        "quizzes": [
+          {
+            "question": "Why prove the fleet by sample instead of checking all fifty by hand?",
+            "answers": [
+              "A defined sample with a failure rule is verifiable and honest at scale — and identical provenance is what the image hash bought you",
+              "Checking is impossible on Windows 11",
+              "Only pilots can be checked"
+            ],
+            "correct": 0,
+            "explanation": "The factory model earns the sampling model. The written failure rule is what keeps the sample from being theater."
+          },
+          {
+            "question": "What turns a sampled failure into more than a shrug?",
+            "answers": [
+              "Deleting the failed machine",
+              "The written rule: failures widen the sample, repeats stop the rollout and become findings",
+              "Rebooting twice"
+            ],
+            "correct": 1,
+            "explanation": "The rule was written before the checks ran — which is exactly what makes acting on it defensible."
+          },
+          {
+            "question": "What is the pipeline's role during the rollout itself?",
+            "answers": [
+              "It pauses to save disk",
+              "It only matters after completion",
+              "Live progress and anomaly surface — each wave's joins and errors appear as they happen"
+            ],
+            "correct": 2,
+            "explanation": "Course 1.8's investment turns deployment into something observed, not something reconstructed afterward."
+          }
+        ],
+        "recap": [
+          "Fifty machines, rolled in waves, watched as they landed.",
+          "A defined sample with a failure rule carried the proof.",
+          "The fleet reports into the pipeline like everything else."
+        ],
+        "next": "The final lesson runs the fleet's scans and closes wave 4.",
+        "sources": [
+          "wef",
+          "controls"
+        ]
+      },
+      {
+        "id": "scan",
+        "title": "Delta scan the fleet and hand off",
+        "minutes": 20,
+        "summary": "The cadence meets its first population: SCAP baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory the next wave's tooling will take over.",
+        "objectives": [
+          "Baseline sampled endpoints with the Windows 11 STIG benchmark.",
+          "Rescan the infrastructure this course touched.",
+          "Hand the fleet inventory to the management wave."
+        ],
+        "steps": [
+          "Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 5 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
+          "Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (a scope now in full use); attribute each delta to its lesson.",
+          "Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.10's management tooling will take ownership of keeping it current.",
+          "Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what wave 5 builds next."
+        ],
+        "command": "Get-ChildItem C:\\Evidence\\workstation-fleet -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\workstation-fleet\\*",
+        "check": "Sampled endpoints hold dated Windows 11 baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.",
+        "evidence": "Finish the checklist: endpoint baselines, infrastructure rescans, the fleet inventory, and the handoff note to course 1.10.",
+        "quizzes": [
+          {
+            "question": "Which benchmark do the endpoints get?",
+            "answers": [
+              "Windows Server 2025, close enough",
+              "The router's config export",
+              "The Windows 11 STIG benchmark — the fleet's own standard from the same DISA package"
+            ],
+            "correct": 2,
+            "explanation": "The GPO package staged in course 1.3 carried the endpoint STIGs too; the fleet is scanned against its own content."
+          },
+          {
+            "question": "Why does the issuing CA get a rescan now?",
+            "answers": [
+              "Fifty enrollments changed its operational posture — change-triggered means this too",
+              "CAs are rescanned weekly by rule",
+              "It was missed earlier"
+            ],
+            "correct": 0,
+            "explanation": "The cadence follows change wherever it lands. Enrollment at fleet scale is a change worth measuring."
+          },
+          {
+            "question": "What does the fleet still lack as this course closes?",
+            "answers": [
+              "Certificates and policy",
+              "Updates, endpoint protection, and vulnerability coverage — wave 5's entire agenda",
+              "Network addresses"
+            ],
+            "correct": 1,
+            "explanation": "Honest handoffs name the gap. Fifty hardened machines that never patch would drift out of the state just proven — which is why 1.10 is next."
+          }
+        ],
+        "recap": [
+          "Endpoint baselines by sample; infrastructure deltas attributed.",
+          "The fleet inventory is the closing artifact.",
+          "The gap — patching and protection — is named for wave 5."
+        ],
+        "next": "That completes course 1.9. Course 1.10 keeps the fleet alive: updates, approved software, endpoint protection, and the scanner that watches for weakness.",
+        "sources": [
+          "disa-gpo",
+          "controls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "patch-protect",
+    "prerequisites": [
+      "Complete course 1.9: the fleet exists, inventoried and reporting into the logging pipeline.",
+      "Provision SBD-WSUS01 (10.0.20.30), SBD-REPO01 (10.0.70.20, Linux), SBD-MGMT01 (10.0.70.10), SBD-EPO01 (10.0.50.30), and SBD-NESSUS01 (10.0.50.20) per the model's placements.",
+      "Keep the approved-media process ready: update content, package mirrors, protection definitions, and scanner plugins all cross the air gap the same reviewed, hashed way."
+    ],
+    "labNote": "Wave 5 keeps the proven state from drifting: updates and software arrive only through controlled channels, every endpoint runs managed protection, and a credentialed scanner turns the course 1.3 cadence into routine. In an air-gapped lab, every one of these systems feeds on content carried across the boundary — which is the recurring lesson.",
+    "sources": [
+      {
+        "id": "wsus",
+        "title": "Microsoft · Windows Server Update Services (WSUS)",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-server-update-services/get-started/windows-server-update-services-wsus"
+      },
+      {
+        "id": "redhat",
+        "title": "Red Hat · product documentation",
+        "url": "https://docs.redhat.com/en"
+      },
+      {
+        "id": "trellix",
+        "title": "Trellix · product documentation",
+        "url": "https://docs.trellix.com/"
+      },
+      {
+        "id": "tenable",
+        "title": "Tenable · Nessus documentation",
+        "url": "https://docs.tenable.com/nessus/"
+      },
+      {
+        "id": "disa-tools",
+        "title": "DISA · SRG/STIG tools (SCC and STIG Viewer)",
+        "url": "https://www.cyber.mil/stigs/srg-stig-tools"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design the rings and the software rules",
+        "minutes": 20,
+        "summary": "Decide how change reaches the network before any of it does: update rings that try things on the expendable before the essential, one approved source per software type, and register rows for every new path.",
+        "objectives": [
+          "Define the update rings and their order.",
+          "Set the one-approved-source rule per software type.",
+          "Register the wave's service paths."
+        ],
+        "steps": [
+          "Define three rings and their order: a pilot ring (the course 1.9 sample machines plus one member server), the broad ring (fleet and member servers), and the critical ring last (domain controllers and both VLAN 30 hosts) — updates earn their way up, never down.",
+          "Write the software rule: Windows updates come only from SBD-WSUS01, Linux packages only from SBD-REPO01, protection definitions only through SBD-EPO01, and anything else arrives as a documented exception — one source per type is what makes 'unauthorized software' a checkable claim.",
+          "Decide the air-gap feeding cadence: what content crosses on media, how often, hashed by whom — the course 1.3 transfer procedure, now on a schedule.",
+          "Add the register rows: fleet and servers to WSUS (8530), Linux consumers to REPO01 (HTTP), agent-to-ePO and ePO-to-agent ports per the product's documentation, and the scanner's credentialed reach into each VLAN — the one deliberate wide permit, owned and logged."
+        ],
+        "command": "# Capture the before state: where machines currently look for updates (nowhere internal yet).\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate' -ErrorAction SilentlyContinue\nGet-ADComputer -Filter * -SearchBase 'OU=SBD,DC=sbd,DC=test' | Measure-Object",
+        "check": "The ring table names every system's ring, the one-source rule and feeding cadence are written, and the register carries the wave's rows with owners.",
+        "evidence": "Keep the ring assignments, the software source rules, the feeding cadence, and the new register rows.",
+        "quizzes": [
+          {
+            "question": "Why do domain controllers sit in the last ring?",
+            "answers": [
+              "They update fastest",
+              "A bad update should burn a pilot machine, not the identity fabric — criticality decides order",
+              "DCs cannot be updated"
+            ],
+            "correct": 1,
+            "explanation": "Rings are a blast-radius design: change proves itself on what the network can lose before touching what it cannot."
+          },
+          {
+            "question": "What does one-approved-source-per-type actually buy?",
+            "answers": [
+              "Cheaper licensing",
+              "Faster downloads",
+              "'Unauthorized software' becomes checkable — anything not from the named source is a finding by definition"
+            ],
+            "correct": 2,
+            "explanation": "A rule you can test is a control; a preference you cannot is a hope. One source per type draws the testable line."
+          },
+          {
+            "question": "Which register row in this wave is deliberately wide, and what disciplines it?",
+            "answers": [
+              "The scanner's credentialed reach — owned, logged, and justified as the cadence's instrument",
+              "The fleet's path to WSUS",
+              "There are no wide rows"
+            ],
+            "correct": 0,
+            "explanation": "A vulnerability scanner must reach broadly to be worth having. The register makes that breadth a documented decision, not an accident."
+          }
+        ],
+        "recap": [
+          "Pilot → broad → critical: updates earn their way up.",
+          "One named source per software type, exceptions documented.",
+          "Every path — including the scanner's wide one — is a register row."
+        ],
+        "next": "Lesson 2 builds the Windows update channel.",
+        "sources": [
+          "wsus",
+          "controls"
+        ]
+      },
+      {
+        "id": "wsus",
+        "title": "Build SBD-WSUS01 and the ring policies",
+        "minutes": 30,
+        "summary": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and GPOs that point every OU at the server — with a pilot ring that proves each approval first.",
+        "objectives": [
+          "Install WSUS and import content through the offline process.",
+          "Map rings to WSUS groups and OU-linked policies.",
+          "Approve and verify a first update cycle through the pilot ring."
+        ],
+        "steps": [
+          "Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — Windows Server 2025, Windows 11, and defender definitions — and nothing speculative.",
+          "Feed it offline: export the needed content on the connected side, hash it, carry it across, and import — the WSUS offline servicing path is the course 1.3 media procedure wearing an update hat.",
+          "Create WSUS computer groups matching the rings, and link ring GPOs at the OUs: update source SBD-WSUS01, the ring's group assignment, and install/restart windows that respect what each ring does for a living.",
+          "Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived."
+        ],
+        "command": "Get-WsusServer | Get-WsusComputer -ComputerTargetGroups 'Ring 1 - Pilot' | Select-Object FullDomainName, LastReportedStatusTime\ngpresult /r /scope:computer\nGet-WindowsUpdateLog -ErrorAction SilentlyContinue",
+        "check": "Every system reports to its ring's group, the pilot ring installed and reported the first approved cycle, and the promotion to later rings followed the written order.",
+        "evidence": "Record the product scope, the offline import with hashes, the ring GPO reports, and the first cycle's per-ring approval and install timeline.",
+        "quizzes": [
+          {
+            "question": "How does update content reach this WSUS server?",
+            "answers": [
+              "Direct from Microsoft Update over the internet",
+              "By the approved offline export-import process — hashed media across the air gap",
+              "It generates updates locally"
+            ],
+            "correct": 1,
+            "explanation": "The air gap holds for updates too. WSUS's offline servicing path exists for exactly this network shape."
+          },
+          {
+            "question": "What gates an update's arrival at the domain controllers?",
+            "answers": [
+              "The calendar date alone",
+              "The DC's own download speed",
+              "Survival in the pilot and broad rings first — approval promotes ring by ring"
+            ],
+            "correct": 2,
+            "explanation": "The ring design from lesson 1 becomes mechanics here: the critical ring installs only proven approvals."
+          },
+          {
+            "question": "Why scope products and classifications tightly?",
+            "answers": [
+              "Unused content is imported, stored, and reviewed for nothing — and every artifact crossing the boundary should earn its trip",
+              "WSUS breaks above ten products",
+              "Licensing forbids more"
+            ],
+            "correct": 0,
+            "explanation": "In an air-gapped lab, every megabyte is carried by hand. Scope is both hygiene and respect for the boundary process."
+          }
+        ],
+        "recap": [
+          "Updates travel one road: offline import, ring approvals, OU policies.",
+          "The pilot ring absorbs the risk; the critical ring inherits the proof.",
+          "The first full cycle is on record, ring by ring."
+        ],
+        "next": "Lesson 3 gives the Linux side its equivalent road.",
+        "sources": [
+          "wsus",
+          "disa-tools"
+        ]
+      },
+      {
+        "id": "repo",
+        "title": "Build SBD-REPO01 for approved packages",
+        "minutes": 20,
+        "summary": "The lab's Linux hosts and tooling need packages, and the rule from lesson 1 applies to them too: one internal repository, fed across the boundary, serving only what was reviewed in.",
+        "objectives": [
+          "Stand up the internal package repository on SBD-REPO01.",
+          "Mirror the approved package set through the offline process.",
+          "Point the Linux consumers at the repository and nothing else."
+        ],
+        "steps": [
+          "Build SBD-REPO01 per your Linux platform plan and serve a repository directory over HTTP at 10.0.70.20 — the register row from lesson 1 already permits the path from its consumers.",
+          "Mirror the approved package set on the connected side, hash the set, carry it across, and verify before publishing — same ceremony, different payload; record the repository's snapshot date as its version.",
+          "Configure each Linux consumer (the analysis platform's host if Linux, the scanner appliance's feeds where applicable) to use only the internal repository — remove or disable every external source definition so the one-source rule is configuration, not convention.",
+          "Document the repository's own administration under the tier model — managed from VLAN 60, changes recorded — and its assessable record: the hashed snapshot catalog, like the router's config export."
+        ],
+        "command": "Test-NetConnection 10.0.70.20 -Port 80\n# On a Linux consumer: confirm the only configured source is the internal repository\n# dnf repolist  (or the platform equivalent) — capture the output into the evidence set\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\patch-protect\\repo-snapshot-catalog.txt",
+        "check": "The repository answers on its registered path, consumers list the internal source and only the internal source, and the snapshot catalog with hashes is filed.",
+        "evidence": "Keep the snapshot date and hash catalog, the consumer source listings, and the repository's administration record.",
+        "quizzes": [
+          {
+            "question": "What is the repository's version, for evidence purposes?",
+            "answers": [
+              "The hashed snapshot date of its mirrored content",
+              "The server's uptime",
+              "The newest package's name"
+            ],
+            "correct": 0,
+            "explanation": "A mirror is a moment in time. The dated, hashed snapshot is what lets anyone say exactly which content the lab could install."
+          },
+          {
+            "question": "How is the one-source rule enforced on a Linux consumer?",
+            "answers": [
+              "By asking administrators nicely",
+              "External source definitions are removed or disabled — the configuration itself allows only the internal repository",
+              "By firewall rules alone"
+            ],
+            "correct": 1,
+            "explanation": "Both layers help, but the consumer's own configuration is the primary control — and the thing the scan or config review verifies."
+          },
+          {
+            "question": "What stands as this host's assessable record?",
+            "answers": [
+              "A screenshot of the login page",
+              "Nothing — Linux hosts are exempt",
+              "The hashed snapshot catalog and administration record — the router pattern again"
+            ],
+            "correct": 2,
+            "explanation": "No SCAP content for a role does not mean no evidence: verified configuration and content catalogs carry the proof."
+          }
+        ],
+        "recap": [
+          "One internal repository, fed by the same boundary ceremony.",
+          "Consumers can only see the approved source — by configuration.",
+          "The dated, hashed snapshot is the version of record."
+        ],
+        "next": "Lesson 4 gives the inventory a keeper.",
+        "sources": [
+          "redhat",
+          "controls"
+        ]
+      },
+      {
+        "id": "mgmt",
+        "title": "SBD-MGMT01 and the living inventory",
+        "minutes": 25,
+        "summary": "The course 1.9 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70.",
+        "objectives": [
+          "Stand up the management tooling host under the tier model.",
+          "Build the component inventory covering all modeled systems.",
+          "Define how the inventory stays current and who owns it."
+        ],
+        "steps": [
+          "Build SBD-MGMT01 in the Servers OU, administered from VLAN 60 per the tier rules, with your chosen configuration and inventory tooling — the record matters more than the brand.",
+          "Load the inventory with every system the network now has — the 1.9 fleet list, the servers, the admin plane, the router — each with its OU, VLAN, address, ring, software sources, and scan status: the CM-8 component inventory, in one place.",
+          "Define currency: joins and retirements update the inventory as part of their process, and a monthly reconciliation compares the inventory against the directory and the DHCP leases — drift between them is a finding.",
+          "Name the owner and file the inventory's first reconciliation as evidence; course 2.2 will cite this record directly for the configuration-management controls."
+        ],
+        "command": "Get-ADComputer -Filter * -SearchBase 'OU=SBD,DC=sbd,DC=test' | Measure-Object\nGet-DhcpServerv4Lease -ScopeId 10.0.80.0 | Measure-Object\n# Compare both counts against the inventory's totals and record the reconciliation",
+        "check": "The inventory lists every modeled system with its attributes, the first directory-and-DHCP reconciliation matches (or its mismatches are findings), and ownership and cadence are written.",
+        "evidence": "Keep the populated inventory export, the reconciliation record, and the ownership and cadence note.",
+        "quizzes": [
+          {
+            "question": "What makes an inventory 'living' rather than a stale spreadsheet?",
+            "answers": [
+              "Pretty formatting",
+              "Update-on-change plus a scheduled reconciliation against sources that cannot lie — the directory and the leases",
+              "Monthly printing"
+            ],
+            "correct": 1,
+            "explanation": "Processes keep it current; reconciliation proves it stayed current. Both are written down, so both are checkable."
+          },
+          {
+            "question": "A machine appears in DHCP leases but not the inventory. What is that?",
+            "answers": [
+              "Normal churn to ignore",
+              "A reason to restart DHCP",
+              "A finding — either an undocumented system or a broken process, and both matter"
+            ],
+            "correct": 2,
+            "explanation": "The reconciliation exists to surface exactly this. Unknown hardware on the network is the classic first question of any assessment."
+          },
+          {
+            "question": "Which control family consumes this record most directly?",
+            "answers": [
+              "Configuration management — CM-8's component inventory is literally this artifact",
+              "Physical security",
+              "Awareness training"
+            ],
+            "correct": 0,
+            "explanation": "The authorization path's CM controls ask 'what do you have and how do you know' — this lesson is the answer being built."
+          }
+        ],
+        "recap": [
+          "One record of everything, with ring, sources, and scan status.",
+          "Reconciliation against directory and leases keeps it honest.",
+          "Owned, scheduled, and already shaped for course 2.2."
+        ],
+        "next": "Lesson 5 puts managed protection on every endpoint.",
+        "sources": [
+          "controls"
+        ]
+      },
+      {
+        "id": "epo",
+        "title": "Endpoint protection through SBD-EPO01",
+        "minutes": 30,
+        "summary": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show.",
+        "objectives": [
+          "Stand up the ePO server and its agent deployment.",
+          "Apply the protection and DLP policy baseline by ring.",
+          "Verify coverage and wire detections into the pipeline."
+        ],
+        "steps": [
+          "Build SBD-EPO01 in VLAN 50, fed its definitions through the offline process on the lesson-1 cadence, with its console reachable only from the admin plane — the register rows from lesson 1 carry agent traffic both ways.",
+          "Deploy agents to the pilot ring first, confirm check-ins, then follow the ring order through the fleet and member servers — the same earn-your-way-up discipline as updates.",
+          "Apply the policy baseline: on-access protection, the scan schedule, and the data-loss-prevention policy scoped to what the model's DLP role calls for — each setting a decision in the record, not a default accepted silently.",
+          "Verify coverage against the living inventory — every endpoint present and checking in — and forward the server's threat events into the course 1.8 pipeline so detections land beside everything else; a standard test file makes the whole path fire once, on record."
+        ],
+        "command": "Test-NetConnection SBD-EPO01.sbd.test -Port 443\nGet-Service -ComputerName SBD-PC01 -Name 'masvc' -ErrorAction SilentlyContinue | Select-Object Status\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, MachineName",
+        "check": "Every inventoried endpoint shows a checking-in agent, the policy baseline is applied and recorded, and a test detection traveled from endpoint to console to the analyst's search.",
+        "evidence": "Keep the coverage-vs-inventory comparison, the policy baseline record, and the traced test detection.",
+        "quizzes": [
+          {
+            "question": "What answers 'is every endpoint protected'?",
+            "answers": [
+              "Asking the help desk",
+              "The console's coverage reconciled against the living inventory — agents checking in, compared to machines that exist",
+              "The install media's label"
+            ],
+            "correct": 1,
+            "explanation": "Coverage is a comparison, not a feeling. Lesson 4's inventory is the denominator that makes the claim checkable."
+          },
+          {
+            "question": "Why do protection detections flow into the 1.8 pipeline?",
+            "answers": [
+              "One place to look: detections correlate with sign-ins and boundary denies on the same analyst screen",
+              "The console cannot store events",
+              "Syslog is faster than consoles"
+            ],
+            "correct": 0,
+            "explanation": "A detection next to the surrounding sign-ins and denies tells a story; a detection alone tells a fact."
+          },
+          {
+            "question": "How do definition updates reach this server?",
+            "answers": [
+              "Live from the vendor cloud",
+              "They never update in a lab",
+              "On the written offline cadence — the same hashed-media ceremony as everything else"
+            ],
+            "correct": 2,
+            "explanation": "Protection content ages fast, which is why the feeding cadence was a lesson-1 decision with a schedule, not an afterthought."
+          }
+        ],
+        "recap": [
+          "Agents by ring, policy from one console, console from the admin plane.",
+          "Coverage is proven against the inventory, not assumed.",
+          "Detections join the pipeline — one screen tells the whole story."
+        ],
+        "next": "The final lesson adds the scanner and makes the cadence routine.",
+        "sources": [
+          "trellix",
+          "controls"
+        ]
+      },
+      {
+        "id": "nessus",
+        "title": "SBD-NESSUS01 and the standing cadence",
+        "minutes": 25,
+        "summary": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the POA&M habit, and this wave's five new systems getting their own baselines on the way out.",
+        "objectives": [
+          "Stand up the scanner with least-privilege credentialed access.",
+          "Run the first full-network credentialed scan and triage it.",
+          "Fold scanning into the standing cadence and close the wave's scans."
+        ],
+        "steps": [
+          "Build SBD-NESSUS01 in VLAN 50, plugins fed on the offline cadence, with a dedicated scan account — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1.",
+          "Run the first credentialed scan VLAN by VLAN against the inventory, and triage like the course 1.3 rescan taught: every finding becomes fix-now, documented deviation, or POA&M candidate — never unexplained.",
+          "Wire results outward: findings into the analysis pipeline for trending, the triage into the living exception record, and the scan schedule into the cadence — quarterly with the DISA cycle, plus change-triggered, now automated enough to keep.",
+          "Close wave 5's own books: baselines for WSUS01, REPO01 (config-export pattern), MGMT01, EPO01, and NESSUS01, rescans where agents and policies changed existing systems, and the handoff — the network now sustains itself; wave 6 finally gives it something to serve."
+        ],
+        "command": "Test-NetConnection SBD-NESSUS01.sbd.test -Port 8834\nGet-ChildItem C:\\Evidence\\patch-protect -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\patch-protect\\*",
+        "check": "The credentialed scan covered the inventory with the scan account's use logged, every finding is classified, results and schedule are wired into pipeline and cadence, and the wave's baselines and rescans are filed.",
+        "evidence": "Keep the scan summary with its triage, the scan-account and register records, the cadence entry, and the wave's scan set.",
+        "quizzes": [
+          {
+            "question": "Why credentialed scans rather than unauthenticated ones?",
+            "answers": [
+              "They run quieter on the network",
+              "Logged-in checks see the real configuration state — patch levels and settings — instead of guessing from the outside",
+              "Credentials are required by law"
+            ],
+            "correct": 1,
+            "explanation": "The cadence wants configuration truth, which only an authenticated look provides; the scan account's scoping and logging keep that power honest."
+          },
+          {
+            "question": "Where does a scanner finding end up?",
+            "answers": [
+              "In one of three classified places: fixed, documented as a deviation, or on the POA&M path",
+              "Deleted if inconvenient",
+              "In the scanner only"
+            ],
+            "correct": 0,
+            "explanation": "The triage rule from 1.3 scales up unchanged: open items end classified, and the classifications feed the records course 2.2 assembles."
+          },
+          {
+            "question": "What did this wave change about the cadence itself?",
+            "answers": [
+              "It ended the cadence",
+              "It moved scans to the fleet's discretion",
+              "It gave it an instrument — scheduled credentialed scanning makes the quarterly-plus-change rhythm sustainable"
+            ],
+            "correct": 2,
+            "explanation": "Course 1.3 set the rhythm by hand; the scanner is what lets a real operation keep the beat."
+          }
+        ],
+        "recap": [
+          "Credentialed, least-privilege, logged — the scanner earns its wide row.",
+          "Findings end classified and flow into pipeline and records.",
+          "Wave 5's systems are baselined; the network now maintains itself."
+        ],
+        "next": "That completes course 1.10. Course 1.11 stands up the business services the users actually came for — file, database, licensing, and web.",
+        "sources": [
+          "tenable",
+          "disa-tools",
+          "controls"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "business-services",
+    "prerequisites": [
+      "Complete courses 1.5–1.10: the routed, watched, managed network with working PKI services and the ring/source rules in force.",
+      "Provision the VLAN 40 hosts: SBD-FS01 (10.0.40.10), SBD-SQL01 (10.0.40.20), SBD-APPS01 (10.0.40.30), and SBD-WEB01 (10.0.40.40, Linux with Apache).",
+      "Have the course 1.5 register and the course 1.6 SBD Server Authentication template ready — every service here gets a documented path and a real certificate."
+    ],
+    "labNote": "The users finally get what the network exists for: files, a database, licensing, and an internal web service. The model's rule governs the whole wave — permit only documented business service paths — so every service arrives with its register rows, its service identity, and its certificate, and nothing reaches it any other way.",
+    "sources": [
+      {
+        "id": "smb",
+        "title": "Microsoft · SMB security enhancements",
+        "url": "https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-security"
+      },
+      {
+        "id": "sql",
+        "title": "Microsoft · Securing SQL Server",
+        "url": "https://learn.microsoft.com/en-us/sql/relational-databases/security/securing-sql-server"
+      },
+      {
+        "id": "gmsa",
+        "title": "Microsoft · Group managed service accounts",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-managed-service-accounts/group-managed-service-accounts/group-managed-service-accounts-overview"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      },
+      {
+        "id": "disa-gpo",
+        "title": "DISA · STIGs and GPO package (incl. Apache guidance)",
+        "url": "https://www.cyber.mil/stigs/gpo"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design the service paths and identities",
+        "minutes": 25,
+        "summary": "Four services, and before any of them exist: who talks to what over which port, which identity each service runs as, and which groups own access — the register and the directory answer all three before a role installs.",
+        "objectives": [
+          "Write the register rows for every business service path.",
+          "Choose managed service identities instead of password accounts.",
+          "Define the access groups that will own each service's data."
+        ],
+        "steps": [
+          "Write the service-path rows: fleet to FS01 (SMB 445), fleet to APPS01 (its licensing port) and WEB01 (HTTPS 443), WEB01 and APPS01 — and only they — to SQL01 (1433). Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.",
+          "Choose the service identities: group managed service accounts for the SQL and application services, so passwords rotate themselves — and note Windows Server 2025's delegated managed service accounts as the migration path for any legacy service account this lab later inherits.",
+          "Create the access groups under the course 1.3 Groups OU — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.",
+          "Request the server certificates through the course 1.6 process: one SBD Server Authentication certificate each for SQL01 and WEB01, enrolled from the template, with the publication site serving their revocation story."
+        ],
+        "command": "Get-ADServiceAccount -Filter * | Select-Object Name, Enabled\nGet-ADGroup -SearchBase 'OU=Groups,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name\nTest-NetConnection 10.0.40.20 -Port 1433   # expected before build: TcpTestSucceeded False",
+        "check": "The register carries the four services' rows with the SQL path restricted to its two callers, the gMSAs and role groups exist, and both server certificates are issued and recorded.",
+        "evidence": "Keep the service-path rows, the identity and group design, and the certificate enrollment records.",
+        "quizzes": [
+          {
+            "question": "Who may reach SQL01 on 1433?",
+            "answers": [
+              "Any domain member",
+              "The fleet directly",
+              "Only WEB01 and APPS01 — the applications are the database's whole audience"
+            ],
+            "correct": 2,
+            "explanation": "Endpoints consume applications; applications consume the database. The register encodes that dependency chain and denies shortcuts around it."
+          },
+          {
+            "question": "Why gMSAs instead of a user account named svc-sql?",
+            "answers": [
+              "The directory manages and rotates the password itself — no human knows it, nothing expires unnoticed",
+              "gMSAs run queries faster",
+              "Password accounts cannot start services"
+            ],
+            "correct": 0,
+            "explanation": "Service account passwords are a classic standing weakness. Managed accounts remove the password from human hands entirely."
+          },
+          {
+            "question": "Why grant access to role groups rather than people?",
+            "answers": [
+              "Groups are alphabetical",
+              "Access follows the job: membership changes are one record, and permissions never accumulate on individuals",
+              "ACLs cannot hold user names"
+            ],
+            "correct": 1,
+            "explanation": "Role-based access is what makes 'who can touch this data' answerable from group membership instead of archaeology."
+          }
+        ],
+        "recap": [
+          "Every path is a row; the database hears only its applications.",
+          "Service identities are managed accounts, not passwords.",
+          "Access belongs to roles; certificates are already in hand."
+        ],
+        "next": "Lesson 2 builds the file service the fleet will actually use.",
+        "sources": [
+          "gmsa",
+          "controls",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "fileserver",
+        "title": "Build SBD-FS01 with least-privilege shares",
+        "minutes": 30,
+        "summary": "The file server is where access control meets daily life. Build the shares against the role groups, lean on the SMB security the platform now enforces, and make 'who can read this' a one-lookup question.",
+        "objectives": [
+          "Create the shares with role-group permissions and no individual grants.",
+          "Confirm the SMB signing and encryption posture end to end.",
+          "Verify access and denial per role from the fleet."
+        ],
+        "steps": [
+          "Build SBD-FS01 in the Servers OU and create the planned shares, granting NTFS permissions to the lesson-1 role groups only — share permissions stay simple, the filesystem carries the detail, and no named human appears in an ACL.",
+          "Enable access-based enumeration so users see only what their roles permit — the quiet UX of least privilege.",
+          "Confirm the SMB posture: Windows Server 2025 and the Windows 11 fleet already require signing by default, and this share design opts into SMB encryption for the sensitive share — verify both on a live session rather than assuming the default.",
+          "Test as members of two different roles from fleet machines: each sees and opens exactly its shares, the other's are invisible and denied, and the denial lands in the pipeline like every other refusal on this network."
+        ],
+        "command": "Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode\nGet-SmbSession | Select-Object ClientComputerName, Signed, Encrypted   # run during the test session, on FS01\nicacls D:\\Shares\\Projects | Select-String 'SBD'",
+        "check": "Shares grant to role groups only, a live session shows signing (and encryption where designed), and the two-role test proves both the access and the invisible-denied behavior.",
+        "evidence": "Keep the share and NTFS permission reports, the live session's signing/encryption output, and the two-role test record with its pipeline entry.",
+        "quizzes": [
+          {
+            "question": "Where does the fine-grained permission detail live?",
+            "answers": [
+              "In the share permissions",
+              "On the NTFS filesystem, granted to role groups — shares stay simple on top",
+              "In a spreadsheet"
+            ],
+            "correct": 1,
+            "explanation": "The classic split: simple share grants, precise filesystem ACLs, and roles everywhere — auditable at a glance."
+          },
+          {
+            "question": "What does the live Get-SmbSession check prove that settings review doesn't?",
+            "answers": [
+              "That the actual session negotiated signing and encryption — posture in effect, not posture on paper",
+              "That the share has files",
+              "Nothing extra"
+            ],
+            "correct": 0,
+            "explanation": "2025's defaults make signing expected — but the evidence standard of this whole path is observed behavior, so the session gets inspected."
+          },
+          {
+            "question": "A user can't see a share their colleague uses. What is that?",
+            "answers": [
+              "A replication failure",
+              "A help desk ticket to grant access immediately",
+              "Access-based enumeration doing its job — visibility follows role membership"
+            ],
+            "correct": 2,
+            "explanation": "Invisible-unless-permitted is the designed behavior; the role group, not an exception, is the path to access."
+          }
+        ],
+        "recap": [
+          "Roles own the ACLs; humans own role memberships.",
+          "Signing and encryption are verified on a live session.",
+          "Both the access and the denial are on record."
+        ],
+        "next": "Lesson 3 builds the database the applications will depend on.",
+        "sources": [
+          "smb",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "database",
+        "title": "Build SBD-SQL01 behind its applications",
+        "minutes": 30,
+        "summary": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly two callers — the narrowest audience on the network, by design.",
+        "objectives": [
+          "Install the database service under its gMSA.",
+          "Bind the SBD Server Authentication certificate for encrypted connections.",
+          "Prove the two-caller rule: applications connect, everything else is refused."
+        ],
+        "steps": [
+          "Install the database engine on SBD-SQL01 with the lesson-1 gMSA as its service identity — the install itself demonstrates the managed account working where a password account used to live.",
+          "Bind the issued certificate to the instance and require encrypted connections; the chain validates against pki.sbd.test like every other certificate on this network.",
+          "Create the application databases with role-based database access for the WEB01 and APPS01 identities — least privilege continues inside the engine, not just at its port.",
+          "Prove the audience: a connection from WEB01 succeeds encrypted; the same attempt from a fleet machine dies at the boundary with a deny-log entry — the register row, demonstrated from both sides."
+        ],
+        "command": "Get-Service MSSQLSERVER -ComputerName SBD-SQL01 | Select-Object Status\n# From SBD-WEB01: the registered caller connects. From a fleet machine:\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # expected from fleet: TcpTestSucceeded False\ncertutil -verify -urlfetch C:\\Evidence\\services\\sql01.cer",
+        "check": "The service runs as the gMSA, connections are certificate-encrypted with a validating chain, application access works by database role, and the fleet's direct attempt fails with its logged deny.",
+        "evidence": "Keep the service identity proof, the certificate binding and urlfetch output, the database role grants, and the paired success/deny connection evidence.",
+        "quizzes": [
+          {
+            "question": "What demonstrates the gMSA actually working?",
+            "answers": [
+              "The service running under it — a production role started by an identity no human holds a password for",
+              "A password in the evidence folder",
+              "The account's description field"
+            ],
+            "correct": 0,
+            "explanation": "The running service is the proof: managed identity in use, with rotation handled by the directory."
+          },
+          {
+            "question": "Why does the database get a certificate at all?",
+            "answers": [
+              "Certificates speed up queries",
+              "Connection encryption with a validating internal chain — the PKI path's work, consumed by a real service",
+              "SQL refuses to install without one"
+            ],
+            "correct": 1,
+            "explanation": "This is the payoff moment for courses 1.4–1.6: a business service encrypting with a certificate the lab issued, published, and can revoke."
+          },
+          {
+            "question": "What is the complete evidence for the two-caller rule?",
+            "answers": [
+              "The register row alone",
+              "A diagram of VLAN 40",
+              "The successful encrypted connection from an application plus the fleet attempt's failure and deny-log entry"
+            ],
+            "correct": 2,
+            "explanation": "Same standard as 1.5: the permit shown working and the deny shown refusing, each with its record."
+          }
+        ],
+        "recap": [
+          "A managed identity runs the engine; no password exists to leak.",
+          "Connections encrypt under the lab's own validated chain.",
+          "Two callers in, everyone else logged out at the boundary."
+        ],
+        "next": "Lesson 4 stands up the services users actually touch.",
+        "sources": [
+          "sql",
+          "gmsa"
+        ]
+      },
+      {
+        "id": "apps-web",
+        "title": "Build SBD-APPS01 and SBD-WEB01",
+        "minutes": 35,
+        "summary": "The licensing service and the internal web server complete the dependency chain: fleet to application, application to database — each hop registered, the web tier hardened against its DISA guidance, and HTTPS served from the lab's own trust.",
+        "objectives": [
+          "Stand up the licensing service with its registered fleet path.",
+          "Build the Apache server hardened per its STIG guidance, serving HTTPS with the internal certificate.",
+          "Prove the full chain: fleet → web → database."
+        ],
+        "steps": [
+          "Build SBD-APPS01 in the Servers OU, run its licensing service under a managed identity, and verify the fleet path on the registered port — the smallest of the four services, and the template for any future one: identity, row, evidence.",
+          "Build SBD-WEB01 on the Linux platform, packages from SBD-REPO01 only, and harden the web tier against DISA's Apache guidance — the server's assessable record follows the Linux pattern: hardened configuration exported and hashed, checklist items answered in STIG Viewer.",
+          "Install the SBD Server Authentication certificate with its chain and serve the internal application over HTTPS — the 2,048-bit floor from the accuracy review applies here as everywhere.",
+          "Prove the chain from a fleet machine: the HTTPS page loads with a validating certificate, the page's data round-trips through SQL01, and the fleet still cannot touch 1433 directly — three courses of design visible in one browser request."
+        ],
+        "command": "Test-NetConnection SBD-WEB01.sbd.test -Port 443\n# From a fleet machine, trust and chain:\ncertutil -verify -urlfetch C:\\Evidence\\services\\web01.cer\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # from fleet, still expected: False",
+        "check": "The licensing path works as registered, the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration, and the end-to-end request proves fleet → web → database with the shortcut still denied.",
+        "evidence": "Keep APPS01's identity and path proof, WEB01's hardened config export with hashes and checklist, the certificate validation output, and the end-to-end chain test.",
+        "quizzes": [
+          {
+            "question": "Where do WEB01's packages come from?",
+            "answers": [
+              "Any public mirror that responds",
+              "A USB stick from home",
+              "SBD-REPO01 — the one approved source the 1.10 rule named for Linux software"
+            ],
+            "correct": 2,
+            "explanation": "The one-source rule follows software wherever it runs; the web tier installs only what crossed the boundary through the repository."
+          },
+          {
+            "question": "What is the Apache host's assessable record?",
+            "answers": [
+              "A screenshot of the home page",
+              "Its hardened configuration export with hashes plus the answered STIG checklist — the established Linux pattern",
+              "Its uptime counter"
+            ],
+            "correct": 1,
+            "explanation": "The router, the repository, and now the web tier: no SCAP automation does not mean no evidence standard."
+          },
+          {
+            "question": "What does one successful page load from the fleet actually demonstrate?",
+            "answers": [
+              "The whole designed chain — registered fleet-to-web path, validating internal HTTPS, and the web tier's registered path into the database",
+              "Only that Apache started",
+              "That the fleet can reach the database directly"
+            ],
+            "correct": 0,
+            "explanation": "The browser request traverses three register rows and the PKI in one go — which is why it is the lesson's closing test."
+          }
+        ],
+        "recap": [
+          "Two services, two identities, every hop a register row.",
+          "The web tier is hardened to its guidance and serves the lab's own trust.",
+          "One page load proves the dependency chain end to end."
+        ],
+        "next": "The final lesson scans the wave and reconciles the register against reality one last time.",
+        "sources": [
+          "disa-gpo",
+          "sql",
+          "controls"
+        ]
+      },
+      {
+        "id": "prove-scan",
+        "title": "Reconcile, scan, and close the wave",
+        "minutes": 30,
+        "summary": "The service wave closes the way every wave has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete.",
+        "objectives": [
+          "Reconcile the full register against observed permits and denies.",
+          "Baseline the four service hosts and rescan what changed.",
+          "Update the living records and write the wave's handoff."
+        ],
+        "steps": [
+          "Run the full-register reconciliation one more time: every business-service row proven from its real source, every adjacent deny probed and logged — the VLAN 40 section of the matrix joins the evidence beside courses 1.5 and 1.7's.",
+          "Run the cadence: SCAP baselines for FS01, SQL01, and APPS01; the config-export record for WEB01; a credentialed scan of VLAN 40 from SBD-NESSUS01 with its findings triaged into the three classifications.",
+          "Update the living records: the four hosts, their identities, certificates, and rings into the SBD-MGMT01 inventory; the new rows' owners into the register; any service-hardening deviations into the exception record.",
+          "Write the handoff: every modeled system except the recovery design is now built, watched, patched, and evidenced — course 1.12 proves the network can come back from the dead, and then path 2 takes the whole record to authorization."
+        ],
+        "command": "Get-ChildItem C:\\Evidence\\business-services -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\business-services\\*",
+        "check": "The matrix covers every VLAN 40 row with paired permit/deny proof, the four hosts carry baselines or config records with triaged scan findings, and inventory, register, and exception record all reflect the finished wave.",
+        "evidence": "Finish the checklist: the reconciliation matrix, the scan and triage set, the updated living records, and the handoff note to course 1.12.",
+        "quizzes": [
+          {
+            "question": "Why re-run the whole register reconciliation now?",
+            "answers": [
+              "The register deleted itself",
+              "Four services changed what the boundary must permit — the reconciliation proves intent and behavior still match after the biggest change yet",
+              "Reconciliations are decorative"
+            ],
+            "correct": 1,
+            "explanation": "Each wave's additions could silently break the last wave's guarantees. The periodic full reconciliation is how the register stays true."
+          },
+          {
+            "question": "What distinguishes WEB01's closing evidence from FS01's?",
+            "answers": [
+              "WEB01 has none",
+              "FS01 is exempt from scans",
+              "FS01 gets a SCAP baseline; WEB01 gets the hashed config export and answered checklist — same standard, platform-appropriate instrument"
+            ],
+            "correct": 2,
+            "explanation": "The evidence standard is constant; the tool varies by platform, exactly as the course has practiced since the router."
+          },
+          {
+            "question": "What remains before the authorization path begins?",
+            "answers": [
+              "Proving recovery — course 1.12 — so the Body of Evidence includes the network coming back, not just running",
+              "Nothing at all",
+              "Rebuilding the domain controllers"
+            ],
+            "correct": 0,
+            "explanation": "A network that runs but cannot recover is half a story. The last build course makes restoration a demonstrated fact."
+          }
+        ],
+        "recap": [
+          "Register and reality reconcile across the finished network.",
+          "Every service host carries its platform-appropriate evidence.",
+          "One course remains: proving the network can be brought back."
+        ],
+        "next": "That completes course 1.11. Course 1.12 closes the Build path by proving recovery — directory, CA, policy, and logs — before authorization begins.",
+        "sources": [
+          "controls",
+          "disa-gpo"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prove-recovery",
+    "prerequisites": [
+      "Complete courses 1.1–1.11: the full network, its records, and the protected log archive all exist.",
+      "Provision protected backup storage reachable only by the backup process, plus an isolated recovery network segment (or host) for the restore rehearsal.",
+      "Have the custody records handy: the DSRM passwords from course 1.1 and the CA key protection decisions from course 1.4 — recovery is where those promises come due."
+    ],
+    "labNote": "The model's final chapter: a network that cannot come back was never really built. This course backs up what matters — directory, certificate authority, policy, boundary, and the log record — proves one real restore in isolation, and files the tested-recovery evidence the authorization path expects.",
+    "sources": [
+      {
+        "id": "forest",
+        "title": "Microsoft · Active Directory forest recovery guide",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/forest-recovery-guide/ad-forest-recovery-guide"
+      },
+      {
+        "id": "wbadmin",
+        "title": "Microsoft · Wbadmin (Windows Server Backup)",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin"
+      },
+      {
+        "id": "certutil",
+        "title": "Microsoft · Certutil reference (CA backup and restore)",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls (CP family)",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "requirements",
+        "title": "Decide what recovery must prove",
+        "minutes": 20,
+        "summary": "Recovery starts as a list of promises: which systems and records must be restorable, how old a restored copy may be, how long restoration may take — written as commitments the rest of the course exists to keep.",
+        "objectives": [
+          "Name the recovery set: what must come back, in what order.",
+          "Set the recovery point and time objectives per item.",
+          "Decide where backups live and who can touch them."
+        ],
+        "steps": [
+          "Write the recovery set in dependency order — the same order the path built it: the directory first (everything trusts it), then the CA's database and keys, Group Policy, the router configuration, the log archive, and the living records themselves (register, inventory, exception record).",
+          "Set the two numbers per item: how much history may be lost (recovery point) and how long restoration may take (recovery time) — lab-honest values you will actually measure against in lesson 4, not aspirations.",
+          "Decide backup placement: a protected location written only by the backup process, readable by the recovery role, with one copy's custody offline on media — the air-gapped network's version of an off-site copy.",
+          "Confirm the standing custody items: the DSRM passwords are sealed and findable, and the root CA's protected backup from the course 1.4 ceremony is accounted for — recovery depends on secrets that must exist before the bad day."
+        ],
+        "command": "# Capture the current protection state before this course changes it.\nwbadmin get versions\nGet-ChildItem \\\\SBD-FS01\\BackupTarget -ErrorAction SilentlyContinue | Measure-Object",
+        "check": "The recovery set is ordered by dependency with point and time objectives per item, the backup placement and access rules are written, and the DSRM and root-key custody records check out.",
+        "evidence": "Keep the recovery requirements sheet, the objectives table, the placement and access decisions, and the custody verification notes.",
+        "quizzes": [
+          {
+            "question": "Why does the directory lead the recovery order?",
+            "answers": [
+              "It has the most data",
+              "Everything else authenticates against it — services restored before identity have nothing to trust",
+              "Alphabetical order"
+            ],
+            "correct": 1,
+            "explanation": "Recovery order mirrors build order for the same reason: the dependency chain starts at identity."
+          },
+          {
+            "question": "What makes a recovery time objective honest?",
+            "answers": [
+              "Making it very small",
+              "Leaving it unstated",
+              "Setting a value you will actually measure a rehearsal against"
+            ],
+            "correct": 2,
+            "explanation": "Lesson 4 times a real restore. An objective nobody measures is marketing, not a commitment."
+          },
+          {
+            "question": "What is the offline media copy for?",
+            "answers": [
+              "Surviving a failure that takes the online backup with it — the air-gapped answer to off-site",
+              "Faster restores",
+              "Decoration for the evidence binder"
+            ],
+            "correct": 0,
+            "explanation": "Replication and online backups share failure modes with what they protect. One custody-tracked copy stands apart."
+          }
+        ],
+        "recap": [
+          "The recovery set is ordered by dependency, directory first.",
+          "Point and time objectives exist to be measured, not admired.",
+          "Backups get a protected home plus one offline, custody-tracked copy."
+        ],
+        "next": "Lesson 2 makes the directory's safety net real.",
+        "sources": [
+          "controls",
+          "forest"
+        ]
+      },
+      {
+        "id": "directory",
+        "title": "Back up the directory, on schedule",
+        "minutes": 25,
+        "summary": "System state from both controllers, on a schedule, to the protected target — plus the quiet feature that handles the most common 'disaster' of all: the Recycle Bin for deleted directory objects.",
+        "objectives": [
+          "Schedule system state backups on both domain controllers.",
+          "Verify and catalog each backup with hashes.",
+          "Enable the Active Directory Recycle Bin for object-level recovery."
+        ],
+        "steps": [
+          "Schedule Windows Server Backup system state jobs on SBD-DC01 and SBD-DC02 to the protected target — two controllers, two independent backups, because replication is availability and was never recovery (course 1.1's point, now kept).",
+          "After the first run, verify each backup's completion, record its version identifier, and hash the catalog entry into the evidence set — an unverified backup is a hope with a timestamp.",
+          "Enable the Active Directory Recycle Bin (a one-way, forest-level action from the Tier 0 seat, recorded as the change it is) so a deleted user or OU comes back intact without touching system state at all.",
+          "Write the restore decision tree: deleted object → Recycle Bin; corrupted or lost DC → system state restore (lesson 4's rehearsal); whole-forest loss → the Microsoft forest recovery guide, referenced and staged with the evidence rather than improvised on the day."
+        ],
+        "command": "wbadmin get versions\nGet-ADOptionalFeature -Filter {Name -like 'Recycle Bin*'} | Select-Object Name, EnabledScopes\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\backup-catalog.txt",
+        "check": "Both DCs show scheduled, completed system state versions on the protected target, the Recycle Bin reports an enabled scope, and the decision tree names the tool for each failure class.",
+        "evidence": "Keep the backup schedules and version listings, the hashed catalog, the Recycle Bin enablement record, and the restore decision tree.",
+        "quizzes": [
+          {
+            "question": "Both DCs replicate — why back up both?",
+            "answers": [
+              "Replication copies mistakes as faithfully as data; independent backups are the history replication doesn't keep",
+              "Backups run faster in pairs",
+              "Only one actually holds the directory"
+            ],
+            "correct": 0,
+            "explanation": "The course 1.1 teaching point, finally implemented: availability and recoverability are different capabilities with different tools."
+          },
+          {
+            "question": "An administrator deletes an OU by mistake. First tool?",
+            "answers": [
+              "Rebuild the forest",
+              "The Recycle Bin — object-level restore with attributes intact, no system state needed",
+              "Ask users to recreate their accounts"
+            ],
+            "correct": 1,
+            "explanation": "The decision tree's first branch: match the restore to the loss. Most disasters are small, and the small tool is already enabled."
+          },
+          {
+            "question": "What makes a backup more than a hope?",
+            "answers": [
+              "A long retention setting",
+              "Its file size",
+              "Verified completion, a recorded version, and a hashed catalog entry — and eventually a rehearsed restore"
+            ],
+            "correct": 2,
+            "explanation": "The evidence standard applies to safety nets too: recorded, verifiable, and — in lesson 4 — actually exercised."
+          }
+        ],
+        "recap": [
+          "Two independent system state schedules, verified and cataloged.",
+          "The Recycle Bin handles the everyday disaster in seconds.",
+          "A decision tree matches each failure class to its tool."
+        ],
+        "next": "Lesson 3 protects the trust fabric and the supporting state.",
+        "sources": [
+          "wbadmin",
+          "forest"
+        ]
+      },
+      {
+        "id": "trust-state",
+        "title": "Back up the CA, policy, boundary, and records",
+        "minutes": 25,
+        "summary": "The directory is not the only thing the network cannot re-derive: the issuing CA's database and key, the Group Policy set, the router's configuration, the log archive, and the living records each get their protected, cataloged copy.",
+        "objectives": [
+          "Back up the issuing CA's database and key under ceremony-grade protection.",
+          "Refresh the GPO and router configuration backups into the protected set.",
+          "Fold the log archive and living records into the same catalog."
+        ],
+        "steps": [
+          "Back up the issuing CA — database and private key — with certutil, protect the key material to the same standard as the course 1.4 ceremony artifacts, and record custody; the root's protected backup already exists from that ceremony and is verified, not duplicated, here.",
+          "Refresh the Group Policy backup (the course 1.3 Backup-GPO set, now the whole policy estate) and the router configuration export into the protected target, each hashed into the catalog.",
+          "Confirm the log archive's protection already satisfies this course — SBD-AUDIT01's hashed archives are themselves the record — and add the archive catalog to the recovery set so the evidence survives the systems it describes.",
+          "Export the living records — register, inventory, exception record, and this course's own sheets — into the set: a recovered network without its records would pass no assessment and teach the wrong lesson."
+        ],
+        "command": "certutil -backup C:\\Evidence\\recovery\\ca-backup\nGet-ChildItem C:\\Evidence\\recovery -Recurse | Select-Object Name, Length\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\ca-backup\\*, C:\\Evidence\\recovery\\gpo-backup\\* | Select-Object -First 6",
+        "check": "The CA backup exists with key custody recorded, the policy and router exports are current and hashed, and the catalog covers logs and living records alongside the systems.",
+        "evidence": "Keep the CA backup and custody record, the refreshed policy and router exports with hashes, and the complete recovery catalog.",
+        "quizzes": [
+          {
+            "question": "Why does the CA key backup get ceremony-grade handling?",
+            "answers": [
+              "A copied issuing key is the power to mint trusted certificates — the backup is as sensitive as the CA itself",
+              "Keys are large files",
+              "certutil requires it"
+            ],
+            "correct": 0,
+            "explanation": "Backups inherit the sensitivity of what they contain. The course 1.4 custody discipline applies to every copy of key material, forever."
+          },
+          {
+            "question": "Why do the register, inventory, and exception record join the backup set?",
+            "answers": [
+              "They are the largest files",
+              "A restored network without its records has lost its assessable story — the evidence must survive what it evidences",
+              "Backups require ten items minimum"
+            ],
+            "correct": 1,
+            "explanation": "This path's real product is a defensible record. Recovery that saves the machines and loses the story saves the wrong half."
+          },
+          {
+            "question": "What does this lesson do about the offline root's backup?",
+            "answers": [
+              "Copies it onto the network for convenience",
+              "Ignores it",
+              "Verifies the ceremony-era backup's custody — it already exists, offline, and stays that way"
+            ],
+            "correct": 2,
+            "explanation": "The root's protection is its isolation. This course checks the promise rather than breaking it with a networked copy."
+          }
+        ],
+        "recap": [
+          "CA database and key: backed up, custody recorded, ceremony rules intact.",
+          "Policy, boundary, logs, and records all live in one hashed catalog.",
+          "The evidence now survives the systems it describes."
+        ],
+        "next": "Lesson 4 stops trusting the backups and tests one.",
+        "sources": [
+          "certutil",
+          "wbadmin"
+        ]
+      },
+      {
+        "id": "rehearse",
+        "title": "Rehearse a real restore, in isolation",
+        "minutes": 30,
+        "summary": "One restore, actually performed: a domain controller's system state brought back on the isolated segment, timed against the objective, verified against the directory — plus the small restore everyone will someday need, from the Recycle Bin.",
+        "objectives": [
+          "Restore a DC's system state in the isolated recovery segment.",
+          "Measure the restore against the time objective and verify directory health.",
+          "Perform and record an object-level Recycle Bin restore."
+        ],
+        "steps": [
+          "Stage the rehearsal: the isolated recovery segment has no path to the production VLANs — a restored controller believing it is authoritative must never meet the live directory; that isolation rule is written before the restore starts.",
+          "Restore SBD-DC02's system state from the protected backup onto the recovery segment, timing the work from decision to directory-services-running against the lesson-1 objective.",
+          "Verify the restored directory the course 1.1 way — services, shares, a directory query — then record what the rehearsal taught: steps that surprised you, the measured time, and the decision-tree updates; then tear the rehearsal down completely.",
+          "Back in production, run the everyday restore: delete a disposable test object, bring it back from the Recycle Bin with attributes intact, and file both rehearsals — the big one and the small one — as the tested-recovery evidence."
+        ],
+        "command": "wbadmin start systemstaterecovery -version:<version-id> -backupTarget:<target>   # on the isolated recovery host\nGet-Service NTDS,DNS,Netlogon   # after restart, on the restored controller\nRestore-ADObject -Identity <deleted-object-guid>   # production Recycle Bin rehearsal",
+        "check": "The isolated restore reached a healthy directory within (or honestly against) the time objective, the teardown is confirmed, and the production object restore returned the test object intact.",
+        "evidence": "Keep the timed rehearsal log with its verification output, the lessons-learned and decision-tree updates, the teardown confirmation, and the object-restore record.",
+        "quizzes": [
+          {
+            "question": "Why must the rehearsal segment be isolated from production?",
+            "answers": [
+              "To make the restore faster",
+              "A restored controller carries old directory state — meeting the live forest would inject the past into the present",
+              "Isolation is optional for labs"
+            ],
+            "correct": 1,
+            "explanation": "The rehearsal's first rule protects production from the rehearsal. Old authoritative state on a live network is its own disaster."
+          },
+          {
+            "question": "The restore took longer than the objective. What now?",
+            "answers": [
+              "Hide the timing",
+              "Declare the objective met anyway",
+              "Record the honest number and either fix the process or revise the objective — both are legitimate; silence is not"
+            ],
+            "correct": 2,
+            "explanation": "The rehearsal exists to replace belief with measurement. Either outcome — better process or truer objective — improves the real bad day."
+          },
+          {
+            "question": "Why rehearse the Recycle Bin restore too?",
+            "answers": [
+              "The most likely recovery event deserves the same tested-and-recorded treatment as the rare one",
+              "It is required before system state restores",
+              "Deleted objects expire daily"
+            ],
+            "correct": 0,
+            "explanation": "Recovery evidence should match recovery reality: object-level loss is the common case, so its tool gets proven, not presumed."
+          }
+        ],
+        "recap": [
+          "One real restore, isolated, timed, verified, and torn down.",
+          "The measured number replaced the hoped-for one.",
+          "The everyday restore is proven alongside the dramatic one."
+        ],
+        "next": "The final lesson files the recovery record and closes the Build path.",
+        "sources": [
+          "wbadmin",
+          "forest"
+        ]
+      },
+      {
+        "id": "record",
+        "title": "File the recovery record and close the path",
+        "minutes": 20,
+        "summary": "The Build path ends the way it worked: owners, schedules, and evidence. The recovery record joins the living documents, the final scans snapshot the finished network, and the Body of Evidence is ready for the authorization courses to assemble.",
+        "objectives": [
+          "Assemble the tested-recovery record with owners and review dates.",
+          "Run the closing scan snapshot across the finished network.",
+          "Hand the complete evidence set to the authorization path."
+        ],
+        "steps": [
+          "Assemble the recovery record: the requirements and objectives, the backup catalog, both rehearsal results with the measured times, the decision tree, and a named owner with a scheduled next rehearsal — recovery is a practice with a calendar, not a binder.",
+          "Run the closing snapshot: the standing credentialed scan across every VLAN plus current SCAP results per the cadence, triaged as always — the dated 'as-authorized' picture path 2 will reference.",
+          "Reconcile the three living records one final time — inventory against directory and leases, register against behavior, exception record against open findings — so the authorization path inherits agreement, not archaeology.",
+          "Write the Build path's closing note: what exists, where every record lives, and what is intentionally open — then start course 2.1, where this network stops being a project and becomes a system seeking authorization."
+        ],
+        "command": "Get-ChildItem C:\\Evidence -Directory | Select-Object Name\nGet-ChildItem C:\\Evidence\\recovery -Recurse | Measure-Object\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\recovery-record.pdf -ErrorAction SilentlyContinue",
+        "check": "The recovery record is complete with an owner and next-rehearsal date, the closing snapshot is filed with triage, and all three living records reconcile cleanly into the handoff note.",
+        "evidence": "Finish the checklist: the recovery record, the closing scan snapshot, the three reconciliations, and the Build path's closing note.",
+        "quizzes": [
+          {
+            "question": "What makes recovery 'a practice with a calendar'?",
+            "answers": [
+              "A named owner and a scheduled next rehearsal — the test repeats as the network changes",
+              "Laminating the decision tree",
+              "Buying more storage"
+            ],
+            "correct": 0,
+            "explanation": "One rehearsal proves today's backups. The schedule is what keeps tomorrow's honest."
+          },
+          {
+            "question": "Why take a full scan snapshot at path's end?",
+            "answers": [
+              "Scanners need exercise",
+              "It is the dated security picture the authorization decision will actually be about",
+              "To fill the evidence folder"
+            ],
+            "correct": 1,
+            "explanation": "Path 2's assessors and the authorizing official evaluate a system at a moment. The snapshot is that moment, captured."
+          },
+          {
+            "question": "What does path 2 inherit from twelve build courses?",
+            "answers": [
+              "Just the virtual machines",
+              "A to-do list",
+              "A reconciled, evidenced system: inventory, register, exceptions, scans, and tested recovery — the Body of Evidence, already real"
+            ],
+            "correct": 2,
+            "explanation": "The authorization path was never going to invent evidence; it organizes what the Build path produced on purpose, course by course."
+          }
+        ],
+        "recap": [
+          "Recovery has an owner, a date, and a measured track record.",
+          "The closing snapshot freezes the as-authorized picture.",
+          "The Body of Evidence exists — path 2 assembles, it doesn't excavate."
+        ],
+        "next": "That completes the Build the Network path. Continue with course 2.1 to carry this network — and its evidence — through the Risk Management Framework to an authorization decision.",
+        "sources": [
+          "controls",
+          "forest"
+        ]
+      }
+    ]
   }
 ]

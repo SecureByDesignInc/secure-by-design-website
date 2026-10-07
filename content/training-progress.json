@@ -238,5 +238,239 @@
     "title": "Delta scan the change and hand off",
     "href": "/training/connect-segment#scan",
     "group": "Network build"
+  },
+  {
+    "id": "training:pki-services:publication",
+    "title": "Build the pki.sbd.test publication site",
+    "href": "/training/pki-services#publication",
+    "group": "Network build"
+  },
+  {
+    "id": "training:pki-services:publish-trust",
+    "title": "Publish the trust data at its advertised URLs",
+    "href": "/training/pki-services#publish-trust",
+    "group": "Network build"
+  },
+  {
+    "id": "training:pki-services:template-admin",
+    "title": "Separate template administration",
+    "href": "/training/pki-services#template-admin",
+    "group": "Network build"
+  },
+  {
+    "id": "training:pki-services:first-templates",
+    "title": "Publish the first working templates",
+    "href": "/training/pki-services#first-templates",
+    "group": "Network build"
+  },
+  {
+    "id": "training:pki-services:validate",
+    "title": "Validate enrollment and delta scan",
+    "href": "/training/pki-services#validate",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:design",
+    "title": "Design the tiers and the address plan",
+    "href": "/training/tiered-admin#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:dhcp",
+    "title": "Build SBD-DHCP01 and the relay",
+    "href": "/training/tiered-admin#dhcp",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:admin-hosts",
+    "title": "Build the administration systems",
+    "href": "/training/tiered-admin#admin-hosts",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:logon-restrictions",
+    "title": "Restrict where privilege can sign in",
+    "href": "/training/tiered-admin#logon-restrictions",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:prove",
+    "title": "Prove the tiers and the addressing",
+    "href": "/training/tiered-admin#prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:scan",
+    "title": "Delta scan and hand off",
+    "href": "/training/tiered-admin#scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:design",
+    "title": "Design collect, protect, analyze",
+    "href": "/training/logging-pipeline#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:auditing",
+    "title": "Turn on the right auditing",
+    "href": "/training/logging-pipeline#auditing",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:collector",
+    "title": "Build the collector",
+    "href": "/training/logging-pipeline#collector",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:protect",
+    "title": "Protect the record on SBD-AUDIT01",
+    "href": "/training/logging-pipeline#protect",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:analyze",
+    "title": "Analyze in SBD-SPLUNK01",
+    "href": "/training/logging-pipeline#analyze",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:prove",
+    "title": "Prove the chain and delta scan",
+    "href": "/training/logging-pipeline#prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:prepare",
+    "title": "Prepare the fleet rollout",
+    "href": "/training/workstation-fleet#prepare",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:pilot",
+    "title": "Join the pilot and inspect first boot",
+    "href": "/training/workstation-fleet#pilot",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:laps",
+    "title": "Manage local administrators with Windows LAPS",
+    "href": "/training/workstation-fleet#laps",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:certificates",
+    "title": "Autoenroll the fleet's certificates",
+    "href": "/training/workstation-fleet#certificates",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:scale",
+    "title": "Scale to fifty and prove by sample",
+    "href": "/training/workstation-fleet#scale",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:scan",
+    "title": "Delta scan the fleet and hand off",
+    "href": "/training/workstation-fleet#scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:design",
+    "title": "Design the rings and the software rules",
+    "href": "/training/patch-protect#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:wsus",
+    "title": "Build SBD-WSUS01 and the ring policies",
+    "href": "/training/patch-protect#wsus",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:repo",
+    "title": "Build SBD-REPO01 for approved packages",
+    "href": "/training/patch-protect#repo",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:mgmt",
+    "title": "SBD-MGMT01 and the living inventory",
+    "href": "/training/patch-protect#mgmt",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:epo",
+    "title": "Endpoint protection through SBD-EPO01",
+    "href": "/training/patch-protect#epo",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:nessus",
+    "title": "SBD-NESSUS01 and the standing cadence",
+    "href": "/training/patch-protect#nessus",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:design",
+    "title": "Design the service paths and identities",
+    "href": "/training/business-services#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:fileserver",
+    "title": "Build SBD-FS01 with least-privilege shares",
+    "href": "/training/business-services#fileserver",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:database",
+    "title": "Build SBD-SQL01 behind its applications",
+    "href": "/training/business-services#database",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:apps-web",
+    "title": "Build SBD-APPS01 and SBD-WEB01",
+    "href": "/training/business-services#apps-web",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:prove-scan",
+    "title": "Reconcile, scan, and close the wave",
+    "href": "/training/business-services#prove-scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:requirements",
+    "title": "Decide what recovery must prove",
+    "href": "/training/prove-recovery#requirements",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:directory",
+    "title": "Back up the directory, on schedule",
+    "href": "/training/prove-recovery#directory",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:trust-state",
+    "title": "Back up the CA, policy, boundary, and records",
+    "href": "/training/prove-recovery#trust-state",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:rehearse",
+    "title": "Rehearse a real restore, in isolation",
+    "href": "/training/prove-recovery#rehearse",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:record",
+    "title": "File the recovery record and close the path",
+    "href": "/training/prove-recovery#record",
+    "group": "Network build"
   }
 ]

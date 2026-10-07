@@ -605,6 +605,481 @@
         "Build the core router and prove permitted paths and logged denials per VLAN.",
         "Stand up SBD-TIME01 and verify the domain time hierarchy end to end."
       ]
+    },
+    {
+      "categoryOrder": 6,
+      "number": "1.6",
+      "estimatedHours": 2,
+      "title": "Finish the PKI services",
+      "subtitle": "pki.sbd.test publication & template administration",
+      "description": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
+      "tags": [
+        "Windows Server 2025",
+        "PKI",
+        "AD CS",
+        "Certificate templates",
+        "AIA and CDP"
+      ],
+      "systems": [
+        "SBD-PKI-MGMT01",
+        "SBD-SUBCA01"
+      ],
+      "artLabels": [
+        "pki.sbd.test live",
+        "Templates, delegated",
+        "Enrollment proven"
+      ],
+      "outcomes": [
+        "Publish certificates and CRLs at the exact URLs issued certificates carry.",
+        "Move template administration to a delegated seat with a written change process.",
+        "Prove pilot autoenrollment and live revocation retrieval across the routed network."
+      ],
+      "id": "pki-services",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 5,
+      "lessonCount": 5,
+      "stages": [
+        {
+          "title": "Build the pki.sbd.test publication site",
+          "detail": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network."
+        },
+        {
+          "title": "Publish the trust data at its advertised URLs",
+          "detail": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything."
+        },
+        {
+          "title": "Separate template administration",
+          "detail": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open."
+        },
+        {
+          "title": "Publish the first working templates",
+          "detail": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those."
+        },
+        {
+          "title": "Validate enrollment and delta scan",
+          "detail": "Close the loop the way course 1.4 did, but now across the routed network: a pilot machine enrolls automatically, validates against the live publication site, and the change-triggered scans record what this course did."
+        }
+      ],
+      "training": {
+        "guide": "/training/pki-services",
+        "checklist": "/training/pki-services/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/pki-services/checklist"
+      }
+    },
+    {
+      "categoryOrder": 7,
+      "number": "1.7",
+      "estimatedHours": 2.5,
+      "title": "Addressing and tiered administration",
+      "subtitle": "DHCP, admin seats & where privilege may sign in",
+      "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
+      "tags": [
+        "Windows Server 2025",
+        "DHCP",
+        "Tiered administration",
+        "Privileged access",
+        "Group Policy"
+      ],
+      "systems": [
+        "SBD-DHCP01",
+        "AdminJumpBox01",
+        "SBD-ADMIN-SRV01",
+        "SBD-ADMIN-PC01"
+      ],
+      "artLabels": [
+        "DHCP + core relay",
+        "Three admin seats",
+        "Tier rules enforced"
+      ],
+      "outcomes": [
+        "Serve the workstation VLAN through an authorized DHCP server and core relay.",
+        "Stand up single-purpose administration hosts for each tier in the Admin OU.",
+        "Enforce and prove per-tier sign-in restrictions with captured denial evidence."
+      ],
+      "id": "tiered-admin",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "stages": [
+        {
+          "title": "Design the tiers and the address plan",
+          "detail": "Tiering is one sentence with teeth: credentials that control a tier never touch a less-trusted one. Write that policy against the OU structure, then plan the DHCP scope the fleet will live in — both before any host is built."
+        },
+        {
+          "title": "Build SBD-DHCP01 and the relay",
+          "detail": "Addressing is the first service fifty machines will ask for. Build the DHCP server, authorize it in the directory so rogue servers stand out, and relay VLAN 80's broadcasts through the core."
+        },
+        {
+          "title": "Build the administration systems",
+          "detail": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration — each in the Admin OU, each doing nothing else."
+        },
+        {
+          "title": "Restrict where privilege can sign in",
+          "detail": "The tier rule becomes real when the directory refuses the wrong sign-in. Deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log."
+        },
+        {
+          "title": "Prove the tiers and the addressing",
+          "detail": "Run the matrix: every tier's administration works from its seat, every cross-tier attempt fails with an event, and the addressing service behaves exactly as registered."
+        },
+        {
+          "title": "Delta scan and hand off",
+          "detail": "Four new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe."
+        }
+      ],
+      "training": {
+        "guide": "/training/tiered-admin",
+        "checklist": "/training/tiered-admin/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/tiered-admin/checklist"
+      }
+    },
+    {
+      "categoryOrder": 8,
+      "number": "1.8",
+      "estimatedHours": 2.5,
+      "title": "See everything: the logging pipeline",
+      "subtitle": "Collect, protect & analyze before the fleet arrives",
+      "description": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
+      "tags": [
+        "Windows Server 2025",
+        "Logging",
+        "Windows Event Forwarding",
+        "SIEM",
+        "Audit policy"
+      ],
+      "systems": [
+        "SBD-SYSLOG01",
+        "SBD-AUDIT01",
+        "SBD-SPLUNK01"
+      ],
+      "artLabels": [
+        "Collect by subscription",
+        "Protect with hashes",
+        "Analyze + one alert"
+      ],
+      "outcomes": [
+        "Forward the DC, admin-plane, and router-deny records into one collector by subscription.",
+        "Protect the archive with hash catalogs, named readers, and delete-by-process-only.",
+        "Prove the chain by tracing one event from source to analyst, with an owned alert."
+      ],
+      "id": "logging-pipeline",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "stages": [
+        {
+          "title": "Design collect, protect, analyze",
+          "detail": "Three systems, three distinct jobs: SBD-SYSLOG01 gathers, SBD-AUDIT01 preserves, SBD-SPLUNK01 answers questions. Decide what is collected first, how long it lives, and who may touch which stage — before a single event flows."
+        },
+        {
+          "title": "Turn on the right auditing",
+          "detail": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written."
+        },
+        {
+          "title": "Build the collector",
+          "detail": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings the DC and admin-host events in by subscription, and the core router's denies arrive as syslog — one host where the network's record first lands."
+        },
+        {
+          "title": "Protect the record on SBD-AUDIT01",
+          "detail": "The repository is where the record outlives mistakes and attackers alike: scheduled archives from the collector, hashed on arrival, readable by few, deletable by process only."
+        },
+        {
+          "title": "Analyze in SBD-SPLUNK01",
+          "detail": "Analysis earns its place with three working searches and one alert: failed privileged sign-ins, the boundary's denies, and the health of time — questions this network can already answer about itself."
+        },
+        {
+          "title": "Prove the chain and delta scan",
+          "detail": "One deliberate event, followed all the way: a failed privileged sign-in should appear on the source, the collector, the repository's next archive, and the analyst's screen — then the cadence scans close the course."
+        }
+      ],
+      "training": {
+        "guide": "/training/logging-pipeline",
+        "checklist": "/training/logging-pipeline/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/logging-pipeline/checklist"
+      }
+    },
+    {
+      "categoryOrder": 9,
+      "number": "1.9",
+      "estimatedHours": 2.5,
+      "title": "Bring in the fleet",
+      "subtitle": "50 Windows 11 endpoints, managed from first boot",
+      "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+      "tags": [
+        "Windows 11",
+        "Domain join",
+        "Windows LAPS",
+        "Autoenrollment",
+        "DISA STIG"
+      ],
+      "systems": [
+        "50 Windows 11 PCs",
+        "SBD-DHCP01",
+        "SBD-SUBCA01"
+      ],
+      "artLabels": [
+        "Waves, not a big bang",
+        "LAPS + certificates",
+        "Proven by sample"
+      ],
+      "outcomes": [
+        "Roll fifty endpoints in waves that land hardened, addressed, and registered untouched.",
+        "Manage every local administrator with Windows LAPS under the tier model.",
+        "Prove the fleet with a defined sample, a failure rule, and pipeline-observed joins."
+      ],
+      "id": "workstation-fleet",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "stages": [
+        {
+          "title": "Prepare the fleet rollout",
+          "detail": "Fifty of anything needs a factory, not fifty craft projects. Settle the image, the names, the join account, and the policy links so every endpoint is born identical — then prove it on paper before proving it on metal."
+        },
+        {
+          "title": "Join the pilot and inspect first boot",
+          "detail": "Three machines go first, and everything the path has built shows up at once: a DHCP lease through the relay, an OU landing, STIG policy, a DNS record — and the join itself appearing on the analyst's screen."
+        },
+        {
+          "title": "Manage local administrators with Windows LAPS",
+          "detail": "Fifty identical machines must not share one local administrator password. Windows LAPS gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it."
+        },
+        {
+          "title": "Autoenroll the fleet's certificates",
+          "detail": "Course 1.6 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+        },
+        {
+          "title": "Scale to fifty and prove by sample",
+          "detail": "Roll the remaining waves, then prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means."
+        },
+        {
+          "title": "Delta scan the fleet and hand off",
+          "detail": "The cadence meets its first population: SCAP baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory the next wave's tooling will take over."
+        }
+      ],
+      "training": {
+        "guide": "/training/workstation-fleet",
+        "checklist": "/training/workstation-fleet/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/workstation-fleet/checklist"
+      }
+    },
+    {
+      "categoryOrder": 10,
+      "number": "1.10",
+      "estimatedHours": 2.5,
+      "title": "Patch, protect, and watch for weakness",
+      "subtitle": "WSUS rings, approved sources, ePO & credentialed scanning",
+      "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type with SBD-REPO01 for packages, a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+      "tags": [
+        "Windows Server 2025",
+        "WSUS",
+        "Endpoint protection",
+        "Vulnerability scanning",
+        "Configuration management"
+      ],
+      "systems": [
+        "SBD-WSUS01",
+        "SBD-REPO01",
+        "SBD-MGMT01",
+        "SBD-EPO01",
+        "SBD-NESSUS01"
+      ],
+      "artLabels": [
+        "Rings + one source",
+        "Inventory + protection",
+        "Credentialed cadence"
+      ],
+      "outcomes": [
+        "Deliver updates and software through ring-gated, single-source, air-gap-fed channels.",
+        "Prove protection coverage against a living component inventory.",
+        "Run credentialed vulnerability scanning on the standing cadence with classified findings."
+      ],
+      "id": "patch-protect",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "stages": [
+        {
+          "title": "Design the rings and the software rules",
+          "detail": "Decide how change reaches the network before any of it does: update rings that try things on the expendable before the essential, one approved source per software type, and register rows for every new path."
+        },
+        {
+          "title": "Build SBD-WSUS01 and the ring policies",
+          "detail": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and GPOs that point every OU at the server — with a pilot ring that proves each approval first."
+        },
+        {
+          "title": "Build SBD-REPO01 for approved packages",
+          "detail": "The lab's Linux hosts and tooling need packages, and the rule from lesson 1 applies to them too: one internal repository, fed across the boundary, serving only what was reviewed in."
+        },
+        {
+          "title": "SBD-MGMT01 and the living inventory",
+          "detail": "The course 1.9 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70."
+        },
+        {
+          "title": "Endpoint protection through SBD-EPO01",
+          "detail": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show."
+        },
+        {
+          "title": "SBD-NESSUS01 and the standing cadence",
+          "detail": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the POA&M habit, and this wave's five new systems getting their own baselines on the way out."
+        }
+      ],
+      "training": {
+        "guide": "/training/patch-protect",
+        "checklist": "/training/patch-protect/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/patch-protect/checklist"
+      }
+    },
+    {
+      "categoryOrder": 11,
+      "number": "1.11",
+      "estimatedHours": 2.5,
+      "title": "Stand up the business services",
+      "subtitle": "Files, database, licensing & web — by documented paths",
+      "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-SQL01 running as a managed identity behind exactly two callers, SBD-APPS01's licensing service, and SBD-WEB01 serving internal HTTPS from a hardened Apache — every hop a documented, proven register row.",
+      "tags": [
+        "Windows Server 2025",
+        "File services",
+        "SQL Server",
+        "Apache",
+        "Service accounts"
+      ],
+      "systems": [
+        "SBD-FS01",
+        "SBD-SQL01",
+        "SBD-APPS01",
+        "SBD-WEB01"
+      ],
+      "artLabels": [
+        "Role-based shares",
+        "gMSA + encrypted SQL",
+        "HTTPS on own trust"
+      ],
+      "outcomes": [
+        "Serve files through role-group permissions with verified SMB signing and encryption.",
+        "Run the database as a managed identity, certificate-encrypted, behind its two applications.",
+        "Prove the fleet → web → database chain with every hop registered and every shortcut denied."
+      ],
+      "id": "business-services",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 5,
+      "lessonCount": 5,
+      "stages": [
+        {
+          "title": "Design the service paths and identities",
+          "detail": "Four services, and before any of them exist: who talks to what over which port, which identity each service runs as, and which groups own access — the register and the directory answer all three before a role installs."
+        },
+        {
+          "title": "Build SBD-FS01 with least-privilege shares",
+          "detail": "The file server is where access control meets daily life. Build the shares against the role groups, lean on the SMB security the platform now enforces, and make 'who can read this' a one-lookup question."
+        },
+        {
+          "title": "Build SBD-SQL01 behind its applications",
+          "detail": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly two callers — the narrowest audience on the network, by design."
+        },
+        {
+          "title": "Build SBD-APPS01 and SBD-WEB01",
+          "detail": "The licensing service and the internal web server complete the dependency chain: fleet to application, application to database — each hop registered, the web tier hardened against its DISA guidance, and HTTPS served from the lab's own trust."
+        },
+        {
+          "title": "Reconcile, scan, and close the wave",
+          "detail": "The service wave closes the way every wave has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete."
+        }
+      ],
+      "training": {
+        "guide": "/training/business-services",
+        "checklist": "/training/business-services/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/business-services/checklist"
+      }
+    },
+    {
+      "categoryOrder": 12,
+      "number": "1.12",
+      "estimatedHours": 2,
+      "title": "Prove you can recover",
+      "subtitle": "Backups with custody, one rehearsed restore & the closing record",
+      "description": "Close the Build path by proving the network can come back: scheduled directory and CA backups under ceremony-grade custody, policy, boundary, logs, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
+      "tags": [
+        "Windows Server 2025",
+        "Backup and recovery",
+        "System state",
+        "AD Recycle Bin",
+        "Contingency planning"
+      ],
+      "systems": [
+        "SBD-DC01",
+        "SBD-DC02",
+        "SBD-SUBCA01",
+        "SBD-AUDIT01"
+      ],
+      "artLabels": [
+        "Catalog with custody",
+        "One timed rehearsal",
+        "The closing record"
+      ],
+      "outcomes": [
+        "Back up the directory, CA, policy, boundary, logs, and records into one verified catalog.",
+        "Rehearse a real system state restore in isolation, measured against written objectives.",
+        "File the tested-recovery record that completes the Body of Evidence for path 2."
+      ],
+      "id": "prove-recovery",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "kind": "configuration",
+      "moduleCount": 5,
+      "lessonCount": 5,
+      "stages": [
+        {
+          "title": "Decide what recovery must prove",
+          "detail": "Recovery starts as a list of promises: which systems and records must be restorable, how old a restored copy may be, how long restoration may take — written as commitments the rest of the course exists to keep."
+        },
+        {
+          "title": "Back up the directory, on schedule",
+          "detail": "System state from both controllers, on a schedule, to the protected target — plus the quiet feature that handles the most common 'disaster' of all: the Recycle Bin for deleted directory objects."
+        },
+        {
+          "title": "Back up the CA, policy, boundary, and records",
+          "detail": "The directory is not the only thing the network cannot re-derive: the issuing CA's database and key, the Group Policy set, the router's configuration, the log archive, and the living records each get their protected, cataloged copy."
+        },
+        {
+          "title": "Rehearse a real restore, in isolation",
+          "detail": "One restore, actually performed: a domain controller's system state brought back on the isolated segment, timed against the objective, verified against the directory — plus the small restore everyone will someday need, from the Recycle Bin."
+        },
+        {
+          "title": "File the recovery record and close the path",
+          "detail": "The Build path ends the way it worked: owners, schedules, and evidence. The recovery record joins the living documents, the final scans snapshot the finished network, and the Body of Evidence is ready for the authorization courses to assemble."
+        }
+      ],
+      "training": {
+        "guide": "/training/prove-recovery",
+        "checklist": "/training/prove-recovery/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/prove-recovery/checklist"
+      }
     }
   ],
   "categories": [
