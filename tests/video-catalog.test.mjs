@@ -33,7 +33,7 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'two-tier-pki', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'harden-baseline', 'two-tier-pki', 'connect-segment', 'pki-services', 'tiered-admin', 'logging-pipeline', 'workstation-fleet', 'patch-protect', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
@@ -50,7 +50,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 3], ['network-authorization', 3]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 12], ['network-authorization', 3]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -97,19 +97,32 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6]);
+  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6, 6, 6, 5, 6, 6, 6, 6, 5, 5]);
   for (const configuration of configurations) {
     const course = library.courses.find(item => item.id === configuration.id);
     assert.equal(course.kind, 'configuration');
     assert.equal(course.lessonCount, configuration.lessons.length);
     assert.equal(course.training.guide, `/training/${configuration.id}`);
     const checklist = readFileSync(new URL('../public' + course.training.checklist, import.meta.url), 'utf8');
+    for (const key of ['pdf', 'word']) {
+      assert.match(course.training[key], new RegExp(`^/training/${configuration.id}/SecureByDesign-${configuration.id}-Workbook\\.(pdf|docx)$`));
+      assert.ok(existsSync(new URL('../public' + course.training[key], import.meta.url)), `${configuration.id} ${key} workbook exists`);
+    }
+    assert.ok(Number.isInteger(course.training.pages) && course.training.pages > 0);
     assert.ok(resources.some(resource => resource.url === 'https://securebydesigninc.com' + course.training.guide));
     for (const lesson of configuration.lessons) {
       assert.ok(lesson.steps.length >= 3);
       assert.ok(lesson.check && lesson.evidence && lesson.command);
-      assert.ok(lesson.quiz.correct >= 0 && lesson.quiz.correct < lesson.quiz.answers.length);
-      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && source.url.startsWith('https://learn.microsoft.com/'))));
+      assert.ok(Number.isInteger(lesson.minutes) && lesson.minutes > 0);
+      assert.ok(lesson.objectives.length >= 3, `${lesson.id} states its learning objectives`);
+      assert.ok(lesson.recap.length >= 2 && lesson.next, `${lesson.id} ends with a recap and a next step`);
+      assert.ok(lesson.quizzes.length >= 3, `${lesson.id} has enough knowledge checks`);
+      for (const quiz of lesson.quizzes) {
+        assert.ok(quiz.correct >= 0 && quiz.correct < quiz.answers.length);
+        assert.ok(quiz.explanation, `${lesson.id} explains each answer`);
+      }
+      assert.ok(new Set(lesson.quizzes.map(quiz => quiz.correct)).size > 1, `${lesson.id} varies the correct answer position`);
+      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/'].some(origin => source.url.startsWith(origin)))));
       assert.ok(checklist.includes(lesson.title));
       const entry = progress.find(item => item.id === `training:${course.id}:${lesson.id}`);
       assert.equal(entry?.href, `${course.training.guide}#${lesson.id}`);

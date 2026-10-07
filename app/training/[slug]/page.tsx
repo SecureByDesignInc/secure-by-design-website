@@ -17,7 +17,7 @@ export default async function ConfigurationPage({ params }: { params: Promise<{ 
   const course = library.courses.find(item => item.id === slug);
   if (!configuration || !course) notFound();
   return <main id="main" className="vc-page vc-guide-page container">
-    <Link className="vc-guide-back" href="/videos">← Back to the Training Library</Link>
+    <Link className="vc-guide-back" href="/training">← Back to the Training Library</Link>
     <h1 className="vc-sr-only">{course.title}</h1>
     <ConfigurationGuide course={course} configuration={configuration} standalone />
   </main>;

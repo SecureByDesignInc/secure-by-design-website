@@ -1,0 +1,89 @@
+# Connect and segment the network — configuration checklist
+
+Secure By Design · Edition 1.0 · 7 October 2026
+
+This course connects the eight VLANs through a router the lab controls, enforces default-deny between them with a documented exception register, and stands up the internal time service. The router platform is your choice — the lessons describe what to configure and verify every result from the Windows side, so the checks work whatever appliance you pick. The network still has no path across the air gap.
+
+## Before you start
+
+- [ ] Complete courses 1.1–1.4: verified domain controllers, DNS, the hardened baseline with its scan cadence, and the two-tier PKI.
+- [ ] Provision a new virtual machine for the layer-3 router (SBD-CORE01 in this sample) with one interface per VLAN, and a Windows Server 2025 VM for SBD-TIME01 at 10.0.20.40.
+- [ ] Have the Inside the Network VLAN plan at hand: VLANs 10–80 on 10.0.X.0/24 subnets, with .1 reserved as each gateway in this sample.
+
+## Design the segmentation and service paths
+
+- [ ] List the eight VLANs with their subnets and purposes from the network plan. Reserve .1 in each subnet as the gateway for this sample, and record that no route crosses the air-gapped boundary.
+- [ ] Write the policy sentence first: traffic between VLANs is denied unless a register entry permits it. Segmentation alone does not establish enforcement — the access control lists do.
+- [ ] Draft the register's first entries from paths the built systems already need: every VLAN to the domain controllers for DNS, Kerberos, LDAP, SMB, and RPC; every system to SBD-TIME01 for time; the admin VLAN to the tiers it manages. One row per path: source, destination, service and port, justification, owner.
+- [ ] Mark the paths that do not exist yet (workstation pools, business services) as planned rows, and decide the change process: who may add a register entry, and what evidence each addition needs.
+
+**Verify:** The register exists with every current path justified, the gateway plan is written, and the pre-routing state of both DCs is captured as the before picture.
+
+**Evidence:** Keep the segmentation policy statement, the exception register with owners, and the captured pre-routing output.
+
+Notes / result / date: __________________________
+
+## Build the core router
+
+- [ ] Create the router VM (SBD-CORE01 in this sample) with one virtual interface attached to each of the eight VLAN networks. Record the platform and version you chose; the register, not the vendor syntax, is the course's deliverable.
+- [ ] Assign each interface its subnet's .1 address and enable routing between the interfaces. Do not configure a default route or any path toward the hypervisor's outside networks — the air gap is a routing decision too.
+- [ ] Set the gateway on the built systems: 10.0.10.1 on both domain controllers and 10.0.30.1 on the issuing CA. The offline root gets nothing; it stays off the network entirely.
+- [ ] From a host in another VLAN, prove the route: reach each gateway, then a DC address. Leave the ACLs permissive for this one lesson so routing and filtering failures cannot be confused — lesson 3 locks it down.
+
+**Verify:** Each built system shows its planned gateway, the trace crosses the router in one hop, and the router holds no route toward anything outside the lab.
+
+**Evidence:** Record the router platform and version, its interface and address table, the gateway changes on each system, and the trace output.
+
+Notes / result / date: __________________________
+
+## Enforce default-deny with the register
+
+- [ ] Apply the inter-VLAN default-deny rule on the router, with logging for denied packets. The log of what was blocked is as much evidence as the list of what was allowed.
+- [ ] Permit the directory paths from every VLAN to VLAN 10 per Microsoft's Active Directory port documentation: DNS (53), Kerberos (88 and 464), LDAP (389/636), global catalog (3268/3269), SMB (445), and the RPC endpoint mapper with its dynamic range — the register row for RPC should name the range decision explicitly.
+- [ ] Permit NTP (123) from every VLAN to SBD-TIME01, and HTTP to the pki.sbd.test publication service in VLAN 30 so clients can fetch certificates and revocation lists.
+- [ ] Deny workstation-to-workstation traffic inside VLAN 80's future rows now, per the model's notes, and read back the full rule set against the register line by line — anything configured but not registered gets removed or registered, never ignored.
+
+**Verify:** Registered paths succeed, an unregistered port fails and appears in the router's deny log, and the rule set matches the register with no unexplained entries in either direction.
+
+**Evidence:** Keep the exported rule set, the register cross-check, the permitted-path test output, and a captured deny-log entry for the blocked test.
+
+Notes / result / date: __________________________
+
+## Stand up SBD-TIME01 and the time hierarchy
+
+- [ ] Build SBD-TIME01 at 10.0.20.40 as a workgroup or domain-joined Windows Server 2025 host with the Windows Time service configured as an NTP server. In an air-gapped lab its clock is the reference by declaration — record the source decision (host clock, or an approved hardware source) with its expected accuracy and drift threshold.
+- [ ] On the domain controller holding the PDC emulator role, configure Windows Time to use SBD-TIME01 as its manual peer and mark it reliable. Only the PDC emulator points outward; every other domain member keeps the default domain-hierarchy sync.
+- [ ] Confirm the register's NTP row is active and the hardening GPOs from course 1.3 do not conflict with the time settings — if a STIG value and this design disagree, the deviation record from that course is where the decision lives.
+- [ ] Verify the chain end to end: TIME01 serving, the PDC emulator sourcing from it, the second DC sourcing from the domain hierarchy, and offsets within your recorded threshold.
+
+**Verify:** The PDC emulator reports SBD-TIME01 as its source, the other controller reports the domain hierarchy, and measured offsets sit inside the documented threshold.
+
+**Evidence:** Record the time design decisions, both controllers' source and status output, the stripchart offsets, and the register row that permits NTP.
+
+Notes / result / date: __________________________
+
+## Prove the paths and the denials
+
+- [ ] From a test host in each populated VLAN, run the register's permitted paths as a scripted matrix: directory ports to VLAN 10, NTP to TIME01, HTTP to pki.sbd.test. Record source VLAN, destination, port, and result for every row.
+- [ ] Run the deliberate failures: a port no register row permits, from a VLAN that should not reach it. Confirm the failure and find its entry in the router's deny log — the pair is the evidence.
+- [ ] Re-run the course 1.2 and 1.4 verification habits across the boundary: resolve the domain SRV records and fetch pki.sbd.test's certificate revocation list from outside VLANs 10 and 30.
+- [ ] File the matrix and the deny-log captures with the register. Any mismatch — a registered path failing or an unregistered path passing — is a finding to resolve before the course ends, not a note.
+
+**Verify:** Every register row passes from its source VLAN, every probed unregistered path fails with a logged deny, and directory discovery works across the routed network.
+
+**Evidence:** Keep the test matrix with timestamps, the deny-log captures, and the cross-VLAN SRV and CRL retrieval output.
+
+Notes / result / date: __________________________
+
+## Delta scan the change and hand off
+
+- [ ] Rescan both domain controllers with the same benchmark and tool versions as course 1.3, and take SBD-TIME01's first baseline scan. Attribute any movement to this course's changes — the gateway and time settings are the expected deltas.
+- [ ] Export the router's configuration, hash the export, and store it with the evidence. The router has no SCAP benchmark in this lab, so its config export, register reconciliation, and deny log stand as its assessable record — say so explicitly in the evidence notes.
+- [ ] Add the new rows to the hardening course's exception and deviation record where the two overlap (time settings, any firewall interplay), and set the register's named owner and review date alongside the scan cadence.
+- [ ] Write the handoff line for the next course: the network now routes, filters, and keeps time — wave 2's PKI publication host and template administration build on exactly these paths.
+
+**Verify:** The DC rescans show only the expected deltas, TIME01 has a dated baseline, the router export is hashed and reconciled with the register, and owners and review dates are set.
+
+**Evidence:** Finish the course checklist: scan results, router export and hash, the reconciled register with owner and review date, and the handoff note.
+
+Notes / result / date: __________________________

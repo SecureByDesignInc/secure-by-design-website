@@ -352,7 +352,7 @@
       "command": "Get-ADDomain |\n  Select-Object DNSRoot, PDCEmulator, RIDMaster, InfrastructureMaster\nGet-ADForest |\n  Select-Object RootDomain, SchemaMaster, DomainNamingMaster",
       "expected": "The record identifies the actual role holders and links configuration decisions to dated test results. Open issues remain visible. Lesson completion records learning activity; it is not a system authorization decision.",
       "mistake": "A diagram becoming complete does not establish that your VM passed a check. The model tells the lesson story; your observations establish what happened in your environment.",
-      "network": "The identity foundation is complete for this episode. Continue into the full network to see the services that later lessons can add.",
+      "network": "The identity foundation is complete for this course. Continue into the full network to see the services that later lessons can add.",
       "control": {
         "id": "CM-2 / CM-6",
         "name": "Maintain the configuration and its evidence",
@@ -411,7 +411,7 @@
         ],
         [
           "Organization and consistent settings",
-          "Organizational units (OUs) organize objects and support delegated administration and Group Policy. Group Policy applies centrally managed settings to users and computers. A global catalog helps find directory objects across a forest; both controllers in this episode provide that role."
+          "Organizational units (OUs) organize objects and support delegated administration and Group Policy. Group Policy applies centrally managed settings to users and computers. A global catalog helps find directory objects across a forest; both controllers in this course provide that role."
         ]
       ],
       "takeaway": "AD DS provides directory and identity services. DNS helps clients find those services. Each has a distinct job.",

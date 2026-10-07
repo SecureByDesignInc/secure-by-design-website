@@ -275,7 +275,7 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
                     </div>
                     <span className="vc-coming">
                       <Video size={15} />
-                      Video coming soon
+                      Video in production
                     </span>
                   </div>
                 </div>

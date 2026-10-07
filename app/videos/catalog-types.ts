@@ -59,8 +59,10 @@ export type TrainingCourse = {
   stages: { title: string; detail: string; number?: string; href?: string }[];
   training: {
     guide: string;
+    pdf?: string;
     word?: string;
     checklist?: string;
+    checklistPage?: string;
     pages?: number;
     materialsEdition: string;
     updated: string;

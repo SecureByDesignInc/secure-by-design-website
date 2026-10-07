@@ -91,12 +91,13 @@ function EpisodeTile({
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{course ? `${episode.moduleCount} MODULES` : `${episode.chapters.length} CHAPTERS`}</span>
+            <span>{course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
           <div className="vc-tile-description">
             <p className="vc-kicker">
+              {episode.categoryOrder === 1 && <span className="vc-start-here">START HERE</span>}
               {`COURSE ${episode.number} / ${episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}
             </p>
             <h3 id={`tile-title-${episode.id}`} title={episode.title}>{episode.title}</h3>
@@ -111,13 +112,13 @@ function EpisodeTile({
           <div className="vc-tile-actions">
             <div className="vc-tile-status">
               <span>
-                <Video size={13} />
-                {available ? 'Video available' : 'Video coming soon'}
-              </span>
-              {course && <span className="vc-tile-course-size"><BookOpen size={13} />{episode.moduleCount} modules · {episode.estimatedHours}h</span>}
-              <span>
                 <Check size={13} />
                 Written training available
+              </span>
+              {course ? <span className="vc-tile-course-size"><BookOpen size={13} />{episode.lessonCount ?? episode.moduleCount} lessons · {episode.estimatedHours}h</span> : <span className="vc-tile-course-size"><BookOpen size={13} />{episode.chapters.length} lessons · Self-paced</span>}
+              <span>
+                <Video size={13} />
+                {available ? 'Video available' : 'Video in production'}
               </span>
             </div>
             <button
@@ -135,7 +136,7 @@ function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {course && episode.kind === 'configuration' ? 'Guide + checklist' : 'Guide + workbooks'}<span>·</span>Pay it forward
+              {course && episode.kind === 'configuration' ? 'Guide + workbook + checklist' : 'Guide + workbooks'}<span>·</span>Pay it forward
             </p>
           </div>
         </div>
@@ -218,10 +219,10 @@ export default function VideoHub({ library }: { library: Library }) {
         <div className="vc-library-heading">
           <div>
             <p className="vc-kicker">YOUR TRAINING LIBRARY</p>
-            <h2 id="episode-library-title">Choose your next learning path.</h2>
+            <h2 id="episode-library-title">Choose your next course.</h2>
           </div>
           <span>
-            {catalog.length} learning path{catalog.length === 1 ? '' : 's'} in the catalog
+            {(library.categories ?? []).length} learning paths · {catalog.length} course{catalog.length === 1 ? '' : 's'}
           </span>
         </div>
         <div className="vc-category-filters" role="group" aria-label="Training category">
@@ -290,7 +291,7 @@ export default function VideoHub({ library }: { library: Library }) {
           <output aria-live="polite">
             {matches.length === 0
               ? 'No training materials found'
-              : `Showing ${visible.length} of ${matches.length} learning path${matches.length === 1 ? '' : 's'}`}
+              : `Showing ${visible.length} of ${matches.length} course${matches.length === 1 ? '' : 's'}`}
             {topic && ` · ${topic}`}
           </output>
           {filtered && (
