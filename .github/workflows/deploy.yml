@@ -79,4 +79,21 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm exec wrangler deploy --config dist/server/wrangler.json
+        run: |
+          set -o pipefail
+          node -e "const c=require('./dist/server/wrangler.json');console.log('::notice title=Deploy target::worker='+c.name+' d1='+JSON.stringify((c.d1_databases||[]).map(d=>d.binding+':'+d.database_name)))"
+          pnpm exec wrangler deploy --config dist/server/wrangler.json 2>&1 | tee deploy.log
+          grep -E "Uploaded|Deployed|https://|Version ID|Current Version|Triggers|workers.dev" deploy.log | head -12 | while IFS= read -r line; do echo "::notice title=Wrangler::$line"; done
+      - name: Verify the deployed Worker
+        env:
+          WORKER: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+        run: |
+          sleep 15
+          url=$(grep -oE "https://[a-z0-9.-]+\.workers\.dev" deploy.log | head -1)
+          [ -n "$url" ] || { echo "::warning title=Verify::No workers.dev URL in deploy output"; exit 0; }
+          for path in / /training /training/harden-baseline /videos; do
+            code=$(curl -s -o page.html -w '%{http_code} %{redirect_url}' "$url$path")
+            title=$(grep -o '<title>[^<]*' page.html | head -1 | sed 's/<title>//')
+            mark=$(grep -c 'Harden the baseline' page.html || true)
+            echo "::notice title=Verify $path::$url$path -> $code | title: $title | 'Harden the baseline' mentions: $mark"
+          done
