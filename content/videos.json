@@ -537,6 +537,74 @@
         "Import the DISA GPO package and link STIG policies by organizational unit.",
         "Verify hardening with baseline and rescan SCAP results, reconciled checklists, and documented exceptions."
       ]
+    },
+    {
+      "id": "connect-segment",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "categoryOrder": 5,
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "estimatedHours": 2.5,
+      "stages": [
+        {
+          "title": "Design the segmentation and service paths",
+          "detail": "A VLAN is a boundary only if something enforces it. Before touching the router, write the policy: default deny between VLANs, and an exception register where every permitted path names its source, destination, port, and reason."
+        },
+        {
+          "title": "Build the core router",
+          "detail": "The core is a virtual machine the lab controls: one interface per VLAN, the planned gateway address on each, and no default route anywhere — there is nowhere outside this network to go."
+        },
+        {
+          "title": "Enforce default-deny with the register",
+          "detail": "Now the policy becomes configuration: deny between VLANs by default, permit exactly the register's rows, and log what gets dropped so the denials are visible evidence, not silence."
+        },
+        {
+          "title": "Stand up SBD-TIME01 and the time hierarchy",
+          "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Build the internal reference, point the PDC emulator at it, and let the domain hierarchy carry time to everything else."
+        },
+        {
+          "title": "Prove the paths and the denials",
+          "detail": "A segmented network is proven twice: every registered path works from where it is supposed to work, and the paths you never granted fail — visibly, in the log."
+        },
+        {
+          "title": "Delta scan the change and hand off",
+          "detail": "Course 1.3's rule was simple: every role addition gets a scan. Two systems joined the network and every existing one gained a gateway — that is a change worth measuring."
+        }
+      ],
+      "training": {
+        "guide": "/training/connect-segment",
+        "checklist": "/training/connect-segment/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/connect-segment/checklist"
+      },
+      "number": "1.5",
+      "title": "Connect and segment the network",
+      "subtitle": "Core routing, default-deny ACLs & internal time",
+      "description": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
+      "tags": [
+        "Windows Server 2025",
+        "Segmentation",
+        "Routing",
+        "Access control",
+        "Time service"
+      ],
+      "systems": [
+        "SBD-CORE01",
+        "SBD-TIME01"
+      ],
+      "artLabels": [
+        "Route the eight VLANs",
+        "Default-deny + register",
+        "Internal time source"
+      ],
+      "outcomes": [
+        "Design and enforce default-deny segmentation with a justified exception register.",
+        "Build the core router and prove permitted paths and logged denials per VLAN.",
+        "Stand up SBD-TIME01 and verify the domain time hierarchy end to end."
+      ]
     }
   ],
   "categories": [

@@ -33,7 +33,7 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'harden-baseline', 'two-tier-pki', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'harden-baseline', 'two-tier-pki', 'connect-segment', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
@@ -50,7 +50,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 4], ['network-authorization', 3]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 5], ['network-authorization', 3]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -97,7 +97,7 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6, 6]);
+  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6, 6, 6]);
   for (const configuration of configurations) {
     const course = library.courses.find(item => item.id === configuration.id);
     assert.equal(course.kind, 'configuration');

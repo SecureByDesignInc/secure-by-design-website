@@ -202,5 +202,41 @@
     "title": "Set the rescan cadence and exception record",
     "href": "/training/harden-baseline#maintain",
     "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:design",
+    "title": "Design the segmentation and service paths",
+    "href": "/training/connect-segment#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:router",
+    "title": "Build the core router",
+    "href": "/training/connect-segment#router",
+    "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:acls",
+    "title": "Enforce default-deny with the register",
+    "href": "/training/connect-segment#acls",
+    "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:time",
+    "title": "Stand up SBD-TIME01 and the time hierarchy",
+    "href": "/training/connect-segment#time",
+    "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:prove",
+    "title": "Prove the paths and the denials",
+    "href": "/training/connect-segment#prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:connect-segment:scan",
+    "title": "Delta scan the change and hand off",
+    "href": "/training/connect-segment#scan",
+    "group": "Network build"
   }
 ]

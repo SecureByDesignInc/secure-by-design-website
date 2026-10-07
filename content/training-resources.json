@@ -115,5 +115,14 @@
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
+  },
+  {
+    "id": "connect-guide",
+    "title": "Connect and segment the network · configuration guide",
+    "url": "https://securebydesigninc.com/training/connect-segment",
+    "description": "Core routing, default-deny ACLs, and the internal time service · 6 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
   }
 ]
