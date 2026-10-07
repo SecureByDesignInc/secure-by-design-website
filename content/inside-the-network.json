@@ -1,0 +1,1500 @@
+{
+  "systems": [
+    {
+      "id": "dc1",
+      "name": "SBD-DC01",
+      "role": "AD DS + DNS",
+      "segment": "VLAN 10 · Domain controllers",
+      "address": "10.0.10.10",
+      "purpose": "Find services, authenticate identities, and answer directory requests.",
+      "services": [
+        {
+          "name": "DNS",
+          "port": "TCP / UDP 53",
+          "note": ""
+        },
+        {
+          "name": "Kerberos KDC",
+          "port": "TCP / UDP 88",
+          "note": "Password changes use TCP / UDP 464."
+        },
+        {
+          "name": "Directory access",
+          "port": "LDAP TCP / UDP 389 · LDAPS TCP 636",
+          "note": "UDP 389 carries the domain controller locator ping. Client and protection settings determine the binding."
+        },
+        {
+          "name": "Global catalog",
+          "port": "TCP 3268 · TLS TCP 3269",
+          "note": ""
+        },
+        {
+          "name": "Group Policy and SYSVOL",
+          "port": "SMB · TCP 445",
+          "note": ""
+        },
+        {
+          "name": "RPC services",
+          "port": "TCP 135 · dynamic TCP 49152–65535",
+          "note": "NetLogon, LSA, and SAM use the dynamic range after the endpoint mapper."
+        },
+        {
+          "name": "Domain time",
+          "port": "W32Time · UDP 123",
+          "note": "Members follow the domain time hierarchy."
+        },
+        {
+          "name": "AD Web Services",
+          "port": "TCP 9389",
+          "note": "Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-2",
+          "title": "Account Management"
+        },
+        {
+          "id": "IA-2",
+          "title": "Identification and Authentication (Organizational Users)"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "id": "dc2",
+      "name": "SBD-DC02",
+      "role": "AD DS + DNS",
+      "segment": "VLAN 10 · Domain controllers",
+      "address": "10.0.10.11",
+      "purpose": "Provide another AD DS and DNS service point.",
+      "services": [
+        {
+          "name": "DNS",
+          "port": "TCP / UDP 53",
+          "note": ""
+        },
+        {
+          "name": "Kerberos KDC",
+          "port": "TCP / UDP 88",
+          "note": "Password changes use TCP / UDP 464."
+        },
+        {
+          "name": "Directory access",
+          "port": "LDAP TCP / UDP 389 · LDAPS TCP 636",
+          "note": "UDP 389 carries the domain controller locator ping. Client and protection settings determine the binding."
+        },
+        {
+          "name": "Global catalog",
+          "port": "TCP 3268 · TLS TCP 3269",
+          "note": ""
+        },
+        {
+          "name": "Group Policy and SYSVOL",
+          "port": "SMB · TCP 445",
+          "note": ""
+        },
+        {
+          "name": "RPC services",
+          "port": "TCP 135 · dynamic TCP 49152–65535",
+          "note": "NetLogon, LSA, and SAM use the dynamic range after the endpoint mapper."
+        },
+        {
+          "name": "Domain time",
+          "port": "W32Time · UDP 123",
+          "note": "Members follow the domain time hierarchy."
+        },
+        {
+          "name": "AD Web Services",
+          "port": "TCP 9389",
+          "note": "Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-2",
+          "title": "Account Management"
+        },
+        {
+          "id": "IA-2",
+          "title": "Identification and Authentication (Organizational Users)"
+        },
+        {
+          "id": "CP-9",
+          "title": "System Backup"
+        }
+      ]
+    },
+    {
+      "id": "dhcp",
+      "name": "SBD-DHCP01",
+      "role": "DHCP server",
+      "segment": "VLAN 20 · Identity & services",
+      "address": "10.0.20.10",
+      "purpose": "Provide client lease settings for the approved address space.",
+      "services": [
+        {
+          "name": "DHCPv4",
+          "port": "UDP 67 server / 68 client",
+          "note": "An initial broadcast may require a relay across subnets."
+        }
+      ],
+      "controls": [
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
+      "id": "syslog",
+      "name": "SBD-SYSLOG01",
+      "role": "Log message server",
+      "segment": "VLAN 20 · Identity & services",
+      "address": "10.0.20.20",
+      "purpose": "Receive and route the chosen log messages.",
+      "services": [
+        {
+          "name": "Syslog over TLS",
+          "port": "TCP 6514",
+          "note": "Configure the collector listener and trusted senders."
+        },
+        {
+          "name": "SIEM / archive delivery",
+          "port": "Integration-specific",
+          "note": "Do not infer Splunk or archive ports from the arrow."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        },
+        {
+          "id": "AU-9",
+          "title": "Protection of Audit Information"
+        },
+        {
+          "id": "SC-8(1)",
+          "title": "Transmission Confidentiality and Integrity | Cryptographic Protection"
+        }
+      ]
+    },
+    {
+      "id": "wsus",
+      "name": "SBD-WSUS01",
+      "role": "Windows update service",
+      "segment": "VLAN 20 · Identity & services",
+      "address": "10.0.20.30",
+      "purpose": "Distribute approved Windows updates inside the air gap.",
+      "services": [
+        {
+          "name": "Update metadata",
+          "port": "HTTPS 8531",
+          "note": ""
+        },
+        {
+          "name": "Signed update payloads",
+          "port": "HTTP 8530",
+          "note": "WSUS uses separate metadata and payload connections."
+        }
+      ],
+      "controls": [
+        {
+          "id": "SI-2",
+          "title": "Flaw Remediation"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "name": "SBD-TIME01",
+      "role": "Internal authoritative time",
+      "segment": "VLAN 20 · Identity & services",
+      "address": "10.0.20.40",
+      "purpose": "Internal reference clock. Source accuracy, fallback, and drift thresholds must be approved without adding an external network connection.",
+      "services": [
+        {
+          "name": "Internal authoritative time",
+          "port": "Listeners to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "AU-8",
+          "title": "Time Stamps"
+        },
+        {
+          "id": "SC-45",
+          "title": "System Time Synchronization"
+        }
+      ]
+    },
+    {
+      "id": "subca",
+      "name": "SBD-SUBCA01",
+      "role": "Issuing certificate authority",
+      "segment": "VLAN 30 · PKI infrastructure",
+      "address": "10.0.30.20",
+      "purpose": "Issue certificates under the approved subordinate CA policy.",
+      "services": [
+        {
+          "name": "Certificate enrollment",
+          "port": "Transport to define",
+          "note": ""
+        },
+        {
+          "name": "CRL / AIA publication",
+          "port": "Endpoints to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-12",
+          "title": "Cryptographic Key Establishment and Management"
+        },
+        {
+          "id": "SC-17",
+          "title": "Public Key Infrastructure Certificates"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "id": "templates",
+      "name": "SBD-PKI-MGMT01",
+      "role": "Certificate template administration",
+      "segment": "VLAN 30 · PKI infrastructure",
+      "address": "10.0.30.30",
+      "purpose": "Certificate templates are directory objects. This host provides the administrative tools to manage them.",
+      "services": [
+        {
+          "name": "Certificate template administration",
+          "port": "Listeners to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-17",
+          "title": "Public Key Infrastructure Certificates"
+        },
+        {
+          "id": "IA-5",
+          "title": "Authenticator Management"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "id": "fs",
+      "name": "SBD-FS01",
+      "role": "File share server",
+      "segment": "VLAN 40 · Servers & data",
+      "address": "10.0.40.10",
+      "purpose": "Serve shared files while enforcing resource permissions.",
+      "services": [
+        {
+          "name": "SMB",
+          "port": "TCP 445",
+          "note": "Reference service port; share and encryption policies are unspecified."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "SC-28(1)",
+          "title": "Protection of Information at Rest | Cryptographic Protection"
+        }
+      ]
+    },
+    {
+      "id": "sql",
+      "name": "SBD-SQL01",
+      "role": "SQL server",
+      "segment": "VLAN 40 · Servers & data",
+      "address": "10.0.40.20",
+      "purpose": "Host databases for consumers that still need to be identified.",
+      "services": [
+        {
+          "name": "SQL Database Engine",
+          "port": "TCP 1433 for a default instance",
+          "note": "Named instances can use dynamic or explicitly configured ports."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "SC-8(1)",
+          "title": "Transmission Confidentiality and Integrity | Cryptographic Protection"
+        },
+        {
+          "id": "SC-28(1)",
+          "title": "Protection of Information at Rest | Cryptographic Protection"
+        }
+      ]
+    },
+    {
+      "id": "apps",
+      "name": "SBD-APPS01",
+      "role": "License server",
+      "segment": "VLAN 40 · Servers & data",
+      "address": "10.0.40.30",
+      "purpose": "Answer requests for the supplied licensing role.",
+      "services": [
+        {
+          "name": "License manager",
+          "port": "Vendor-specific",
+          "note": "Confirm product, ports, direction, and client population."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "name": "SBD-WEB01",
+      "role": "Internal Apache web server",
+      "segment": "VLAN 40 · Servers & data",
+      "address": "10.0.40.40",
+      "purpose": "Serve approved internal web applications over HTTPS.",
+      "services": [
+        {
+          "name": "HTTPS",
+          "port": "TCP 443",
+          "note": "Server certificate issued by the internal issuing CA."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "SC-8(1)",
+          "title": "Transmission Confidentiality and Integrity | Cryptographic Protection"
+        }
+      ]
+    },
+    {
+      "id": "splunk",
+      "name": "SBD-SPLUNK01",
+      "role": "Splunk SIEM",
+      "segment": "VLAN 50 · Security & monitoring",
+      "address": "10.0.50.10",
+      "purpose": "Single server instance; no cluster or standby. Index and investigate the security events that are actually collected.",
+      "services": [
+        {
+          "name": "Splunk ingestion",
+          "port": "Input-dependent",
+          "note": "Choose the approved forwarder, input, or API design."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AU-6",
+          "title": "Audit Record Review, Analysis, and Reporting"
+        },
+        {
+          "id": "SI-4",
+          "title": "System Monitoring"
+        }
+      ]
+    },
+    {
+      "id": "nessus",
+      "name": "SBD-NESSUS01",
+      "role": "Tenable / Nessus",
+      "segment": "VLAN 50 · Security & monitoring",
+      "address": "10.0.50.20",
+      "purpose": "Single Tenable/Nessus server instance; no cluster or standby. Assess authorized targets for known vulnerabilities.",
+      "services": [
+        {
+          "name": "Scanning / agents",
+          "port": "Scope-dependent",
+          "note": "No general port range or scan permission is assumed."
+        }
+      ],
+      "controls": [
+        {
+          "id": "RA-5",
+          "title": "Vulnerability Monitoring and Scanning"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "id": "epo",
+      "name": "SBD-EPO01",
+      "role": "Trellix ePO + DLP",
+      "segment": "VLAN 50 · Security & monitoring",
+      "address": "10.0.50.30",
+      "purpose": "Single Trellix ePO/DLP server instance; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
+      "services": [
+        {
+          "name": "Agent management / policy",
+          "port": "Product-dependent",
+          "note": "Confirm deployed modules, agent versions, and listener configuration."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-4",
+          "title": "Information Flow Enforcement"
+        },
+        {
+          "id": "SI-3",
+          "title": "Malicious Code Protection"
+        },
+        {
+          "id": "SI-4",
+          "title": "System Monitoring"
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "name": "SBD-AUDIT01",
+      "role": "Audit log repository",
+      "segment": "VLAN 50 · Security & monitoring",
+      "address": "10.0.50.40",
+      "purpose": "Retain security records under the approved retention policy.",
+      "services": [
+        {
+          "name": "Audit ingestion",
+          "port": "Method to define",
+          "note": "No listener, storage protocol, or immutable mode is assumed."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AU-9",
+          "title": "Protection of Audit Information"
+        },
+        {
+          "id": "AU-11",
+          "title": "Audit Record Retention"
+        }
+      ]
+    },
+    {
+      "id": "jump",
+      "name": "AdminJumpBox01",
+      "role": "Identity / PKI administration only",
+      "segment": "VLAN 60 · Tiered administration",
+      "address": "10.0.60.10",
+      "purpose": "Provide dedicated identity and PKI administration from the Tier 0 host.",
+      "services": [
+        {
+          "name": "Remote management",
+          "port": "Scope and protocols to define",
+          "note": "No broad access to identity, servers, or clients is assumed."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "IA-2(1)",
+          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
+        },
+        {
+          "id": "SC-7(15)",
+          "title": "Boundary Protection | Networked Privileged Accesses"
+        }
+      ]
+    },
+    {
+      "id": "jump1",
+      "name": "SBD-ADMIN-SRV01",
+      "role": "Server administration only",
+      "segment": "VLAN 60 · Tiered administration",
+      "address": "10.0.60.20",
+      "purpose": "Dedicated privileged workstation for approved member-server targets. Separate operator roles further restrict security tools and protected audit storage.",
+      "services": [
+        {
+          "name": "Server administration only",
+          "port": "Listeners to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "IA-2(1)",
+          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
+      "id": "jump2",
+      "name": "SBD-ADMIN-PC01",
+      "role": "Endpoint administration only",
+      "segment": "VLAN 60 · Tiered administration",
+      "address": "10.0.60.30",
+      "purpose": "Dedicated privileged workstation for the 50 client endpoints. No AD, CA, or server administrative sessions.",
+      "services": [
+        {
+          "name": "Endpoint administration only",
+          "port": "Listeners to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "IA-2(1)",
+          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
+      "id": "management",
+      "name": "SBD-MGMT01",
+      "role": "Management tools server",
+      "segment": "VLAN 70 · Management tools",
+      "address": "10.0.70.10",
+      "purpose": "Management tools. Define administrative accounts, permitted targets, and protocols.",
+      "services": [
+        {
+          "name": "Management tools server",
+          "port": "Listeners to define",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "CM-2",
+          "title": "Baseline Configuration"
+        },
+        {
+          "id": "CM-3",
+          "title": "Configuration Change Control"
+        },
+        {
+          "id": "CM-8",
+          "title": "System Component Inventory"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "id": "repo",
+      "name": "SBD-REPO01",
+      "role": "Linux repository server",
+      "segment": "VLAN 70 · Management tools",
+      "address": "10.0.70.20",
+      "purpose": "Serve the approved Linux package collection.",
+      "services": [
+        {
+          "name": "Package repository",
+          "port": "Transport to define",
+          "note": "Choose the repository server, listener, and consumers."
+        },
+        {
+          "name": "Log forwarding",
+          "port": "TLS 6514",
+          "note": "Chosen only for the log scenario."
+        }
+      ],
+      "controls": [
+        {
+          "id": "SI-2",
+          "title": "Flaw Remediation"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        }
+      ]
+    },
+    {
+      "id": "workstations",
+      "name": "50 Windows 11 PCs",
+      "role": "User workstations × 50",
+      "segment": "VLAN 80 · User workstations",
+      "address": "10.0.80.100–149",
+      "purpose": "Represent 50 Windows 11 user endpoints.",
+      "services": [
+        {
+          "name": "Addressing",
+          "port": "DHCP client",
+          "note": ""
+        },
+        {
+          "name": "Identity and resource clients",
+          "port": "DNS / Kerberos / SMB",
+          "note": ""
+        },
+        {
+          "name": "Update client",
+          "port": "Internal WSUS",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "SI-2",
+          "title": "Flaw Remediation"
+        },
+        {
+          "id": "SI-3",
+          "title": "Malicious Code Protection"
+        }
+      ]
+    },
+    {
+      "id": "root",
+      "name": "SBD-ROOTCA01",
+      "role": "Offline root CA · workgroup",
+      "segment": "Offline · not domain-joined",
+      "address": "No network address (offline)",
+      "purpose": "Protect the trust anchor and perform authorized offline ceremonies.",
+      "services": [
+        {
+          "name": "Live network listeners",
+          "port": "None represented",
+          "note": "Offline and non-domain-joined."
+        },
+        {
+          "name": "Subordinate signing / root CRL",
+          "port": "Offline ceremony",
+          "note": ""
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-12",
+          "title": "Cryptographic Key Establishment and Management"
+        },
+        {
+          "id": "SC-17",
+          "title": "Public Key Infrastructure Certificates"
+        },
+        {
+          "id": "CP-9",
+          "title": "System Backup"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "number": 10,
+      "name": "Domain controllers",
+      "subnet": "10.0.10.0/24",
+      "boundary": "Restrict directory administration; allow only documented identity and DNS dependencies.",
+      "systems": [
+        "SBD-DC01",
+        "SBD-DC02"
+      ],
+      "controls": [
+        {
+          "id": "AC-2",
+          "title": "Account Management"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "IA-2",
+          "title": "Identification and Authentication (Organizational Users)"
+        },
+        {
+          "id": "SC-7",
+          "title": "Boundary Protection"
+        },
+        {
+          "id": "CP-9",
+          "title": "System Backup"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "name": "Identity & services",
+      "subnet": "10.0.20.0/24",
+      "boundary": "Define DHCP relay and approved update and collection routes. No internet upstream.",
+      "systems": [
+        "SBD-DHCP01",
+        "SBD-SYSLOG01",
+        "SBD-WSUS01",
+        "SBD-TIME01"
+      ],
+      "controls": [
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "CM-8",
+          "title": "System Component Inventory"
+        },
+        {
+          "id": "SI-2",
+          "title": "Flaw Remediation"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "name": "PKI infrastructure",
+      "subnet": "10.0.30.0/24",
+      "boundary": "Only the issuing services join this segment. The offline root has no switch connection.",
+      "systems": [
+        "SBD-SUBCA01",
+        "SBD-PKI-MGMT01"
+      ],
+      "controls": [
+        {
+          "id": "SC-12",
+          "title": "Cryptographic Key Establishment and Management"
+        },
+        {
+          "id": "SC-17",
+          "title": "Public Key Infrastructure Certificates"
+        },
+        {
+          "id": "IA-5",
+          "title": "Authenticator Management"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "name": "Servers & data",
+      "subnet": "10.0.40.0/24",
+      "boundary": "Authorize each client-to-service path. SQL consumers and licensing ports remain to be defined.",
+      "systems": [
+        "SBD-FS01",
+        "SBD-SQL01",
+        "SBD-APPS01",
+        "SBD-WEB01"
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "SC-8(1)",
+          "title": "Transmission Confidentiality and Integrity | Cryptographic Protection"
+        },
+        {
+          "id": "SC-28(1)",
+          "title": "Protection of Information at Rest | Cryptographic Protection"
+        },
+        {
+          "id": "CP-9",
+          "title": "System Backup"
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "name": "Security & monitoring",
+      "subnet": "10.0.50.0/24",
+      "boundary": "Scope scanners and agents explicitly. Protect audit records and separate security administration.",
+      "systems": [
+        "SBD-SPLUNK01",
+        "SBD-NESSUS01",
+        "SBD-EPO01",
+        "SBD-AUDIT01"
+      ],
+      "controls": [
+        {
+          "id": "AU-6",
+          "title": "Audit Record Review, Analysis, and Reporting"
+        },
+        {
+          "id": "AU-9",
+          "title": "Protection of Audit Information"
+        },
+        {
+          "id": "AU-11",
+          "title": "Audit Record Retention"
+        },
+        {
+          "id": "RA-5",
+          "title": "Vulnerability Monitoring and Scanning"
+        },
+        {
+          "id": "SI-3",
+          "title": "Malicious Code Protection"
+        },
+        {
+          "id": "SI-4",
+          "title": "System Monitoring"
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "name": "Tiered administration",
+      "subnet": "10.0.60.0/24",
+      "boundary": "Separate identity/PKI, server, and endpoint administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
+      "systems": [
+        "AdminJumpBox01",
+        "SBD-ADMIN-SRV01",
+        "SBD-ADMIN-PC01"
+      ],
+      "controls": [
+        {
+          "id": "AC-2",
+          "title": "Account Management"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "IA-2(1)",
+          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        },
+        {
+          "id": "SC-7(15)",
+          "title": "Boundary Protection | Networked Privileged Accesses"
+        }
+      ]
+    },
+    {
+      "number": 70,
+      "name": "Management tools",
+      "subnet": "10.0.70.0/24",
+      "boundary": "Constrain publishers and management identities. Validate packages brought in on approved media.",
+      "systems": [
+        "SBD-MGMT01",
+        "SBD-REPO01"
+      ],
+      "controls": [
+        {
+          "id": "CM-2",
+          "title": "Baseline Configuration"
+        },
+        {
+          "id": "CM-3",
+          "title": "Configuration Change Control"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "CM-8",
+          "title": "System Component Inventory"
+        },
+        {
+          "id": "SI-2",
+          "title": "Flaw Remediation"
+        },
+        {
+          "id": "CP-10",
+          "title": "System Recovery and Reconstitution"
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "name": "User workstations",
+      "subnet": "10.0.80.0/24",
+      "boundary": "Dedicated client segment. Block peer SMB/RDP and direct administrative access; allow documented identity and resource dependencies only.",
+      "systems": [
+        "50 Windows 11 PCs"
+      ],
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "CM-6",
+          "title": "Configuration Settings"
+        },
+        {
+          "id": "CM-7",
+          "title": "Least Functionality"
+        },
+        {
+          "id": "SC-7",
+          "title": "Boundary Protection"
+        }
+      ]
+    }
+  ],
+  "processes": [
+    {
+      "id": "signin",
+      "label": "Sign in",
+      "title": "A workstation finds its identity.",
+      "caption": "Addressing, name resolution, and domain authentication.",
+      "steps": [
+        {
+          "title": "Obtain a network address",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DHCP01",
+          "protocol": "DHCP · UDP 67 / 68",
+          "description": "A new client requests an address and receives lease settings. The exchange includes discovery, offer, request, and acknowledgement.",
+          "test": ""
+        },
+        {
+          "title": "Locate directory services",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The workstation asks internal DNS to locate domain services. DNS records connect service names to reachable hosts.",
+          "test": ""
+        },
+        {
+          "title": "Authenticate to the domain",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "Kerberos · TCP / UDP 88",
+          "description": "The client proves its identity to the domain controller’s Key Distribution Center and obtains a ticket-granting ticket.",
+          "test": ""
+        },
+        {
+          "title": "Read directory information",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "LDAP · TCP 389 / LDAPS · TCP 636",
+          "description": "Directory clients retrieve the information they need from Active Directory. Protection and binding behavior depend on the client and server configuration.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "files",
+      "label": "Open a file",
+      "title": "From a name to an authorized file.",
+      "caption": "Follow a domain client to its file share.",
+      "steps": [
+        {
+          "title": "Resolve the file server",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The client resolves the file server’s name before opening a connection. The diagram uses SBD-FS01 as the named destination.",
+          "test": ""
+        },
+        {
+          "title": "Request a service ticket",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "Kerberos · TCP / UDP 88",
+          "description": "The workstation uses its ticket-granting ticket to request a ticket for the file service. It then presents that service ticket to the server.",
+          "test": ""
+        },
+        {
+          "title": "Open the approved share",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-FS01",
+          "protocol": "SMB · TCP 445",
+          "description": "The client requests a file over SMB. The server applies the relevant share and filesystem permissions before allowing access.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "updates",
+      "label": "Get updates",
+      "title": "Bring updates inside. Distribute with care.",
+      "caption": "A disconnected update workflow, with no internet edge.",
+      "steps": [
+        {
+          "title": "Import approved update material",
+          "from": "Authorized operator",
+          "to": "SBD-WSUS01",
+          "protocol": "MANUAL TRANSFER · NO NETWORK SESSION",
+          "description": "An authorized operator brings approved update material across the air gap using controlled media and an established import process.",
+          "test": ""
+        },
+        {
+          "title": "Check update metadata",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WSUS01",
+          "protocol": "HTTPS · TCP 8531",
+          "description": "The client contacts the internal WSUS service for update metadata using the TLS-enabled configuration.",
+          "test": ""
+        },
+        {
+          "title": "Retrieve signed update content",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WSUS01",
+          "protocol": "HTTP · TCP 8530",
+          "description": "WSUS uses its HTTP connection for update payloads, with signatures protecting payload authenticity. TLS is used for metadata rather than every WSUS path.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "label": "Follow a log",
+      "title": "Turn an event into useful evidence.",
+      "caption": "From a Linux source to collection, analysis, and retention.",
+      "steps": [
+        {
+          "title": "Deliver a source event",
+          "from": "SBD-REPO01",
+          "to": "SBD-SYSLOG01",
+          "protocol": "SYSLOG OVER TLS · TCP 6514",
+          "description": "A configured Linux source can initiate a protected syslog session to the collector. The connection uses TLS transport.",
+          "test": ""
+        },
+        {
+          "title": "Ingest for investigation",
+          "from": "SBD-SYSLOG01",
+          "to": "SBD-SPLUNK01",
+          "protocol": "INTEGRATION · TRANSPORT TO DEFINE",
+          "description": "The collection layer supplies events to Splunk for indexing and investigation. The exact forwarder, API, or input method must be chosen.",
+          "test": ""
+        },
+        {
+          "title": "Retain an audit copy",
+          "from": "SBD-SYSLOG01",
+          "to": "SBD-AUDIT01",
+          "protocol": "ARCHIVE DELIVERY · METHOD TO DEFINE",
+          "description": "An approved archive process preserves the records needed for review and retention. This is a proposed collector-to-repository relationship.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "license",
+      "label": "License check",
+      "title": "A licensing service has its own contract.",
+      "caption": "Follow the client request to its licensing service.",
+      "steps": [
+        {
+          "title": "Request a license",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-APPS01",
+          "protocol": "VENDOR LICENSING · PORTS TO DEFINE",
+          "description": "An approved client contacts the licensing service to check or obtain its entitlement. Protocol, direction, persistence, and offline behavior depend on the product.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "trust",
+      "label": "Offline trust",
+      "title": "The root stays outside the live network.",
+      "caption": "A controlled offline certificate ceremony.",
+      "steps": [
+        {
+          "title": "Prepare the signing material",
+          "from": "Authorized operator",
+          "to": "SBD-SUBCA01",
+          "protocol": "OFFLINE CEREMONY · NO LIVE PATH",
+          "description": "Prepare the subordinate CA’s signing request and the records required for the ceremony. Protect the request and validate the intended certificate policy.",
+          "test": ""
+        },
+        {
+          "title": "Use the offline root",
+          "from": "Authorized operator",
+          "to": "SBD-ROOTCA01",
+          "protocol": "OFFLINE ROOT · NO NETWORK SESSION",
+          "description": "Authorized operators use the protected root key in a controlled ceremony. The root CA remains non-domain-joined and disconnected.",
+          "test": ""
+        },
+        {
+          "title": "Return publication artifacts",
+          "from": "Authorized operator",
+          "to": "SBD-SUBCA01",
+          "protocol": "CONTROLLED TRANSFER · NO LIVE PATH",
+          "description": "Return approved certificate and revocation artifacts through the documented offline transfer process. Define the issuing CA’s enrollment and publication design separately.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "label": "Use a web app",
+      "title": "A browser trusts the internal web service.",
+      "caption": "Name resolution, certificate trust, and an encrypted session.",
+      "steps": [
+        {
+          "title": "Resolve the web server",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The browser resolves the web service’s internal name before connecting. DNS returns SBD-WEB01’s address on VLAN 40.",
+          "test": ""
+        },
+        {
+          "title": "Verify the server certificate",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "The browser opens a TLS session. SBD-WEB01 presents a certificate from the internal issuing CA, and the client checks the name, validity dates, and chain to the trusted offline root.",
+          "test": ""
+        },
+        {
+          "title": "Request the application",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "Inside the encrypted session, the browser sends HTTP requests and receives the application’s responses. The application decides what the signed-in user may see.",
+          "test": ""
+        }
+      ]
+    }
+  ],
+  "whatIfs": [
+    {
+      "id": "dc-down",
+      "label": "DC01 is down",
+      "title": "One domain controller fails.",
+      "caption": "The client turns to SBD-DC02 for DNS and authentication.",
+      "steps": [
+        {
+          "title": "Query SBD-DC01",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The workstation sends its DNS query to its first configured DNS server. SBD-DC01 is offline, so no reply comes back.",
+          "test": ""
+        },
+        {
+          "title": "Retry with SBD-DC02",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC02",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The client retries with its next configured DNS server. SBD-DC02 also provides DNS for the domain and answers.",
+          "test": ""
+        },
+        {
+          "title": "Authenticate with SBD-DC02",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC02",
+          "protocol": "Kerberos · TCP / UDP 88",
+          "description": "DNS service records list both domain controllers, and the client’s domain controller locator finds SBD-DC02 responding. SBD-DC02’s Key Distribution Center issues the ticket-granting ticket.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "cert-expired",
+      "label": "Certificate expired",
+      "title": "The browser refuses an expired certificate.",
+      "caption": "Trust checks fail before any application data is sent.",
+      "steps": [
+        {
+          "title": "Resolve the web server",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-DC01",
+          "protocol": "DNS · TCP / UDP 53",
+          "description": "The browser resolves the web service’s internal name, exactly as on a normal day.",
+          "test": ""
+        },
+        {
+          "title": "Present an expired certificate",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-WEB01",
+          "protocol": "HTTPS · TCP 443",
+          "description": "SBD-WEB01 presents a certificate whose validity period has ended. The browser checks the dates, stops the connection, and shows a certificate error.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "pc-to-sql",
+      "label": "A PC tries SQL",
+      "title": "Default deny stops a direct database connection.",
+      "caption": "No exception exists for workstation-to-SQL traffic.",
+      "steps": [
+        {
+          "title": "Connect straight to SBD-SQL01",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-SQL01",
+          "protocol": "SQL · TCP 1433",
+          "description": "A workstation tries to reach the database server directly. The core finds no matching exception, so default deny drops the session.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "peer-rdp",
+      "label": "PC-to-PC remote desktop",
+      "title": "Host firewalls stop lateral movement.",
+      "caption": "One workstation tries remote desktop to another.",
+      "steps": [
+        {
+          "title": "Open remote desktop to another PC",
+          "from": "50 Windows 11 PCs",
+          "to": "50 Windows 11 PCs",
+          "protocol": "RDP · TCP / UDP 3389",
+          "description": "A workstation tries a remote desktop session to a peer on the same VLAN. The destination’s host firewall refuses it.",
+          "test": ""
+        }
+      ]
+    },
+    {
+      "id": "drill",
+      "label": "Attack drill",
+      "title": "An intruder tests every boundary.",
+      "caption": "Six moves an intruder might try, from one compromised PC to a stolen admin session. Each is checked against the rules.",
+      "steps": [
+        {
+          "title": "A compromised PC tries the database",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-SQL01",
+          "protocol": "SQL · TCP 1433",
+          "description": "Malware on one workstation reaches straight for SBD-SQL01. No exception exists for workstation-to-SQL traffic, so the core drops the attempt.",
+          "test": "Client-to-SQL, client-to-management, and peer SMB/RDP fail."
+        },
+        {
+          "title": "It looks for the security tools",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-SPLUNK01",
+          "protocol": "MANAGEMENT · Splunk Web · TCP 8000",
+          "description": "Taking over a security tool would blind the defenders. The PC tries Splunk’s web interface. No rule lets user workstations reach security-tool management, so default deny drops it.",
+          "test": "A compromised client cannot reach security-tool management interfaces."
+        },
+        {
+          "title": "It tries a neighbour’s file shares",
+          "from": "50 Windows 11 PCs",
+          "to": "50 Windows 11 PCs",
+          "protocol": "SMB · TCP 445",
+          "description": "Next, the PC tries the shares on another workstation in VLAN 80. The traffic never crosses the core, so the neighbour’s host firewall refuses it.",
+          "test": "Client-to-SQL, client-to-management, and peer SMB/RDP fail."
+        },
+        {
+          "title": "It tries remote desktop to a neighbour",
+          "from": "50 Windows 11 PCs",
+          "to": "50 Windows 11 PCs",
+          "protocol": "RDP · TCP / UDP 3389",
+          "description": "The PC tries a remote desktop session to a peer. The destination’s host firewall refuses it.",
+          "test": "Client-to-SQL, client-to-management, and peer SMB/RDP fail."
+        },
+        {
+          "title": "A compromised web server reaches for the database",
+          "from": "SBD-WEB01",
+          "to": "SBD-SQL01",
+          "protocol": "SQL · TCP 1433",
+          "description": "If SBD-WEB01 were taken over, SBD-SQL01 would be the next target. They share VLAN 40, so the core never sees this traffic. SBD-SQL01’s host firewall keeps it blocked.",
+          "test": "The web server cannot access SQL before an approved dependency exists."
+        },
+        {
+          "title": "A stolen admin session aims at a domain controller",
+          "from": "SBD-ADMIN-PC01",
+          "to": "SBD-DC01",
+          "protocol": "MANAGEMENT · REMOTE ADMINISTRATION",
+          "description": "With an endpoint administrator’s stolen session on SBD-ADMIN-PC01, the attacker aims at SBD-DC01. That host manages user endpoints only. No rule lets it manage a domain controller, so default deny drops it.",
+          "test": "An endpoint administrator cannot manage a DC, issuing CA, or member server."
+        }
+      ]
+    }
+  ],
+  "protocols": [
+    {
+      "service": "DNS",
+      "transport": "TCP / UDP 53",
+      "meaning": "Name and service discovery; resolver order must be configured."
+    },
+    {
+      "service": "DHCPv4",
+      "transport": "UDP 67 / 68",
+      "meaning": "Server / client exchange. Relay requirements depend on subnet design."
+    },
+    {
+      "service": "Kerberos",
+      "transport": "TCP / UDP 88",
+      "meaning": "KDC authentication and ticket requests."
+    },
+    {
+      "service": "Kerberos password change",
+      "transport": "TCP / UDP 464",
+      "meaning": "Password changes and resets."
+    },
+    {
+      "service": "Directory access",
+      "transport": "TCP / UDP 389 · TCP 636",
+      "meaning": "LDAP / LDAPS. UDP 389 carries the domain controller locator ping; validate binding and protections."
+    },
+    {
+      "service": "Global catalog",
+      "transport": "TCP 3268 / 3269",
+      "meaning": "Forest-wide directory searches; 3269 uses TLS."
+    },
+    {
+      "service": "Group Policy and SYSVOL",
+      "transport": "TCP 445",
+      "meaning": "Domain members read policies and scripts from domain controller shares over SMB; Group Policy also uses LDAP and RPC."
+    },
+    {
+      "service": "RPC services",
+      "transport": "TCP 135 · TCP 49152–65535",
+      "meaning": "Endpoint mapper, then the dynamic range for NetLogon, LSA, and SAM."
+    },
+    {
+      "service": "Domain time",
+      "transport": "UDP 123",
+      "meaning": "W32Time. Domain members follow the domain time hierarchy."
+    },
+    {
+      "service": "AD Web Services",
+      "transport": "TCP 9389",
+      "meaning": "Active Directory PowerShell and Administrative Center. Needed from administration hosts, not user workstations."
+    },
+    {
+      "service": "SMB",
+      "transport": "TCP 445",
+      "meaning": "Client request to the file service."
+    },
+    {
+      "service": "WSUS metadata",
+      "transport": "HTTPS 8531",
+      "meaning": "TLS metadata connection."
+    },
+    {
+      "service": "WSUS content",
+      "transport": "HTTP 8530",
+      "meaning": "Signed payloads use the separate content connection."
+    },
+    {
+      "service": "Syslog over TLS",
+      "transport": "TCP 6514",
+      "meaning": "Configured sender initiates to the TLS receiver."
+    },
+    {
+      "service": "HTTPS",
+      "transport": "TCP 443",
+      "meaning": "Internal web applications over TLS; server certificates come from the internal issuing CA."
+    },
+    {
+      "service": "SQL Server",
+      "transport": "TCP 1433 (default instance)",
+      "meaning": "Default instance. Named instances may use dynamic or configured ports; identify approved consumers."
+    },
+    {
+      "service": "Licensing / SIEM / ePO",
+      "transport": "Not assumed",
+      "meaning": "Product, integration, and configuration must define these transports."
+    },
+    {
+      "service": "Offline root CA",
+      "transport": "No live port",
+      "meaning": "Manual ceremony and controlled transfer only."
+    }
+  ],
+  "offline": [
+    "SBD-ROOTCA01"
+  ],
+  "controlCount": 47
+}

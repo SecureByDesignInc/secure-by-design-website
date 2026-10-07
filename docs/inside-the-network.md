@@ -33,3 +33,31 @@ Added planning nodes are TIME01, ADMIN-SRV01, and ADMIN-PC01. The existing jump 
 The user requested a realistic data-center appearance while retaining the motion graphics. The locally modeled room now includes rack cabinets, server chassis and drive bays, switch ports and cable runs, raised floor tiles, cooling and overhead lighting, administration desks, and a separate workstation area. Root CA and backup equipment remain physically separate and uncabled. The architecture still owns every system identity, address, service, policy, and scenario. Hardware vendors, virtualization products, and physical host assignments are not supplied; do not invent those as inventory facts. Rack positions are presentation coordinates.
 
 `data-center-layout.js` owns room placement. `equipment.js` builds unbranded equipment and batches static metalwork using instancing. `scene.js` preserves orbit/zoom, keyboard selection, guided camera motion, traffic packets, reduced-motion support, labels, presentation mode, and 4K export. The selected server is outlined at its actual scene position; system details identify its room location. Existing architecture checks now also validate complete equipment coverage and distinct, in-bounds positions. Browser QA is unavailable in this managed environment without the control-browser skill; source, geometry, and build checks are used, with the visual verification limit reported.
+
+## Review and browser verification — October 6, 2026
+
+`node scripts/check-network-browser.mjs` serves `public/` locally and drives the model in headless Chromium. It selects all six processes and their steps, every system and VLAN, and opens the protocol reference. It also verifies a 3840 × 2160 PNG export, mobile width, reduced motion, and the WebGL fallback, and it fails on console errors, warnings, or missing files. It skips when Playwright is not installed; set `PLAYWRIGHT_MODULE` to use a global installation.
+
+Control titles were checked against NIST's OSCAL SP 800-53 Rev. 5 catalog: all 47 controls exist, none are withdrawn, and enhancements use the official “Base | Enhancement” titles. Domain controller services and the protocol reference follow Microsoft's AD port reference and Windows service and port requirements; they list core client-to-DC services, not a complete firewall profile. `scripts/prepare-network-text.mjs` writes `content/inside-the-network.json` for the text version on `/inside-the-network`. Rerun it, or `pnpm dev` / `pnpm build`, whenever model data changes.
+
+A seventh process, “Use a web app”, follows a workstation through internal DNS (F01) and HTTPS to SBD-WEB01 (F13), including client-side certificate validation against the internal PKI. It introduces no new systems or permitted flows. `check-network-relationships.mjs` asserts that all three steps map to permitted rules.
+
+## Motion, what-ifs, links, checks, and clips — October 6, 2026
+
+Main-scene motion now follows `flow-policy.js`: permit badges at the core, amber gates for pending rules, red gates for denials, replies, UDP pulses, TLS and signed markers, and amber custody walks for manual transfers. Four what-if sequences live in `technical.js` (`whatIfs`, combined with the processes as `sequences`). `courses.js` holds course links, and `knowledge-checks.js` holds the per-process questions. `recorder.js` records clips through a 2D compositing canvas fed by the scene's frame hook, and the scene's `setOutput` renders at the clip size. The scene pauses rendering when off screen.
+
+`check-network-architecture.mjs` now validates every sequence's endpoints, wire fields, custody-walk routes, what-if outcomes, course links, and knowledge-check answers. `check-network-relationships.mjs` covers the what-if flows. `check-network-browser.mjs` adds what-ifs, policy labels, knowledge checks, shareable links, and a recorded clip.
+
+## Visual and interaction upgrade — October 6, 2026
+
+`scene.js` was rebuilt around the same public API, with additions for the new features: `setView`, `setTheme`, `setCameraMode`, `setStepSeconds`, `showConnections`, `inspectPacket`, `releasePacket`, and `setReserved`.
+
+- **Routes and packet timing.** Routes are polylines (`Route`) through the overhead cable trays to the core switch. Packets follow fixed timelines: travel, a dwell at the core, or a hold and a drop at a gate. Their speed adapts so the first packet finishes within the step length.
+- **Labels.** Labels are screen-space sprites redrawn at their on-screen pixel size, including 4K export and recording sizes. A per-frame placement pass orders them by priority and moves crowded labels up on leader lines.
+- **See-through equipment.** `equipment.batch` returns a fade registry. Batched instances dither through an `aFade` instance attribute, and the scene fades the groups that block the camera's view of the active systems.
+- **Logical view.** The logical view (VLAN islands, a hexagonal core, and the separate offline area) lives in its own group. A 1.6-second morph fades the room while each system's role icon travels from its rack to its island.
+- **Bloom.** The cinematic look's bloom lazy-loads three.js r186 post-processing, vendored under `vendor/postprocessing` and `vendor/shaders` (MIT).
+- **App and content modules.** `packets.js` describes one packet per networked step. `app.js` adds hover tooltips, the packet card, the connection list, and the view and look toggles. The attack drill is a what-if in `technical.js` with `drill:true` and per-step `test` text.
+- **Recording.** `recorder.js` adds the step length, title and end cards, the follow camera, and the cinematic look. With cards, the last step holds behind the end card before the clip ends.
+
+`check-network-architecture.mjs` now also checks the drill outcomes and rules, that each drill step replays a documented acceptance test, and that every networked step has a packet profile and card. `check-network-browser.mjs` also exercises the drill scorecard, packet inspection by button and by selecting a packet in the 3D view, hover tooltips, readable rack names, the connection map, the logical view and its link, the cinematic look, and clips with cards. Its URL adds `?qa`, which exposes read-only test helpers (packet, equipment, and label screen positions) as `window.insideNetworkQA`.
