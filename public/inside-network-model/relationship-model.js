@@ -1,14 +1,15 @@
 import {inventory} from './inventory.js';
 import {vlans,facilities,families,additionalControls,buildArchitectureNodes} from './architecture.js';
-import {technical,scenarios} from './technical.js';
-import {securityPractices,trafficRules,evaluateFlow,policyStatus} from './security.js';
+import {technical,sequences} from './technical.js';
+import {securityPractices,evaluateFlow,policyStatus} from './security.js';
+import {stepPolicy} from './flow-policy.js';
 
 // These are relationships in the existing design, not additional equipment.
 const systems=buildArchitectureNodes(inventory.nodes);
 const controls={...inventory.controls,...additionalControls};
 const unique=values=>[...new Set(values)];
 const segment=id=>vlans.find(v=>v.ids.includes(id));
-const colors={association:'#729bad',traffic:'#79dece',manual:'#e6bc82',pending:'#e6bc82',deny:'#ee9294'};
+const colors={association:'#729bad',traffic:'#79dece',manual:'#e6bc82',pending:'#e6bc82',deny:'#ee9294',failed:'#f0a983'};
 const item=(key,label,short,type,color,action)=>({key,label,short,type,color,action});
 function entity(id){
  const v=vlans.find(v=>v.id===id);
@@ -68,16 +69,11 @@ function processView(id){
  return graph(media?'Controlled media handling':'Offline backup & recovery',media?'Inbound: approve, validate, record custody, then import through an authorized operator. Outbound handling requires its own release approval.':'Protect offline copies and rehearse restoration. Recovery follows a human-controlled procedure.','Amber steps show a manual procedure',stages,stages.slice(1).map((n,i)=>edge(stages[i].key,n.key,'manual','Manual procedure')),'process');
 }
 function flowView(context){
- const s=scenarios[context.scenario],step=s.steps[context.step];
- const from=step.from||'operator',to=step.to;
- const rules=trafficRules.filter(r=>r.from.includes(from)&&r.to.includes(to));
- // The existing policy register may block a protocol shown in a teaching sequence.
- const protocol=step.protocol.toLowerCase();
- const service=protocol.includes('kerberos')?'Kerberos':protocol.includes('dns')?'DNS':protocol.includes('dhcp')?'DHCP':protocol.includes('ldap')?'Directory':protocol.includes('smb')?'SMB':protocol.includes('wsus')||to==='wsus'?'WSUS':protocol.includes('syslog')?'Syslog TLS':null;
- const rule=rules.find(r=>r.service===service)||(rules.length===1?rules[0]:null);
- const kind=step.manual||from==='root'||to==='root'?'manual':step.unverified||!rule||rule.status==='pending'?'pending':rule.status==='deny'?'deny':'traffic';
- const legend=kind==='manual'?'Manual handling · no network connection':kind==='traffic'?'Moving markers show the service request':kind==='pending'?'Service relationship · blocked pending validation':'Denied by policy';
- return graph(step.title,step.protocol,legend,unique([from,to]).map(entity),[edge(from,to,kind,step.protocol)],'flow');
+ const step=sequences[context.scenario].steps[context.step];
+ const from=step.from||'operator',to=step.to,policy=stepPolicy(step);
+ const kind=policy.kind==='unreachable'||policy.kind==='rejected'?'failed':policy.kind;
+ const legend={manual:'Manual handling · no network connection',traffic:'Moving markers show the service request',pending:'Service relationship · blocked pending validation',deny:'Denied by policy',unreachable:'Permitted · the destination does not respond',rejected:'Permitted · the client refuses the certificate'}[policy.kind];
+ return graph(step.title,`${step.protocol} · ${policy.label}`,legend,unique([from,to]).map(entity),[edge(from,to,kind,step.protocol)],'flow');
 }
 export function relationshipModel(context={type:'overview'}){
  switch(context.type){
