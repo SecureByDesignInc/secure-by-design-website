@@ -102,3 +102,7 @@ jobs:
             mark=$(grep -c 'Harden the baseline' page.html || true)
             echo "::notice title=Verify $path::$url$path -> $code | title: $title | 'Harden the baseline' mentions: $mark"
           done
+          code=$(curl -s -o itn.html -w '%{http_code}' "$url/inside-the-network")
+          text=$(grep -c 'Read the network as text' itn.html || true)
+          model=$(curl -s -o /dev/null -w '%{http_code}' "$url/inside-network-model/courses.js")
+          echo "::notice title=Verify /inside-the-network::$code | text version present: $text | model courses.js: $model"
