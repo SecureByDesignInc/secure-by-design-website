@@ -21,6 +21,8 @@ const d1DatabaseId =
 
 const localBindingConfig = {
   ...(workerName ? { name: workerName } : {}),
+  // Keep plain-text variables set in the Cloudflare dashboard across deploys.
+  keep_vars: true,
   main: './server/index.js',
   compatibility_flags: ['nodejs_compat'],
   d1_databases: d1
