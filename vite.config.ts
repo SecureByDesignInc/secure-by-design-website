@@ -14,10 +14,10 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === 'seatbelt';
 
 // Production deploys (GitHub Actions) supply the owner's real Worker name and
 // D1 database through repository variables; local builds keep the placeholders.
-const workerName = process.env.CLOUDFLARE_WORKER_NAME;
-const d1DatabaseName = process.env.CLOUDFLARE_D1_DATABASE_NAME ?? 'site-creator-d1';
+const workerName = process.env.CLOUDFLARE_WORKER_NAME || undefined;
+const d1DatabaseName = process.env.CLOUDFLARE_D1_DATABASE_NAME || 'site-creator-d1';
 const d1DatabaseId =
-  process.env.CLOUDFLARE_D1_DATABASE_ID ?? SITE_CREATOR_PLACEHOLDER_DATABASE_ID;
+  process.env.CLOUDFLARE_D1_DATABASE_ID || SITE_CREATOR_PLACEHOLDER_DATABASE_ID;
 
 const localBindingConfig = {
   ...(workerName ? { name: workerName } : {}),
