@@ -760,5 +760,438 @@
         "next": "That completes the Build the Network path. Path 2 prepares this same network for authorization, starting with course 2.1."
       }
     ]
+  },
+  {
+    "id": "harden-baseline",
+    "prerequisites": [
+      "Complete the identity build and DNS courses with replication and name resolution verified on both controllers.",
+      "Use the isolated Windows Server 2025 environment and an account approved for organizational unit and Group Policy administration.",
+      "Have an approved connected system and removable-media procedure for bringing DISA downloads into the lab."
+    ],
+    "labNote": "This course designs the organizational unit (OU) structure, applies the DISA STIG Group Policy package, and verifies the result with SCAP scans. Paths, versions, and session locations below are examples — adapt them to your tooling. Expect STIG settings to change behavior: that is the point, and the reason everything is scanned and recorded.",
+    "sources": [
+      {
+        "id": "ou",
+        "title": "Microsoft · New-ADOrganizationalUnit",
+        "url": "https://learn.microsoft.com/en-us/powershell/module/activedirectory/new-adorganizationalunit"
+      },
+      {
+        "id": "redirect",
+        "title": "Microsoft · Redirect the Users and Computers containers",
+        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/redirect-users-computers-containers"
+      },
+      {
+        "id": "central-store",
+        "title": "Microsoft · Create and manage the Group Policy Central Store",
+        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-client/group-policy/create-and-manage-central-store"
+      },
+      {
+        "id": "import-gpo",
+        "title": "Microsoft · Import-GPO",
+        "url": "https://learn.microsoft.com/en-us/powershell/module/grouppolicy/import-gpo"
+      },
+      {
+        "id": "gpresult",
+        "title": "Microsoft · Gpresult",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/gpresult"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      },
+      {
+        "id": "disa-gpo",
+        "title": "DISA · STIG Group Policy Objects package",
+        "url": "https://www.cyber.mil/stigs/gpo"
+      },
+      {
+        "id": "disa-tools",
+        "title": "DISA · SRG/STIG tools (SCC and STIG Viewer)",
+        "url": "https://www.cyber.mil/stigs/srg-stig-tools"
+      },
+      {
+        "id": "ncp",
+        "title": "NIST · National Checklist Program (SP 800-70)",
+        "url": "https://csrc.nist.gov/projects/national-checklist-program"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "ou-design",
+        "title": "Design and build the OU structure",
+        "minutes": 20,
+        "summary": "Organizational units exist for delegation and Group Policy targeting, not to mirror an org chart. Build the structure the hardening policies will hang on before importing any of them.",
+        "objectives": [
+          "Design an OU structure around delegation and Group Policy targeting.",
+          "Create protected OUs and redirect the default Computers and Users containers.",
+          "Explain why the built-in Domain Controllers OU stays untouched."
+        ],
+        "steps": [
+          "Design the structure by administration: a top-level SBD OU containing Servers, Workstations, Users, Groups, and an Admin OU for privileged accounts. The built-in Domain Controllers OU stays where it is and keeps its name.",
+          "Create the planned OUs with accidental-deletion protection enabled. Record each OU's purpose and who will administer its contents; an OU with no delegation or policy purpose is clutter.",
+          "Redirect the default Computers and Users containers to managed OUs with redircmp and redirusr. Group Policy cannot be linked to the default containers, so anything landing there would join the domain unmanaged.",
+          "Keep privileged accounts and systems separate: the Admin OU holds the identities that administer domain controllers, and the next course places the issuing CA in the Servers tier. Do not nest deeper than the delegation plan requires."
+        ],
+        "command": "Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName\nGet-ADDomain | Select-Object ComputersContainer, UsersContainer\n(Get-ADOrganizationalUnit -Identity 'OU=SBD,DC=sbd,DC=test' -Properties ProtectedFromAccidentalDeletion).ProtectedFromAccidentalDeletion",
+        "check": "The planned OUs exist with deletion protection, the default container redirects point at managed OUs, and each OU has a recorded purpose and administrator.",
+        "evidence": "Keep the OU design sheet: each OU's distinguished name, purpose, delegated administrator, and the redirect commands with their output.",
+        "quizzes": [
+          {
+            "question": "What should drive the shape of the OU structure?",
+            "answers": [
+              "Group Policy targeting and delegated administration",
+              "The company org chart",
+              "Alphabetical order of departments"
+            ],
+            "correct": 0,
+            "explanation": "OUs are an administrative tool. Policy and delegation boundaries define them; reporting lines belong in HR systems."
+          },
+          {
+            "question": "Why redirect the default Computers container?",
+            "answers": [
+              "It makes domain join faster",
+              "Group Policy cannot be linked to the default containers, so new machines would sit unmanaged",
+              "It is required before DNS works"
+            ],
+            "correct": 1,
+            "explanation": "Redirection sends newly joined machines into an OU where policy applies from their first start."
+          },
+          {
+            "question": "Where do the two domain controllers live after this lesson?",
+            "answers": [
+              "In the new Servers OU",
+              "In the built-in Domain Controllers OU, unchanged",
+              "In the Users container"
+            ],
+            "correct": 1,
+            "explanation": "Domain controllers stay in their built-in OU — it is where the DC hardening policies link in lesson 4."
+          }
+        ],
+        "recap": [
+          "OUs follow administration, not the org chart.",
+          "The default containers are redirected so nothing joins unmanaged.",
+          "The Domain Controllers OU remains the link point for DC policies."
+        ],
+        "next": "Lesson 2 brings the DISA tooling across the air gap the same controlled way the PKI course moves certificates.",
+        "sources": [
+          "ou",
+          "redirect"
+        ]
+      },
+      {
+        "id": "staging",
+        "title": "Stage the tooling across the air gap",
+        "minutes": 15,
+        "summary": "The hardening content is downloaded artifacts: the DISA GPO package, the SCAP Compliance Checker (SCC), and STIG Viewer. They cross the boundary the way everything does here — reviewed, hashed, and carried on approved removable media.",
+        "objectives": [
+          "Identify the DISA artifacts the hardening work needs.",
+          "Move downloaded tooling across the air gap with hash verification.",
+          "Record versions so scans stay comparable over time."
+        ],
+        "steps": [
+          "On an approved connected system, download the current DISA GPO package and the SRG/STIG tools (SCC and STIG Viewer) from DISA's public site. Note each file's version and the quarterly release it belongs to.",
+          "Record a SHA-256 hash for every file on the connected side, then transfer the set with the approved removable-media procedure. No live link to the lab is created for convenience.",
+          "In the lab, recalculate and compare every hash before opening anything. A mismatch stops the work, exactly as it would in the PKI signing ceremony.",
+          "Install SCC and STIG Viewer on an administrative host and stage the GPO package where the import lesson can reach it. Record tool versions; scan results are only comparable when the benchmark and tool versions are known."
+        ],
+        "command": "Get-ChildItem C:\\Staging\\DISA | Select-Object Name, Length\nGet-FileHash -Algorithm SHA256 C:\\Staging\\DISA\\*",
+        "check": "Every transferred file's hash matches the value recorded on the connected side, and tool and package versions are written down.",
+        "evidence": "Keep the transfer record: file names, versions, both hash sets, media custody, and the date.",
+        "quizzes": [
+          {
+            "question": "Why hash the files on both sides of the transfer?",
+            "answers": [
+              "To prove the same files arrived unaltered",
+              "To compress them for the media",
+              "Because SCC refuses unhashed input"
+            ],
+            "correct": 0,
+            "explanation": "An independently recorded hash is how a human-controlled transfer proves integrity across the boundary."
+          },
+          {
+            "question": "Which release cadence do the DISA GPO package and STIGs follow?",
+            "answers": [
+              "Weekly",
+              "Quarterly",
+              "Only at new Windows releases"
+            ],
+            "correct": 1,
+            "explanation": "DISA refreshes STIG content on a quarterly cycle, which this course's standing rescan cadence follows."
+          },
+          {
+            "question": "A hash mismatch appears on the lab side. What now?",
+            "answers": [
+              "Open the file and inspect it manually",
+              "Stop, set the media aside, and repeat the approved transfer",
+              "Regenerate hashes until they match"
+            ],
+            "correct": 1,
+            "explanation": "A mismatch means the file is not the one that was reviewed. Unverified content never gets opened inside the boundary."
+          }
+        ],
+        "recap": [
+          "The GPO package, SCC, and STIG Viewer come from DISA's public site.",
+          "Hashes are recorded on both sides of the boundary.",
+          "Tool and package versions are part of the evidence."
+        ],
+        "next": "Lesson 3 measures the network before anything is hardened.",
+        "sources": [
+          "disa-gpo",
+          "disa-tools"
+        ]
+      },
+      {
+        "id": "baseline",
+        "title": "Capture the pre-hardening baseline",
+        "minutes": 25,
+        "summary": "Measure before you change. A scan of the freshly built controllers shows the honest starting point, teaches what the operating system already secures by default, and becomes the before picture every later scan is compared against.",
+        "objectives": [
+          "Run a SCAP baseline scan against both domain controllers.",
+          "Distinguish automated results from manual-review items.",
+          "Preserve raw results as evidence with hashes and versions."
+        ],
+        "steps": [
+          "On each domain controller, run SCC with the Windows Server 2025 STIG benchmark and the directory-related content staged for this course. Save each session's results with the host name and date.",
+          "Open the results and read, don't just count. Note which checks already pass: Windows Server 2025 ships with defaults such as required SMB signing and LDAP sealing on new deployments, so part of the STIG is green before you touch anything.",
+          "Separate the automated results from the manual checks. SCAP answers what a scanner can read; items marked for manual review go to STIG Viewer for a human answer in lesson 5.",
+          "Store the raw result files unmodified, with recorded hashes. The baseline is evidence; a cleaned-up copy is a summary, not the record."
+        ],
+        "command": "# Adapt paths to your SCC installation and session directory.\nGet-ChildItem C:\\Evidence\\baseline -Recurse -Include *.xml | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\baseline\\*",
+        "check": "Both controllers have a dated baseline result set, the already-compliant OS defaults are noted, and the raw files are hashed and stored.",
+        "evidence": "Keep the per-host result files, their hashes, the benchmark and tool versions, and a short note of what the OS defaults already covered.",
+        "quizzes": [
+          {
+            "question": "Why scan before applying any GPO?",
+            "answers": [
+              "The scanner requires an unhardened system",
+              "A dated before record makes every later change measurable and attributable",
+              "Scanning after GPOs is not possible"
+            ],
+            "correct": 1,
+            "explanation": "The baseline is the comparison point. Without it, the rescan proves only a state, not what your hardening changed."
+          },
+          {
+            "question": "Several checks pass before any hardening. What is the likely reason on Windows Server 2025?",
+            "answers": [
+              "The scanner is misconfigured",
+              "Earlier lessons secretly applied GPOs",
+              "The OS ships secure defaults, such as required SMB signing, that satisfy those checks"
+            ],
+            "correct": 2,
+            "explanation": "Windows Server 2025 raised several security defaults, so a fresh build already meets part of the benchmark."
+          },
+          {
+            "question": "What happens with checks the scanner marks for manual review?",
+            "answers": [
+              "They are ignored as not applicable",
+              "They count as failures forever",
+              "A person answers them in STIG Viewer with recorded rationale"
+            ],
+            "correct": 2,
+            "explanation": "SCAP automates what a scanner can read; manual checks need a reviewer's observed evidence to be defensible."
+          }
+        ],
+        "recap": [
+          "The baseline is measured, dated, and stored unmodified.",
+          "Secure-by-default items are recognized, not claimed as your work.",
+          "Manual checks are queued for human review."
+        ],
+        "next": "Lesson 4 applies the DISA policies the gap you just measured calls for.",
+        "sources": [
+          "disa-tools",
+          "ncp",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "apply",
+        "title": "Import and link the DISA GPOs",
+        "minutes": 35,
+        "summary": "Group Policy is how the STIG becomes configuration. Import the package into the central store, link by organizational unit, and keep the lab's deliberate deviations written down rather than silently skipped.",
+        "objectives": [
+          "Stage the package's templates in the Group Policy central store.",
+          "Import DISA's policies and link them by organizational unit.",
+          "Handle lab-specific deviations with documentation instead of silent edits."
+        ],
+        "steps": [
+          "Copy the package's ADMX and ADML templates into the domain's Group Policy central store (the PolicyDefinitions folder in SYSVOL) so every editor on any domain controller shows the same settings.",
+          "Create empty GPOs named for the package's policies and import the package's settings into them with the GPMC Import Settings wizard or Import-GPO. Keep DISA's names with a local prefix so the source release stays identifiable.",
+          "Link the domain-controller policies to the Domain Controllers OU and the member-server policies to the Servers OU for future systems. Review link order and inheritance; do not use Enforced as a shortcut around understanding precedence.",
+          "Walk the settings that need a decision in this network — anything referencing infrastructure the lab does not have. Record each deviation with its rationale instead of deleting the setting, then update policy and confirm application."
+        ],
+        "command": "Get-ChildItem \\\\sbd.test\\SYSVOL\\sbd.test\\Policies\\PolicyDefinitions | Measure-Object\nGet-GPO -All | Select-Object DisplayName, GpoStatus, ModificationTime\nGet-GPInheritance -Target 'OU=Domain Controllers,DC=sbd,DC=test'\ngpupdate /force\ngpresult /r /scope:computer",
+        "check": "The central store serves the package's templates, the imported GPOs are linked to the intended OUs, gpresult shows them applying, and every deviation has a written reason.",
+        "evidence": "Keep the import record: package release, GPO names and links, inheritance output, and the deviation list with rationale and owner.",
+        "quizzes": [
+          {
+            "question": "Why does the OU work from lesson 1 matter here?",
+            "answers": [
+              "GPOs link to OUs, so the structure decides which systems receive which hardening",
+              "OUs make the GPO files smaller",
+              "DISA requires an OU named DISA"
+            ],
+            "correct": 0,
+            "explanation": "Policy targeting is the OU structure's whole job: domain-controller policies to the Domain Controllers OU, server policies to the Servers OU."
+          },
+          {
+            "question": "Where do the ADMX templates go so every domain controller's editor agrees?",
+            "answers": [
+              "Each administrator's desktop",
+              "The Group Policy central store in SYSVOL",
+              "The offline root CA"
+            ],
+            "correct": 1,
+            "explanation": "The central store replicates with SYSVOL, so every Group Policy editor in the domain reads the same definitions."
+          },
+          {
+            "question": "A STIG setting assumes infrastructure the lab doesn't have. What is the right move?",
+            "answers": [
+              "Delete the setting from the GPO quietly",
+              "Mark the whole package not applicable",
+              "Record a deviation with rationale and keep it visible for the assessment"
+            ],
+            "correct": 2,
+            "explanation": "Documented deviations keep the hardening honest. A silent edit hides a decision an assessor will later need to see."
+          }
+        ],
+        "recap": [
+          "The central store keeps policy definitions consistent across controllers.",
+          "Links follow the OU design; precedence is understood, not forced.",
+          "Deviations are documented decisions, not deletions."
+        ],
+        "next": "Lesson 5 proves what the policies changed.",
+        "sources": [
+          "central-store",
+          "import-gpo",
+          "disa-gpo",
+          "gpresult"
+        ]
+      },
+      {
+        "id": "rescan",
+        "title": "Rescan, reconcile, and record",
+        "minutes": 35,
+        "summary": "The second scan is the verdict. Compare it with the baseline, let the automated results fill the checklists, and give every remaining open item a human answer.",
+        "objectives": [
+          "Re-scan with matched benchmark and tool versions and compare against the baseline.",
+          "Populate checklists from scan results and answer manual checks with evidence.",
+          "Classify every remaining open item explicitly."
+        ],
+        "steps": [
+          "Rerun SCC on both controllers with the same benchmark and tool versions as the baseline. Changing versions between scans makes the comparison meaningless.",
+          "Compare the two result sets per host: which checks moved from open to compliant, which stayed open, and whether anything regressed. Attribute each change to the policy that caused it.",
+          "Create the course checklists in STIG Viewer and bring in the scan results so automated passes are populated. Work the manual-review items one by one, recording the observed evidence for each answer.",
+          "Classify what remains open: a finding to fix now, a documented deviation from lesson 4, or a candidate for a Plan of Action and Milestones (POA&M) — the artifact the Body of Evidence course teaches you to write."
+        ],
+        "command": "# Compare result sets; adapt paths to your evidence layout.\nGet-ChildItem C:\\Evidence\\baseline, C:\\Evidence\\hardened -Recurse -Include *.xml | Select-Object Directory, Name\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\hardened\\*\ngpresult /h C:\\Evidence\\hardened\\SBD-DC01-gpresult.html",
+        "check": "Both hosts show the expected movement from the baseline, every change is attributable, and every open item is a finding, a deviation, or a POA&M candidate — never unexplained.",
+        "evidence": "Keep the before/after comparison, the populated checklist files, manual-check answers with their observed evidence, and the classification of remaining opens.",
+        "quizzes": [
+          {
+            "question": "Why keep the same benchmark and SCC versions for the rescan?",
+            "answers": [
+              "Newer versions cost more",
+              "Results are only comparable when the measuring stick didn't change",
+              "DISA forbids upgrading mid-quarter"
+            ],
+            "correct": 1,
+            "explanation": "A version change alters which checks exist and how they evaluate, so the before/after comparison would mix causes."
+          },
+          {
+            "question": "A check is still open and the lab intends to leave it that way, with a reason. What is that called?",
+            "answers": [
+              "A false positive",
+              "A passing result",
+              "A documented deviation — and possibly, later, a POA&M entry"
+            ],
+            "correct": 2,
+            "explanation": "An intentional, justified open item is a deviation; one that will be fixed on a plan becomes a POA&M entry in the authorization path."
+          },
+          {
+            "question": "What makes a checklist entry for a manual check defensible?",
+            "answers": [
+              "The reviewer's observed evidence and rationale are recorded with it",
+              "The box is checked",
+              "It was green in the automated scan"
+            ],
+            "correct": 0,
+            "explanation": "A manual answer without recorded evidence is an assertion. The observation is what an assessor can verify."
+          }
+        ],
+        "recap": [
+          "Same versions, honest comparison.",
+          "Automated results fill the checklist; humans answer the rest.",
+          "Open items end the lesson classified, never mysterious."
+        ],
+        "next": "The final lesson turns this into a standing practice with owners and triggers.",
+        "sources": [
+          "disa-tools",
+          "ncp"
+        ]
+      },
+      {
+        "id": "maintain",
+        "title": "Set the rescan cadence and exception record",
+        "minutes": 20,
+        "summary": "Hardening is a state you maintain, not a step you finish. Close the course by deciding who rescans, when, and which event forces an early look.",
+        "objectives": [
+          "Consolidate deviations into an owned, dated exception record.",
+          "Define the quarterly and event-driven rescan cadence.",
+          "Export and back up the applied policy state as evidence."
+        ],
+        "steps": [
+          "Consolidate the deviation records into one exception list: setting, reason, risk note, owner, and review date. This list travels into the authorization path as part of the Body of Evidence.",
+          "Set the standing cadence: review each quarterly DISA release for applicable updates, and rescan after any role addition or significant configuration change. The PKI course's closing delta scan is the first scheduled instance.",
+          "Export the Group Policy reports and back up the GPO set so the applied policy state is recoverable and reviewable without a live console.",
+          "Write the handoff note a future administrator or assessor would need: where the evidence lives, which versions produced it, and what is intentionally open."
+        ],
+        "command": "Get-GPOReport -All -ReportType Html -Path C:\\Evidence\\gpo-report.html\nBackup-GPO -All -Path C:\\Evidence\\gpo-backup\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\gpo-report.html",
+        "check": "The exception list has owners and review dates, the GPO set is exported and backed up, and the rescan triggers are written where the next course will meet them.",
+        "evidence": "Finish the hardening checklist: exception list, GPO backup location, report hashes, the cadence, and the named owner of the next review.",
+        "quizzes": [
+          {
+            "question": "What triggers a rescan before the next quarterly cycle?",
+            "answers": [
+              "Only a calendar reminder",
+              "A role addition or significant configuration change",
+              "Nothing — quarterly is the only trigger"
+            ],
+            "correct": 1,
+            "explanation": "Change is the other trigger. The PKI course ends with exactly such a delta scan."
+          },
+          {
+            "question": "Why back up the GPO set as part of the evidence?",
+            "answers": [
+              "It makes gpupdate run faster",
+              "DISA requires backups inside SYSVOL",
+              "The applied policy state becomes recoverable and reviewable, independent of a live console"
+            ],
+            "correct": 2,
+            "explanation": "A backup plus reports lets anyone — including a future you — verify or restore the applied state without trusting memory."
+          },
+          {
+            "question": "Where does the exception list end up in the bigger arc?",
+            "answers": [
+              "It is deleted after the course",
+              "In the Body of Evidence the authorization path organizes and assesses",
+              "Inside the offline root CA"
+            ],
+            "correct": 1,
+            "explanation": "Deviations and POA&M candidates are authorization-package material. Course 2.2 picks this list up by name."
+          }
+        ],
+        "recap": [
+          "Exceptions have owners and review dates.",
+          "Rescans follow the DISA quarter and every meaningful change.",
+          "The applied GPO state is exported, backed up, and hashed."
+        ],
+        "next": "That completes hardening the baseline. Course 1.4 builds the two-tier PKI on this hardened base — and ends with this course's first delta scan.",
+        "sources": [
+          "disa-gpo",
+          "ncp"
+        ]
+      }
+    ]
   }
 ]

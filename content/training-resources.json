@@ -106,5 +106,14 @@
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
+  },
+  {
+    "id": "harden-guide",
+    "title": "Harden the baseline · configuration guide",
+    "url": "https://securebydesigninc.com/training/harden-baseline",
+    "description": "OU design, DISA GPOs, and STIG/SCAP verification · 6 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
   }
 ]

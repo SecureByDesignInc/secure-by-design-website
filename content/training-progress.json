@@ -166,5 +166,41 @@
     "title": "12 · Monitor and maintain authorization",
     "href": "/training/rmf/index.html#catalog/12",
     "group": "Network authorization"
+  },
+  {
+    "id": "training:harden-baseline:ou-design",
+    "title": "Design and build the OU structure",
+    "href": "/training/harden-baseline#ou-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:staging",
+    "title": "Stage the tooling across the air gap",
+    "href": "/training/harden-baseline#staging",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:baseline",
+    "title": "Capture the pre-hardening baseline",
+    "href": "/training/harden-baseline#baseline",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:apply",
+    "title": "Import and link the DISA GPOs",
+    "href": "/training/harden-baseline#apply",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:rescan",
+    "title": "Rescan, reconcile, and record",
+    "href": "/training/harden-baseline#rescan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:maintain",
+    "title": "Set the rescan cadence and exception record",
+    "href": "/training/harden-baseline#maintain",
+    "group": "Network build"
   }
 ]

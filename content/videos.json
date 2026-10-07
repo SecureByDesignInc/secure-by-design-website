@@ -406,7 +406,7 @@
       "id": "two-tier-pki",
       "afterEpisode": "dc01-dc02",
       "categoryId": "network-build",
-      "categoryOrder": 3,
+      "categoryOrder": 4,
       "kind": "configuration",
       "moduleCount": 6,
       "lessonCount": 6,
@@ -444,7 +444,7 @@
         "updated": "5 October 2026",
         "checklistPage": "/training/two-tier-pki/checklist"
       },
-      "number": "1.3",
+      "number": "1.4",
       "title": "Configure a Root CA & issuing CA",
       "subtitle": "Offline root + subordinate CA / Two-tier PKI",
       "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
@@ -468,6 +468,74 @@
         "Design the CA hierarchy and its publication dependencies.",
         "Configure the offline root and sign an issuing CA request through controlled media transfer.",
         "Publish trust data and prove certificate enrollment and revocation."
+      ]
+    },
+    {
+      "id": "harden-baseline",
+      "afterEpisode": "dc01-dc02",
+      "categoryId": "network-build",
+      "categoryOrder": 3,
+      "kind": "configuration",
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "estimatedHours": 2.5,
+      "stages": [
+        {
+          "title": "Design and build the OU structure",
+          "detail": "Organizational units exist for delegation and Group Policy targeting, not to mirror an org chart. Build the structure the hardening policies will hang on before importing any of them."
+        },
+        {
+          "title": "Stage the tooling across the air gap",
+          "detail": "The hardening content is downloaded artifacts: the DISA GPO package, the SCAP Compliance Checker (SCC), and STIG Viewer. They cross the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
+        },
+        {
+          "title": "Capture the pre-hardening baseline",
+          "detail": "Measure before you change. A scan of the freshly built controllers shows the honest starting point, teaches what the operating system already secures by default, and becomes the before picture every later scan is compared against."
+        },
+        {
+          "title": "Import and link the DISA GPOs",
+          "detail": "Group Policy is how the STIG becomes configuration. Import the package into the central store, link by organizational unit, and keep the lab's deliberate deviations written down rather than silently skipped."
+        },
+        {
+          "title": "Rescan, reconcile, and record",
+          "detail": "The second scan is the verdict. Compare it with the baseline, let the automated results fill the checklists, and give every remaining open item a human answer."
+        },
+        {
+          "title": "Set the rescan cadence and exception record",
+          "detail": "Hardening is a state you maintain, not a step you finish. Close the course by deciding who rescans, when, and which event forces an early look."
+        }
+      ],
+      "training": {
+        "guide": "/training/harden-baseline",
+        "checklist": "/training/harden-baseline/configuration-checklist.md",
+        "materialsEdition": "1.0",
+        "updated": "7 October 2026",
+        "checklistPage": "/training/harden-baseline/checklist"
+      },
+      "number": "1.3",
+      "title": "Harden the baseline",
+      "subtitle": "OU design, DISA GPOs & STIG/SCAP verification",
+      "description": "Design the organizational unit structure, apply the DISA STIG Group Policy package to the verified network core, and prove the result with before-and-after SCAP scans, reconciled checklists, and a documented exception record.",
+      "tags": [
+        "Windows Server 2025",
+        "DISA STIG",
+        "Group Policy",
+        "SCAP",
+        "Organizational units"
+      ],
+      "systems": [
+        "SBD-DC01",
+        "SBD-DC02"
+      ],
+      "artLabels": [
+        "OU structure + redirects",
+        "DISA GPOs by OU",
+        "Scan → reconcile → record"
+      ],
+      "outcomes": [
+        "Design OUs for delegation and policy targeting, and redirect the default containers.",
+        "Import the DISA GPO package and link STIG policies by organizational unit.",
+        "Verify hardening with baseline and rescan SCAP results, reconciled checklists, and documented exceptions."
       ]
     }
   ],
