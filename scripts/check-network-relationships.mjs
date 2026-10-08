@@ -31,7 +31,7 @@ for(const [scenario,s] of scenarios.entries())for(const [step,t] of s.steps.entr
  if(t.manual)assert.equal(m.edges[0].kind,'manual');
  if(t.unverified)assert.equal(m.edges[0].kind,'pending');
 }
-assert.equal(validate({type:'flow',scenario:0,step:0}).edges[0].kind,'pending','Proposed DHCP relay remains blocked');
+assert.equal(validate({type:'flow',scenario:0,step:0}).edges[0].kind,'traffic','The DHCP relay (F04) has service motion');
 assert.equal(validate({type:'flow',scenario:0,step:1}).edges[0].kind,'traffic','Permitted DNS has service motion');
 assert.equal(validate({type:'flow',scenario:0,step:2}).edges[0].kind,'traffic','Permitted Kerberos has service motion');
 assert.equal(validate({type:'flow',scenario:0,step:3}).edges[0].kind,'traffic','The settled directory profile (F03) has service motion');

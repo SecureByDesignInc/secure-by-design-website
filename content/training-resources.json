@@ -120,7 +120,7 @@
     "id": "connect-guide",
     "title": "Connect and segment the network · configuration guide",
     "url": "https://securebydesigninc.com/training/connect-segment",
-    "description": "Core routing, default-deny ACLs, and the internal time service · 6 lessons",
+    "description": "Core routing, default-deny ACLs, and the internal time service · 7 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -192,7 +192,7 @@
     "id": "dns-configuration-pdf",
     "title": "Configure DNS · Workbook PDF",
     "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
-    "description": "14 pages · edition 1.0",
+    "description": "14 pages · edition 1.1",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -219,7 +219,7 @@
     "id": "harden-baseline-pdf",
     "title": "Harden the baseline · Workbook PDF",
     "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
-    "description": "16 pages · edition 1.0",
+    "description": "16 pages · edition 1.1",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -255,7 +255,7 @@
     "id": "two-tier-pki-pdf",
     "title": "Configure a Root CA & issuing CA · Workbook PDF",
     "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
-    "description": "16 pages · edition 1.0",
+    "description": "16 pages · edition 1.1",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -282,7 +282,7 @@
     "id": "connect-segment-pdf",
     "title": "Connect and segment the network · Workbook PDF",
     "url": "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
-    "description": "18 pages · edition 1.1",
+    "description": "18 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -318,7 +318,7 @@
     "id": "pki-services-pdf",
     "title": "Finish the PKI services · Workbook PDF",
     "url": "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
-    "description": "14 pages · edition 1.0",
+    "description": "14 pages · edition 1.1",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -354,7 +354,7 @@
     "id": "tiered-admin-pdf",
     "title": "Addressing and tiered administration · Workbook PDF",
     "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
-    "description": "16 pages · edition 1.1",
+    "description": "16 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -390,7 +390,7 @@
     "id": "logging-pipeline-pdf",
     "title": "See everything: the logging pipeline · Workbook PDF",
     "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
-    "description": "16 pages · edition 1.1",
+    "description": "16 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -426,7 +426,7 @@
     "id": "workstation-fleet-pdf",
     "title": "Bring in the fleet · Workbook PDF",
     "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
-    "description": "18 pages · edition 1.1",
+    "description": "18 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -462,7 +462,7 @@
     "id": "patch-protect-pdf",
     "title": "Patch, protect, and watch for weakness · Workbook PDF",
     "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
-    "description": "16 pages · edition 1.1",
+    "description": "16 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -498,7 +498,7 @@
     "id": "business-services-pdf",
     "title": "Stand up the business services · Workbook PDF",
     "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.pdf",
-    "description": "14 pages · edition 1.0",
+    "description": "14 pages · edition 1.1",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -534,7 +534,7 @@
     "id": "prove-recovery-pdf",
     "title": "Prove you can recover · Workbook PDF",
     "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
-    "description": "16 pages · edition 1.1",
+    "description": "16 pages · edition 1.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"

@@ -48,6 +48,8 @@ export type TrainingCourse = {
   subtitle: string;
   description: string;
   tags: string[];
+  /** Platforms the course configures, shown in the course-page kicker (for example "Windows Server 2025 · Linux"). */
+  platform?: string;
   systems: string[];
   moduleCount: number;
   lessonCount: number;
