@@ -1,0 +1,23 @@
+name: Audit verification
+on:
+  push:
+    branches: [audit/verify]
+    paths-ignore: ['audit-results/**']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm i --prefix .github/audit/verify playwright@1.55.0 > /dev/null 2>&1
+          .github/audit/verify/node_modules/.bin/playwright install --with-deps chromium > /dev/null 2>&1
+      - continue-on-error: true
+        run: node .github/audit/verify/verify.mjs
+      - run: |
+          git config user.name "Secure By Design"; git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          git add audit-results/verify; git commit -qm "Verification results" || true; git push origin HEAD:audit/verify
