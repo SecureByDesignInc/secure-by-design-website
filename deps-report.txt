@@ -1,0 +1,5 @@
+Production advisories before: {"info":0,"low":0,"moderate":1,"high":2,"critical":0}
+After: {"info":0,"low":0,"moderate":0,"high":1,"critical":0}
+Versions: react 19.2.8, react-dom 19.2.8, react-server-dom-webpack 19.2.8
+Remaining:
+high braces GHSA-vfj7-8cjw-p6xm (<=3.0.3 → <0.0.0)
