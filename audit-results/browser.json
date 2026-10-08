@@ -8,26 +8,26 @@
  {
   "page": "/",
   "name": "No errors at 1440px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/",
   "name": "No errors at 390px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/training",
   "name": "Tiles shown before \"Show more\"",
   "ok": true,
-  "detail": "12: Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover"
+  "detail": "15: Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover | Risk Management Framework | Body of Evidence | Authorization to Operate"
  },
  {
   "page": "/training",
   "name": "Network Authorization tiles visible without clicking \"Show more\"",
-  "ok": false,
-  "detail": "RMF 2.1–2.3 appear only after Show more materials"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/training",
@@ -39,7 +39,7 @@
   "page": "/training",
   "name": "Headings",
   "ok": true,
-  "detail": "Choose your next course. | Build the Network | Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover"
+  "detail": "Choose your next course. | Build the Network | Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover | Network Authorization | Risk Management Framework | Body of Evidence | Authorization to Operate"
  },
  {
   "page": "/training",
@@ -50,32 +50,32 @@
  {
   "page": "/training",
   "name": "No errors at 1440px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/training",
   "name": "No errors at 390px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/training/connect-segment",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
+  "detail": "console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js"
  },
  {
   "page": "/training/workstation-fleet",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
+  "detail": "console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-DUTeVEX0.js"
  },
  {
   "page": "/training/rmf",
   "name": "RMF course edition shown",
   "ok": true,
-  "detail": "Edition 1.1"
+  "detail": "Edition 1.2"
  },
  {
   "page": "/training/rmf/index.html",
@@ -98,8 +98,8 @@
  {
   "page": "/my-progress",
   "name": "No errors at 1440px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/inside-the-network",
@@ -122,14 +122,14 @@
  {
   "page": "/inside-the-network",
   "name": "No errors at 1440px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/inside-the-network",
   "name": "No errors at 390px",
-  "ok": false,
-  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
+  "ok": true,
+  "detail": ""
  },
  {
   "page": "/inside-network-model/model.html#process=signin&step=2",

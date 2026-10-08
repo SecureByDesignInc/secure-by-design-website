@@ -1,49 +1,49 @@
 {
  "site": "https://securebydesigninc.com",
- "expected": "b8ddb31fb21b77e42526a8354d8d3164a205d80c",
- "startedAt": "2026-10-08T05:25:35.981Z",
+ "expected": "4a4499455fd7dfd6dd8b39962495b9a8c5dad975",
+ "startedAt": "2026-10-08T13:21:47.245Z",
  "checks": [
   {
    "area": "Hosting",
    "name": "apex serves the current main build",
    "ok": true,
-   "detail": "https://securebydesigninc.com → 200 commit b8ddb31fb21b77e42526a8354d8d3164a205d80c (expected b8ddb31fb21b77e42526a8354d8d3164a205d80c)"
+   "detail": "https://securebydesigninc.com → 200 commit 4a4499455fd7dfd6dd8b39962495b9a8c5dad975 (expected 4a4499455fd7dfd6dd8b39962495b9a8c5dad975)"
   },
   {
    "area": "Hosting",
    "name": "www serves the current main build",
    "ok": true,
-   "detail": "https://www.securebydesigninc.com → 200 commit b8ddb31fb21b77e42526a8354d8d3164a205d80c (expected b8ddb31fb21b77e42526a8354d8d3164a205d80c)"
+   "detail": "https://www.securebydesigninc.com → 200 commit 4a4499455fd7dfd6dd8b39962495b9a8c5dad975 (expected 4a4499455fd7dfd6dd8b39962495b9a8c5dad975)"
   },
   {
    "area": "Hosting",
    "name": "workers.dev serves the current main build",
    "ok": true,
-   "detail": "https://secure-by-design-website.securebydesign.workers.dev → 200 commit b8ddb31fb21b77e42526a8354d8d3164a205d80c (expected b8ddb31fb21b77e42526a8354d8d3164a205d80c)"
+   "detail": "https://secure-by-design-website.securebydesign.workers.dev → 200 commit 4a4499455fd7dfd6dd8b39962495b9a8c5dad975 (expected 4a4499455fd7dfd6dd8b39962495b9a8c5dad975)"
   },
   {
    "area": "Hosting",
    "name": "http:// redirects to https://",
-   "ok": false,
-   "detail": "200 → null"
+   "ok": true,
+   "detail": "301 → https://securebydesigninc.com/"
   },
   {
    "area": "Hosting",
    "name": "Every static file in public/ is live and identical to main",
    "ok": true,
-   "detail": "208/208 identical; 0 different; 0 missing"
+   "detail": "209/209 identical; 0 different; 0 missing"
   },
   {
    "area": "Pages",
    "name": "Every known page returns 200",
    "ok": false,
-   "detail": "/blog → 404; /blogs → 404; /rmf-series → 404; /rmf-series/artifacts → 404; /rmf-series/controls → 404; /rmf-series/phases-and-evidence → 404; /rmf-series/prepare → 404; /rmf-series/system → 404; /rmf-series/other-approaches → 404; /rmf-series/concepts/dns → 404; /sitemap.xml → 404"
+   "detail": "/blog → 404; /blogs → 404; /resources → 404; /rmf-series → 404; /rmf-series/artifacts → 404; /rmf-series/controls → 404; /rmf-series/phases-and-evidence → 404; /rmf-series/prepare → 404; /rmf-series/system → 404; /rmf-series/other-approaches → 404; /rmf-series/concepts/dns → 404"
   },
   {
    "area": "Pages",
    "name": "Every sitemap URL returns 200",
-   "ok": false,
-   "detail": "0 URLs; broken: none"
+   "ok": true,
+   "detail": "28 URLs; broken: none"
   },
   {
    "area": "Decommissioned",
@@ -72,56 +72,86 @@
   {
    "area": "Redirects",
    "name": "/career-explorer redirects to /careers",
+   "ok": false,
+   "detail": "404 → null"
+  },
+  {
+   "area": "Decommissioned",
+   "name": "/cyber-range returns not found",
    "ok": true,
-   "detail": "308 → https://securebydesigninc.com/careers"
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/cyber-range direct-URL status (informational)",
-   "ok": null,
-   "detail": "200"
+   "name": "/how-to returns not found",
+   "ok": true,
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/careers direct-URL status (informational)",
-   "ok": null,
-   "detail": "200"
+   "name": "/guides-and-labs returns not found",
+   "ok": true,
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/career-goals direct-URL status (informational)",
-   "ok": null,
-   "detail": "200"
+   "name": "/careers returns not found",
+   "ok": true,
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/how-to direct-URL status (informational)",
-   "ok": null,
-   "detail": "308 → /cyber-range"
+   "name": "/career-explorer returns not found",
+   "ok": true,
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/guides-and-labs direct-URL status (informational)",
-   "ok": null,
-   "detail": "308 → /cyber-range"
+   "name": "/career-explorer/roles returns not found",
+   "ok": true,
+   "detail": "404"
   },
   {
    "area": "Decommissioned",
-   "name": "/community-contributions direct-URL status (informational)",
-   "ok": null,
-   "detail": "302 → https://securebydesigninc.com/signin-with-chatgpt?return_to=%2Fcommunity-contributions"
+   "name": "/career-goals returns not found",
+   "ok": true,
+   "detail": "404"
+  },
+  {
+   "area": "Decommissioned",
+   "name": "/resources returns not found",
+   "ok": true,
+   "detail": "404"
+  },
+  {
+   "area": "Decommissioned",
+   "name": "/resource-options returns not found",
+   "ok": true,
+   "detail": "404"
+  },
+  {
+   "area": "Security",
+   "name": "Forged oai-* identity headers cannot open owner records",
+   "ok": true,
+   "detail": "API 403, page 302"
+  },
+  {
+   "area": "Security",
+   "name": "HSTS header on pages",
+   "ok": true,
+   "detail": "max-age=31536000"
   },
   {
    "area": "Pages",
    "name": "No broken internal links on crawled pages",
    "ok": true,
-   "detail": "176 links checked; none broken"
+   "detail": "98 links checked; none broken"
   },
   {
    "area": "Decommissioned",
    "name": "No page links to Cyber Range or Community/career pages",
-   "ok": false,
-   "detail": "/career-goals from /resources, /career-goals, /careers; /careers from /resources, /career-goals, /careers, /career-explorer/roles; /career-explorer/explorer.css from /careers; /career-explorer/roles from /careers, /career-explorer/roles, /career-explorer/roles/321, /career-explorer/roles/311; /career-explorer/roles/321 from /career-explorer/roles, /career-explorer/roles/321; /career-explorer/roles/311 from /career-explorer/roles, /career-explorer/roles/311; /career-explorer/roles/312 from /career-explorer/roles, /career-explorer/roles/312; /career-explorer/roles/111 from /career-explorer/roles"
+   "ok": true,
+   "detail": "none"
   },
   {
    "area": "Homepage",
@@ -175,7 +205,7 @@
    "area": "Training Library",
    "name": "Tiles in the first page of the catalog (server HTML)",
    "ok": null,
-   "detail": "12 tiles before \"Show more\"; catalog has 15 entries"
+   "detail": "15 tiles before \"Show more\"; catalog has 15 entries"
   },
   {
    "area": "Courses",
@@ -292,10 +322,52 @@
    "detail": ""
   },
   {
-   "area": "My Account",
-   "name": "Guided tier text (informational)",
-   "ok": null,
-   "detail": "Guided is monthly. All prices are in USD. Available now Community Build a daily learning habit. $ 0 No payment details required. Current learning paths and courses Existing downloads and references Streaks, XP, quests and achievements in the app Progress sync with an optional account Continue with Community Coming soon · planned benefits Builder Turn lessons into projects. $ 20 / month $20 billed monthl"
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “Recommended”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “founding pricing for the first 100 members”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “Build a portfolio employers can see.”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “$267 per quarter”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “The Guided portfolio track”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “Resume and portfolio review”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "My Account shows “1:1 session”",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Membership (Scenario A)",
+   "name": "Paid tiers still say coming soon",
+   "ok": true,
+   "detail": ""
   },
   {
    "area": "App labels",
@@ -342,20 +414,32 @@
   {
    "area": "Training recommendations (Oct 6)",
    "name": "Sample domain standardized on sbd.test in the model",
-   "ok": false,
-   "detail": "SecureByDesign.internal still in app.js, packets.js"
+   "ok": true,
+   "detail": "ok"
   },
   {
    "area": "Training recommendations (Oct 6)",
-   "name": "“What Is Active Directory?” uses sbd.test as the internal domain",
+   "name": "DC01/DC02 guide has the ports foundation, pktmon step, and model links",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Training recommendations (Oct 6)",
+   "name": "Course lessons link to model steps (1.5 first lesson)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "area": "Training recommendations (Oct 6)",
+   "name": "RMF module 08 uses the attack drill",
    "ok": true,
    "detail": ""
   },
   {
    "area": "Training recommendations (Oct 6)",
    "name": "DC01/DC02 workbook new edition (ports box, pktmon step)",
-   "ok": false,
-   "detail": "\"edition\": \"Materials edition 0.3\""
+   "ok": true,
+   "detail": "\"edition\": \"Materials edition 0.4\""
   }
  ],
  "routes": [
@@ -409,9 +493,9 @@
   },
   {
    "path": "/resources",
-   "status": 200,
-   "final": "https://securebydesigninc.com/career-goals",
-   "title": "Career Goals &amp; Support | Secure By Design"
+   "status": 404,
+   "final": "https://securebydesigninc.com/resources",
+   "title": "Secure By Design — Cybersecurity &amp; System Administration"
   },
   {
    "path": "/rmf-series",
@@ -481,9 +565,9 @@
   },
   {
    "path": "/sitemap.xml",
-   "status": 404,
+   "status": 200,
    "final": "https://securebydesigninc.com/sitemap.xml",
-   "title": "Secure By Design — Cybersecurity &amp; System Administration"
+   "title": ""
   },
   {
    "path": "/robots.txt",
@@ -625,8 +709,8 @@
   }
  ],
  "files": {
-  "total": 208,
-  "identical": 208,
+  "total": 209,
+  "identical": 209,
   "different": [],
   "missing": []
  },
@@ -953,13 +1037,42 @@
   }
  ],
  "links": {
-  "checked": 176,
+  "checked": 98,
   "broken": []
  },
  "sitemap": {
-  "count": 0,
+  "count": 28,
   "broken": [],
-  "locs": []
+  "locs": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/training/two-tier-pki",
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/connect-segment",
+   "https://securebydesigninc.com/training/pki-services",
+   "https://securebydesigninc.com/training/tiered-admin",
+   "https://securebydesigninc.com/training/logging-pipeline",
+   "https://securebydesigninc.com/training/workstation-fleet",
+   "https://securebydesigninc.com/training/patch-protect",
+   "https://securebydesigninc.com/training/business-services",
+   "https://securebydesigninc.com/training/prove-recovery",
+   "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "https://securebydesigninc.com/training/connect-segment/checklist",
+   "https://securebydesigninc.com/training/pki-services/checklist",
+   "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "https://securebydesigninc.com/training/patch-protect/checklist",
+   "https://securebydesigninc.com/training/business-services/checklist",
+   "https://securebydesigninc.com/training/prove-recovery/checklist"
+  ]
  },
- "finishedAt": "2026-10-08T05:25:49.809Z"
+ "finishedAt": "2026-10-08T13:22:04.699Z"
 }

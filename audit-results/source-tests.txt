@@ -26,7 +26,7 @@ ok 3 - known mappings retain their correct proficiency and service scope
 ok 4 - each service and proficiency is deduplicated, with plain text only
 # Subtest: public role assets have no reference-site publicity or private provenance
 ok 5 - public role assets have no reference-site publicity or private provenance
-# (node:2282) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4479) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: stores a submission and outbox record; duplicate retries do not create duplicates
 ok 6 - stores a submission and outbox record; duplicate retries do not create duplicates
@@ -47,13 +47,13 @@ ok 12 - expired uncertain email attempts require review instead of risking dupli
 ok 13 - record and notification insertion is atomic on database failure
 # Subtest: missing database fails clearly and never reports a saved record
 ok 14 - missing database fails clearly and never reports a saved record
-# Subtest: built site preserves the existing homepage and gates private career routes
-ok 15 - built site preserves the existing homepage and gates private career routes
+# Subtest: built site keeps the homepage, takes Community offline, and ignores client-supplied identity headers
+ok 15 - built site keeps the homepage, takes Community offline, and ignores client-supplied identity headers
 # Subtest: owner email test uses the requested inbox and reports acceptance without claiming delivery
 ok 16 - owner email test uses the requested inbox and reports acceptance without claiming delivery
 # Subtest: built website routes public submissions into its database and keeps records private
 ok 17 - built website routes public submissions into its database and keeps records private
-# (node:2294) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4491) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: all submitted email flows share one membership and link only after account verification
 ok 18 - all submitted email flows share one membership and link only after account verification
@@ -67,10 +67,10 @@ ok 21 - rate-limited submissions never create memberships
 # community_contribution_unavailable
 # Subtest: membership storage failure rolls back contact submissions and their notifications
 ok 22 - membership storage failure rolls back contact submissions and their notifications
-# (node:2307) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4503) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
-# Subtest: combined Community page leads with participation and preserves explorer tools and legacy entry routes
-not ok 23 - combined Community page leads with participation and preserves explorer tools and legacy entry routes
+# Subtest: Community pages are offline; the combined page source keeps participation first and its explorer tools for relaunch
+ok 23 - Community pages are offline; the combined page source keeps participation first and its explorer tools for relaunch
 # Subtest: contributions save separately, notify only the owner, and deduplicate retries
 ok 24 - contributions save separately, notify only the owner, and deduplicate retries
 # Subtest: invalid links, consent, oversized input and foreign origins are rejected
@@ -81,8 +81,8 @@ ok 26 - owner-only review and status changes never publish or email the contribu
 ok 27 - notification failure preserves the record and retry expiration prevents duplicate delivery
 # Subtest: daily source limit and missing configuration preserve usable records
 ok 28 - daily source limit and missing configuration preserve usable records
-# Subtest: built Community page retains all forms and private review routes reject unauthorized access
-ok 29 - built Community page retains all forms and private review routes reject unauthorized access
+# Subtest: Community source retains all forms; private review routes ignore client-supplied identity headers
+ok 29 - Community source retains all forms; private review routes ignore client-supplied identity headers
 # Subtest: every public page shares the homepage without page, query, or fragment data
 ok 30 - every public page shares the homepage without page, query, or fragment data
 # Subtest: private, unknown, external, and malformed destinations share only the homepage
@@ -103,23 +103,23 @@ ok 37 - mounted footer rejects duplicate in-flight clicks and re-enables control
 ok 38 - manual controls stay mounted during and after copying and support selecting the URL
 # Subtest: cleanup removes listeners and an old pending request cannot alter a remounted footer
 ok 39 - cleanup removes listeners and an old pending request cannot alter a remounted footer
-# (node:2326) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4522) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: the complete recognized progress catalog retains every original ID and its order
 ok 40 - the complete recognized progress catalog retains every original ID and its order
 # Subtest: the shared progress catalog imports only minimal article metadata rather than article prose
 ok 41 - the shared progress catalog imports only minimal article metadata rather than article prose
-# Subtest: dashboard filtering preserves stored objects while excluding unavailable journal counts and resume candidates
-ok 42 - dashboard filtering preserves stored objects while excluding unavailable journal counts and resume candidates
-# Subtest: rendered dashboard shows only active learning counts and resumes the next active record
-not ok 43 - rendered dashboard shows only active learning counts and resumes the next active record
+# Subtest: dashboard filtering preserves stored objects while excluding offline Journal and Cyber Range records
+ok 42 - dashboard filtering preserves stored objects while excluding offline Journal and Cyber Range records
+# Subtest: rendered dashboard counts only active training; offline Journal and Cyber Range records stay stored but hidden
+ok 43 - rendered dashboard counts only active training; offline Journal and Cyber Range records stay stored but hidden
 # Subtest: journal-only accounts get zero active counts and Training Library discovery without journal resume links
-not ok 44 - journal-only accounts get zero active counts and Training Library discovery without journal resume links
+ok 44 - journal-only accounts get zero active counts and Training Library discovery without journal resume links
 # Subtest: new configuration progress resumes its exact lesson and counts in Network build
-not ok 45 - new configuration progress resumes its exact lesson and counts in Network build
+ok 45 - new configuration progress resumes its exact lesson and counts in Network build
 # Subtest: backend still accepts all legacy journal IDs and reads preserve saved account records
 ok 46 - backend still accepts all legacy journal IDs and reads preserve saved account records
-# (node:2338) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4534) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: native sign-in issues only a hashed, time-limited bearer session
 ok 47 - native sign-in issues only a hashed, time-limited bearer session
@@ -137,7 +137,7 @@ ok 52 - password reset through the existing website revokes native sessions
 ok 53 - native and browser sign-ins share the same brute-force limit
 # Subtest: native email enrollment is disabled by default and only uses verified bearer identity
 ok 54 - native email enrollment is disabled by default and only uses verified bearer identity
-# (node:2350) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4547) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: activity union is idempotent and isolated; browser credentials cannot write
 ok 55 - activity union is idempotent and isolated; browser credentials cannot write
@@ -145,7 +145,7 @@ ok 55 - activity union is idempotent and isolated; browser credentials cannot wr
 ok 56 - reject invalid dates, future rewards, spoofed ownership and partial invalid batches
 # Subtest: history pages are bounded and preserve every day without overlaps
 ok 57 - history pages are bounded and preserve every day without overlaps
-# (node:2362) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4559) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: native and browser share course progress and bookmarks, isolated by account
 ok 58 - native and browser share course progress and bookmarks, isolated by account
@@ -155,7 +155,7 @@ ok 59 - completion resists a delayed start update; removed bookmarks stay remove
 ok 60 - native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
 # Subtest: sync leaves archived reading and bookmark records intact
 ok 61 - sync leaves archived reading and bookmark records intact
-# (node:2374) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4571) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: anonymous readers see no account and cannot save
 ok 62 - anonymous readers see no account and cannot save
@@ -195,7 +195,7 @@ ok 73 - recovery changes the password, revokes older sessions and invalidates ot
 ok 74 - creating again cannot replace an existing password; recovery does not create unknown accounts
 # Subtest: password guesses are rate limited and password hashes never leave the API
 ok 75 - password guesses are rate limited and password hashes never leave the API
-# (node:2386) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:4584) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: signup stays pending until the recipient confirms; unsubscribe is separate from career records
 ok 76 - signup stays pending until the recipient confirms; unsubscribe is separate from career records
@@ -207,8 +207,8 @@ ok 78 - duplicates do not spam or reset active subscribers and per-address retry
 ok 79 - expired tokens and unverified attempts never become active, including when delivery fails
 # Subtest: per-source submission limits and CSV formula protection work
 ok 80 - per-source submission limits and CSV formula protection work
-# Subtest: the built site serves both choices, protects subscriber management, and never mutates on email-link GET
-ok 81 - the built site serves both choices, protects subscriber management, and never mutates on email-link GET
+# Subtest: the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET
+ok 81 - the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET
 # Subtest: training native sharing starts immediately and shares only the homepage
 ok 82 - training native sharing starts immediately and shares only the homepage
 # Subtest: cancelling native sharing does not overwrite the clipboard
@@ -247,9 +247,9 @@ ok 98 - every advertised training resource is present and remains on this site
 ok 99 - the first recording remains unpublished and the retired formats are removed
 # tests 99
 # suites 0
-# pass 95
-# fail 4
+# pass 99
+# fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 7197.11735
+# duration_ms 12994.476163
