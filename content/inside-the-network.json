@@ -247,40 +247,6 @@
       ]
     },
     {
-      "id": "nps",
-      "name": "SBD-NPS01",
-      "role": "Network access control (RADIUS)",
-      "segment": "VLAN 20 · Identity & services",
-      "address": "10.0.20.50",
-      "purpose": "Admit devices to the network and authenticate switch administrators.",
-      "services": [
-        {
-          "name": "RADIUS",
-          "port": "UDP 1812 authentication · 1813 accounting",
-          "note": "Only the access and core switches are RADIUS clients."
-        },
-        {
-          "name": "802.1X EAP-TLS",
-          "port": "Machine certificates",
-          "note": "No password-based EAP methods."
-        }
-      ],
-      "controls": [
-        {
-          "id": "IA-3",
-          "title": "Device Identification and Authentication"
-        },
-        {
-          "id": "AC-6",
-          "title": "Least Privilege"
-        },
-        {
-          "id": "AU-12",
-          "title": "Audit Record Generation"
-        }
-      ]
-    },
-    {
       "id": "subca",
       "name": "SBD-SUBCA01",
       "role": "Issuing certificate authority",
@@ -469,7 +435,7 @@
       "role": "Splunk SIEM",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.10",
-      "purpose": "Single server instance; no cluster or standby. Index and investigate the security events that are actually collected.",
+      "purpose": "Linux, domain-joined. Single server instance, sized for a small network; no cluster or standby. Index and investigate the security events that are actually collected.",
       "services": [
         {
           "name": "Splunk ingestion",
@@ -494,7 +460,7 @@
       "role": "Tenable / Nessus",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.20",
-      "purpose": "Single Tenable/Nessus server instance; no cluster or standby. Assess authorized targets for known vulnerabilities.",
+      "purpose": "Linux, domain-joined. Single Tenable/Nessus server instance, sized for a small network; no cluster or standby. Assess authorized targets for known vulnerabilities.",
       "services": [
         {
           "name": "Scanning / agents",
@@ -519,7 +485,7 @@
       "role": "Trellix ePO + DLP",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.30",
-      "purpose": "Single Trellix ePO/DLP server instance; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
+      "purpose": "Single Trellix ePO/DLP server instance, sized for a small network; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
       "services": [
         {
           "name": "Agent management / policy",
@@ -564,40 +530,6 @@
         {
           "id": "AU-11",
           "title": "Audit Record Retention"
-        }
-      ]
-    },
-    {
-      "id": "sensor",
-      "name": "SBD-SENSOR01",
-      "role": "Network sensor (Zeek / Suricata)",
-      "segment": "VLAN 50 · Security & monitoring",
-      "address": "10.0.50.50",
-      "purpose": "Watch the traffic between VLANs for what host agents miss.",
-      "services": [
-        {
-          "name": "Capture interface",
-          "port": "No address",
-          "note": "Receives a SPAN copy of the core’s routed interfaces; never transmits."
-        },
-        {
-          "name": "Alert forwarding",
-          "port": "TCP 9997 with TLS",
-          "note": "Detections and flow records to Splunk (F20)."
-        }
-      ],
-      "controls": [
-        {
-          "id": "SI-4",
-          "title": "System Monitoring"
-        },
-        {
-          "id": "SI-4(2)",
-          "title": "Automated Tools and Mechanisms for Real-time Analysis"
-        },
-        {
-          "id": "SI-4(4)",
-          "title": "Inbound and Outbound Communications Traffic"
         }
       ]
     },
@@ -693,35 +625,6 @@
         {
           "id": "AU-12",
           "title": "Audit Record Generation"
-        }
-      ]
-    },
-    {
-      "id": "jump3",
-      "name": "SBD-ADMIN-AUD01",
-      "role": "Audit custody only",
-      "segment": "VLAN 60 · Tiered administration",
-      "address": "10.0.60.40",
-      "purpose": "Give the audit custodian a seat no server operator can use.",
-      "services": [
-        {
-          "name": "Remote management",
-          "port": "SBD-AUDIT01 retention only",
-          "note": "Server operators cannot sign in here."
-        }
-      ],
-      "controls": [
-        {
-          "id": "AC-5",
-          "title": "Separation of Duties"
-        },
-        {
-          "id": "AU-9(4)",
-          "title": "Access by Subset of Privileged Users"
-        },
-        {
-          "id": "IA-2(1)",
-          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
         }
       ]
     },
@@ -920,8 +823,7 @@
         "SBD-DHCP01",
         "SBD-SYSLOG01",
         "SBD-WSUS01",
-        "SBD-TIME01",
-        "SBD-NPS01"
+        "SBD-TIME01"
       ],
       "controls": [
         {
@@ -1013,8 +915,7 @@
         "SBD-SPLUNK01",
         "SBD-NESSUS01",
         "SBD-EPO01",
-        "SBD-AUDIT01",
-        "SBD-SENSOR01"
+        "SBD-AUDIT01"
       ],
       "controls": [
         {
@@ -1051,12 +952,11 @@
       "number": 60,
       "name": "Tiered administration",
       "subnet": "10.0.60.0/24",
-      "boundary": "Separate Tier 0, server, endpoint, and audit-custody administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
+      "boundary": "Separate identity/PKI, server, and endpoint administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
       "systems": [
         "AdminJumpBox01",
         "SBD-ADMIN-SRV01",
-        "SBD-ADMIN-PC01",
-        "SBD-ADMIN-AUD01"
+        "SBD-ADMIN-PC01"
       ],
       "controls": [
         {
@@ -1145,10 +1045,6 @@
         {
           "id": "SC-7",
           "title": "Boundary Protection"
-        },
-        {
-          "id": "IA-3",
-          "title": "Device Identification and Authentication"
         },
         {
           "id": "IA-2(2)",
@@ -1632,5 +1528,5 @@
   "offline": [
     "SBD-ROOTCA01"
   ],
-  "controlCount": 59
+  "controlCount": 58
 }

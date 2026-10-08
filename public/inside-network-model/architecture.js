@@ -60,29 +60,15 @@ Object.assign(additionalControls,{
 });
 facilities.find(f=>f.id==='core').items=['Default deny between VLANs; explicit source, destination, service, purpose, and owner for exceptions.','Host firewalls also enforce isolation within VLANs 40, 50, 60, and 80.','VLAN 80 DHCP relay is a proposed core function; verify relay and scope settings.','Test allowed sessions and blocked lateral movement; back up approved rules.'];
 facilities.find(f=>f.id==='backup').items=['Test restoration of AD/DNS, PKI, files, SQL, and network configuration.','Splunk, Tenable/Nessus, and Trellix ePO/DLP each remain one server: no cluster or standby.','Protect each platform’s configuration, required data, keys, and recovery material; validate vendor-supported recovery.','Define downtime, recovery point and recovery time targets; rehearse loss of each platform.'];
-// Architecture review, October 2026: device admission, network monitoring, a dedicated audit-custody seat,
-// Tier 0 scope, and the baseline controls the design already supports.
-vlans.find(v=>v.id==='v20').ids.push('nps');
-vlans.find(v=>v.id==='v20').functions.push('802.1X network access (RADIUS) and device-admin AAA');
-vlans.find(v=>v.id==='v50').ids.push('sensor');
-vlans.find(v=>v.id==='v50').functions.push('Network traffic monitoring from a core SPAN');
-vlans.find(v=>v.id==='v50').controls.push('SI-4(4)');
-vlans.find(v=>v.id==='v60').ids.push('jump3');
-Object.assign(vlans.find(v=>v.id==='v60'),{boundary:'Separate Tier 0, server, endpoint, and audit-custody administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.'});
+// Architecture review, October 2026: Tier 0 scope and the baseline controls the design already supports.
+// Splunk and Nessus run on Linux and are domain-joined; no systems were added.
 vlans.find(v=>v.id==='v10').controls.push('SC-22','SC-23');
-vlans.find(v=>v.id==='v80').functions.push('802.1X port authentication; unknown devices go to quarantine VLAN 90');
-vlans.find(v=>v.id==='v80').controls.push('IA-3','IA-2(2)');
-Object.assign(addresses,{nps:'10.0.20.50',sensor:'10.0.50.50',jump3:'10.0.60.40'});
-addedSystems.push(
- {id:'nps',name:'SBD-NPS01',role:'Network access control (RADIUS)',controls:['IA-3','AC-6','AU-12'],known:'Windows NPS. Checks 802.1X EAP-TLS machine certificates for access ports and authenticates switch administrators. Unknown devices are placed in quarantine VLAN 90. Tier 0: managed only from AdminJumpBox01.',design:['Require machine certificates from the issuing CA; no password-based EAP.','Log every grant and denial to the collector.'],evidence:['Network policy export and RADIUS client list.','Admission tests: enrolled PC admitted, unknown laptop quarantined.']},
- {id:'sensor',name:'SBD-SENSOR01',role:'Network sensor (Zeek / Suricata)',controls:['SI-4','SI-4(2)','SI-4(4)'],known:'Linux network sensor. Its capture interface receives a SPAN copy of the core’s routed traffic and has no address; its management interface sends detections and flow records to Splunk.',design:['Capture interface listens only; it never transmits.','Content updates arrive on approved media.'],evidence:['SPAN configuration and capture statistics.','Detection tests visible in Splunk.']},
- {id:'jump3',name:'SBD-ADMIN-AUD01',role:'Audit custody only',controls:['AC-5','AU-9(4)','IA-2(1)'],known:'Dedicated seat for the audit custodian. The only host that may administer protected retention on SBD-AUDIT01; server operators cannot sign in to it.',design:['Separate custodian accounts with MFA.','Retention changes need independent approval.'],evidence:['Sign-in restrictions and account review.','Denied retention change from ADMIN-SRV01.']}
-);
+vlans.find(v=>v.id==='v50').controls.push('SI-4(4)');
+vlans.find(v=>v.id==='v80').controls.push('IA-2(2)');
 Object.assign(additionalControls,{
  'AU-2':['Event Logging','Identify the event types the system logs and why they support investigations.'],
  'AU-3':['Content of Audit Records','Record what happened, when and where, the source, the outcome, and who was involved.'],
  'AU-9(4)':['Access by Subset of Privileged Users','Limit management of audit logging to a defined subset of privileged users.'],
- 'IA-3':['Device Identification and Authentication','Identify and authenticate devices before they connect.'],
  'IA-2(2)':['Multi-factor Authentication to Non-privileged Accounts','Require multi-factor authentication for non-privileged accounts.'],
  'AC-6(5)':['Privileged Accounts','Restrict privileged accounts to defined personnel or roles.'],
  'SC-13':['Cryptographic Protection','Use the required types of cryptography for each protection need.'],
@@ -96,9 +82,9 @@ families.push(['PL','Planning']);
 {
  const core=facilities.find(f=>f.id==='core');
  core.controls.push('AC-6','AU-12');
- core.items.push('Management plane: switch management only on VLAN 100 from AdminJumpBox01, AAA through SBD-NPS01, switch syslog to SBD-SYSLOG01, and versioned configuration backups.','802.1X on access ports; quarantine VLAN 90 has no routes. A SPAN session feeds SBD-SENSOR01.');
+ core.items.push('Management plane: switch management only on VLAN 100 from AdminJumpBox01, named administrator accounts, switch syslog (including denies) to SBD-SYSLOG01, and versioned configuration backups.');
  const backup=facilities.find(f=>f.id==='backup');
- backup.items.push('Backup path: each server writes to a protected local backup volume; custodians carry DC, CA, and audit backups here under the media custody procedure. There is no network path to this facility.','Record the single-instance decision as a risk acceptance (PL-2) with backups as the mitigation; track gaps in the POA&M (CA-5).');
+ backup.items.push('Backup path: each server writes to a protected local backup volume; custodians carry DC, CA, and audit backups here under the media custody procedure. There is no network path to this facility.','Record the single-instance decision as a risk acceptance (PL-2): one server each suits the small network and modest resource needs. Backups are the mitigation; track gaps in the POA&M (CA-5).');
  backup.controls.push('CA-5','PL-2');
 }
-export function buildArchitectureNodes(existing){return [...existing,...addedSystems].map(n=>({...n,...(n.id==='jump'?{role:'Tier 0 administration only',known:'Dedicated Tier 0 administrative host for AD, DNS, PKI, and every system that can control them: NPS, the core switch, the hypervisor hosts, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. No member-server or endpoint administration.',design:['Use separate Tier 0 admin accounts and offline-compatible MFA.','Restrict targets to Tier 0 systems and scopes; root CA ceremonies remain local.'],evidence:['Privileged target allowlist and account reviews.','MFA, audit, and cross-tier denial tests.']}:{}),zone:vlans.find(v=>v.ids.includes(n.id))?.id||n.zone,address:addresses[n.id]||null}));}
+export function buildArchitectureNodes(existing){return [...existing,...addedSystems].map(n=>({...n,...(n.id==='jump'?{role:'Tier 0 administration only',known:'Dedicated Tier 0 administrative host for AD, DNS, PKI, and every system that can control them: the core switch, the hypervisor hosts, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. No member-server or endpoint administration.',design:['Use separate Tier 0 admin accounts and offline-compatible MFA.','Restrict targets to Tier 0 systems and scopes; root CA ceremonies remain local.'],evidence:['Privileged target allowlist and account reviews.','MFA, audit, and cross-tier denial tests.']}:{}),zone:vlans.find(v=>v.ids.includes(n.id))?.id||n.zone,address:addresses[n.id]||null}));}

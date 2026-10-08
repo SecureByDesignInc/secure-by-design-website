@@ -6,12 +6,12 @@ Control catalog: NIST SP 800-53 Rev. 5.
 
 ## Architecture
 
-Eight VLANs; 50 clients in 10.0.80.100–149 admitted by 802.1X (quarantine VLAN 90, no routes); switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
+Eight VLANs; 50 clients in 10.0.80.100–149; switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
 
 ## 1. Enforce network boundaries
 
 Owner role: Network administrator
-Controls: AC-4, SC-7, SC-7(5), IA-3
+Controls: AC-4, SC-7, SC-7(5)
 
 VLAN 80 isolates the client population. Routed boundaries deny unmatched sessions; host firewalls enforce local separation too.
 
@@ -19,14 +19,12 @@ VLAN 80 isolates the client population. Routed boundaries deny unmatched session
 - [ ] Configure the core DHCP relay for VLAN 80 and a reserved client pool of 10.0.80.100–149; confirm exclusions and lease options.
 - [ ] Permit only identified service dependencies. Resolve AD replication, enrollment, and vendor protocols before enabling their rules.
 - [ ] Review exceptions after changes and on a proposed quarterly cycle.
-- [ ] Admit devices with 802.1X: access ports require EAP-TLS with a machine certificate from the issuing CA, checked by SBD-NPS01. Unknown or failed devices land in quarantine VLAN 90, which has no routes.
 
 ### Acceptance checks
 
 - [ ] Approved client DNS and file access succeeds.
 - [ ] Client-to-SQL, client-to-management, and peer SMB/RDP fail.
 - [ ] Unspecified ports and sources remain denied; collect rule counters and denial logs.
-- [ ] An unenrolled laptop on a VLAN 80 port lands in quarantine VLAN 90 and reaches nothing.
 
 Evidence: Approved traffic matrix and rule exports; Allowed and denied connection results.
 Parameters: Suggested review cycle: quarterly and after change; approve the actual interval.
@@ -37,9 +35,9 @@ Assessment result: ____________________
 Owner role: Identity and platform owners
 Controls: AC-5, AC-6, IA-2(1), AU-12, AC-6(5)
 
-Four dedicated administration hosts use separate identities and target scopes. Tier 0 covers identity, PKI, and every system that can control them. No host has universal administrative reach.
+Three dedicated administration hosts use separate identities and target scopes. Tier 0 covers identity, PKI, and every system that can control them. No host has universal administrative reach.
 
-- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, NPS, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, ADMIN-PC01 handles clients, and ADMIN-AUD01 is the audit custodian’s seat.
+- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01 handles clients.
 - [ ] Require offline-compatible MFA and separate everyday and privileged accounts. Prohibit ordinary browsing, email, and general file use on administrative hosts.
 - [ ] Deny cross-tier sessions with host and routed controls. Within the server tier, separate scanner, endpoint-policy, SIEM, and audit-custodian permissions.
 - [ ] Manage unique local credentials, service-account scope, emergency access, session logs, and account removal.
@@ -127,20 +125,22 @@ Assessment result: ____________________
 ## 6. Keep trustworthy audit evidence
 
 Owner role: Security analyst and audit custodian
-Controls: AU-5, AU-6, AU-8, AU-9, AU-11, AU-12, SC-45, AU-2, AU-3, AU-9(4), SI-4(2)
+Controls: AU-5, AU-6, AU-8, AU-9, AU-11, AU-12, SC-45, AU-2, AU-3, AU-9(4), SI-4(2), SI-4(4)
 
 One Splunk server provides analysis. The separate audit repository retains protected evidence; it is not a second Splunk instance.
 
 - [ ] Use internal time: TIME01 supplies the domain time authority; domain members follow the domain hierarchy. Define a reference source, tolerance, and fallback without opening an external network path.
-- [ ] Define the logged event set (AU-2) and the fields each record must carry (AU-3). Forward Windows security events from every domain member with a source-initiated WEF subscription (F17), Linux events over syslog TLS (F07), and router denies; restrict senders.
-- [ ] Collector → Splunk over the forwarder with TLS (F10); collector → SBD-AUDIT01 over encrypted SMB with a write-only archival account (F11). The audit custodian administers protected retention only from SBD-ADMIN-AUD01; offline backups follow the recovery practice.
+- [ ] Define the logged event set (AU-2) and the fields each record must carry (AU-3). Forward Windows security events with a source-initiated WEF subscription (F17), events from the Linux servers over syslog TLS (F07), and the router’s deny log; restrict senders.
+- [ ] Collector → Splunk over the forwarder with TLS (F10); collector → SBD-AUDIT01 over encrypted SMB with a write-only archival account (F11). Only the audit custodian’s separate accounts administer protected retention (AU-9(4)); offline backups follow the recovery practice.
 - [ ] Alert on stopped sources, audit-policy changes, clock drift, full storage, and unauthorized deletion. Size local queues for a Splunk outage and test replay without silent loss.
+- [ ] Watch the traffic through the router’s deny log in Splunk: alert on repeated denied attempts and on denied traffic from unexpected VLANs (SI-4(4)).
 
 ### Acceptance checks
 
 - [ ] Generate an event and trace its timestamps through collection, search, and retention.
 - [ ] An ordinary platform administrator cannot delete retained audit evidence.
 - [ ] Stop Splunk in a test environment, verify queue alerts, restore it, and reconcile replayed events.
+- [ ] A test connection on an unregistered port appears as a router deny in Splunk and fires its alert.
 
 Evidence: Event coverage and retention policy; Alert tests, capacity calculations, and replay reconciliation.
 Parameters: Set retention, queue capacity, maximum clock drift, alert response, and review frequency.
@@ -181,7 +181,7 @@ Splunk, Tenable/Nessus, and Trellix ePO/DLP each have exactly one server instanc
 - [ ] During a Splunk outage retain and monitor local logs; during a Nessus outage track deferred scans; during an ePO/DLP outage verify installed agents retain their last policy and document lost central visibility.
 - [ ] Exercise malicious-media, ransomware, and privileged-account compromise scenarios; retain results and corrective actions.
 - [ ] Backup path: each server writes its backup (DC system state, CA database and keys, configurations, the audit archive) to a protected local backup volume. Tier 0 custodians carry DC and CA backups, and the audit custodian carries the archive, to the offline backup facility under the media custody procedure. No network path to the backup facility exists.
-- [ ] Record the single-instance decision for Splunk, Tenable/Nessus, and Trellix ePO/DLP as a risk acceptance in the system security plan (PL-2), with backups as the mitigation and any gaps tracked in the POA&M (CA-5).
+- [ ] Record the single-instance decision for Splunk, Tenable/Nessus, and Trellix ePO/DLP as a risk acceptance in the system security plan (PL-2): one server each suits the small network and the tools’ modest resource needs. Backups are the mitigation, and any gaps are tracked in the POA&M (CA-5).
 
 ### Acceptance checks
 
@@ -196,12 +196,12 @@ Assessment result: ____________________
 ## 9. Protect the network’s own management
 
 Owner role: Network administrator
-Controls: AC-6, CM-6, AU-12, SC-7, IA-3
+Controls: AC-6, CM-6, AU-12, SC-7
 
-The core switch is managed only on a separate management VLAN (VLAN 100, switch interfaces only), reachable from AdminJumpBox01. Device logins use central AAA through SBD-NPS01, and every change leaves a log entry and a versioned configuration.
+The core switch is managed only on a separate management VLAN (VLAN 100, switch interfaces only), reachable from AdminJumpBox01. Device logins use named accounts, and every change leaves a log entry and a versioned configuration.
 
 - [ ] Move switch management to VLAN 100 and bind SSH and HTTPS management to it; disable Telnet, HTTP, and unused services.
-- [ ] Authenticate device administrators with RADIUS through SBD-NPS01, keep one sealed local break-glass account, and log every session.
+- [ ] Give each device administrator a named account, keep one sealed break-glass account, and log every session.
 - [ ] Send switch syslog (including ACL denies) to SBD-SYSLOG01 and keep time from the internal hierarchy.
 - [ ] Back up the running configuration after every approved change; keep versions with hashes and compare them on a schedule.
 
@@ -215,32 +215,12 @@ Evidence: Management VLAN and access-list export; AAA and switch log samples; Co
 Parameters: Suggested configuration comparison: weekly and after every change.
 Assessment result: ____________________
 
-## 10. Watch the network itself
-
-Owner role: Security analyst
-Controls: SI-4, SI-4(2), SI-4(4)
-
-A SPAN session on the core copies inter-VLAN traffic to SBD-SENSOR01, whose monitoring interface has no address. The sensor (Zeek or Suricata) sends detections and flow records to Splunk.
-
-- [ ] Mirror the core’s routed interfaces to the sensor’s capture port; size the SPAN so it does not drop traffic at peak.
-- [ ] Load content through the approved media process like any other security content.
-- [ ] Alert on new devices, unexpected east-west sessions, traffic to quarantine VLAN 90, and repeated denied-path probing.
-
-### Acceptance checks
-
-- [ ] A test connection on an unregistered port appears as a sensor detection in Splunk.
-- [ ] The sensor’s capture interface answers no traffic.
-
-Evidence: SPAN configuration and capture statistics; Detection tests and alert routing.
-Parameters: Set capture retention, alert thresholds, and the content-update cadence.
-Assessment result: ____________________
-
 ## Privileged access
 
-- Tier 0 · identity, PKI, and what controls them: AdminJumpBox01; targets: SBD-DC01, SBD-DC02, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-NPS01, SBD-WSUS01, SBD-EPO01, SBD-NESSUS01, SBD-SPLUNK01. Identity: Tier 0 operators with separate task permissions. Includes the DC-facing administration of WSUS (DC update ring), ePO (DC agent policy), Nessus (DC scan credentials), and Splunk (DC monitoring), plus NPS, the core switch, and the hypervisor hosts and their console. Prohibited: Member-server and endpoint administration; remote access to offline root.
-- Member servers: SBD-ADMIN-SRV01; targets: SBD-DHCP01, SBD-SYSLOG01, SBD-WSUS01, SBD-TIME01, SBD-FS01, SBD-SQL01, SBD-APPS01, SBD-WEB01, SBD-SPLUNK01, SBD-NESSUS01, SBD-EPO01, SBD-MGMT01, SBD-REPO01, SBD-SENSOR01. Identity: Named role limited to assigned servers; separate security-tool operators with member-server and endpoint scope only. Prohibited: DC/CA/template/NPS administration, DC-facing scopes in WSUS, ePO, Nessus, and Splunk, client administration, and audit-retention changes.
+- Tier 0 · identity, PKI, and what controls them: AdminJumpBox01; targets: SBD-DC01, SBD-DC02, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-WSUS01, SBD-EPO01, SBD-NESSUS01, SBD-SPLUNK01. Identity: Tier 0 operators with separate task permissions. Includes the DC-facing administration of WSUS (DC update ring), ePO (DC agent policy), Nessus (DC scan credentials), and Splunk (DC monitoring), plus the core switch and the hypervisor hosts and their console. Prohibited: Member-server and endpoint administration; remote access to offline root.
+- Member servers: SBD-ADMIN-SRV01; targets: SBD-DHCP01, SBD-SYSLOG01, SBD-WSUS01, SBD-TIME01, SBD-FS01, SBD-SQL01, SBD-APPS01, SBD-WEB01, SBD-SPLUNK01, SBD-NESSUS01, SBD-EPO01, SBD-MGMT01, SBD-REPO01. Identity: Named role limited to assigned servers; separate security-tool operators with member-server and endpoint scope only. Prohibited: DC/CA/template administration, DC-facing scopes in WSUS, ePO, Nessus, and Splunk, client administration, and audit-retention changes.
 - User endpoints: SBD-ADMIN-PC01; targets: 50 Windows 11 PCs. Identity: Endpoint-only operator; scoped local credentials. Prohibited: Identity, PKI, member-server, and security-tool management.
-- Audit custody: SBD-ADMIN-AUD01; targets: SBD-AUDIT01. Identity: Audit custodian on a dedicated seat (SBD-ADMIN-AUD01); protected retention changes require independent approval. Prohibited: Server operators cannot sign in to this seat, use this role, or delete retained records.
+- Audit custody: SBD-ADMIN-SRV01; targets: SBD-AUDIT01. Identity: Separate audit custodian accounts and a separate session on SBD-ADMIN-SRV01; protected retention changes require independent approval. Prohibited: Ordinary server operators cannot use this role or delete retained records.
 
 ## Control verification record
 

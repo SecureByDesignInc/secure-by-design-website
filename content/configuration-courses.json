@@ -1559,7 +1559,7 @@
         "steps": [
           "Create management VLAN 100 (10.0.100.0/24) for network-device management only, and bind the router's SSH and HTTPS management to its address there, 10.0.100.1. Disable Telnet, plain HTTP, and every management service the platform enables by default that the design does not use.",
           "Permit management sessions to 10.0.100.1 only from AdminJumpBox01's planned address (10.0.60.10), which course 1.7 builds — until then, manage from the hypervisor console only. Add the row to the register: the router enforces Tier 0 boundaries, so its management is Tier 0.",
-          "Create one named administrator account plus a sealed break-glass account. Course 1.9 moves device logins to central AAA through SBD-NPS01, and course 1.8 sends the router's syslog, including its deny log, to the collector; write both as dated follow-ups in the register now.",
+          "Give each administrator a named account on the router and keep one sealed break-glass account; shared logins hide who changed what. Course 1.8 sends the router's syslog, including its deny log, to the collector; write that as a dated follow-up in the register now.",
           "Export the running configuration after every approved change, hash it, and keep every version. Compare the newest export with the running configuration on a schedule; a difference with no change record is a finding."
         ],
         "command": "# From a host outside VLAN 100 (expected: TcpTestSucceeded False):\nTest-NetConnection 10.0.100.1 -Port 22\n# Configuration versions with hashes:\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\connect-segment\\router-config-*.txt",
@@ -2024,7 +2024,7 @@
     "id": "tiered-admin",
     "prerequisites": [
       "Complete course 1.5: the routed network with its ACL register, and course 1.3's OU structure with the Admin OU in place.",
-      "Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the four administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30), and SBD-ADMIN-AUD01 (.40).",
+      "Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the three administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30).",
       "Decide the privileged accounts: separate admin identities per tier, never daily-driver accounts with admin rights."
     ],
     "labNote": "This course builds the control plane before the fleet exists: DHCP for the workstation VLAN, and a tiered administration model where privileged sessions only ever start from dedicated hosts. The model's rule is strict — the jump systems administer; they browse nothing, read no mail, and accept no inbound sessions from user space.",
@@ -2067,8 +2067,8 @@
           "Plan the VLAN 80 DHCP scope, options, and relay."
         ],
         "steps": [
-          "Define three tiers against what exists, using Microsoft's rule: anything that can control a Tier 0 system is Tier 0. Tier 0 is the identity and trust fabric (DCs, both CAs, PKI-MGMT01) plus what controls it — the hypervisor hosts and their console, the core router's management, NPS when course 1.9 adds it, and the DC-facing parts of the tools that patch, protect, scan, monitor, and back up the DCs. Tier 1 is the member servers; Tier 2 the user endpoints. Map each tier to its OU from course 1.3 and to the admin system that will manage it.",
-          "Write the credential rule per tier: a Tier 0 account signs in only on Tier 0 systems and AdminJumpBox01; Tier 1 admins work from SBD-ADMIN-SRV01; Tier 2 from SBD-ADMIN-PC01. The audit custodian gets a fourth seat, SBD-ADMIN-AUD01, that no server operator can use. Each administrator gets separate per-tier accounts — the daily account holds no admin rights anywhere.",
+          "Define three tiers against what exists, using Microsoft's rule: anything that can control a Tier 0 system is Tier 0. Tier 0 is the identity and trust fabric (DCs, both CAs, PKI-MGMT01) plus what controls it — the hypervisor hosts and their console, the core router's management, and the DC-facing parts of the tools that patch, protect, scan, monitor, and back up the DCs. Tier 1 is the member servers; Tier 2 the user endpoints. Map each tier to its OU from course 1.3 and to the admin system that will manage it.",
+          "Write the credential rule per tier: a Tier 0 account signs in only on Tier 0 systems and AdminJumpBox01; Tier 1 admins work from SBD-ADMIN-SRV01; Tier 2 from SBD-ADMIN-PC01. The audit custodian uses separate accounts and sessions on SBD-ADMIN-SRV01 that ordinary server operators cannot use. Each administrator gets separate per-tier accounts — the daily account holds no admin rights anywhere.",
           "Plan the DHCP design: scope 10.0.80.100–149 for the workstation VLAN, options for router 10.0.80.1, the two DCs as DNS, and the sbd.test domain; the core router relays VLAN 80 broadcasts to SBD-DHCP01; everything else stays static.",
           "Add the register rows this course needs: VLAN 60 to each tier's management ports, DHCP relay from the core to SBD-DHCP01, and explicit denies from VLAN 80 into VLAN 60 — user space never initiates toward the admin plane."
         ],
@@ -2195,20 +2195,20 @@
         "id": "admin-hosts",
         "title": "Build the administration systems",
         "minutes": 30,
-        "summary": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration, and one for the audit custodian — each in the Admin OU, each doing nothing else.",
+        "summary": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration — each in the Admin OU, each doing nothing else.",
         "objectives": [
-          "Build the four VLAN 60 systems into the Admin OU.",
+          "Build the three VLAN 60 systems into the Admin OU.",
           "Keep them single-purpose: hardened, minimal, no user-space services.",
           "Register and restrict their management paths."
         ],
         "steps": [
-          "Build AdminJumpBox01, SBD-ADMIN-SRV01, SBD-ADMIN-PC01, and SBD-ADMIN-AUD01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs, joined into an Admin OU sub-structure so course 1.3's hardening GPOs apply from first boot.",
+          "Build AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs, joined into an Admin OU sub-structure so course 1.3's hardening GPOs apply from first boot.",
           "Strip them to purpose: no browsing to anything but internal admin interfaces, no mail, no file shares hosted, and the management tools for exactly their tier — RSAT on the server seats, endpoint tooling on the PC seat.",
-          "Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986) from the specific admin host each tier allows, the router's management on VLAN 100 from AdminJumpBox01 only, and SBD-AUDIT01's retention administration from SBD-ADMIN-AUD01 only. Keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.",
+          "Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986, SSH 22 for the domain-joined Linux servers) from the specific admin host each tier allows, and the router's management on VLAN 100 from AdminJumpBox01 only. Keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.",
           "Require the admin hosts' own local firewalls to accept management inbound from nowhere — sessions originate here, they never terminate here."
         ],
         "command": "Get-ADComputer -SearchBase 'OU=Admin,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName\nTest-NetConnection SBD-DC01.sbd.test -Port 5985\ngpresult /r /scope:computer",
-        "check": "All four hosts sit in the Admin OU with the hardening GPOs applied, management ports answer from the correct admin host per tier, and nothing in user space can open a session toward VLAN 60.",
+        "check": "All three hosts sit in the Admin OU with the hardening GPOs applied, management ports answer from the correct admin host per tier, and nothing in user space can open a session toward VLAN 60.",
         "evidence": "Record each host's build sheet, OU placement, gpresult output, and the register rows for its permitted management paths.",
         "quizzes": [
           {
@@ -2381,20 +2381,20 @@
         "id": "scan",
         "title": "Delta scan and hand off",
         "minutes": 20,
-        "summary": "Five new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe.",
+        "summary": "Four new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe.",
         "objectives": [
-          "Baseline the five new hosts and rescan the changed ones.",
+          "Baseline the four new hosts and rescan the changed ones.",
           "Fold the course's decisions into the standing records.",
           "Write the handoff the logging wave builds on."
         ],
         "steps": [
-          "Run first baselines on SBD-DHCP01 and the four admin hosts with the standard benchmark and tool versions, and rescan the domain controllers — the logon-rights GPOs are the expected delta there.",
+          "Run first baselines on SBD-DHCP01 and the three admin hosts with the standard benchmark and tool versions, and rescan the domain controllers — the logon-rights GPOs are the expected delta there.",
           "Add this course's rows to the living records: the deny-logon and Protected Users decisions into the exception record where they interact with STIG values, and the new permit and deny rows into the register with owners.",
           "Confirm the admin hosts appear in the hardening course's quarterly cadence; privileged seats are rescanned first from now on, not last.",
-          "Write the handoff: administration now has a home, which means the logging course can require that SIEM consoles and collectors are managed only from VLAN 60 — with the DC-facing scopes from the Tier 0 seat and audit retention from SBD-ADMIN-AUD01 — say so explicitly for course 1.8."
+          "Write the handoff: administration now has a home, which means the logging course can require that SIEM consoles and collectors are managed only from VLAN 60 — with the DC-facing scopes from the Tier 0 seat and audit retention under the custodian's separate accounts — say so explicitly for course 1.8."
         ],
         "command": "Get-ChildItem C:\\Evidence\\tiered-admin -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\tiered-admin\\*",
-        "check": "Five baselines and the DC rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.",
+        "check": "Four baselines and the DC rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.",
         "evidence": "Finish the checklist: scan set, updated records, the tier matrix, and the handoff note.",
         "quizzes": [
           {
@@ -2444,7 +2444,7 @@
     "id": "logging-pipeline",
     "prerequisites": [
       "Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.",
-      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-AUDIT01 (10.0.50.40) and SBD-SPLUNK01 (10.0.50.10) per your platform plan for the repository and analysis roles, and a Linux VM for SBD-SENSOR01 (10.0.50.50) with a second, address-less capture interface.",
+      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain, and SBD-AUDIT01 (10.0.50.40) per your platform plan for the repository role.",
       "Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system."
     ],
     "labNote": "This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.",
@@ -2675,7 +2675,7 @@
         "steps": [
           "Create the archival job: on schedule, the collector exports its Forwarded Events and syslog intake to dated archive files and transfers them to SBD-AUDIT01's repository share — the only inbound write path the repository allows.",
           "On arrival, hash each archive and append the hash to a catalog kept with the archives; an archive whose hash no longer matches is a finding, not a file.",
-          "Set the permissions to match lesson 1's decision: the archival process writes, a named auditors group reads, and no interactive account holds delete rights — retention-driven deletion runs as its own documented, logged process, administered only from the audit custodian's seat, SBD-ADMIN-AUD01.",
+          "Set the permissions to match lesson 1's decision: the archival process writes, a named auditors group reads, and no interactive account holds delete rights — retention-driven deletion runs as its own documented, logged process, administered only under the audit custodian's separate accounts.",
           "Fill in the AU table with what now exists: where each stage's data lives, its retention clock, and who can touch it — this table is the artifact course 2.2 will file."
         ],
         "command": "Get-ChildItem \\\\SBD-AUDIT01\\LogArchive | Select-Object Name, Length, LastWriteTime -First 5\nGet-FileHash -Algorithm SHA256 \\\\SBD-AUDIT01\\LogArchive\\*.evtx | Select-Object -First 3\nicacls \\\\SBD-AUDIT01\\LogArchive",
@@ -2780,72 +2780,10 @@
           "Three searches answer real questions from day one.",
           "One alert, one responder, one written first step."
         ],
-        "next": "Lesson 6 adds the view the host logs cannot give: the traffic itself.",
+        "next": "The final lesson proves the chain end to end and runs the scans.",
         "sources": [
           "splunkdocs",
           "wef"
-        ]
-      },
-      {
-        "id": "sensor",
-        "title": "Watch the network with SBD-SENSOR01",
-        "minutes": 25,
-        "summary": "Host logs show what systems say happened. A network sensor shows what actually crossed the wire: a new device, an unexpected east-west session, or someone probing the paths the register denies.",
-        "objectives": [
-          "Feed the core's routed traffic to a passive sensor through a SPAN session.",
-          "Send the sensor's detections and flow records into Splunk.",
-          "Alert on the traffic the design says should never happen."
-        ],
-        "steps": [
-          "Build SBD-SENSOR01 with an open-source sensor (Zeek or Suricata) loaded through the approved media process. Give it two interfaces: management at 10.0.50.50, and a capture interface with no address that only listens.",
-          "On the core router, mirror the routed VLAN interfaces to the capture interface (a SPAN or port-mirror session). Check the sensor's capture statistics at a busy moment; dropped packets mean the mirror or the sensor is undersized.",
-          "Forward the sensor's detections and connection logs to SBD-SPLUNK01 over the forwarder with TLS on TCP 9997, add register row F20 with its owner, and manage the sensor from VLAN 60 like the other security tools.",
-          "Build three alerts: a device address never seen before, any session to the quarantine VLAN course 1.9 will add, and repeated attempts on ports the register denies. Give each a named responder, like lesson 5's alert."
-        ],
-        "command": "# From a test host: try one unregistered port, then search for it in Splunk.\nTest-NetConnection 10.0.40.20 -Port 1433\n# On the sensor (Linux): confirm the capture interface has no address.\nip -brief address show",
-        "check": "The capture interface has no address, capture statistics show no drops at peak, and a test connection on an unregistered port appears as a sensor event in Splunk and fires its alert.",
-        "evidence": "Keep the SPAN configuration, the sensor's interface listing, capture statistics, the F20 register row, and the alert that fired for the test connection.",
-        "quizzes": [
-          {
-            "question": "Why does the sensor's capture interface have no IP address?",
-            "answers": [
-              "So nothing on the network can reach or attack it; it only listens",
-              "Because SPAN traffic cannot carry addresses",
-              "To save addresses in VLAN 50"
-            ],
-            "correct": 0,
-            "explanation": "A listen-only interface cannot be connected to, so the sensor watches the traffic without becoming a target on the networks it watches."
-          },
-          {
-            "question": "The sensor sees traffic the endpoint agents do not report. Which is a typical example?",
-            "answers": [
-              "A user opening a file",
-              "A device that has no agent at all",
-              "A Windows update installing"
-            ],
-            "correct": 1,
-            "explanation": "An unmanaged or rogue device has no agent and writes no logs you collect. Its traffic still crosses the mirrored core."
-          },
-          {
-            "question": "Which NIST SP 800-53 control enhancement covers monitoring inbound and outbound traffic for unusual activity?",
-            "answers": [
-              "AU-9(4)",
-              "AC-6(5)",
-              "SI-4(4)"
-            ],
-            "correct": 2,
-            "explanation": "SI-4(4) asks you to monitor communications traffic for unusual or unauthorized activity. The sensor and its alerts are the implementation."
-          }
-        ],
-        "recap": [
-          "A SPAN session feeds a listen-only sensor; nothing can connect to its capture side.",
-          "Detections and flow records join the other evidence in Splunk.",
-          "Alerts cover the traffic the design says should never happen."
-        ],
-        "next": "The final lesson proves the chain end to end and runs the scans.",
-        "sources": [
-          "controls",
-          "splunkdocs"
         ]
       },
       {
@@ -2861,7 +2799,7 @@
         "steps": [
           "Generate the test event: one failed sign-in with a (disabled-password) tier account on a DC. Find it in the DC's Security log, in Forwarded Events on the collector, flag it for the next archive's verification on the repository, and watch the alert fire in analysis.",
           "Repeat with the boundary: probe one unregistered port, then find that deny in the syslog stream and in search two — course 1.5's evidence pair now assembles itself.",
-          "Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, SBD-SPLUNK01, and SBD-SENSOR01 (Windows hosts with the standard benchmark; a non-Windows analysis host gets its config export + hash treatment like the router), plus a DC rescan for the audit-policy deltas.",
+          "Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, and SBD-SPLUNK01 (Windows hosts with the standard benchmark; SBD-SPLUNK01 runs Linux, so scan it with the DISA STIG benchmark for its distribution), plus a DC rescan for the audit-policy deltas.",
           "File the end-to-end trace as this course's signature evidence and write the handoff: the fleet course inherits a pipeline that will see its first domain join happen."
         ],
         "command": "Get-WinEvent -LogName ForwardedEvents -MaxEvents 10 | Where-Object Id -eq 4625 | Select-Object TimeCreated, MachineName\nGet-ChildItem C:\\Evidence\\logging-pipeline -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\logging-pipeline\\*",
@@ -2879,14 +2817,14 @@
             "explanation": "Components can each pass while the chain fails. The traced event is the integration test."
           },
           {
-            "question": "How is a non-Windows analysis host scanned in this lab?",
+            "question": "How is SBD-SPLUNK01, a domain-joined Linux server, scanned in this lab?",
             "answers": [
               "It is exempt from evidence",
               "With the Windows Server benchmark anyway",
-              "Like the router: hashed configuration export standing as its assessable record"
+              "With the DISA STIG benchmark for its Linux distribution, on the same cadence as the Windows servers"
             ],
             "correct": 2,
-            "explanation": "The pattern from course 1.5 generalizes: no SCAP content means the record is the verified configuration, not nothing."
+            "explanation": "Linux distributions have their own DISA STIGs and SCAP content. A domain-joined Linux server is held to the same scan cadence as every other server."
           },
           {
             "question": "Why insist the pipeline exists before the fleet course?",
@@ -2917,8 +2855,7 @@
     "prerequisites": [
       "Complete courses 1.5–1.8: routed network, working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline.",
       "Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
-      "Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link.",
-      "Provision a Windows Server 2025 VM for SBD-NPS01 (10.0.20.50), and confirm the access switch for VLAN 80 supports 802.1X port authentication."
+      "Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link."
     ],
     "labNote": "Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.",
     "sources": [
@@ -2951,21 +2888,6 @@
         "id": "controls",
         "title": "NIST · SP 800-53 Rev. 5 security controls",
         "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
-      },
-      {
-        "id": "nps",
-        "title": "Microsoft · Network Policy Server overview",
-        "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-top"
-      },
-      {
-        "id": "nps-clients",
-        "title": "Microsoft · Configure RADIUS clients",
-        "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-radius-clients-configure"
-      },
-      {
-        "id": "eap-tls",
-        "title": "Microsoft · Certificate requirements for EAP-TLS",
-        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/certificate-requirements-eap-tls-peap"
       }
     ],
     "lessons": [
@@ -3212,73 +3134,10 @@
           "Enrollment is hands-free and verified live across the boundary.",
           "The CA's issued log joins the evidence."
         ],
-        "next": "Lesson 5 puts those certificates to work at the switch port: only enrolled machines get onto the network.",
+        "next": "Lesson 5 scales from three machines to fifty — by sampling, not by faith.",
         "sources": [
           "autoenroll",
           "controls"
-        ]
-      },
-      {
-        "id": "nac",
-        "title": "Admit only enrolled devices with 802.1X",
-        "minutes": 30,
-        "summary": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch port stays closed until the machine proves who it is with the certificate it just enrolled, and anything that cannot ends up somewhere with no routes.",
-        "objectives": [
-          "Build SBD-NPS01 as the RADIUS server for port authentication.",
-          "Require EAP-TLS with machine certificates on the VLAN 80 access ports.",
-          "Send unknown devices to a quarantine VLAN and prove it."
-        ],
-        "steps": [
-          "Build SBD-NPS01 in the Servers OU and register it in Active Directory. Give it a server certificate with the Server Authentication purpose from the issuing CA, and treat it as Tier 0: it admits devices and, later, authenticates network administrators, so it is managed only from AdminJumpBox01.",
-          "Add the VLAN 80 access switch as a RADIUS client with a long, unique shared secret, then create the network policy: wired 802.1X, EAP-TLS only, machine certificates that chain to the approved root and carry the Client Authentication purpose, from the Domain Computers group.",
-          "Create quarantine VLAN 90 with no gateway and no routes, and set the access ports to require 802.1X with VLAN 90 as the failure and guest VLAN. Push the wired 802.1X client settings to the Workstations OU by Group Policy (Wired AutoConfig, EAP-TLS, the approved root as the trusted CA).",
-          "Add register row F19 with its owner, move the router's administrator logins to RADIUS through SBD-NPS01 as course 1.5 planned, and confirm NPS grant and denial events reach the course 1.8 collector."
-        ],
-        "command": "# On an enrolled pilot: the wired interface authenticated with EAP-TLS.\nnetsh lan show interfaces\n# On SBD-NPS01: recent grants (6272) and denials (6273).\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273} -MaxEvents 5 | Select-Object TimeCreated, Id",
-        "check": "An enrolled pilot authenticates and gets its normal VLAN 80 lease; an unenrolled test laptop lands in VLAN 90 and reaches nothing; NPS logs both outcomes, and they appear in the collector.",
-        "evidence": "Keep the network policy export, the RADIUS client list (without the secret), the port configuration, both test results with their NPS events, and the F19 register row.",
-        "quizzes": [
-          {
-            "question": "What lets a workstation onto a VLAN 80 port after this lesson?",
-            "answers": [
-              "Knowing the Wi-Fi password",
-              "Its machine certificate, checked by NPS through EAP-TLS",
-              "Being plugged in before 8 a.m."
-            ],
-            "correct": 1,
-            "explanation": "EAP-TLS proves the device holds a private key for a certificate the approved CA issued. No certificate, no access."
-          },
-          {
-            "question": "Where does an unknown device end up?",
-            "answers": [
-              "Quarantine VLAN 90, which has no routes",
-              "VLAN 80, with a warning",
-              "The domain controller VLAN, so it can enroll"
-            ],
-            "correct": 0,
-            "explanation": "The failure VLAN gives an unknown device a place to be that leads nowhere, and the sensor and logs can see it there."
-          },
-          {
-            "question": "Why is SBD-NPS01 treated as Tier 0?",
-            "answers": [
-              "It stores user files",
-              "It hosts the web application",
-              "It decides which devices join the network and authenticates network administrators"
-            ],
-            "correct": 2,
-            "explanation": "A system that admits devices and authenticates the people who manage the router can change who reaches Tier 0, so it is managed like Tier 0."
-          }
-        ],
-        "recap": [
-          "VLAN 80 ports open only for machines with a certificate from the approved CA.",
-          "Unknown devices land in quarantine VLAN 90, which leads nowhere.",
-          "NPS is Tier 0, and its decisions are logged with everything else."
-        ],
-        "next": "Lesson 6 scales from three machines to fifty — by sampling, not by faith.",
-        "sources": [
-          "nps",
-          "nps-clients",
-          "eap-tls"
         ]
       },
       {
@@ -3293,7 +3152,7 @@
         ],
         "steps": [
           "Deploy the remaining machines in the planned waves, watching the DHCP scope's utilization and the join events arriving in analysis as each wave lands — the pipeline is now the rollout's progress bar.",
-          "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, 802.1X admission, peer-deny).",
+          "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, peer-deny).",
           "Write the sample rule down: one failed check in the sample widens the sample; a repeated failure stops the rollout and becomes a finding. A sample without a failure rule is a formality.",
           "Extend the course 1.8 forwarding subscription to the Workstations OU so all fifty endpoints report their security events — and confirm fleet sign-ins now appear in the analyst's searches."
         ],
@@ -3354,7 +3213,7 @@
           "Hand the fleet inventory to the management wave."
         ],
         "steps": [
-          "Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
+          "Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 5 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
           "Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (a scope now in full use); attribute each delta to its lesson.",
           "Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.10's management tooling will take ownership of keeping it current.",
           "Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what wave 5 builds next."
@@ -3462,7 +3321,7 @@
           "Define three rings and their order: a pilot ring (the course 1.9 sample machines plus one member server), the broad ring (fleet and member servers), and the critical ring last (domain controllers and both VLAN 30 hosts) — updates earn their way up, never down.",
           "Write the software rule: Windows updates come only from SBD-WSUS01, Linux packages only from SBD-REPO01, protection definitions only through SBD-EPO01, and anything else arrives as a documented exception — one source per type is what makes 'unauthorized software' a checkable claim.",
           "Decide the air-gap feeding cadence: what content crosses on media, how often, hashed by whom — the course 1.3 transfer procedure, now on a schedule.",
-          "Add the register rows: every Windows system to WSUS (8530/8531), domain controllers included, Linux consumers to REPO01 (HTTP), agent-to-ePO and ePO-to-agent ports per the product's documentation, and the scanner's credentialed reach into each VLAN — the one deliberate wide permit, owned and logged."
+          "Add the register rows: every Windows system to WSUS (8530/8531), domain controllers included, the domain-joined Linux servers (SBD-SPLUNK01 and SBD-NESSUS01) to REPO01 (HTTP, GPG-signed packages), agent-to-ePO and ePO-to-agent ports per the product's documentation, and the scanner's credentialed reach into each VLAN — the one deliberate wide permit, owned and logged."
         ],
         "command": "# Capture the before state: where machines currently look for updates (nowhere internal yet).\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate' -ErrorAction SilentlyContinue\nGet-ADComputer -Filter * -SearchBase 'OU=SBD,DC=sbd,DC=test' | Measure-Object",
         "check": "The ring table names every system's ring, the one-source rule and feeding cadence are written, and the register carries the wave's rows with owners.",
@@ -3768,7 +3627,7 @@
           "Fold scanning into the standing cadence and close the wave's scans."
         ],
         "steps": [
-          "Build SBD-NESSUS01 in VLAN 50, plugins fed on the offline cadence, with dedicated scan accounts — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1. The account that scans the domain controllers is a Tier 0 credential, kept apart from the member-server scan account and used only for DC scan jobs.",
+          "Build SBD-NESSUS01 on Linux in VLAN 50, joined to the sbd.test domain, plugins fed on the offline cadence, with dedicated scan accounts — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1. The account that scans the domain controllers is a Tier 0 credential, kept apart from the member-server scan account and used only for DC scan jobs.",
           "Run the first credentialed scan VLAN by VLAN against the inventory, and triage like the course 1.3 rescan taught: every finding becomes fix-now, documented deviation, or POA&M candidate — never unexplained.",
           "Wire results outward: findings into the analysis pipeline for trending, the triage into the living exception record, and the scan schedule into the cadence — quarterly with the DISA cycle, plus change-triggered, now automated enough to keep.",
           "Close wave 5's own books: baselines for WSUS01, REPO01 (config-export pattern), MGMT01, EPO01, and NESSUS01, rescans where agents and policies changed existing systems, and the handoff — the network now sustains itself; wave 6 finally gives it something to serve."

@@ -8,7 +8,7 @@ import {packetProfiles,describePacket} from '../public/inside-network-model/pack
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
 import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
-import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers} from '../public/inside-network-model/security.js';
+import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers,linuxMembers,domainMembers} from '../public/inside-network-model/security.js';
 
 const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
 const controls={...inventory.controls,...additionalControls};
@@ -92,21 +92,23 @@ assert.equal(evaluateFlow('jump2','dc1','Management').status,'deny');
 assert.equal(evaluateFlow('jump','workstations','Management').status,'deny');
 assert.equal(evaluateFlow('jump1','dc1','Management').status,'deny');
 assert(!adminMatrix.find(r=>r.id==='servers').targets.includes('audit'));
-// Every domain member reaches the domain controllers, and every Windows system reaches WSUS and the collector.
-for(const id of windowsMembers){for(const service of ['DNS','Kerberos','Directory'])assert.equal(evaluateFlow(id,'dc1',service).status,'permit',`${id} → DC ${service}`);if(id!=='wsus')assert.equal(evaluateFlow(id,'wsus','WSUS').status,'permit',`${id} patches`);if(id!=='syslog')assert.equal(evaluateFlow(id,'syslog','Event forwarding').status,'permit',`${id} forwards events`);assert.equal(evaluateFlow(id,'templates','PKI publication').status,'permit',`${id} checks revocation`);}
-// Tier 0 covers the tools that control the DCs; the audit custodian has a separate seat.
-for(const id of ['nps','wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers ${id}`);
-assert.equal(adminMatrix.find(r=>r.id==='audit').host,'jump3');
-assert.equal(evaluateFlow('jump1','audit','Management').status,'deny','Server seat cannot administer the audit archive');
-assert.equal(evaluateFlow('jump1','nps','Management').status,'deny','NPS is Tier 0');
-assert.equal(evaluateFlow('sensor','dc1','Kerberos').status,'deny','The Linux sensor is not a domain member');
+// Every domain member reaches the domain controllers and revocation data; every Windows system patches and forwards events;
+// the domain-joined Linux servers patch from the repository and send syslog over TLS.
+for(const id of domainMembers){for(const service of ['DNS','Kerberos','Directory'])assert.equal(evaluateFlow(id,'dc1',service).status,'permit',`${id} → DC ${service}`);assert.equal(evaluateFlow(id,'templates','PKI publication').status,'permit',`${id} checks revocation`);}
+for(const id of windowsMembers){if(id!=='wsus')assert.equal(evaluateFlow(id,'wsus','WSUS').status,'permit',`${id} patches`);if(id!=='syslog')assert.equal(evaluateFlow(id,'syslog','Event forwarding').status,'permit',`${id} forwards events`);}
+for(const id of linuxMembers){assert.equal(evaluateFlow(id,'repo','Linux packages').status,'permit',`${id} patches from the repository`);assert.equal(evaluateFlow(id,'syslog','Syslog TLS').status,'permit',`${id} sends syslog`);}
+assert.deepEqual(linuxMembers,['splunk','nessus'],'Splunk and Nessus are the domain-joined Linux servers');
+// Tier 0 covers the tools that control the DCs; audit custody stays a separate role.
+for(const id of ['wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers the DC-facing scope of ${id}`);
+assert.equal(evaluateFlow('repo','dc1','Kerberos').status,'deny','The Linux repository is not a domain member');
+assert.equal(nodes.length,23,'No systems were added: 22 named systems plus the workstation group');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
 console.log('Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.');
 
 const room=dataCenterLayout(vlans),positions=new Set();
 assert.deepEqual(new Set(room.flatMap(zone=>zone.ids)),new Set(memberships),'Every networked system appears in the data center');
 for(const zone of room){
- assert(zone.ids.length<=(zone.kind==='rack'?5:zone.kind==='desks'?4:50),'Equipment fits its cabinet');
+ assert(zone.ids.length<=(zone.kind==='rack'?4:50),'Equipment fits its cabinet');
  for(const [index,id]of zone.ids.entries()){
   const point=equipmentPosition(zone,index);
   assert(point.every(Number.isFinite),`Valid equipment position for ${id}`);

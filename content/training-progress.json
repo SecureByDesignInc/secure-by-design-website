@@ -342,12 +342,6 @@
     "group": "Network build"
   },
   {
-    "id": "training:logging-pipeline:sensor",
-    "title": "Watch the network with SBD-SENSOR01",
-    "href": "/training/logging-pipeline#sensor",
-    "group": "Network build"
-  },
-  {
     "id": "training:logging-pipeline:prove",
     "title": "Prove the chain and delta scan",
     "href": "/training/logging-pipeline#prove",
@@ -375,12 +369,6 @@
     "id": "training:workstation-fleet:certificates",
     "title": "Autoenroll the fleet's certificates",
     "href": "/training/workstation-fleet#certificates",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:nac",
-    "title": "Admit only enrolled devices with 802.1X",
-    "href": "/training/workstation-fleet#nac",
     "group": "Network build"
   },
   {

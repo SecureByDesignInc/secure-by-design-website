@@ -736,7 +736,7 @@
         },
         {
           "title": "Build the administration systems",
-          "detail": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration, and one for the audit custodian — each in the Admin OU, each doing nothing else."
+          "detail": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration — each in the Admin OU, each doing nothing else."
         },
         {
           "title": "Restrict where privilege can sign in",
@@ -748,7 +748,7 @@
         },
         {
           "title": "Delta scan and hand off",
-          "detail": "Five new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe."
+          "detail": "Four new systems joined and the directory's logon policy changed — the cadence fires again. Baseline the newcomers, rescan what changed, and hand the next course a network that can finally be watched from somewhere safe."
         }
       ],
       "training": {
@@ -765,7 +765,7 @@
     {
       "categoryOrder": 8,
       "number": "1.8",
-      "estimatedHours": 3.0,
+      "estimatedHours": 2.5,
       "title": "See everything: the logging pipeline",
       "subtitle": "Collect, protect & analyze before the fleet arrives",
       "description": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
@@ -795,8 +795,8 @@
       "afterEpisode": "dc01-dc02",
       "categoryId": "network-build",
       "kind": "configuration",
-      "moduleCount": 7,
-      "lessonCount": 7,
+      "moduleCount": 6,
+      "lessonCount": 6,
       "stages": [
         {
           "title": "Design collect, protect, analyze",
@@ -819,10 +819,6 @@
           "detail": "Analysis earns its place with three working searches and one alert: failed privileged sign-ins, the boundary's denies, and the health of time — questions this network can already answer about itself."
         },
         {
-          "title": "Watch the network with SBD-SENSOR01",
-          "detail": "Host logs show what systems say happened. A network sensor shows what actually crossed the wire: a new device, an unexpected east-west session, or someone probing the paths the register denies."
-        },
-        {
           "title": "Prove the chain and delta scan",
           "detail": "One deliberate event, followed all the way: a failed privileged sign-in should appear on the source, the collector, the repository's next archive, and the analyst's screen — then the cadence scans close the course."
         }
@@ -835,13 +831,13 @@
         "checklistPage": "/training/logging-pipeline/checklist",
         "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
-        "pages": 18
+        "pages": 16
       }
     },
     {
       "categoryOrder": 9,
       "number": "1.9",
-      "estimatedHours": 3.0,
+      "estimatedHours": 2.5,
       "title": "Bring in the fleet",
       "subtitle": "50 Windows 11 endpoints, managed from first boot",
       "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
@@ -871,8 +867,8 @@
       "afterEpisode": "dc01-dc02",
       "categoryId": "network-build",
       "kind": "configuration",
-      "moduleCount": 7,
-      "lessonCount": 7,
+      "moduleCount": 6,
+      "lessonCount": 6,
       "stages": [
         {
           "title": "Prepare the fleet rollout",
@@ -891,10 +887,6 @@
           "detail": "Course 1.6 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
         },
         {
-          "title": "Admit only enrolled devices with 802.1X",
-          "detail": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch port stays closed until the machine proves who it is with the certificate it just enrolled, and anything that cannot ends up somewhere with no routes."
-        },
-        {
           "title": "Scale to fifty and prove by sample",
           "detail": "Roll the remaining waves, then prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means."
         },
@@ -906,12 +898,12 @@
       "training": {
         "guide": "/training/workstation-fleet",
         "checklist": "/training/workstation-fleet/configuration-checklist.md",
-        "materialsEdition": "1.1",
+        "materialsEdition": "1.0",
         "updated": "7 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "pages": 18
+        "pages": 16
       }
     },
     {

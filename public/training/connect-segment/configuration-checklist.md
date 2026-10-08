@@ -79,7 +79,7 @@ Notes / result / date: __________________________
 
 - [ ] Create management VLAN 100 (10.0.100.0/24) for network-device management only, and bind the router's SSH and HTTPS management to its address there, 10.0.100.1. Disable Telnet, plain HTTP, and every management service the platform enables by default that the design does not use.
 - [ ] Permit management sessions to 10.0.100.1 only from AdminJumpBox01's planned address (10.0.60.10), which course 1.7 builds — until then, manage from the hypervisor console only. Add the row to the register: the router enforces Tier 0 boundaries, so its management is Tier 0.
-- [ ] Create one named administrator account plus a sealed break-glass account. Course 1.9 moves device logins to central AAA through SBD-NPS01, and course 1.8 sends the router's syslog, including its deny log, to the collector; write both as dated follow-ups in the register now.
+- [ ] Give each administrator a named account on the router and keep one sealed break-glass account; shared logins hide who changed what. Course 1.8 sends the router's syslog, including its deny log, to the collector; write that as a dated follow-up in the register now.
 - [ ] Export the running configuration after every approved change, hash it, and keep every version. Compare the newest export with the running configuration on a schedule; a difference with no change record is a finding.
 
 **Verify:** Management answers only on VLAN 100 and only from the permitted source, insecure management services are off, and each configuration version has a hash and a matching change record.
