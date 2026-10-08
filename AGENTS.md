@@ -266,3 +266,7 @@ The user approved Claude's architecture review recommendations (NIST SP 800-53 R
 ## Inside the Network: traffic walkthroughs are optional — October 7, 2026
 
 The user found “Follow the traffic” distracting as the default and chose to demote it, not remove it. The model now opens on the architecture explorer (Architecture at a glance). The processes, what-ifs, attack drill, playback, and knowledge checks live in a collapsed “Follow the traffic” section below the explorer; the playback panel, the Flow details tab, and the Frame flow and Follow packet tools appear only while a process is shown. Process links (`#process=…`) open the section. Keep all walkthrough content, packet cards, and Record clip.
+
+## Deploy target and verification — October 7, 2026
+
+`CLOUDFLARE_WORKER_NAME` must be `secure-by-design-website`: that Worker owns the securebydesigninc.com and www custom domains, the D1 binding (`aa31a619-…`), and the email secrets (`RESEND_API_KEY`, `OWNER_EMAIL`). Until October 7 the variable held the account ID, so deploys went to a separate Worker named after it and the domain kept serving the handoff build. The build job writes `public/build-info.json` with the commit, and the deploy fails unless both securebydesigninc.com and www serve that commit, `/training` shows at least 12 tiles, and a course page and `/inside-the-network` load.

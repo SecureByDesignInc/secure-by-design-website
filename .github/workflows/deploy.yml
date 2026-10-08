@@ -40,6 +40,9 @@ jobs:
           node scripts/check-network-architecture.mjs
           node scripts/check-network-relationships.mjs
           node scripts/check-data-center-equipment.mjs
+      - name: Stamp the build
+        # Every deploy carries its commit, so the post-deploy check can prove the domain serves this exact build.
+        run: printf '{"commit":"%s","builtAt":"%s"}\n' "$GITHUB_SHA" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > public/build-info.json
       - name: Build
         run: pnpm build
       - uses: actions/upload-artifact@v4
@@ -106,3 +109,30 @@ jobs:
           text=$(grep -c 'Read the network as text' itn.html || true)
           model=$(curl -s -o /dev/null -w '%{http_code}' "$url/inside-network-model/courses.js")
           echo "::notice title=Verify /inside-the-network::$code | text version present: $text | model courses.js: $model"
+      - name: Verify the public domain serves this build
+        # Fails the deploy if securebydesigninc.com or www is not serving this commit,
+        # so a wrong Worker name or a stale host can never report success again.
+        run: |
+          fail=0
+          for site in https://securebydesigninc.com https://www.securebydesigninc.com; do
+            served=""
+            for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+              served=$(curl -s -m 20 "$site/build-info.json?check=$GITHUB_RUN_ID-$attempt" | jq -r '.commit // empty' 2>/dev/null || true)
+              [ "$served" = "$GITHUB_SHA" ] && break
+              sleep 10
+            done
+            if [ "$served" != "$GITHUB_SHA" ]; then
+              echo "::error title=Domain check $site::Serving build '${served:-none}', expected $GITHUB_SHA. Check CLOUDFLARE_WORKER_NAME and the Worker's custom domains."
+              fail=1; continue
+            fi
+            training=$(curl -s -m 20 -o training.html -w '%{http_code}' "$site/training")
+            tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
+            course=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
+            itn=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
+            echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/connect-segment $course | /inside-the-network $itn"
+            if [ "$training" != 200 ] || [ "$tiles" -lt 12 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 12 tiles."
+              fail=1
+            fi
+          done
+          exit $fail
