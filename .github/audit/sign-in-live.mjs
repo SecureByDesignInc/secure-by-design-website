@@ -62,6 +62,10 @@ for (const width of [390, 1440]) {
     const button = page.getByRole('button', { name: 'Sign in with a passkey' });
     await button.waitFor({ timeout: 15000 });
     check(`my-progress shows passkey sign-in (${width})`, await button.isVisible(), '');
+    const colors = await button.evaluate(el => { const s = getComputedStyle(el); return [s.color, s.backgroundColor]; });
+    const lum = c => { const [r, g, b] = c.match(/[\d.]+/g).slice(0, 3).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    const [hi, lo] = colors.map(lum).sort((x, y) => y - x), ratio = (hi + 0.05) / (lo + 0.05);
+    check(`passkey button text is readable (${width})`, ratio >= 4.5, `${ratio.toFixed(2)}:1 ${colors.join(' on ')}`);
     const providerButtons = await page.locator('.sso-apple, .sso-google, .sso-microsoft').count();
     check(`provider buttons hidden until keys exist (${width})`, providerButtons === 0, `${providerButtons} shown`);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
