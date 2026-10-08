@@ -207,8 +207,8 @@ export function createEquipment(lights) {
     if(fadeClones.has(material))return fadeClones.get(material);
     const clone=material.clone();
     clone.onBeforeCompile=shader=>{
-      shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float aFade;\nvarying float vSbdFade;').replace('#include <begin_vertex>','#include <begin_vertex>\nvSbdFade=aFade;');
-      shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vSbdFade;\nfloat sbdBayer(vec2 p){ivec2 q=ivec2(mod(p,4.0));int i=q.x+q.y*4;float m[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);return (m[i]+.5)/16.;}').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(vSbdFade<.999&&sbdBayer(gl_FragCoord.xy)>=vSbdFade)discard;');
+      shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float aFade;\nattribute float aDim;\nvarying float vSbdFade;\nvarying float vSbdDim;').replace('#include <begin_vertex>','#include <begin_vertex>\nvSbdFade=aFade;vSbdDim=aDim;');
+      shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vSbdFade;\nvarying float vSbdDim;\nfloat sbdBayer(vec2 p){ivec2 q=ivec2(mod(p,4.0));int i=q.x+q.y*4;float m[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);return (m[i]+.5)/16.;}').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nif(vSbdFade<.999&&sbdBayer(gl_FragCoord.xy)>=vSbdFade)discard;').replace('#include <dithering_fragment>','#include <dithering_fragment>\ngl_FragColor.rgb*=vSbdDim;');
     };
     clone.customProgramCacheKey=()=>'sbd-fade-'+material.uuid;
     fadeClones.set(material,clone);return clone;
@@ -228,7 +228,9 @@ export function createEquipment(lights) {
     for(const [material,meshes]of buckets){
       if(meshes.length<2)continue;
       const geometry=unit.clone(),fade=new Float32Array(meshes.length).fill(1),byKey=new Map();
+      const dim=new Float32Array(meshes.length).fill(1);
       geometry.setAttribute('aFade',new THREE.InstancedBufferAttribute(fade,1));
+      geometry.setAttribute('aDim',new THREE.InstancedBufferAttribute(dim,1));
       const instances=new THREE.InstancedMesh(geometry,fadeMaterial(material),meshes.length);
       meshes.forEach((mesh,index)=>{
         instances.setMatrixAt(index,mesh.matrixWorld);
@@ -238,7 +240,7 @@ export function createEquipment(lights) {
       });
       instances.castShadow=meshes.some(mesh=>mesh.castShadow);instances.receiveShadow=true;
       for(const mesh of meshes)mesh.removeFromParent();
-      scene.add(instances);registry.meshes.push({mesh:instances,fade,byKey});
+      scene.add(instances);registry.meshes.push({mesh:instances,fade,dim,byKey});
     }
     return registry;
   }
@@ -246,6 +248,10 @@ export function createEquipment(lights) {
   function setFade(registry,key,value){
     for(const {mesh,fade,byKey} of registry.meshes){const indices=byKey.get(key);if(!indices)continue;for(const i of indices)fade[i]=value;mesh.geometry.attributes.aFade.needsUpdate=true;}
     for(const group of registry.groups.get(key)||[])group.traverse(o=>{if(o!==group&&!o.userData.keepVisible&&(o.isMesh||o.isLine))o.visible=value>.55;});
+  }
+  // Dim one equipment group without making it see-through: the parts of a step stay bright, the rest of the room steps back.
+  function setDim(registry,key,value){
+    for(const {mesh,dim,byKey} of registry.meshes){const indices=byKey.get(key);if(!indices)continue;for(const i of indices)dim[i]=value;mesh.geometry.attributes.aDim.needsUpdate=true;}
   }
   // Standard keeps the established look; cinematic darkens the room so traffic and status lights carry the scene.
   const themed={metal,black,silver,rubber,white,recess};
@@ -257,5 +263,5 @@ export function createEquipment(lights) {
     const colors=themes[name]||themes.standard;
     for(const [key,material] of Object.entries(themed)){if(!colors[key])continue;material.color.set(colors[key]);fadeClones.get(material)?.color.set(colors[key]);}
   }
-  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,room,batch,setFade,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
+  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,room,batch,setFade,setDim,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
 }

@@ -58,6 +58,29 @@ try {
     // Motion and labels follow the policy register.
     await page.locator('#scenarioButtons button').nth(0).click();await page.locator('#steps button').nth(0).click();
     assert.equal(await page.locator('#stageKind').textContent(), 'BLOCKED PENDING VALIDATION', 'Pending DHCP relay is shown as blocked');
+    // Learning view: choosing a process keeps the stage on screen, the step's narration and controls sit on the stage,
+    // and only the step's own systems keep labels.
+    await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
+    await page.locator('#scenarioButtons button').nth(scenarios.findIndex(s => s.id === 'files')).click();
+    await page.waitForTimeout(1200);
+    const stageBox = await page.evaluate(() => { const r = document.querySelector('.stage').getBoundingClientRect(); return { top: r.top, bottom: r.bottom, height: innerHeight }; });
+    assert(stageBox.top >= -1 && stageBox.top < stageBox.height / 2, `Stage is in view after choosing a process (${Math.round(stageBox.top)})`);
+    assert.equal(await page.locator('#stageCounter').textContent(), '1 / 3');
+    assert.match(await page.locator('#stageDescription').textContent(), /\S/, 'Step narration on the stage');
+    await page.locator('#stageNext').click();
+    assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 3', 'On-stage controls drive playback');
+    await page.waitForTimeout(800);
+    const shownZones = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'zone' && l.show).length);
+    assert(shownZones <= 2, `Only the step's segments keep rack labels (${shownZones})`);
+    await page.locator('#labels').click();
+    assert.equal(await page.locator('#labels .tool-long').textContent(), 'Labels: All');
+    await page.waitForTimeout(800);
+    assert((await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'zone' && l.show).length)) > shownZones, 'All labels shows the other racks');
+    await page.locator('#labels').click();await page.locator('#labels').click();
+    assert.equal(await page.locator('#labels .tool-long').textContent(), 'Labels: Focus');
+    await page.locator('#followToggle').click();
+    assert.equal(await page.locator('#followToggle').getAttribute('aria-pressed'), 'false');
+    await page.locator('#followToggle').click();
     assert.equal(await page.locator('#whatIfButtons button').count(), whatIfs.length);
     for (let i = 0; i < whatIfs.length; i++) {
       await page.locator('#whatIfButtons button').nth(i).click();
@@ -174,7 +197,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();
