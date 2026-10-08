@@ -130,6 +130,23 @@ await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
 await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.status === 200 && (await r.arrayBuffer()).byteLength < 20000);
 
+// Cloudflare Web Analytics (kept by the owner, 8 October 2026): Cloudflare injects its beacon at the edge, so this only
+// finds it on the live site. Informational: the CSP must allow it, but a local run has no beacon to load.
+const analytics = await (async () => {
+  const page = await context.newPage();
+  const seen = [];
+  page.on('response', response => { if (/cloudflareinsights\.com/.test(response.url())) seen.push(`${response.request().method()} ${new URL(response.url()).host}${new URL(response.url()).pathname} ${response.status()}`); });
+  page.on('requestfailed', request => { if (/cloudflareinsights\.com/.test(request.url())) seen.push(`FAILED ${request.url()} (${request.failure()?.errorText})`); });
+  try {
+    await page.goto(base + '/training', { waitUntil: 'load', timeout: 60000 });
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+    await page.goto(base + '/privacy', { waitUntil: 'load', timeout: 60000 }); // leaving the first page sends its report
+    await page.waitForTimeout(4000);
+  } catch (error) { seen.push(`error: ${String(error.message || error).split('\n')[0]}`); }
+  await page.close();
+  return seen.length ? [...new Set(seen)].join(' || ') : 'no beacon (expected for a local run)';
+})();
+
 await browser.close();
 
 const failing = results.filter(result => result.problems.length);
@@ -141,6 +158,7 @@ if (noted.length) annotate('notice', 'Other console messages and 4xx responses',
 annotate('notice', 'Back links', backLinks.join(' || '));
 annotate('notice', 'Share previews and crawlers', share.join(' || '));
 annotate(server.some(line => line.startsWith('FAIL')) ? 'warning' : 'notice', 'Server checks', server.join(' || '));
-writeFileSync('browser-check.json', JSON.stringify({ base, results, backLinks, share, server }, null, 1));
+annotate(/FAILED|error/.test(analytics) ? 'warning' : 'notice', 'Cloudflare Web Analytics', analytics);
+writeFileSync('browser-check.json', JSON.stringify({ base, results, backLinks, share, server, analytics }, null, 1));
 console.log(`${results.length} pages, ${failing.length} with problems; ${blocking} blocking issue(s).`);
 process.exit(blocking ? 1 : 0);
