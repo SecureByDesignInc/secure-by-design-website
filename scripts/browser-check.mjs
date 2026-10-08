@@ -116,7 +116,10 @@ for (const [agent, ua] of [
 // Server behaviour the audit changed.
 const server = [];
 const check = async (label, request, test) => {
-  try { const response = await fetch(base + request.path, { redirect: 'manual', ...request.init }); const ok = await test(response); server.push(`${ok ? 'ok' : 'FAIL'} ${label}: ${response.status} ${response.headers.get('location') || ''}`); if (!ok) blocking++; }
+  // Retry once on a network error: a local server may close a kept-alive connection after answering a POST
+  // without reading its body, and the next request on that socket fails (Cloudflare doesn't).
+  const get = () => fetch(base + request.path, { redirect: 'manual', ...request.init });
+  try { const response = await get().catch(() => new Promise(resolve => setTimeout(resolve, 300)).then(get)); const ok = await test(response); server.push(`${ok ? 'ok' : 'FAIL'} ${label}: ${response.status} ${response.headers.get('location') || ''}`); if (!ok) blocking++; }
   catch (error) { server.push(`FAIL ${label}: ${error.message}`); blocking++; }
 };
 await check('owner page sends visitors to sign in', { path: '/career-records' }, r => r.status === 302 && (r.headers.get('location') || '').endsWith('/my-progress?returnTo=%2Fcareer-records#account'));
