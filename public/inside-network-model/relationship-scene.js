@@ -87,6 +87,8 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
   frame=0;if(disposed||!motion||!visible||document.hidden||lost)return;
   time+=last?Math.min((now-last)/1000,.05):0;last=now;
   if(document.querySelector('dialog[open]')){frame=requestAnimationFrame(animate);return;}
+  // With no traffic to show, hold the halos steady and stop drawing until something changes (saves battery).
+  if(!particles.length&&!model?.edges.some(e=>e.kind==='manual')){halos.forEach(halo=>{halo.material.opacity=.24;});draw();return;}
   particles.forEach(({dot,curve},i)=>dot.position.copy(curve.getPoint((time*.22+i*.3)%1)));
   const manual=model?.edges.some(e=>e.kind==='manual');
   halos.forEach((halo,i)=>{halo.material.opacity=manual?(.18+(Math.floor(time/1.8)%halos.length===i?.28:0)):.24+Math.sin(time*1.4-i*.6)*.055;});

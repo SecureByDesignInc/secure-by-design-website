@@ -41,10 +41,14 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const scene=new THREE.Scene();scene.background=new THREE.Color('#081522');scene.fog=new THREE.FogExp2('#081522',.004);
  const camera=new THREE.PerspectiveCamera(39,1,.1,900);
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.shadowMap.enabled=container.clientWidth>=720;renderer.shadowMap.type=THREE.PCFShadowMap;
+ // The equipment never moves, so shadows are drawn once and again only when the room's visibility changes.
+ renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;
+ let dirty=true;const refreshShadows=()=>{renderer.shadowMap.needsUpdate=true;dirty=true;};
  container.prepend(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','3D data center with server racks, network switches, workstations, and offline equipment. Drag to orbit, scroll to zoom, or select a system. Arrow keys rotate; Home shows the full network.');
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=!reduced;orbit.dampingFactor=.075;orbit.minDistance=10;orbit.maxDistance=500;orbit.maxPolarAngle=Math.PI*.47;orbit.minPolarAngle=.09;orbit.enablePan=true;
  // Any drag or zoom hands the camera to the viewer for the rest of the step.
  orbit.addEventListener('start',()=>{transition=null;drift=null;if(guide)guide.user=true;onInteract();});
+ orbit.addEventListener('change',()=>{dirty=true;});
  const hemi=new THREE.HemisphereLight('#c8e8ff','#26323c',2.5);scene.add(hemi);
  const key=new THREE.DirectionalLight('#ecfbff',3.5);key.position.set(-18,40,25);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-45,right:45,top:50,bottom:-45,near:1,far:110});key.shadow.normalBias=.15;scene.add(key);
  const rim=new THREE.DirectionalLight('#9dc1df',1.7);rim.position.set(25,22,-25);scene.add(rim);
@@ -63,7 +67,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
 
  // ---- Screen-space labels: constant on-screen size, decluttered by priority every frame ----
  // Text is drawn at the size it appears on screen (and redrawn for 4K export and recording), so it stays sharp.
- const labels=[];let reserved=[];
+ const labels=[];let reserved=[],labelsSettling=true;
  const makeText=(width,height,draw,grow=1)=>({width,height,aspect:height/width,draw,texture:null,texW:0,grow});
  const measure=document.createElement('canvas').getContext('2d');
  function labelTexture(title,sub,color,width=400){
@@ -108,7 +112,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   if(view!==target||morph&&morph.t<.75)return -1;
   // During a traffic step, only the step's own systems, their segments, and the core keep labels
   // (others appear on hover), so the two or three things that matter stand out. "All labels" turns this off.
-  const quiet=stepMode&&labelMode==='focus',hoverZone=hoverId&&objects.get(hoverId)?.zone;
+  // Phones also quiet the room around a selected system, since rack names would cover most of a small stage.
+  const narrow=!output&&!exportSize&&viewSize().w<600,quiet=labelMode==='focus'&&(stepMode||narrow&&(!!selection||activeIds.length>0)),hoverZone=hoverId&&objects.get(hoverId)?.zone;
   const zoneActive=e.zone&&activeZones.has(e.zone);
   if(e.kind==='zone'||e.kind==='island')return zoneActive?82:quiet&&e.zone!==hoverZone?-1:50;
   if(e.kind==='facility'||e.kind==='lfacility'){
@@ -148,9 +153,9 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
    const [up,side]=placements[chosen],dy=up*half,dx=side*sw*.42,rect=[x+dx-sw/2-3,y-sh-3-dy,x+dx+sw/2+3,y+3-dy];
    placed.push(rect);e.rect=rect;e.step=chosen;e.lift=up*half;e.shift=side*sw*.42;e.show=true;e.unit=2*tanHalf/h;e.scale=sw*e.unit;e.target=sw*density;e.sh=sh;e.sw=sw;
   }
-  const rate=moving&&dt>0?Math.min(1,dt*9):1;
+  const rate=moving&&dt>0?Math.min(1,dt*9):1;labelsSettling=false;
   for(const e of labels){
-   e.alpha+=((e.show?1:0)-e.alpha)*rate;if(!e.show&&e.alpha<.02)e.alpha=0;
+   e.alpha+=((e.show?1:0)-e.alpha)*rate;if(!e.show&&e.alpha<.02)e.alpha=0;if(e.show&&e.alpha>.98)e.alpha=1;if(e.alpha>0&&e.alpha<1)labelsSettling=true;
    e.sprite.visible=e.alpha>.02;e.leader.visible=e.sprite.visible&&e.lift>0;
    if(!e.sprite.visible)continue;
    const map=textureFor(e.text,e.target||e.px);if(e.sprite.material.map!==map){e.sprite.material.map=map;e.sprite.material.needsUpdate=true;}
@@ -218,10 +223,12 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const keyed=o=>{for(let p=o;p&&p!==physical;p=p.parent)if(p.userData?.fadeKey)return true;return false;};
  physical.traverse(o=>{if(o===physical||batchedMeshes.has(o)||!(o.isMesh||o.isLine||o.isSprite)||keyed(o))return;if(o.userData.floor)floorMesh=o;else roomDecor.push(o);});
  const fadeKeys=[...new Set([...registry.bounds.keys(),...registry.groups.keys()])],xray=new Map(fadeKeys.map(k=>[k,{value:1,target:1,applied:1}]));
- let physicalAmount=1;
+ let physicalAmount=1,fading=false;
  const dimState=new Map(fadeKeys.map(k=>[k,{value:1,target:1,applied:1}]));
  function applyFades(force=false){
-  for(const [k,state] of xray){const value=k==='room'?physicalAmount:state.value*physicalAmount;if(force||Math.abs(value-state.applied)>.004){equipment.setFade(registry,k,value);state.applied=value;}}
+  let changed=false;
+  for(const [k,state] of xray){const value=k==='room'?physicalAmount:state.value*physicalAmount;if(force||Math.abs(value-state.applied)>.004){equipment.setFade(registry,k,value);state.applied=value;changed=true;}}
+  if(changed)refreshShadows();
   if(floorMesh){const transparent=physicalAmount<.999;if(floorMesh.material.transparent!==transparent){floorMesh.material.transparent=transparent;floorMesh.material.needsUpdate=true;}floorMesh.material.opacity=physicalAmount;floorMesh.material.depthWrite=physicalAmount>.5;floorMesh.visible=physicalAmount>.01;}
   for(const o of roomDecor)o.visible=physicalAmount>.5;
   physical.visible=physicalAmount>.001;
@@ -248,6 +255,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   applyFades();
   // Equipment outside the current step steps back (darker, still solid) so the step's systems stand out.
   const quiet=stepMode&&view==='physical'&&!morph;
+  fading=[...xray.values(),...dimState.values()].some(state=>Math.abs(state.target-state.value)>.004);
   for(const [k,state] of dimState){
    state.target=quiet&&k!=='room'&&!protectedKeys.has(k)?.42:1;
    state.value+=(state.target-state.value)*rate;
@@ -299,7 +307,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  let logicalAmount=0;
  const glyphFrom=new THREE.Vector3();
  function applyLogical(amount){
-  logicalAmount=amount;logical.visible=amount>.001;
+  refreshShadows();logicalAmount=amount;logical.visible=amount>.001;
   // While fading, nothing writes depth, so half-faded pieces never punch holes in the room behind them.
   for(const m of logicalFade){m.opacity=m.userData.base*smooth(THREE.MathUtils.clamp((amount-.35)/.65,0,1));m.depthWrite=m.userData.depthWrite&&amount>.999;}
   for(const [id,o] of objects){
@@ -316,8 +324,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  let insets={top:0,bottom:0},output=null,frameHook=null,onScreen=true,forceActive=false,running=false;
  const viewSize=()=>exportSize||(output?{w:output.w,h:output.h}:{w:container.clientWidth,h:container.clientHeight});
  function applyInsets(){const {w,h}=viewSize(),shift=insets.bottom-insets.top;if(w&&h&&Math.abs(shift)>.001)camera.setViewOffset(w,h,0,shift*h/2,w,h);else camera.clearViewOffset();camera.updateProjectionMatrix();}
- function resize(){if(output)return;const {clientWidth:w,clientHeight:h}=container;if(!w||!h)return;camera.aspect=w/h;applyInsets();renderer.setSize(w,h);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);}}
- function move(position,target,animate=true){if(!moving||!animate){camera.position.copy(position);orbit.target.copy(target);transition=null;orbit.update();}else transition={a:camera.position.clone(),b:position,c:orbit.target.clone(),d:target,t:0};drift={target:target.clone(),offset:position.clone().sub(target),start:time+2.2};}
+ function resize(){refreshShadows();if(output)return;const {clientWidth:w,clientHeight:h}=container;if(!w||!h)return;camera.aspect=w/h;applyInsets();renderer.setSize(w,h);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);}}
+ function move(position,target,animate=true){if(!moving||!animate){camera.position.copy(position);orbit.target.copy(target);transition=null;orbit.update();}else transition={a:camera.position.clone(),b:position,c:orbit.target.clone(),d:target,t:0};drift=stepMode?null:{target:target.clone(),offset:position.clone().sub(target),start:time+2.2,until:performance.now()+22000};dirty=true;}
  function fit(ids=null,animate=true){
   framedIds=ids;
   const bounds=new THREE.Box3(),logicalView=view==='logical';
@@ -637,7 +645,12 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  }
  function inspectPacket(kind='request'){
   if(!flow)return false;
-  const list=(kind==='reply'?flow.replies:flow.packets).filter(p=>p.mode!=='gone');if(!list.length)return false;
+  const all=kind==='reply'?flow.replies:flow.packets;if(!all.length)return false;
+  let list=all.filter(p=>p.mode!=='gone');
+  // Nothing on the wire right now: move the timeline so the first one is partway along its route, then inspect it.
+  if(!list.length){const p=all[0],f=flow;
+   if(p.reply)f.clock=f.L/f.v*.5-p.offset;else f.clock=Math.min(f.travel*.45,f.sGate/f.v*.8)-p.offset;
+   updateFlow(0);list=all.filter(q=>q.mode!=='gone');if(!list.length)return false;}
   const target=flow.blocked?flow.sGate:flow.routed?flow.sHub:flow.L/2;
   freezePacket(list.reduce((a,b)=>Math.abs(b.s-target)<Math.abs(a.s-target)?b:a));return true;
  }
@@ -678,7 +691,8 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   hemi.intensity=look.hemi;key.intensity=look.key;rim.intensity=look.rim;fill.intensity=look.fill;renderer.toneMappingExposure=look.exposure;
   equipment.setTheme(theme);ground.material.color.set(look.ground);
   for(const m of tinted)m.color.copy(m.userData.tint).multiplyScalar(look.packet);
-  if(!moving)for(const l of lights)l.material.emissiveIntensity=.6*look.led;
+  if(!moving||theme!=='cinematic')for(const l of lights)l.material.emissiveIntensity=.6*look.led;
+  refreshShadows();
   return theme==='cinematic'?ensureComposer():Promise.resolve();
  }
  // ---- Follow-the-packet camera for clips ----
@@ -728,6 +742,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   return best;
  }
  function setHover(id,packet=null,e=null){
+  dirty=true;
   const changed=(id||'')!==hoverId;hoverId=id||'';
   if(changed)hoverRing.visible=!!id&&!morph&&placeRing(hoverRing,id);
   if(!hooks.onHover)return;
@@ -758,20 +773,24 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  function render(){if(useBloom())composer.render();else renderer.render(scene,camera);}
  function loop(now){
   const elapsed=Math.min((now-last)/1000,.25),dt=Math.min(elapsed,.06);last=now;
+  // Render on demand: when nothing moves and nothing changed, skip the frame to save battery.
+  const animating=forceActive||!!output||!!morph||!!frameHook||(moving&&(!!flow||!!walker||!!transition||!!drift||transient.length>0||theme==='cinematic'));
+  if(!animating&&!dirty&&!fading&&!labelsSettling){if(!orbit.update(dt))return;dirty=true;}
   if(moving){
    time+=dt;
    if(transition){transition.t+=elapsed;const p=Math.min(transition.t/2.2,1),t=smooth(p);camera.position.lerpVectors(transition.a,transition.b,t);orbit.target.lerpVectors(transition.c,transition.d,t);if(p===1)transition=null;}
+   else if(drift&&now>drift.until){drift=null;dirty=true;}
    else if(drift){const s=new THREE.Spherical().setFromVector3(drift.offset);s.theta+=Math.sin((time-drift.start)*.19)*.06;s.phi+=Math.sin((time-drift.start)*.13)*.012;camera.position.copy(drift.target).add(new THREE.Vector3().setFromSpherical(s));orbit.target.copy(drift.target);}
-   for(const l of lights)l.material.emissiveIntensity=(.35+1.1*Math.pow((Math.sin(time*1.6+l.phase)+1)/2,3))*look.led;
+   // Status lights blink only in the cinematic look; in the standard look they hold steady.
+   if(theme==='cinematic')for(const l of lights)l.material.emissiveIntensity=(.35+1.1*Math.pow((Math.sin(time*1.6+l.phase)+1)/2,3))*look.led;
    updateFlow(Math.min(elapsed,.1));
-   if(selectionRing.visible&&selection!=='root')selectionRing.material.opacity=.6+.23*Math.sin(time*1.6);
   }
   if(morph){morph.t=Math.min(1,morph.t+elapsed/morph.duration);const target=morph.to==='logical'?1:0;applyLogical(morph.from+(target-morph.from)*smooth(morph.t));if(morph.t>=1)finishMorph();}
   updateFollow(elapsed);updateGuided(elapsed);updateScreenLines();
   orbit.update(dt);
   scene.fog.density=look.fog*THREE.MathUtils.clamp(110/camera.position.distanceTo(orbit.target),.3,1);
   updateXray(moving?elapsed:0);updateLabels(moving?elapsed:0);
-  render();frameHook?.(renderer.domElement);
+  dirty=false;render();frameHook?.(renderer.domElement);
  }
  // Render only while the stage is on screen (or while recording), to save battery and CPU.
  function updateLoop(){const run=forceActive||(onScreen&&!document.hidden);if(run===running)return;running=run;if(run)last=performance.now();renderer.setAnimationLoop(run?loop:null);}
@@ -794,20 +813,25 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   if(size){if(!output)output={ratio:renderer.getPixelRatio(),insets};output.w=size.w;output.h=size.h;insets=size.insets||{top:0,bottom:0};renderer.setPixelRatio(1);renderer.setSize(size.w,size.h,false);if(composer){composer.setPixelRatio(1);composer.setSize(size.w,size.h);}camera.aspect=size.w/size.h;applyInsets();fit(framedIds,false);followSnap=true;}
   else if(output){const saved=output;output=null;insets=saved.insets;renderer.setPixelRatio(saved.ratio);resize();fit(framedIds,false);}
  }
- function setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;finishMorph();for(const l of lights)l.material.emissiveIntensity=.6*look.led;}}
+ function setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;finishMorph();for(const l of lights)l.material.emissiveIntensity=.6*look.led;}dirty=true;}
  function dispose(){
   observer.disconnect();visibility.disconnect();document.removeEventListener('visibilitychange',updateLoop);orbit.dispose();renderer.setAnimationLoop(null);composer?.dispose?.();
   const geometries=new Set(),materials=new Set(),textures=new Set();
   scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:o.material?[o.material]:[]){materials.add(m);if(m.map)textures.add(m.map);}});
   for(const t of textures)t.dispose();for(const m of materials)m.dispose();for(const g of geometries)g.dispose();renderer.dispose();renderer.domElement.remove();
  }
- return {showStep,select,highlight,exportImage,setInsets,setOutput,resize,dispose,setMotion,canvas:renderer.domElement,
+ const baseDescription=renderer.domElement.getAttribute('aria-label');
+ const api={setDescription(text){renderer.domElement.setAttribute('aria-label',text?`${text} ${baseDescription}`:baseDescription);},showStep,select,highlight,exportImage,setInsets,setOutput,resize,dispose,setMotion,canvas:renderer.domElement,
   setFrameHook(fn){frameHook=fn;},setForceActive(on){forceActive=on;updateLoop();},overview:()=>highlight(),frame:ids=>fit(ids),setLabels(on){labelMode=on?'focus':'off';},setLabelMode(mode){labelMode=['focus','all','off'].includes(mode)?mode:'focus';},getLabelMode:()=>labelMode,
   setView,getView:()=>view,setTheme,getTheme:()=>theme,setCameraMode(mode){cameraMode=['follow','guided'].includes(mode)?mode:'wide';followSnap=true;if(guide){guide.user=false;guide.t=Math.max(guide.t,1.2);}if(cameraMode==='wide')fit(framedIds,false);},getCameraMode:()=>cameraMode,
   setStepSeconds(seconds){stepSeconds=seconds;},showConnections,inspectPacket,releasePacket,
   setReserved(rects){reserved=rects||[];},
   debugProject(id){const o=objects.get(id);if(!o)return null;projected.copy(anchorOf(id)).project(camera);const r=renderer.domElement.getBoundingClientRect();return {x:(projected.x+1)/2*r.width+r.left,y:(1-projected.y)/2*r.height+r.top};},
+  debugState(){return {flow:!!flow,walker:!!walker,transition:!!transition,drift:!!drift,morph:!!morph,fading,labelsSettling,dirty,theme,transient:transient.length,forceActive,output:!!output};},
   debugLabels(){return labels.map(e=>({kind:e.kind,id:e.id,zone:e.zone,priority:e.priority,show:e.show,rect:e.rect?.map(Math.round)}));},
   // Test hook: screen positions of visible packets, used by the browser checks.
   debugPackets(){if(!flow)return [];const r=renderer.domElement.getBoundingClientRect();return [...flow.packets,...flow.replies].filter(p=>p.head.visible).map(p=>{projected.copy(p.head.position).project(camera);return {kind:p.kind,x:(projected.x+1)/2*r.width+r.left,y:(1-projected.y)/2*r.height+r.top};});}};
+ // Any call that changes what the scene shows also schedules a frame (rendering is on demand).
+ for(const [name,fn] of Object.entries(api))if(typeof fn==='function'&&!name.startsWith('get')&&!name.startsWith('debug'))api[name]=(...args)=>{dirty=true;return fn(...args);};
+ return api;
 }

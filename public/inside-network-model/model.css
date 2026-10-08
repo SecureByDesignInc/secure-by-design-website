@@ -341,3 +341,56 @@ body:not(.process-active) #reset,body:not(.process-active) #followToggle{display
 @media(prefers-reduced-motion:reduce){.traffic-chevron{transition:none}}
 /* Playback appears once a process is chosen, so nothing looks selected before the learner picks one. */
 body:not(.process-active) #processPlayback{display:none}
+/* Layout pass (October 7, 2026): one slim toolbar along the top of the stage, a Key popover, and a phone menu. */
+.stage-toolbar{position:absolute;top:0;left:0;right:0;z-index:4;display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:10px 16px;background:linear-gradient(#081624f0,#08162400);pointer-events:none}
+.stage-toolbar>*{pointer-events:auto}
+.stage-toolbar .scene-tools{position:static;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;gap:5px;top:auto;bottom:auto;left:auto;right:auto}
+.stage-toolbar .scene-tools button{font-size:11px;min-height:30px;padding:5px 9px}
+.phone-only{display:none}
+.stage-heading{top:58px}
+body.process-active .stage-heading p{display:none}
+body.process-active .stage-heading h2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(560px,60vw)}
+.scene-key,.scene-help{display:none}
+body.show-key .scene-key{display:flex;position:absolute;top:52px;right:16px;left:auto;bottom:auto;z-index:5;flex-direction:column;gap:9px;padding:12px 14px;border:1px solid #35566b;border-radius:9px;background:#081626f2;box-shadow:0 10px 30px #0008;font-size:11px}
+body.show-key .scene-help{display:block;position:absolute;top:152px;right:16px;left:auto;bottom:auto;z-index:5;margin:0;max-width:220px;text-align:right}
+#viewport canvas:focus-visible{outline:3px solid #eacb8f;outline-offset:-4px}
+/* Step diagram replaces the 3D relationship thumbnail during walkthroughs. */
+body.process-active #relationshipView{display:none}
+.ladder{margin:0 0 18px;padding:12px 10px 8px;border:1px solid #2f4f63;border-radius:10px;background:#0a1a29}
+.ladder figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 4px 6px;font-size:9px;letter-spacing:1.3px;color:#7fa6bd}
+.ladder-key{display:flex;align-items:center;gap:5px;letter-spacing:0;font-size:10px;color:#9ab7c9}
+.ladder-key i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-left:6px}
+.ladder-head{font-size:10px;font-weight:600;fill:#cfe5f2}
+.ladder-life{stroke:#35546a;stroke-width:1;stroke-dasharray:2 4}
+.ladder-label{font-size:10.5px;fill:#b9d2e1}
+.ladder-x{font-size:14px;font-weight:700}
+.ladder-bg{fill:transparent}
+.ladder-row{cursor:pointer;outline:none}
+.ladder-row:hover .ladder-bg{fill:#12293b}
+.ladder-row.current .ladder-bg{fill:#16334a;stroke:#4e8ea3}
+.ladder-row.current .ladder-label{fill:#eefbff;font-weight:600}
+.ladder-row:focus-visible .ladder-bg{stroke:#eacb8f;stroke-width:2}
+/* In this step: the step's systems, one tap away in the inspector. */
+.step-systems{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0 2px;font-size:11px;color:#8fb2c8}
+.step-systems[hidden]{display:none}
+.step-systems>span{letter-spacing:1px;text-transform:uppercase;font-size:9.5px;margin-right:2px}
+.step-systems button{min-height:28px;padding:4px 9px;font-size:11.5px;background:#10293a;border-color:#2c5266;color:#d6eef7}
+.step-systems b{font-weight:600;color:#d6eef7;font-size:11.5px}
+.step-systems i{font-style:normal;color:#6f98ae}
+/* Pause after each step: the stage caption says the step is done and points at Next. */
+.flow-caption.step-complete #stageNext{background:#7de2ee;color:#092030;border-color:#7de2ee}
+.flow-caption.step-complete .stage-counter::after{content:' ✓';color:#7fe0b7}
+@media(max-width:1150px){.stage-toolbar .scene-tools button{font-size:10px;padding:5px 7px}}
+@media(max-width:780px){
+ .phone-only{display:inline-flex;align-items:center}
+ .stage-toolbar{justify-content:flex-start;flex-wrap:wrap;padding:10px 12px}
+ .stage-toolbar .scene-tools{display:none;position:absolute;top:48px;left:12px;right:12px;padding:10px;border:1px solid #35566b;border-radius:10px;background:#081626f5;box-shadow:0 12px 30px #000a;justify-content:flex-start}
+ .stage-toolbar .scene-tools.open{display:flex}
+ .stage-toolbar .scene-tools button{min-height:40px;font-size:12px;padding:8px 11px}
+ .stage-toolbar>button{min-height:36px;font-size:12px;padding:6px 11px;background:#0a192bcc}
+ #toolsMenu::after{content:' ▾'}
+ .stage-heading{top:56px}
+ body.show-key .scene-key{top:auto;bottom:12px;right:12px}
+ body.show-key .scene-help{display:none}
+}
+body.cinema .stage-toolbar{display:none}
