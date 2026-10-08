@@ -42,6 +42,18 @@ jobs:
           sed -i "s#^const url = .*#const url = 'https://securebydesigninc.com/inside-network-model/model.html?qa';#" scripts/check-network-browser.mjs
           node scripts/check-network-browser.mjs > "$GITHUB_WORKSPACE/audit-results/model-browser.txt" 2>&1; echo "exit $?" >> "$GITHUB_WORKSPACE/audit-results/model-browser.txt"
           tail -40 "$GITHUB_WORKSPACE/audit-results/model-browser.txt"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Source tests on main (full suite)
+        continue-on-error: true
+        run: |
+          cd /tmp/main
+          pnpm install --frozen-lockfile > /dev/null
+          pnpm build > "$GITHUB_WORKSPACE/audit-results/build.txt" 2>&1; echo "build exit $?" >> "$GITHUB_WORKSPACE/audit-results/build.txt"
+          { for s in check-network-architecture check-network-relationships check-data-center-equipment check-rmf; do echo "== $s"; node scripts/$s.mjs 2>&1 | tail -4; echo "exit $?"; done
+            echo "== node --test"; node --test tests/*.test.mjs 2>&1 | grep -E "^# |^not ok|^ok" ; } > "$GITHUB_WORKSPACE/audit-results/source-tests.txt" 2>&1
+          cat "$GITHUB_WORKSPACE/audit-results/source-tests.txt"
       - name: DNS snapshot
         continue-on-error: true
         run: |

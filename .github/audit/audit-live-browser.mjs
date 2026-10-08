@@ -13,8 +13,8 @@ async function visit(path, viewport, fn) {
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
-  page.on('response', r => { if (r.status() >= 400 && r.url().includes('securebydesigninc.com')) errors.push(`HTTP ${r.status()} ${r.url()}`); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text() + ' @ ' + (m.location()?.url || '')); });
+  page.on('response', r => { if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`); });
   const tag = `${path.replace(/[^a-z0-9]+/gi, '_') || 'home'}_${viewport.width}`;
   try {
     await page.goto(SITE + path, { waitUntil: 'load', timeout: 60000 });
