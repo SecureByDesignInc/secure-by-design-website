@@ -1,8 +1,10 @@
 import './privacy.css';
+import { sharePreview } from '../share-preview';
 
 export const metadata = {
   title: 'Privacy policy',
   description: 'What the Secure By Design website and app collect, why, who helps us run them, and how to delete your account.',
+  ...sharePreview('Privacy policy | Secure By Design', 'What the Secure By Design website and app collect, why, who helps us run them, and how to delete your account.', '/privacy'),
 };
 
 const contact = 'support@securebydesigninc.com';
@@ -32,20 +34,22 @@ export default function Privacy() {
         <ul>
           <li><strong>Email address</strong>, to identify your account, send one-time sign-in codes, and help you recover access.</li>
           <li><strong>Password</strong>, if you set one, stored only as a salted scrypt hash. We can’t read it.</li>
-          <li><strong>Apple, Google, or Microsoft sign-in</strong>, if you choose it: the account identifier that service gives us and the email address it shares. We never receive your password for that service. With Apple’s Hide My Email, we receive a private relay address.</li>
+          <li><strong>Apple, Google, or Microsoft sign-in</strong>, if you choose it: the account identifier that service gives us and the email address it shares. We never receive your password for that service. With Apple’s Hide My Email, we receive a private relay address. For Sign in with Apple we also keep the token Apple issues, so we can revoke our access when you remove Apple sign-in or delete your account.</li>
           <li><strong>Passkeys</strong>, if you add one: its public key and identifier, the kind of device you added it from, and when it was last used. Your fingerprint, face, or device PIN never leaves your device.</li>
           <li><strong>Learning records</strong>: course and lesson progress, saved materials, daily learning activity in the app (such as streak days and completed reviews), and the learning-path choices you make.</li>
-          <li><strong>Community membership</strong>: when you sign in or submit your email in a form, we record a free Community membership with your email, the date, and where you joined.</li>
+          <li><strong>Community membership</strong>: when you sign in or verify your email, we record a free Community membership with your email, the date, and where you joined.</li>
           <li><strong>Sessions</strong>: a sign-in cookie on the website (up to 30 days) and a sign-in token in the app (up to 12 hours).</li>
         </ul>
         <h3>When you ask us to email you or send us a form</h3>
         <ul>
           <li>Resource emails: your email, optional name, when you confirmed, and when you unsubscribed. We send them only after you confirm.</li>
           <li>Optional getting-started emails from the app, only if you agree, with a record of that agreement.</li>
-          <li>Forms such as career goals or resource suggestions: the name, email, and answers you choose to send, for us to read and reply to.</li>
+          <li>Forms: the career goals, community contribution, and resource sign-up forms are closed for now. We keep the name, email, and answers people sent before they closed, to read and reply to.</li>
         </ul>
         <h3>Optional app analytics</h3>
-        <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings. The website does not use analytics.</p>
+        <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>
+        <h3>Website page counts</h3>
+        <p>The website uses Cloudflare Web Analytics to count page views and measure how quickly pages load. It doesn’t use cookies or local storage, doesn’t follow you across sites, and isn’t linked to your account.</p>
       </section>
 
       <section id="use" aria-labelledby="use-title">
@@ -55,6 +59,7 @@ export default function Privacy() {
           <li>To send sign-in codes, account messages, and the emails you asked for.</li>
           <li>To read and answer what you send us.</li>
           <li>To keep the service secure and stop abuse.</li>
+          <li>To see which pages are visited and how quickly they load, from the website’s page counts.</li>
           <li>With analytics turned on, to see which lessons help and where learners get stuck.</li>
         </ul>
       </section>
@@ -63,11 +68,11 @@ export default function Privacy() {
         <h2 id="providers-title">Who helps us run the service</h2>
         <p>We share information only with these providers, to run the service, or when the law requires it.</p>
         <ul>
-          <li><strong>Cloudflare</strong> hosts the website, its database, and the app’s connection to your account.</li>
+          <li><strong>Cloudflare</strong> hosts the website, its database, and the app’s connection to your account, and provides the website’s page counts (Cloudflare Web Analytics).</li>
           <li><strong>Apple</strong>, <strong>Google</strong>, and <strong>Microsoft</strong> confirm who you are when you choose to sign in with them, under their own privacy policies.</li>
           <li><strong>Resend</strong> delivers our emails.</li>
           <li><strong>PostHog</strong> (United States) receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
-          <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. A video loads from YouTube only when you choose to play it.</li>
+          <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
           <li><strong>UserJot</strong> hosts our public idea board. It opens in your browser only if you choose to visit it, and posts there are public.</li>
           <li><strong>Apple</strong> and <strong>Google</strong> distribute the app under their own privacy policies.</li>
         </ul>

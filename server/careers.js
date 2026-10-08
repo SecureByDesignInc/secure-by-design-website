@@ -1,4 +1,5 @@
 import {communityEnrollmentStatement,communityMembership,enrollCommunity} from './community-membership.js';
+import {getReader} from './reader-auth.js';
 const recipient='support@securebydesigninc.com';
 const originDefault='https://securebydesigninc.com';
 const textFields={name:120,email:254,timeZone:100,contactPreferences:300,currentSituation:3000,background:5000,strengths:3000,aspirations:4000,motivation:3000,currentEfforts:3000,obstacles:3000,discussion:3000,goal1:1500,goal1Date:10,goal1Progress:1500,goal1Action:1500,goal2:1500,goal2Date:10,goal2Progress:1500,goal2Action:1500,accountability:1500,checkInFrequency:150};
@@ -7,7 +8,17 @@ const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:
 class InputError extends Error{constructor(message,status=400){super(message);this.status=status;}}
 const db=env=>{if(!env.DB)throw new InputError('The records service is not available yet. Your answers have not been submitted.',503);return env.DB;};
 const q=(env,sql,...args)=>db(env).prepare(sql).bind(...args);
-export function isOwner(request,env){return !!env.OWNER_EMAIL&&!!request.headers.get('oai-authenticated-user-id')&&request.headers.get('oai-authenticated-user-email')?.trim().toLowerCase()===env.OWNER_EMAIL.trim().toLowerCase();}
+// The owner signs in like any reader, with the OWNER_EMAIL account, and must have signed in within the last 12 hours.
+// (ChatGPT Sites used to vouch for the owner with oai-* headers; the Worker strips those, so they are never trusted.)
+export const OWNER_SESSION_HOURS=12;
+export async function ownerReader(request,env){
+ if(!env.OWNER_EMAIL||!env.DB)return null;
+ let reader;try{reader=await getReader(request,env);}catch{return null;}
+ if(!reader||reader.email.trim().toLowerCase()!==env.OWNER_EMAIL.trim().toLowerCase())return null;
+ const signedInAt=Date.parse(reader.sessionExpires)-30*86400000;
+ return Date.now()-signedInAt<OWNER_SESSION_HOURS*3600000?reader:null;
+}
+export async function isOwner(request,env){return !!await ownerReader(request,env);}
 export function emailReady(env){return !!(env.RESEND_API_KEY&&env.NOTIFICATION_FROM);}
 async function readJSON(request){
  if(!request.headers.get('content-type')?.startsWith('application/json'))throw new InputError('Send the form as JSON.',415);
@@ -75,7 +86,7 @@ export async function api(request,env,ctx){
   if(!['GET','POST','PUT'].includes(request.method))return json({error:'Method not allowed.'},405);
   if(request.method!=='GET'&&request.headers.get('origin')!==url.origin)return json({error:'Request origin could not be verified.'},403);
   if(path==='/api/career-submissions'&&request.method==='POST')return await submit(request,env,ctx);
-  if(!isOwner(request,env))return json({error:'Sign in with the site owner account to view these records.'},403);
+  if(!await isOwner(request,env))return json({error:'Sign in with the site owner account to view these records.'},403);
   if(path==='/api/career-records'&&request.method==='GET'){
    const offset=Number(url.searchParams.get('offset')||0);if(!Number.isSafeInteger(offset)||offset<0)throw new InputError('Invalid page.');
    const rows=await q(env,'SELECT r.id,r.name,r.email,r.created_at,r.status,r.next_check_in,n.state AS notification_state FROM career_records r LEFT JOIN career_notifications n ON n.record_id=r.id ORDER BY r.created_at DESC,r.id DESC LIMIT 50 OFFSET ?',offset).all();

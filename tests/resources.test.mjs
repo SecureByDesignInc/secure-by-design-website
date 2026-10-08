@@ -2,10 +2,11 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 import {resourcesApi,resourceConsent} from '../server/resources.js';
 import worker from '../dist/server/index.js';
 import {combineCommunityPage} from '../server/community-page.js';
+import {addOwnerSession,ownerCookie,forgedOwnerHeaders} from './owner-session.mjs';
 function database(){const raw=new DatabaseSync(':memory:');raw.exec('PRAGMA foreign_keys=ON');for(const f of fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())raw.exec(fs.readFileSync('drizzle/'+f,'utf8'));const prepare=sql=>{let values=[];return{bind(...v){values=v;return this},async first(){return raw.prepare(sql).get(...values)||null},async all(){return{results:raw.prepare(sql).all(...values)}},async run(){return{meta:{changes:Number(raw.prepare(sql).run(...values).changes)}}}}};return{raw,prepare,async batch(statements){raw.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());raw.exec('COMMIT');return result}catch(e){raw.exec('ROLLBACK');throw e}}};}
 const origin='https://securebydesigninc.com',owner='owner@example.invalid';
-const req=(path,method='GET',data,authorized=false,extra={})=>new Request(origin+path,{method,headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.5',...(authorized?{'oai-authenticated-user-id':'owner','oai-authenticated-user-email':owner}:{}),...extra},body:data===undefined?undefined:JSON.stringify(data)});
-const setup=()=>({DB:database(),OWNER_EMAIL:owner,RESEND_API_KEY:'test-placeholder',NOTIFICATION_FROM:'sender@example.invalid',SITE_ORIGIN:origin});
+const req=(path,method='GET',data,authorized=false,extra={})=>new Request(origin+path,{method,headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.5',...(authorized?ownerCookie:{}),...extra},body:data===undefined?undefined:JSON.stringify(data)});
+const setup=()=>{const env={DB:database(),OWNER_EMAIL:owner,RESEND_API_KEY:'test-placeholder',NOTIFICATION_FROM:'sender@example.invalid',SITE_ORIGIN:origin};addOwnerSession(env.DB.raw,owner);return env;};
 const fixture=()=>({email:'reader@example.com',name:'Reader',consent:true,website:''});
 async function mocked(callback){const before=globalThis.fetch,mails=[];globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.resend.com/emails');mails.push(JSON.parse(options.body));return Response.json({id:'mock-receipt'});};try{return await callback(mails);}finally{globalThis.fetch=before;}}
 const row=env=>env.DB.raw.prepare('SELECT * FROM resource_subscribers').get();
@@ -48,8 +49,9 @@ test('per-source submission limits and CSV formula protection work',()=>mocked(a
 test('the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET',()=>mocked(async mails=>{
  const env=setup(),ctx={waitUntil:()=>{}};const page=combineCommunityPage(fs.readFileSync('server/career-pages/careers.html','utf8'),fs.readFileSync('server/career-pages/career-explorer.html','utf8'));for(const id of ['career-goals-link','resource-form','resource-link'])assert.ok(page.includes('id="'+id+'"'));
  assert.equal((await worker.fetch(req('/resource-subscribers'),env,ctx)).status,302);
- assert.equal((await worker.fetch(req('/resource-subscribers','GET',undefined,true),env,ctx)).status,302,'forged oai-* headers are stripped');
+ assert.equal((await worker.fetch(req('/resource-subscribers','GET',undefined,false,forgedOwnerHeaders(owner)),env,ctx)).status,302,'forged oai-* headers are stripped');
+ assert.equal((await worker.fetch(req('/resource-subscribers','GET',undefined,true),env,ctx)).status,200,'the signed-in owner can open subscribers');
  assert.equal((await worker.fetch(req('/resource-subscribers.html'),env,ctx)).status,404);
- assert.equal((await worker.fetch(req('/api/resource-signups','POST',fixture()),env,ctx)).status,202);
- assert.equal((await worker.fetch(req('/resource-preferences'),env,ctx)).status,200);assert.equal(row(env).status,'pending');
+ assert.equal((await worker.fetch(req('/api/resource-signups','POST',fixture()),env,ctx)).status,410,'the retired resource sign-up form is closed');
+ assert.equal((await worker.fetch(req('/resource-preferences'),env,ctx)).status,200);assert.equal(env.DB.raw.prepare('SELECT count(*) AS n FROM resource_subscribers').get().n,0);
 }));

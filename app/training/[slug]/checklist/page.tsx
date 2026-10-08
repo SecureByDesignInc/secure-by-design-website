@@ -1,15 +1,16 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { ArrowLeft, Download } from 'lucide-react';
 import PrintButton from './print-button';
 import configurationCourses from '../../../../content/configuration-courses.json';
 import library from '../../../../content/videos.json';
 import '../../../videos/videos.css';
+import { sharePreview } from '../../../share-preview';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const course = library.courses.find(item => item.id === slug);
-  return { title: course ? `${course.title} — configuration checklist` : 'Configuration checklist', description: course?.description };
+  const title = course ? `${course.title} — configuration checklist` : 'Configuration checklist';
+  return { title, description: course?.description, ...sharePreview(`${title} | Secure By Design`, course?.description ?? '', `/training/${slug}/checklist`) };
 }
 
 export default async function ChecklistPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -18,7 +19,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ slug
   const course = library.courses.find(item => item.id === slug);
   if (!configuration || !course) notFound();
   return <main id="main" className="vc-page vc-checklist-page">
-    <Link className="vc-guide-back" href={course.training.guide}><ArrowLeft size={15} /> Back to {course.title}</Link>
+    <a className="vc-guide-back" href={course.training.guide}><ArrowLeft size={15} /> Back to {course.title}</a>
     <header className="vc-checklist-head">
       <p className="vc-kicker">COURSE {course.number} · CONFIGURATION CHECKLIST</p>
       <h1>{course.title}</h1>

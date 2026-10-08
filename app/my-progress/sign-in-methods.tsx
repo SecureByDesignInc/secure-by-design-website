@@ -7,8 +7,8 @@ type Methods={email:string;password:boolean;identities:{provider:ProviderId;subj
 const day=(value:string|null)=>value?new Date(value).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
 const order:ProviderId[]=['apple','google','microsoft'];
 // Sensitive changes need a recent sign-in. Sign out and come back here through the sign-in form.
-async function signInAgain(){try{await fetch('/api/reader-auth/signout',{method:'POST'});}finally{location.assign('/my-progress?returnTo='+encodeURIComponent('/my-progress#account-settings')+'#account');}}
-export function ReauthNotice({message}:{message:string}){return <p className="reader-error" role="alert">{message} <button type="button" onClick={()=>void signInAgain()}>Sign in again</button></p>;}
+async function signInAgain(returnTo:string){try{await fetch('/api/reader-auth/signout',{method:'POST'});}finally{location.assign('/my-progress?returnTo='+encodeURIComponent(returnTo)+'#account');}}
+export function ReauthNotice({message,returnTo='/my-progress#account-settings'}:{message:string;returnTo?:string}){return <p className="reader-error" role="alert">{message} <button type="button" onClick={()=>void signInAgain(returnTo)}>Sign in again</button></p>;}
 
 export default function SignInMethods(){
  const [methods,setMethods]=useState<Methods|null>(null),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState(''),[reauth,setReauth]=useState(false);
@@ -17,7 +17,7 @@ export default function SignInMethods(){
  useEffect(()=>{setSupportsPasskeys(passkeysSupported());void load();
   const params=new URLSearchParams(location.search),linked=params.get('linked') as ProviderId|null,failed=params.get('signin_error');
   if(linked&&providerNames[linked])setMessage(`${providerNames[linked]} is now linked. You can use it to sign in.`);
-  if(failed==='reauth')setReauth(true);else if(failed)setError(signInErrors[failed]||signInErrors.failed);
+  if(failed==='reauth')setReauth(true);else if(failed)setError(Object.prototype.hasOwnProperty.call(signInErrors,failed)?signInErrors[failed]:signInErrors.failed);
  },[load]);
  async function remove(body:{kind:'identity';provider:ProviderId;subject:string}|{kind:'passkey';id:string}){
   setBusy(true);setError('');setMessage('');setReauth(false);

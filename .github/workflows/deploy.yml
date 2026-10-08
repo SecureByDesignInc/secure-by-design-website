@@ -118,23 +118,6 @@ jobs:
           node -e "const c=require('./dist/server/wrangler.json');console.log('::notice title=Deploy target::worker='+c.name+' d1='+JSON.stringify((c.d1_databases||[]).map(d=>d.binding+':'+d.database_name)))"
           pnpm exec wrangler deploy --config dist/server/wrangler.json 2>&1 | tee deploy.log
           grep -E "Uploaded|Deployed|https://|Version ID|Current Version|Triggers|workers.dev" deploy.log | head -12 | while IFS= read -r line; do echo "::notice title=Wrangler::$line"; done
-      - name: Verify the deployed Worker
-        env:
-          WORKER: ${{ vars.CLOUDFLARE_WORKER_NAME }}
-        run: |
-          sleep 15
-          url=$(grep -oE "https://[a-z0-9.-]+\.workers\.dev" deploy.log | head -1)
-          [ -n "$url" ] || { echo "::warning title=Verify::No workers.dev URL in deploy output"; exit 0; }
-          for path in / /training /training/harden-baseline /videos; do
-            code=$(curl -s -o page.html -w '%{http_code} %{redirect_url}' "$url$path")
-            title=$(grep -o '<title>[^<]*' page.html | head -1 | sed 's/<title>//')
-            mark=$(grep -c 'Harden the baseline' page.html || true)
-            echo "::notice title=Verify $path::$url$path -> $code | title: $title | 'Harden the baseline' mentions: $mark"
-          done
-          code=$(curl -s -o itn.html -w '%{http_code}' "$url/inside-the-network")
-          text=$(grep -c 'Read the network as text' itn.html || true)
-          model=$(curl -s -o /dev/null -w '%{http_code}' "$url/inside-network-model/courses.js")
-          echo "::notice title=Verify /inside-the-network::$code | text version present: $text | model courses.js: $model"
       - name: Verify the public domain serves this build
         # Fails the deploy if securebydesigninc.com or www is not serving this commit,
         # so a wrong Worker name or a stale host can never report success again.
@@ -164,3 +147,19 @@ jobs:
           redirect=$(curl -s -m 20 -o /dev/null -w '%{http_code} %{redirect_url}' http://securebydesigninc.com/training)
           case "$redirect" in 301\ https://securebydesigninc.com/training*|308\ https://securebydesigninc.com/training*) echo "::notice title=HTTPS redirect::$redirect";; *) echo "::warning title=HTTPS redirect::http:// answered '$redirect' instead of redirecting to https://";; esac
           exit $fail
+      - name: Verify key pages on the public domain
+        env:
+          WORKER: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+        run: |
+          # The Worker has no workers.dev route; this runs after the domain check confirms the new build is live.
+          url=https://securebydesigninc.com
+          for path in / /training /training/harden-baseline /videos; do
+            code=$(curl -s -o page.html -w '%{http_code} %{redirect_url}' "$url$path")
+            title=$(grep -o '<title>[^<]*' page.html | head -1 | sed 's/<title>//')
+            mark=$(grep -c 'Harden the baseline' page.html || true)
+            echo "::notice title=Verify $path::$url$path -> $code | title: $title | 'Harden the baseline' mentions: $mark"
+          done
+          code=$(curl -s -o itn.html -w '%{http_code}' "$url/inside-the-network")
+          text=$(grep -c 'Read the network as text' itn.html || true)
+          model=$(curl -s -o /dev/null -w '%{http_code}' "$url/inside-network-model/courses.js")
+          echo "::notice title=Verify /inside-the-network::$code | text version present: $text | model courses.js: $model"
