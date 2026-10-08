@@ -1,7 +1,7 @@
 // What one packet in each traffic step carries, in the layered style of a packet analyzer.
 // Addresses come from the architecture; ports from the protocol references in technical.js.
 // Example values (a client address from the pool, a dynamic port) are labeled as examples.
-const domain='SecureByDesign.internal';
+const domain='sbd.test';
 const dnsQuery=(question,answer)=>({
  app:'Domain Name System (DNS)',request:`Standard query · ${question}`,reply:answer?`Standard query response · ${answer}`:null,
  readable:'Everything: the name asked for, the record type, and the answer. DNS is not encrypted in this design.',

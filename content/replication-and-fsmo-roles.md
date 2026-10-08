@@ -44,6 +44,8 @@ But two virtual machines on the same host still share a host failure. Two contro
 
 Jon checks those dependencies instead of treating the number two as a complete availability plan. Dylan cares whether he can work, not how many server icons are on the diagram.
 
+Try it in [What if DC01 is down?](/inside-the-network#process=dc-down): the query to DC01 gets no answer, the client retries with SBD-DC02, and sign-in continues.
+
 ## Replication does not replace recovery
 
 This part is easy to overlook: a bad change can replicate too. Another domain controller isn’t a historical backup waiting to hand you yesterday’s environment.

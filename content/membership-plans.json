@@ -1,6 +1,9 @@
 {
   "currency": "USD",
   "creatorNote": "Start learning with what's here. If it helps you, pay us back by sharing our content. When you're ready to go deeper, we'll help you take the next step.",
+  "intro": "Start with Community. Add hands-on projects, live office hours and personal coaching when you’re ready.",
+  "billingNote": "Annual savings apply to Builder. Guided is billed monthly or quarterly. All prices are in USD.",
+  "availabilityNote": "Builder and Guided are coming soon. Their benefits are being prepared; paid enrollment and checkout are not open.",
   "plans": [
     {
       "id": "community",
@@ -9,12 +12,19 @@
       "monthlyPrice": 0,
       "annualPrice": null,
       "available": true,
+      "status": "Available now",
       "features": [
         "Current learning paths and courses",
         "Existing downloads and references",
         "Streaks, XP, quests and achievements in the app",
-        "Progress sync with an optional account"
-      ]
+        "Progress sync with an optional account",
+        "The public Secure By Design Discord"
+      ],
+      "comingSoon": [
+        "A monthly livestream",
+        "Career path guides and a resume template"
+      ],
+      "detail": "Keep learning with the current courses and tools. Sharing is always optional. No subscription or automatic charges."
     },
     {
       "id": "builder",
@@ -23,26 +33,96 @@
       "monthlyPrice": 20,
       "annualPrice": 180,
       "available": false,
+      "status": "Coming soon · founding pricing for the first 100 members",
+      "badge": "Recommended",
+      "founding": {
+        "members": 100,
+        "monthlyPrice": 15,
+        "annualPrice": 144
+      },
+      "chargeMonthly": "Founding members will pay $15/month, locked in while subscribed.",
+      "chargeAnnual": "$180 billed yearly · $15/month equivalent. Founding members will pay $144/year.",
       "features": [
         "Everything in Community",
         "New guided project packs for your own lab",
-        "New Risk Management Framework workbooks and practice assessments",
-        "Portfolio walkthroughs and documentation templates"
-      ]
+        "Risk Management Framework workbooks and practice assessments",
+        "Portfolio walkthroughs and documentation templates",
+        "Member-only Discord channels",
+        "A monthly live office hour, recorded",
+        "A quarterly build cohort"
+      ],
+      "detailMonthly": "Planned price: $20 for one month of Builder access, or $15/month locked in as a founding member. Your own lab hardware, software and hosting are separate.",
+      "detailAnnual": "Pay $180 for 12 months and save $60 compared with 12 monthly payments. Founding members will pay $144/year. Your own lab hardware, software and hosting are separate.",
+      "renewMonthly": "Planned billing: renews at $20/month. Cancel or pause online before renewal; access continues through the paid period. Community access and saved progress remain.",
+      "renewAnnual": "Planned billing: renews at $180/year, with a reminder before renewal. Cancel online any time; access continues through the paid period. Community access and saved progress remain."
     },
     {
       "id": "guided",
       "name": "Guided",
-      "tagline": "Get feedback on your work.",
+      "tagline": "Build a portfolio employers can see.",
       "monthlyPrice": 99,
       "annualPrice": null,
+      "quarterlyPrice": 267,
       "available": false,
+      "status": "Coming soon · limited seats",
+      "chargeMonthly": "Or $267 per quarter (save 10%): one full portfolio track. Seats will be limited.",
       "features": [
         "Everything in Builder",
-        "One 30-minute coaching call per month",
-        "One project review per month, up to 10 pages",
-        "Written feedback and next steps"
-      ]
+        "A portfolio track: Build, Harden, Authorize, Capstone",
+        "Group coaching calls every other week",
+        "A 1:1 call each month",
+        "A written review every other week, with peer review in between",
+        "One in-depth project review a month, up to 10 pages",
+        "A resume review each month"
+      ],
+      "detailMonthly": "Work through a four-phase portfolio track with group coaching every other week, a 1:1 call each month, written reviews every other week with peer review between, and an in-depth project review and a resume review each month. Seats will be limited so every review gets real attention.",
+      "renewMonthly": "Planned billing: renews at $99/month, or $267/quarter. Cancel, pause or move to Builder online before renewal; access continues through the paid period."
     }
-  ]
+  ],
+  "portfolioTrack": {
+    "kicker": "The Guided portfolio track",
+    "title": "Four phases, each ending in work you can show an employer",
+    "intro": "You build, secure and document a complete network, the way a security team would. A written review every other week, with peer review in between, keeps each piece at a standard a hiring manager will take seriously.",
+    "phases": [
+      {
+        "label": "Phase 1 · Weeks 1–4",
+        "name": "Build",
+        "text": "Active Directory, DNS and a two-tier PKI, with network diagrams and build documentation."
+      },
+      {
+        "label": "Phase 2 · Weeks 5–8",
+        "name": "Harden",
+        "text": "A Group Policy baseline, STIG and SCAP scan results, and a remediation report."
+      },
+      {
+        "label": "Phase 3 · Weeks 9–11",
+        "name": "Authorize",
+        "text": "An RMF package: System Security Plan, POA&M and control evidence."
+      },
+      {
+        "label": "Phase 4 · Week 12",
+        "name": "Capstone",
+        "text": "A recorded authorization briefing and a portfolio page you can send to employers."
+      }
+    ],
+    "outcome": "You leave with a public portfolio of write-ups and diagrams, a verified certificate of completion, and a reference based on the work we reviewed together."
+  },
+  "addOns": {
+    "kicker": "Add-ons for any member · coming soon",
+    "title": "Need a little help without a monthly plan?",
+    "items": [
+      {
+        "id": "resume-review",
+        "name": "Resume and portfolio review",
+        "price": 49,
+        "text": "One-time. Written feedback on your resume and one project write-up within five business days."
+      },
+      {
+        "id": "one-to-one",
+        "name": "1:1 session",
+        "price": 79,
+        "text": "45 minutes on your goals, your resume or the lab you’re building."
+      }
+    ]
+  }
 }

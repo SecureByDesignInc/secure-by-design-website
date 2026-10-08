@@ -10,7 +10,7 @@ The Technical Blog shows the first article of each series and standalone posts. 
 
 The Cyber Range login sits beside the heading on desktop and directly below it on mobile. It is an interface preview: nonempty fields open a sample workspace. No identity is authenticated, no data is sent to a login service or persisted, and no lab systems are started. The password is discarded after submission. Logout or refresh resets the preview. Live accounts and labs are marked coming soon.
 
-The `/cyber-range` page combines planned walkthroughs and sandbox exercises, reusing the existing login preview. The site navigation shows a single “Cyber Range” item. The former `/how-to` and `/guides-and-labs` addresses redirect to it. Each topic links to an existing background article; unfinished guides and labs remain marked as coming soon.
+Cyber Range (`/cyber-range`, with `/how-to` and `/guides-and-labs`) and the Community and career pages (`/careers`, `/career-explorer`, `/career-goals`, `/resources`) are offline until the owner relaunches them; they return the site’s not-found page and their source is retained. The `/cyber-range` page combines planned walkthroughs and sandbox exercises, reusing the existing login preview. The site navigation shows a single “Cyber Range” item. The former `/how-to` and `/guides-and-labs` addresses redirect to it. Each topic links to an existing background article; unfinished guides and labs remain marked as coming soon.
 
 ## Editing
 

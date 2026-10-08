@@ -44,9 +44,9 @@
         "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
         "package": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
         "cover": "/training/dc01-dc02/workbook-cover.webp",
-        "pages": 12,
-        "materialsEdition": "0.3",
-        "updated": "4 October 2026",
+        "pages": 14,
+        "materialsEdition": "0.4",
+        "updated": "8 October 2026",
         "copyrightOwner": "Secure By Design Team LLC",
         "copyrightYear": 2026,
         "notices": "/training/dc01-dc02/notices.html"
@@ -158,8 +158,8 @@
         "guide": "/training/rmf/index.html#catalog/01",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 11,
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "relatedResources": []
       },
       "categoryId": "network-authorization",
@@ -236,8 +236,8 @@
         "guide": "/training/rmf/index.html#catalog/05",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 11,
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "relatedResources": [
           {
             "title": "Open the Body of Evidence workspace",
@@ -309,8 +309,8 @@
         "guide": "/training/rmf/index.html#catalog/10",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 11,
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "relatedResources": [
           {
             "title": "Open the authorization package capstone",

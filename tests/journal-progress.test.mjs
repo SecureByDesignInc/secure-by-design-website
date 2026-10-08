@@ -23,8 +23,9 @@ const expectedIds = [
 
 test('the complete recognized progress catalog retains every original ID and its order', () => {
   assert.deepEqual(catalog.progressCatalog.filter(item=>!item.id.startsWith('training:')).map(item => item.id), expectedIds);
-  assert.deepEqual(catalog.activeProgressCatalog.map(item => item.id), [...training.map(item=>item.id),...expectedIds.slice(14)]);
-  assert.ok(catalog.activeProgressCatalog.every(item => item.href.startsWith('/cyber-range')||item.href.startsWith('/training/')));
+  // Journal (rmf:*, article:*) and Cyber Range (path:*) entries are offline; only the Training Library counts.
+  assert.deepEqual(catalog.activeProgressCatalog.map(item => item.id), training.map(item=>item.id));
+  assert.ok(catalog.activeProgressCatalog.every(item => item.href.startsWith('/training/')));
 });
 
 test('the shared progress catalog imports only minimal article metadata rather than article prose', () => {
@@ -36,7 +37,7 @@ test('the shared progress catalog imports only minimal article metadata rather t
   assert.match(source, /from ['"]\.\/article-progress\.json['"]/);
 });
 
-test('dashboard filtering preserves stored objects while excluding unavailable journal counts and resume candidates', () => {
+test('dashboard filtering preserves stored objects while excluding offline Journal and Cyber Range records', () => {
   const records = [
     { id: 'article:what-is-active-directory', status: 'in_progress', updatedAt: '2026-10-04T12:00:00Z' },
     { id: 'rmf:prepare', status: 'completed', updatedAt: '2026-10-04T11:00:00Z' },
@@ -44,9 +45,10 @@ test('dashboard filtering preserves stored objects while excluding unavailable j
     { id: 'path:orientation', status: 'completed', updatedAt: '2026-10-04T09:00:00Z' },
   ];
   const snapshot = JSON.stringify(records);
-  assert.deepEqual(catalog.filterActiveProgressRecords(records), records.slice(2));
-  assert.equal(catalog.filterActiveProgressRecords(records)[0], records[2]);
-  assert.deepEqual(catalog.filterActiveProgressRecords(records.slice(0, 2)), []);
+  const withTraining = [...records, { id: 'training:dns-configuration:zones', status: 'completed', updatedAt: '2026-10-08T09:00:00Z' }];
+  assert.deepEqual(catalog.filterActiveProgressRecords(records), []);
+  assert.equal(catalog.filterActiveProgressRecords(withTraining)[0], withTraining[4]);
+  assert.equal(catalog.filterActiveProgressRecords(withTraining).length, 1);
   assert.equal(JSON.stringify(records), snapshot);
 });
 
@@ -74,26 +76,26 @@ function renderDashboard(records) {
   return renderToStaticMarkup(React.createElement(exports.default));
 }
 
-test('rendered dashboard shows only active learning counts and resumes the next active record', () => {
+test('rendered dashboard counts only active training; offline Journal and Cyber Range records stay stored but hidden', () => {
   const html = renderDashboard([
     { id: 'article:what-is-active-directory', status: 'in_progress' },
     { id: 'rmf:prepare', status: 'completed' },
     { id: 'path:domain', status: 'in_progress' },
     { id: 'path:orientation', status: 'completed' },
+    { id: 'training:dns-configuration:zones', status: 'completed' },
   ]);
   assert.match(html, /<span>Completed<\/span><strong>1<\/strong>/);
-  assert.match(html, /<span>In progress<\/span><strong>1<\/strong>/);
-  assert.match(html, /<h2>Active Directory foundations<\/h2><a href="\/cyber-range#your-path">Continue/);
-  assert.match(html, /1 of 5 complete/);
-  assert.match(html, /href="\/videos">Explore the Training Library/);
-  assert.doesNotMatch(html, /Security Journal|Technical articles|<h2>RMF lifecycle|href="\/(?:blogs?|rmf-series)/);
+  assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
+  assert.match(html, /<h2>Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
+  assert.doesNotMatch(html, /Learning path|cyber-range|Security Journal|Technical articles|<h2>RMF lifecycle|href="\/(?:blogs?|rmf-series)/);
+  assert.ok(catalog.progressCatalog.some(item => item.id === 'path:domain'), 'Cyber Range IDs remain recognized for saved progress');
 });
 
 test('journal-only accounts get zero active counts and Training Library discovery without journal resume links', () => {
   const html = renderDashboard([{ id: 'article:what-is-active-directory', status: 'in_progress' }, { id: 'rmf:prepare', status: 'completed' }]);
   assert.match(html, /<span>Completed<\/span><strong>0<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
-  assert.match(html, /<h2>Find something to explore\.<\/h2><a href="\/videos">Explore the Training Library/);
+  assert.match(html, /<h2>Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
   assert.doesNotMatch(html, /Continue reading|Security Journal|href="\/(?:blogs?|rmf-series)/);
 });
 
@@ -103,8 +105,9 @@ test('new configuration progress resumes its exact lesson and counts in Network 
     { id: 'training:two-tier-pki:sign', status: 'in_progress' },
   ]);
   assert.match(html, /href="\/training\/two-tier-pki#sign">Continue/);
-  assert.match(html, /Network build: 1 of 16 complete/);
-  assert.match(html, /Network authorization: 0 of 12 complete/);
+  const total = group => catalog.activeProgressCatalog.filter(item => item.group === group).length;
+  assert.match(html, new RegExp(`Network build: 1 of ${total('Network build')} complete`));
+  assert.match(html, new RegExp(`Network authorization: 0 of ${total('Network authorization')} complete`));
 });
 
 test('backend still accepts all legacy journal IDs and reads preserve saved account records', async t => {
@@ -128,6 +131,6 @@ test('backend still accepts all legacy journal IDs and reads preserve saved acco
   const before = raw.prepare('SELECT * FROM reader_progress ORDER BY item_id').all();
   const body = await (await readerProgressApi(request(), env)).json();
   assert.equal(body.records.length, expectedIds.length);
-  assert.equal(catalog.filterActiveProgressRecords(body.records).length, 5);
+  assert.equal(catalog.filterActiveProgressRecords(body.records).length, 0);
   assert.deepEqual(raw.prepare('SELECT * FROM reader_progress ORDER BY item_id').all(), before);
 });

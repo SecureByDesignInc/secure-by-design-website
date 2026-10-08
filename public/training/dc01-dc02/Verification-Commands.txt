@@ -39,6 +39,19 @@ repadmin /replsummary
 
 Expected observations: Each DNS service returns domain locator records for the configured controllers and the correct host addresses. Review DCDiag findings and replication failures individually. Save output with host, time, and interpretation; do not record an automatic pass because the command ran.
 
+Optional: see it on the wire (run on SBD-DC02 in an elevated PowerShell window)
+New-Item -ItemType Directory C:\Evidence -Force
+pktmon filter remove
+pktmon filter add DNS -p 53
+pktmon start --capture --comp nics --pkt-size 0 --file-name C:\Evidence\dc-locator.etl
+Resolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server 10.0.10.10
+pktmon stop
+pktmon etl2txt C:\Evidence\dc-locator.etl --out C:\Evidence\dc-locator.txt
+pktmon etl2pcap C:\Evidence\dc-locator.etl --out C:\Evidence\dc-locator.pcapng
+pktmon filter remove
+
+Expected observations: Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming SBD-DC01 and SBD-DC02 on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark. Keep the capture with your evidence; it contains only the traffic the filter allowed.
+
 Leave a build someone else can understand
 Get-ADDomain |
   Select-Object DNSRoot, PDCEmulator, RIDMaster, InfrastructureMaster

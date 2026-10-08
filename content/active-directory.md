@@ -16,7 +16,7 @@ Let’s put these terms to work at **Secure By Design**. Dylan is a project anal
 
 Dylan has just joined the team. He sits down at his workstation, signs in, and tries to open the Pokemon project folder. Nothing unusual there. But following that one request will give us a way to see how the pieces fit together.
 
-The internal domain is `securebydesigninc.com`. Here’s what Jon has set up:
+The internal domain is `sbd.test`, the same name the training labs use. Here’s what Jon has set up:
 
 - `SBD-DC01` and `SBD-DC02`: two writable domain controllers, both also running DNS and global catalog services.
 - `SBD-FS01`: the file server where the project documents live.
@@ -120,7 +120,7 @@ Secure By Design starts with one forest. That gives us enough to work with while
 
 ### Tree
 
-A **tree** is a collection of domains with a contiguous DNS namespace. Our example domain, `securebydesigninc.com`, could have child domains such as `westcoast.securebydesigninc.com` or `eastcoast.securebydesigninc.com` if a future requirement called for them.
+A **tree** is a collection of domains with a contiguous DNS namespace. Our example domain, `sbd.test`, could have child domains such as `westcoast.sbd.test` or `eastcoast.sbd.test` if a future requirement called for them.
 
 Those domains would form a domain tree, connected through automatic transitive trusts. We haven’t actually added those child domains to our example. The company still has one domain, and that’s perfectly fine. A tree doesn’t need a bunch of extra branches just to count as a tree.
 
@@ -157,6 +157,8 @@ Windows can also allow some offline sign-ins using previously cached information
 If Dylan can’t find a controller, Jon investigates discovery and connectivity. If his identity can’t be verified, the focus shifts to authentication. If he signs in but can’t open Pokemon, the file server and permissions deserve attention.
 
 Follow where the request got stuck. You’ll get further with that than by changing three unrelated settings and hoping one of them was the problem.
+
+To watch Dylan’s request travel through a working design, open [Open a file in Inside the Network](/inside-the-network#process=files). Each step shows which system answers and which rule allows it.
 
 ## Active Directory is more than a login server
 

@@ -8,8 +8,9 @@ const partners=JSON.parse(readFileSync(new URL('content/partners.json',root),'ut
 const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const platforms=JSON.parse(readFileSync(new URL('content/videos.json',root),'utf8')).platforms;
 const appMarkup=renderAppStores(JSON.parse(readFileSync(new URL('content/app-stores.json',root),'utf8')));
-const socialMarkup='<nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along</span><div>'+platforms.filter(platform=>platform.channelUrl).map(platform=>`<a class="plausible-event-name=Outbound+Link:+Click plausible-event-platform=${escape(platform.name)} plausible-event-placement=header" href="${escape(platform.channelUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on ${escape(platform.name)} (opens in a new tab)"><img class="header-social-icon" src="/social/${escape(platform.id)}-sbd.svg" width="22" height="22" alt="">${escape(platform.name)}</a>`).join('')+'</div></nav>';
-const socialTracking='<script defer src="/social-analytics.js"></script><script defer src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"></script>';
+const socialMarkup='<nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along</span><div>'+platforms.filter(platform=>platform.channelUrl).map(platform=>`<a href="${escape(platform.channelUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on ${escape(platform.name)} (opens in a new tab)"><img class="header-social-icon" src="/social/${escape(platform.id)}-sbd.svg" width="22" height="22" alt="">${escape(platform.name)}</a>`).join('')+'</div></nav>';
+// Analytics were removed on October 8, 2026 (the Plausible subscription ended).
+const stripTracking=html=>html.replace('<script defer src="/social-analytics.js"></script><script defer src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"></script>','');
 const partnerMarkup='<div class="footer-partners" role="group" aria-label="Partner programs">'+partners.map(partner=>{
  return `<span class="footer-partner"><span class="footer-partner-logo"><img src="${escape(partner.logo)}" width="${partner.width}" height="${partner.height}" alt=""></span><span class="footer-partner-name">${escape(partner.label)}</span></span>`;
 }).join('')+'</div>';
@@ -28,7 +29,7 @@ for(const name of pages){
  const connectPattern=/<div class="header-connect">[\s\S]*?(?:<\/section>|<\/nav>)<\/div>/;
  const updated=(connectPattern.test(html)?html.replace(connectPattern,connect):html.replace(pattern,connect)).replace(/<nav aria-label="Main navigation">[\s\S]*?<\/nav>/,navigation).replace(footerPattern,footer);
  const shared=updated.includes('src="/footer-share-boot.mjs"')?updated:updated.replace('</body>','<script type="module" src="/footer-share-boot.mjs"></script></body>');
- writeFileSync(file,shared.includes('src="/social-analytics.js"')?shared:shared.replace('</head>',socialTracking+'</head>'));
+ writeFileSync(file,stripTracking(shared));
 }
 const include=s=>/^(?:\*|:root|body|a|a:hover)$/.test(s)||/^body\.site-editorial$/.test(s)||/\.(?:site-header|site-footer|brand(?:-logo|-wordmark)?|footer-brand|container|skip-link)(?![\w-])/.test(s)||/^body\.site-editorial [ab][^,]*:focus-visible$/.test(s);
 const out=postcss.root();

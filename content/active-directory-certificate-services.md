@@ -10,7 +10,7 @@ In the [Active Directory Foundations post](/blog/what-is-active-directory), we w
 
 The similar names can trip you up. **AD DS** handles the directory and domain identity services. **AD CS** handles certificate services. A domain can operate without AD CS, and installing a domain controller doesn’t automatically make it a certificate authority.
 
-For Secure By Design, let’s have Jon configure an internal portal at `portal.securebydesigninc.com`. We’ll stick with that one service instead of trying to build every possible certificate use case at once.
+For Secure By Design, let’s have Jon configure an internal portal at `portal.sbd.test`. We’ll stick with that one service instead of trying to build every possible certificate use case at once.
 
 ## The certificate is public. The private key needs protection.
 
@@ -53,7 +53,7 @@ In a certificate-based **Transport Layer Security**, or **TLS**, connection, the
 
 The browser also needs to validate what it receives. Among the important checks are:
 
-- Does the certificate cover `portal.securebydesigninc.com`?
+- Does the certificate cover `portal.sbd.test`?
 - Is it within its validity period and suitable for the intended use?
 - Does its chain lead to a root the client trusts?
 - What does the application’s revocation policy require, and can it obtain the information it needs?
@@ -61,6 +61,8 @@ The browser also needs to validate what it receives. Among the important checks 
 Microsoft’s [certificate-validation guidance](https://learn.microsoft.com/en-us/windows/win32/secauthn/manually-validating-schannel-credentials) describes these checks. A certificate being issued successfully doesn’t settle all of them.
 
 If the connection succeeds but the portal says Dylan can’t open a project, we’re back to an authorization question. A trusted server certificate doesn’t grant Dylan permission to every page it hosts.
+
+Inside the Network shows both outcomes: [Use a web app, step 2](/inside-the-network#process=web&step=2) verifies a valid certificate, and [What if a certificate expired?](/inside-the-network#process=cert-expired) shows the browser refusing one the network still allows.
 
 ## Internal trust still has to reach the client
 
