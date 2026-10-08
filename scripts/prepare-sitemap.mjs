@@ -6,7 +6,7 @@ const site = 'https://securebydesigninc.com';
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const library = read('content/videos.json');
 const configuration = read('content/configuration-courses.json');
-const paths = ['/', '/inside-the-network', '/training', '/my-progress'];
+const paths = ['/', '/inside-the-network', '/training', '/my-progress', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
   if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, ''));
