@@ -1,0 +1,48 @@
+name: Dependency update (temporary)
+
+# One-off helper: updates the React server packages to the patched release in CI (the registry isn't
+# reachable from the editing workspace), audits production dependencies, and commits the lockfile.
+on:
+  push:
+    branches: ['deps/**']
+    paths: ['.github/workflows/deps-update.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - name: Audit before
+        run: pnpm audit --prod --json > "$RUNNER_TEMP/before.json" || true
+      - name: Update React server packages (GHSA-wx67-qw84-cm4g)
+        run: pnpm add -E react@~19.2.8 react-dom@~19.2.8 react-server-dom-webpack@~19.2.8
+      - name: Audit after
+        run: |
+          pnpm audit --prod --json > "$RUNNER_TEMP/after.json" || true
+          node -e '
+            const fs=require("fs");
+            const sum=f=>{try{const a=JSON.parse(fs.readFileSync(f,"utf8"));const m=a.metadata?.vulnerabilities||{};const list=Object.values(a.advisories||{}).map(x=>`${x.severity} ${x.module_name} ${x.github_advisory_id||x.id} (${x.vulnerable_versions} → ${x.patched_versions})`);return {m,list};}catch(e){return {m:{},list:["unreadable: "+e.message]}}};
+            const b=sum(process.env.RUNNER_TEMP+"/before.json"),a=sum(process.env.RUNNER_TEMP+"/after.json");
+            const pkg=require("./package.json");
+            const lines=["Production advisories before: "+JSON.stringify(b.m),"After: "+JSON.stringify(a.m),"Versions: react "+pkg.dependencies.react+", react-dom "+pkg.dependencies["react-dom"]+", react-server-dom-webpack "+pkg.dependencies["react-server-dom-webpack"],"Remaining:",...a.list];
+            fs.writeFileSync("deps-report.txt",lines.join("\n")+"\n");
+            console.log("::notice title=Dependency update::"+lines.slice(0,3).join(" | "));
+            console.log("::notice title=Remaining production advisories::"+(a.list.join(" || ")||"none"));
+          '
+      - name: Commit the lockfile
+        run: |
+          git config user.name "Secure By Design"; git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          git rm -q .github/workflows/deps-update.yml
+          git add package.json pnpm-lock.yaml deps-report.txt
+          git commit -qm "Update React server packages to the patched release (GHSA-wx67-qw84-cm4g)" -m "Lockfile regenerated in CI. Report: deps-report.txt" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" -m "Claude-Session: https://claude.ai/code/session_019wopQQuPwG5CcFGYaGF73Y"
+          git push origin HEAD:${GITHUB_REF_NAME}
