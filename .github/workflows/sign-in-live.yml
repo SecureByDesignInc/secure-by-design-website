@@ -1,0 +1,32 @@
+name: Sign-in live check
+# Check-only branch: verifies the deployed sign-in pages and endpoints. Deploys nothing.
+on:
+  push:
+    branches: [audit/sign-in]
+permissions:
+  contents: write
+concurrency:
+  group: sign-in-live
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm i --prefix /tmp/pw playwright@1.55.0 >/dev/null
+          /tmp/pw/node_modules/.bin/playwright install --with-deps chromium >/dev/null
+      - name: Check sign-in on securebydesigninc.com
+        continue-on-error: true
+        run: PLAYWRIGHT_MODULE=/tmp/pw/node_modules/playwright/index.mjs node .github/audit/sign-in-live.mjs
+      - name: Save results to this branch
+        run: |
+          git config user.name "Secure By Design"
+          git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          git add audit-results
+          git commit -m "Sign-in live check results" -q || echo "nothing to commit"
+          git push origin HEAD:audit/sign-in
