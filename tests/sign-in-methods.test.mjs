@@ -317,3 +317,11 @@ test('deleting an account removes its records and keeps only an unsubscribe reco
   const subscriber = e.DB.raw.prepare('SELECT name,status FROM resource_subscribers').get();
   assert.deepEqual({ ...subscriber }, { name: '', status: 'unsubscribed' });
 });
+
+test('sign-in buttons keep their own colors inside reader pages', () => {
+  const css = fs.readFileSync(new URL('../app/reader-progress.css', import.meta.url), 'utf8');
+  // .reader-page button (0,1,1) outranks single-class rules; these overrides must stay at least as specific.
+  for (const selector of ['.reader-page .sso-button{', '.reader-page .sso-passkey{', '.reader-page .sso-apple{', '.reader-page button.reader-primary{']) {
+    assert.ok(css.replace(/,\s*/g, ',').split('}').some(rule => rule.split('{')[0].split(',').some(part => `${part.trim()}{` === selector)), `missing ${selector}`);
+  }
+});
