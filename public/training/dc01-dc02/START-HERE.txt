@@ -33,25 +33,24 @@ THREE-LICENSE.txt                      License for the bundled 3D library
 guide-share.js / guide-share.css       Optional end-of-guide sharing controls
 
 The lesson code and 3D assets are bundled without external dependencies. The workbook links
-need the files to stay beside index.html. Journal articles and source links
-need an internet connection. Some mobile file viewers restrict local HTML;
+need the files to stay beside index.html. Source links and links to the
+website need an internet connection. Some mobile file viewers restrict local HTML;
 open it in a full browser or use the published guide on securebydesigninc.com.
 
-This proof of concept contains sample values and source-checked lesson
-content. It has not been validated on your Windows Server environment. Your recorded
-video, original screenshots, and timestamps are not included yet. The video
-area intentionally describes the upcoming recording rather than pretending
-to play a video. The app view is a responsive browser presentation, not an
-installed native app. Progress is local; no account or cloud sync is used.
+The lesson uses sample names and addresses (sbd.test, 10.0.10.10 and
+10.0.10.11) and steps based on Microsoft documentation. It has not been
+tested on your Windows Server environment, so check each result yourself.
+The recorded walkthrough is coming soon; the video panel says so until then.
+Progress in this downloaded copy stays in your browser. Nothing is uploaded.
 
 The scene illustrates chapter states. It does not connect to your VMs, run
 commands, or validate your server configuration. Completion records your
 learning activity. Keep credentials out of notes and evidence exports.
 
-WEBSITE AND APP DELIVERY
-This package demonstrates the lesson content and interactions. A published
-edition can connect the video chapters, shared lesson content, and network
-states to the website and app, then use the account service for progress.
-Each episode can connect viewers to the same companion and its chapters.
+ON THE WEBSITE
+The same guide is published at https://securebydesigninc.com/training/dc01-dc02/
+Signed in to My Account there, you can also save your learning status and
+keep this guide in your saved materials. Lab notes and evidence exports
+always stay in your browser.
 
 Secure By Design | https://securebydesigninc.com/

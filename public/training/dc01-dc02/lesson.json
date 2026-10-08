@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "title": "Build the identity foundation",
   "subtitle": "Windows Server 2025 · Active Directory and DNS",
-  "status": "Proof of concept",
+  "status": "Written training available · Video coming soon",
   "video": {
     "youtubeId": null,
     "instagramUrl": null,
     "tiktokUrl": null,
     "timestamps": null
   },
-  "scope": "Two new Windows Server 2025 Desktop Experience virtual machines on an isolated network. Sample values below must be reconciled with the final recording. Procedures are documentation-based and have not been executed against your environment.",
+  "scope": "Two new Windows Server 2025 Desktop Experience virtual machines on an isolated network. The names and addresses are sample values; replace them with your own plan. The steps follow Microsoft documentation and have not been run on your systems, so confirm each result in your own environment.",
   "sources": [
     {
       "id": "install",
@@ -313,7 +313,7 @@
       "network": "Follow a DNS query from the test viewpoint to either DC. Switch the resolver to see the alternative service path. The core represents the routing dependency when a client is on another VLAN.",
       "control": {
         "id": "IA-2",
-        "name": "Identification and Authentication",
+        "name": "Identification and Authentication (Organizational Users)",
         "phase": "Assess",
         "body": "DNS is a dependency that helps users locate identity services. DNS test output supports understanding that dependency; it does not demonstrate all authentication requirements, such as multifactor authentication or account policy.",
         "question": "What do these checks establish, and what authentication behavior still needs its own test?",
