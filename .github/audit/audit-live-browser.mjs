@@ -53,7 +53,7 @@ await visit('/training/connect-segment', desktop);
 await visit('/training/workstation-fleet', desktop);
 await visit('/training/rmf/index.html', desktop, async page => {
   const ed = await page.evaluate(() => (document.body.innerText.match(/edition[^\n]{0,40}/i) || [''])[0]);
-  note('/training/rmf', 'RMF course edition shown', /1\.1/.test(ed), ed);
+  note('/training/rmf', 'RMF course edition shown', /1\.2/.test(ed), ed);
 });
 await visit('/training/dc01-dc02/index.html', desktop);
 await visit('/my-progress', desktop, async page => {

@@ -80,10 +80,19 @@ for (const [from, to] of [['/videos', '/training'], ['/learning-library', '/trai
   check('Redirects', `${from} redirects to ${to}`, [301, 308, 302, 307].includes(r.status) && (r.location || '').includes(to), `${r.status} → ${r.location}`);
 }
 
-// Decommissioned sections: reachable by URL? linked from anywhere?
-for (const path of ['/cyber-range', '/careers', '/career-goals', '/how-to', '/guides-and-labs', '/community-contributions']) {
+// Offline sections must answer not found.
+for (const path of ['/cyber-range', '/how-to', '/guides-and-labs', '/careers', '/career-explorer', '/career-explorer/roles', '/career-goals', '/resources', '/resource-options']) {
   const r = await get(SITE + path, { redirect: 'manual' });
-  check('Decommissioned', `${path} direct-URL status (informational)`, null, `${r.status}${r.location ? ' → ' + r.location : ''}`);
+  check('Decommissioned', `${path} returns not found`, r.status === 404, `${r.status}${r.location ? ' → ' + r.location : ''}`);
+}
+// Security: forged ChatGPT identity headers are ignored; HSTS is sent.
+{
+  const forged = { 'oai-authenticated-user-id': 'audit', 'oai-authenticated-user-email': 'support@securebydesigninc.com' };
+  const api = await fetch(SITE + '/api/career-records', { headers: forged, redirect: 'manual' });
+  const page = await fetch(SITE + '/career-records', { headers: forged, redirect: 'manual' });
+  check('Security', 'Forged oai-* identity headers cannot open owner records', api.status === 403 && page.status === 302, `API ${api.status}, page ${page.status}`);
+  const home = await fetch(SITE + '/', { redirect: 'manual' });
+  check('Security', 'HSTS header on pages', /max-age=\d+/.test(home.headers.get('strict-transport-security') || ''), home.headers.get('strict-transport-security') || 'missing');
 }
 
 // 4. Crawl internal links from the main pages
@@ -140,7 +149,9 @@ for (const [id, needles] of Object.entries({ 'logging-pipeline': ['Linux', 'SBD-
 }
 check('My Account', 'Continue learning leads the signed-in page (text present)', has('/my-progress', 'Continue learning'));
 check('My Account', 'Membership options Community / Builder / Guided', ['Community', 'Builder', 'Guided'].every(n => has('/my-progress', n)));
-check('My Account', 'Guided tier text (informational)', null, (text(pages['/my-progress'].body).match(/Guided.{0,400}/) || [''])[0]);
+for (const needle of ['Recommended', 'founding pricing for the first 100 members', 'Build a portfolio employers can see.', '$267 per quarter', 'The Guided portfolio track', 'Resume and portfolio review', '1:1 session'])
+  check('Membership (Scenario A)', `My Account shows “${needle}”`, has('/my-progress', needle));
+check('Membership (Scenario A)', 'Paid tiers still say coming soon', has('/my-progress', 'paid enrollment and checkout are not open'));
 check('App labels', 'iOS invitation-only TestFlight beta / Android coming soon', (has('/account', 'invitation-only') || has('/my-progress', 'invitation-only') || has('/', 'invitation-only')) && (has('/account', 'TestFlight') || has('/', 'TestFlight')));
 check('Inside the Network', 'Page heading and “Read the network as text”', has('/inside-the-network', 'Read the network as text'));
 check('Closing invitation', '“If this helped you, help someone else find it.” on guides (script served)', (await get(SITE + '/footer-share.mjs')).body.includes('If this helped you, help someone else find it.'));
@@ -166,8 +177,11 @@ check('Resources', `All ${resources.length} training resources (workbooks, check
   const hits = [];
   for (const f of internal) if ((await get(`${SITE}/inside-network-model/${f}`)).body.includes('SecureByDesign.internal')) hits.push(f);
   check('Training recommendations (Oct 6)', 'Sample domain standardized on sbd.test in the model', !hits.length, hits.length ? `SecureByDesign.internal still in ${hits.join(', ')}` : 'ok');
-  const ad = pages['/blog/what-is-active-directory'] || await get(SITE + '/blog/what-is-active-directory');
-  check('Training recommendations (Oct 6)', '“What Is Active Directory?” uses sbd.test as the internal domain', !/internal domain is securebydesigninc\.com/i.test(text(ad.body)), (text(ad.body).match(/internal domain is.{0,40}/i) || [''])[0]);
+  const lesson = (await get(SITE + '/training/dc01-dc02/lesson.json')).body;
+  check('Training recommendations (Oct 6)', 'DC01/DC02 guide has the ports foundation, pktmon step, and model links', lesson.includes('What crosses the network?') && lesson.includes('pktmon start --capture') && lesson.includes('#process=dc-down'));
+  check('Training recommendations (Oct 6)', 'Course lessons link to model steps (1.5 first lesson)', has('/training/connect-segment', 'See it inside the network'));
+  const rmf = (await get(SITE + '/training/rmf/catalog-data.js')).body;
+  check('Training recommendations (Oct 6)', 'RMF module 08 uses the attack drill', rmf.includes('#process=drill') && rmf.includes('Operational verification'));
   const dc = (await get(SITE + '/training/dc01-dc02/package-manifest.json')).body;
   check('Training recommendations (Oct 6)', 'DC01/DC02 workbook new edition (ports box, pktmon step)', !/0\.3/.test(dc), (dc.match(/"edition"[^,]*/) || [''])[0]);
 }
