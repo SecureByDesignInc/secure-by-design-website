@@ -20,7 +20,7 @@ jobs:
           m=$(q "SELECT name FROM d1_migrations ORDER BY id" | jq -r 'if .success then ([.result[0].results[].name]|join(", ")) else ([.errors[]?.message]|join("; ")) end')
           echo "::notice title=Applied migrations::$m"
           w=$(q "SELECT sql FROM sqlite_master WHERE name LIKE 'membership_waitlist%' OR (type='index' AND tbl_name='membership_waitlist')" | jq -r 'if .success then ([.result[0].results[].sql]|join(" || ")) else ([.errors[]?.message]|join("; ")) end')
-          echo "::notice title=Waitlist schema::$w"
+          echo "::notice title=Waitlist schema::$(echo "$w" | tr "\n\t" "  ")"
           wc=$(q "SELECT count(*) AS n FROM membership_waitlist" | jq -c 'if .success then .result[0].results[0] else [.errors[]?.message] end')
           echo "::notice title=Waitlist rows::$wc"
           c=$(q "SELECT (SELECT count(*) FROM reader_accounts) AS accounts, (SELECT count(*) FROM reader_sessions) AS sessions" | jq -c 'if .success then .result[0].results[0] else [.errors[]?.message] end')
