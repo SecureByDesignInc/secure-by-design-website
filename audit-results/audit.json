@@ -1,7 +1,7 @@
 {
  "site": "https://securebydesigninc.com",
  "expected": "b8ddb31fb21b77e42526a8354d8d3164a205d80c",
- "startedAt": "2026-10-08T05:15:10.938Z",
+ "startedAt": "2026-10-08T05:25:35.981Z",
  "checks": [
   {
    "area": "Hosting",
@@ -961,5 +961,5 @@
   "broken": [],
   "locs": []
  },
- "finishedAt": "2026-10-08T05:15:29.546Z"
+ "finishedAt": "2026-10-08T05:25:49.809Z"
 }

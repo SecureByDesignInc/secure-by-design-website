@@ -1,0 +1,255 @@
+== check-network-architecture
+Architecture checks passed: 22 named systems, eight VLANs, unique addresses, 7 valid sequences plus 5 what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.
+Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.
+Data-center checks passed: all systems represented, distinct equipment positions, valid room bounds, and a separate offline bay.
+exit 0
+== check-network-relationships
+Relationship checks passed: 12336 views, all controls/VLANs/practices, every policy combination, and manual/offline isolation.
+exit 0
+== check-data-center-equipment
+Equipment geometry checks passed: 1388 mesh draws reduced to 227; 48,838 triangles retained; positions and offline indicators preserved.
+exit 0
+== check-rmf
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+exit 0
+== node --test
+# Subtest: all 58 indexed roles have unique codes, descriptions, and matching detail records
+ok 1 - all 58 indexed roles have unique codes, descriptions, and matching detail records
+# Subtest: pending roles never expose historical qualification mappings
+ok 2 - pending roles never expose historical qualification mappings
+# Subtest: known mappings retain their correct proficiency and service scope
+ok 3 - known mappings retain their correct proficiency and service scope
+# Subtest: each service and proficiency is deduplicated, with plain text only
+ok 4 - each service and proficiency is deduplicated, with plain text only
+# Subtest: public role assets have no reference-site publicity or private provenance
+ok 5 - public role assets have no reference-site publicity or private provenance
+# (node:3568) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stores a submission and outbox record; duplicate retries do not create duplicates
+ok 6 - stores a submission and outbox record; duplicate retries do not create duplicates
+# Subtest: owner authorization applies to every private API and requires both identity headers
+ok 7 - owner authorization applies to every private API and requires both identity headers
+# Subtest: rejects missing acknowledgement, malformed email, bad date, unknown fields, and oversized bodies
+ok 8 - rejects missing acknowledgement, malformed email, bad date, unknown fields, and oversized bodies
+# Subtest: rejects cross-origin mutations and enforces a durable per-day submission limit
+ok 9 - rejects cross-origin mutations and enforces a durable per-day submission limit
+# Subtest: saves follow-up and rejects stale updates without losing notes
+ok 10 - saves follow-up and rejects stale updates without losing notes
+# Subtest: email failure preserves the saved record; retries use the same key and no private answers
+ok 11 - email failure preserves the saved record; retries use the same key and no private answers
+# Subtest: expired uncertain email attempts require review instead of risking duplicate delivery
+ok 12 - expired uncertain email attempts require review instead of risking duplicate delivery
+# career_records_unavailable
+# Subtest: record and notification insertion is atomic on database failure
+ok 13 - record and notification insertion is atomic on database failure
+# Subtest: missing database fails clearly and never reports a saved record
+ok 14 - missing database fails clearly and never reports a saved record
+# Subtest: built site preserves the existing homepage and gates private career routes
+ok 15 - built site preserves the existing homepage and gates private career routes
+# Subtest: owner email test uses the requested inbox and reports acceptance without claiming delivery
+ok 16 - owner email test uses the requested inbox and reports acceptance without claiming delivery
+# Subtest: built website routes public submissions into its database and keeps records private
+ok 17 - built website routes public submissions into its database and keeps records private
+# (node:3580) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all submitted email flows share one membership and link only after account verification
+ok 18 - all submitted email flows share one membership and link only after account verification
+# Subtest: a resource signup enrolls immediately but email confirmation does not create account access
+ok 19 - a resource signup enrolls immediately but email confirmation does not create account access
+# Subtest: invalid forms, failed authentication, and failed account email delivery never enroll
+ok 20 - invalid forms, failed authentication, and failed account email delivery never enroll
+# Subtest: rate-limited submissions never create memberships
+ok 21 - rate-limited submissions never create memberships
+# career_records_unavailable
+# community_contribution_unavailable
+# Subtest: membership storage failure rolls back contact submissions and their notifications
+ok 22 - membership storage failure rolls back contact submissions and their notifications
+# (node:3593) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: combined Community page leads with participation and preserves explorer tools and legacy entry routes
+not ok 23 - combined Community page leads with participation and preserves explorer tools and legacy entry routes
+# Subtest: contributions save separately, notify only the owner, and deduplicate retries
+ok 24 - contributions save separately, notify only the owner, and deduplicate retries
+# Subtest: invalid links, consent, oversized input and foreign origins are rejected
+ok 25 - invalid links, consent, oversized input and foreign origins are rejected
+# Subtest: owner-only review and status changes never publish or email the contributor
+ok 26 - owner-only review and status changes never publish or email the contributor
+# Subtest: notification failure preserves the record and retry expiration prevents duplicate delivery
+ok 27 - notification failure preserves the record and retry expiration prevents duplicate delivery
+# Subtest: daily source limit and missing configuration preserve usable records
+ok 28 - daily source limit and missing configuration preserve usable records
+# Subtest: built Community page retains all forms and private review routes reject unauthorized access
+ok 29 - built Community page retains all forms and private review routes reject unauthorized access
+# Subtest: every public page shares the homepage without page, query, or fragment data
+ok 30 - every public page shares the homepage without page, query, or fragment data
+# Subtest: private, unknown, external, and malformed destinations share only the homepage
+ok 31 - private, unknown, external, and malformed destinations share only the homepage
+# Subtest: native sharing starts immediately with the Secure By Design title and homepage
+ok 32 - native sharing starts immediately with the Secure By Design title and homepage
+# Subtest: native cancellation never writes to the clipboard
+ok 33 - native cancellation never writes to the clipboard
+# Subtest: unsupported or failed native sharing waits for a successful homepage copy
+ok 34 - unsupported or failed native sharing waits for a successful homepage copy
+# Subtest: missing or rejected clipboard access uses manual copying without false success
+ok 35 - missing or rejected clipboard access uses manual copying without false success
+# Subtest: footer markup exposes a labeled manual link and persistent polite status
+ok 36 - footer markup exposes a labeled manual link and persistent polite status
+# Subtest: mounted footer rejects duplicate in-flight clicks and re-enables controls afterward
+ok 37 - mounted footer rejects duplicate in-flight clicks and re-enables controls afterward
+# Subtest: manual controls stay mounted during and after copying and support selecting the URL
+ok 38 - manual controls stay mounted during and after copying and support selecting the URL
+# Subtest: cleanup removes listeners and an old pending request cannot alter a remounted footer
+ok 39 - cleanup removes listeners and an old pending request cannot alter a remounted footer
+# (node:3612) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: the complete recognized progress catalog retains every original ID and its order
+ok 40 - the complete recognized progress catalog retains every original ID and its order
+# Subtest: the shared progress catalog imports only minimal article metadata rather than article prose
+ok 41 - the shared progress catalog imports only minimal article metadata rather than article prose
+# Subtest: dashboard filtering preserves stored objects while excluding unavailable journal counts and resume candidates
+ok 42 - dashboard filtering preserves stored objects while excluding unavailable journal counts and resume candidates
+# Subtest: rendered dashboard shows only active learning counts and resumes the next active record
+not ok 43 - rendered dashboard shows only active learning counts and resumes the next active record
+# Subtest: journal-only accounts get zero active counts and Training Library discovery without journal resume links
+not ok 44 - journal-only accounts get zero active counts and Training Library discovery without journal resume links
+# Subtest: new configuration progress resumes its exact lesson and counts in Network build
+not ok 45 - new configuration progress resumes its exact lesson and counts in Network build
+# Subtest: backend still accepts all legacy journal IDs and reads preserve saved account records
+ok 46 - backend still accepts all legacy journal IDs and reads preserve saved account records
+# (node:3624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native sign-in issues only a hashed, time-limited bearer session
+ok 47 - native sign-in issues only a hashed, time-limited bearer session
+# Subtest: unknown, incorrect and legacy accounts cannot create native sessions
+ok 48 - unknown, incorrect and legacy accounts cannot create native sessions
+# Subtest: browser and native session credentials are not interchangeable
+ok 49 - browser and native session credentials are not interchangeable
+# Subtest: native routes reject browser origins and unversioned requests
+ok 50 - native routes reject browser origins and unversioned requests
+# Subtest: sign-out and session expiration revoke native access
+ok 51 - sign-out and session expiration revoke native access
+# Subtest: password reset through the existing website revokes native sessions
+ok 52 - password reset through the existing website revokes native sessions
+# Subtest: native and browser sign-ins share the same brute-force limit
+ok 53 - native and browser sign-ins share the same brute-force limit
+# Subtest: native email enrollment is disabled by default and only uses verified bearer identity
+ok 54 - native email enrollment is disabled by default and only uses verified bearer identity
+# (node:3636) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: activity union is idempotent and isolated; browser credentials cannot write
+ok 55 - activity union is idempotent and isolated; browser credentials cannot write
+# Subtest: reject invalid dates, future rewards, spoofed ownership and partial invalid batches
+ok 56 - reject invalid dates, future rewards, spoofed ownership and partial invalid batches
+# Subtest: history pages are bounded and preserve every day without overlaps
+ok 57 - history pages are bounded and preserve every day without overlaps
+# (node:3648) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native and browser share course progress and bookmarks, isolated by account
+ok 58 - native and browser share course progress and bookmarks, isolated by account
+# Subtest: completion resists a delayed start update; removed bookmarks stay removed
+ok 59 - completion resists a delayed start update; removed bookmarks stay removed
+# Subtest: native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
+ok 60 - native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
+# Subtest: sync leaves archived reading and bookmark records intact
+ok 61 - sync leaves archived reading and bookmark records intact
+# (node:3660) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: anonymous readers see no account and cannot save
+ok 62 - anonymous readers see no account and cannot save
+# Subtest: progress and profile persist and are isolated by authenticated identity
+ok 63 - progress and profile persist and are isolated by authenticated identity
+# Subtest: rejects cross-origin writes, unrecognized items, statuses and client-supplied ownership
+ok 64 - rejects cross-origin writes, unrecognized items, statuses and client-supplied ownership
+# Subtest: clearing progress deletes only the current reader and supports re-enrollment
+ok 65 - clearing progress deletes only the current reader and supports re-enrollment
+# Reader progress storage failed Error: no such table: reader_progress
+#     at Object.run (file:///tmp/main/tests/reader-progress.test.mjs:10:401)
+#     at readerProgressApi (file:///tmp/main/server/reader-progress.js:40:238)
+#     at async TestContext.<anonymous> (file:///tmp/main/tests/reader-progress.test.mjs:17:221)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+#   code: 'ERR_SQLITE_ERROR',
+#   errcode: 1,
+#   errstr: 'SQL logic error'
+# }
+# Subtest: storage failures report unavailable without claiming a save
+ok 66 - storage failures report unavailable without claiming a save
+# Subtest: email verification creates an account, uses one-time codes, and logout revokes the session
+ok 67 - email verification creates an account, uses one-time codes, and logout revokes the session
+# Subtest: codes expire and lock after five wrong guesses; sign-in requests are rate limited
+ok 68 - codes expire and lock after five wrong guesses; sign-in requests are rate limited
+# Subtest: email failure never creates an account; forged ChatGPT identity is not a reader session
+ok 69 - email failure never creates an account; forged ChatGPT identity is not a reader session
+# Subtest: password is mandatory; mismatches and short passwords cannot create an account
+ok 70 - password is mandatory; mismatches and short passwords cannot create an account
+# Subtest: password sign-in restores progress in another session and rejects wrong or unknown credentials
+ok 71 - password sign-in restores progress in another session and rejects wrong or unknown credentials
+# Subtest: legacy accounts retain their identity and progress when setting a password
+ok 72 - legacy accounts retain their identity and progress when setting a password
+# Subtest: recovery changes the password, revokes older sessions and invalidates other codes
+ok 73 - recovery changes the password, revokes older sessions and invalidates other codes
+# Subtest: creating again cannot replace an existing password; recovery does not create unknown accounts
+ok 74 - creating again cannot replace an existing password; recovery does not create unknown accounts
+# Subtest: password guesses are rate limited and password hashes never leave the API
+ok 75 - password guesses are rate limited and password hashes never leave the API
+# (node:3672) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: signup stays pending until the recipient confirms; unsubscribe is separate from career records
+ok 76 - signup stays pending until the recipient confirms; unsubscribe is separate from career records
+# Subtest: signup validation and origin checks prevent accidental enrollment and unsafe private access
+ok 77 - signup validation and origin checks prevent accidental enrollment and unsafe private access
+# Subtest: duplicates do not spam or reset active subscribers and per-address retry limits persist
+ok 78 - duplicates do not spam or reset active subscribers and per-address retry limits persist
+# Subtest: expired tokens and unverified attempts never become active, including when delivery fails
+ok 79 - expired tokens and unverified attempts never become active, including when delivery fails
+# Subtest: per-source submission limits and CSV formula protection work
+ok 80 - per-source submission limits and CSV formula protection work
+# Subtest: the built site serves both choices, protects subscriber management, and never mutates on email-link GET
+ok 81 - the built site serves both choices, protects subscriber management, and never mutates on email-link GET
+# Subtest: training native sharing starts immediately and shares only the homepage
+ok 82 - training native sharing starts immediately and shares only the homepage
+# Subtest: cancelling native sharing does not overwrite the clipboard
+ok 83 - cancelling native sharing does not overwrite the clipboard
+# Subtest: unavailable native sharing copies the homepage and waits for completion
+ok 84 - unavailable native sharing copies the homepage and waits for completion
+# Subtest: non-cancellation share failures fall back to copying
+ok 85 - non-cancellation share failures fall back to copying
+# Subtest: missing or denied clipboard access offers manual copying
+ok 86 - missing or denied clipboard access offers manual copying
+# Subtest: related build courses stay together before authorization and materials remain available
+ok 87 - related build courses stay together before authorization and materials remain available
+# Subtest: category groups preserve course identity and omit groups with no matches
+ok 88 - category groups preserve course identity and omit groups with no matches
+# Subtest: authorization parts cover the existing course once and preserve saved progress and resource destinations
+ok 89 - authorization parts cover the existing course once and preserve saved progress and resource destinations
+# Subtest: configuration lessons have complete guides, checklists, quizzes and shared progress identifiers
+ok 90 - configuration lessons have complete guides, checklists, quizzes and shared progress identifiers
+# Subtest: identity scene requires the supported model and its exact ordered chapter stages
+ok 91 - identity scene requires the supported model and its exact ordered chapter stages
+# Subtest: search covers every catalog field without case or surrounding whitespace sensitivity
+ok 92 - search covers every catalog field without case or surrounding whitespace sensitivity
+# Subtest: topic and query combine while topic matching remains exact
+ok 93 - topic and query combine while topic matching remains exact
+# Subtest: topics are unique, sorted, and derived only from available episodes
+ok 94 - topics are unique, sorted, and derived only from available episodes
+# Subtest: a large catalog preserves editorial order and original episode objects
+ok 95 - a large catalog preserves editorial order and original episode objects
+# Subtest: unpublished or invalid video IDs do not produce an iframe URL
+ok 96 - unpublished or invalid video IDs do not produce an iframe URL
+# Subtest: published video IDs use the privacy-enhanced player and safe chapter offsets
+ok 97 - published video IDs use the privacy-enhanced player and safe chapter offsets
+# Subtest: every advertised training resource is present and remains on this site
+ok 98 - every advertised training resource is present and remains on this site
+# Subtest: the first recording remains unpublished and the retired formats are removed
+ok 99 - the first recording remains unpublished and the retired formats are removed
+# tests 99
+# suites 0
+# pass 95
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11094.531907

@@ -9,13 +9,13 @@
   "page": "/",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/",
   "name": "No errors at 390px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/training",
@@ -51,25 +51,25 @@
   "page": "/training",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
  },
  {
   "page": "/training",
   "name": "No errors at 390px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/training/connect-segment",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
  },
  {
   "page": "/training/workstation-fleet",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 @ https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js"
  },
  {
   "page": "/training/rmf",
@@ -99,7 +99,7 @@
   "page": "/my-progress",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/inside-the-network",
@@ -123,13 +123,13 @@
   "page": "/inside-the-network",
   "name": "No errors at 1440px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/inside-the-network",
   "name": "No errors at 390px",
   "ok": false,
-  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+  "detail": "HTTP 404 https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js || console: Failed to load resource: the server responded with a status of 404 () @ https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"
  },
  {
   "page": "/inside-network-model/model.html#process=signin&step=2",

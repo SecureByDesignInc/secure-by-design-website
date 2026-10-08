@@ -2,11 +2,11 @@
 desi.ns.cloudflare.com.
 benedict.ns.cloudflare.com.
 == A
-104.21.29.17
 172.67.171.63
+104.21.29.17
 == AAAA
-2606:4700:3031::6815:1d11
 2606:4700:3031::ac43:ab3f
+2606:4700:3031::6815:1d11
 == MX
 10 mx.siteprotect.com.
 == TXT
