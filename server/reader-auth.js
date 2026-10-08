@@ -2,10 +2,10 @@ import {validPassword,hashPassword,checkPassword} from './reader-password.js';
 import {communityEnrollmentStatement,communityMembership,enrollCommunity} from './community-membership.js';
 const random=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),n=>n.toString(16).padStart(2,'0')).join('');
 export const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),n=>n.toString(16).padStart(2,'0')).join('');
-const local=request=>['localhost','127.0.0.1'].includes(new URL(request.url).hostname);
+export const local=request=>['localhost','127.0.0.1'].includes(new URL(request.url).hostname);
 const name=(request,kind)=>local(request)?'sbd_local_'+kind:'__Host-sbd_'+kind;
-function cookie(request,kind){const entries=(request.headers.get('cookie')||'').split(';').map(s=>s.trim()).filter(s=>s.startsWith(name(request,kind)+'='));return entries.length===1?entries[0].split('=')[1]:''}
-const setCookie=(request,kind,value,age)=>`${name(request,kind)}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${local(request)?'':'; Secure'}`;
+export function cookie(request,kind){const entries=(request.headers.get('cookie')||'').split(';').map(s=>s.trim()).filter(s=>s.startsWith(name(request,kind)+'='));return entries.length===1?entries[0].split('=')[1]:''}
+export const setCookie=(request,kind,value,age)=>`${name(request,kind)}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${local(request)?'':'; Secure'}`;
 const json=(data,status=200,cookieValue)=>Response.json(data,{status,headers:{'cache-control':'private, no-store','x-content-type-options':'nosniff',...(cookieValue?{'set-cookie':cookieValue}:{})}});
 export async function readAuthBody(request){
  if(!request.headers.get('content-type')?.startsWith('application/json'))throw new Error('Send the form as JSON.');
@@ -16,14 +16,19 @@ export async function readAuthBody(request){
 export async function getReader(request,env){
  const token=cookie(request,'reader');if(!/^[a-f0-9]{64}$/.test(token))return null;
  if(!env.DB)throw new Error('Reader storage unavailable');
- return env.DB.prepare("SELECT a.id,a.email,a.password_hash IS NULL AS needsPassword FROM reader_accounts a JOIN reader_sessions s ON s.account_id=a.id WHERE s.token_hash=? AND s.expires_at>? AND s.client_kind='browser'").bind(await digest(token),new Date().toISOString()).first();
+ // needsPassword marks legacy email-code accounts with no sign-in method yet (no password, provider, or passkey).
+ return env.DB.prepare("SELECT a.id,a.email,(a.password_hash IS NULL AND NOT EXISTS (SELECT 1 FROM reader_identities i WHERE i.account_id=a.id) AND NOT EXISTS (SELECT 1 FROM reader_passkeys p WHERE p.account_id=a.id)) AS needsPassword FROM reader_accounts a JOIN reader_sessions s ON s.account_id=a.id WHERE s.token_hash=? AND s.expires_at>? AND s.client_kind='browser'").bind(await digest(token),new Date().toISOString()).first();
 }
-async function signedIn(request,env,accountId,email){
+// Starts a 30-day browser session and returns its Set-Cookie value. Shared by passwords, providers, and passkeys.
+export async function startBrowserSession(request,env,accountId,email){
  const session=random();await env.DB.batch([
   communityEnrollmentStatement(env,email,'account',{accountId,verified:true}),
   env.DB.prepare('INSERT INTO reader_sessions (token_hash,account_id,expires_at) VALUES (?,?,?)').bind(await digest(session),accountId,new Date(Date.now()+30*86400000).toISOString())
  ]);
- return json({signedIn:true,membership:communityMembership},200,setCookie(request,'reader',session,30*86400));
+ return setCookie(request,'reader',session,30*86400);
+}
+async function signedIn(request,env,accountId,email){
+ return json({signedIn:true,membership:communityMembership},200,await startBrowserSession(request,env,accountId,email));
 }
 async function rate(env,key,max,expires){const row=await env.DB.prepare('INSERT INTO reader_auth_limits (key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,expires,max).first();return !!row}
 export async function readerAuthApi(request,env){

@@ -10,6 +10,7 @@ import {nativeProgressApi} from './native-progress.js';
 import {nativeActivityApi} from './native-activity.js';
 import {nativeAuthApi} from './native-auth.js';
 import {nativeOnboardingApi} from './native-onboarding.js';
+import {signInApi} from './sign-in-methods.js';
 // The site now runs on its own Cloudflare Worker. ChatGPT Sites used to inject the oai-authenticated-* identity
 // headers; nothing does now, so any such header comes from the client and must not be trusted.
 function withoutPlatformIdentity(request){
@@ -26,6 +27,7 @@ async function route(request,env,ctx){
  if(/^\/api\/native-progress(\/|$)/.test(path))return nativeProgressApi(request,env);
  if(/^\/api\/native-auth(\/|$)/.test(path))return nativeAuthApi(request,env);
  if(path==='/api/native-onboarding')return nativeOnboardingApi(request,env);
+ if(/^\/api\/sign-in(\/|$)/.test(path))return signInApi(request,env);
  if(/^\/api\/reader-auth(\/|$)/.test(path))return readerAuthApi(request,env);
  if(/^\/api\/reader-progress(\/|$)/.test(path))return readerProgressApi(request,env);
  if(/^\/api\/community-contributions(\/|$)/.test(path))return contributionsApi(request,env,ctx);
