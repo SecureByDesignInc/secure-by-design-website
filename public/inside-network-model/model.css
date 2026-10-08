@@ -322,3 +322,22 @@ body.cinema .stage-transport{opacity:.85}
 .flow-caption strong{margin:5px 0}
 .stage-description{margin-top:6px;font-size:12px;line-height:1.45}
 @media(max-width:780px){#followToggle{display:none}.flow-caption{flex-wrap:wrap}.flow-caption-text{flex:1 1 calc(100% - 30px)}.stage-transport{margin-left:22px}}
+/* Traffic walkthroughs are optional: a collapsed section below the explorer. */
+.traffic-section{border-top:1px solid #294a60;background:#0b1828}
+.traffic-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:18px;padding:18px 28px;min-height:64px}
+.traffic-section>summary::-webkit-details-marker{display:none}
+.traffic-section>summary:hover{background:#0f2134}
+.traffic-section>summary:focus-visible{outline:3px solid #eacb8f;outline-offset:-3px}
+.traffic-summary-text{display:flex;align-items:baseline;gap:14px;flex:1;min-width:0;flex-wrap:wrap}
+.traffic-summary-text strong{font-size:20px;font-weight:600;letter-spacing:-.3px;color:#edfaff}
+.traffic-summary-text span{font-size:13px;color:#a7c3d4}
+.traffic-summary-count{font-size:11px;letter-spacing:.4px;color:#7fa6bd;white-space:nowrap}
+.traffic-chevron{font-size:18px;color:#8cd8e6;transition:transform .2s}
+.traffic-section[open]>.traffic-chevron,.traffic-section[open]>summary .traffic-chevron{transform:rotate(180deg)}
+.traffic-section .scenarios>.process-heading{display:none}
+.traffic-section .scenarios{border-top-color:#1f3a4e}
+body:not(.process-active) #reset,body:not(.process-active) #followToggle{display:none}
+@media(max-width:780px){.traffic-section{order:4}.traffic-section>summary{padding:16px;gap:12px}.traffic-summary-count{display:none}.traffic-summary-text strong{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.traffic-chevron{transition:none}}
+/* Playback appears once a process is chosen, so nothing looks selected before the learner picks one. */
+body:not(.process-active) #processPlayback{display:none}

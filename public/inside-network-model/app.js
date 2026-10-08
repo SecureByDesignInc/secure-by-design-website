@@ -151,7 +151,7 @@ function inspect(id,{frame=true,reveal=true}={}){
  selected=id;setPlaying(false);renderSystem();tab('system');scene?.select(id,frame);if(connectionsOn)applyConnections();showRelationship({type:'system',id});
  const n=getNode(id),v=vlans.find(v=>v.ids.includes(id));
  $('sceneTitle').textContent=n.name;$('sceneCaption').textContent=n.role;
- document.querySelector('.flow-caption').classList.remove('is-step');$('stageDescription').textContent='';
+ document.querySelector('.flow-caption').classList.remove('is-step');$('stageDescription').textContent='';setProcessMode(false);
  $('stageKind').textContent='SELECTED SYSTEM';$('stageFlow').textContent=n.address||'Offline root CA';
  $('stageProtocol').textContent=v?`VLAN ${v.number} · ${v.name}`:'Physically disconnected · local access';
  $('announce').textContent=`Selected ${name(id)}. System details available.`;
@@ -160,7 +160,10 @@ function inspect(id,{frame=true,reveal=true}={}){
 }
 function controlChips(ids){return `<div class="control-chips">${ids.map(id=>`<button data-control="${esc(id)}" title="${esc(inventory.controls[id]?.[0])}">${esc(id)}</button>`).join('')}</div>`;}
 function bindControls(root){root.querySelectorAll('[data-control]').forEach(b=>b.onclick=()=>inspectControl(b.dataset.control));}
-function architectureView(html,ids=[],relationship={type:'overview'}){document.querySelector('.flow-caption').classList.remove('is-step');if(recorder?.active)recorder.stop(true);clearMarkers();setPlaying(false);tab('architecture');$('architectureContent').innerHTML=html;bindSystems($('architectureContent'));bindControls($('architectureContent'));scene?.highlight(ids);showRelationship(relationship);$('stageKind').textContent='NETWORK ARCHITECTURE';$('stageProtocol').textContent='Internal uplinks · permitted flows require explicit rules';$('announce').textContent=$('architectureContent').querySelector('h2')?.textContent||'Architecture selected';}
+// The traffic walkthroughs are optional: flow-only controls and the Flow details tab appear only while a process is shown.
+function setProcessMode(on){document.body.classList.toggle('process-active',on);$('flowTab').hidden=!on;if(!on)document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-current','false'));}
+function openTraffic(){const section=$('trafficSection');if(!section.open)section.open=true;}
+function architectureView(html,ids=[],relationship={type:'overview'}){document.querySelector('.flow-caption').classList.remove('is-step');setProcessMode(false);if(recorder?.active)recorder.stop(true);clearMarkers();setPlaying(false);tab('architecture');$('architectureContent').innerHTML=html;bindSystems($('architectureContent'));bindControls($('architectureContent'));scene?.highlight(ids);showRelationship(relationship);$('stageKind').textContent='NETWORK ARCHITECTURE';$('stageProtocol').textContent='Internal uplinks · permitted flows require explicit rules';$('announce').textContent=$('architectureContent').querySelector('h2')?.textContent||'Architecture selected';}
 function inspectVlan(id){const v=vlans.find(v=>v.id===id);if(!v)return;architectureView(`<span class="eyebrow">VIRTUAL LOCAL AREA NETWORK ${v.number}</span><h2>${esc(v.name)}</h2><div class="address-card"><strong>${v.subnet}</strong></div><p>${esc(v.boundary)}</p><h3>Systems & addresses</h3>${v.ids.map(id=>`<button class="asset-row" data-system="${id}"><strong>${esc(name(id))}</strong><span>${esc(getNode(id).role)}</span><code>${getNode(id).address}</code></button>`).join('')}<h3>Key functions</h3><ul>${v.functions.map(f=>`<li>${esc(f)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(v.controls)}`,v.ids,{type:'vlan',id});$('sceneTitle').textContent=`VLAN ${v.number} · ${v.name}`;$('sceneCaption').textContent=v.subnet;$('stageFlow').textContent=v.boundary;$('vlanLegend').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vlan===id)));publish(`vlan=${v.number}`);}
 function inspectControl(id){const c=inventory.controls[id];if(!c)return;const matched=nodes.filter(n=>n.controls.includes(id)||vlans.find(v=>v.ids.includes(n.id))?.controls.includes(id));const supporting=facilities.filter(f=>f.controls.includes(id));architectureView(`<span class="eyebrow">NIST SP 800-53 · REVISION 5</span><h2>${esc(id)} · ${esc(c[0])}</h2><p>${esc(c[1])}</p><h3>Related systems in this design</h3>${matched.length?dependencies(matched.map(n=>n.id)):'<p>This is a governance or process responsibility, not an individual server function.</p>'}${supporting.map(f=>`<h3>${esc(f.name)}</h3><p>${esc(f.detail)}</p>`).join('')}<h3>Control implementation</h3><p>Document the selected requirement, responsible owner, implementation, and supporting evidence.</p>${courseBlock(['rmf'],'Prepare it for authorization')}`,[...matched.map(n=>n.id),...supporting.map(f=>f.id)],{type:'control',id});$('sceneTitle').textContent=`${id} · ${c[0]}`;$('sceneCaption').textContent='Systems and processes associated with this control.';$('stageFlow').textContent=c[0];publish(`control=${encodeURIComponent(id)}`);}
 function inspectFacility(id){const f=facilities.find(f=>f.id===id);architectureView(`<span class="eyebrow">ARCHITECTURE & OPERATIONS</span><h2>${esc(f.name)}</h2><p>${esc(f.detail)}</p><ul>${f.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(f.controls)}`,[id],{type:'facility',id});$('sceneTitle').textContent=f.name;$('sceneCaption').textContent=id==='core'?'Layer 3 routing · allow by exception':'Human-controlled process · no live network link';$('stageFlow').textContent=f.name;$('stageProtocol').textContent=id==='core'?'Internal switching and routing':'Controlled offline operations';publish(`facility=${id}`);}
@@ -183,7 +186,7 @@ function changeStep(index){
  $('stageDescription').textContent=step.description;$('stageCounter').textContent=`${stepIndex+1} / ${s.steps.length}`;document.querySelector('.flow-caption').classList.add('is-step');
  $('sequenceKicker').textContent=s.drill?'ATTACK DRILL / ACCEPTANCE TESTS':s.whatIf?`WHAT IF / ${s.label.toUpperCase()}`:`${String(current+1).padStart(2,'0')} / ${s.label.toUpperCase()}`;$('sequenceTitle').textContent=s.title;
  $('currentStepTitle').textContent=step.title;$('currentStepDescription').textContent=step.description;$('stepCounter').textContent=`Step ${stepIndex+1} of ${s.steps.length}`;
- renderSteps();renderFlow();tab('flow');scene?.showStep(step,s.color,s.dependencies,policy,policy.kind==='manual'?null:gateText(policy,step));showRelationship({type:'flow',scenario:current,step:stepIndex});
+ setProcessMode(true);renderSteps();renderFlow();tab('flow');scene?.showStep(step,s.color,s.dependencies,policy,policy.kind==='manual'?null:gateText(policy,step));showRelationship({type:'flow',scenario:current,step:stepIndex});
  $('announce').textContent=`${s.label}, step ${stepIndex+1}: ${step.title}. ${policy.label}.`;
  publish(`process=${s.id}&step=${stepIndex+1}`);
 }
@@ -194,6 +197,8 @@ $('whatIfButtons').innerHTML=whatIfs.map((s,i)=>`<button aria-current="false" ar
 // Choosing a process brings the 3D stage into view (not the panel below it), so the motion plays where the learner is looking.
 function revealStage(){const stage=document.querySelector('.stage'),r=stage.getBoundingClientRect();if(r.top>=0&&r.bottom<=innerHeight)return;stage.scrollIntoView({block:r.height>innerHeight?'start':'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 document.querySelectorAll('[data-scenario]').forEach(b=>b.onclick=()=>{changeScenario(Number(b.dataset.scenario));setPlaying(moving);revealStage();});
+// Opening the walkthroughs shows the processes; nothing plays until one is chosen.
+$('trafficSection').addEventListener('toggle',reportHeight);
 $('stageBack').onclick=()=>$('back').click();$('stageNext').onclick=()=>$('next').click();$('stagePlay').onclick=()=>$('play').click();
 for(const group of [...vlans.map(v=>({label:`VLAN ${v.number} · ${v.name}`,ids:v.ids})),{label:'Offline systems',ids:systemOrder.filter(id=>!vlans.some(v=>v.ids.includes(id)))}]){
  const options=document.createElement('optgroup');options.label=group.label;
@@ -206,7 +211,7 @@ $('showSystemDetails').onclick=()=>inspect(selected);
 $('systemSelect').onchange=e=>inspect(e.target.value);
 $('flowTab').onclick=()=>{endRecording();setPlaying(false);changeStep(stepIndex);};$('systemTab').onclick=()=>inspect(selected);
 $('architectureTab').onclick=architectureOverview;
-for(const name of ['system','flow','architecture'])$(name+'Tab').onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const tabs=['system','flow','architecture'],other=tabs[(tabs.indexOf(name)+(e.key==='ArrowRight'?1:2))%3];$(other+'Tab').click();$(other+'Tab').focus();}};
+for(const name of ['system','flow','architecture'])$(name+'Tab').onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const tabs=['system','flow','architecture'].filter(t=>!$(t+'Tab').hidden),other=tabs[(tabs.indexOf(name)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];$(other+'Tab').click();$(other+'Tab').focus();}};
 $('back').onclick=()=>{endRecording();setPlaying(false);changeStep(stepIndex-1);};$('next').onclick=()=>{endRecording();setPlaying(false);changeStep(stepIndex+1);};
 $('play').onclick=()=>{const wasPlaying=playing;endRecording();if(!moving)setMotion(true);const next=!wasPlaying;setPlaying(next);if(next)changeStep(stepIndex);};
 $('speed').onchange=e=>{endRecording();speed=Number(e.target.value);scene?.setStepSeconds(stepSeconds/speed);};
@@ -237,7 +242,8 @@ renderSystem();changeScenario(0);setMotion(moving);setPlaying(playing);
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{if(event.matches)setMotion(false);});
 window.addEventListener('pagehide',event=>{if(!event.persisted)relationships?.dispose();});
 try{scene=createNetworkScene($('viewport'),nodes,inspect,()=>{if(!recorder?.active)setPlaying(false);},{onHover:showHoverTip,onPacket:showPacketCard,onView});}catch(e){console.error(e);$('loading').hidden=false;$('loading').innerHTML='<strong>3D graphics unavailable</strong><span>Use a browser with WebGL 2 and hardware acceleration.</span><span>All technical explanations remain available.</span>';}
-inspect(selected,{frame:false,reveal:false});
+// Inside the Network opens on the architecture explorer; traffic walkthroughs are optional, further down.
+architectureOverview();
 // Automated browser checks open the model with ?qa to reach the scene; nothing else uses this.
 if(new URLSearchParams(location.search).has('qa'))window.insideNetworkQA={packets:()=>scene?.debugPackets()||[],project:id=>scene?.debugProject(id),labels:()=>scene?.debugLabels()||[]};
 let previous=performance.now();function tick(now){const dt=Math.min((now-previous)/1000,.1);previous=now;if(playing&&moving&&!document.hidden&&!document.querySelector('dialog[open]')&&!recorder?.holding){elapsed+=dt*speed;if(elapsed>=stepSeconds)changeStep(stepIndex+1);}const bar=$('steps').querySelector('[aria-current=step] .step-progress');if(bar)bar.style.transform=`scaleX(${Math.min(1,elapsed/stepSeconds)})`;requestAnimationFrame(tick);}requestAnimationFrame(tick);
@@ -271,7 +277,7 @@ function publish(hash){
 function applyHash(raw){
  const params=new URLSearchParams(String(raw||'').replace(/^#/,''));
  if(scene){const wanted=params.get('layout')==='logical'?'logical':'physical';if(scene.getView()!==wanted)scene.setView(wanted);}
- if(params.has('process')){const index=sequences.findIndex(s=>s.id===params.get('process'));if(index<0)return false;changeScenario(index);setPlaying(false);changeStep(Math.max(1,Math.min(sequences[index].steps.length,Number(params.get('step'))||1))-1);return true;}
+ if(params.has('process')){const index=sequences.findIndex(s=>s.id===params.get('process'));if(index<0)return false;openTraffic();changeScenario(index);setPlaying(false);changeStep(Math.max(1,Math.min(sequences[index].steps.length,Number(params.get('step'))||1))-1);return true;}
  if(params.has('system')&&getNode(params.get('system'))){inspect(params.get('system'),{reveal:false});return true;}
  const vlan=vlans.find(v=>String(v.number)===params.get('vlan'));if(vlan){inspectVlan(vlan.id);return true;}
  if(params.has('control')&&Object.hasOwn(inventory.controls,params.get('control'))){inspectControl(params.get('control'));return true;}

@@ -49,6 +49,14 @@ try {
     const { context, page } = await open({ width: 1440, height: 900 });
     assert.equal(await page.locator('#viewport canvas').count(), 1, '3D canvas renders');
     assert.equal(await page.locator('#loading').isVisible(), false, 'Loading message clears');
+    // The model opens on the architecture explorer; traffic walkthroughs are an optional, collapsed section.
+    assert.equal(await page.locator('#architectureTab').getAttribute('aria-selected'), 'true', 'Opens on the architecture explorer');
+    assert.equal(await page.locator('#trafficSection').evaluate(el => el.open), false, 'Traffic walkthroughs start collapsed');
+    assert.equal(await page.locator('#flowTab').isHidden(), true, 'Flow details appear only while a process is shown');
+    assert.equal(await page.locator('#followToggle').isHidden(), true, 'Flow-only stage tools are hidden until a process is chosen');
+    await page.locator('#trafficSection > summary').click();
+    assert.equal(await page.locator('#processPlayback').isHidden(), true, 'Playback appears only after a process is chosen');
+    assert.equal(await page.locator('#scenarioButtons [aria-current=true]').count(), 0, 'No process is preselected');
     assert.equal(await page.locator('#scenarioButtons button').count(), scenarios.length);
     for (const [index, scenario] of scenarios.entries()) {
       await page.locator('#scenarioButtons button').nth(index).click();
@@ -172,6 +180,7 @@ try {
   {
     const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2&layout=logical' });
     assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 4');
+    assert.equal(await page.locator('#trafficSection').evaluate(el => el.open), true, 'Process links open the walkthroughs');
     assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
     assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Links can open the logical view');
     await context.close();
@@ -197,7 +206,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();
