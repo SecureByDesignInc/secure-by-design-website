@@ -1,6 +1,6 @@
 # Sign-in live check
 
-0 failed of 26
+0 failed of 28
 
 - ✅ providers endpoint — 200 {"providers":{"apple":false,"google":false,"microsoft":false},"passkeys":true} cache=private, no-store
 - ✅ unconfigured provider start redirects with an error code — 303 /my-progress?signin_error=unavailable#account
@@ -10,6 +10,7 @@
 - ✅ app exchange rejects an unknown code — 400 {"error":"That sign-in expired. Try again."}
 - ✅ www redirects to apex keeping the query — 301 https://securebydesigninc.com/app-sign-in?challenge=abc
 - ✅ my-progress shows passkey sign-in (390)
+- ✅ passkey button text is readable (390) — 11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)
 - ✅ provider buttons hidden until keys exist (390) — 0 shown
 - ✅ no horizontal scroll on my-progress (390) — 0px
 - ✅ app-sign-in shows the sign-in form (390)
@@ -18,9 +19,10 @@
 - ✅ privacy mentions passkeys and self-service deletion (390)
 - ✅ no page errors (390)
 - ✅ my-progress shows passkey sign-in (1440)
+- ✅ passkey button text is readable (1440) — 11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)
 - ✅ provider buttons hidden until keys exist (1440) — 0 shown
 - ✅ no horizontal scroll on my-progress (1440) — 0px
-- ✅ passkey options from the site — {"status":200,"body":{"publicKey":{"challenge":"gb9etC68BZoQ-TfC3KWYslk1LY8arTrdKmfIQNZ_TWM","rpId":"securebydesigninc.com","userVerification":"required","timeout":300000,"allowCredentials":[]}}}
+- ✅ passkey options from the site — {"status":200,"body":{"publicKey":{"challenge":"LLpvE2_fdXIqQt0BODfjvGfDxKci4BvYn0oDqTqSVpc","rpId":"securebydesigninc.com","userVerification":"required","timeout":300000,"allowCredentials":[]}}}
 - ✅ unregistered passkey is refused with a clear message — This passkey isn’t registered with Secure By Design. Sign in another way, then add it in My Account.
 - ✅ still signed out after unregistered passkey — 401
 - ✅ app-sign-in shows the sign-in form (1440)

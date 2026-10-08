@@ -40,6 +40,11 @@
     "detail": ""
   },
   {
+    "name": "passkey button text is readable (390)",
+    "ok": true,
+    "detail": "11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)"
+  },
+  {
     "name": "provider buttons hidden until keys exist (390)",
     "ok": true,
     "detail": "0 shown"
@@ -80,6 +85,11 @@
     "detail": ""
   },
   {
+    "name": "passkey button text is readable (1440)",
+    "ok": true,
+    "detail": "11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)"
+  },
+  {
     "name": "provider buttons hidden until keys exist (1440)",
     "ok": true,
     "detail": "0 shown"
@@ -92,7 +102,7 @@
   {
     "name": "passkey options from the site",
     "ok": true,
-    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"gb9etC68BZoQ-TfC3KWYslk1LY8arTrdKmfIQNZ_TWM\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
+    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"LLpvE2_fdXIqQt0BODfjvGfDxKci4BvYn0oDqTqSVpc\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
   },
   {
     "name": "unregistered passkey is refused with a clear message",
