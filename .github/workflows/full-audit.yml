@@ -1,0 +1,102 @@
+name: Full site audit
+# Audit-only branch: read-only checks of securebydesigninc.com and the source. Deploys nothing.
+on:
+  push:
+    branches: [audit/full]
+    paths-ignore: ['audit-results/**']
+permissions:
+  contents: write
+concurrency:
+  group: full-audit
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i --prefix .github/audit/full cheerio@1.0.0 > /dev/null 2>&1
+      - name: Crawl and link check
+        continue-on-error: true
+        run: node .github/audit/full/crawl.mjs
+      - name: Spelling in rendered page text
+        continue-on-error: true
+        run: pip install -q codespell==2.3.0 && codespell --count audit-results/full/crawl/text > audit-results/full/crawl/codespell-pages.txt 2>&1; tail -3 audit-results/full/crawl/codespell-pages.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: crawl, path: audit-results/full, retention-days: 3 }
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm i --prefix .github/audit/full playwright@1.55.0 axe-core@4.10.3 > /dev/null 2>&1
+          .github/audit/full/node_modules/.bin/playwright install --with-deps chromium webkit firefox > /dev/null 2>&1
+      - name: Browser checks
+        continue-on-error: true
+        run: node .github/audit/full/browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: browser, path: audit-results/full, retention-days: 3 }
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Lighthouse
+        continue-on-error: true
+        run: .github/audit/full/lighthouse.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: lighthouse, path: audit-results/full, retention-days: 3 }
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Security checks
+        continue-on-error: true
+        run: .github/audit/full/security.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: security, path: audit-results/full, retention-days: 3 }
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - name: Source checks
+        continue-on-error: true
+        run: .github/audit/full/source.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: source, path: audit-results/full, retention-days: 3 }
+  collect:
+    needs: [crawl, browser, lighthouse, security, source]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: /tmp/parts }
+      - name: Save results to this branch
+        run: |
+          rm -rf audit-results/full && mkdir -p audit-results/full
+          for d in /tmp/parts/*/; do cp -r "$d"/. audit-results/full/; done
+          du -sh audit-results/full; find audit-results/full -type f | wc -l
+          git config user.name "Secure By Design"
+          git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          git add audit-results
+          git commit -qm "Full audit results" || echo "nothing to commit"
+          git push origin HEAD:audit/full
