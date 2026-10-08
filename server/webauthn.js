@@ -119,6 +119,7 @@ export async function verifyRegistration({ credential, challenge, origins, rpId 
   const auth = parseAuthenticatorData(attestation.get('authData'));
   if (!same(auth.rpIdHash, await sha256(rpId))) throw new Error('Wrong relying party');
   if (!auth.userPresent || !auth.credentialId) throw new Error('No user presence');
+  if (!auth.userVerified) throw new Error('Device unlock required');
   const credentialId = b64url.encode(auth.credentialId);
   if (credential.id !== credentialId) throw new Error('Credential ID mismatch');
   const { alg, jwk } = coseToJwk(auth.publicKey);
@@ -133,6 +134,7 @@ export async function verifyAssertion({ credential, challenge, origins, rpId, st
   const auth = parseAuthenticatorData(authData);
   if (!same(auth.rpIdHash, await sha256(rpId))) throw new Error('Wrong relying party');
   if (!auth.userPresent) throw new Error('No user presence');
+  if (!auth.userVerified) throw new Error('Device unlock required');
   const signed = new Uint8Array(authData.length + 32);
   signed.set(authData); signed.set(await sha256(clientBytes), authData.length);
   const jwk = JSON.parse(stored.public_key);

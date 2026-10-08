@@ -4,6 +4,7 @@ CREATE TABLE `reader_identities` (
 	`subject` text NOT NULL,
 	`account_id` text NOT NULL,
 	`email` text,
+	`refresh_token` text,
 	`created_at` text NOT NULL,
 	`last_used_at` text,
 	PRIMARY KEY(`provider`, `subject`),
@@ -31,3 +32,5 @@ CREATE TABLE `reader_auth_flows` (
 	`data` text NOT NULL,
 	`expires_at` text NOT NULL
 );
+--> statement-breakpoint
+CREATE INDEX `idx_reader_auth_flows_expires` ON `reader_auth_flows` (`expires_at`);

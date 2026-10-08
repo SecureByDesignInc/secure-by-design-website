@@ -17,7 +17,7 @@ export async function getReader(request,env){
  const token=cookie(request,'reader');if(!/^[a-f0-9]{64}$/.test(token))return null;
  if(!env.DB)throw new Error('Reader storage unavailable');
  // needsPassword marks legacy email-code accounts with no sign-in method yet (no password, provider, or passkey).
- return env.DB.prepare("SELECT a.id,a.email,(a.password_hash IS NULL AND NOT EXISTS (SELECT 1 FROM reader_identities i WHERE i.account_id=a.id) AND NOT EXISTS (SELECT 1 FROM reader_passkeys p WHERE p.account_id=a.id)) AS needsPassword FROM reader_accounts a JOIN reader_sessions s ON s.account_id=a.id WHERE s.token_hash=? AND s.expires_at>? AND s.client_kind='browser'").bind(await digest(token),new Date().toISOString()).first();
+ return env.DB.prepare("SELECT a.id,a.email,(a.password_hash IS NULL AND NOT EXISTS (SELECT 1 FROM reader_identities i WHERE i.account_id=a.id) AND NOT EXISTS (SELECT 1 FROM reader_passkeys p WHERE p.account_id=a.id)) AS needsPassword,s.expires_at AS sessionExpires FROM reader_accounts a JOIN reader_sessions s ON s.account_id=a.id WHERE s.token_hash=? AND s.expires_at>? AND s.client_kind='browser'").bind(await digest(token),new Date().toISOString()).first();
 }
 // Starts a 30-day browser session and returns its Set-Cookie value. Shared by passwords, providers, and passkeys.
 export async function startBrowserSession(request,env,accountId,email){
@@ -40,7 +40,11 @@ export async function readerAuthApi(request,env){
   const now=new Date().toISOString();
   if(route==='/api/reader-auth/signout'){
    const token=cookie(request,'reader');if(token)await env.DB.prepare('DELETE FROM reader_sessions WHERE token_hash=?').bind(await digest(token)).run();
-   return json({signedOut:true},200,setCookie(request,'reader','',0));
+   // Also forget any half-finished provider link started in this browser.
+   const headers=new Headers({'cache-control':'private, no-store','x-content-type-options':'nosniff'});
+   headers.append('set-cookie',setCookie(request,'reader','',0));
+   headers.append('set-cookie',local(request)?'sbd_local_flow=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0':'__Host-sbd_flow=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0');
+   return Response.json({signedOut:true},{status:200,headers});
   }
   let data;try{data=await readAuthBody(request)}catch{return json({error:'Check the form and try again.'},400)}
   if(route==='/api/reader-auth/signin'){

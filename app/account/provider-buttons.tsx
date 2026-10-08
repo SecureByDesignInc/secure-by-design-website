@@ -13,6 +13,7 @@ export const signInErrors:Record<string,string>={
  unavailable:'That sign-in option isn’t available yet. Use another method.',
  busy:'Too many sign-in attempts. Please try again later.',
  signin_first:'Sign in first, then add another sign-in method.',
+ reauth:'For your security, sign in again, then add the sign-in method.',
  linked_elsewhere:'That account is already linked to a different Secure By Design account.',
  unverified_email:'That account didn’t confirm your email address. Sign in another way, then add it in My Account.',
  unverified_microsoft:'Your work or school Microsoft account doesn’t confirm your email address to us. Sign in with your email, Apple, Google, or a passkey, then add Microsoft from My Account.',

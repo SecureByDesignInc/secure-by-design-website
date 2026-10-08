@@ -143,7 +143,7 @@ jobs:
           for site in https://securebydesigninc.com https://www.securebydesigninc.com; do
             served=""
             for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-              served=$(curl -s -m 20 "$site/build-info.json?check=$GITHUB_RUN_ID-$attempt" | jq -r '.commit // empty' 2>/dev/null || true)
+              served=$(curl -sL -m 20 "$site/build-info.json?check=$GITHUB_RUN_ID-$attempt" | jq -r '.commit // empty' 2>/dev/null || true)
               [ "$served" = "$GITHUB_SHA" ] && break
               sleep 10
             done
@@ -151,10 +151,10 @@ jobs:
               echo "::error title=Domain check $site::Serving build '${served:-none}', expected $GITHUB_SHA. Check CLOUDFLARE_WORKER_NAME and the Worker's custom domains."
               fail=1; continue
             fi
-            training=$(curl -s -m 20 -o training.html -w '%{http_code}' "$site/training")
+            training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/training")
             tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
-            course=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
-            itn=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
+            course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
+            itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
             echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/connect-segment $course | /inside-the-network $itn"
             if [ "$training" != 200 ] || [ "$tiles" -lt 15 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
               echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 15 tiles."

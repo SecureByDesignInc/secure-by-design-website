@@ -39,6 +39,8 @@ export default {async fetch(incoming,env,ctx){
  const url=new URL(incoming.url);
  // Send plain-HTTP visitors to HTTPS (Cloudflare's Always Use HTTPS setting does the same at the edge).
  if(url.protocol==='http:'&&!localHosts.has(url.hostname)){url.protocol='https:';return Response.redirect(url.toString(),301);}
+ // One canonical host keeps sign-in cookies, passkeys, and provider callbacks on securebydesigninc.com.
+ if(url.hostname==='www.securebydesigninc.com'){url.hostname='securebydesigninc.com';return Response.redirect(url.toString(),301);}
  const response=await route(withoutPlatformIdentity(incoming),env,ctx);
  if(url.protocol!=='https:'||response.headers.has('strict-transport-security'))return response;
  try{response.headers.set('strict-transport-security',hsts);return response;}

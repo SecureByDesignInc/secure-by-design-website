@@ -144,5 +144,15 @@ export async function exchangeCode(provider, env, { code, redirectUri, verifier,
   const response = await fetcher(provider.token, { method: 'POST', signal: AbortSignal.timeout(10000), headers: { 'content-type': 'application/x-www-form-urlencoded', accept: 'application/json' }, body });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || typeof data.id_token !== 'string') throw new Error('Token exchange failed');
-  return data.id_token;
+  return { idToken: data.id_token, refreshToken: typeof data.refresh_token === 'string' && data.refresh_token.length < 2048 ? data.refresh_token : null };
+}
+
+// Apple asks apps that delete accounts or unlink Sign in with Apple to revoke the user's tokens.
+export async function revokeAppleToken(env, refreshToken, fetcher = fetch) {
+  if (!refreshToken || !providers.apple.configured(env)) return false;
+  try {
+    const body = new URLSearchParams({ client_id: env.APPLE_CLIENT_ID, client_secret: await appleClientSecret(env), token: refreshToken, token_type_hint: 'refresh_token' });
+    const response = await fetcher('https://appleid.apple.com/auth/revoke', { method: 'POST', signal: AbortSignal.timeout(8000), headers: { 'content-type': 'application/x-www-form-urlencoded' }, body });
+    return response.ok;
+  } catch { return false; }
 }

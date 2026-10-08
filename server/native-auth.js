@@ -46,7 +46,7 @@ export async function nativeAuthApi(request,env){
    if(Object.keys(data).some(k=>!['code','verifier'].includes(k))||typeof data.code!=='string'||typeof data.verifier!=='string')return json({error:'Sign in again.'},400);
    const ip=request.headers.get('cf-connecting-ip');if(!ip)return json({error:'This request could not be verified.'},503);
    const now=new Date().toISOString(),expires=new Date(Date.now()+3600000).toISOString();
-   const allowed=await env.DB.prepare('INSERT INTO reader_auth_limits (key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(await digest(`exchange-ip:${now.slice(0,13)}:${ip}`),expires,30).first();
+   const allowed=await env.DB.prepare('INSERT INTO reader_auth_limits (key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(await digest(`exchange-ip:${now.slice(0,13)}:${ip}`),expires,120).first();
    if(!allowed)return json({error:'Too many sign-in attempts. Try again in an hour.'},429);
    const account=await redeemAppHandoff(env,data.code,data.verifier);
    if(!account)return json({error:'That sign-in expired. Try again.'},400);
