@@ -6,7 +6,7 @@ It would be easy to pull up the organization chart and start making a domain for
 
 ## Begin with one forest and one domain
 
-Our example starts with one forest and one domain: `securebydesigninc.com`. The forest shares a schema and configuration. The domain gives us a scope for directory data, authentication, and administration. Domains with a contiguous DNS namespace form a tree; a single domain already counts. [Microsoft’s logical model](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/understanding-the-active-directory-logical-model) covers how these pieces relate.
+Our example starts with one forest and one domain: `sbd.test`. The forest shares a schema and configuration. The domain gives us a scope for directory data, authentication, and administration. Domains with a contiguous DNS namespace form a tree; a single domain already counts. [Microsoft’s logical model](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/understanding-the-active-directory-logical-model) covers how these pieces relate.
 
 That’s our starting point, not a template you should blindly copy into every environment. Jon needs to ask what changes when the new team arrives. Do they need different permissions? Different settings? Someone else handling their accounts?
 

@@ -45,6 +45,18 @@ jobs:
         run: printf '{"commit":"%s","builtAt":"%s"}\n' "$GITHUB_SHA" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > public/build-info.json
       - name: Build
         run: pnpm build
+      - name: Full test suite (uses the build)
+        # scripts/check-rmf.mjs covers the offline Security Journal's /rmf-series guide; run it when the Journal returns.
+        run: |
+          set -o pipefail
+          status=0
+          node --test --test-reporter=tap tests/*.test.mjs > test-results.tap 2>&1 || status=1
+          grep -E '^# (tests|pass|fail)' test-results.tap || true
+          if [ $status -ne 0 ]; then
+            # Surface each failure as an annotation so it is readable without downloading logs.
+            awk '/^ *not ok /{name=$0} /^ *(error|expected|actual|location):/{if(name!=""){print name" | "$0}}' test-results.tap | head -40 | while IFS= read -r line; do echo "::error title=Test failure::$line"; done
+          fi
+          exit $status
       - uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -130,9 +142,11 @@ jobs:
             course=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
             itn=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
             echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/connect-segment $course | /inside-the-network $itn"
-            if [ "$training" != 200 ] || [ "$tiles" -lt 12 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
-              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 12 tiles."
+            if [ "$training" != 200 ] || [ "$tiles" -lt 15 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 15 tiles."
               fail=1
             fi
           done
+          redirect=$(curl -s -m 20 -o /dev/null -w '%{http_code} %{redirect_url}' http://securebydesigninc.com/training)
+          case "$redirect" in 301\ https://securebydesigninc.com/training*|308\ https://securebydesigninc.com/training*) echo "::notice title=HTTPS redirect::$redirect";; *) echo "::warning title=HTTPS redirect::http:// answered '$redirect' instead of redirecting to https://";; esac
           exit $fail

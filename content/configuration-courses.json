@@ -171,6 +171,11 @@
         "command": "Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test\nResolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10\nResolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10",
         "check": "Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.",
         "evidence": "Keep a record table with owner, type, target, time to live, and reason for the change.",
+        "model": {
+          "href": "/inside-the-network#process=signin&step=2",
+          "label": "Sign in, step 2",
+          "text": "The SRV records you create here are exactly what a workstation asks DNS for when it looks for a domain controller. The packet card shows the question and the answer."
+        },
         "sources": [
           "records"
         ],
@@ -232,6 +237,11 @@
         "command": "Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.11\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.10\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.11\ndcdiag /test:dns /v\nrepadmin /replsummary",
         "check": "Both DNS servers return the expected host and AD service records, replication is healthy, and the client still resolves internal names when either resolver is unavailable.",
         "evidence": "Keep paired lookup results, diagnostic output, and the failover test record with start, restore, and final verification times.",
+        "model": {
+          "href": "/inside-the-network#process=files&step=1",
+          "label": "Open a file, step 1",
+          "text": "Before a workstation can ask for a ticket to SBD-FS01, DNS has to turn the server name into its address."
+        },
         "sources": [
           "resolve",
           "dcdiag"
@@ -294,6 +304,11 @@
         "command": "Get-DnsClientServerAddress -AddressFamily IPv4\nGet-DnsClientCache\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10\nResolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.11",
         "check": "The original failure is reproducibly resolved, both resolvers agree, and the change record explains the cause rather than only showing a passing screenshot.",
         "evidence": "Complete the DNS checklist and retain the before/after lookup results with the configuration owner.",
+        "model": {
+          "href": "/inside-the-network#process=dc-down",
+          "label": "What if DC01 is down?",
+          "text": "Watch a client give up on an unanswered query and retry with SBD-DC02, the behavior your resolver order makes possible."
+        },
         "sources": [
           "resolve",
           "records"
@@ -404,6 +419,11 @@
         "command": "# Run on the future issuing CA, not the offline root.\nGet-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain\nResolve-DnsName SBD-DC01.sbd.test\nResolve-DnsName SBD-DC02.sbd.test",
         "check": "The written plan separates trust, issuance, publication, and administration. It identifies who renews CRLs before they expire.",
         "evidence": "Keep the approved hierarchy and a worksheet mapping every certificate/CRL URL to its actual publisher and file.",
+        "model": {
+          "href": "/inside-the-network#process=trust",
+          "label": "Offline trust",
+          "text": "The root stays outside the live network; signing material is carried to it by hand and the results are carried back."
+        },
         "sources": [
           "design"
         ],
@@ -588,6 +608,11 @@
         "command": "# Inspect public artifacts; use your actual approved paths.\ncertutil -dump C:\\CAConfig\\IssuingCA.cer\ncertutil -dump C:\\CAConfig\\RootCA.crl\nGet-FileHash -Algorithm SHA256 C:\\CAConfig\\IssuingCA.cer, C:\\CAConfig\\RootCA.cer, C:\\CAConfig\\RootCA.crl",
         "check": "Artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.",
         "evidence": "Keep approval, request ID, artifact hashes, verified certificate/CRL properties, media custody, and root shutdown evidence together.",
+        "model": {
+          "href": "/inside-the-network#process=trust&step=2",
+          "label": "Offline trust, step 2",
+          "text": "The ceremony you perform in this lesson, shown as a custody walk with no network link to the root."
+        },
         "sources": [
           "ceremony"
         ],
@@ -711,6 +736,11 @@
         "command": "# On the validation client; test.cer is the disposable public certificate.\ncertutil -dump test.cer\ncertutil -urlfetch -verify test.cer",
         "check": "A valid test certificate chains to the approved root and retrieves current revocation data. After revocation and publication, the test certificate is rejected for the expected reason.",
         "evidence": "Finish the PKI checklist with enrollment, retrieval and revocation results, renewal dates, backup verification, and recovery ownership.",
+        "model": {
+          "href": "/inside-the-network#process=web&step=2",
+          "label": "Use a web app, step 2",
+          "text": "A browser checks the server certificate against the internal chain you just validated."
+        },
         "sources": [
           "publish",
           "certutil"
@@ -1023,6 +1053,11 @@
         "command": "Get-ChildItem \\\\sbd.test\\SYSVOL\\sbd.test\\Policies\\PolicyDefinitions | Measure-Object\nGet-GPO -All | Select-Object DisplayName, GpoStatus, ModificationTime\nGet-GPInheritance -Target 'OU=Domain Controllers,DC=sbd,DC=test'\ngpupdate /force\ngpresult /r /scope:computer",
         "check": "The central store serves the package's templates, the imported GPOs are linked to the intended OUs, gpresult shows them applying, and every deviation has a written reason.",
         "evidence": "Keep the import record: package release, GPO names and links, inheritance output, and the deviation list with rationale and owner.",
+        "model": {
+          "href": "/inside-the-network#process=signin&step=4",
+          "label": "Sign in, step 4",
+          "text": "After sign-in, members read Group Policy over LDAP and SMB from SYSVOL. That is how the GPOs you link reach every machine."
+        },
         "quizzes": [
           {
             "question": "Why does the OU work from lesson 1 matter here?",
@@ -1254,6 +1289,11 @@
         "command": "# Record the pre-routing state on each DC — today there is no gateway.\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Select-Object DestinationPrefix, NextHop | Sort-Object DestinationPrefix -Unique",
         "check": "The register exists with every current path justified, the gateway plan is written, and the pre-routing state of both DCs is captured as the before picture.",
         "evidence": "Keep the segmentation policy statement, the exception register with owners, and the captured pre-routing output.",
+        "model": {
+          "href": "/inside-the-network#view=overview&layout=logical",
+          "label": "the logical view",
+          "text": "Each VLAN becomes an island around the core switch, so you can check your segment plan against the design."
+        },
         "quizzes": [
           {
             "question": "What makes a VLAN an enforced boundary?",
@@ -1379,6 +1419,11 @@
         "command": "# From a test host outside VLAN 10: permitted paths answer, everything else fails.\nTest-NetConnection SBD-DC01.sbd.test -Port 53\nTest-NetConnection SBD-DC01.sbd.test -Port 88\nTest-NetConnection SBD-DC01.sbd.test -Port 389\nTest-NetConnection 10.0.10.10 -Port 3389   # expected: TcpTestSucceeded False",
         "check": "Registered paths succeed, an unregistered port fails and appears in the router's deny log, and the rule set matches the register with no unexplained entries in either direction.",
         "evidence": "Keep the exported rule set, the register cross-check, the permitted-path test output, and a captured deny-log entry for the blocked test.",
+        "model": {
+          "href": "/inside-the-network#process=pc-to-sql",
+          "label": "What if a PC tries SQL?",
+          "text": "Default deny at the core stops a workstation from reaching the database directly."
+        },
         "quizzes": [
           {
             "question": "A rule exists on the router but not in the register. What happens?",
@@ -1441,6 +1486,11 @@
         "command": "# On the PDC emulator, then on the other DC.\nw32tm /query /source\nw32tm /query /status\nw32tm /stripchart /computer:10.0.20.40 /samples:3 /dataonly",
         "check": "The PDC emulator reports SBD-TIME01 as its source, the other controller reports the domain hierarchy, and measured offsets sit inside the documented threshold.",
         "evidence": "Record the time design decisions, both controllers' source and status output, the stripchart offsets, and the register row that permits NTP.",
+        "model": {
+          "href": "/inside-the-network#system=time",
+          "label": "SBD-TIME01",
+          "text": "The time server, its address, and every rule in the register that names it."
+        },
         "quizzes": [
           {
             "question": "Which system syncs directly with SBD-TIME01?",
@@ -1503,6 +1553,11 @@
         "command": "$targets = @(@('SBD-DC01.sbd.test',53),@('SBD-DC01.sbd.test',88),@('10.0.20.40',123),@('pki.sbd.test',80))\nforeach ($t in $targets) { Test-NetConnection $t[0] -Port $t[1] | Select-Object ComputerName, RemotePort, TcpTestSucceeded }\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV",
         "check": "Every register row passes from its source VLAN, every probed unregistered path fails with a logged deny, and directory discovery works across the routed network.",
         "evidence": "Keep the test matrix with timestamps, the deny-log captures, and the cross-VLAN SRV and CRL retrieval output.",
+        "model": {
+          "href": "/inside-the-network#process=drill",
+          "label": "the attack drill",
+          "text": "Six attempts that your ACLs and host firewalls must stop. Use them as your denial tests."
+        },
         "quizzes": [
           {
             "question": "What is the complete evidence for one denial?",
@@ -1788,6 +1843,11 @@
         "command": "certutil -verify -urlfetch C:\\Evidence\\pki\\test.cer\ncertutil -URL http://pki.sbd.test/RootCA.crl\nGet-ChildItem C:\\inetpub\\pkiroot | Select-Object Name, LastWriteTime",
         "check": "Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.",
         "evidence": "Keep the URL-to-file mapping table, the folder listing with timestamps, and the urlfetch output from the clean client.",
+        "model": {
+          "href": "/inside-the-network#process=web&step=3",
+          "label": "Use a web app, step 3",
+          "text": "A client checks revocation at the URL you publish on pki.sbd.test."
+        },
         "quizzes": [
           {
             "question": "Why can't the published filenames be renamed to something tidier?",
@@ -1975,6 +2035,11 @@
         "command": "gpupdate /force\ncertutil -pulse\nGet-ChildItem Cert:\\LocalMachine\\My | Select-Object Subject, NotAfter, Thumbprint\ncertutil -verify -urlfetch C:\\Evidence\\pki\\pilot.cer",
         "check": "The pilot enrolls hands-free, verification passes with live retrieval from pki.sbd.test, and both VLAN 30 hosts have current, attributed scan results.",
         "evidence": "Keep the pilot's certificate details, the urlfetch output, and the delta-scan comparison for SUBCA01 plus the PKI-MGMT01 baseline.",
+        "model": {
+          "href": "/inside-the-network#process=cert-expired",
+          "label": "What if a certificate expired?",
+          "text": "The network permits the connection; the client refuses the expired certificate."
+        },
         "quizzes": [
           {
             "question": "What does a hands-free pilot enrollment prove?",
@@ -2272,6 +2337,11 @@
         "command": "gpresult /r /scope:computer\nGet-ADGroupMember 'Protected Users' | Select-Object Name\nwhoami /priv | Select-String 'SeDenyInteractiveLogonRight' -Quiet",
         "check": "A Tier 0 account's sign-in attempt on a Tier 2 test machine is refused by policy and produces the matching denial event; Protected Users contains the Tier 0 admins; the break-glass and MFA decisions are written.",
         "evidence": "Keep the logon-rights GPO reports, the refused sign-in's event capture, the Protected Users membership, and the break-glass and MFA decision records.",
+        "model": {
+          "href": "/inside-the-network#process=drill&step=6",
+          "label": "Attack drill, step 6",
+          "text": "A stolen administrator session aims at a domain controller and is stopped. This is the path your logon restrictions close."
+        },
         "quizzes": [
           {
             "question": "What turns the tier rule from policy into enforcement?",
@@ -2334,6 +2404,11 @@
         "command": "Enter-PSSession SBD-DHCP01.sbd.test   # from SBD-ADMIN-SRV01, Tier 1 account\nipconfig /renew   # on the VLAN 80 test client\nGet-WinEvent -LogName Security -MaxEvents 5 | Where-Object Id -in 4625,4672 | Select-Object TimeCreated, Id",
         "check": "Every in-tier path succeeds, every tested out-of-tier path fails with captured evidence, and DHCP with dynamic DNS still works end to end under the full rule set.",
         "evidence": "Keep the completed tier matrix with timestamps, the denial captures, and the post-restriction lease and registration proof.",
+        "model": {
+          "href": "/inside-the-network#process=peer-rdp",
+          "label": "What if a PC tries remote desktop to another PC?",
+          "text": "Host firewalls stop lateral movement between workstations."
+        },
         "quizzes": [
           {
             "question": "What pairs make the denial evidence complete?",
@@ -2495,6 +2570,11 @@
         "command": "# Capture the before state: what the DCs currently audit and where nothing is forwarded yet.\nauditpol /get /category:* | Select-String 'Logon|Account Management|Directory Service|Policy Change'\nGet-Service Wecsvc -ComputerName SBD-SYSLOG01",
         "check": "The design names each stage's job, scope, retention, and readers; the repository's no-delete rule is written; and the register carries the three pipeline paths with owners.",
         "evidence": "Keep the pipeline design sheet, the retention and access table, and the new register rows.",
+        "model": {
+          "href": "/inside-the-network#process=logs",
+          "label": "Turn an event into evidence",
+          "text": "Follow one event from a domain controller to the collector, Splunk, and the audit copy."
+        },
         "quizzes": [
           {
             "question": "Why separate the repository from the analysis system?",
@@ -2681,6 +2761,11 @@
         "command": "Get-ChildItem \\\\SBD-AUDIT01\\LogArchive | Select-Object Name, Length, LastWriteTime -First 5\nGet-FileHash -Algorithm SHA256 \\\\SBD-AUDIT01\\LogArchive\\*.evtx | Select-Object -First 3\nicacls \\\\SBD-AUDIT01\\LogArchive",
         "check": "Dated archives arrive on schedule with catalog hashes that verify, the permission listing matches the access model exactly, and the AU table reflects reality.",
         "evidence": "Keep the archival job definition, the hash catalog excerpt, the permissions output, and the completed AU table.",
+        "model": {
+          "href": "/inside-the-network#process=logs&step=4",
+          "label": "Turn an event into evidence, step 4",
+          "text": "The collector writes a retained copy to SBD-AUDIT01."
+        },
         "quizzes": [
           {
             "question": "What does the hash catalog actually protect against?",
@@ -2743,6 +2828,11 @@
         "command": "Test-NetConnection SBD-SPLUNK01.sbd.test -Port 9997\n# In the analysis console, confirm the three saved searches return today's events\nGet-WinEvent -FilterHashtable @{LogName='Security';Id=4625} -MaxEvents 3 | Select-Object TimeCreated, MachineName",
         "check": "Both streams index with correct timestamps, the three searches return real current events, and the alert fires in a test with its responder and first step documented.",
         "evidence": "Record the input configuration, each search with a result sample, and the alert definition with its responder.",
+        "model": {
+          "href": "/inside-the-network#process=logs&step=3",
+          "label": "Turn an event into evidence, step 3",
+          "text": "The collector forwards events to SBD-SPLUNK01 for investigation."
+        },
         "quizzes": [
           {
             "question": "Why does the repository stay out of the analysis flow?",
@@ -2988,6 +3078,11 @@
         "command": "Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName\ngpresult /r /scope:computer\nResolve-DnsName SBD-PC01.sbd.test\nTest-NetConnection SBD-PC02.sbd.test -Port 445   # expected: TcpTestSucceeded False",
         "check": "All three pilots sit in the Workstations OU with STIG policy applied and DNS registered, peer SMB/RDP fails as designed, and the join events are visible in analysis.",
         "evidence": "Keep each pilot's placement, gpresult, and DNS proof; the peer-deny output; and the analysis search showing the three computer-account creations.",
+        "model": {
+          "href": "/inside-the-network#process=signin",
+          "label": "Sign in",
+          "text": "A workstation gets its address, finds a domain controller, authenticates, and reads its policy."
+        },
         "quizzes": [
           {
             "question": "How does a brand-new machine end up hardened without anyone touching it?",
@@ -3175,6 +3270,11 @@
         "command": "# On an enrolled pilot: the wired interface authenticated with EAP-TLS.\nnetsh lan show interfaces\n# On SBD-DHCP01: recent NPS grants (6272) and denials (6273).\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273} -MaxEvents 5 | Select-Object TimeCreated, Id",
         "check": "An enrolled pilot authenticates and gets its normal VLAN 80 lease; an unenrolled test laptop lands in VLAN 90 and reaches nothing; NPS logs both outcomes, and they appear in the collector.",
         "evidence": "Keep the network policy export, the RADIUS client list (without the secret), the port configuration, both test results with their NPS events, and the F20 register row.",
+        "model": {
+          "href": "/inside-the-network#system=dhcp",
+          "label": "SBD-DHCP01",
+          "text": "The NPS role for 802.1X runs here, on the existing DHCP server."
+        },
         "quizzes": [
           {
             "question": "What lets a workstation onto a VLAN 80 port after this lesson?",
@@ -3467,6 +3567,11 @@
         "command": "Get-WsusServer | Get-WsusComputer -ComputerTargetGroups 'Ring 1 - Pilot' | Select-Object FullDomainName, LastReportedStatusTime\ngpresult /r /scope:computer\nGet-WindowsUpdateLog -ErrorAction SilentlyContinue",
         "check": "Every system reports to its ring's group, the pilot ring installed and reported the first approved cycle, and the promotion to later rings followed the written order.",
         "evidence": "Record the product scope, the offline import with hashes, the ring GPO reports, and the first cycle's per-ring approval and install timeline.",
+        "model": {
+          "href": "/inside-the-network#process=updates",
+          "label": "Bring updates inside",
+          "text": "Approved updates cross the air gap by hand, then members check metadata and pull signed content from SBD-WSUS01."
+        },
         "quizzes": [
           {
             "question": "How does update content reach this WSUS server?",
@@ -3529,6 +3634,11 @@
         "command": "Test-NetConnection 10.0.70.20 -Port 80\n# On a Linux consumer: confirm the only configured source is the internal repository\n# dnf repolist  (or the platform equivalent) — capture the output into the evidence set\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\patch-protect\\repo-snapshot-catalog.txt",
         "check": "The repository answers on its registered path, consumers list the internal source and only the internal source, and the snapshot catalog with hashes is filed.",
         "evidence": "Keep the snapshot date and hash catalog, the consumer source listings, and the repository's administration record.",
+        "model": {
+          "href": "/inside-the-network#system=repo",
+          "label": "SBD-REPO01",
+          "text": "The Linux package repository and the rules that let Splunk and Nessus patch from it."
+        },
         "quizzes": [
           {
             "question": "What is the repository's version, for evidence purposes?",
@@ -3883,6 +3993,11 @@
         "command": "Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode\nGet-SmbSession | Select-Object ClientComputerName, Signed, Encrypted   # run during the test session, on FS01\nicacls D:\\Shares\\Projects | Select-String 'SBD'",
         "check": "Shares grant to role groups only, a live session shows signing (and encryption where designed), and the two-role test proves both the access and the invisible-denied behavior.",
         "evidence": "Keep the share and NTFS permission reports, the live session's signing/encryption output, and the two-role test record with its pipeline entry.",
+        "model": {
+          "href": "/inside-the-network#process=files&step=3",
+          "label": "Open a file, step 3",
+          "text": "A workstation presents its service ticket and opens the approved share on SBD-FS01."
+        },
         "quizzes": [
           {
             "question": "Where does the fine-grained permission detail live?",
@@ -3945,6 +4060,11 @@
         "command": "Get-Service MSSQLSERVER -ComputerName SBD-SQL01 | Select-Object Status\n# From SBD-WEB01: the registered caller connects. From a fleet machine:\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # expected from fleet: TcpTestSucceeded False\ncertutil -verify -urlfetch C:\\Evidence\\services\\sql01.cer",
         "check": "The service runs as the gMSA, connections are certificate-encrypted with a validating chain, application access works by database role, and the fleet's direct attempt fails with its logged deny.",
         "evidence": "Keep the service identity proof, the certificate binding and urlfetch output, the database role grants, and the paired success/deny connection evidence.",
+        "model": {
+          "href": "/inside-the-network#process=pc-to-sql",
+          "label": "What if a PC tries SQL?",
+          "text": "Only the applications reach SBD-SQL01; a workstation going straight to the database is denied."
+        },
         "quizzes": [
           {
             "question": "What demonstrates the gMSA actually working?",
@@ -4007,6 +4127,11 @@
         "command": "Test-NetConnection SBD-WEB01.sbd.test -Port 443\n# From a fleet machine, trust and chain:\ncertutil -verify -urlfetch C:\\Evidence\\services\\web01.cer\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # from fleet, still expected: False",
         "check": "The licensing path works as registered, the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration, and the end-to-end request proves fleet → web → database with the shortcut still denied.",
         "evidence": "Keep APPS01's identity and path proof, WEB01's hardened config export with hashes and checklist, the certificate validation output, and the end-to-end chain test.",
+        "model": {
+          "href": "/inside-the-network#process=web",
+          "label": "Use a web app",
+          "text": "Resolve the name, verify the certificate, check revocation, and request the application on SBD-WEB01."
+        },
         "quizzes": [
           {
             "question": "Where do WEB01's packages come from?",
@@ -4351,6 +4476,11 @@
         "command": "# Hash on the protected volume, then on the media.\nGet-FileHash -Algorithm SHA256 E:\\Backups\\SBD-DC02\\*.vhdx\nGet-FileHash -Algorithm SHA256 F:\\Media-0012\\SBD-DC02\\*.vhdx",
         "check": "Every item in the recovery set has an offline copy with matching hashes on the volume and the media, a custody entry with a named custodian of the right tier, and one copy has been retrieved and verified.",
         "evidence": "Keep the custodian assignments, the hash pairs, the custody register entries, and the retrieval test record.",
+        "model": {
+          "href": "/inside-the-network#facility=backup",
+          "label": "Offline backup & recovery",
+          "text": "The offline cabinet has no network path. Copies arrive only by custodian under the media procedure."
+        },
         "quizzes": [
           {
             "question": "Who carries the domain controllers' system-state backup to the cabinet?",

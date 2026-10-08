@@ -17,8 +17,6 @@ export const metadata:Metadata={title:{default:'Secure By Design — Cybersecuri
 export default function RootLayout({children}:{children:React.ReactNode}){
   return <html lang="en">
     <head>
-      <script async src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js" />
-      <script dangerouslySetInnerHTML={{ __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();` }} />
     </head>
     <body className={sans.variable+' '+mono.variable+' site-editorial'}>
       <a className="skip-link" href="#main">Skip to content</a>
@@ -29,7 +27,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
           <div dangerouslySetInnerHTML={{__html: renderAppStores(appStores)}} />
           <nav className="header-socials" aria-label="Follow Secure By Design">
             <span>Follow along</span>
-            <div>{videoLibrary.platforms.filter(platform => platform.channelUrl).map(platform => <a key={platform.id} className={`plausible-event-name=Outbound+Link:+Click plausible-event-platform=${platform.name} plausible-event-placement=header`} href={platform.channelUrl} target="_blank" rel="noopener noreferrer" aria-label={`Secure By Design on ${platform.name} (opens in a new tab)`}><img className="header-social-icon" src={`/social/${platform.id}-sbd.svg`} width="22" height="22" alt="" />{platform.name}</a>)}
+            <div>{videoLibrary.platforms.filter(platform => platform.channelUrl).map(platform => <a key={platform.id} href={platform.channelUrl} target="_blank" rel="noopener noreferrer" aria-label={`Secure By Design on ${platform.name} (opens in a new tab)`}><img className="header-social-icon" src={`/social/${platform.id}-sbd.svg`} width="22" height="22" alt="" />{platform.name}</a>)}
             </div>
           </nav>
           </div>

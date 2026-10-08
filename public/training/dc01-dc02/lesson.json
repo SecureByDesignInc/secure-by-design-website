@@ -81,6 +81,21 @@
       "id": "authentication",
       "title": "Microsoft · Authentication and authorization",
       "url": "https://learn.microsoft.com/en-us/windows-server/security/windows-authentication/windows-authentication-concepts"
+    },
+    {
+      "id": "ports",
+      "title": "Microsoft · Service overview and network port requirements",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements"
+    },
+    {
+      "id": "ad-firewall",
+      "title": "Microsoft · Configure a firewall for AD domains and trusts",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/config-firewall-for-ad-domains-and-trusts"
+    },
+    {
+      "id": "pktmon",
+      "title": "Microsoft · Packet Monitor (pktmon)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pktmon"
     }
   ],
   "chapters": [
@@ -325,7 +340,24 @@
         "diag",
         "controls"
       ],
-      "foundationIds": []
+      "foundationIds": [
+        "ports"
+      ],
+      "wire": {
+        "title": "Optional: see it on the wire",
+        "intro": "Packet Monitor (pktmon) is built into Windows Server 2025. Run it on SBD-DC02 in an elevated PowerShell window while you query DC01, so the request crosses the network. Then compare the capture with the packet card for Sign in, step 2.",
+        "label": "Capture the locator query on SBD-DC02",
+        "command": "New-Item -ItemType Directory C:\\Evidence -Force\npktmon filter remove\npktmon filter add DNS -p 53\npktmon start --capture --comp nics --pkt-size 0 --file-name C:\\Evidence\\dc-locator.etl\nResolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server 10.0.10.10\npktmon stop\npktmon etl2txt C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.txt\npktmon etl2pcap C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.pcapng\npktmon filter remove",
+        "expected": "Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming SBD-DC01 and SBD-DC02 on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark. Keep the capture with your evidence; it contains only the traffic the filter allowed.",
+        "sources": [
+          "pktmon"
+        ]
+      },
+      "model": {
+        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=2",
+        "label": "Sign in, step 2",
+        "text": "Compare your capture with the packet card for this step."
+      }
     },
     {
       "id": "evidence",
@@ -450,7 +482,12 @@
         "dns-overview",
         "dns-zones",
         "dc-locator"
-      ]
+      ],
+      "model": {
+        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=2",
+        "label": "Sign in, step 2",
+        "text": "The workstation asks DNS for the same domain controller locator records you query in Verify. Open the packet card to see the question and the answer."
+      }
     },
     {
       "id": "redundancy",
@@ -481,7 +518,93 @@
         "fsmo",
         "dc-locator",
         "dns"
-      ]
+      ],
+      "model": {
+        "href": "https://securebydesigninc.com/inside-the-network#process=dc-down",
+        "label": "What if DC01 is down?",
+        "text": "The query to DC01 gets no answer, the workstation retries with SBD-DC02, and sign-in continues."
+      }
+    },
+    {
+      "id": "ports",
+      "title": "What crosses the network?",
+      "summary": "The ports a domain member needs to reach its domain controllers.",
+      "blocks": [
+        [
+          "A flat lab hides the conversation",
+          "Your lab is one flat network, so nothing stands between a client and DC01. In a segmented network, every one of these conversations has to be allowed on purpose. Inside the Network shows them crossing the core switch."
+        ],
+        [
+          "Discovery and sign-in are only the start",
+          "DNS finds a domain controller and Kerberos proves who is signing in. After that, the member reads the directory over LDAP, pulls Group Policy and scripts from SYSVOL over SMB, and uses RPC for NetLogon. Time matters too: Kerberos rejects clocks that drift too far apart."
+        ]
+      ],
+      "table": {
+        "caption": "What a domain member sends to its domain controllers",
+        "head": [
+          "Purpose",
+          "Port",
+          "What it carries"
+        ],
+        "rows": [
+          [
+            "Name and service discovery",
+            "TCP/UDP 53",
+            "DNS, including the SRV records that locate domain controllers"
+          ],
+          [
+            "Authentication",
+            "TCP/UDP 88",
+            "Kerberos tickets"
+          ],
+          [
+            "Password change",
+            "TCP/UDP 464",
+            "Kerberos password changes and resets"
+          ],
+          [
+            "Directory",
+            "TCP/UDP 389 · TCP 636",
+            "LDAP and LDAPS; UDP 389 carries the domain controller locator ping"
+          ],
+          [
+            "Global catalog",
+            "TCP 3268 · 3269",
+            "Forest-wide searches; 3269 uses TLS"
+          ],
+          [
+            "Group Policy and SYSVOL",
+            "TCP 445",
+            "SMB reads of policies and scripts from domain controller shares"
+          ],
+          [
+            "RPC services",
+            "TCP 135 · 49152–65535",
+            "Endpoint mapper, then the dynamic range for NetLogon, LSA, and SAM"
+          ],
+          [
+            "Time",
+            "UDP 123",
+            "W32Time; members follow the domain time hierarchy"
+          ],
+          [
+            "Administration",
+            "TCP 9389",
+            "AD Web Services for PowerShell and Administrative Center, from administration hosts only"
+          ]
+        ]
+      },
+      "takeaway": "Allowing DNS and Kerberos isn't enough. Finding a domain controller, applying Group Policy, and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rule F03 permits this directory profile for domain members, with LDAP signing and channel binding required.",
+      "prompt": "A workstation can resolve names and get Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
+      "sources": [
+        "ports",
+        "ad-firewall"
+      ],
+      "model": {
+        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=4",
+        "label": "Sign in, step 4",
+        "text": "After it authenticates, the workstation reads directory information and Group Policy from SBD-DC01."
+      }
     }
   ]
 }

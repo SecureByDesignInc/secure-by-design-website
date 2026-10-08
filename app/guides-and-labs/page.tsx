@@ -1,5 +1,6 @@
-import { permanentRedirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
+// Formerly redirected to /cyber-range, which is offline (October 2026).
 export default function GuidesAndLabs() {
-  permanentRedirect('/cyber-range');
+  notFound();
 }
