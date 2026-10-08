@@ -372,6 +372,12 @@
     "group": "Network build"
   },
   {
+    "id": "training:workstation-fleet:nac",
+    "title": "Admit only enrolled devices with 802.1X",
+    "href": "/training/workstation-fleet#nac",
+    "group": "Network build"
+  },
+  {
     "id": "training:workstation-fleet:scale",
     "title": "Scale to fifty and prove by sample",
     "href": "/training/workstation-fleet#scale",

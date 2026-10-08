@@ -2444,7 +2444,7 @@
     "id": "logging-pipeline",
     "prerequisites": [
       "Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.",
-      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain, and SBD-AUDIT01 (10.0.50.40) per your platform plan for the repository role.",
+      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain, and SBD-AUDIT01 (10.0.50.40) as Windows Server 2025 joined to the domain.",
       "Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system."
     ],
     "labNote": "This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.",
@@ -2855,7 +2855,8 @@
     "prerequisites": [
       "Complete courses 1.5–1.8: routed network, working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline.",
       "Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
-      "Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link."
+      "Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link.",
+      "Confirm the VLAN 80 access switch supports 802.1X port authentication. No new server is needed: the NPS role goes on SBD-DHCP01."
     ],
     "labNote": "Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.",
     "sources": [
@@ -2888,6 +2889,21 @@
         "id": "controls",
         "title": "NIST · SP 800-53 Rev. 5 security controls",
         "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      },
+      {
+        "id": "nps",
+        "title": "Microsoft · Network Policy Server overview",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-top"
+      },
+      {
+        "id": "nps-clients",
+        "title": "Microsoft · Configure RADIUS clients",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-radius-clients-configure"
+      },
+      {
+        "id": "eap-tls",
+        "title": "Microsoft · Certificate requirements for EAP-TLS",
+        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/certificate-requirements-eap-tls-peap"
       }
     ],
     "lessons": [
@@ -3134,10 +3150,73 @@
           "Enrollment is hands-free and verified live across the boundary.",
           "The CA's issued log joins the evidence."
         ],
-        "next": "Lesson 5 scales from three machines to fifty — by sampling, not by faith.",
+        "next": "Lesson 5 puts those certificates to work at the switch port: only enrolled machines get onto the network.",
         "sources": [
           "autoenroll",
           "controls"
+        ]
+      },
+      {
+        "id": "nac",
+        "title": "Admit only enrolled devices with 802.1X",
+        "minutes": 30,
+        "summary": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch port stays closed until the machine proves who it is with the certificate it just enrolled. Anything that cannot ends up somewhere with no routes. No new server: the NPS role joins DHCP on SBD-DHCP01.",
+        "objectives": [
+          "Add the Network Policy Server role to SBD-DHCP01 for port authentication.",
+          "Require EAP-TLS with machine certificates on the VLAN 80 access ports.",
+          "Send unknown devices to a quarantine VLAN and prove it."
+        ],
+        "steps": [
+          "Add the Network Policy Server role to SBD-DHCP01 and register it in Active Directory. Give it a server certificate with the Server Authentication purpose from the issuing CA. It handles port admission only; router logins stay the named local accounts from course 1.5, so the server stays in the member-server tier.",
+          "Add the VLAN 80 access switch as a RADIUS client with a long, unique shared secret, then create the network policy: wired 802.1X, EAP-TLS only, machine certificates that chain to the approved root and carry the Client Authentication purpose, from the Domain Computers group.",
+          "Create quarantine VLAN 90 with no gateway and no routes, and set the access ports to require 802.1X with VLAN 90 as the failure and guest VLAN. Push the wired 802.1X client settings to the Workstations OU by Group Policy (Wired AutoConfig, EAP-TLS, the approved root as the trusted CA).",
+          "Add register row F20 with its owner, and confirm NPS grant and denial events reach the course 1.8 collector through the existing event forwarding subscription."
+        ],
+        "command": "# On an enrolled pilot: the wired interface authenticated with EAP-TLS.\nnetsh lan show interfaces\n# On SBD-DHCP01: recent NPS grants (6272) and denials (6273).\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273} -MaxEvents 5 | Select-Object TimeCreated, Id",
+        "check": "An enrolled pilot authenticates and gets its normal VLAN 80 lease; an unenrolled test laptop lands in VLAN 90 and reaches nothing; NPS logs both outcomes, and they appear in the collector.",
+        "evidence": "Keep the network policy export, the RADIUS client list (without the secret), the port configuration, both test results with their NPS events, and the F20 register row.",
+        "quizzes": [
+          {
+            "question": "What lets a workstation onto a VLAN 80 port after this lesson?",
+            "answers": [
+              "Knowing a shared password",
+              "Its machine certificate, checked by NPS through EAP-TLS",
+              "Being plugged in before the switch boots"
+            ],
+            "correct": 1,
+            "explanation": "EAP-TLS proves the device holds the private key for a certificate the approved CA issued. No certificate, no access."
+          },
+          {
+            "question": "Where does an unknown device end up?",
+            "answers": [
+              "Quarantine VLAN 90, which has no routes",
+              "VLAN 80, with a warning",
+              "The domain controller VLAN, so it can enroll"
+            ],
+            "correct": 0,
+            "explanation": "The failure VLAN gives an unknown device a place to be that leads nowhere, and the router's deny log shows anything it tries."
+          },
+          {
+            "question": "Why does NPS on SBD-DHCP01 handle port admission only, not router logins?",
+            "answers": [
+              "NPS cannot authenticate people",
+              "Router logins need a separate license",
+              "If it authenticated the router's administrators, it could control Tier 0 and would have to be managed as Tier 0"
+            ],
+            "correct": 2,
+            "explanation": "Anything that can control a Tier 0 system is Tier 0. Keeping NPS to port admission keeps SBD-DHCP01 in the member-server tier."
+          }
+        ],
+        "recap": [
+          "VLAN 80 ports open only for machines with a certificate from the approved CA.",
+          "Unknown devices land in quarantine VLAN 90, which leads nowhere.",
+          "No new server: NPS runs on SBD-DHCP01, and its decisions are logged with everything else."
+        ],
+        "next": "Lesson 6 scales from three machines to fifty — by sampling, not by faith.",
+        "sources": [
+          "nps",
+          "nps-clients",
+          "eap-tls"
         ]
       },
       {
@@ -3152,7 +3231,7 @@
         ],
         "steps": [
           "Deploy the remaining machines in the planned waves, watching the DHCP scope's utilization and the join events arriving in analysis as each wave lands — the pipeline is now the rollout's progress bar.",
-          "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, peer-deny).",
+          "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, 802.1X admission, peer-deny).",
           "Write the sample rule down: one failed check in the sample widens the sample; a repeated failure stops the rollout and becomes a finding. A sample without a failure rule is a formality.",
           "Extend the course 1.8 forwarding subscription to the Workstations OU so all fifty endpoints report their security events — and confirm fleet sign-ins now appear in the analyst's searches."
         ],
@@ -3213,7 +3292,7 @@
           "Hand the fleet inventory to the management wave."
         ],
         "steps": [
-          "Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 5 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
+          "Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
           "Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (a scope now in full use); attribute each delta to its lesson.",
           "Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.10's management tooling will take ownership of keeping it current.",
           "Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what wave 5 builds next."

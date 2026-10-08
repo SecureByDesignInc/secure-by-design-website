@@ -1,6 +1,6 @@
 # Bring in the fleet — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.
 
@@ -9,6 +9,7 @@ Fifty endpoints join a network that is finally ready for them: addressed by DHCP
 - [ ] Complete courses 1.5–1.8: routed network, working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline.
 - [ ] Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.
 - [ ] Confirm the Workstations OU, the container redirects from course 1.3, and the DISA Windows 11 STIG policies from the GPO package are ready to link.
+- [ ] Confirm the VLAN 80 access switch supports 802.1X port authentication. No new server is needed: the NPS role goes on SBD-DHCP01.
 
 ## Prepare the fleet rollout
 
@@ -62,10 +63,23 @@ Notes / result / date: __________________________
 
 Notes / result / date: __________________________
 
+## Admit only enrolled devices with 802.1X
+
+- [ ] Add the Network Policy Server role to SBD-DHCP01 and register it in Active Directory. Give it a server certificate with the Server Authentication purpose from the issuing CA. It handles port admission only; router logins stay the named local accounts from course 1.5, so the server stays in the member-server tier.
+- [ ] Add the VLAN 80 access switch as a RADIUS client with a long, unique shared secret, then create the network policy: wired 802.1X, EAP-TLS only, machine certificates that chain to the approved root and carry the Client Authentication purpose, from the Domain Computers group.
+- [ ] Create quarantine VLAN 90 with no gateway and no routes, and set the access ports to require 802.1X with VLAN 90 as the failure and guest VLAN. Push the wired 802.1X client settings to the Workstations OU by Group Policy (Wired AutoConfig, EAP-TLS, the approved root as the trusted CA).
+- [ ] Add register row F20 with its owner, and confirm NPS grant and denial events reach the course 1.8 collector through the existing event forwarding subscription.
+
+**Verify:** An enrolled pilot authenticates and gets its normal VLAN 80 lease; an unenrolled test laptop lands in VLAN 90 and reaches nothing; NPS logs both outcomes, and they appear in the collector.
+
+**Evidence:** Keep the network policy export, the RADIUS client list (without the secret), the port configuration, both test results with their NPS events, and the F20 register row.
+
+Notes / result / date: __________________________
+
 ## Scale to fifty and prove by sample
 
 - [ ] Deploy the remaining machines in the planned waves, watching the DHCP scope's utilization and the join events arriving in analysis as each wave lands — the pipeline is now the rollout's progress bar.
-- [ ] Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, peer-deny).
+- [ ] Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, 802.1X admission, peer-deny).
 - [ ] Write the sample rule down: one failed check in the sample widens the sample; a repeated failure stops the rollout and becomes a finding. A sample without a failure rule is a formality.
 - [ ] Extend the course 1.8 forwarding subscription to the Workstations OU so all fifty endpoints report their security events — and confirm fleet sign-ins now appear in the analyst's searches.
 
@@ -77,7 +91,7 @@ Notes / result / date: __________________________
 
 ## Delta scan the fleet and hand off
 
-- [ ] Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 5 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.
+- [ ] Run SCC with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.
 - [ ] Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (a scope now in full use); attribute each delta to its lesson.
 - [ ] Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.10's management tooling will take ownership of keeping it current.
 - [ ] Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what wave 5 builds next.

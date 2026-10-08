@@ -131,15 +131,25 @@
     {
       "id": "dhcp",
       "name": "SBD-DHCP01",
-      "role": "DHCP server",
+      "role": "DHCP server + NPS (802.1X)",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.10",
-      "purpose": "Provide client lease settings for the approved address space.",
+      "purpose": "Provide client lease settings for the approved address space, and admit devices to VLAN 80 ports with 802.1X.",
       "services": [
         {
           "name": "DHCPv4",
           "port": "UDP 67 server / 68 client",
           "note": "An initial broadcast may require a relay across subnets."
+        },
+        {
+          "name": "RADIUS (NPS role)",
+          "port": "UDP 1812 authentication · 1813 accounting",
+          "note": "Only the VLAN 80 access switch is a RADIUS client."
+        },
+        {
+          "name": "802.1X EAP-TLS",
+          "port": "Machine certificates",
+          "note": "No password-based EAP methods."
         }
       ],
       "controls": [
@@ -154,6 +164,10 @@
         {
           "id": "AU-12",
           "title": "Audit Record Generation"
+        },
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
         }
       ]
     },
@@ -511,15 +525,15 @@
     {
       "id": "audit",
       "name": "SBD-AUDIT01",
-      "role": "Audit log repository",
+      "role": "Audit log repository · Windows, domain-joined",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.40",
-      "purpose": "Retain security records under the approved retention policy.",
+      "purpose": "Windows, domain-joined. Retain security records under the approved retention policy.",
       "services": [
         {
-          "name": "Audit ingestion",
-          "port": "Method to define",
-          "note": "No listener, storage protocol, or immutable mode is assumed."
+          "name": "Audit archive",
+          "port": "SMB 3 · TCP 445 with encryption",
+          "note": "Write-only archival account from the collector (F11); hashes cataloged on arrival."
         }
       ],
       "controls": [
@@ -1049,6 +1063,10 @@
         {
           "id": "IA-2(2)",
           "title": "Multi-factor Authentication to Non-privileged Accounts"
+        },
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
         }
       ]
     }
@@ -1528,5 +1546,5 @@
   "offline": [
     "SBD-ROOTCA01"
   ],
-  "controlCount": 58
+  "controlCount": 59
 }

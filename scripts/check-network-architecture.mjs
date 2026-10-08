@@ -102,6 +102,8 @@ assert.deepEqual(linuxMembers,['splunk','nessus'],'Splunk and Nessus are the dom
 for(const id of ['wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers the DC-facing scope of ${id}`);
 assert.equal(evaluateFlow('repo','dc1','Kerberos').status,'deny','The Linux repository is not a domain member');
 assert.equal(nodes.length,23,'No systems were added: 22 named systems plus the workstation group');
+assert.equal(evaluateFlow('workstations','dhcp','Network access').status,'permit','802.1X admission through the NPS role on SBD-DHCP01');
+assert(windowsMembers.includes('audit'),'SBD-AUDIT01 is domain-joined Windows');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
 console.log('Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.');
 

@@ -6,12 +6,12 @@ Control catalog: NIST SP 800-53 Rev. 5.
 
 ## Architecture
 
-Eight VLANs; 50 clients in 10.0.80.100–149; switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
+Eight VLANs; 50 clients in 10.0.80.100–149 admitted by 802.1X (NPS on SBD-DHCP01; quarantine VLAN 90 has no routes); switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
 
 ## 1. Enforce network boundaries
 
 Owner role: Network administrator
-Controls: AC-4, SC-7, SC-7(5)
+Controls: AC-4, SC-7, SC-7(5), IA-3
 
 VLAN 80 isolates the client population. Routed boundaries deny unmatched sessions; host firewalls enforce local separation too.
 
@@ -19,12 +19,14 @@ VLAN 80 isolates the client population. Routed boundaries deny unmatched session
 - [ ] Configure the core DHCP relay for VLAN 80 and a reserved client pool of 10.0.80.100–149; confirm exclusions and lease options.
 - [ ] Permit only identified service dependencies. Resolve AD replication, enrollment, and vendor protocols before enabling their rules.
 - [ ] Review exceptions after changes and on a proposed quarterly cycle.
+- [ ] Admit devices with 802.1X: VLAN 80 access ports require EAP-TLS with a machine certificate from the issuing CA, checked by the NPS role on SBD-DHCP01 (no new server). Unknown or failed devices land in quarantine VLAN 90, which has no routes. NPS handles port admission only; router logins stay named local accounts, so NPS does not become a Tier 0 system.
 
 ### Acceptance checks
 
 - [ ] Approved client DNS and file access succeeds.
 - [ ] Client-to-SQL, client-to-management, and peer SMB/RDP fail.
 - [ ] Unspecified ports and sources remain denied; collect rule counters and denial logs.
+- [ ] An unenrolled laptop on a VLAN 80 port lands in quarantine VLAN 90 and reaches nothing.
 
 Evidence: Approved traffic matrix and rule exports; Allowed and denied connection results.
 Parameters: Suggested review cycle: quarterly and after change; approve the actual interval.

@@ -1,11 +1,11 @@
 // Educational design policy. Never import this module as a production firewall configuration.
 export const singleInstances=['splunk','nessus','epo'];
-// Who depends on the domain. Windows systems are domain-joined; Splunk and Nessus run on Linux and are also domain-joined.
-// The Linux package repository and the audit repository (platform per plan) use DNS only.
-export const windowsMembers=['dc1','dc2','dhcp','syslog','wsus','time','subca','templates','fs','sql','apps','web','epo','jump','jump1','jump2','management','workstations'];
+// Who depends on the domain. Windows systems (including SBD-AUDIT01) are domain-joined; Splunk and Nessus run on Linux and
+// are also domain-joined. The Linux package repository uses DNS only.
+export const windowsMembers=['dc1','dc2','dhcp','syslog','wsus','time','subca','templates','fs','sql','apps','web','epo','audit','jump','jump1','jump2','management','workstations'];
 export const linuxMembers=['splunk','nessus'];
 export const domainMembers=[...windowsMembers,...linuxMembers];
-const networked=[...domainMembers,'audit','repo'];
+const networked=[...domainMembers,'repo'];
 const except=(list,...ids)=>list.filter(id=>!ids.includes(id));
 export const securityPractices=[
  {id:'boundaries',title:'Enforce network boundaries',ids:['core','workstations','dc1','fs'],controls:['AC-4','SC-7','SC-7(5)'],owner:'Network administrator',design:'VLAN 80 isolates the client population. Routed boundaries deny unmatched sessions; host firewalls enforce local separation too.',actions:['Maintain a versioned flow register with source, destination, service, purpose, owner, and test evidence.','Configure the core DHCP relay for VLAN 80 and a reserved client pool of 10.0.80.100–149; confirm exclusions and lease options.','Permit only identified service dependencies. Resolve AD replication, enrollment, and vendor protocols before enabling their rules.','Review exceptions after changes and on a proposed quarterly cycle.'],tests:['Approved client DNS and file access succeeds.','Client-to-SQL, client-to-management, and peer SMB/RDP fail.','Unspecified ports and sources remain denied; collect rule counters and denial logs.'],evidence:['Approved traffic matrix and rule exports','Allowed and denied connection results'],parameters:'Suggested review cycle: quarterly and after change; approve the actual interval.'},
@@ -22,6 +22,9 @@ export const securityPractices=[
 // the network's own management plane, network monitoring, backup paths, and recorded risk decisions.
 {
  const practice=id=>securityPractices.find(p=>p.id===id),add=(id,key,...items)=>practice(id)[key].push(...items.filter(item=>!practice(id)[key].includes(item)));
+ add('boundaries','ids','dhcp');add('boundaries','controls','IA-3');
+ add('boundaries','actions','Admit devices with 802.1X: VLAN 80 access ports require EAP-TLS with a machine certificate from the issuing CA, checked by the NPS role on SBD-DHCP01 (no new server). Unknown or failed devices land in quarantine VLAN 90, which has no routes. NPS handles port admission only; router logins stay named local accounts, so NPS does not become a Tier 0 system.');
+ add('boundaries','tests','An unenrolled laptop on a VLAN 80 port lands in quarantine VLAN 90 and reaches nothing.');
  practice('administration').design='Three dedicated administration hosts use separate identities and target scopes. Tier 0 covers identity, PKI, and every system that can control them. No host has universal administrative reach.';
  practice('administration').actions[0]='Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01 handles clients.';
  add('administration','controls','AC-6(5)');
@@ -68,6 +71,7 @@ export const trafficRules=[
  rule('F17',except(windowsMembers,'syslog'),['syslog'],'Event forwarding','WinRM HTTP 5985, Kerberos-encrypted · source-initiated subscription','Windows Event Forwarding of the designed security events (AU-2) to the collector','Logging owner'),
  rule('F18',domainMembers,['templates'],'PKI publication','HTTP 80 · CRL and AIA at pki.sbd.test','Certificate chain and revocation checking; CRLs are signed, so plain HTTP is the standard transport','PKI custodian'),
  rule('F19',linuxMembers,['repo'],'Linux packages','HTTP 80; GPG-signed packages and repository metadata','Approved Linux updates for the domain-joined Linux servers from SBD-REPO01','Patch owner'),
+ rule('F20',['workstations'],['dhcp'],'Network access','802.1X EAP-TLS; the access switch relays RADIUS UDP 1812/1813 to the NPS role on SBD-DHCP01','Port admission with machine certificates; failed or unknown devices land in quarantine VLAN 90, which has no routes','Network owner'),
  ...adminMatrix.map((r,i)=>rule('A0'+(i+1),[r.host],r.targets,'Management','Approved management protocol, MFA, identity and target binding required',r.tier+' administration: '+r.identity,'Privileged-access owner','pending')),
  rule('D01',['workstations'],['workstations'],'SMB','TCP 445','Block peer file/administrative shares','Endpoint owner','deny'),
  rule('D02',['workstations'],['workstations'],'RDP','TCP/UDP 3389','Block peer remote desktop','Endpoint owner','deny')

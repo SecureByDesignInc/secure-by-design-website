@@ -64,11 +64,14 @@ facilities.find(f=>f.id==='backup').items=['Test restoration of AD/DNS, PKI, fil
 // Splunk and Nessus run on Linux and are domain-joined; no systems were added.
 vlans.find(v=>v.id==='v10').controls.push('SC-22','SC-23');
 vlans.find(v=>v.id==='v50').controls.push('SI-4(4)');
-vlans.find(v=>v.id==='v80').controls.push('IA-2(2)');
+vlans.find(v=>v.id==='v80').controls.push('IA-2(2)','IA-3');
+vlans.find(v=>v.id==='v80').functions.push('802.1X port admission; unknown devices go to quarantine VLAN 90');
+vlans.find(v=>v.id==='v20').functions.push('802.1X port admission (NPS role on SBD-DHCP01)');
 Object.assign(additionalControls,{
  'AU-2':['Event Logging','Identify the event types the system logs and why they support investigations.'],
  'AU-3':['Content of Audit Records','Record what happened, when and where, the source, the outcome, and who was involved.'],
  'AU-9(4)':['Access by Subset of Privileged Users','Limit management of audit logging to a defined subset of privileged users.'],
+ 'IA-3':['Device Identification and Authentication','Identify and authenticate devices before they connect.'],
  'IA-2(2)':['Multi-factor Authentication to Non-privileged Accounts','Require multi-factor authentication for non-privileged accounts.'],
  'AC-6(5)':['Privileged Accounts','Restrict privileged accounts to defined personnel or roles.'],
  'SC-13':['Cryptographic Protection','Use the required types of cryptography for each protection need.'],
@@ -87,4 +90,6 @@ families.push(['PL','Planning']);
  backup.items.push('Backup path: each server writes to a protected local backup volume; custodians carry DC, CA, and audit backups here under the media custody procedure. There is no network path to this facility.','Record the single-instance decision as a risk acceptance (PL-2): one server each suits the small network and modest resource needs. Backups are the mitigation; track gaps in the POA&M (CA-5).');
  backup.controls.push('CA-5','PL-2');
 }
-export function buildArchitectureNodes(existing){return [...existing,...addedSystems].map(n=>({...n,...(n.id==='jump'?{role:'Tier 0 administration only',known:'Dedicated Tier 0 administrative host for AD, DNS, PKI, and every system that can control them: the core switch, the hypervisor hosts, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. No member-server or endpoint administration.',design:['Use separate Tier 0 admin accounts and offline-compatible MFA.','Restrict targets to Tier 0 systems and scopes; root CA ceremonies remain local.'],evidence:['Privileged target allowlist and account reviews.','MFA, audit, and cross-tier denial tests.']}:{}),zone:vlans.find(v=>v.ids.includes(n.id))?.id||n.zone,address:addresses[n.id]||null}));}
+// Roles added to existing systems (no new servers): NPS runs on SBD-DHCP01 for 802.1X port admission.
+const roleChanges={dhcp:n=>({role:'DHCP server + NPS (802.1X)',controls:[...n.controls,'IA-3'],known:'Windows Server with two roles: DHCP for the VLAN 80 pool, and Network Policy Server for 802.1X port admission (EAP-TLS with machine certificates). NPS handles port admission only; router logins stay named local accounts.',design:[...n.design,'Require machine certificates from the issuing CA; no password-based EAP. Unknown devices go to quarantine VLAN 90.'],evidence:[...n.evidence,'Network policy export and admission tests: enrolled PC admitted, unknown device quarantined.']}),audit:n=>({role:n.role+' · Windows, domain-joined'})};
+export function buildArchitectureNodes(existing){return [...existing,...addedSystems].map(n=>({...n,...(roleChanges[n.id]?.(n)||{}),...(n.id==='jump'?{role:'Tier 0 administration only',known:'Dedicated Tier 0 administrative host for AD, DNS, PKI, and every system that can control them: the core switch, the hypervisor hosts, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. No member-server or endpoint administration.',design:['Use separate Tier 0 admin accounts and offline-compatible MFA.','Restrict targets to Tier 0 systems and scopes; root CA ceremonies remain local.'],evidence:['Privileged target allowlist and account reviews.','MFA, audit, and cross-tier denial tests.']}:{}),zone:vlans.find(v=>v.ids.includes(n.id))?.id||n.zone,address:addresses[n.id]||null}));}

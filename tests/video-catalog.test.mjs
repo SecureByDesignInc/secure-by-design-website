@@ -97,7 +97,7 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6, 6, 7, 5, 6, 6, 6, 6, 5, 6]);
+  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 6, 6, 7, 5, 6, 6, 7, 6, 5, 6]);
   for (const configuration of configurations) {
     const course = library.courses.find(item => item.id === configuration.id);
     assert.equal(course.kind, 'configuration');

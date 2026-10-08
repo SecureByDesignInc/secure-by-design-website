@@ -7,7 +7,7 @@ This course builds the model's collect → protect → analyze chain before the 
 ## Before you start
 
 - [ ] Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.
-- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain, and SBD-AUDIT01 (10.0.50.40) per your platform plan for the repository role.
+- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain, and SBD-AUDIT01 (10.0.50.40) as Windows Server 2025 joined to the domain.
 - [ ] Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system.
 
 ## Design collect, protect, analyze
