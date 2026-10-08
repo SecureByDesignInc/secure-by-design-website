@@ -32,8 +32,8 @@ const smooth=t=>t*t*(3-2*t);
 
 export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},hooks={}){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
- let moving=!reduced,labelsVisible=true,selection='',hoverId='',activeIds=[],routedActive=false,transition=null,drift=null,time=0,framedIds=null;
- let view='physical',morph=null,theme='standard',cameraMode='wide',stepSeconds=10,lastCall={fn:'highlight',args:[[]]},connectionState=null,exportSize=null;
+ let moving=!reduced,labelMode='focus',stepMode=false,selection='',hoverId='',activeIds=[],routedActive=false,transition=null,drift=null,time=0,framedIds=null;
+ let view='physical',morph=null,theme='standard',cameraMode='guided',guide=null,stepSeconds=10,lastCall={fn:'highlight',args:[[]]},connectionState=null,exportSize=null;
  const objects=new Map(),pickables={physical:[],logical:[]},lights=[];
  const colors={...Object.fromEntries(vlans.map(v=>[v.id,v.color])),core:'#7bddf0',media:'#eeb978',backup:'#86c4f1',offline:'#e5c58e'};
  const policyColors={permit:'#7fe0b7',traffic:'#7fe0b7',pending:'#e6bc82',deny:'#ee9294'};
@@ -43,7 +43,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.shadowMap.enabled=container.clientWidth>=720;renderer.shadowMap.type=THREE.PCFShadowMap;
  container.prepend(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','3D data center with server racks, network switches, workstations, and offline equipment. Drag to orbit, scroll to zoom, or select a system. Arrow keys rotate; Home shows the full network.');
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=!reduced;orbit.dampingFactor=.075;orbit.minDistance=10;orbit.maxDistance=500;orbit.maxPolarAngle=Math.PI*.47;orbit.minPolarAngle=.09;orbit.enablePan=true;
- orbit.addEventListener('start',()=>{transition=null;drift=null;onInteract();});
+ // Any drag or zoom hands the camera to the viewer for the rest of the step.
+ orbit.addEventListener('start',()=>{transition=null;drift=null;if(guide)guide.user=true;onInteract();});
  const hemi=new THREE.HemisphereLight('#c8e8ff','#26323c',2.5);scene.add(hemi);
  const key=new THREE.DirectionalLight('#ecfbff',3.5);key.position.set(-18,40,25);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-45,right:45,top:50,bottom:-45,near:1,far:110});key.shadow.normalBias=.15;scene.add(key);
  const rim=new THREE.DirectionalLight('#9dc1df',1.7);rim.position.set(25,22,-25);scene.add(rim);
@@ -63,14 +64,21 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  // ---- Screen-space labels: constant on-screen size, decluttered by priority every frame ----
  // Text is drawn at the size it appears on screen (and redrawn for 4K export and recording), so it stays sharp.
  const labels=[];let reserved=[];
- const makeText=(width,height,draw)=>({width,height,aspect:height/width,draw,texture:null,texW:0});
+ const makeText=(width,height,draw,grow=1)=>({width,height,aspect:height/width,draw,texture:null,texW:0,grow});
+ const measure=document.createElement('canvas').getContext('2d');
  function labelTexture(title,sub,color,width=400){
+  // Widen the label to fit its text instead of squeezing the letters. screenLabel scales the on-screen
+  // size by the same factor, so every label keeps one type size.
+  const base=width,titleFont='650 36px Inter,Segoe UI,Arial',subFont='600 27px Inter,Segoe UI,Arial';
+  measure.font=titleFont;let need=measure.measureText(title).width;
+  if(sub){measure.font=subFont;need=Math.max(need,measure.measureText(sub).width);}
+  width=Math.max(width,Math.ceil(need+40));
   const height=sub?108:64;
   return makeText(width,height,ctx=>{
    ctx.fillStyle='rgba(5,17,30,.93)';ctx.beginPath();ctx.roundRect(2,2,width-4,height-4,12);ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.stroke();
-   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#eef8ff';ctx.font='650 36px Inter,Segoe UI,Arial';ctx.fillText(title,width/2,sub?37:33,width-30);
-   if(sub){ctx.font='600 27px Inter,Segoe UI,Arial';ctx.fillStyle=color;ctx.fillText(sub,width/2,79,width-30);}
-  });
+   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#eef8ff';ctx.font=titleFont;ctx.fillText(title,width/2,sub?37:33,width-30);
+   if(sub){ctx.font=subFont;ctx.fillStyle=color;ctx.fillText(sub,width/2,79,width-30);}
+  },width/base);
  }
  function textureFor(text,target){
   target=THREE.MathUtils.clamp(Math.round(target),48,2048);
@@ -82,6 +90,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  // kind: zone | facility | node (physical) · island | lfacility | lnode (logical) · badge | connection (temporary)
  const leaderMaterial=new THREE.SpriteMaterial({color:'#bfe3f2',transparent:true,depthWrite:false,depthTest:false,sizeAttenuation:false,fog:false});
  function screenLabel(text,{kind,id=null,zone=null,px=170,position,own=false,color='#bfe3f2'}){
+  px*=text.grow||1;
   const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:textureFor(text,px),transparent:true,depthWrite:false,depthTest:false,sizeAttenuation:false,opacity:0,fog:false}));
   sprite.center.set(.5,0);sprite.renderOrder=kind==='badge'?32:24;sprite.visible=false;labelLayer.add(sprite);
   // A thin leader connects a label that had to move up to its anchor.
@@ -94,15 +103,22 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  function labelPriority(e,camDistance){
   if(e.kind==='badge')return flowGroup.visible?1000:-1;
   if(e.kind==='connection')return connectionGroup.visible?34:-1;
-  if(!labelsVisible)return -1;
+  if(labelMode==='off')return -1;
   const target=physicalKinds.has(e.kind)?'physical':'logical';
   if(view!==target||morph&&morph.t<.75)return -1;
+  // During a traffic step, only the step's own systems, their segments, and the core keep labels
+  // (others appear on hover), so the two or three things that matter stand out. "All labels" turns this off.
+  const quiet=stepMode&&labelMode==='focus',hoverZone=hoverId&&objects.get(hoverId)?.zone;
   const zoneActive=e.zone&&activeZones.has(e.zone);
-  if(e.kind==='zone'||e.kind==='island')return zoneActive?82:50;
-  if(e.kind==='facility'||e.kind==='lfacility')return isActive(e.id)?84:e.id==='core'?46:38;
+  if(e.kind==='zone'||e.kind==='island')return zoneActive?82:quiet&&e.zone!==hoverZone?-1:50;
+  if(e.kind==='facility'||e.kind==='lfacility'){
+   if(isActive(e.id)||quiet&&e.id==='core'&&routedActive)return 84;
+   if(quiet&&hoverId!==e.id)return -1;
+   return e.id==='core'?46:38;
+  }
   // Server-level labels appear for active, selected, or hovered systems, and when the camera is close.
   if(isActive(e.id))return 100;if(hoverId===e.id)return 96;
-  return camDistance(e)<(view==='logical'?42:34)?60:-1;
+  return !quiet&&camDistance(e)<(view==='logical'?42:34)?60:-1;
  }
  const projected=new THREE.Vector3(),placements=[[0,0],[1,0],[2,0],[1,-1],[1,1],[2,-1],[2,1],[3,0],[3,-1],[3,1],[2,-2],[2,2],[4,0],[4,-1],[4,1],[3,-2],[3,2],[5,0],[5,-1],[5,1]];
  // Each label tries its previous placement first; these orders are built once.
@@ -124,8 +140,10 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
    const sw=e.px*k,sh=sw*e.text.aspect,x=(projected.x+1)/2*w,y=(1-projected.y)/2*h,half=(sh+9)/2;
    // Crowded labels move up (and slightly sideways) on a leader line, so neighbouring racks can all be named.
    // The previous placement is tried first, which keeps labels steady while the camera moves.
-   const order=e.kind==='badge'?placementOrders[0]:placementOrders[e.step];let chosen=-1;
-   for(const index of order){const [up,side]=placements[index],dy=up*half,dx=side*sw*.42;if(e.kind==='badge'||free(x+dx-sw/2-3,y-sh-3-dy,x+dx+sw/2+3,y+3-dy)){chosen=index;break;}}
+   const order=placementOrders[e.step];let chosen=-1;
+   for(const index of order){const [up,side]=placements[index],dy=up*half,dx=side*sw*.42;if(free(x+dx-sw/2-3,y-sh-3-dy,x+dx+sw/2+3,y+3-dy)){chosen=index;break;}}
+   // Policy badges always show: when every spot is covered, they take their own spot anyway.
+   if(chosen<0&&e.kind==='badge')chosen=0;
    if(chosen<0)continue;
    const [up,side]=placements[chosen],dy=up*half,dx=side*sw*.42,rect=[x+dx-sw/2-3,y-sh-3-dy,x+dx+sw/2+3,y+3-dy];
    placed.push(rect);e.rect=rect;e.step=chosen;e.lift=up*half;e.shift=side*sw*.42;e.show=true;e.unit=2*tanHalf/h;e.scale=sw*e.unit;e.target=sw*density;e.sh=sh;e.sw=sw;
@@ -177,7 +195,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const f=facilities.find(f=>f.id===id),position=facilityPositions[id],g=new THREE.Group();g.position.set(position[0],0,position[1]);g.userData.fadeKey='facility-'+id;physical.add(g);
   const dimensions=id==='media'?[15,4,8]:[7,height,6];
   const hit=new THREE.Mesh(new THREE.BoxGeometry(...dimensions),hitMaterial);hit.position.y=height/2;hit.userData.id=id;g.add(hit);pickables.physical.push(hit);
-  const text=labelTexture(f.name.toUpperCase(),sub,f.color);
+  // Short room labels; the inspector keeps the full names.
+  const text=labelTexture(({media:'MEDIA HANDLING',backup:'OFFLINE BACKUP'})[id]||f.name.toUpperCase(),sub,f.color);
   objects.set(id,{node:{id,zone:id,name:f.name},group:g,dimensions,anchor:new THREE.Vector3(0,id==='core'?9:height/2,2.8),fadeKey:'facility-'+id,zone:id,color:f.color,facility:true,text,label:screenLabel(text,{kind:'facility',id,zone:id,px:175,position:new THREE.Vector3(position[0],height+1.4,position[1])})});
   return g;
  }
@@ -200,6 +219,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  physical.traverse(o=>{if(o===physical||batchedMeshes.has(o)||!(o.isMesh||o.isLine||o.isSprite)||keyed(o))return;if(o.userData.floor)floorMesh=o;else roomDecor.push(o);});
  const fadeKeys=[...new Set([...registry.bounds.keys(),...registry.groups.keys()])],xray=new Map(fadeKeys.map(k=>[k,{value:1,target:1,applied:1}]));
  let physicalAmount=1;
+ const dimState=new Map(fadeKeys.map(k=>[k,{value:1,target:1,applied:1}]));
  function applyFades(force=false){
   for(const [k,state] of xray){const value=k==='room'?physicalAmount:state.value*physicalAmount;if(force||Math.abs(value-state.applied)>.004){equipment.setFade(registry,k,value);state.applied=value;}}
   if(floorMesh){const transparent=physicalAmount<.999;if(floorMesh.material.transparent!==transparent){floorMesh.material.transparent=transparent;floorMesh.material.needsUpdate=true;}floorMesh.material.opacity=physicalAmount;floorMesh.material.depthWrite=physicalAmount>.5;floorMesh.visible=physicalAmount>.01;}
@@ -226,6 +246,13 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const rate=moving&&dt>0?Math.min(1,dt*5):1;
   for(const state of xray.values())state.value+=(state.target-state.value)*rate;
   applyFades();
+  // Equipment outside the current step steps back (darker, still solid) so the step's systems stand out.
+  const quiet=stepMode&&view==='physical'&&!morph;
+  for(const [k,state] of dimState){
+   state.target=quiet&&k!=='room'&&!protectedKeys.has(k)?.42:1;
+   state.value+=(state.target-state.value)*rate;
+   if(Math.abs(state.value-state.applied)>.004){equipment.setDim(registry,k,state.value);state.applied=state.value;}
+  }
  }
 
  // ---- Logical view: VLAN islands around the core, with the offline area kept apart ----
@@ -306,7 +333,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   // The logical view looks down on the islands like a diagram.
   const portrait=camera.aspect<.8,direction=(logicalView?(portrait?new THREE.Vector3(.08,1.9,1):new THREE.Vector3(.16,1.25,1)):portrait?new THREE.Vector3(.2,1.2,1):output&&camera.aspect>1.5?new THREE.Vector3(.5,.42,1):new THREE.Vector3(.46,.66,1)).normalize(),right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize(),tan=Math.tan(THREE.MathUtils.degToRad(19.5)),tanV=tan*Math.max(.35,1-insets.top-insets.bottom);let distance=24;
   for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){const p=new THREE.Vector3(x,y,z).sub(target);distance=Math.max(distance,Math.abs(p.dot(right))/(tan*camera.aspect)+p.dot(direction),Math.abs(p.dot(up))/tanV+p.dot(direction));}
-  const padding=output?1:portrait?1.08:camera.aspect<1?1.18:1.10;move(target.clone().addScaledVector(direction,Math.min(distance*padding,480)),target,animate);
+  const padding=output?1:portrait?1.08:camera.aspect<1?1.18:1.10,position=target.clone().addScaledVector(direction,Math.min(distance*padding,480));move(position,target,animate);
+  return {position:position.clone(),target:target.clone()};
  }
 
  // ---- Traffic routes: up into the cable trays, along them to the core, a rule check, and back out ----
@@ -361,6 +389,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   flow=null;walker=null;transient.length=0;for(const k of Object.keys(effects))delete effects[k];
   for(const e of labels.filter(e=>e.kind==='badge'))removeLabel(e);
   while(flowGroup.children.length){const c=flowGroup.children[0];flowGroup.remove(c);c.traverse(disposeObject);}
+  screenLines.clear();guide=null;
   pickRing.visible=false;
  }
  // Policy and transfer labels keep a constant, readable size on screen, anchored above their 3D point.
@@ -373,8 +402,45 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   });
   return screenLabel(text,{kind:'badge',px:165,position,own:true});
  }
- function tube(route,radius,material){const mesh=new THREE.Mesh(new THREE.TubeGeometry(route,Math.min(700,Math.max(40,Math.ceil(route.total*3))),radius,8,false),material);flowGroup.add(mesh);return mesh;}
- function dashedLine(route,color){const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(route.points),new THREE.LineDashedMaterial({color,dashSize:.45,gapSize:.4,transparent:true,opacity:.55}));line.computeLineDistances();flowGroup.add(line);return line;}
+ // Traffic lines keep a fixed width in pixels, so a path stays readable from the whole-room view to a close-up.
+ const screenLineVertex=`uniform vec2 resolution;uniform float width;attribute vec3 prev;attribute vec3 next;attribute float side;attribute float dist;varying float vDist;
+#include <common>
+#include <fog_pars_vertex>
+void main(){vDist=dist;mat4 m=projectionMatrix*modelViewMatrix;vec4 c=m*vec4(position,1.);vec4 p=m*vec4(prev,1.);vec4 n=m*vec4(next,1.);
+vec2 cs=c.xy/c.w*resolution*.5,ps=p.xy/p.w*resolution*.5,ns=n.xy/n.w*resolution*.5;vec2 a=cs-ps,b=ns-cs;
+a=length(a)<1e-4?b:a;b=length(b)<1e-4?a:b;a=normalize(a);b=normalize(b);vec2 t=normalize(a+b+1e-6);vec2 nrm=vec2(-t.y,t.x);
+float miter=1./max(dot(nrm,vec2(-a.y,a.x)),.6);c.xy+=nrm*side*width*.5*miter/(resolution*.5)*c.w;gl_Position=c;
+vec4 mvPosition=modelViewMatrix*vec4(position,1.);
+#include <fog_vertex>
+}`;
+ const screenLineFragment=`uniform vec3 color;uniform float opacity;uniform float dash;uniform float gap;varying float vDist;
+#include <common>
+#include <fog_pars_fragment>
+void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color,opacity);
+#include <colorspace_fragment>
+#include <fog_fragment>
+}`;
+ const screenLines=new Set(),lineResolution=new THREE.Vector2(1,1);
+ function screenLine(route,{color,width=3,opacity=.9,additive=false,dash=0,gap=0,through=false}){
+  const pts=route.points,n=pts.length,pos=[],prev=[],next=[],side=[],dist=[],index=[];
+  const before=i=>i>0?pts[i-1]:pts[0].clone().multiplyScalar(2).sub(pts[1]),after=i=>i<n-1?pts[i+1]:pts[n-1].clone().multiplyScalar(2).sub(pts[n-2]);
+  for(let i=0;i<n;i++)for(const s of [-1,1]){const p=pts[i],a=before(i),b=after(i);pos.push(p.x,p.y,p.z);prev.push(a.x,a.y,a.z);next.push(b.x,b.y,b.z);side.push(s);dist.push(route.lengths[i]);}
+  for(let i=0;i<n-1;i++){const k=i*2;index.push(k,k+1,k+2,k+1,k+3,k+2);}
+  const geometry=new THREE.BufferGeometry();geometry.setIndex(index);
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geometry.setAttribute('prev',new THREE.Float32BufferAttribute(prev,3));geometry.setAttribute('next',new THREE.Float32BufferAttribute(next,3));
+  geometry.setAttribute('side',new THREE.Float32BufferAttribute(side,1));geometry.setAttribute('dist',new THREE.Float32BufferAttribute(dist,1));
+  const material=new THREE.ShaderMaterial({uniforms:THREE.UniformsUtils.merge([THREE.UniformsLib.fog,{color:{value:new THREE.Color(color)},opacity:{value:opacity},resolution:{value:lineResolution},width:{value:width},dash:{value:dash},gap:{value:gap}}]),
+   vertexShader:screenLineVertex,fragmentShader:screenLineFragment,transparent:true,depthWrite:false,depthTest:!through,fog:true,side:THREE.DoubleSide,blending:additive?THREE.AdditiveBlending:THREE.NormalBlending});
+  material.uniforms.resolution.value=lineResolution;material.userData.baseWidth=width;
+  const mesh=new THREE.Mesh(geometry,material);mesh.frustumCulled=false;mesh.renderOrder=6;flowGroup.add(mesh);screenLines.add(material);
+  return mesh;
+ }
+ // Pixel sizes follow the output: the same line looks the same on screen, in a recorded clip, and in a 4K export.
+ const pixelScale=()=>{const {h}=viewSize();return exportSize||output?h/800:1;};
+ function updateScreenLines(){const {w,h}=viewSize();lineResolution.set(w||1,h||1);const k=pixelScale();for(const m of screenLines)m.uniforms.width.value=m.userData.baseWidth*k;}
+ // World units covered by one screen pixel at a point.
+ const pixelAt=point=>{const {h}=viewSize();return camera.position.distanceTo(point)*2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(h,1);};
+ function dashedLine(route,color){return screenLine(route,{color,width:2,opacity:.6,dash:.9,gap:.7});}
  function gateAt(position,tangent,color,[title,sub],facing){
   const group=new THREE.Group();group.position.copy(position);flowGroup.add(group);
   const ring=new THREE.Mesh(new THREE.TorusGeometry(1.6,.15,12,48),basic(color));if(!facing)ring.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),tangent.clone().normalize());group.add(ring);
@@ -396,9 +462,10 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const pickRing=new THREE.Sprite(new THREE.SpriteMaterial({map:ringTexture,color:'#fff4c8',transparent:true,depthWrite:false,depthTest:false,fog:false}));pickRing.renderOrder=28;pickRing.visible=false;scene.add(pickRing);
  function makePacket(f,{reply=false,offset=0}){
   const size=reply?.72:1,color=reply?f.replyColor:f.color;
-  const head=new THREE.Mesh(f.style==='tcp'?new THREE.ConeGeometry(.19*size,.7*size,10):new THREE.SphereGeometry(.23*size,14,10),tint(new THREE.MeshBasicMaterial(),reply?f.replyColor:'#eaffff'));flowGroup.add(head);
-  const shine=glow(flowGroup,0,0,0,color,reply?1.5:2.2,.75);
-  const tails=[];for(let j=0;j<(f.style==='tcp'?5:f.style==='either'?2:0);j++){const tail=new THREE.Mesh(new THREE.SphereGeometry((.15-j*.02)*size,8,6),basic(color,.55-j*.08));flowGroup.add(tail);tails.push(tail);}
+  // Packets draw over the equipment so the learner never loses one behind a rack.
+  const head=new THREE.Mesh(f.style==='tcp'?new THREE.ConeGeometry(.19*size,.7*size,10):new THREE.SphereGeometry(.23*size,14,10),tint(new THREE.MeshBasicMaterial({depthTest:false,transparent:true}),reply?f.replyColor:'#eaffff'));head.renderOrder=21;flowGroup.add(head);
+  const shine=glow(flowGroup,0,0,0,color,reply?1.5:2.2,.75);shine.material.depthTest=false;shine.renderOrder=20;
+  const tails=[];for(let j=0;j<(f.style==='tcp'?5:f.style==='either'?2:0);j++){const tail=new THREE.Mesh(new THREE.SphereGeometry((.15-j*.02)*size,8,6),basic(color,.55-j*.08));tail.material.depthTest=false;tail.renderOrder=20;flowGroup.add(tail);tails.push(tail);}
   return {head,shine,tails,offset,reply,kind:reply?'reply':'request',mode:'travel',s:0,lt:-1};
  }
  // Each packet follows a fixed timeline: travel, a rule check at the core, then onward (or a hold and a drop at a gate).
@@ -415,7 +482,10 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const dir=p.reply?-1:1,t=s/f.L;f.path.route.getPoint(t,p.head.position);p.shine.position.copy(p.head.position);
   if(f.style==='tcp'){f.path.route.getTangent(Math.min(t,.9999),tangent);if(dir<0)tangent.negate();p.head.quaternion.setFromUnitVectors(up,tangent);}
   const fade=f.policy.kind==='unreachable'&&!p.reply&&s>f.L*.85?Math.max(0,1-(s-f.L*.85)/(f.L*.15)):1;
-  p.head.scale.setScalar((.3+.7*fade)*(mode==='hold'?1+.25*Math.sin(time*18):1));p.shine.material.opacity=(p.reply?.5:.75)*fade*look.glow;
+  // Packets never shrink below a few pixels, however far away the camera is.
+  const px=pixelAt(p.head.position)*pixelScale(),grow=Math.max(1,(p.reply?3.5:5)*px/((p.reply?.72:1)*.23));
+  p.head.scale.setScalar(grow*(.3+.7*fade)*(mode==='hold'?1+.25*Math.sin(time*18):1));p.shine.material.opacity=(p.reply?.5:.75)*fade*look.glow;p.shine.scale.setScalar(Math.max(p.reply?1.5:2.2,(p.reply?18:26)*px));
+  for(const tail of p.tails)tail.scale.setScalar(grow);
   p.tails.forEach((tail,i)=>{const back=s-dir*(i+1)*.55;tail.visible=fade>.2&&back>=0&&back<=f.L&&mode==='travel';if(tail.visible)f.path.route.getPoint(back/f.L,tail.position);});
  }
  function updateFlow(dt){
@@ -436,6 +506,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
    if(effects.hub){effects.hub.flash*=decay;effects.hub.shine.material.opacity=(.15+.7*effects.hub.flash)*look.glow;effects.hub.shine.scale.setScalar(4+3*effects.hub.flash);}
    if(effects.gate){const g=effects.gate;g.flash*=decay;g.ring.scale.setScalar(1+.28*g.flash);g.shine.material.opacity=.35+.55*g.flash;}
    if(effects.endpoint)effects.endpoint.shine.material.opacity=.35+.25*Math.sin(time*3);
+   if(effects.ends){const {h}=viewSize(),unit=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(h,1),k=pixelScale();for(const e of effects.ends){const beat=moving?(Math.sin(time*2.4+e.phase*Math.PI)+1)/2:.5;e.sprite.scale.setScalar((30+12*beat)*k*unit);e.sprite.material.opacity=.55+.4*(1-beat);}}
   }
   if(walker){if(!frozen)walker.u=(walker.u+dt*walker.speed)%1;const position=walker.path.getPoint(walker.u);walker.carrier.position.set(position.x,Math.abs(Math.sin(walker.u*walker.length*1.6))*.12,position.z);walker.tag.position.copy(walker.carrier.position).setY(2.3);}
   for(let i=transient.length-1;i>=0;i--){const fx=transient[i];fx.age+=dt;const k=Math.min(1,fx.age/fx.life);fx.update(k,dt);if(k>=1){transient.splice(i,1);fx.object.removeFromParent();fx.object.traverse(disposeObject);}}
@@ -476,7 +547,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  function showStep(step,color,allIds,policy={kind:step.manual?'manual':'traffic',rule:null},gate=null){
   lastCall={fn:'showStep',args:[step,color,allIds,policy,gate]};
   clearFlow();clearConnections();connectionState=null;releasePacket();followSnap=true;
-  selection='';selectionRing.visible=false;
+  selection='';selectionRing.visible=false;stepMode=true;
   const ids=[...new Set([step.from,step.to,...(step.manual?step.walk||[]:[])].filter(id=>id&&objects.has(id)))];
   activeIds=ids;routedActive=false;updateOutlines();
   if(policy.kind==='manual'){if(step.walk)custodyWalk(step.walk);fit(ids,true);updateFlow(0);return;}
@@ -489,8 +560,10 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const f=flow={step,color,policy,path,blocked,L,routed,style,dwell,hold,sHub:routed?path.hubT*L:0,sGate,v,travel,cycle:travel+Math.max(.6,travel*.18),replyCycle:L/v+Math.max(.6,L/v*.25),clock:0,packets:[],replies:[],
    replyColor:'#'+new THREE.Color(color).lerp(new THREE.Color('#ffffff'),.45).getHexString(),hub:route.getPoint(path.hubT??.5),gate:route.getPoint(blocked?path.gateT:1)};
   const tls=step.protection==='tls'&&policy.kind==='traffic',shown=blocked?subRoute(route,0,path.gateT):route;
-  tube(shown,.055,basic(color,.85));
-  tube(shown,tls?.27:.19,new THREE.MeshBasicMaterial({color,transparent:true,opacity:tls?.24:.11,depthWrite:false,blending:THREE.AdditiveBlending}));
+  screenLine(shown,{color,width:tls?16:11,opacity:tls?.26:.16,additive:true,through:true});
+  screenLine(shown,{color,width:3.5,opacity:.95});
+  // Rings mark where the step starts and where it is going, visible even through equipment.
+  effects.ends=[[route.getPoint(0),color],[route.getPoint(1),blocked?'#9fb3c4':color]].map(([position,c],i)=>{const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:ringTexture,color:c,transparent:true,depthWrite:false,depthTest:false,sizeAttenuation:false,fog:false,opacity:.9}));sprite.position.copy(position);sprite.renderOrder=22;flowGroup.add(sprite);return {sprite,phase:i*.5};});
   if(blocked)dashedLine(subRoute(route,path.gateT,1),color);
   const count=style==='tcp'?4:3;for(let k=0;k<count;k++)f.packets.push(makePacket(f,{offset:k*f.cycle/count}));
   if((policy.kind==='traffic'||policy.kind==='rejected')&&step.reply!==false)for(const k of [0,1])f.replies.push(makePacket(f,{reply:true,offset:(k+.3)*f.replyCycle/2}));
@@ -503,19 +576,23 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const sealAt=route.getPoint(routed?path.hubT*.55:.3).add(new THREE.Vector3(0,1.6,0));
   if(tls)lockBadge(color,'Encrypted session',sealAt);
   if(step.protection==='signed'&&!blocked)badge('SIGNED · NOT ENCRYPTED','Signatures protect the payload',color,sealAt,210);
-  fit(routed?[...ids,'core']:ids,true);updateFlow(0);
+  // Shot plan: an establishing shot of the whole step, then the camera eases in to follow the packet,
+  // and returns to the establishing shot after the first trip.
+  const shot=fit(routed?[...ids,'core']:ids,true);
+  guide=shot?{wide:shot,t:0,w:0,user:false,target:null}:null;
+  updateFlow(0);
  }
  function select(id,focus=true,animate=false){
   lastCall={fn:'select',args:[id,focus]};
   clearFlow();clearConnections();connectionState=null;releasePacket();
-  selection=id;activeIds=[id];routedActive=false;
+  selection=id;activeIds=[id];routedActive=false;stepMode=false;
   if(!objects.has(id))return;
   placeRing(selectionRing,id);selectionRing.material.color.set(objects.get(id).color||'#8eeefa');selectionRing.visible=true;updateOutlines();
   if(focus)fit([id]);else fit(null,animate);
  }
  function highlight(ids=[]){
   lastCall={fn:'highlight',args:[ids]};
-  clearFlow();clearConnections();connectionState=null;releasePacket();
+  clearFlow();clearConnections();connectionState=null;releasePacket();stepMode=false;
   activeIds=ids.filter(id=>objects.has(id));selection='';selectionRing.visible=false;routedActive=false;updateOutlines();
   fit(activeIds.length?activeIds:null);
  }
@@ -618,6 +695,22 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const portrait=camera.aspect<.8,direction=(view==='logical'?new THREE.Vector3(.12,1.4,1):portrait?new THREE.Vector3(.25,.95,1):new THREE.Vector3(.55,.5,1)).normalize();
   camera.position.copy(followTarget).addScaledVector(direction,view==='logical'?34:portrait?30:23);orbit.target.copy(followTarget);transition=null;drift=null;
  }
+ function updateGuided(dt){
+  if(cameraMode!=='guided'||!guide||!flow||!moving||morph||frozen)return;
+  if(guide.user){guide.w=0;return;}
+  guide.t+=dt;
+  const establish=smooth(THREE.MathUtils.clamp((guide.t-1.2)/1.6,0,1)),release=smooth(THREE.MathUtils.clamp((flow.clock-flow.travel-.9)/1.8,0,1));
+  const w=establish*(1-release);guide.w=w;if(w<=0)return;
+  const point=followPoint();if(!point)return;
+  if(!guide.target)guide.target=point.clone();else guide.target.lerp(point,1-Math.exp(-dt*3.5));
+  // While the establishing move is still running, blend from where it has the camera this frame.
+  const base=transition?{position:camera.position.clone(),target:orbit.target.clone()}:guide.wide;
+  const away=guide.wide.position.clone().sub(guide.wide.target),wideDistance=away.length(),portrait=camera.aspect<.8;
+  const distance=Math.min(wideDistance,view==='logical'?(portrait?70:60):(portrait?66:56));
+  const position=guide.target.clone().addScaledVector(away.normalize(),distance);
+  drift=null;
+  camera.position.lerpVectors(base.position,position,w);orbit.target.lerpVectors(base.target,guide.target,w);
+ }
  // ---- Pointer: pick systems and packets; hover shows a highlight and a tooltip ----
  const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let down=null,hoverPacket=false;
  const selectableLabels=new Set(['node','lnode','facility','lfacility']);
@@ -674,7 +767,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
    if(selectionRing.visible&&selection!=='root')selectionRing.material.opacity=.6+.23*Math.sin(time*1.6);
   }
   if(morph){morph.t=Math.min(1,morph.t+elapsed/morph.duration);const target=morph.to==='logical'?1:0;applyLogical(morph.from+(target-morph.from)*smooth(morph.t));if(morph.t>=1)finishMorph();}
-  updateFollow(elapsed);
+  updateFollow(elapsed);updateGuided(elapsed);updateScreenLines();
   orbit.update(dt);
   scene.fog.density=look.fog*THREE.MathUtils.clamp(110/camera.position.distanceTo(orbit.target),.3,1);
   updateXray(moving?elapsed:0);updateLabels(moving?elapsed:0);
@@ -709,8 +802,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   for(const t of textures)t.dispose();for(const m of materials)m.dispose();for(const g of geometries)g.dispose();renderer.dispose();renderer.domElement.remove();
  }
  return {showStep,select,highlight,exportImage,setInsets,setOutput,resize,dispose,setMotion,canvas:renderer.domElement,
-  setFrameHook(fn){frameHook=fn;},setForceActive(on){forceActive=on;updateLoop();},overview:()=>highlight(),frame:ids=>fit(ids),setLabels(on){labelsVisible=on;},
-  setView,getView:()=>view,setTheme,getTheme:()=>theme,setCameraMode(mode){cameraMode=mode==='follow'?'follow':'wide';followSnap=true;if(cameraMode==='wide')fit(framedIds,false);},
+  setFrameHook(fn){frameHook=fn;},setForceActive(on){forceActive=on;updateLoop();},overview:()=>highlight(),frame:ids=>fit(ids),setLabels(on){labelMode=on?'focus':'off';},setLabelMode(mode){labelMode=['focus','all','off'].includes(mode)?mode:'focus';},getLabelMode:()=>labelMode,
+  setView,getView:()=>view,setTheme,getTheme:()=>theme,setCameraMode(mode){cameraMode=['follow','guided'].includes(mode)?mode:'wide';followSnap=true;if(guide){guide.user=false;guide.t=Math.max(guide.t,1.2);}if(cameraMode==='wide')fit(framedIds,false);},getCameraMode:()=>cameraMode,
   setStepSeconds(seconds){stepSeconds=seconds;},showConnections,inspectPacket,releasePacket,
   setReserved(rects){reserved=rects||[];},
   debugProject(id){const o=objects.get(id);if(!o)return null;projected.copy(anchorOf(id)).project(camera);const r=renderer.domElement.getBoundingClientRect();return {x:(projected.x+1)/2*r.width+r.left,y:(1-projected.y)/2*r.height+r.top};},
