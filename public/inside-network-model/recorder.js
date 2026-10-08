@@ -68,7 +68,9 @@ export function createClipRecorder({getScene,sequences,play,current,toast,onStat
   recorder.ondataavailable=event=>{if(event.data.size)session.chunks.push(event.data);};
   recorder.onstop=()=>finish(session);
   scene.setOutput({w:format.w,h:format.h,insets:captions?format.insets:{top:0,bottom:0}});
-  scene.setCameraMode(opts.follow?'follow':'wide');
+  // Clips use the close follow camera when asked; otherwise the same guided shot plan as the live view.
+  state.previousCamera=scene.getCameraMode?.()||'guided';
+  scene.setCameraMode(opts.follow?'follow':'guided');
   scene.setForceActive(true);
   scene.setFrameHook(source=>{
    ctx.drawImage(source,0,0,format.w,format.h);
@@ -97,7 +99,7 @@ export function createClipRecorder({getScene,sequences,play,current,toast,onStat
  function stop(save=true){
   if(!state||state.stopping)return;
   state.stopping=true;state.save=save;state.durationMs=performance.now()-(state.recordingStarted||state.startedAt);clearInterval(state.timer);clearTimeout(state.limit);clearTimeout(state.outroTimer);
-  const scene=getScene();scene?.setFrameHook(null);scene?.setOutput(null);scene?.setForceActive(false);scene?.setCameraMode('wide');
+  const scene=getScene();scene?.setFrameHook(null);scene?.setOutput(null);scene?.setForceActive(false);scene?.setCameraMode(state.previousCamera||'guided');
   if(state.changedLook)look?.set(state.previousLook);
   $('recordingStatus').hidden=true;$('recordingTime').textContent='REC 0:00';
   onState(false);

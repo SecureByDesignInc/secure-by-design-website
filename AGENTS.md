@@ -247,6 +247,10 @@ The user approved all ten of Claude's visual and functional recommendations for 
 - **Cinematic look.** An optional “Cinematic” toggle darkens the room and makes traffic and status lights glow. Bloom is used on large screens and in recordings only. The standard look remains the default, and the choice is remembered in the browser.
 - **Better clips.** Record clip adds a step length of 4, 6, 8, or 10 seconds, title and end cards, a close-up “follow the packet” camera, and an optional cinematic look.
 
+## Inside the Network learning pass — October 7, 2026
+
+The user approved the learning pass from Claude's 3D graphic review. Choosing a process brings the stage into view instead of scrolling to the panel below it; the stage caption carries the step narration, play/pause, back/next, and a step counter. Traffic lines have a fixed pixel width, packets keep a minimum on-screen size and draw over equipment, and pulsing rings mark each step's endpoints. The default camera is the guided shot plan (“Follow packet”): establishing shot, ease in to follow the packet, return after its first trip; viewer drags or zooms take over for that step, and reduced motion keeps static framing. During a step only its systems, segments, core, and gate keep labels, and other equipment is dimmed; Labels cycles Focus / All / Off. Labels widen to fit their text rather than compressing it. Keep these behaviors when revising the scene.
+
 ## Inside the Network architecture review — October 7, 2026
 
 The user approved Claude's architecture review recommendations (NIST SP 800-53 Rev. 5, Moderate baseline as the reference), then declined the three proposed new systems (a separate RADIUS/NPS server, a network sensor, and a dedicated audit-custody seat). Do not add new servers for these. The user kept the 802.1X material: the NPS role runs on the existing SBD-DHCP01. These notes supersede earlier rule statuses and tier descriptions where they differ.
