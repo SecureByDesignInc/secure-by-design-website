@@ -1,0 +1,140 @@
+[
+ {
+  "page": "/",
+  "name": "Homepage section order",
+  "ok": true,
+  "detail": "Cybersecurity startswith curiosity. → Start buildingyour network. → A note from Secure By Design → More waysto figure it out. → Choose yournext step. → There’s alwaysmore to understand."
+ },
+ {
+  "page": "/",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/",
+  "name": "No errors at 390px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/training",
+  "name": "Tiles shown before \"Show more\"",
+  "ok": true,
+  "detail": "12: Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover"
+ },
+ {
+  "page": "/training",
+  "name": "Network Authorization tiles visible without clicking \"Show more\"",
+  "ok": false,
+  "detail": "RMF 2.1–2.3 appear only after Show more materials"
+ },
+ {
+  "page": "/training",
+  "name": "All catalog tiles after \"Show more\"",
+  "ok": true,
+  "detail": "15: Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover | Risk Management Framework | Body of Evidence | Authorization to Operate"
+ },
+ {
+  "page": "/training",
+  "name": "Headings",
+  "ok": true,
+  "detail": "Choose your next course. | Build the Network | Build the identity foundation | Configure DNS | Harden the baseline | Configure a Root CA & issuing CA | Connect and segment the network | Finish the PKI services | Addressing and tiered administration | See everything: the logging pipeline | Bring in the fleet | Patch, protect, and watch for weakness | Stand up the business services | Prove you can recover"
+ },
+ {
+  "page": "/training",
+  "name": "Network Authorization filter",
+  "ok": true,
+  "detail": "Risk Management Framework | Body of Evidence | Authorization to Operate"
+ },
+ {
+  "page": "/training",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+ },
+ {
+  "page": "/training",
+  "name": "No errors at 390px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/training/connect-segment",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352 || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+ },
+ {
+  "page": "/training/workstation-fleet",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 () || console: [vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-C6bSaYpY.js:2:4352"
+ },
+ {
+  "page": "/training/rmf",
+  "name": "RMF course edition shown",
+  "ok": true,
+  "detail": "Edition 1.1"
+ },
+ {
+  "page": "/training/rmf/index.html",
+  "name": "No errors at 1440px",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "page": "/training/dc01-dc02/index.html",
+  "name": "No errors at 1440px",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "page": "/my-progress",
+  "name": "Section order (signed out)",
+  "ok": true,
+  "detail": "My Account → One account for your learning. → Community is included. → Membership options"
+ },
+ {
+  "page": "/my-progress",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/inside-the-network",
+  "name": "Model renders and opens on the architecture explorer",
+  "ok": true,
+  "detail": "canvas 1, architecture tab selected true"
+ },
+ {
+  "page": "/inside-the-network",
+  "name": "Follow the traffic starts collapsed",
+  "ok": true,
+  "detail": "open=false"
+ },
+ {
+  "page": "/inside-the-network",
+  "name": "Slim stage toolbar present",
+  "ok": true,
+  "detail": "count 1"
+ },
+ {
+  "page": "/inside-the-network",
+  "name": "No errors at 1440px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/inside-the-network",
+  "name": "No errors at 390px",
+  "ok": false,
+  "detail": "console: Failed to load resource: the server responded with a status of 404 ()"
+ },
+ {
+  "page": "/inside-network-model/model.html#process=signin&step=2",
+  "name": "No errors at 1440px",
+  "ok": true,
+  "detail": ""
+ }
+]

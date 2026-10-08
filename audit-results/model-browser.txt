@@ -1,0 +1,2 @@
+Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, 7 processes and 5 what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.
+exit 0
