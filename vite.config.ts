@@ -23,6 +23,9 @@ const localBindingConfig = {
   ...(workerName ? { name: workerName } : {}),
   // Keep plain-text variables set in the Cloudflare dashboard across deploys.
   keep_vars: true,
+  // Serve only on securebydesigninc.com: no public *.workers.dev copy or per-version preview URLs.
+  workers_dev: false,
+  preview_urls: false,
   main: './server/index.js',
   compatibility_flags: ['nodejs_compat'],
   d1_databases: d1

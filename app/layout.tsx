@@ -6,6 +6,7 @@ import partners from '../content/partners.json';
 import videoLibrary from '../content/videos.json';
 import appStores from '../content/app-stores.json';
 import { renderAppStores } from '../lib/app-stores.mjs';
+import { siteSharePreview } from './share-preview';
 import './globals.css';
 import './brand-glow.css';
 import './editorial.css';
@@ -13,7 +14,7 @@ import './template-shared.css';
 import './reader-progress.css';
 const sans=Geist({variable:'--font-geist-sans',subsets:['latin']});
 const mono=Geist_Mono({variable:'--font-geist-mono',subsets:['latin']});
-export const metadata:Metadata={title:{default:'Secure By Design — Cybersecurity & System Administration',template:'%s | Secure By Design'},description:'Let’s work through cybersecurity, identity, and system administration with clear explanations and examples you can follow.',icons:{icon:[{url:'/brand-lock.svg',type:'image/svg+xml'}]},metadataBase:new URL('https://securebydesigninc.com')};
+export const metadata:Metadata={title:{default:'Secure By Design — Cybersecurity & System Administration',template:'%s | Secure By Design'},description:'Let’s work through cybersecurity, identity, and system administration with clear explanations and examples you can follow.',icons:{icon:[{url:'/favicon.svg',type:'image/svg+xml'}],apple:[{url:'/apple-touch-icon.png',sizes:'180x180'}]},metadataBase:new URL('https://securebydesigninc.com'),...siteSharePreview('Secure By Design — Cybersecurity & System Administration','Let’s work through cybersecurity, identity, and system administration with clear explanations and examples you can follow.')};
 export default function RootLayout({children}:{children:React.ReactNode}){
   return <html lang="en">
     <head>
@@ -22,7 +23,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header container">
         <div className="site-header-identity">
-          <a href="/" className="brand" aria-label="Secure By Design home"><img className="brand-logo" src="/brand-lock.svg" width="72" height="72" alt=""/><span className="brand-wordmark"><span><strong>Secure</strong> By Design</span><small>Educate. Empower. Secure the future.</small></span></a>
+          <a href="/" className="brand"><img className="brand-logo" src="/brand-lock.svg" width="72" height="72" alt=""/><span className="brand-wordmark"><span><strong>Secure</strong> By Design</span><small>Educate. Empower. Secure the future.</small></span></a>
           <div className="header-connect">
           <div dangerouslySetInnerHTML={{__html: renderAppStores(appStores)}} />
           <nav className="header-socials" aria-label="Follow Secure By Design">

@@ -5,10 +5,11 @@ import explorer from './career-pages/career-explorer.html?raw';
 import form from './career-pages/careers.html?raw';
 import records from './career-pages/career-records.html?raw';
 import {isOwner} from './careers.js';
+import {getReader} from './reader-auth.js';
 import {combineCommunityPage} from './community-page.js';
 const community=combineCommunityPage(form,explorer);
 const headers={'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'same-origin','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'"};
-export function careerPage(request,env){
+export async function careerPage(request,env){
  const path=new URL(request.url).pathname.replace(/\/$/,'');
  if(!['/community-contributions','/community-contributions.html','/careers','/career-explorer','/career-records','/resource-subscribers','/resource-preferences','/careers.html','/career-explorer.html','/career-records.html','/resource-subscribers.html','/resource-preferences.html'].includes(path))return null;
  // The public Community pages are offline until relaunch (October 2026); the site's not-found page answers.
@@ -18,8 +19,13 @@ export function careerPage(request,env){
  if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405,headers});
  if(path==='/career-explorer')return Response.redirect(new URL('/careers'+new URL(request.url).search,request.url),308);
  if(['/career-records','/resource-subscribers','/community-contributions'].includes(path)){
-  if(!request.headers.get('oai-authenticated-user-id'))return Response.redirect(new URL('/signin-with-chatgpt?return_to='+encodeURIComponent(path),request.url),302);
-  if(!isOwner(request,env))return new Response('Only the site owner can open these records.',{status:403,headers});
+  // Owner pages: sign in on My Account with the owner's address, then come back here.
+  if(!await isOwner(request,env)){
+   let reader=null;try{reader=await getReader(request,env);}catch{}
+   if(!reader)return Response.redirect(new URL('/my-progress?returnTo='+encodeURIComponent(path)+'#account',request.url),302);
+   if(reader.email.trim().toLowerCase()===String(env.OWNER_EMAIL||'').trim().toLowerCase())return Response.redirect(new URL('/my-progress?returnTo='+encodeURIComponent(path)+'&owner_reauth=1#account',request.url),302);
+   return new Response('Only the site owner can open these records.',{status:403,headers});
+  }
  }
  return new Response(request.method==='HEAD'?null:({'/community-contributions':contributions,'/careers':community,'/career-records':records,'/resource-subscribers':subscribers,'/resource-preferences':preferences})[path],{headers});
 }

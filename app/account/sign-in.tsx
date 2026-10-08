@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import ProviderButtons from './provider-buttons';
+import {safeReturnPath} from './safe-return';
 type Mode='create'|'signin'|'reset';
 export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail?:string;onSignedIn:()=>Promise<void>}){
  const [ready,setReady]=useState(false),[providerReturn,setProviderReturn]=useState('/my-progress');
@@ -8,7 +9,7 @@ export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail
   // Send provider sign-ins straight to the page that asked for sign-in, when it is on this site.
   const requested=new URLSearchParams(location.search).get('returnTo');
   const here=new URL(location.href);for(const key of ['signin_error','signed_in','linked'])here.searchParams.delete(key);
-  try{const target=requested?new URL(requested,location.origin):null;setProviderReturn(target&&target.origin===location.origin?target.pathname+target.search+target.hash:here.pathname+here.search);}catch{setProviderReturn(here.pathname+here.search);}
+  setProviderReturn(safeReturnPath(requested)??here.pathname+here.search);
  },[]);
  const [mode,setMode]=useState<Mode>(existingEmail?'reset':'create');
  const [email,setEmail]=useState(existingEmail),[code,setCode]=useState(''),[password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState('');
@@ -40,7 +41,7 @@ export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail
   <form onSubmit={submit}><fieldset className="reader-account-form" disabled={!ready||busy}>
    {sent?<><p role="status">Enter the code sent to {email}.</p><label htmlFor="reader-code">8-digit email verification code</label><input id="reader-code" value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,'').slice(0,8))} autoComplete="one-time-code" inputMode="numeric" pattern="[0-9]{8}" required autoFocus/><p className="reader-note">Use this browser to enter your code within 10 minutes.</p></>:<><label htmlFor="reader-email">Email address</label><input id="reader-email" type="email" autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)} maxLength={254} required/></>}
    {(sent||mode==='signin')&&<><label htmlFor="reader-password">{mode==='signin'?'Password':'Choose a password'}</label><input id="reader-password" type="password" autoComplete={mode==='signin'?'current-password':'new-password'} value={password} onChange={e=>setPassword(e.target.value)} minLength={mode==='signin'?undefined:15} maxLength={128} aria-describedby={sent?'password-help':undefined} required/>{sent&&<><p id="password-help" className="reader-note">Use 15–128 characters. A long, unique passphrase works well.</p><label htmlFor="reader-confirm">Confirm password</label><input id="reader-confirm" type="password" autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} minLength={15} maxLength={128} required/></>}</>}
-   {!sent&&<p className="reader-note">{mode==='signin'?'Signing in automatically includes Community membership.':'Submitting your email automatically enrolls you in Community. Verify your email and set a password to access your account.'} No payment details required.</p>}
+   {!sent&&<p className="reader-note">{mode==='signin'?'Signing in automatically includes Community membership.':'Verify your email and set a password to access your account. Verifying your email also starts your free Community membership.'} No payment details required.</p>}
    {!sent&&mode!=='signin'&&<label className="reader-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)} required/><span>Save my email address for my Community membership and my private Secure By Design learning account.</span></label>}
    <button className="reader-primary" disabled={busy}>{busy?'Please wait…':mode==='signin'?'Sign in':sent?(mode==='reset'?'Save password and sign in':'Create permanent account'):'Email me a verification code'}</button>
    {sent&&<button type="button" onClick={()=>changeMode(mode)}>Request a new code or change email</button>}

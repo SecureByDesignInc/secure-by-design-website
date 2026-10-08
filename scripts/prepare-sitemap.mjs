@@ -6,10 +6,12 @@ const site = 'https://securebydesigninc.com';
 const read = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const library = read('content/videos.json');
 const configuration = read('content/configuration-courses.json');
-const paths = ['/', '/inside-the-network', '/training', '/my-progress', '/privacy'];
+// My Account is noindex (it is an account page), so it stays out of the sitemap.
+const paths = ['/', '/inside-the-network', '/training', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
-  if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, ''));
+  // List the address a guide is served at: /training/rmf/index.html redirects to /training/rmf/.
+  if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, '').replace(/\/index\.html$/, '/'));
 }
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 const unique = [...new Set(paths)];

@@ -86,7 +86,7 @@ export async function resourcesApi(request,env){
   if(request.method==='POST'&&request.headers.get('origin')!==url.origin)return json({error:'Request origin could not be verified.'},403);
   if(path==='/api/resource-signups'&&request.method==='POST')return await signup(request,env);
   if(path==='/api/resource-preferences'&&request.method==='POST')return await preferences(request,env);
-  if(!isOwner(request,env))return json({error:'Sign in with the site owner account to view subscribers.'},403);
+  if(!await isOwner(request,env))return json({error:'Sign in with the site owner account to view subscribers.'},403);
   if(path==='/api/resource-subscribers'&&request.method==='GET'){
    const status=url.searchParams.get('status')||'active',offset=Number(url.searchParams.get('offset')||0);
    if(!['active','pending','unsubscribed'].includes(status)||!Number.isSafeInteger(offset)||offset<0)throw new RequestError('Invalid subscriber filter.');

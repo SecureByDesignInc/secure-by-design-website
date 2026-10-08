@@ -1,14 +1,15 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import ConfigurationGuide from '../../videos/configuration-guide';
 import configurationCourses from '../../../content/configuration-courses.json';
 import library from '../../../content/videos.json';
 import '../../videos/videos.css';
+import { sharePreview } from '../../share-preview';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const course = library.courses.find(item => item.id === slug);
-  return { title: course?.title ?? 'Training guide', description: course?.description };
+  const title = course?.title ?? 'Training guide';
+  return { title, description: course?.description, ...sharePreview(`${title} | Secure By Design`, course?.description ?? '', `/training/${slug}`) };
 }
 
 export default async function ConfigurationPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -17,7 +18,7 @@ export default async function ConfigurationPage({ params }: { params: Promise<{ 
   const course = library.courses.find(item => item.id === slug);
   if (!configuration || !course) notFound();
   return <main id="main" className="vc-page vc-guide-page container">
-    <Link className="vc-guide-back" href="/training">← Back to the Training Library</Link>
+    <a className="vc-guide-back" href="/training">← Back to the Training Library</a>
     <h1 className="vc-sr-only">{course.title}</h1>
     <ConfigurationGuide course={course} configuration={configuration} standalone />
   </main>;

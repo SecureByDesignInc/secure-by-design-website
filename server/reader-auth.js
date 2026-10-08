@@ -1,5 +1,6 @@
 import {validPassword,hashPassword,checkPassword} from './reader-password.js';
-import {communityEnrollmentStatement,communityMembership,enrollCommunity} from './community-membership.js';
+import {communityEnrollmentStatement,communityMembership} from './community-membership.js';
+import {emailLimitKey,ipLimitKey} from './limits.js';
 const random=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),n=>n.toString(16).padStart(2,'0')).join('');
 export const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),n=>n.toString(16).padStart(2,'0')).join('');
 export const local=request=>['localhost','127.0.0.1'].includes(new URL(request.url).hostname);
@@ -30,6 +31,12 @@ export async function startBrowserSession(request,env,accountId,email){
 async function signedIn(request,env,accountId,email){
  return json({signedIn:true,membership:communityMembership},200,await startBrowserSession(request,env,accountId,email));
 }
+// Password attempts: per network, per inbox from each network, and a ceiling for one inbox from everywhere.
+// Counting an inbox per network means a stranger can't lock someone out with a handful of wrong passwords.
+export function signinLimits(now,ip,email){
+ const hour=now.slice(0,13),net=ipLimitKey(ip),inbox=emailLimitKey(email);
+ return [[`signin-ip:${hour}:${net}`,30],[`signin-email:${hour}:${inbox}:${net}`,10],[`signin-email-all:${hour}:${inbox}`,50]];
+}
 async function rate(env,key,max,expires){const row=await env.DB.prepare('INSERT INTO reader_auth_limits (key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,expires,max).first();return !!row}
 export async function readerAuthApi(request,env){
  const url=new URL(request.url),route=url.pathname;
@@ -53,7 +60,7 @@ export async function readerAuthApi(request,env){
    if(!ip)return json({error:'This request could not be verified.'},503);
    await env.DB.prepare('DELETE FROM reader_auth_limits WHERE expires_at<?').bind(now).run();
    const expires=new Date(Date.now()+3600000).toISOString();
-   for(const [key,max] of [[`signin-ip:${now.slice(0,13)}:${ip}`,30],[`signin-email:${now.slice(0,13)}:${email}`,10]])if(!await rate(env,await digest(key),max,expires))return json({error:'Too many sign-in attempts. Please try again in an hour or use password recovery.'},429);
+   for(const [key,max] of signinLimits(now,ip,email))if(!await rate(env,await digest(key),max,expires))return json({error:'Too many sign-in attempts. Please try again in an hour or use password recovery.'},429);
    const account=await env.DB.prepare('SELECT id,password_hash FROM reader_accounts WHERE email=?').bind(email).first();
    if(!await checkPassword(data.password,account?.password_hash))return json({error:'Email or password did not match. If you previously used email codes, choose Set or reset password.'},401);
    return await signedIn(request,env,account.id,email);
@@ -63,14 +70,15 @@ export async function readerAuthApi(request,env){
    if(!env.RESEND_API_KEY||!env.NOTIFICATION_FROM)return json({error:'Email sign-in is temporarily unavailable. Please try again later.'},503);
    const email=data.email.trim().toLowerCase(),ip=request.headers.get('cf-connecting-ip')||(local(request)?'local-test':null);
    if(!ip)return json({error:'This request could not be verified.'},503);
-   const hour=now.slice(0,13),expires=new Date(Date.now()+3600000).toISOString();
+   const hour=now.slice(0,13),inbox=emailLimitKey(email),hourEnds=new Date(Date.now()+3600000).toISOString(),dayEnds=new Date(Date.now()+86400000).toISOString();
    await env.DB.batch([env.DB.prepare('DELETE FROM reader_auth_limits WHERE expires_at<?').bind(now),env.DB.prepare('DELETE FROM reader_challenges WHERE expires_at<?').bind(now),env.DB.prepare('DELETE FROM reader_sessions WHERE expires_at<?').bind(now)]);
-   for(const [key,max] of [[`ip:${hour}:${ip}`,10],[`email:${hour}:${email}`,5],[`minute:${now.slice(0,16)}:${email}`,1]])if(!await rate(env,await digest(key),max,expires))return json({error:'Please wait before requesting another code. Too many attempts may require waiting an hour.'},429);
+   // Per network, per inbox (ignoring +tags), at most one a minute, and at most 10 code emails a day to one inbox.
+   for(const [key,max,expires] of [[`ip:${hour}:${ipLimitKey(ip)}`,10,hourEnds],[`email:${hour}:${inbox}`,5,hourEnds],[`minute:${now.slice(0,16)}:${inbox}`,1,hourEnds],[`email-day:${now.slice(0,10)}:${inbox}`,10,dayEnds]])if(!await rate(env,await digest(key),max,expires))return json({error:'Please wait before requesting another code. Too many attempts may require waiting an hour.'},429);
    const challenge=random();const value=crypto.getRandomValues(new Uint32Array(1))[0];const code=String(value%100000000).padStart(8,'0');
    await env.DB.prepare('INSERT INTO reader_challenges (id,email,code_hash,attempts,expires_at,purpose) VALUES (?,?,?,0,?,?)').bind(challenge,email,await digest(challenge+':'+code),new Date(Date.now()+600000).toISOString(),data.purpose||'create').run();
    try{const response=await fetch('https://api.resend.com/emails',{method:'POST',signal:AbortSignal.timeout(12000),headers:{authorization:'Bearer '+env.RESEND_API_KEY,'content-type':'application/json','Idempotency-Key':'reader-signin/'+challenge},body:JSON.stringify({from:env.NOTIFICATION_FROM,to:[email],subject:'Your Secure By Design verification code',text:`Your Secure By Design verification code is:\n\n${code}\n\nEnter this code in the browser where you requested it. It expires in 10 minutes and can be used once.\n\nUse this code to verify your email and create or reset your account password. Your password is required to sign in and save learning progress. It does not subscribe you to resource emails.\n\nIf you did not request this code, ignore this email. Do not share the code.`})});if(!response.ok)throw Error();}catch{await env.DB.prepare('DELETE FROM reader_challenges WHERE id=?').bind(challenge).run();return json({error:'The verification email could not be sent. Please wait a minute and try again.'},502)}
-   await enrollCommunity(env,email,'account');
-   return json({membership:communityMembership,message:'Your Community membership is included. Check your email for an 8-digit code to finish setting up account access. It expires in 10 minutes.'},202,setCookie(request,'challenge',challenge,600));
+   // Community membership starts when the address is verified (signedIn enrolls it), never on an unverified request.
+   return json({membership:communityMembership,message:'Check your email for an 8-digit code to finish setting up account access. It expires in 10 minutes. Your Community membership starts when you verify your email.'},202,setCookie(request,'challenge',challenge,600));
   }
   if(route==='/api/reader-auth/verify'){
    const challenge=cookie(request,'challenge');if(!/^[a-f0-9]{64}$/.test(challenge)||Object.keys(data).some(k=>!['code','password','confirmPassword'].includes(k))||typeof data.code!=='string'||!/^\d{8}$/.test(data.code))return json({error:'Enter the 8-digit code in the browser where you requested it.'},400);

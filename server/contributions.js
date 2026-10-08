@@ -66,7 +66,7 @@ export async function contributionsApi(request,env,ctx){try{
  if(!['GET','POST','PUT'].includes(request.method))return json({error:'Method not allowed.'},405);
  if(request.method!=='GET'&&request.headers.get('origin')!==url.origin)return json({error:'Request origin could not be verified.'},403);
  if(path==='/api/community-contributions'&&request.method==='POST')return await submit(request,env,ctx);
- if(!isOwner(request,env))return json({error:'Sign in with the site owner account to review contributions.'},403);
+ if(!await isOwner(request,env))return json({error:'Sign in with the site owner account to review contributions.'},403);
  if(path==='/api/community-contributions'&&request.method==='GET'){
  const offset=Number(url.searchParams.get('offset')||0);if(!Number.isSafeInteger(offset)||offset<0)throw new InputError('Invalid page.');
  const rows=await q(env,'SELECT c.*,n.state AS notification_state FROM community_contributions c LEFT JOIN community_notifications n ON n.record_id=c.id ORDER BY c.created_at DESC,c.id DESC LIMIT 50 OFFSET ?',offset).all();const total=await q(env,'SELECT count(*) AS count FROM community_contributions').first();return json({contributions:rows.results,total:total.count});}

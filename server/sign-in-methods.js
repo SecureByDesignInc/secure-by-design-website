@@ -8,6 +8,7 @@
 //   accounts) are never matched to or create an account; those learners link the provider from My Account.
 // - Linking requires an existing session and a request started on this site.
 import { b64url, sha256, randomToken, providers, providerStatus, authorizationUrl, exchangeCode, verifyIdToken, revokeAppleToken } from './oidc.js';
+import { ipLimitKey } from './limits.js';
 import { verifyRegistration, verifyAssertion, relyingParty, ES256, RS256 } from './webauthn.js';
 import { getReader, startBrowserSession, cookie, setCookie, local, digest } from './reader-auth.js';
 import { deleteAccount } from './account-deletion.js';
@@ -68,7 +69,8 @@ async function rate(env, key, max) {
   const row = await env.DB.prepare('INSERT INTO reader_auth_limits (key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(await digest(`${key}:${now.slice(0, 13)}`), expires, max).first();
   return Boolean(row);
 }
-const clientIp = request => request.headers.get('cf-connecting-ip') || (local(request) ? 'local-test' : null);
+// Rate limits count an IPv6 /64 as one client (see limits.js).
+const clientIp = request => { const ip = request.headers.get('cf-connecting-ip') || (local(request) ? 'local-test' : null); return ip && ipLimitKey(ip); };
 async function saveFlow(env, id, kind, data, minutes) {
   const now = new Date().toISOString();
   await env.DB.batch([
@@ -294,6 +296,8 @@ export async function signInApi(request, env, { fetcher = fetch } = {}) {
     if (route === '/api/sign-in/app-handoff') {
       // The app opens this site in the system browser with a PKCE challenge; a one-time code returns to the app.
       if (typeof data.challenge !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(data.challenge)) return reply({ error: 'Open sign-in from the Secure By Design app again.' }, 400);
+      // A link someone else sent can't silently hand an old session to an app: the learner signs in again first.
+      if (!recent(reader)) return reauth();
       const code = randomToken();
       await saveFlow(env, code, 'app-handoff', { accountId: reader.id, challenge: data.challenge }, 2);
       return reply({ redirect: `${APP_SCHEME}://auth?code=${code}` });

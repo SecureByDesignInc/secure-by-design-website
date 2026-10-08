@@ -8,11 +8,14 @@ import AccountForm from '../account/sign-in';
 
 export default function AppSignIn(){
  const {data,error:loadError,refresh}=useReaderProgress();
- const [challenge,setChallenge]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const [challenge,setChallenge]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  useEffect(()=>{const value=new URLSearchParams(location.search).get('challenge');setChallenge(value&&/^[A-Za-z0-9_-]{43}$/.test(value)?value:'');},[]);
  async function continueToApp(){
   setBusy(true);setError('');
-  try{const r=await fetch('/api/sign-in/app-handoff',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({challenge})});const d=await r.json();if(!r.ok)throw new Error(d.error);location.assign(d.redirect);}
+  try{const r=await fetch('/api/sign-in/app-handoff',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({challenge})});const d=await r.json();
+   // Opening the app needs a sign-in from the last 15 minutes, so an old session can't be handed over by a link.
+   if(d.reauth){await fetch('/api/reader-auth/signout',{method:'POST'});setNotice('For your security, sign in again to open the app.');setBusy(false);await refresh();return;}
+   if(!r.ok)throw new Error(d.error);location.assign(d.redirect);}
   catch(e){setError(e instanceof Error&&e.message?e.message:'Could not return to the app. Try again.');setBusy(false);}
  }
  if(loadError)return <p className="reader-error" role="alert">{loadError} <button onClick={()=>void refresh()}>Try again</button></p>;
@@ -26,6 +29,6 @@ export default function AppSignIn(){
    <div className="reader-actions"><button className="reader-primary" disabled={busy} onClick={()=>void continueToApp()}>{busy?'Opening the app…':'Continue to the app'}</button>
    <button disabled={busy} onClick={async()=>{await fetch('/api/reader-auth/signout',{method:'POST'});await refresh();}}>Use a different account</button></div>
    {error&&<p className="reader-error" role="alert">{error}</p>}
-  </section>:<AccountForm existingEmail={data.user?.email} onSignedIn={refresh}/>}
+  </section>:<>{notice&&<p className="reader-error" role="status">{notice}</p>}<AccountForm existingEmail={data.user?.email} onSignedIn={refresh}/></>}
  </>;
 }

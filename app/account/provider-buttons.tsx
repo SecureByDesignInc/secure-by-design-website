@@ -34,7 +34,7 @@ export function startUrl(id:ProviderId,returnTo:string,intent:'signin'|'link'='s
 export default function ProviderButtons({returnTo,onSignedIn}:{returnTo:string;onSignedIn:()=>Promise<void>|void}){
  const providers=useProviders();
  const [passkeys,setPasskeys]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
- useEffect(()=>{setPasskeys(passkeysSupported());const code=new URLSearchParams(location.search).get('signin_error');if(code)setError(signInErrors[code]||signInErrors.failed);},[]);
+ useEffect(()=>{setPasskeys(passkeysSupported());const code=new URLSearchParams(location.search).get('signin_error');if(code)setError(Object.prototype.hasOwnProperty.call(signInErrors,code)?signInErrors[code]:signInErrors.failed);},[]);
  const available=order.filter(id=>providers?.[id]);
  if(!available.length&&!passkeys)return error?<p className="reader-error" role="alert">{error}</p>:null;
  return <div className="sso" aria-label="Other ways to sign in">
