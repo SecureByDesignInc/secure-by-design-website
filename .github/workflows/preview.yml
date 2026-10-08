@@ -1,0 +1,66 @@
+name: Preview snapshot
+
+# Temporary design-review helper (not for main): builds this branch, runs it locally with Wrangler,
+# saves each page's HTML, the built assets, and phone/desktop screenshots to the preview-results branch.
+on:
+  push:
+    branches: ['preview/**']
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CLOUDFLARE_WORKER_NAME: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+      CLOUDFLARE_D1_DATABASE_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
+      CLOUDFLARE_D1_DATABASE_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Install a test browser
+        run: |
+          npm i --prefix "$RUNNER_TEMP/pw" playwright@1.56.0 > /dev/null 2>&1
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium > /dev/null 2>&1
+      - name: Run the built site locally
+        run: |
+          node -e "const c=require('./dist/server/wrangler.json');const d=(c.d1_databases||[])[0];if(d)require('fs').writeFileSync('d1-local.json',JSON.stringify({name:'d1-local',compatibility_date:'2026-01-01',d1_databases:[{binding:d.binding,database_name:d.database_name,database_id:d.database_id,migrations_dir:'drizzle'}]}))"
+          [ -f d1-local.json ] && pnpm exec wrangler d1 migrations apply DB --local --config d1-local.json --persist-to "$RUNNER_TEMP/state" > migrations.log 2>&1 || true
+          up() { for i in $(seq 1 "$1"); do curl -s -o /dev/null http://127.0.0.1:8787/ && return 0; sleep 1; done; return 1; }
+          log() { tail -c 3000 "$1" | tr '\n' '|' | sed 's/%/%25/g'; }
+          nohup pnpm exec wrangler dev --config dist/server/wrangler.json --ip 127.0.0.1 --port 8787 --persist-to "$RUNNER_TEMP/state" > wrangler-dev.log 2>&1 &
+          if ! up 90; then
+            echo "::warning title=wrangler dev did not start::$(log wrangler-dev.log)"
+            pkill -f "wrangler dev" || true
+            nohup pnpm exec vite preview --host 127.0.0.1 --port 8787 --strictPort > vite-preview.log 2>&1 &
+            up 90 || { echo "::error title=vite preview did not start::$(log vite-preview.log)"; exit 1; }
+          fi
+      - name: Snapshot
+        env:
+          PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
+        run: |
+          mkdir -p "$RUNNER_TEMP/out"
+          rsync -a --compare-dest="$PWD/public/" dist/client/ "$RUNNER_TEMP/out/client-extra/"
+          find "$RUNNER_TEMP/out/client-extra" -type d -empty -delete
+          node .github/preview/snapshot.mjs http://127.0.0.1:8787 "$RUNNER_TEMP/out"
+          cp wrangler-dev.log "$RUNNER_TEMP/out/" || true
+      - name: Publish to preview-results
+        run: |
+          cd "$RUNNER_TEMP/out"
+          git init -q -b preview-results
+          git config user.name "Secure By Design"; git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          printf '%s\n' "$GITHUB_REF_NAME $GITHUB_SHA" > SOURCE.txt
+          git add -A; git commit -qm "Preview snapshot of $GITHUB_REF_NAME ($GITHUB_SHA)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:preview-results
+          echo "::notice title=Preview snapshot::$(du -sh . | cut -f1) pushed to preview-results"
