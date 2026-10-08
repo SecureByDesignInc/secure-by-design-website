@@ -2,3 +2,13 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+# Patched releases of packages that build tools and the shadcn CLI pull in (pnpm audit, 8 October 2026).
+# Each stays within its current major version.
+overrides:
+  '@modelcontextprotocol/sdk': ^1.31.0
+  brace-expansion@5: ^5.0.12
+  fast-uri: ^3.1.8
+  image-size: ^2.0.3
+  ip-address: ^10.7.1
+  proxy-addr: ^2.0.8
+  source-map-js: ^1.2.2
