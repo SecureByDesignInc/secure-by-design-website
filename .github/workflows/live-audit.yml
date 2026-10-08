@@ -25,17 +25,21 @@ jobs:
           git worktree add -q /tmp/main origin/main
           mkdir -p audit-results
       - name: Install Playwright
+        if: hashFiles('.github/audit/tests-only') == ''
         run: |
           npm i --prefix /tmp/pw playwright@1.55.0 >/dev/null
           /tmp/pw/node_modules/.bin/playwright install --with-deps chromium >/dev/null
           echo "PLAYWRIGHT_MODULE=/tmp/pw/node_modules/playwright/index.mjs" >> "$GITHUB_ENV"
       - name: HTTP audit
+        if: hashFiles('.github/audit/tests-only') == ''
         continue-on-error: true
         run: REPO_DIR=/tmp/main node .github/audit/audit-live-site.mjs
       - name: Browser audit
+        if: hashFiles('.github/audit/tests-only') == ''
         continue-on-error: true
         run: node .github/audit/audit-live-browser.mjs
       - name: Repo browser test against the live model
+        if: hashFiles('.github/audit/tests-only') == ''
         continue-on-error: true
         run: |
           cd /tmp/main
@@ -53,8 +57,10 @@ jobs:
           pnpm build > "$GITHUB_WORKSPACE/audit-results/build.txt" 2>&1; echo "build exit $?" >> "$GITHUB_WORKSPACE/audit-results/build.txt"
           { for s in check-network-architecture check-network-relationships check-data-center-equipment check-rmf; do echo "== $s"; node scripts/$s.mjs 2>&1 | tail -4; echo "exit $?"; done
             echo "== node --test"; node --test tests/*.test.mjs 2>&1 | grep -E "^# |^not ok|^ok" ; } > "$GITHUB_WORKSPACE/audit-results/source-tests.txt" 2>&1
+          node --test tests/community.test.mjs tests/journal-progress.test.mjs > "$GITHUB_WORKSPACE/audit-results/failing-tests.txt" 2>&1 || true
           cat "$GITHUB_WORKSPACE/audit-results/source-tests.txt"
       - name: DNS snapshot
+        if: hashFiles('.github/audit/tests-only') == ''
         continue-on-error: true
         run: |
           for t in NS A AAAA MX TXT CAA; do echo "== $t"; dig +short securebydesigninc.com $t; done > audit-results/dns.txt
