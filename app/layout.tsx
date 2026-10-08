@@ -43,7 +43,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
             <span className="footer-partner-name">{partner.label}</span>
           </span>)}
         </div>
-        <div className="footer-actions"><a href="/#about">About Secure By Design</a><FooterShare /></div>
+        <div className="footer-actions"><a href="/#about">About Secure By Design</a><a href="/privacy">Privacy</a><FooterShare /></div>
       </footer>
     </body>
   </html>;

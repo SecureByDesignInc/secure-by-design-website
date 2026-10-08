@@ -289,3 +289,7 @@ The owner asked for every approved-but-unpublished item and the live-audit fixes
 - **Training Library** shows up to 24 tiles before “Show more”, so both paths are visible. The deploy check now expects at least 15 tiles and reports the HTTPS redirect. CI runs the full `tests/` suite after the build. `scripts/check-rmf.mjs` checks the offline Journal's `/rmf-series` guide, so it is not run until the Journal returns.
 - **Sitemap.** `scripts/prepare-sitemap.mjs` (run by `prepare-content.mjs`) writes `public/sitemap.xml` and `public/robots.txt` from the published pages only.
 - **Analytics** were removed (Plausible cancelled).
+
+## Privacy policy and account deletion — October 8, 2026
+
+`/privacy` (app/privacy) is the privacy policy for the website and the iOS/Android app, written from what the code actually stores (reader accounts, scrypt password hashes, progress, bookmarks, learning activity, profiles, Community membership, email lists with consent records, form submissions) and the providers in use (Cloudflare, Resend, optional PostHog in the app, YouTube privacy-enhanced embeds, UserJot). `#delete-account` is the account-deletion page Google Play requires; requests go to support@securebydesigninc.com and are completed within 30 days. Update the policy whenever data collection or providers change. The footer (React and generated shells) links to it, and the sitemap includes it.

@@ -24,7 +24,7 @@ for(const name of pages){
  const navigation='<nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${label}</a>`).join('')+'</nav>';
  const footerPattern=/<footer class="site-footer container">[\s\S]*?<\/footer>/;
  if(!footerPattern.test(html))throw new Error('Shared footer missing: '+name);
- const footer='<footer class="site-footer container"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a>'+partnerMarkup+'<div class="footer-actions"><a href="/#about">About Secure By Design</a>'+renderFooterShare()+'</div></footer>';
+ const footer='<footer class="site-footer container"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a>'+partnerMarkup+'<div class="footer-actions"><a href="/#about">About Secure By Design</a><a href="/privacy">Privacy</a>'+renderFooterShare()+'</div></footer>';
  const connect='<div class="header-connect">'+appMarkup+socialMarkup+'</div>';
  const connectPattern=/<div class="header-connect">[\s\S]*?(?:<\/section>|<\/nav>)<\/div>/;
  const updated=(connectPattern.test(html)?html.replace(connectPattern,connect):html.replace(pattern,connect)).replace(/<nav aria-label="Main navigation">[\s\S]*?<\/nav>/,navigation).replace(footerPattern,footer);
