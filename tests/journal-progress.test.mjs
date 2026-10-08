@@ -86,7 +86,7 @@ test('rendered dashboard counts only active training; offline Journal and Cyber 
   ]);
   assert.match(html, /<span>Completed<\/span><strong>1<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
-  assert.match(html, /<h2>Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
+  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
   assert.doesNotMatch(html, /Learning path|cyber-range|Security Journal|Technical articles|<h2>RMF lifecycle|href="\/(?:blogs?|rmf-series)/);
   assert.ok(catalog.progressCatalog.some(item => item.id === 'path:domain'), 'Cyber Range IDs remain recognized for saved progress');
 });
@@ -95,7 +95,7 @@ test('journal-only accounts get zero active counts and Training Library discover
   const html = renderDashboard([{ id: 'article:what-is-active-directory', status: 'in_progress' }, { id: 'rmf:prepare', status: 'completed' }]);
   assert.match(html, /<span>Completed<\/span><strong>0<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
-  assert.match(html, /<h2>Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
+  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/training">Explore the Training Library/);
   assert.doesNotMatch(html, /Continue reading|Security Journal|href="\/(?:blogs?|rmf-series)/);
 });
 
