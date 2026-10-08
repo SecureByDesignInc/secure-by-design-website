@@ -1,0 +1,127 @@
+[
+  {
+    "name": "providers endpoint",
+    "ok": true,
+    "detail": "200 {\"providers\":{\"apple\":false,\"google\":false,\"microsoft\":false},\"passkeys\":true} cache=private, no-store"
+  },
+  {
+    "name": "unconfigured provider start redirects with an error code",
+    "ok": true,
+    "detail": "303 /my-progress?signin_error=unavailable#account"
+  },
+  {
+    "name": "methods require a session",
+    "ok": true,
+    "detail": "401"
+  },
+  {
+    "name": "cross-site passkey request refused",
+    "ok": true,
+    "detail": "403"
+  },
+  {
+    "name": "cross-site delete refused",
+    "ok": true,
+    "detail": "403"
+  },
+  {
+    "name": "app exchange rejects an unknown code",
+    "ok": true,
+    "detail": "400 {\"error\":\"That sign-in expired. Try again.\"}"
+  },
+  {
+    "name": "www redirects to apex keeping the query",
+    "ok": true,
+    "detail": "301 https://securebydesigninc.com/app-sign-in?challenge=abc"
+  },
+  {
+    "name": "my-progress shows passkey sign-in (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "provider buttons hidden until keys exist (390)",
+    "ok": true,
+    "detail": "0 shown"
+  },
+  {
+    "name": "no horizontal scroll on my-progress (390)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in shows the sign-in form (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no horizontal scroll on app-sign-in (390)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in without a challenge explains itself (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "privacy mentions passkeys and self-service deletion (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "my-progress shows passkey sign-in (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "provider buttons hidden until keys exist (1440)",
+    "ok": true,
+    "detail": "0 shown"
+  },
+  {
+    "name": "no horizontal scroll on my-progress (1440)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "passkey options from the site",
+    "ok": true,
+    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"sS3MOvfJkMAc-G3Rvdt7Ilu3lTqUZFcE3sEDlwLMYQQ\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
+  },
+  {
+    "name": "my-progress 1440",
+    "ok": false,
+    "detail": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.reader-error[role=alert], .reader-error').first() to be visible\n"
+  },
+  {
+    "name": "app-sign-in shows the sign-in form (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no horizontal scroll on app-sign-in (1440)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in without a challenge explains itself (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "privacy mentions passkeys and self-service deletion (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors (1440)",
+    "ok": true,
+    "detail": ""
+  }
+]
