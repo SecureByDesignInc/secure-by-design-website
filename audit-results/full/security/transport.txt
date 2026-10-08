@@ -1,0 +1,21 @@
+TRACE / -> 405
+PUT / -> 405
+DELETE / -> 405
+PATCH / -> 405
+OPTIONS / -> 405
+http version: 2
+alt-svc: alt-svc: h3=":443"; ma=86400
+html encoding (br): content-encoding: br
+html encoding (gzip): content-encoding: gzip
+--- certificate
+subject=CN = securebydesigninc.com
+issuer=C = US, O = Google Trust Services, CN = WE1
+notBefore=Oct  8 03:17:59 2026 GMT
+notAfter=Jan  6 04:17:55 2027 GMT
+X509v3 Subject Alternative Name: 
+    DNS:securebydesigninc.com, DNS:*.securebydesigninc.com
+--- www certificate
+subject=CN = securebydesigninc.com
+issuer=C = US, O = Google Trust Services, CN = WE1
+notBefore=Oct  8 01:26:20 2026 GMT
+notAfter=Jan  6 02:26:17 2027 GMT

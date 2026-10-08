@@ -1,0 +1,97 @@
+== public/training/business-services/SecureByDesign-business-services-Workbook.docx (118850 bytes)
+<dc:title>Stand up the business services — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-07T20:25:26.228Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-07T20:25:26.228Z</dcterms:modified>
+== public/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx (121509 bytes)
+<dc:title>Connect and segment the network — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:20.928Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:20.928Z</dcterms:modified>
+== public/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx (320712 bytes)
+<dc:title>Secure By Design Windows Server 2025 DC01 and DC02 Companion Workbook</dc:title>
+<dc:creator>Secure By Design Team LLC</dc:creator>
+<cp:lastModifiedBy/>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:modified>
+  <Pages>1
+  <Words>0
+  <Application>Microsoft Macintosh Word
+== public/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx (117555 bytes)
+<dc:title>Configure DNS — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.674Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.674Z</dcterms:modified>
+== public/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx (119953 bytes)
+<dc:title>Harden the baseline — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.892Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.892Z</dcterms:modified>
+== public/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx (119890 bytes)
+<dc:title>See everything: the logging pipeline — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.074Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.074Z</dcterms:modified>
+== public/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx (120413 bytes)
+<dc:title>Patch, protect, and watch for weakness — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.174Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.174Z</dcterms:modified>
+== public/training/pki-services/SecureByDesign-pki-services-Workbook.docx (118083 bytes)
+<dc:title>Finish the PKI services — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.998Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.998Z</dcterms:modified>
+== public/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx (120029 bytes)
+<dc:title>Prove you can recover — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.266Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.266Z</dcterms:modified>
+== public/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx (51857 bytes)
+<dc:title>RMF Body of Evidence and ATO Package Training Catalog</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy/>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:modified>
+  <Pages>1
+  <Words>0
+  <Application>Microsoft Macintosh Word
+== public/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx (120210 bytes)
+<dc:title>Addressing and tiered administration — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.035Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.035Z</dcterms:modified>
+== public/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx (119243 bytes)
+<dc:title>Configure a Root CA &amp; issuing CA — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.829Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-07T20:25:25.829Z</dcterms:modified>
+== public/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx (121886 bytes)
+<dc:title>Bring in the fleet — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Un-named</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.115Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T02:14:21.115Z</dcterms:modified>

@@ -1,0 +1,22 @@
+[
+ {
+  "Description": "Identified a Private Key, which may compromise cryptographic security and sensitive data encryption.",
+  "StartLine": 17,
+  "EndLine": 17,
+  "StartColumn": 20,
+  "EndColumn": 166,
+  "Match": "REDACTED",
+  "Secret": "REDACTED",
+  "File": "tests/sign-in-methods.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "ca9b2083229ae71ae5112dd178d4f9a7a048abb7",
+  "Entropy": 5.135812,
+  "Author": "Secure By Design",
+  "Email": "w6wvbp4yjn@privaterelay.appleid.com",
+  "Date": "2026-10-08T16:09:21Z",
+  "Message": "Sign in with Apple, Google, Microsoft, and passkeys; self-service account deletion\n\n- OIDC code flow (PKCE for Google and Microsoft, Apple form_post with an\n  ES256 client secret); ID tokens verified against provider keys\n  (signature, issuer, audience, expiry, nonce) and bound to the browser\n  that started the flow.\n- Only provider-verified emails match or create accounts; Microsoft\n  work/school emails count only with xms_edov. Linking needs a session.\n- Passkeys (WebAuthn, discoverable credentials) with origin, RP ID,\n  challenge, and counter checks; no dependencies.\n- My Account lists and manages sign-in methods and can delete the\n  account. /app-sign-in hands a website sign-in to the app through a\n  one-time code and PKCE verifier (/api/native-auth/exchange).\n- Provider buttons appear only once their keys are set in Cloudflare.\n- Migration 0011; the deploy now applies new D1 migrations first.\n- Privacy policy and docs/sign-in-providers.md updated.\n\nCo-Authored-By: Claude Opus 5.5 \u003cnoreply@anthropic.com\u003e\nClaude-Session: https://claude.ai/code/session_019wopQQuPwG5CcFGYaGF73Y",
+  "Tags": [],
+  "RuleID": "private-key",
+  "Fingerprint": "ca9b2083229ae71ae5112dd178d4f9a7a048abb7:tests/sign-in-methods.test.mjs:private-key:17"
+ }
+]

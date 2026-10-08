@@ -1,0 +1,4139 @@
+{
+ "at": "2026-10-08T17:40:21.930Z",
+ "pages": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3183,
+   "ttfb": 722,
+   "dcl": 1202,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1576,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4809,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[.WebGL-0x15f400f53f00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x15f400f53f00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 4955,
+   "ttfb": 506,
+   "dcl": 975,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1576,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3530,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 5251,
+   "ttfb": 584,
+   "dcl": 1081,
+   "lcp": null,
+   "requests": 38,
+   "kb": 1433,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3912,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0A020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 4276,
+   "ttfb": 290,
+   "dcl": 394,
+   "lcp": null,
+   "requests": 38,
+   "kb": 1433,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1849,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A060C80B0C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A030C80B0C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2412,
+   "ttfb": 406,
+   "dcl": 720,
+   "lcp": null,
+   "requests": 48,
+   "kb": 1575,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7851,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2404,
+   "ttfb": 382,
+   "dcl": 673,
+   "lcp": null,
+   "requests": 48,
+   "kb": 1575,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2964,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1390,
+   "ttfb": 74,
+   "dcl": 184,
+   "lcp": null,
+   "requests": 49,
+   "kb": 1467,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8238,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".membership-creator"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2070,
+   "ttfb": 388,
+   "dcl": 797,
+   "lcp": null,
+   "requests": 49,
+   "kb": 1467,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4259,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.143,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".membership-creator"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2470,
+   "ttfb": 474,
+   "dcl": 849,
+   "lcp": null,
+   "requests": 36,
+   "kb": 1414,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7252,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Privacy policy | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "link-in-text-block",
+     "impact": "serious",
+     "help": "Links must be distinguishable without relying on color",
+     "nodes": 3,
+     "targets": [
+      "li:nth-child(5) > a",
+      "a[href=\"/my-progress#delete-account\"]",
+      "li:nth-child(3) > a"
+     ],
+     "summary": "Fix any of the following:\n  The link has insufficient color contrast of 2.16:1 with the surrounding text. (Minimum contrast is 3:1, link text: #1269b9, surrounding text: #20384c)\n  The link has no styling (such as underline) to distinguish it from the surrounding text"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 962,
+   "ttfb": 55,
+   "dcl": 158,
+   "lcp": null,
+   "requests": 36,
+   "kb": 1415,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4395,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Privacy policy | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "link-in-text-block",
+     "impact": "serious",
+     "help": "Links must be distinguishable without relying on color",
+     "nodes": 3,
+     "targets": [
+      "li:nth-child(5) > a",
+      "a[href=\"/my-progress#delete-account\"]",
+      "li:nth-child(3) > a"
+     ],
+     "summary": "Fix any of the following:\n  The link has insufficient color contrast of 2.16:1 with the surrounding text. (Minimum contrast is 3:1, link text: #1269b9, surrounding text: #20384c)\n  The link has no styling (such as underline) to distinguish it from the surrounding text"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2935,
+   "ttfb": 978,
+   "dcl": 2077,
+   "lcp": null,
+   "requests": 7,
+   "kb": 787,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5346,
+   "smallTargets": 3,
+   "fonts": [],
+   "title": "Build the identity foundation | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 3,
+     "targets": [
+      "#learn-ad > details > summary",
+      "#learn-dns > details > summary",
+      "#guide-panel > details > summary"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #56809b, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".model-link"
+     ],
+     "summary": "Fix any of the following:\n  The null landmark is contained in another landmark."
+    },
+    {
+     "id": "landmark-unique",
+     "impact": "moderate",
+     "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+     "nodes": 1,
+     "targets": [
+      ".chapters"
+     ],
+     "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+    },
+    {
+     "id": "region",
+     "impact": "moderate",
+     "help": "All page content should be contained by landmarks",
+     "nodes": 1,
+     "targets": [
+      ".hero > div:nth-child(1)"
+     ],
+     "summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3151,
+   "ttfb": 788,
+   "dcl": 2237,
+   "lcp": null,
+   "requests": 7,
+   "kb": 787,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3754,
+   "smallTargets": 3,
+   "fonts": [],
+   "title": "Build the identity foundation | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0.101,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 3,
+     "targets": [
+      "#learn-ad > details > summary",
+      "#learn-dns > details > summary",
+      "#guide-panel > details > summary"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #56809b, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".model-link"
+     ],
+     "summary": "Fix any of the following:\n  The null landmark is contained in another landmark."
+    },
+    {
+     "id": "landmark-unique",
+     "impact": "moderate",
+     "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+     "nodes": 1,
+     "targets": [
+      ".chapters"
+     ],
+     "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+    },
+    {
+     "id": "region",
+     "impact": "moderate",
+     "help": "All page content should be contained by landmarks",
+     "nodes": 1,
+     "targets": [
+      ".hero"
+     ],
+     "summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2178,
+   "ttfb": 617,
+   "dcl": 1030,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1147,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4362,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 2,
+     "targets": [
+      "#lesson-1 > small",
+      "#lesson-2 > small"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.06 (foreground color: #617d90, background color: #f5f8fb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1945,
+   "ttfb": 479,
+   "dcl": 929,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1147,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2926,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.045,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 13,
+     "targets": [
+      ".desktop-nav > .module-link[href$=\"#catalog/02\"] > span:nth-child(1)",
+      ".desktop-nav > .module-link[href$=\"#catalog/03\"] > span:nth-child(1)",
+      ".desktop-nav > .module-link[href$=\"#catalog/04\"] > span:nth-child(1)",
+      ".desktop-nav > .module-link[href$=\"#catalog/05\"] > span:nth-child(1)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.85 (foreground color: #647f94, background color: #f1f6fa, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2281,
+   "ttfb": 555,
+   "dcl": 977,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1446,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=397"
+   ],
+   "heightPx": 5922,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1963,
+   "ttfb": 372,
+   "dcl": 670,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1446,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3442,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-dns-configuration\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1958,
+   "ttfb": 378,
+   "dcl": 728,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1447,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 6252,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2882,
+   "ttfb": 848,
+   "dcl": 1244,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1447,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3606,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-two-tier-pki\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2228,
+   "ttfb": 368,
+   "dcl": 716,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=1045"
+   ],
+   "heightPx": 6043,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2575,
+   "ttfb": 528,
+   "dcl": 952,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1447,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3469,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-harden-baseline\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2312,
+   "ttfb": 374,
+   "dcl": 652,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1449,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=894"
+   ],
+   "heightPx": 6458,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 6,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2231,
+   "ttfb": 371,
+   "dcl": 668,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1449,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3610,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 6,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-connect-segment\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2291,
+   "ttfb": 367,
+   "dcl": 658,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1446,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=448"
+   ],
+   "heightPx": 5908,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2264,
+   "ttfb": 530,
+   "dcl": 930,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1446,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3442,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-pki-services\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1980,
+   "ttfb": 374,
+   "dcl": 685,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=599"
+   ],
+   "heightPx": 6820,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2246,
+   "ttfb": 361,
+   "dcl": 653,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3860,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-tiered-admin\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2432,
+   "ttfb": 520,
+   "dcl": 906,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=786"
+   ],
+   "heightPx": 6412,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2211,
+   "ttfb": 372,
+   "dcl": 648,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3686,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-logging-pipeline\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    },
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2536,
+   "ttfb": 537,
+   "dcl": 952,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1450,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=599"
+   ],
+   "heightPx": 6313,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 6,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2019,
+   "ttfb": 602,
+   "dcl": 1000,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1450,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3518,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 6,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-workstation-fleet\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2237,
+   "ttfb": 380,
+   "dcl": 668,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=815"
+   ],
+   "heightPx": 6241,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2302,
+   "ttfb": 369,
+   "dcl": 668,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3550,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-patch-protect\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2038,
+   "ttfb": 366,
+   "dcl": 658,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1447,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=714"
+   ],
+   "heightPx": 6030,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2478,
+   "ttfb": 527,
+   "dcl": 942,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1447,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3496,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-business-services\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1948,
+   "ttfb": 369,
+   "dcl": 655,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=671"
+   ],
+   "heightPx": 6191,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2259,
+   "ttfb": 364,
+   "dcl": 648,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1448,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3521,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 5,
+     "targets": [
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(3) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(4) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(5) > span",
+      "button[aria-controls=\"lesson-panel-prove-recovery\"]:nth-child(6) > span"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.44 (foreground color: #427f98, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2153,
+   "ttfb": 362,
+   "dcl": 662,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1435,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6250,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2272,
+   "ttfb": 526,
+   "dcl": 940,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3714,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2293,
+   "ttfb": 368,
+   "dcl": 663,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7688,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2299,
+   "ttfb": 373,
+   "dcl": 671,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4458,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1722,
+   "ttfb": 368,
+   "dcl": 670,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7542,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2192,
+   "ttfb": 522,
+   "dcl": 930,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4408,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2309,
+   "ttfb": 431,
+   "dcl": 727,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 9089,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2294,
+   "ttfb": 374,
+   "dcl": 716,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5186,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2238,
+   "ttfb": 535,
+   "dcl": 944,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6349,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2524,
+   "ttfb": 526,
+   "dcl": 942,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3797,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2240,
+   "ttfb": 361,
+   "dcl": 681,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8193,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2486,
+   "ttfb": 519,
+   "dcl": 914,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4685,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2362,
+   "ttfb": 614,
+   "dcl": 1049,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7583,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2258,
+   "ttfb": 376,
+   "dcl": 670,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4423,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1811,
+   "ttfb": 371,
+   "dcl": 663,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8973,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2242,
+   "ttfb": 528,
+   "dcl": 946,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5195,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3510,
+   "ttfb": 364,
+   "dcl": 653,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8317,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2219,
+   "ttfb": 527,
+   "dcl": 913,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4600,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2277,
+   "ttfb": 366,
+   "dcl": 657,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6955,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1989,
+   "ttfb": 508,
+   "dcl": 932,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1436,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3978,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1923,
+   "ttfb": 369,
+   "dcl": 657,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8114,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2271,
+   "ttfb": 362,
+   "dcl": 656,
+   "lcp": null,
+   "requests": 43,
+   "kb": 1437,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4593,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 4,
+     "targets": [
+      ".vc-kicker",
+      "h1",
+      "p:nth-child(3)",
+      "p:nth-child(4)"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/app-sign-in?challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2426,
+   "ttfb": 520,
+   "dcl": 921,
+   "lcp": null,
+   "requests": 41,
+   "kb": 1420,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2267,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Sign in to the app | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/app-sign-in?challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2238,
+   "ttfb": 364,
+   "dcl": 640,
+   "lcp": null,
+   "requests": 41,
+   "kb": 1420,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1556,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Sign in to the app | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.094,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3325,
+   "ttfb": 611,
+   "dcl": 1667,
+   "lcp": null,
+   "requests": 25,
+   "kb": 1671,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "279KB https://securebydesigninc.com/inside-network-model/vendor/three.core.js"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2541,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A030C80B0C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3838,
+   "ttfb": 471,
+   "dcl": 1717,
+   "lcp": null,
+   "requests": 25,
+   "kb": 1671,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "279KB https://securebydesigninc.com/inside-network-model/vendor/three.core.js"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 932,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020000C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A030C80B0C120000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/notices.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1633,
+   "ttfb": 914,
+   "dcl": 957,
+   "lcp": null,
+   "requests": 3,
+   "kb": 3,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1591,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Notices and permissions | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/notices.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1324,
+   "ttfb": 669,
+   "dcl": 709,
+   "lcp": null,
+   "requests": 3,
+   "kb": 3,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1318,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Notices and permissions | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/audit-missing-page",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 404,
+   "loadMs": 2175,
+   "ttfb": 482,
+   "dcl": 873,
+   "lcp": null,
+   "requests": 34,
+   "kb": 1408,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1388,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": [
+    "404 https://securebydesigninc.com/audit-missing-page"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/audit-missing-page",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 404,
+   "loadMs": 1904,
+   "ttfb": 355,
+   "dcl": 629,
+   "lcp": null,
+   "requests": 34,
+   "kb": 1408,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1014,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": [
+    "404 https://securebydesigninc.com/audit-missing-page"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/resource-preferences",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2112,
+   "ttfb": 488,
+   "dcl": 1283,
+   "lcp": null,
+   "requests": 18,
+   "kb": 1220,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1167,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Email preferences | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "error": "page.addScriptTag: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline exec",
+   "consoleErrors": [
+    "Refused to load the script 'https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920' because it violates the following Content Security Policy directive: \"script-src 'self'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a f",
+    "Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline execution.\n"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [
+    "csp https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/resource-preferences",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2110,
+   "ttfb": 472,
+   "dcl": 1059,
+   "lcp": null,
+   "requests": 18,
+   "kb": 1219,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 900,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Email preferences | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.001,
+   "error": "page.addScriptTag: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline exec",
+   "consoleErrors": [
+    "Refused to load the script 'https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920' because it violates the following Content Security Policy directive: \"script-src 'self'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a f",
+    "Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline execution.\n"
+   ],
+   "consoleWarnings": [
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [
+    "csp https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "badResponses": []
+  }
+ ],
+ "crossBrowser": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2613,
+   "ttfb": 402,
+   "dcl": 753,
+   "lcp": null,
+   "requests": 40,
+   "kb": 1563,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4742,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 3750,
+   "ttfb": 531,
+   "dcl": 982,
+   "lcp": null,
+   "requests": 40,
+   "kb": 1563,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3511,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2892,
+   "ttfb": 569,
+   "dcl": 1029,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1541,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7807,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2475,
+   "ttfb": 403,
+   "dcl": 864,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1541,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2950,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 3001,
+   "ttfb": 537,
+   "dcl": 1018,
+   "lcp": null,
+   "requests": 42,
+   "kb": 1439,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 6207,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function. (In 'ne(c)', 'ne' is undefined)"
+   ],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2807,
+   "ttfb": 531,
+   "dcl": 908,
+   "lcp": null,
+   "requests": 42,
+   "kb": 1439,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3596,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\"",
+    "\"Geist Mono\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: TypeError: ne is not a function. (In 'ne(c)', 'ne' is undefined)"
+   ],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2419,
+   "ttfb": 382,
+   "dcl": 720,
+   "lcp": null,
+   "requests": 45,
+   "kb": 1461,
+   "big": [
+    "1109KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8049,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 2865,
+   "ttfb": 536,
+   "dcl": 1052,
+   "lcp": null,
+   "requests": 45,
+   "kb": 1459,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4101,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 7722,
+   "ttfb": 568,
+   "dcl": 1033,
+   "lcp": null,
+   "requests": 34,
+   "kb": 1425,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3903,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 7880,
+   "ttfb": 556,
+   "dcl": 1111,
+   "lcp": null,
+   "requests": 34,
+   "kb": 1425,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1847,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 3037,
+   "ttfb": 696,
+   "dcl": 1079,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1146,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4320,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 3034,
+   "ttfb": 698,
+   "dcl": 1077,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1146,
+   "big": [
+    "1107KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2910,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2251,
+   "ttfb": 405,
+   "dcl": 1159,
+   "lcp": null,
+   "requests": 41,
+   "kb": 1575,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4780,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/_next/static/chun",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2460,
+   "ttfb": 429,
+   "dcl": 1169,
+   "lcp": null,
+   "requests": 41,
+   "kb": 1575,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3531,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/_next/static/chun",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1834,
+   "ttfb": 279,
+   "dcl": 838,
+   "lcp": null,
+   "requests": 45,
+   "kb": 1574,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7852,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1831,
+   "ttfb": 277,
+   "dcl": 853,
+   "lcp": null,
+   "requests": 45,
+   "kb": 1574,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2964,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1669,
+   "ttfb": 249,
+   "dcl": 781,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1452,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 6206,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1996,
+   "ttfb": 347,
+   "dcl": 1041,
+   "lcp": null,
+   "requests": 44,
+   "kb": 1446,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3608,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "[vinext] RSC prefetch setup error: Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2656,
+   "ttfb": 570,
+   "dcl": 1449,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1466,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8215,
+   "smallTargets": 3,
+   "fonts": [
+    "\"Geist\"",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2361,
+   "ttfb": 374,
+   "dcl": 1146,
+   "lcp": null,
+   "requests": 46,
+   "kb": 1466,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4234,
+   "smallTargets": 3,
+   "fonts": [
+    "\"Geist\"",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 3242,
+   "ttfb": 369,
+   "dcl": 1021,
+   "lcp": null,
+   "requests": 35,
+   "kb": 1431,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3759,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+    "Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/inside-network-mo",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2000,
+   "ttfb": 122,
+   "dcl": 520,
+   "lcp": null,
+   "requests": 35,
+   "kb": 1431,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg",
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1849,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+    "Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/inside-network-mo",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1757,
+   "ttfb": 369,
+   "dcl": 607,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1147,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4363,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 2204,
+   "ttfb": 534,
+   "dcl": 928,
+   "lcp": null,
+   "requests": 12,
+   "kb": 1147,
+   "big": [
+    "1106KB https://securebydesigninc.com/brand-lock.svg"
+   ],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2925,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  }
+ ],
+ "interactions": [
+  {
+   "area": "Training Library",
+   "name": "loads tiles and search narrows results",
+   "ok": true,
+   "detail": "tiles 15; \"DNS\" → 2; nonsense → 0 (empty state true); after clear → 15; DNS mentioned true"
+  },
+  {
+   "area": "Training Library",
+   "name": "category filter",
+   "ok": true,
+   "detail": "choices: All training\n15 | Build the Network\n12 | Network Authorization\n3; visible tiles: 12"
+  },
+  {
+   "area": "Training Library",
+   "name": "open a tile shows its materials, downloads respond",
+   "ok": true,
+   "detail": "expanded=1; 200 dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip; 200 dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf; 200 dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx"
+  },
+  {
+   "area": "Sharing",
+   "name": "Pass it on copies the homepage URL (no native share in headless)",
+   "ok": true,
+   "detail": "clipboard=\"https://securebydesigninc.com/\" status=\"Link copied. Ready to pass it on. Showing 15 of 15 courses \""
+  },
+  {
+   "area": "Course page",
+   "name": "DNS course: lessons, quiz answer feedback, checklist and workbook links",
+   "ok": true,
+   "detail": "h1=\"Configure DNS\" headings=2 quiz=no radio quiz inputs files: 200 SecureByDesign-dns-configuration-Workbook.pdf; 200 SecureByDesign-dns-configuration-Workbook.docx; 200 checklist; 200 configuration-checklist.md"
+  },
+  {
+   "area": "Course page",
+   "name": "Mark a lesson complete without an account (guest progress)",
+   "ok": true,
+   "detail": "no completion button found"
+  },
+  {
+   "area": "Inside the Network",
+   "name": "frame loads a WebGL scene; text version opens; traffic section opens",
+   "ok": true,
+   "detail": "canvases in frame=2; text section opens=false; traffic=clicked"
+  },
+  {
+   "area": "Inside the Network",
+   "name": "deep link #process=… selects a process",
+   "ok": true,
+   "detail": "page url now https://securebydesigninc.com/inside-the-network#process=web-app&step=1"
+  },
+  {
+   "area": "My Account",
+   "name": "sign-in form validates empty and malformed input without sending anything",
+   "ok": true,
+   "detail": "validation signals=4, invalid inputs=2, POSTs sent=0"
+  },
+  {
+   "area": "My Account",
+   "name": "membership options visible to visitors",
+   "ok": true,
+   "detail": "$0 | $20 / month | $15/month, locked in while subscribed. | $99 / month | $267 per quarter (save 10%): one full portfo | $0"
+  },
+  {
+   "area": "Keyboard",
+   "name": "first 20 Tab stops on the homepage show a visible focus style",
+   "ok": true,
+   "detail": "20 stops; without visible focus: none; first: a Skip to content | a Secure By Design\nEDUCATE. EMPO | a YouTube | a TikTok"
+  },
+  {
+   "area": "Display",
+   "name": "dark-mode and reduced-motion renders (screenshots)",
+   "ok": true,
+   "detail": "saved"
+  },
+  {
+   "area": "Errors",
+   "name": "pages during interactions threw no errors",
+   "ok": false,
+   "detail": "[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"
+  }
+ ],
+ "reflow": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=397"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "overflowPx": 0,
+   "overflowEls": []
+  }
+ ]
+}

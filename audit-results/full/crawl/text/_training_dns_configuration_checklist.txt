@@ -1,0 +1,36 @@
+Skip to contentSecure By DesignEducate.
+Empower.
+Secure the future.App availabilityiPhone & iPadiOS beta · TestFlightAndroidComing soonFollow alongYouTubeTikTokInstagramDiscordHomeInside the NetworkTraining LibraryMy Account Back to Configure DNSCOURSE 1.2 · CONFIGURATION CHECKLISTConfigure DNSSecure By Design · Edition 1.0 · 5 October 2026The addresses and names below continue the training example.
+Match every change to your own address plan.
+This network has no internet DNS dependency.Print or save as PDFMarkdown versionBefore you startComplete the DC01 + DC02 identity build with both domain controllers healthy.Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.1.
+Map names to the networkAbout 15 min · Open this lessonRecord the domain, each subnet, both DNS addresses, and the owner of each service name.
+Keep host records and service aliases distinguishable.On each domain controller, open DNS Manager and review the existing sbd.test and _msdcs zones.
+Promotion may already have created them; do not create duplicate zones.Check the DNS role and static network settings.
+Domain members must use internal DNS servers that resolve the AD namespace; a public resolver is not an alternate for this environment.Decide whether any separate internal namespace needs a conditional forwarder.
+With no recursive dependencies, document a no-recursion design; do not add internet forwarders or delete every root hint as a shortcut.Verify: Both servers and the client point to the intended internal DNS service.
+Existing AD zones and the forwarding/recursion decision are recorded.Evidence: Save the address/name worksheet and the initial zone inventory before changing anything.Notes / result / date:2.
+Configure forward and reverse zonesAbout 20 min · Open this lessonIn DNS Manager, inspect sbd.test Properties.
+Confirm that it is AD-integrated and choose the domain or forest replication scope that matches the DNS servers intended to host it.Use secure dynamic updates for the AD-integrated zone.
+Review delegation and permissions before broadening who can change records.Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist.
+Select the approved replication scope and secure updates.Review zone-transfer settings.
+AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly.Verify: The intended forward and reverse zones appear on both DNS hosts after replication.
+The reverse zone for this /24 is 10.0.10.in-addr.arpa.Evidence: Capture the zone type, update policy, replication scope, and transfer policy for each zone.Notes / result / date:3.
+Create and maintain service recordsAbout 20 min · Open this lessonReview the DC A and PTR records first.
+Correct mismatches through the owning host and DNS administration process rather than blindly adding another record with the same name.Choose one approved service host from your address plan.
+In sbd.test, use New Host (A or AAAA), enter its actual name and address, and select the associated PTR option when the reverse zone is ready.For a service alias, use New Alias (CNAME) and select the intended fully qualified host.
+For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete.
+An alias cannot coexist with other record types at the same name.Verify: Forward and reverse responses agree with the address plan.
+Each alias reaches the intended host; creating a DNS name alone does not configure its service.Evidence: Keep a record table with owner, type, target, time to live, and reason for the change.Notes / result / date:4.
+Prove resolution and directory discoveryAbout 20 min · Open this lessonFrom a domain client, query each DNS server for the same host and reverse record.
+Record the server queried and the returned data.Query the AD LDAP service records below against both servers.
+These records let a client discover domain controllers; an ordinary host lookup does not prove that discovery works.Run the DNS diagnostics and directory replication checks on a domain controller.
+Investigate failures in context, including the intentionally isolated network design.During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other.
+Restore connectivity and repeat for the opposite server.
+Do not interrupt shared production services for this exercise.Verify: Both DNS servers return the expected host and AD service records, replication is healthy, and the client still resolves internal names when either resolver is unavailable.Evidence: Keep paired lookup results, diagnostic output, and the failover test record with start, restore, and final verification times.Notes / result / date:5.
+Find the fault and record the fixAbout 15 min · Open this lessonFor a failing lookup, record the exact name, record type, client, resolver, timestamp, and error.
+Compare the fully qualified name with any short-name search behavior.Query both servers directly.
+If they disagree, inspect zone scope and replication.
+If both are correct but the client is not, inspect client DNS settings and cached data.Distinguish a missing name (NXDOMAIN) from a timeout or service failure.
+Fix the owning configuration first, then use Clear-DnsClientCache on the test client if stale cache remains relevant.Repeat the original test and the redundancy checks.
+Record what changed and the rollback method.
+Review aging/scavenging separately against DHCP, static records, and backup practices before enabling automatic deletion.Verify: The original failure is reproducibly resolved, both resolvers agree, and the change record explains the cause rather than only showing a passing screenshot.Evidence: Complete the DNS checklist and retain the before/after lookup results with the configuration owner.Notes / result / date:Secure By Design© 2026Tenable PartnerRed Hat PartnerAbout Secure By DesignPrivacy Pass it on Secure By Design homepage Copy link Configure DNS — configuration checklist | Secure By Design

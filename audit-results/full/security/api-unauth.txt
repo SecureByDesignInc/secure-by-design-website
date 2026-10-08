@@ -1,0 +1,18 @@
+/api/sign-in/providers -> 200 application/json 78B | {"providers":{"apple":false,"google":false,"microsoft":false},"passkeys":true}
+/api/sign-in/methods -> 401 application/json 46B | {"error":"Sign in to manage sign-in methods."}
+/api/reader-auth/session -> 405 application/json 31B | {"error":"Method not allowed."}
+/api/reader-progress -> 200 application/json 56B | {"user":null,"profile":null,"records":[],"bookmarks":[]}
+/api/native-auth/session -> 403 application/json 58B | {"error":"Use the Secure By Design app for this request."}
+/api/native-progress -> 403 application/json 58B | {"error":"Use the Secure By Design app for this request."}
+/api/native-activity -> 403 application/json 58B | {"error":"Use the Secure By Design app for this request."}
+/api/native-onboarding -> 403 application/json 58B | {"error":"Use the Secure By Design app for this request."}
+/api/community-contributions -> 403 application/json 72B | {"error":"Sign in with the site owner account to review contributions."}
+/api/resource-signups -> 403 application/json 68B | {"error":"Sign in with the site owner account to view subscribers."}
+/api/resource-subscribers -> 403 application/json 68B | {"error":"Sign in with the site owner account to view subscribers."}
+/api/resource-preferences -> 403 application/json 68B | {"error":"Sign in with the site owner account to view subscribers."}
+/api/career-submissions -> 403 application/json 70B | {"error":"Sign in with the site owner account to view these records."}
+/api/career-records -> 403 application/json 70B | {"error":"Sign in with the site owner account to view these records."}
+/api/career-notifications -> 403 application/json 70B | {"error":"Sign in with the site owner account to view these records."}
+/career-records -> 302  0B | 
+/career-records/x -> 404 text/html; charset=utf-8 23768B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" href="/brand-lock.svg" as="image"/><link rel="preload" href="/social/yo
+/resource-preferences -> 200 text/html; charset=utf-8 5572B | <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Email preferences | Secure By Design</title><meta name="robots" content="noindex,nofol

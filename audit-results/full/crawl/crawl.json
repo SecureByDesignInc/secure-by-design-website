@@ -1,0 +1,5090 @@
+{
+ "site": "https://securebydesigninc.com",
+ "at": "2026-10-08T17:39:21.493Z",
+ "sitemap": [
+  "https://securebydesigninc.com/",
+  "https://securebydesigninc.com/inside-the-network",
+  "https://securebydesigninc.com/training",
+  "https://securebydesigninc.com/my-progress",
+  "https://securebydesigninc.com/privacy",
+  "https://securebydesigninc.com/training/dc01-dc02/index.html",
+  "https://securebydesigninc.com/training/rmf/index.html",
+  "https://securebydesigninc.com/training/dns-configuration",
+  "https://securebydesigninc.com/training/two-tier-pki",
+  "https://securebydesigninc.com/training/harden-baseline",
+  "https://securebydesigninc.com/training/connect-segment",
+  "https://securebydesigninc.com/training/pki-services",
+  "https://securebydesigninc.com/training/tiered-admin",
+  "https://securebydesigninc.com/training/logging-pipeline",
+  "https://securebydesigninc.com/training/workstation-fleet",
+  "https://securebydesigninc.com/training/patch-protect",
+  "https://securebydesigninc.com/training/business-services",
+  "https://securebydesigninc.com/training/prove-recovery",
+  "https://securebydesigninc.com/training/dns-configuration/checklist",
+  "https://securebydesigninc.com/training/two-tier-pki/checklist",
+  "https://securebydesigninc.com/training/harden-baseline/checklist",
+  "https://securebydesigninc.com/training/connect-segment/checklist",
+  "https://securebydesigninc.com/training/pki-services/checklist",
+  "https://securebydesigninc.com/training/tiered-admin/checklist",
+  "https://securebydesigninc.com/training/logging-pipeline/checklist",
+  "https://securebydesigninc.com/training/workstation-fleet/checklist",
+  "https://securebydesigninc.com/training/patch-protect/checklist",
+  "https://securebydesigninc.com/training/business-services/checklist",
+  "https://securebydesigninc.com/training/prove-recovery/checklist"
+ ],
+ "pages": [
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/my-progress",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 46440,
+   "ms": 189,
+   "cache": "no-store, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "My Account | Secure By Design",
+   "description": "Your learning progress, account, and membership options in one place on Secure By Design.",
+   "canonical": "",
+   "robots": "noindex, nofollow",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "My Account"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 33,
+   "inlineScriptBytes": 15486,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/page.DK9r56jz.css",
+    "/_next/static/css/my-progress.B-q9ziat.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 537,
+   "placeholders": [
+    "coming soon"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/inside-the-network",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 155407,
+   "ms": 347,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Inside the Network | Secure By Design",
+   "description": "Explore a 3D data center with server racks, network equipment, and animated traffic. Explore protocols, services, dependencies, and security practices with NIST SP 800-53 control mappings.",
+   "canonical": "https://securebydesigninc.com/inside-the-network",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Inside the Network"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [
+    {
+     "src": "/inside-network-model/model.html",
+     "title": "Inside the Network — interactive 3D security architecture",
+     "sandbox": null
+    }
+   ],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 77,
+   "inlineScriptBytes": 95219,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/page.CXbpvuNs.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 3382,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 39429,
+   "ms": 429,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "description": "Straightforward conversations about cybersecurity, technology, and compliance. Bring your curiosity and explore Secure By Design.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Cybersecurity startswith curiosity."
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h2",
+    "h2",
+    "h3",
+    "h3",
+    "h2",
+    "h3",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 32,
+   "inlineScriptBytes": 14703,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/page.sX_bFSmh.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 392,
+   "placeholders": [
+    "coming soon"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 147834,
+   "ms": 642,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Training Library | Secure By Design",
+   "description": "Explore practical training, interactive guides, and resources from Secure By Design. Choose a topic, build your skills, and follow your own learning path.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Build your skills.Understand the why."
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h3"
+   ],
+   "headingSkips": 0,
+   "imgs": 10,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 32,
+   "inlineScriptBytes": 61004,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1384,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/dns-configuration",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 65823,
+   "ms": 133,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Configure DNS"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 39736,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 648,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/privacy",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 52144,
+   "ms": 155,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Privacy policy | Secure By Design",
+   "description": "What the Secure By Design website and app collect, why, who helps us run them, and how to delete your account.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Privacy policy"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h3",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 43,
+   "inlineScriptBytes": 29294,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/page.CBGpR_Ty.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1105,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/index.html",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/rmf/",
+   "redirected": true,
+   "type": "text/html",
+   "bytes": 4162,
+   "ms": 200,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Risk Management Framework, Body of Evidence & Authorization to Operate | Secure By Design",
+   "description": "Apply the Risk Management Framework to the Inside the Network build, develop its Body of Evidence, and prepare its Authorization to Operate package.",
+   "canonical": "https://securebydesigninc.com/training/rmf/index.html",
+   "robots": "",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307192b'/%3E%3Cpath d='M9 7h14v18H9zM13 12h6m-6 4h6m-6 4h4' fill='none' stroke='%2379dceb' stroke-width='2'/%3E%3C/svg%3E"
+   ],
+   "h1": [
+    "Risk Management Framework,Body of Evidence &Authorization to Operate."
+   ],
+   "headings": [
+    "h1"
+   ],
+   "headingSkips": 0,
+   "imgs": 1,
+   "imgNoAlt": [],
+   "imgNoSize": 0,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "../guide-share.js",
+    "catalog-data.js",
+    "learning-data.js",
+    "app.js",
+    "/training/account-progress.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 0,
+   "inlineScriptBytes": 0,
+   "styles": [
+    "styles.css",
+    "../guide-share.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 115,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/dc01-dc02/",
+   "redirected": true,
+   "type": "text/html",
+   "bytes": 3334624,
+   "ms": 566,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Build the identity foundation | Secure By Design",
+   "description": "",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [],
+   "h1": [
+    "Build the identity foundation."
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h3",
+    "h3"
+   ],
+   "headingSkips": 0,
+   "imgs": 2,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "guide-share.js",
+    "account-progress.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 4,
+   "inlineScriptBytes": 3048961,
+   "styles": [
+    "guide-share.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 212,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/harden-baseline",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 71785,
+   "ms": 100,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Design the organizational unit structure, apply the DISA STIG Group Policy package to the verified network core, and prove the result with before-and-after SCAP scans, reconciled checklists, and a documented exception record.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Harden the baseline"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 44680,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 726,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/pki-services",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 67844,
+   "ms": 116,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Finish the PKI services"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 41071,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 735,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/two-tier-pki",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 72645,
+   "ms": 127,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Configure a Root CA & issuing CA"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 45418,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 697,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/connect-segment",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 78460,
+   "ms": 140,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Connect and segment the network"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 50089,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 854,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/tiered-admin",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 74345,
+   "ms": 83,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Addressing and tiered administration"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 45894,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 919,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/logging-pipeline",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 73139,
+   "ms": 103,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "See everything: the logging pipeline"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 44848,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 838,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/patch-protect",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 73758,
+   "ms": 111,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type with SBD-REPO01 for packages, a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Patch, protect, and watch for weakness"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 46020,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 789,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/workstation-fleet",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 78266,
+   "ms": 117,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Bring in the fleet"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 50463,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 859,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/business-services",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 70267,
+   "ms": 79,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-SQL01 running as a managed identity behind exactly two callers, SBD-APPS01's licensing service, and SBD-WEB01 serving internal HTTPS from a hardened Apache — every hop a documented, proven register row.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Stand up the business services"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 42591,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 786,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/prove-recovery",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 73369,
+   "ms": 91,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Close the Build path by proving the network can come back: scheduled directory and CA backups under ceremony-grade custody, policy, boundary, logs, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Prove you can recover"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4",
+    "h4"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 41,
+   "inlineScriptBytes": 45892,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 823,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 60363,
+   "ms": 109,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Configure DNS"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 48,
+   "inlineScriptBytes": 35784,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 938,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 67815,
+   "ms": 125,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Configure a Root CA & issuing CA"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 50,
+   "inlineScriptBytes": 40552,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1170,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 75128,
+   "ms": 87,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Connect and segment the network"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 52,
+   "inlineScriptBytes": 45212,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1664,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 70826,
+   "ms": 95,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Addressing and tiered administration"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 52,
+   "inlineScriptBytes": 42443,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1469,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/pki-services/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 62266,
+   "ms": 114,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Finish the PKI services"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 50,
+   "inlineScriptBytes": 36863,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1038,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 67047,
+   "ms": 121,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Design the organizational unit structure, apply the DISA STIG Group Policy package to the verified network core, and prove the result with before-and-after SCAP scans, reconciled checklists, and a documented exception record.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Harden the baseline"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 50,
+   "inlineScriptBytes": 39999,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1267,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 68595,
+   "ms": 58,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "See everything: the logging pipeline"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 51,
+   "inlineScriptBytes": 40984,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1356,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 74715,
+   "ms": 74,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Bring in the fleet"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 53,
+   "inlineScriptBytes": 44987,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1605,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 70996,
+   "ms": 116,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type with SBD-REPO01 for packages, a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Patch, protect, and watch for weakness"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 51,
+   "inlineScriptBytes": 42493,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1427,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/business-services/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 64794,
+   "ms": 139,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-SQL01 running as a managed identity behind exactly two callers, SBD-APPS01's licensing service, and SBD-WEB01 serving internal HTTPS from a hardened Apache — every hop a documented, proven register row.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Stand up the business services"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 50,
+   "inlineScriptBytes": 38403,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1174,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "redirected": false,
+   "type": "text/html; charset=utf-8",
+   "bytes": 70722,
+   "ms": 57,
+   "cache": "",
+   "encoding": "br",
+   "lang": "en",
+   "title": "",
+   "description": "Close the Build path by proving the network can come back: scheduled directory and CA backups under ceremony-grade custody, policy, boundary, logs, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Prove you can recover"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 9,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "/_next/static/chunks/framework-D_rUT4EX.js",
+    "/_next/static/chunks/app-elements-H_Dr48wG.js",
+    "/_next/static/chunks/hash-Cp347hhd.js",
+    "/_next/static/chunks/record-uXSNv6cl.js",
+    "/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+    "/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+    "/_next/static/chunks/headers-C_MtfdF4.js",
+    "/_next/static/chunks/protocol-headers-B9-bVeat.js",
+    "/_next/static/chunks/deployment-id-DFhHa9wO.js",
+    "/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+    "/_next/static/chunks/index-ChAF12I3.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 52,
+   "inlineScriptBytes": 42308,
+   "styles": [
+    "/_next/static/css/index.B3x970JY.css",
+    "/_next/static/css/videos.D80nOC9D.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 1448,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/rmf/",
+   "redirected": false,
+   "type": "text/html",
+   "bytes": 4162,
+   "ms": 119,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Risk Management Framework, Body of Evidence & Authorization to Operate | Secure By Design",
+   "description": "Apply the Risk Management Framework to the Inside the Network build, develop its Body of Evidence, and prepare its Authorization to Operate package.",
+   "canonical": "https://securebydesigninc.com/training/rmf/index.html",
+   "robots": "",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307192b'/%3E%3Cpath d='M9 7h14v18H9zM13 12h6m-6 4h6m-6 4h4' fill='none' stroke='%2379dceb' stroke-width='2'/%3E%3C/svg%3E"
+   ],
+   "h1": [
+    "Risk Management Framework,Body of Evidence &Authorization to Operate."
+   ],
+   "headings": [
+    "h1"
+   ],
+   "headingSkips": 0,
+   "imgs": 1,
+   "imgNoAlt": [],
+   "imgNoSize": 0,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "../guide-share.js",
+    "catalog-data.js",
+    "learning-data.js",
+    "app.js",
+    "/training/account-progress.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 0,
+   "inlineScriptBytes": 0,
+   "styles": [
+    "styles.css",
+    "../guide-share.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 115,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/inside-network-model/model",
+   "redirected": true,
+   "type": "text/html",
+   "bytes": 13710,
+   "ms": 173,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Inside the Network | Secure By Design",
+   "description": "",
+   "canonical": "",
+   "robots": "noindex",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Inside the Network"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h2",
+    "h2",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 1,
+   "imgNoAlt": [],
+   "imgNoSize": 0,
+   "forms": [
+    {
+     "action": "",
+     "method": "get"
+    }
+   ],
+   "iframes": [],
+   "scripts": [
+    "./app.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 1,
+   "inlineScriptBytes": 128,
+   "styles": [
+    "./model.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 300,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/dc01-dc02/",
+   "redirected": false,
+   "type": "text/html",
+   "bytes": 3334624,
+   "ms": 298,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Build the identity foundation | Secure By Design",
+   "description": "",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [],
+   "h1": [
+    "Build the identity foundation."
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h3",
+    "h3"
+   ],
+   "headingSkips": 0,
+   "imgs": 2,
+   "imgNoAlt": [],
+   "imgNoSize": 2,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "guide-share.js",
+    "account-progress.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 4,
+   "inlineScriptBytes": 3048961,
+   "styles": [
+    "guide-share.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 212,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/inside-network-model/model",
+   "redirected": false,
+   "type": "text/html",
+   "bytes": 13710,
+   "ms": 69,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Inside the Network | Secure By Design",
+   "description": "",
+   "canonical": "",
+   "robots": "noindex",
+   "viewport": "width=device-width,initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [
+    "icon=/brand-lock.svg"
+   ],
+   "h1": [
+    "Inside the Network"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h3",
+    "h2",
+    "h2",
+    "h2",
+    "h3",
+    "h3",
+    "h3",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 1,
+   "imgNoAlt": [],
+   "imgNoSize": 0,
+   "forms": [
+    {
+     "action": "",
+     "method": "get"
+    }
+   ],
+   "iframes": [],
+   "scripts": [
+    "./app.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 1,
+   "inlineScriptBytes": 128,
+   "styles": [
+    "./model.css"
+   ],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 300,
+   "placeholders": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/notices.html",
+   "status": 200,
+   "finalUrl": "https://securebydesigninc.com/training/dc01-dc02/notices",
+   "redirected": true,
+   "type": "text/html",
+   "bytes": 4364,
+   "ms": 191,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "lang": "en",
+   "title": "Notices and permissions | Secure By Design",
+   "description": "",
+   "canonical": "",
+   "robots": "",
+   "viewport": "width=device-width, initial-scale=1",
+   "og": {
+    "title": "",
+    "description": "",
+    "image": "",
+    "url": "",
+    "type": ""
+   },
+   "twitter": "",
+   "jsonLd": 0,
+   "icons": [],
+   "h1": [
+    "Notices and permissions"
+   ],
+   "headings": [
+    "h1",
+    "h2",
+    "h2",
+    "h2"
+   ],
+   "headingSkips": 0,
+   "imgs": 0,
+   "imgNoAlt": [],
+   "imgNoSize": 0,
+   "forms": [],
+   "iframes": [],
+   "scripts": [
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "inlineScripts": 0,
+   "inlineScriptBytes": 0,
+   "styles": [],
+   "targetBlankNoopener": 0,
+   "emptyLinks": 0,
+   "duplicateIds": [],
+   "words": 191,
+   "placeholders": []
+  }
+ ],
+ "linkSources": {
+  "https://securebydesigninc.com/my-progress": [
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/privacy",
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/pki-services"
+  ],
+  "https://securebydesigninc.com/": [
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/privacy",
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/index.html"
+  ],
+  "https://securebydesigninc.com/inside-the-network": [
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/privacy",
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/index.html"
+  ],
+  "https://securebydesigninc.com/training": [
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/privacy",
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/index.html"
+  ],
+  "https://securebydesigninc.com/privacy": [
+   "https://securebydesigninc.com/my-progress",
+   "https://securebydesigninc.com/inside-the-network",
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/privacy",
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/pki-services"
+  ],
+  "https://securebydesigninc.com/training/dc01-dc02/index.html": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training/dc01-dc02/notices.html"
+  ],
+  "https://securebydesigninc.com/training/dns-configuration": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/training/dns-configuration/checklist"
+  ],
+  "https://securebydesigninc.com/training/harden-baseline": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/harden-baseline/checklist"
+  ],
+  "https://securebydesigninc.com/training/two-tier-pki": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training/two-tier-pki",
+   "https://securebydesigninc.com/training/two-tier-pki/checklist"
+  ],
+  "https://securebydesigninc.com/training/connect-segment": [
+   "https://securebydesigninc.com/",
+   "https://securebydesigninc.com/training/connect-segment",
+   "https://securebydesigninc.com/training/connect-segment/checklist"
+  ],
+  "https://securebydesigninc.com/training/rmf/index.html": [
+   "https://securebydesigninc.com/"
+  ],
+  "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf": [
+   "https://securebydesigninc.com/training/dns-configuration"
+  ],
+  "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx": [
+   "https://securebydesigninc.com/training/dns-configuration"
+  ],
+  "https://securebydesigninc.com/training/dns-configuration/checklist": [
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/training/dns-configuration/checklist"
+  ],
+  "https://securebydesigninc.com/training/dns-configuration/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/dns-configuration",
+   "https://securebydesigninc.com/training/dns-configuration/checklist"
+  ],
+  "https://securebydesigninc.com/training/rmf/": [
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/rmf/"
+  ],
+  "https://securebydesigninc.com/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx": [
+   "https://securebydesigninc.com/training/rmf/index.html",
+   "https://securebydesigninc.com/training/rmf/"
+  ],
+  "https://securebydesigninc.com/training/dc01-dc02/": [
+   "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/"
+  ],
+  "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf": [
+   "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/",
+   "https://securebydesigninc.com/training/dc01-dc02/notices.html"
+  ],
+  "https://securebydesigninc.com/training/dc01-dc02/notices.html": [
+   "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "https://securebydesigninc.com/training/dc01-dc02/"
+  ],
+  "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf": [
+   "https://securebydesigninc.com/training/harden-baseline"
+  ],
+  "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx": [
+   "https://securebydesigninc.com/training/harden-baseline"
+  ],
+  "https://securebydesigninc.com/training/harden-baseline/checklist": [
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/harden-baseline/checklist"
+  ],
+  "https://securebydesigninc.com/training/harden-baseline/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/harden-baseline",
+   "https://securebydesigninc.com/training/harden-baseline/checklist"
+  ],
+  "https://securebydesigninc.com/training/pki-services": [
+   "https://securebydesigninc.com/training/pki-services",
+   "https://securebydesigninc.com/training/pki-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.pdf": [
+   "https://securebydesigninc.com/training/pki-services"
+  ],
+  "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.docx": [
+   "https://securebydesigninc.com/training/pki-services"
+  ],
+  "https://securebydesigninc.com/training/pki-services/checklist": [
+   "https://securebydesigninc.com/training/pki-services",
+   "https://securebydesigninc.com/training/pki-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/pki-services/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/pki-services",
+   "https://securebydesigninc.com/training/pki-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf": [
+   "https://securebydesigninc.com/training/two-tier-pki"
+  ],
+  "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx": [
+   "https://securebydesigninc.com/training/two-tier-pki"
+  ],
+  "https://securebydesigninc.com/training/two-tier-pki/checklist": [
+   "https://securebydesigninc.com/training/two-tier-pki",
+   "https://securebydesigninc.com/training/two-tier-pki/checklist"
+  ],
+  "https://securebydesigninc.com/training/two-tier-pki/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/two-tier-pki",
+   "https://securebydesigninc.com/training/two-tier-pki/checklist"
+  ],
+  "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf": [
+   "https://securebydesigninc.com/training/connect-segment"
+  ],
+  "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx": [
+   "https://securebydesigninc.com/training/connect-segment"
+  ],
+  "https://securebydesigninc.com/training/connect-segment/checklist": [
+   "https://securebydesigninc.com/training/connect-segment",
+   "https://securebydesigninc.com/training/connect-segment/checklist"
+  ],
+  "https://securebydesigninc.com/training/connect-segment/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/connect-segment",
+   "https://securebydesigninc.com/training/connect-segment/checklist"
+  ],
+  "https://securebydesigninc.com/training/tiered-admin": [
+   "https://securebydesigninc.com/training/tiered-admin",
+   "https://securebydesigninc.com/training/tiered-admin/checklist"
+  ],
+  "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf": [
+   "https://securebydesigninc.com/training/tiered-admin"
+  ],
+  "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx": [
+   "https://securebydesigninc.com/training/tiered-admin"
+  ],
+  "https://securebydesigninc.com/training/tiered-admin/checklist": [
+   "https://securebydesigninc.com/training/tiered-admin",
+   "https://securebydesigninc.com/training/tiered-admin/checklist"
+  ],
+  "https://securebydesigninc.com/training/tiered-admin/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/tiered-admin",
+   "https://securebydesigninc.com/training/tiered-admin/checklist"
+  ],
+  "https://securebydesigninc.com/training/logging-pipeline": [
+   "https://securebydesigninc.com/training/logging-pipeline",
+   "https://securebydesigninc.com/training/logging-pipeline/checklist"
+  ],
+  "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf": [
+   "https://securebydesigninc.com/training/logging-pipeline"
+  ],
+  "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx": [
+   "https://securebydesigninc.com/training/logging-pipeline"
+  ],
+  "https://securebydesigninc.com/training/logging-pipeline/checklist": [
+   "https://securebydesigninc.com/training/logging-pipeline",
+   "https://securebydesigninc.com/training/logging-pipeline/checklist"
+  ],
+  "https://securebydesigninc.com/training/logging-pipeline/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/logging-pipeline",
+   "https://securebydesigninc.com/training/logging-pipeline/checklist"
+  ],
+  "https://securebydesigninc.com/training/patch-protect": [
+   "https://securebydesigninc.com/training/patch-protect",
+   "https://securebydesigninc.com/training/patch-protect/checklist"
+  ],
+  "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf": [
+   "https://securebydesigninc.com/training/patch-protect"
+  ],
+  "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx": [
+   "https://securebydesigninc.com/training/patch-protect"
+  ],
+  "https://securebydesigninc.com/training/patch-protect/checklist": [
+   "https://securebydesigninc.com/training/patch-protect",
+   "https://securebydesigninc.com/training/patch-protect/checklist"
+  ],
+  "https://securebydesigninc.com/training/patch-protect/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/patch-protect",
+   "https://securebydesigninc.com/training/patch-protect/checklist"
+  ],
+  "https://securebydesigninc.com/training/workstation-fleet": [
+   "https://securebydesigninc.com/training/workstation-fleet",
+   "https://securebydesigninc.com/training/workstation-fleet/checklist"
+  ],
+  "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf": [
+   "https://securebydesigninc.com/training/workstation-fleet"
+  ],
+  "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx": [
+   "https://securebydesigninc.com/training/workstation-fleet"
+  ],
+  "https://securebydesigninc.com/training/workstation-fleet/checklist": [
+   "https://securebydesigninc.com/training/workstation-fleet",
+   "https://securebydesigninc.com/training/workstation-fleet/checklist"
+  ],
+  "https://securebydesigninc.com/training/workstation-fleet/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/workstation-fleet",
+   "https://securebydesigninc.com/training/workstation-fleet/checklist"
+  ],
+  "https://securebydesigninc.com/training/business-services": [
+   "https://securebydesigninc.com/training/business-services",
+   "https://securebydesigninc.com/training/business-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.pdf": [
+   "https://securebydesigninc.com/training/business-services"
+  ],
+  "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.docx": [
+   "https://securebydesigninc.com/training/business-services"
+  ],
+  "https://securebydesigninc.com/training/business-services/checklist": [
+   "https://securebydesigninc.com/training/business-services",
+   "https://securebydesigninc.com/training/business-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/business-services/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/business-services",
+   "https://securebydesigninc.com/training/business-services/checklist"
+  ],
+  "https://securebydesigninc.com/training/prove-recovery": [
+   "https://securebydesigninc.com/training/prove-recovery",
+   "https://securebydesigninc.com/training/prove-recovery/checklist"
+  ],
+  "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf": [
+   "https://securebydesigninc.com/training/prove-recovery"
+  ],
+  "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx": [
+   "https://securebydesigninc.com/training/prove-recovery"
+  ],
+  "https://securebydesigninc.com/training/prove-recovery/checklist": [
+   "https://securebydesigninc.com/training/prove-recovery",
+   "https://securebydesigninc.com/training/prove-recovery/checklist"
+  ],
+  "https://securebydesigninc.com/training/prove-recovery/configuration-checklist.md": [
+   "https://securebydesigninc.com/training/prove-recovery",
+   "https://securebydesigninc.com/training/prove-recovery/checklist"
+  ],
+  "https://securebydesigninc.com/inside-network-model/model": [
+   "https://securebydesigninc.com/inside-network-model/model.html",
+   "https://securebydesigninc.com/inside-network-model/model"
+  ],
+  "https://securebydesigninc.com/inside-network-model/THREE-LICENSE.txt": [
+   "https://securebydesigninc.com/inside-network-model/model.html",
+   "https://securebydesigninc.com/inside-network-model/model"
+  ],
+  "https://securebydesigninc.com/training/dc01-dc02/THREE-LICENSE.txt": [
+   "https://securebydesigninc.com/training/dc01-dc02/notices.html"
+  ]
+ },
+ "assets": [
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/hash-Cp347hhd.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 256,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/record-uXSNv6cl.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 79,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/app-elements-H_Dr48wG.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 12828,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 694,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/framework-D_rUT4EX.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 190152,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/app-rsc-cache-busting-SuCNYTuA.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 4962,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/headers-C_MtfdF4.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 3286,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/navigation-errors-D5LMQqDL.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 4040,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/app-rsc-render-mode-CvTCGruk.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 668,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/protocol-headers-B9-bVeat.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 327,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/page.DK9r56jz.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 6518,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/index.B3x970JY.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 243720,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/my-progress.B-q9ziat.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 3140,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/index-ChAF12I3.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 197506,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/chunks/deployment-id-DFhHa9wO.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 97,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/social/tiktok-sbd.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 722,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/social/instagram-sbd.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 2116,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/app-stores/google-play.png",
+   "status": 200,
+   "type": "image/png",
+   "bytes": 4904,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/social/youtube-sbd.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 474,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/app-stores/app-store.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 10804,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/social/discord-sbd.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 1389,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/partners/tenable-light.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 75786,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/page.sX_bFSmh.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 19024,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/videos.D80nOC9D.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 41449,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration",
+    "https://securebydesigninc.com/training/harden-baseline",
+    "https://securebydesigninc.com/training/pki-services",
+    "https://securebydesigninc.com/training/two-tier-pki"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/page.CXbpvuNs.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 3066,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/inside-the-network"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "status": 200,
+   "type": "text/html",
+   "bytes": 13710,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/inside-the-network"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/partners/red-hat-light.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 2783,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/_next/static/css/page.CBGpR_Ty.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 1408,
+   "cache": "public, max-age=31536000, immutable",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/privacy"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/workbook-cover.webp",
+   "status": 200,
+   "type": "image/webp",
+   "bytes": 25094,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 117555,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 6838,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/dns-configuration",
+    "https://securebydesigninc.com/training/dns-configuration/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 51857,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 193235,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/account-progress.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 4249,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/brand-lock.svg",
+   "status": 200,
+   "type": "image/svg+xml",
+   "bytes": 1509066,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/catalog-data.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 11452,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/guide-share.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 3739,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/styles.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 18422,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/learning-data.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 40073,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/account-progress.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 4249,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "https://securebydesigninc.com/training/dc01-dc02/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/app.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 22553,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/guide-share.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 3739,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "https://securebydesigninc.com/training/dc01-dc02/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/guide-share.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 1947,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/guide-share.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 1947,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "https://securebydesigninc.com/training/dc01-dc02/"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 223556,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/harden-baseline"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 8123,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/harden-baseline",
+    "https://securebydesigninc.com/training/harden-baseline/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 119953,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/harden-baseline"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 296157,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "https://securebydesigninc.com/training/dc01-dc02/",
+    "https://securebydesigninc.com/training/dc01-dc02/notices.html"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 196833,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/pki-services"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 118083,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/pki-services"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 219738,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/two-tier-pki"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 119243,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/two-tier-pki"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 9588,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/two-tier-pki",
+    "https://securebydesigninc.com/training/two-tier-pki/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 6766,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/pki-services",
+    "https://securebydesigninc.com/training/pki-services/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 10504,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment",
+    "https://securebydesigninc.com/training/connect-segment/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 121509,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 247036,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 225176,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/tiered-admin"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 9278,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/tiered-admin",
+    "https://securebydesigninc.com/training/tiered-admin/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 120210,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/tiered-admin"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 8466,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/logging-pipeline",
+    "https://securebydesigninc.com/training/logging-pipeline/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 120413,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/patch-protect"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 9372,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/patch-protect",
+    "https://securebydesigninc.com/training/patch-protect/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 226401,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/patch-protect"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 119890,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/logging-pipeline"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 10232,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/workstation-fleet",
+    "https://securebydesigninc.com/training/workstation-fleet/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 203062,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/business-services"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 121886,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/workstation-fleet"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 250343,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/workstation-fleet"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 7635,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/business-services",
+    "https://securebydesigninc.com/training/business-services/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 120029,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/prove-recovery"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.docx",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "bytes": 118850,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/business-services"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 223869,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/logging-pipeline"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/THREE-LICENSE.txt",
+   "status": 200,
+   "type": "text/plain",
+   "bytes": 1081,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/inside-network-model/model.html",
+    "https://securebydesigninc.com/inside-network-model/model"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/configuration-checklist.md",
+   "status": 200,
+   "type": "text/markdown",
+   "bytes": 9222,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/prove-recovery",
+    "https://securebydesigninc.com/training/prove-recovery/checklist"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.css",
+   "status": 200,
+   "type": "text/css",
+   "bytes": 54627,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/inside-network-model/model.html",
+    "https://securebydesigninc.com/inside-network-model/model"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
+   "status": 200,
+   "type": "application/pdf",
+   "bytes": 223819,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "",
+   "from": [
+    "https://securebydesigninc.com/training/prove-recovery"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/app.js",
+   "status": 200,
+   "type": "text/javascript",
+   "bytes": 53079,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/inside-network-model/model.html",
+    "https://securebydesigninc.com/inside-network-model/model"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/THREE-LICENSE.txt",
+   "status": 200,
+   "type": "text/plain",
+   "bytes": 1081,
+   "cache": "public, max-age=0, must-revalidate",
+   "encoding": "br",
+   "from": [
+    "https://securebydesigninc.com/training/dc01-dc02/notices.html"
+   ]
+  }
+ ],
+ "fragments": [
+  {
+   "source": "https://securebydesigninc.com/my-progress",
+   "target": "https://securebydesigninc.com/my-progress",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/my-progress",
+   "target": "https://securebydesigninc.com/my-progress",
+   "id": "progress",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/my-progress",
+   "target": "https://securebydesigninc.com/my-progress",
+   "id": "memberships",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/my-progress",
+   "target": "https://securebydesigninc.com/",
+   "id": "about",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/inside-the-network",
+   "target": "https://securebydesigninc.com/inside-the-network",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/",
+   "target": "https://securebydesigninc.com/",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training",
+   "target": "https://securebydesigninc.com/training",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training",
+   "target": "https://securebydesigninc.com/training",
+   "id": "episode-library",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "collect",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "use",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "providers",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "keep",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "choices",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "delete-account",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/privacy",
+   "id": "contact",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/privacy",
+   "target": "https://securebydesigninc.com/my-progress",
+   "id": "delete-account",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/rmf/index.html",
+   "target": "https://securebydesigninc.com/training/rmf/",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/rmf/index.html",
+   "target": "https://securebydesigninc.com/training/rmf/",
+   "id": "catalog",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/rmf/index.html",
+   "target": "https://securebydesigninc.com/training/rmf/",
+   "id": "evidence",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/rmf/index.html",
+   "target": "https://securebydesigninc.com/training/rmf/",
+   "id": "capstone",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/rmf/index.html",
+   "target": "https://securebydesigninc.com/training/rmf/",
+   "id": "sources",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dc01-dc02/index.html",
+   "target": "https://securebydesigninc.com/training/dc01-dc02/",
+   "id": "lesson",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki",
+   "target": "https://securebydesigninc.com/inside-the-network",
+   "id": "process=trust",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment",
+   "target": "https://securebydesigninc.com/inside-the-network",
+   "id": "view=overview&layout=logical",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline",
+   "target": "https://securebydesigninc.com/inside-the-network",
+   "id": "process=logs",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "plan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "zones",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "records",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "verify",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "target": "https://securebydesigninc.com/training/dns-configuration",
+   "id": "troubleshoot",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "root",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "request",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "sign",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "publish",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "target": "https://securebydesigninc.com/training/two-tier-pki",
+   "id": "validate",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "router",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "acls",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "time",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "prove",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "management",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "target": "https://securebydesigninc.com/training/connect-segment",
+   "id": "scan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "dhcp",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "admin-hosts",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "logon-restrictions",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "prove",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "target": "https://securebydesigninc.com/training/tiered-admin",
+   "id": "scan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "publication",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "publish-trust",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "template-admin",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "first-templates",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/pki-services/checklist",
+   "target": "https://securebydesigninc.com/training/pki-services",
+   "id": "validate",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "ou-design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "staging",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "baseline",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "apply",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "rescan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "target": "https://securebydesigninc.com/training/harden-baseline",
+   "id": "maintain",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "auditing",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "collector",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "protect",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "analyze",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "target": "https://securebydesigninc.com/training/logging-pipeline",
+   "id": "prove",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "prepare",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "pilot",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "laps",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "certificates",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "nac",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "scale",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "target": "https://securebydesigninc.com/training/workstation-fleet",
+   "id": "scan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "wsus",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "repo",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "mgmt",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "epo",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "target": "https://securebydesigninc.com/training/patch-protect",
+   "id": "nessus",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "design",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "fileserver",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "database",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "apps-web",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/business-services/checklist",
+   "target": "https://securebydesigninc.com/training/business-services",
+   "id": "prove-scan",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "id": "main",
+   "found": true
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "requirements",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "directory",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "trust-state",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "offline-copies",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "rehearse",
+   "found": false
+  },
+  {
+   "source": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "target": "https://securebydesigninc.com/training/prove-recovery",
+   "id": "record",
+   "found": false
+  }
+ ],
+ "external": [
+  {
+   "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+   "status": 200,
+   "final": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://www.youtube.com/channel/UCItxo3KJms-IuQKdFzFXqRg",
+   "status": 200,
+   "final": "https://www.youtube.com/channel/UCItxo3KJms-IuQKdFzFXqRg",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/quickstart-install-configure-dns-server",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/networking/dns/quickstart-install-configure-dns-server",
+   "from": [
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://discord.gg/MDrGbP4cAY",
+   "status": 200,
+   "final": "https://discord.com/invite/MDrGbP4cAY",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://www.instagram.com/securebydesigninc/",
+   "status": 200,
+   "final": "https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fsecurebydesigninc%2F&is_from_rle",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations",
+   "from": [
+    "https://securebydesigninc.com/training/pki-services",
+    "https://securebydesigninc.com/training/two-tier-pki"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/redirect-users-computers-containers",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/redirect-users-computers-containers",
+   "from": [
+    "https://securebydesigninc.com/training/harden-baseline"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil",
+   "from": [
+    "https://securebydesigninc.com/training/pki-services"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/config-firewall-for-ad-domains-and-trusts",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/config-firewall-for-ad-domains-and-trusts",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/dhcp/dhcp-top",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/dhcp/dhcp-top",
+   "from": [
+    "https://securebydesigninc.com/training/tiered-admin"
+   ]
+  },
+  {
+   "url": "https://www.tiktok.com/@jon_sbd",
+   "status": 200,
+   "final": "https://www.tiktok.com/@jon_sbd",
+   "from": [
+    "https://securebydesigninc.com/my-progress",
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/",
+    "https://securebydesigninc.com/training",
+    "https://securebydesigninc.com/training/dns-configuration"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/powershell/module/activedirectory/new-adorganizationalunit",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/powershell/module/activedirectory/new-adorganizationalunit?view=windowsserver2025-ps",
+   "from": [
+    "https://securebydesigninc.com/training/harden-baseline"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-server-update-services/get-started/windows-server-update-services-wsus",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/administration/windows-server-update-services/get-started/windows-server-update-services-wsus",
+   "from": [
+    "https://securebydesigninc.com/training/patch-protect"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netroute",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=windowsserver2025-ps",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025",
+   "from": [
+    "https://securebydesigninc.com/training/business-services"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-managed-service-accounts/group-managed-service-accounts/group-managed-service-accounts-overview",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-managed-service-accounts/group-managed-service-accounts/group-managed-service-accounts-overview",
+   "from": [
+    "https://securebydesigninc.com/training/business-services"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/forest-recovery-guide/ad-forest-recovery-guide",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/forest-recovery-guide/ad-forest-recovery-guide",
+   "from": [
+    "https://securebydesigninc.com/training/prove-recovery"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/use-windows-event-forwarding-to-assist-in-intrusion-detection",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/use-windows-event-forwarding-to-assist-in-intrusion-detection",
+   "from": [
+    "https://securebydesigninc.com/training/logging-pipeline"
+   ]
+  },
+  {
+   "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+   "status": 200,
+   "final": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+   "from": [
+    "https://securebydesigninc.com/training/connect-segment",
+    "https://securebydesigninc.com/training/tiered-admin",
+    "https://securebydesigninc.com/training/logging-pipeline",
+    "https://securebydesigninc.com/training/patch-protect",
+    "https://securebydesigninc.com/training/workstation-fleet"
+   ]
+  },
+  {
+   "url": "https://learn.microsoft.com/en-us/security/privileged-access-workstations/overview",
+   "status": 200,
+   "final": "https://learn.microsoft.com/en-us/security/privileged-access-workstations/overview",
+   "from": [
+    "https://securebydesigninc.com/training/tiered-admin"
+   ]
+  },
+  {
+   "url": "https://www.cyber.mil/stigs/gpo",
+   "status": 200,
+   "final": "https://www.cyber.mil/stigs/gpo",
+   "from": [
+    "https://securebydesigninc.com/training/workstation-fleet"
+   ]
+  }
+ ],
+ "mailtos": [
+  {
+   "url": "mailto:support@securebydesigninc.com",
+   "from": [
+    "https://securebydesigninc.com/privacy"
+   ]
+  },
+  {
+   "url": "mailto:support@securebydesigninc.com?subject=Delete%20my%20Secure%20By%20Design%20account",
+   "from": [
+    "https://securebydesigninc.com/privacy"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "kind": "redirect",
+   "from": "/about",
+   "expect": "/#about",
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/about",
+     "status": 308
+    },
+    {
+     "url": "https://securebydesigninc.com/#about",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/account",
+   "expect": "/my-progress",
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/account",
+     "status": 307
+    },
+    {
+     "url": "https://securebydesigninc.com/my-progress#account",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/memberships",
+   "expect": "/my-progress#memberships",
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/memberships",
+     "status": 308
+    },
+    {
+     "url": "https://securebydesigninc.com/my-progress#memberships",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/videos",
+   "expect": "/training",
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/videos",
+     "status": 308
+    },
+    {
+     "url": "https://securebydesigninc.com/training",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/learning-library",
+   "expect": "/training",
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/learning-library",
+     "status": 308
+    },
+    {
+     "url": "https://securebydesigninc.com/training",
+     "status": 200
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/rmf-series/system",
+   "expect": null,
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/rmf-series/system",
+     "status": 404
+    }
+   ]
+  },
+  {
+   "kind": "redirect",
+   "from": "/career-explorer",
+   "expect": null,
+   "hops": [
+    {
+     "url": "https://securebydesigninc.com/career-explorer",
+     "status": 404
+    }
+   ]
+  },
+  {
+   "kind": "status",
+   "path": "/blog",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/blogs",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/rmf-series",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/blog/what-is-active-directory",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/cyber-range",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/how-to",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/guides-and-labs",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/careers",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/career-goals",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/resources",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/resource-options",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "status",
+   "path": "/learning-library",
+   "status": 308,
+   "location": "/training",
+   "title": "",
+   "h1": ""
+  },
+  {
+   "kind": "status",
+   "path": "/audit-missing-page-1791481159867",
+   "status": 404,
+   "location": null,
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "h1": "This page isn’t here."
+  },
+  {
+   "kind": "host",
+   "from": "http://securebydesigninc.com/",
+   "hops": [
+    {
+     "url": "http://securebydesigninc.com/",
+     "status": 301
+    },
+    {
+     "url": "https://securebydesigninc.com/",
+     "status": 200
+    }
+   ],
+   "finalStatus": 200
+  },
+  {
+   "kind": "host",
+   "from": "http://www.securebydesigninc.com/",
+   "hops": [
+    {
+     "url": "http://www.securebydesigninc.com/",
+     "status": 301
+    },
+    {
+     "url": "https://www.securebydesigninc.com/",
+     "status": 301
+    },
+    {
+     "url": "https://securebydesigninc.com/",
+     "status": 200
+    }
+   ],
+   "finalStatus": 200
+  },
+  {
+   "kind": "host",
+   "from": "https://www.securebydesigninc.com/training?x=1",
+   "hops": [
+    {
+     "url": "https://www.securebydesigninc.com/training?x=1",
+     "status": 301
+    },
+    {
+     "url": "https://securebydesigninc.com/training?x=1",
+     "status": 200
+    }
+   ],
+   "finalStatus": 200
+  },
+  {
+   "kind": "host",
+   "from": "https://secure-by-design-website.securebydesign.workers.dev/",
+   "hops": [
+    {
+     "url": "https://secure-by-design-website.securebydesign.workers.dev/",
+     "status": 200
+    }
+   ],
+   "finalStatus": 200
+  }
+ ],
+ "duplicateTitles": [
+  {
+   "value": "Inside the Network | Secure By Design",
+   "pages": [
+    "https://securebydesigninc.com/inside-the-network",
+    "https://securebydesigninc.com/inside-network-model/model.html",
+    "https://securebydesigninc.com/inside-network-model/model"
+   ]
+  },
+  {
+   "value": "Risk Management Framework, Body of Evidence & Authorization to Operate | Secure By Design",
+   "pages": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "value": "Build the identity foundation | Secure By Design",
+   "pages": [
+    "https://securebydesigninc.com/training/dc01-dc02/index.html",
+    "https://securebydesigninc.com/training/dc01-dc02/"
+   ]
+  }
+ ],
+ "duplicateDescriptions": [
+  {
+   "value": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
+   "pages": [
+    "https://securebydesigninc.com/training/dns-configuration",
+    "https://securebydesigninc.com/training/dns-configuration/checklist"
+   ]
+  },
+  {
+   "value": "Apply the Risk Management Framework to the Inside the Network build, develop its Body of Evidence, and prepare its Authorization to Operate package.",
+   "pages": [
+    "https://securebydesigninc.com/training/rmf/index.html",
+    "https://securebydesigninc.com/training/rmf/"
+   ]
+  },
+  {
+   "value": "Design the organizational unit structure, apply the DISA STIG Group Policy package to the verified network core, and prove the result with before-and-after SCAP scans, reconciled checklists, and a documented exception record.",
+   "pages": [
+    "https://securebydesigninc.com/training/harden-baseline",
+    "https://securebydesigninc.com/training/harden-baseline/checklist"
+   ]
+  },
+  {
+   "value": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
+   "pages": [
+    "https://securebydesigninc.com/training/pki-services",
+    "https://securebydesigninc.com/training/pki-services/checklist"
+   ]
+  },
+  {
+   "value": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
+   "pages": [
+    "https://securebydesigninc.com/training/two-tier-pki",
+    "https://securebydesigninc.com/training/two-tier-pki/checklist"
+   ]
+  },
+  {
+   "value": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
+   "pages": [
+    "https://securebydesigninc.com/training/connect-segment",
+    "https://securebydesigninc.com/training/connect-segment/checklist"
+   ]
+  },
+  {
+   "value": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
+   "pages": [
+    "https://securebydesigninc.com/training/tiered-admin",
+    "https://securebydesigninc.com/training/tiered-admin/checklist"
+   ]
+  },
+  {
+   "value": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
+   "pages": [
+    "https://securebydesigninc.com/training/logging-pipeline",
+    "https://securebydesigninc.com/training/logging-pipeline/checklist"
+   ]
+  },
+  {
+   "value": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type with SBD-REPO01 for packages, a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+   "pages": [
+    "https://securebydesigninc.com/training/patch-protect",
+    "https://securebydesigninc.com/training/patch-protect/checklist"
+   ]
+  },
+  {
+   "value": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+   "pages": [
+    "https://securebydesigninc.com/training/workstation-fleet",
+    "https://securebydesigninc.com/training/workstation-fleet/checklist"
+   ]
+  },
+  {
+   "value": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-SQL01 running as a managed identity behind exactly two callers, SBD-APPS01's licensing service, and SBD-WEB01 serving internal HTTPS from a hardened Apache — every hop a documented, proven register row.",
+   "pages": [
+    "https://securebydesigninc.com/training/business-services",
+    "https://securebydesigninc.com/training/business-services/checklist"
+   ]
+  },
+  {
+   "value": "Close the Build path by proving the network can come back: scheduled directory and CA backups under ceremony-grade custody, policy, boundary, logs, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
+   "pages": [
+    "https://securebydesigninc.com/training/prove-recovery",
+    "https://securebydesigninc.com/training/prove-recovery/checklist"
+   ]
+  }
+ ]
+}

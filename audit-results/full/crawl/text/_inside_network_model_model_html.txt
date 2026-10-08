@@ -1,0 +1,14 @@
+SECURE BY DESIGNInside the NetworkREC 0:00StopCopy linkRecord clipExport 4KPresentation Opening the data centerServer racks · network equipment · 50 workstations AIR-GAPPED DATA CENTEREvery request has a journey.Select a flow.
+Follow it through the network.
+View optionsFull screenSystem detailsDetailsOverviewFrame flowFrameLabels: FocusLabelsFollow packetFollowLogical viewLogicalCinematicKey TRAFFIC FLOWResolving a serviceDNS · TCP / UDP 53‹Play› Selected systemsInternal uplinksOffline root Drag to orbit · scroll to zoom · select equipment Network segments8 VLANs⌄Explore systemsSelect a system‹›System detailsFlow detailsArchitectureRelationship viewExplorePause Follow the trafficOptional walkthroughs: how requests cross the network, what-ifs, and the attack drill.7 processes · 5 what-ifs⌄Follow the trafficChoose a process.
+Trace each step through the network.What if… 01 / SIGN INFrom a workstation to the directory.‹Pause sequence›Speed0.5×1×1.5×Auto-advance offMotion onPausedCheck your understanding Your answers stay in this browser.
+Protocols & technical sources Exit presentation TECHNICAL REFERENCEProtocols & technical sources✕ Explore the network’s service protocols, connection requirements, and supporting documentation.
+Protocol referenceServiceTransportInterpretation Network architectureThe network has eight VLANs, 50 Windows 11 workstations, three administration seats (Tier 0, member servers, and endpoints), an internal time source, and 802.1X port admission through the NPS role on SBD-DHCP01.
+Splunk and Tenable/Nessus run on domain-joined Linux.
+Splunk, Tenable/Nessus, and Trellix ePO/DLP each use one server instance, sized for a small network.The architecture is air-gapped.
+Boundary transfers use approved media under human control, and the root CA remains offline and non-domain-joined.
+Technical sourcesThree.js 0.186.1 · MIT license.
+Assets load locally.
+VIDEO CLIPRecord a clip✕ Records one traffic process from its first step.
+Choose landscape for YouTube or vertical for TikTok, Reels, and Shorts.
+Process Format Landscape 16:91920 × 1080 · YouTube and presentations Vertical 9:161080 × 1920 · TikTok, Reels, and Shorts Step length4 seconds6 seconds8 seconds10 seconds Extras Captions and Secure By Design branding Title and end cards Close-up camera (stays on the packet) Cinematic look with glow Start recording

@@ -1,0 +1,9 @@
+Skip to lesson Secure By DesignLEARN.
+BUILD.
+VERIFY.Course 1.1 · Materials edition 0.4Training Library ↗↓ Workbook THE NETWORK BUILD SERIES / COURSE 1.1Build the identity foundation.Configure DC01 and DC02 with Active Directory and DNS on Windows Server 2025.
+Follow the build, explore the dependencies, and keep the evidence.WINDOWSSERVER 2025DC01 + DC02Your course companionInteractive lesson · 3D networkWorkbook · Personal evidence recordDownload the workbook → YOUR LEARNING PATH0 of 5 lessons completeProgress stays in this browser.
+Export your record to take it with you.↓ Export my recordOne course.
+Five lessons.Explore freely.
+Complete a lesson after recording your checks and answering its question.
+WalkthroughSecurity reasoningMy evidence← PreviousNext lesson → INSIDE THE NETWORK / LESSON VIEWSee your network take shapeReset viewAt this lessonCourse completeISOLATED NETWORK · VLAN 10PLANNEDInteractive graphics are unavailable.Use the system buttons and lesson descriptions below to explore the same lesson.Drag to orbit · scroll to zoom · choose a systemSBD-DC01SBD-DC02Test viewpointDNS query to DC01DC02Pause motionPLANNED SYSTEMSBD-DC01▷COURSE 1.1 / VIDEO COMPANIONYour recorded walkthrough belongs hereThe lesson works now.
+Your video, real screenshots, and chapter timestamps will complete the published edition.Explore the complete Secure By Design network ↗ © 2026 Secure By Design Team LLCCourse 1.1 · Materials edition 0.4 · Updated 8 October 2026Sample values · Learning model · Browser-local progressNotices and permissions

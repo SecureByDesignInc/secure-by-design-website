@@ -1,0 +1,5 @@
+4 certificates; 2 distinct names
+issuers: {'Google Trust Services': 4}
+latest: 2026-09-08T02:46:33
+securebydesigninc.com	resolves: 104.21.29.17 172.67.171.63	CNAME: -	https: 200
+www.securebydesigninc.com	resolves: 172.67.171.63 104.21.29.17	CNAME: -	https: 301

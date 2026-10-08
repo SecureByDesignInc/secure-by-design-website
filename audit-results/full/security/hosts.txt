@@ -1,0 +1,26 @@
+== workers.dev host
+HTTP/2 200 
+date: Thu, 08 Oct 2026 17:39:26 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=njqU736CQmi%2BiHSciNDzXc8mXx1Iow344fr84Zh50q%2ByoQoJqcVTM5cKdlNRFL8rfFDipFxzm0VCv0yT1N1OsNrBBygKGdwkslNVO4gxUqMlkOBcx8Du3CBQBU%2FOAbbIOCQh%2Fkx8EQDD2tsNtrkToCIQsSs1h76PnyHPR3I2ChSHcaMITPQ%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a476ecc859e31119-ORD
+alt-svc: h3=":443"; ma=86400
+
+no canonical/robots tag on workers.dev homepage
+workers.dev /api/sign-in/providers -> 200
+workers.dev robots.txt:
+User-agent: *
+Allow: /
+
+Sitemap: https://securebydesigninc.com/sitemap.xml
+== ChatGPT Sites hosts
+secure-by-design-monitoring-lab.wladozer.chatgpt.site -> 401  | <title>Secure By Design | Security Monitoring Lab
+securebydesign.wladozer.chatgpt.site -> 404  | <title>Not Found
+secure-by-design.wladozer.chatgpt.site -> 404  | <title>Not Found
+securebydesigninc.wladozer.chatgpt.site -> 404  | <title>Not Found
+secure-by-design-website.wladozer.chatgpt.site -> 404  | <title>Not Found
