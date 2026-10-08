@@ -135,8 +135,8 @@ await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.s
 const analytics = await (async () => {
   const page = await context.newPage();
   const seen = [];
-  page.on('response', response => { if (/cloudflareinsights\.com/.test(response.url())) seen.push(`${response.request().method()} ${new URL(response.url()).host}${new URL(response.url()).pathname} ${response.status()}`); });
-  page.on('requestfailed', request => { if (/cloudflareinsights\.com/.test(request.url())) seen.push(`FAILED ${request.url()} (${request.failure()?.errorText})`); });
+  page.on('response', response => { if (/cloudflareinsights\.com|\/cdn-cgi\/rum/.test(response.url())) seen.push(`${response.request().method()} ${new URL(response.url()).host}${new URL(response.url()).pathname} ${response.status()}`); });
+  page.on('requestfailed', request => { if (/cloudflareinsights\.com|\/cdn-cgi\/rum/.test(request.url())) seen.push(`FAILED ${request.url()} (${request.failure()?.errorText})`); });
   try {
     await page.goto(base + '/training', { waitUntil: 'load', timeout: 60000 });
     await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
