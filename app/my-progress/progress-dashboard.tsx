@@ -24,7 +24,7 @@ export default function ProgressDashboard(){
 
  <section id="progress" className="reader-progress-section" aria-label="Progress and account">
  {error&&<p className="reader-error" role="alert">{error} <button onClick={()=>void refresh()}>Try again</button></p>}
- {!data&&!error&&<p><output>Loading your progress…</output></p>}
+ {!data&&!error&&<p className="reader-loading"><output>Loading your progress…</output></p>}
  {data&&(!data.user||data.user.needsPassword)&&<AccountForm existingEmail={data.user?.email} onSignedIn={signedIn}/>}
  {data?.user&&!data.user.needsPassword&&<p className="reader-app-note">Pick up where you left off across devices. In the Secure By Design app, sign in with this account and connect progress to sync completed lessons and saved materials.</p>}
  {data?.user&&<><section className="reader-resume" aria-labelledby="resume-title"><span>{next?'Continue learning':'Start learning'}</span><h2 id="resume-title">{next?.title||'Find something to explore.'}</h2><Link href={next?.href||'/training'}>{next?'Continue →':'Explore the Training Library →'}</Link></section><div className="reader-summary"><section><span>Completed</span><strong>{completed.length}</strong><p>learning modules</p></section><section><span>In progress</span><strong>{records.length-completed.length}</strong><p>saved for your next visit</p></section></div>
