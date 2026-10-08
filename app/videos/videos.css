@@ -2105,3 +2105,14 @@
   .vc-checklist-section{break-inside:avoid;border-color:#9dbccb}
   body{background:#fff}
 }
+/* Printable checklist: per-lesson commands, the course sources, and the copyright line. */
+.vc-checklist-commands{margin:12px 0 0;font-size:13px}
+.vc-checklist-commands p{margin:0 0 6px}
+.vc-checklist-commands pre{margin:0;padding:12px 14px;border:1px solid #ccdae3;border-radius:9px;background:#f6fafc;color:#16364a;font:12px/1.7 ui-monospace,SFMono-Regular,monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.vc-checklist-sources li{font-size:14px;line-height:1.65;padding:3px 0}
+.vc-checklist-copyright{margin:24px 0 0;font-size:13px;color:#486d81}
+@media print{
+  .vc-checklist-commands pre{border-color:#9dbccb;background:#fff;break-inside:avoid}
+  .vc-checklist-sources a{color:inherit;text-decoration:none}
+  .vc-checklist-sources a::after{content:" (" attr(href) ")";font-size:11px;overflow-wrap:anywhere}
+}

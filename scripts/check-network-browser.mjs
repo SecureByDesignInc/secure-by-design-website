@@ -65,7 +65,7 @@ try {
     }
     // Motion and labels follow the policy register.
     await page.locator('#scenarioButtons button').nth(0).click();await page.locator('#steps button').nth(0).click();
-    assert.equal(await page.locator('#stageKind').textContent(), 'BLOCKED PENDING VALIDATION', 'Pending DHCP relay is shown as blocked');
+    assert.equal(await page.locator('#stageKind').textContent(), 'PERMITTED SERVICE REQUEST', 'The DHCP relay (F04) is shown as a permitted request');
     // Learning view: choosing a process keeps the stage on screen, the step's narration and controls sit on the stage,
     // and only the step's own systems keep labels.
     await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
@@ -152,8 +152,10 @@ try {
     await page.selectOption('#systemSelect', 'dc1');
     await page.locator('#connectionsToggle').click();
     assert.equal(await page.locator('#connectionsToggle').getAttribute('aria-pressed'), 'true');
-    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*F03[\s\S]*Pending[\s\S]*F08/, 'Connections list every rule for the system');
+    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*F03[\s\S]*F08/, 'Connections list every rule for the system');
     await page.locator('#connectionsToggle').click();
+    await page.selectOption('#systemSelect', 'sql');
+    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F22[\s\S]*Denied[\s\S]*F14/, 'SBD-SQL01 lists its one registered consumer and the web-to-SQL deny');
     // Logical view (with a shareable link) and the cinematic look.
     await page.locator('#viewToggle').click();
     assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true');

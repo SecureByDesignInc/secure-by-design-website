@@ -29,7 +29,7 @@ const dc1='SBD-DC01',locator=`SRV _ldap._tcp.dc._msdcs.${domain}`;
 export const packetProfiles={
  'signin:0':{app:'Dynamic Host Configuration Protocol (DHCP)',request:'DHCPDISCOVER · broadcast from a client with no address yet',reply:null,srcAddress:'0.0.0.0 (no address yet)',dstAddress:'255.255.255.255 (broadcast)',srcPort:'68',dstPort:'67',
   readable:'The client’s hardware (MAC) address, its host name option, and the options it asks for.',protected:'Nothing. DHCP is not encrypted, which is why relay and scope settings need careful validation.',
-  note:'A broadcast stays inside VLAN 80. The core’s DHCP relay would forward it to SBD-DHCP01 as unicast, but relay rule F04 is still pending, so it goes no further.'},
+  note:'A broadcast stays inside VLAN 80. The core’s DHCP relay forwards it to SBD-DHCP01 as unicast, under rule F04, and the lease comes from the 10.0.80.100–199 pool.'},
  'signin:1':dnsQuery(locator,`SRV records for ${dc1} and SBD-DC02`),
  'signin:2':kerberos(`AS-REQ · a user asks the Key Distribution Center for a ticket-granting ticket (realm ${domain.toUpperCase()})`,'AS-REP · the ticket-granting ticket, encrypted',asRequest),
  'signin:3':{app:'Lightweight Directory Access Protocol (LDAP)',request:'searchRequest · the computer object and its Group Policy links, after a Kerberos (SASL) bind',reply:'searchResEntry · the requested attributes',dstPort:'389',
@@ -49,7 +49,9 @@ export const packetProfiles={
  'logs:2':{...tlsData('forwarded events in Splunk’s forwarding protocol','Addresses, ports, and the TLS handshake.'),reply:null,dstPort:'9997',note:'Rule F10. The forwarder queues events if Splunk is down and replays them later.'},
  'logs:3':{app:'SMB 3',request:'WRITE · a dated archive file to the repository share',reply:null,dstPort:'445',
   readable:'With SMB 3 encryption: addresses, ports, and the session setup.',protected:'File names and archive contents. The archival account can write but not delete.',note:'Rule F11. Each archive is hashed and cataloged when it arrives.'},
- 'license:0':undefinedTransport('Vendor licensing request'),
+ 'license:0':{app:'Vendor licensing protocol',request:'License check · the client asks the licensing service for its entitlement',reply:'Entitlement response · granted or refused by the license manager',dstPort:'Registered vendor port (recorded per application)',
+  readable:'Depends on the vendor protocol. At least the addresses and the registered port; some products also send license and host names in the clear.',protected:'Depends on the product. Record whether each vendor protocol encrypts or signs its messages when you register its port.',
+  note:'Rule F12 permits each application’s registered vendor port to SBD-APPS01. The port is recorded per application, so the model shows no single number.'},
  'web:0':dnsQuery('A or AAAA · the web service’s internal name','A 10.0.40.40'),
  'web:1':{app:'TLS',request:'ClientHello · the browser offers TLS versions and ciphers and names the server it expects',reply:'ServerHello and certificate · issued by the internal issuing CA',
   readable:'Addresses, ports, the server name in the ClientHello, and the offered TLS versions and ciphers. With TLS 1.2 the certificate is visible; TLS 1.3 encrypts it.',protected:'Once the handshake completes, everything inside the session.'},
@@ -68,13 +70,13 @@ export const packetProfiles={
  'drill:1':{...synOnly('Splunk Web','8000 (the product default)'),note:'No rule lets user workstations reach security-tool management, so default deny drops it at the core.'},
  'drill:2':{...synOnly('SMB','445'),note:'Same VLAN, so this never reaches the core. The destination’s host firewall refuses it (rule D01).'},
  'drill:3':{...synOnly('Remote Desktop Protocol (RDP)','3389'),note:'Same VLAN, so this never reaches the core. The destination’s host firewall refuses it (rule D02).'},
- 'drill:4':{...synOnly('SQL Server (TDS)','1433'),note:'Both servers share VLAN 40, so the core never sees this. Rule F14 is pending, so SBD-SQL01’s host firewall keeps refusing it.'},
+ 'drill:4':{...synOnly('SQL Server (TDS)','1433'),note:'Both servers share VLAN 40, so the core never sees this. Rule F14 denies it: SBD-WEB01 has no database dependency, so SBD-SQL01’s host firewall refuses it. Only SBD-APPS01 may connect (F22).'},
  'drill:5':{...synOnly('Remote administration','—'),request:'TCP SYN · a remote administration connection attempt',dstPort:'Depends on the management tool',note:'ADMIN-PC01 manages user endpoints only. No rule lets it manage a domain controller, so default deny drops it at the core.'}
 };
 
 const transportOf=step=>step.stream==='udp'?'UDP':step.stream==='either'?'TCP or UDP':'TCP';
 const portOf=step=>{const m=String(step.detail||'').match(/\b(\d{2,5})\b/);return m?m[1]:null;};
-const exampleClient='10.0.80.117 (example from the 10.0.80.100–149 pool)';
+const exampleClient='10.0.80.117 (example from the 10.0.80.100–199 pool)';
 /**
  * Builds the inspector card for one frozen packet.
  * info: {kind:'request'|'reply', where:'before-core'|'core'|'after-core'|'gate'|'path'}

@@ -1,6 +1,7 @@
 import './prepare-career-shell.mjs';
 import './prepare-career-explorer.mjs';
 import './prepare-network-text.mjs';
+import './prepare-checklists.mjs';
 import './prepare-sitemap.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../content/', import.meta.url);

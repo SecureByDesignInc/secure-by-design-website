@@ -1,6 +1,6 @@
 # Configure DNS — configuration checklist
 
-Secure By Design · Edition 1.0 · 5 October 2026
+Secure By Design · Edition 1.1 · 8 October 2026
 
 The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS dependency.
 
@@ -17,6 +17,14 @@ The addresses and names below continue the training example. Match every change 
 - [ ] Check the DNS role and static network settings. Domain members must use internal DNS servers that resolve the AD namespace; a public resolver is not an alternate for this environment.
 - [ ] Decide whether any separate internal namespace needs a conditional forwarder. With no recursive dependencies, document a no-recursion design; do not add internet forwarders or delete every root hint as a shortcut.
 
+**Commands:**
+
+```
+Get-WindowsFeature DNS
+Get-DnsClientServerAddress -AddressFamily IPv4
+Get-DnsServerZone -ComputerName SBD-DC01
+```
+
 **Verify:** Both servers and the client point to the intended internal DNS service. Existing AD zones and the forwarding/recursion decision are recorded.
 
 **Evidence:** Save the address/name worksheet and the initial zone inventory before changing anything.
@@ -29,6 +37,14 @@ Notes / result / date: __________________________
 - [ ] Use secure dynamic updates for the AD-integrated zone. Review delegation and permissions before broadening who can change records.
 - [ ] Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist. Select the approved replication scope and secure updates.
 - [ ] Review zone-transfer settings. AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly.
+
+**Commands:**
+
+```
+Get-DnsServerZone -ComputerName SBD-DC01 |
+  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope
+Get-DnsServerZone -ComputerName SBD-DC02
+```
 
 **Verify:** The intended forward and reverse zones appear on both DNS hosts after replication. The reverse zone for this /24 is 10.0.10.in-addr.arpa.
 
@@ -43,6 +59,14 @@ Notes / result / date: __________________________
 - [ ] For a service alias, use New Alias (CNAME) and select the intended fully qualified host. For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.
 - [ ] Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete. An alias cannot coexist with other record types at the same name.
 
+**Commands:**
+
+```
+Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test
+Resolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10
+Resolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10
+```
+
 **Verify:** Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.
 
 **Evidence:** Keep a record table with owner, type, target, time to live, and reason for the change.
@@ -55,6 +79,17 @@ Notes / result / date: __________________________
 - [ ] Query the AD LDAP service records below against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove that discovery works.
 - [ ] Run the DNS diagnostics and directory replication checks on a domain controller. Investigate failures in context, including the intentionally isolated network design.
 - [ ] During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise.
+
+**Commands:**
+
+```
+Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.10
+Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.11
+Resolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.10
+Resolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV -Server 10.0.10.11
+dcdiag /test:dns /v
+repadmin /replsummary
+```
 
 **Verify:** Both DNS servers return the expected host and AD service records, replication is healthy, and the client still resolves internal names when either resolver is unavailable.
 
@@ -69,6 +104,15 @@ Notes / result / date: __________________________
 - [ ] Distinguish a missing name (NXDOMAIN) from a timeout or service failure. Fix the owning configuration first, then use Clear-DnsClientCache on the test client if stale cache remains relevant.
 - [ ] Repeat the original test and the redundancy checks. Record what changed and the rollback method. Review aging/scavenging separately against DHCP, static records, and backup practices before enabling automatic deletion.
 
+**Commands:**
+
+```
+Get-DnsClientServerAddress -AddressFamily IPv4
+Get-DnsClientCache
+Resolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10
+Resolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.11
+```
+
 **Verify:** The original failure is reproducibly resolved, both resolvers agree, and the change record explains the cause rather than only showing a passing screenshot.
 
 **Evidence:** Complete the DNS checklist and retain the before/after lookup results with the configuration owner.
@@ -82,3 +126,5 @@ Notes / result / date: __________________________
 - [Microsoft · Manage DNS resource records](https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records)
 - [Microsoft · Resolve-DnsName](https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname)
 - [Microsoft · Dcdiag](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag)
+
+© 2026 Secure By Design Team LLC

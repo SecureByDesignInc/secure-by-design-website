@@ -119,7 +119,7 @@ function EpisodeTile({
               {course ? <span className="vc-tile-course-size"><BookOpen size={13} />{episode.lessonCount ?? episode.moduleCount} lessons · {episode.estimatedHours}h</span> : <span className="vc-tile-course-size"><BookOpen size={13} />{episode.chapters.length} lessons · Self-paced</span>}
               <span>
                 <Video size={13} />
-                {available ? 'Video available' : 'Video in production'}
+                {available ? 'Video available' : 'Video coming soon'}
               </span>
             </div>
             <button

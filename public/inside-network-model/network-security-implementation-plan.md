@@ -6,7 +6,7 @@ Control catalog: NIST SP 800-53 Rev. 5.
 
 ## Architecture
 
-Eight VLANs; 50 clients in 10.0.80.100–149 admitted by 802.1X (NPS on SBD-DHCP01; quarantine VLAN 90 has no routes); switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
+Eight VLANs; 50 clients in the 10.0.80.100–199 pool admitted by 802.1X (NPS on SBD-DHCP01; quarantine VLAN 90 has no routes); switch management on VLAN 100; offline root with no live link; manual media transfers only, including backups. One instance each of Splunk, Tenable/Nessus, and Trellix ePO/DLP. No cluster or standby.
 
 ## 1. Enforce network boundaries
 
@@ -16,7 +16,7 @@ Controls: AC-4, SC-7, SC-7(5), IA-3
 VLAN 80 isolates the client population. Routed boundaries deny unmatched sessions; host firewalls enforce local separation too.
 
 - [ ] Maintain a versioned flow register with source, destination, service, purpose, owner, and test evidence.
-- [ ] Configure the core DHCP relay for VLAN 80 and a reserved client pool of 10.0.80.100–149; confirm exclusions and lease options.
+- [ ] Configure the core DHCP relay for VLAN 80 and a reserved client pool of 10.0.80.100–199, with room for the 50 PCs, test clients, and replacements; confirm exclusions and lease options.
 - [ ] Permit only identified service dependencies. Resolve AD replication, enrollment, and vendor protocols before enabling their rules.
 - [ ] Review exceptions after changes and on a proposed quarterly cycle.
 - [ ] Admit devices with 802.1X: VLAN 80 access ports require EAP-TLS with a machine certificate from the issuing CA, checked by the NPS role on SBD-DHCP01 (no new server). Unknown or failed devices land in quarantine VLAN 90, which has no routes. NPS handles port admission only; router logins stay named local accounts, so NPS does not become a Tier 0 system.
@@ -62,14 +62,14 @@ Controls: AC-3, AC-4, SC-7
 
 Sharing a VLAN never grants a service permission to contact its neighbors. Separate host policies protect data and security services.
 
-- [ ] Permit SQL only from identified application consumers; keep the unconfirmed web-to-SQL dependency blocked.
+- [ ] Permit SQL only from SBD-APPS01, the registered application consumer (F22); deny SBD-WEB01 (F14), which reaches data only through the application API (F21).
 - [ ] Keep file, licensing, and web listeners limited to their intended clients. Block unnecessary outbound server traffic.
 - [ ] Scope Nessus targets, scan windows, and least-privilege scan credentials; never include the offline root.
 - [ ] Constrain ePO/DLP management reach and separate audit retention authority from ordinary tool administration.
 
 ### Acceptance checks
 
-- [ ] The web server cannot access SQL before an approved dependency exists.
+- [ ] The web server cannot reach SQL directly; only SBD-APPS01, the registered consumer, connects.
 - [ ] A compromised client cannot reach security-tool management interfaces.
 - [ ] The scanner cannot reach the offline root or unapproved targets.
 
@@ -131,7 +131,7 @@ Controls: AU-5, AU-6, AU-8, AU-9, AU-11, AU-12, SC-45, AU-2, AU-3, AU-9(4), SI-4
 
 One Splunk server provides analysis. The separate audit repository retains protected evidence; it is not a second Splunk instance.
 
-- [ ] Use internal time: TIME01 supplies the domain time authority; domain members follow the domain hierarchy. Define a reference source, tolerance, and fallback without opening an external network path.
+- [ ] Use internal time: only the PDC emulator, SBD-DC01, syncs from TIME01 (F08); every other domain member syncs from the domain controllers over UDP 123 (F09). Define a reference source, tolerance, and fallback without opening an external network path.
 - [ ] Define the logged event set (AU-2) and the fields each record must carry (AU-3). Forward Windows security events with a source-initiated WEF subscription (F17), events from the Linux servers over syslog TLS (F07), and the router’s deny log; restrict senders.
 - [ ] Collector → Splunk over the forwarder with TLS (F10); collector → SBD-AUDIT01 over encrypted SMB with a write-only archival account (F11). Only the audit custodian’s separate accounts administer protected retention (AU-9(4)); offline backups follow the recovery practice.
 - [ ] Alert on stopped sources, audit-policy changes, clock drift, full storage, and unauthorized deletion. Size local queues for a Splunk outage and test replay without silent loss.
@@ -173,7 +173,7 @@ Assessment result: ____________________
 ## 8. Recover and exercise the design
 
 Owner role: Recovery lead and system owners
-Controls: CP-2, CP-4, CP-9, CP-10, IR-3, IR-4, CP-9(1), CA-5, PL-2
+Controls: CP-2, CP-4, CP-9, CP-10, IR-3, IR-4, CP-9(1), CA-5, PL-2, RA-7, CA-6
 
 Splunk, Tenable/Nessus, and Trellix ePO/DLP each have exactly one server instance. Recovery uses protected backups, not clustering or standby servers.
 
@@ -183,7 +183,7 @@ Splunk, Tenable/Nessus, and Trellix ePO/DLP each have exactly one server instanc
 - [ ] During a Splunk outage retain and monitor local logs; during a Nessus outage track deferred scans; during an ePO/DLP outage verify installed agents retain their last policy and document lost central visibility.
 - [ ] Exercise malicious-media, ransomware, and privileged-account compromise scenarios; retain results and corrective actions.
 - [ ] Backup path: each server writes its backup (DC system state, CA database and keys, configurations, the audit archive) to a protected local backup volume. Tier 0 custodians carry DC and CA backups, and the audit custodian carries the archive, to the offline backup facility under the media custody procedure. No network path to the backup facility exists.
-- [ ] Record the single-instance decision for Splunk, Tenable/Nessus, and Trellix ePO/DLP as a risk acceptance in the system security plan (PL-2): one server each suits the small network and the tools’ modest resource needs. Backups are the mitigation, and any gaps are tracked in the POA&M (CA-5).
+- [ ] Document the single-instance design for Splunk, Tenable/Nessus, and Trellix ePO/DLP in the system security plan, with offline backups as its mitigation (PL-2): one server each suits the small network and the tools’ modest resource needs. The risk response records the rationale and the remaining risk (RA-7); accepting that risk is the authorizing official’s authorization decision (CA-6). Restore gaps are tracked in the POA&M (CA-5).
 
 ### Acceptance checks
 
