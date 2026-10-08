@@ -1,0 +1,30 @@
+[chromium] /training/dns-configuration -> /Back to the Training Library/i: {"href":"/training","landed":"/training/dns-configuration","navigated":false,"errors":["e is not a function"]}
+[chromium] /training/dns-configuration -> /^Training Library$/: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[chromium] /training/dns-configuration -> /Open the checklist/i: {"href":"/training/dns-configuration/checklist","landed":"/training/dns-configuration/checklist","navigated":true,"errors":[]}
+[chromium] /training/dns-configuration -> /See the complete network/i: {"href":"/inside-the-network","landed":"/inside-the-network","navigated":true,"errors":[]}
+[chromium] /training/dns-configuration -> /^Privacy$/: {"href":"/privacy","landed":"/privacy","navigated":true,"errors":[]}
+[chromium] /training/dns-configuration -> /^Home$/: {"href":"/","landed":"/","navigated":true,"errors":[]}
+[chromium] /training/dns-configuration/checklist -> /Back to Configure DNS/i: {"href":"/training/dns-configuration","landed":"/training/dns-configuration/checklist","navigated":false,"errors":["e is not a function"]}
+[chromium] /training/dns-configuration/checklist -> /^My Account$/: {"href":"/my-progress","landed":"/my-progress","navigated":true,"errors":[]}
+[chromium] /training/harden-baseline -> /Back to the Training Library/i: {"href":"/training","landed":"/training/harden-baseline","navigated":false,"errors":["e is not a function"]}
+[chromium] / -> /Explore all training/i: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[chromium] / -> /^Training Library$/: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[chromium] /training -> /^Inside the Network$/: {"href":"/inside-the-network","landed":"/inside-the-network","navigated":true,"errors":[]}
+[chromium] /privacy -> /^Home$/: {"href":"/","landed":"/","navigated":true,"errors":[]}
+[chromium] /my-progress -> /^Training Library$/: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration -> /Back to the Training Library/i: {"href":"/training","landed":"/training/dns-configuration","navigated":false,"errors":["e is not a function. (In 'e(r,n?`replace`:`push`,i,!1)', 'e' is undefined)"]}
+[webkit] /training/dns-configuration -> /^Training Library$/: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration -> /Open the checklist/i: {"href":"/training/dns-configuration/checklist","landed":"/training/dns-configuration/checklist","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration -> /See the complete network/i: {"href":"/inside-the-network","landed":"/inside-the-network","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration -> /^Privacy$/: {"href":"/privacy","landed":"/privacy","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration -> /^Home$/: {"href":"/","landed":"/","navigated":true,"errors":[]}
+[webkit] /training/dns-configuration/checklist -> /Back to Configure DNS/i: {"href":"/training/dns-configuration","landed":"/training/dns-configuration/checklist","navigated":false,"errors":["e is not a function. (In 'e(r,n?`replace`:`push`,i,!1)', 'e' is undefined)"]}
+[webkit] /training/dns-configuration/checklist -> /^My Account$/: {"href":"/my-progress","landed":"/my-progress","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration -> /Back to the Training Library/i: {"href":"/training","landed":"/training/dns-configuration","navigated":false,"errors":["e is not a function"]}
+[firefox] /training/dns-configuration -> /^Training Library$/: {"href":"/training","landed":"/training","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration -> /Open the checklist/i: {"href":"/training/dns-configuration/checklist","landed":"/training/dns-configuration/checklist","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration -> /See the complete network/i: {"href":"/inside-the-network","landed":"/inside-the-network","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration -> /^Privacy$/: {"href":"/privacy","landed":"/privacy","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration -> /^Home$/: {"href":"/","landed":"/","navigated":true,"errors":[]}
+[firefox] /training/dns-configuration/checklist -> /Back to Configure DNS/i: {"href":"/training/dns-configuration","landed":"/training/dns-configuration/checklist","navigated":false,"errors":["e is not a function"]}
+[firefox] /training/dns-configuration/checklist -> /^My Account$/: {"href":"/my-progress","landed":"/my-progress","navigated":true,"errors":[]}
