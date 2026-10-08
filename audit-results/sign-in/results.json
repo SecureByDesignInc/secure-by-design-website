@@ -92,12 +92,17 @@
   {
     "name": "passkey options from the site",
     "ok": true,
-    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"sS3MOvfJkMAc-G3Rvdt7Ilu3lTqUZFcE3sEDlwLMYQQ\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
+    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"gb9etC68BZoQ-TfC3KWYslk1LY8arTrdKmfIQNZ_TWM\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
   },
   {
-    "name": "my-progress 1440",
-    "ok": false,
-    "detail": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.reader-error[role=alert], .reader-error').first() to be visible\n"
+    "name": "unregistered passkey is refused with a clear message",
+    "ok": true,
+    "detail": "This passkey isn’t registered with Secure By Design. Sign in another way, then add it in My Account."
+  },
+  {
+    "name": "still signed out after unregistered passkey",
+    "ok": true,
+    "detail": "401"
   },
   {
     "name": "app-sign-in shows the sign-in form (1440)",
@@ -122,6 +127,6 @@
   {
     "name": "no page errors (1440)",
     "ok": true,
-    "detail": ""
+    "detail": "Failed to load resource: the server responded with a status of 401 () || Failed to load resource: the server responded with a status of 401 ()"
   }
 ]

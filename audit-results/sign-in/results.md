@@ -1,6 +1,6 @@
 # Sign-in live check
 
-1 failed of 25
+0 failed of 26
 
 - ✅ providers endpoint — 200 {"providers":{"apple":false,"google":false,"microsoft":false},"passkeys":true} cache=private, no-store
 - ✅ unconfigured provider start redirects with an error code — 303 /my-progress?signin_error=unavailable#account
@@ -20,13 +20,11 @@
 - ✅ my-progress shows passkey sign-in (1440)
 - ✅ provider buttons hidden until keys exist (1440) — 0 shown
 - ✅ no horizontal scroll on my-progress (1440) — 0px
-- ✅ passkey options from the site — {"status":200,"body":{"publicKey":{"challenge":"sS3MOvfJkMAc-G3Rvdt7Ilu3lTqUZFcE3sEDlwLMYQQ","rpId":"securebydesigninc.com","userVerification":"required","timeout":300000,"allowCredentials":[]}}}
-- ❌ my-progress 1440 — locator.waitFor: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('.reader-error[role=alert], .reader-error').first() to be visible
-
+- ✅ passkey options from the site — {"status":200,"body":{"publicKey":{"challenge":"gb9etC68BZoQ-TfC3KWYslk1LY8arTrdKmfIQNZ_TWM","rpId":"securebydesigninc.com","userVerification":"required","timeout":300000,"allowCredentials":[]}}}
+- ✅ unregistered passkey is refused with a clear message — This passkey isn’t registered with Secure By Design. Sign in another way, then add it in My Account.
+- ✅ still signed out after unregistered passkey — 401
 - ✅ app-sign-in shows the sign-in form (1440)
 - ✅ no horizontal scroll on app-sign-in (1440) — 0px
 - ✅ app-sign-in without a challenge explains itself (1440)
 - ✅ privacy mentions passkeys and self-service deletion (1440)
-- ✅ no page errors (1440)
+- ✅ no page errors (1440) — Failed to load resource: the server responded with a status of 401 () || Failed to load resource: the server responded with a status of 401 ()
