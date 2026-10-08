@@ -14,5 +14,7 @@
 .privacy ul,.privacy ol{padding-left:1.25rem;margin:.5rem 0 1rem}
 .privacy li{margin-bottom:.45rem}
 .privacy a{color:var(--primary)}
+.privacy :is(p,li) a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.privacy :is(p,li) a:hover{text-decoration-thickness:2px}
 .privacy-delete{padding:1.4rem 1.5rem;border:1px solid #aacbdf;border-left:4px solid var(--primary);border-radius:16px;background:#f1f8fc}
 @media(max-width:640px){.privacy-delete{padding:1.1rem}}

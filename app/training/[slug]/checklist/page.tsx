@@ -38,11 +38,20 @@ export default async function ChecklistPage({ params }: { params: Promise<{ slug
       <h2 id={`checklist-${lesson.id}`}>{index + 1}. {lesson.title}</h2>
       <p>About {lesson.minutes} min · <a href={`${course.training.guide}#${lesson.id}`}>Open this lesson</a></p>
       <ul className="vc-checklist-items">{lesson.steps.map(step => <li key={step}>{step}</li>)}</ul>
+      <div className="vc-checklist-commands">
+        <p><strong>Commands:</strong></p>
+        <pre><code>{lesson.command}</code></pre>
+      </div>
       <div className="vc-checklist-proof">
         <p><strong>Verify:</strong> {lesson.check}</p>
         <p><strong>Evidence:</strong> {lesson.evidence}</p>
       </div>
       <p className="vc-checklist-notes">Notes / result / date:</p>
     </section>)}
+    <section className="vc-checklist-section vc-config-sources vc-checklist-sources" aria-labelledby="checklist-sources">
+      <h2 id="checklist-sources">Sources</h2>
+      <ul>{configuration.sources.map(source => <li key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a></li>)}</ul>
+    </section>
+    <p className="vc-checklist-copyright">© 2026 Secure By Design Team LLC</p>
   </main>;
 }

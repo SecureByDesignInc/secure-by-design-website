@@ -157,8 +157,8 @@
       "training": {
         "guide": "/training/rmf/index.html#catalog/01",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 11,
-        "materialsEdition": "1.2",
+        "pages": 10,
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "relatedResources": []
       },
@@ -235,8 +235,8 @@
       "training": {
         "guide": "/training/rmf/index.html#catalog/05",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 11,
-        "materialsEdition": "1.2",
+        "pages": 10,
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "relatedResources": [
           {
@@ -308,8 +308,8 @@
       "training": {
         "guide": "/training/rmf/index.html#catalog/10",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 11,
-        "materialsEdition": "1.2",
+        "pages": 10,
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "relatedResources": [
           {
@@ -374,8 +374,8 @@
       "training": {
         "guide": "/training/dns-configuration",
         "checklist": "/training/dns-configuration/configuration-checklist.md",
-        "materialsEdition": "1.0",
-        "updated": "5 October 2026",
+        "materialsEdition": "1.1",
+        "updated": "8 October 2026",
         "checklistPage": "/training/dns-configuration/checklist",
         "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
@@ -390,6 +390,7 @@
         "DNS",
         "Name resolution"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-DC01",
         "SBD-DC02"
@@ -413,7 +414,7 @@
       "kind": "configuration",
       "moduleCount": 6,
       "lessonCount": 6,
-      "estimatedHours": 2.7,
+      "estimatedHours": 2.8,
       "stages": [
         {
           "title": "Design the two-tier trust hierarchy",
@@ -443,8 +444,8 @@
       "training": {
         "guide": "/training/two-tier-pki",
         "checklist": "/training/two-tier-pki/configuration-checklist.md",
-        "materialsEdition": "1.0",
-        "updated": "5 October 2026",
+        "materialsEdition": "1.1",
+        "updated": "8 October 2026",
         "checklistPage": "/training/two-tier-pki/checklist",
         "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
@@ -461,6 +462,7 @@
         "Subordinate CA",
         "AD CS"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-ROOTCA01",
         "SBD-SUBCA01"
@@ -492,7 +494,7 @@
         },
         {
           "title": "Stage the tooling across the air gap",
-          "detail": "The hardening content is downloaded artifacts: the DISA GPO package, the SCAP Compliance Checker (SCC), and STIG Viewer. They cross the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
+          "detail": "The hardening content is downloaded artifacts: the DISA Group Policy object (GPO) package, the SCAP Compliance Checker (SCC), and STIG Viewer. They cross the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
         },
         {
           "title": "Capture the pre-hardening baseline",
@@ -514,8 +516,8 @@
       "training": {
         "guide": "/training/harden-baseline",
         "checklist": "/training/harden-baseline/configuration-checklist.md",
-        "materialsEdition": "1.0",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.1",
+        "updated": "8 October 2026",
         "checklistPage": "/training/harden-baseline/checklist",
         "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
         "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
@@ -532,6 +534,7 @@
         "SCAP",
         "Organizational units"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-DC01",
         "SBD-DC02"
@@ -589,8 +592,8 @@
       "training": {
         "guide": "/training/connect-segment",
         "checklist": "/training/connect-segment/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/connect-segment/checklist",
         "pdf": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
         "word": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
@@ -607,6 +610,7 @@
         "Access control",
         "Time service"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-CORE01",
         "SBD-TIME01"
@@ -636,6 +640,7 @@
         "Certificate templates",
         "AIA and CDP"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-PKI-MGMT01",
         "SBD-SUBCA01"
@@ -681,8 +686,8 @@
       "training": {
         "guide": "/training/pki-services",
         "checklist": "/training/pki-services/configuration-checklist.md",
-        "materialsEdition": "1.0",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.1",
+        "updated": "8 October 2026",
         "checklistPage": "/training/pki-services/checklist",
         "pdf": "/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
         "word": "/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
@@ -692,7 +697,7 @@
     {
       "categoryOrder": 7,
       "number": "1.7",
-      "estimatedHours": 2.5,
+      "estimatedHours": 2.8,
       "title": "Addressing and tiered administration",
       "subtitle": "DHCP, admin seats & where privilege may sign in",
       "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
@@ -703,6 +708,7 @@
         "Privileged access",
         "Group Policy"
       ],
+      "platform": "Windows Server 2025 · Windows 11",
       "systems": [
         "SBD-DHCP01",
         "AdminJumpBox01",
@@ -740,7 +746,7 @@
         },
         {
           "title": "Restrict where privilege can sign in",
-          "detail": "The tier rule becomes real when the directory refuses the wrong sign-in. Deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log."
+          "detail": "The tier rule becomes real when the directory refuses the wrong sign-in. Give Tier 0 servers their own OU first, deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log."
         },
         {
           "title": "Prove the tiers and the addressing",
@@ -754,8 +760,8 @@
       "training": {
         "guide": "/training/tiered-admin",
         "checklist": "/training/tiered-admin/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/tiered-admin/checklist",
         "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
@@ -776,6 +782,7 @@
         "SIEM",
         "Audit policy"
       ],
+      "platform": "Windows Server 2025 · Linux",
       "systems": [
         "SBD-SYSLOG01",
         "SBD-AUDIT01",
@@ -826,8 +833,8 @@
       "training": {
         "guide": "/training/logging-pipeline",
         "checklist": "/training/logging-pipeline/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/logging-pipeline/checklist",
         "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
@@ -837,7 +844,7 @@
     {
       "categoryOrder": 9,
       "number": "1.9",
-      "estimatedHours": 3.0,
+      "estimatedHours": 3.2,
       "title": "Bring in the fleet",
       "subtitle": "50 Windows 11 endpoints, managed from first boot",
       "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
@@ -848,6 +855,7 @@
         "Autoenrollment",
         "DISA STIG"
       ],
+      "platform": "Windows 11 · Windows Server 2025",
       "systems": [
         "50 Windows 11 PCs",
         "SBD-DHCP01",
@@ -880,7 +888,7 @@
         },
         {
           "title": "Manage local administrators with Windows LAPS",
-          "detail": "Fifty identical machines must not share one local administrator password. Windows LAPS gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it."
+          "detail": "Fifty identical machines must not share one local administrator password. Windows Local Administrator Password Solution (Windows LAPS) gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it."
         },
         {
           "title": "Autoenroll the fleet's certificates",
@@ -888,22 +896,22 @@
         },
         {
           "title": "Admit only enrolled devices with 802.1X",
-          "detail": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch port stays closed until the machine proves who it is with the certificate it just enrolled. Anything that cannot ends up somewhere with no routes. No new server: the NPS role joins DHCP on SBD-DHCP01."
+          "detail": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch asks each machine to prove who it is with the certificate it enrolled. This lesson turns that check on in monitor mode — every result is logged, nothing is blocked yet — because 47 PCs have no certificate until they join the domain; lesson 6 enforces it once the whole fleet has enrolled. No new server: the NPS role joins DHCP on SBD-DHCP01."
         },
         {
-          "title": "Scale to fifty and prove by sample",
-          "detail": "Roll the remaining waves, then prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means."
+          "title": "Scale to fifty, enforce 802.1X, and prove by sample",
+          "detail": "Roll the remaining waves while the ports are still in monitor mode, confirm every PC enrolled its machine certificate and authenticates, then switch the ports to enforcement — and prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means."
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: SCAP baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory the next wave's tooling will take over."
+          "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.10's tooling will take over."
         }
       ],
       "training": {
         "guide": "/training/workstation-fleet",
         "checklist": "/training/workstation-fleet/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
@@ -924,6 +932,7 @@
         "Vulnerability scanning",
         "Configuration management"
       ],
+      "platform": "Windows Server 2025 · Linux",
       "systems": [
         "SBD-WSUS01",
         "SBD-REPO01",
@@ -954,7 +963,7 @@
         },
         {
           "title": "Build SBD-WSUS01 and the ring policies",
-          "detail": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and GPOs that point every OU at the server — with a pilot ring that proves each approval first."
+          "detail": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and Group Policy objects (GPOs) that point every OU at the server — with a pilot ring that proves each approval first."
         },
         {
           "title": "Build SBD-REPO01 for approved packages",
@@ -970,14 +979,14 @@
         },
         {
           "title": "SBD-NESSUS01 and the standing cadence",
-          "detail": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the POA&M habit, and this wave's five new systems getting their own baselines on the way out."
+          "detail": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's five new systems getting their own baselines on the way out."
         }
       ],
       "training": {
         "guide": "/training/patch-protect",
         "checklist": "/training/patch-protect/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/patch-protect/checklist",
         "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
@@ -987,10 +996,10 @@
     {
       "categoryOrder": 11,
       "number": "1.11",
-      "estimatedHours": 2.5,
+      "estimatedHours": 2.7,
       "title": "Stand up the business services",
       "subtitle": "Files, database, licensing & web — by documented paths",
-      "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-SQL01 running as a managed identity behind exactly two callers, SBD-APPS01's licensing service, and SBD-WEB01 serving internal HTTPS from a hardened Apache — every hop a documented, proven register row.",
+      "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-WEB01 serving internal HTTPS from a hardened, domain-joined Linux Apache, SBD-APPS01's licensing service and application API, and SBD-SQL01 running as a managed identity behind exactly one caller — every hop a documented, proven register row.",
       "tags": [
         "Windows Server 2025",
         "File services",
@@ -998,6 +1007,7 @@
         "Apache",
         "Service accounts"
       ],
+      "platform": "Windows Server 2025 · Linux",
       "systems": [
         "SBD-FS01",
         "SBD-SQL01",
@@ -1011,8 +1021,8 @@
       ],
       "outcomes": [
         "Serve files through role-group permissions with verified SMB signing and encryption.",
-        "Run the database as a managed identity, certificate-encrypted, behind its two applications.",
-        "Prove the fleet → web → database chain with every hop registered and every shortcut denied."
+        "Run the database as a managed identity, certificate-encrypted, with SBD-APPS01 as its only caller.",
+        "Prove the fleet → web → application → database chain with every hop registered and every shortcut denied."
       ],
       "id": "business-services",
       "afterEpisode": "dc01-dc02",
@@ -1027,26 +1037,26 @@
         },
         {
           "title": "Build SBD-FS01 with least-privilege shares",
-          "detail": "The file server is where access control meets daily life. Build the shares against the role groups, lean on the SMB security the platform now enforces, and make 'who can read this' a one-lookup question."
+          "detail": "The file server is where access control meets daily life. Build the shares against the role groups, require SMB signing on the server instead of trusting client defaults, and make 'who can read this' a one-lookup question."
         },
         {
           "title": "Build SBD-SQL01 behind its applications",
-          "detail": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly two callers — the narrowest audience on the network, by design."
+          "detail": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly one caller, SBD-APPS01 — the narrowest audience on the network, by design."
         },
         {
           "title": "Build SBD-APPS01 and SBD-WEB01",
-          "detail": "The licensing service and the internal web server complete the dependency chain: fleet to application, application to database — each hop registered, the web tier hardened against its DISA guidance, and HTTPS served from the lab's own trust."
+          "detail": "The application server and the internal web server complete the dependency chain: fleet to web, web to application, application to database — each hop a register row, the web tier hardened against its Defense Information Systems Agency (DISA) guidance, and HTTPS served from the lab's own trust."
         },
         {
-          "title": "Reconcile, scan, and close the wave",
-          "detail": "The service wave closes the way every wave has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete."
+          "title": "Reconcile, scan, and hand off",
+          "detail": "The business services close the way every build course has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete."
         }
       ],
       "training": {
         "guide": "/training/business-services",
         "checklist": "/training/business-services/configuration-checklist.md",
-        "materialsEdition": "1.0",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.1",
+        "updated": "8 October 2026",
         "checklistPage": "/training/business-services/checklist",
         "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
@@ -1067,6 +1077,7 @@
         "AD Recycle Bin",
         "Contingency planning"
       ],
+      "platform": "Windows Server 2025",
       "systems": [
         "SBD-DC01",
         "SBD-DC02",
@@ -1118,8 +1129,8 @@
       "training": {
         "guide": "/training/prove-recovery",
         "checklist": "/training/prove-recovery/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "7 October 2026",
+        "materialsEdition": "1.2",
+        "updated": "8 October 2026",
         "checklistPage": "/training/prove-recovery/checklist",
         "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
@@ -1131,7 +1142,7 @@
     {
       "id": "network-build",
       "title": "Build the Network",
-      "description": "Build identity, name resolution, and certificate trust with Active Directory, DNS, and PKI. Follow the courses in order, starting with 1.1."
+      "description": "Build the complete air-gapped network, one course at a time: identity and DNS, a hardened baseline, two-tier PKI, segmentation and time, tiered administration, logging, the workstation fleet, patching and scanning, business services, and proven recovery. Follow the courses in order, from 1.1 to 1.12."
     },
     {
       "id": "network-authorization",

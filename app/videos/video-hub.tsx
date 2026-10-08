@@ -99,7 +99,9 @@ function EpisodeTile({
           <div className="vc-tile-description">
             <p className="vc-kicker">
               {episode.categoryOrder === 1 && <span className="vc-start-here">START HERE</span>}
-              {`COURSE ${episode.number} / ${episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}
+              {`COURSE ${episode.number}`}
+              {/* Compact tiles hide the topic visually so the kicker fits one line; it stays in the DOM and shows when expanded. */}
+              <span className="vc-kicker-topic">{` / ${episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}</span>
             </p>
             <h3 id={`tile-title-${episode.id}`} title={episode.title}>{episode.title}</h3>
             <p className="vc-tile-subtitle" title={episode.subtitle}>{episode.subtitle}</p>
@@ -119,7 +121,7 @@ function EpisodeTile({
               {course ? <span className="vc-tile-course-size"><BookOpen size={13} />{episode.lessonCount ?? episode.moduleCount} lessons · {episode.estimatedHours}h</span> : <span className="vc-tile-course-size"><BookOpen size={13} />{episode.chapters.length} lessons · Self-paced</span>}
               <span>
                 <Video size={13} />
-                {available ? 'Video available' : 'Video in production'}
+                {available ? 'Video available' : 'Video coming soon'}
               </span>
             </div>
             <button

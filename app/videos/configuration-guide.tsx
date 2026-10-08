@@ -37,7 +37,7 @@ export default function ConfigurationGuide({ course, configuration, standalone =
   });
   return <ReadingProgressGroup><section className="vc-configuration" aria-label={`${course.title} training materials`}>
     <div className="vc-config-intro">
-      <div><p className="vc-kicker">COURSE {course.number} · BUILD THE NETWORK · WINDOWS SERVER 2025</p><h2>{course.title}</h2><p>{course.description}</p><p className="vc-config-meta">{configuration.lessons.length} lessons · ~{course.estimatedHours}h · Self-paced · Written edition</p></div>
+      <div><p className="vc-kicker">COURSE {course.number} · BUILD THE NETWORK · {(course.platform ?? 'Windows Server 2025').toUpperCase()}</p><h2>{course.title}</h2><p>{course.description}</p><p className="vc-config-meta">{configuration.lessons.length} lessons · ~{course.estimatedHours}h · Self-paced · Written edition</p></div>
       <div className="vc-config-links">
         {!standalone && <a href={course.training.guide}><BookOpen size={18} />Open full guide</a>}
         {course.training.pdf && <a href={course.training.pdf} download><Download size={18} />Workbook (PDF{course.training.pages ? ` · ${course.training.pages} pages` : ''})</a>}
@@ -58,10 +58,10 @@ export default function ConfigurationGuide({ course, configuration, standalone =
         <h3 id={`lesson-title-${course.id}`}>{lesson.title}</h3><p>{lesson.summary}</p>
         <div className="vc-config-objectives"><h4><ListChecks size={16} aria-hidden="true" /> In this lesson you will</h4><ul>{lesson.objectives.map(objective => <li key={objective}>{objective}</li>)}</ul></div>
         <h4>Work through the configuration</h4><ol className="vc-config-steps">{lesson.steps.map(step => <li key={step}>{step}</li>)}</ol>
-        <h4>Inspect your configuration</h4><p className="vc-config-command-note">Run the relevant checks in an elevated PowerShell session on the host identified in the lesson. Adapt the example names and paths to your lab.</p><pre tabIndex={0} aria-label="PowerShell verification commands"><code>{lesson.command}</code></pre>
+        <h4>Inspect your configuration</h4><p className="vc-config-command-note">Run the relevant checks in an elevated PowerShell session — or a shell, on the Linux servers — on the host identified in the lesson. Adapt the example names and paths to your lab.</p><pre tabIndex={0} aria-label="Verification commands"><code>{lesson.command}</code></pre>
         <div className="vc-config-proof"><div><h4>What success looks like</h4><p>{lesson.check}</p></div><div><h4>Keep your evidence</h4><p>{lesson.evidence}</p></div></div>
         {model && <aside className="vc-config-model" aria-label="See it inside the network"><h4>See it inside the network</h4><p>{model.text}</p><a href={model.href}>Open {model.label} in Inside the Network <ArrowRight size={14} aria-hidden="true" /></a></aside>}
-        <p className="vc-config-video-note"><Video size={15} aria-hidden="true" />This lesson’s video walkthrough is in production. Its chapter timestamp will link here when the episode publishes.</p>
+        <p className="vc-config-video-note"><Video size={15} aria-hidden="true" />This lesson’s video walkthrough is coming soon. Its chapter timestamp will link here when the episode publishes.</p>
         {lesson.quizzes.map((quiz, quizIndex) => {
           const answer = answers[quizIndex] ?? null;
           return <fieldset className="vc-config-quiz" key={`${lesson.id}-quiz-${quizIndex}`}><legend>Check your understanding · {quizIndex + 1} of {lesson.quizzes.length}</legend><p>{quiz.question}</p><div>{quiz.answers.map((option, index) => <button key={`${lesson.id}-${quizIndex}-${index}`} type="button" aria-pressed={answer === index} onClick={() => answerQuiz(quizIndex, index)}>{option}</button>)}</div>{answer !== null && <p role="status"><strong>{answer === quiz.correct ? 'That’s right. ' : 'Take another look. '}</strong>{quiz.explanation}</p>}</fieldset>;
@@ -74,5 +74,6 @@ export default function ConfigurationGuide({ course, configuration, standalone =
     </div>
     {active === configuration.lessons.length - 1 && <TrainingShare closing />}
     <p className="vc-config-edition">Secure By Design · Edition {course.training.materialsEdition} · Updated {course.training.updated}</p>
+    <p className="vc-config-edition">© 2026 Secure By Design Team LLC</p>
   </section></ReadingProgressGroup>;
 }

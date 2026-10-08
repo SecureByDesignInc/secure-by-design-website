@@ -28,5 +28,5 @@ export const processCourses={
  signin:['identity','dns'],files:['services'],updates:['patch'],logs:['logging'],license:['services'],
  trust:['pki','pkiServices'],web:['dns','pkiServices','services'],
  'dc-down':['identity','dns'],'cert-expired':['pki','pkiServices'],
- 'pc-to-sql':['segment','services'],'peer-rdp':['segment','admin'],drill:['segment','admin','rmf']
+ 'pc-to-sql':['segment','services'],'peer-rdp':['fleet','segment','admin'],drill:['segment','fleet','admin','services','rmf']
 };
