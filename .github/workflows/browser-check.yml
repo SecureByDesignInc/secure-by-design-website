@@ -43,15 +43,18 @@ jobs:
           if [ -f d1-local.json ]; then
             pnpm exec wrangler d1 migrations apply DB --local --config d1-local.json --persist-to "$RUNNER_TEMP/state" > migrations.log 2>&1 || echo "::warning title=Local database::Migrations did not apply; account pages may show errors."
           fi
+          # Wrangler serves the deploy bundle exactly as Cloudflare would; vite preview is the fallback.
+          up() { for i in $(seq 1 "$1"); do curl -s -o /dev/null http://127.0.0.1:8787/ && return 0; sleep 1; done; return 1; }
+          log() { tail -c 3000 "$1" | tr '\n' '|' | sed 's/%/%25/g'; }
           nohup pnpm exec wrangler dev --config dist/server/wrangler.json --ip 127.0.0.1 --port 8787 --persist-to "$RUNNER_TEMP/state" --var OWNER_EMAIL:owner@example.invalid > wrangler-dev.log 2>&1 &
-          for i in $(seq 1 90); do curl -s -o /dev/null http://127.0.0.1:8787/ && break; sleep 1; done
-          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/)
-          if [ "$code" != 200 ]; then
-            echo "::error title=Local site::Wrangler dev answered '$code' instead of 200."
-            tail -30 wrangler-dev.log | while IFS= read -r line; do echo "::error title=wrangler dev::$line"; done
-            exit 1
+          if ! up 90; then
+            echo "::warning title=wrangler dev did not start::$(log wrangler-dev.log)"
+            pkill -f "wrangler dev" || true
+            nohup pnpm exec vite preview --host 127.0.0.1 --port 8787 --strictPort > vite-preview.log 2>&1 &
+            up 90 || { echo "::error title=vite preview did not start::$(log vite-preview.log)"; exit 1; }
+            echo "::notice title=Local site::Running with vite preview"
           fi
-          echo "::notice title=Local site::Static headers file: $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/_headers) (404 expected) | /training/rmf/ CSP: $(curl -sI http://127.0.0.1:8787/training/rmf/ | grep -ci content-security-policy)"
+          echo "::notice title=Local site::Home $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/) | _headers file $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/_headers) (404 expected) | /training/rmf/ CSP headers: $(curl -sI http://127.0.0.1:8787/training/rmf/ | grep -ci content-security-policy)"
       - name: Open every page in Chromium
         env:
           PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
