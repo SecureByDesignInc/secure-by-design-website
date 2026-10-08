@@ -85,7 +85,8 @@ for (const [from, label, to] of [
   const page = await context.newPage();
   try {
     await page.goto(base + from, { waitUntil: 'load', timeout: 60000 });
-    await page.getByRole('link', { name: new RegExp('^' + label) }).first().click();
+    // Link names may start with an arrow ("← Back to…").
+    await page.getByRole('link', { name: new RegExp('^\\W*' + label) }).first().click();
     await page.waitForURL(url => new URL(url).pathname === to, { timeout: 15000 });
     backLinks.push(`${from} -> ${to} ok`);
   } catch (error) {
@@ -123,7 +124,8 @@ await check('forged ChatGPT identity is ignored', { path: '/career-records', ini
 for (const form of ['/api/career-submissions', '/api/community-contributions', '/api/resource-signups']) {
   await check(`${form} is closed`, { path: form, init: { method: 'POST', headers: { origin: base, 'content-type': 'application/json' }, body: '{"email":"check@example.invalid"}' } }, r => r.status === 410);
 }
-await check('security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
+await check('security.txt', { path: '/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
+await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
 await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.status === 200 && (await r.arrayBuffer()).byteLength < 20000);
