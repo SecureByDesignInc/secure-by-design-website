@@ -1,0 +1,23 @@
+name: diag-d1
+on:
+  push:
+    branches: ['diag/d1-schema']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: List production D1 tables and applied migrations (read-only, no personal data)
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+        run: |
+          q() { curl -s -X POST -H "Authorization: Bearer $TOKEN" -H "content-type: application/json" \
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT/d1/database/$D1/query" -d "{\"sql\":\"$1\"}"; }
+          t=$(q "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name" | jq -r 'if .success then ([.result[0].results[].name]|join(", ")) else ([.errors[]?.message]|join("; ")) end')
+          echo "::notice title=Tables::$t"
+          m=$(q "SELECT name FROM d1_migrations ORDER BY id" | jq -r 'if .success then ([.result[0].results[].name]|join(", ")) else ([.errors[]?.message]|join("; ")) end')
+          echo "::notice title=Applied migrations::$m"
+          c=$(q "SELECT (SELECT count(*) FROM reader_accounts) AS accounts, (SELECT count(*) FROM reader_sessions) AS sessions" | jq -c 'if .success then .result[0].results[0] else [.errors[]?.message] end')
+          echo "::notice title=Row counts::$c"
