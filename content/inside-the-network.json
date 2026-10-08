@@ -131,15 +131,25 @@
     {
       "id": "dhcp",
       "name": "SBD-DHCP01",
-      "role": "DHCP server",
+      "role": "DHCP server + NPS (802.1X)",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.10",
-      "purpose": "Provide client lease settings for the approved address space.",
+      "purpose": "Provide client lease settings for the approved address space, and admit devices to VLAN 80 ports with 802.1X.",
       "services": [
         {
           "name": "DHCPv4",
           "port": "UDP 67 server / 68 client",
           "note": "An initial broadcast may require a relay across subnets."
+        },
+        {
+          "name": "RADIUS (NPS role)",
+          "port": "UDP 1812 authentication · 1813 accounting",
+          "note": "Only the VLAN 80 access switch is a RADIUS client."
+        },
+        {
+          "name": "802.1X EAP-TLS",
+          "port": "Machine certificates",
+          "note": "No password-based EAP methods."
         }
       ],
       "controls": [
@@ -154,6 +164,10 @@
         {
           "id": "AU-12",
           "title": "Audit Record Generation"
+        },
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
         }
       ]
     },
@@ -435,7 +449,7 @@
       "role": "Splunk SIEM",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.10",
-      "purpose": "Single server instance; no cluster or standby. Index and investigate the security events that are actually collected.",
+      "purpose": "Linux, domain-joined. Single server instance, sized for a small network; no cluster or standby. Index and investigate the security events that are actually collected.",
       "services": [
         {
           "name": "Splunk ingestion",
@@ -460,7 +474,7 @@
       "role": "Tenable / Nessus",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.20",
-      "purpose": "Single Tenable/Nessus server instance; no cluster or standby. Assess authorized targets for known vulnerabilities.",
+      "purpose": "Linux, domain-joined. Single Tenable/Nessus server instance, sized for a small network; no cluster or standby. Assess authorized targets for known vulnerabilities.",
       "services": [
         {
           "name": "Scanning / agents",
@@ -485,7 +499,7 @@
       "role": "Trellix ePO + DLP",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.30",
-      "purpose": "Single Trellix ePO/DLP server instance; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
+      "purpose": "Single Trellix ePO/DLP server instance, sized for a small network; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
       "services": [
         {
           "name": "Agent management / policy",
@@ -511,15 +525,15 @@
     {
       "id": "audit",
       "name": "SBD-AUDIT01",
-      "role": "Audit log repository",
+      "role": "Audit log repository · Windows, domain-joined",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.40",
-      "purpose": "Retain security records under the approved retention policy.",
+      "purpose": "Windows, domain-joined. Retain security records under the approved retention policy.",
       "services": [
         {
-          "name": "Audit ingestion",
-          "port": "Method to define",
-          "note": "No listener, storage protocol, or immutable mode is assumed."
+          "name": "Audit archive",
+          "port": "SMB 3 · TCP 445 with encryption",
+          "note": "Write-only archival account from the collector (F11); hashes cataloged on arrival."
         }
       ],
       "controls": [
@@ -536,10 +550,10 @@
     {
       "id": "jump",
       "name": "AdminJumpBox01",
-      "role": "Identity / PKI administration only",
+      "role": "Tier 0 administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.10",
-      "purpose": "Provide dedicated identity and PKI administration from the Tier 0 host.",
+      "purpose": "Provide dedicated Tier 0 administration: identity, PKI, and every system that can control them.",
       "services": [
         {
           "name": "Remote management",
@@ -803,6 +817,14 @@
         {
           "id": "CP-9",
           "title": "System Backup"
+        },
+        {
+          "id": "SC-22",
+          "title": "Architecture and Provisioning for Name/Address Resolution Service"
+        },
+        {
+          "id": "SC-23",
+          "title": "Session Authenticity"
         }
       ]
     },
@@ -933,6 +955,10 @@
         {
           "id": "SI-4",
           "title": "System Monitoring"
+        },
+        {
+          "id": "SI-4(4)",
+          "title": "Inbound and Outbound Communications Traffic"
         }
       ]
     },
@@ -1033,6 +1059,14 @@
         {
           "id": "SC-7",
           "title": "Boundary Protection"
+        },
+        {
+          "id": "IA-2(2)",
+          "title": "Multi-factor Authentication to Non-privileged Accounts"
+        },
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
         }
       ]
     }
@@ -1073,7 +1107,7 @@
           "from": "50 Windows 11 PCs",
           "to": "SBD-DC01",
           "protocol": "LDAP · TCP 389 / LDAPS · TCP 636",
-          "description": "Directory clients retrieve the information they need from Active Directory. Protection and binding behavior depend on the client and server configuration.",
+          "description": "The workstation reads its computer and policy objects from Active Directory, then fetches Group Policy from SYSVOL over SMB. Rule F03 permits the full directory profile for domain members.",
           "test": ""
         }
       ]
@@ -1146,8 +1180,16 @@
       "id": "logs",
       "label": "Follow a log",
       "title": "Turn an event into useful evidence.",
-      "caption": "From a Linux source to collection, analysis, and retention.",
+      "caption": "From Windows and Linux sources to collection, analysis, and retention.",
       "steps": [
+        {
+          "title": "Forward a domain controller event",
+          "from": "SBD-DC01",
+          "to": "SBD-SYSLOG01",
+          "protocol": "EVENT FORWARDING · WinRM TCP 5985",
+          "description": "SBD-DC01 pushes the subscribed security events to the collector. The collector never reaches into the source: the subscription is source-initiated, set by Group Policy.",
+          "test": ""
+        },
         {
           "title": "Deliver a source event",
           "from": "SBD-REPO01",
@@ -1160,16 +1202,16 @@
           "title": "Ingest for investigation",
           "from": "SBD-SYSLOG01",
           "to": "SBD-SPLUNK01",
-          "protocol": "INTEGRATION · TRANSPORT TO DEFINE",
-          "description": "The collection layer supplies events to Splunk for indexing and investigation. The exact forwarder, API, or input method must be chosen.",
+          "protocol": "SPLUNK FORWARDER · TCP 9997 + TLS",
+          "description": "The forwarder on the collector sends the Windows events and syslog intake to Splunk for indexing, searches, and alerts.",
           "test": ""
         },
         {
           "title": "Retain an audit copy",
           "from": "SBD-SYSLOG01",
           "to": "SBD-AUDIT01",
-          "protocol": "ARCHIVE DELIVERY · METHOD TO DEFINE",
-          "description": "An approved archive process preserves the records needed for review and retention. This is a proposed collector-to-repository relationship.",
+          "protocol": "ARCHIVE · SMB 3 · TCP 445",
+          "description": "On schedule, the collector writes dated archive files to the repository share on SBD-AUDIT01. Each archive is hashed and cataloged on arrival.",
           "test": ""
         }
       ]
@@ -1226,7 +1268,7 @@
       "id": "web",
       "label": "Use a web app",
       "title": "A browser trusts the internal web service.",
-      "caption": "Name resolution, certificate trust, and an encrypted session.",
+      "caption": "Name resolution, certificate trust, revocation, and an encrypted session.",
       "steps": [
         {
           "title": "Resolve the web server",
@@ -1242,6 +1284,14 @@
           "to": "SBD-WEB01",
           "protocol": "HTTPS · TCP 443",
           "description": "The browser opens a TLS session. SBD-WEB01 presents a certificate from the internal issuing CA, and the client checks the name, validity dates, and chain to the trusted offline root.",
+          "test": ""
+        },
+        {
+          "title": "Check revocation",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-PKI-MGMT01",
+          "protocol": "CRL / AIA · HTTP TCP 80",
+          "description": "The client follows the CRL distribution point in the certificate to pki.sbd.test on SBD-PKI-MGMT01 and downloads the issuing CA’s current revocation list.",
           "test": ""
         },
         {
@@ -1496,5 +1546,5 @@
   "offline": [
     "SBD-ROOTCA01"
   ],
-  "controlCount": 47
+  "controlCount": 59
 }

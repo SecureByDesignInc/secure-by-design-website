@@ -234,6 +234,12 @@
     "group": "Network build"
   },
   {
+    "id": "training:connect-segment:management",
+    "title": "Protect the router's own management",
+    "href": "/training/connect-segment#management",
+    "group": "Network build"
+  },
+  {
     "id": "training:connect-segment:scan",
     "title": "Delta scan the change and hand off",
     "href": "/training/connect-segment#scan",
@@ -366,6 +372,12 @@
     "group": "Network build"
   },
   {
+    "id": "training:workstation-fleet:nac",
+    "title": "Admit only enrolled devices with 802.1X",
+    "href": "/training/workstation-fleet#nac",
+    "group": "Network build"
+  },
+  {
     "id": "training:workstation-fleet:scale",
     "title": "Scale to fifty and prove by sample",
     "href": "/training/workstation-fleet#scale",
@@ -459,6 +471,12 @@
     "id": "training:prove-recovery:trust-state",
     "title": "Back up the CA, policy, boundary, and records",
     "href": "/training/prove-recovery#trust-state",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:offline-copies",
+    "title": "Carry the copies to the offline cabinet",
+    "href": "/training/prove-recovery#offline-copies",
     "group": "Network build"
   },
   {

@@ -131,7 +131,7 @@ try {
     await page.selectOption('#systemSelect', 'dc1');
     await page.locator('#connectionsToggle').click();
     assert.equal(await page.locator('#connectionsToggle').getAttribute('aria-pressed'), 'true');
-    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*Pending[\s\S]*F03/, 'Connections list every rule for the system');
+    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*F03[\s\S]*Pending[\s\S]*F08/, 'Connections list every rule for the system');
     await page.locator('#connectionsToggle').click();
     // Logical view (with a shareable link) and the cinematic look.
     await page.locator('#viewToggle').click();
@@ -171,7 +171,7 @@ try {
   // Shareable links open the linked step.
   {
     const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2&layout=logical' });
-    assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 3');
+    assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 4');
     assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
     assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Links can open the logical view');
     await context.close();

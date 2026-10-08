@@ -1,6 +1,6 @@
 # Connect and segment the network — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 This course connects the eight VLANs through a router the lab controls, enforces default-deny between them with a documented exception register, and stands up the internal time service. The router platform is your choice — the lessons describe what to configure and verify every result from the Windows side, so the checks work whatever appliance you pick. The network still has no path across the air gap.
 
@@ -8,7 +8,7 @@ This course connects the eight VLANs through a router the lab controls, enforces
 
 - [ ] Complete courses 1.1–1.4: verified domain controllers, DNS, the hardened baseline with its scan cadence, and the two-tier PKI.
 - [ ] Provision a new virtual machine for the layer-3 router (SBD-CORE01 in this sample) with one interface per VLAN, and a Windows Server 2025 VM for SBD-TIME01 at 10.0.20.40.
-- [ ] Have the Inside the Network VLAN plan at hand: VLANs 10–80 on 10.0.X.0/24 subnets, with .1 reserved as each gateway in this sample.
+- [ ] Have the Inside the Network VLAN plan at hand: VLANs 10–80 on 10.0.X.0/24 subnets plus management VLAN 100 for network devices, with .1 reserved as each gateway in this sample.
 
 ## Design the segmentation and service paths
 
@@ -72,6 +72,19 @@ Notes / result / date: __________________________
 **Verify:** Every register row passes from its source VLAN, every probed unregistered path fails with a logged deny, and directory discovery works across the routed network.
 
 **Evidence:** Keep the test matrix with timestamps, the deny-log captures, and the cross-VLAN SRV and CRL retrieval output.
+
+Notes / result / date: __________________________
+
+## Protect the router's own management
+
+- [ ] Create management VLAN 100 (10.0.100.0/24) for network-device management only, and bind the router's SSH and HTTPS management to its address there, 10.0.100.1. Disable Telnet, plain HTTP, and every management service the platform enables by default that the design does not use.
+- [ ] Permit management sessions to 10.0.100.1 only from AdminJumpBox01's planned address (10.0.60.10), which course 1.7 builds — until then, manage from the hypervisor console only. Add the row to the register: the router enforces Tier 0 boundaries, so its management is Tier 0.
+- [ ] Give each administrator a named account on the router and keep one sealed break-glass account; shared logins hide who changed what. Course 1.8 sends the router's syslog, including its deny log, to the collector; write that as a dated follow-up in the register now.
+- [ ] Export the running configuration after every approved change, hash it, and keep every version. Compare the newest export with the running configuration on a schedule; a difference with no change record is a finding.
+
+**Verify:** Management answers only on VLAN 100 and only from the permitted source, insecure management services are off, and each configuration version has a hash and a matching change record.
+
+**Evidence:** Keep the management-access rule export, a refused connection test from a user VLAN, the list of disabled services, and the hashed configuration versions with their change records.
 
 Notes / result / date: __________________________
 

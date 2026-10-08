@@ -34,10 +34,10 @@ for(const [scenario,s] of scenarios.entries())for(const [step,t] of s.steps.entr
 assert.equal(validate({type:'flow',scenario:0,step:0}).edges[0].kind,'pending','Proposed DHCP relay remains blocked');
 assert.equal(validate({type:'flow',scenario:0,step:1}).edges[0].kind,'traffic','Permitted DNS has service motion');
 assert.equal(validate({type:'flow',scenario:0,step:2}).edges[0].kind,'traffic','Permitted Kerberos has service motion');
-assert.equal(validate({type:'flow',scenario:0,step:3}).edges[0].kind,'pending','Unvalidated directory profile remains blocked');
+assert.equal(validate({type:'flow',scenario:0,step:3}).edges[0].kind,'traffic','The settled directory profile (F03) has service motion');
 for(const [offset,s] of whatIfs.entries())for(const step of s.steps.keys()){const m=validate({type:'flow',scenario:scenarios.length+offset,step});assert(['traffic','deny','failed','pending'].includes(m.edges[0].kind),'What-ifs and the attack drill show permitted, failed, denied, or pending traffic');}
 const web=scenarios.findIndex(s=>s.id==='web');
-for(const step of [0,1,2])assert.equal(validate({type:'flow',scenario:web,step}).edges[0].kind,'traffic','Web app sequence uses permitted DNS (F01) and HTTPS (F13)');
+for(const step of [0,1,2,3])assert.equal(validate({type:'flow',scenario:web,step}).edges[0].kind,'traffic','Web app sequence uses permitted DNS (F01), HTTPS (F13), and revocation (F18)');
 for(const {id:from} of systems)for(const {id:to} of systems)for(const service of policyServices){
  const m=validate({type:'policy',from,to,service}),r=evaluateFlow(from,to,service);
  assert.equal(m.edges[0].kind,r.status==='permit'?'traffic':r.status,'Visual motion follows the actual policy register');

@@ -8,7 +8,7 @@ import {packetProfiles,describePacket} from '../public/inside-network-model/pack
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
 import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
-import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances} from '../public/inside-network-model/security.js';
+import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers,linuxMembers,domainMembers} from '../public/inside-network-model/security.js';
 
 const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
 const controls={...inventory.controls,...additionalControls};
@@ -49,7 +49,9 @@ assert.equal(outcome('cert-expired'),'traffic,rejected');
 assert.equal(outcome('pc-to-sql'),'deny');
 assert.equal(outcome('peer-rdp'),'deny');
 assert.equal(stepPolicy(sequences.find(s=>s.id==='peer-rdp').steps[0]).rule.id,'D02');
-assert.equal(outcome('signin'),'pending,traffic,traffic,pending','Pending DHCP relay and directory profile stay blocked in the motion');
+assert.equal(outcome('signin'),'pending,traffic,traffic,traffic','Pending DHCP relay stays blocked; the settled directory profile (F03) is permitted');
+assert.equal(outcome('logs'),'traffic,traffic,traffic,traffic','Every log hop is a registered path: WEF, syslog TLS, forwarder, archive');
+assert.equal(outcome('web'),'traffic,traffic,traffic,traffic','Revocation checking has a path (F18)');
 // The attack drill replays the design's acceptance tests: every attempt is stopped by the rule that test names.
 const drill=sequences.find(s=>s.id==='drill');
 assert(drill?.drill&&drill.whatIf,'Attack drill is listed with the what-ifs');
@@ -90,6 +92,18 @@ assert.equal(evaluateFlow('jump2','dc1','Management').status,'deny');
 assert.equal(evaluateFlow('jump','workstations','Management').status,'deny');
 assert.equal(evaluateFlow('jump1','dc1','Management').status,'deny');
 assert(!adminMatrix.find(r=>r.id==='servers').targets.includes('audit'));
+// Every domain member reaches the domain controllers and revocation data; every Windows system patches and forwards events;
+// the domain-joined Linux servers patch from the repository and send syslog over TLS.
+for(const id of domainMembers){for(const service of ['DNS','Kerberos','Directory'])assert.equal(evaluateFlow(id,'dc1',service).status,'permit',`${id} → DC ${service}`);assert.equal(evaluateFlow(id,'templates','PKI publication').status,'permit',`${id} checks revocation`);}
+for(const id of windowsMembers){if(id!=='wsus')assert.equal(evaluateFlow(id,'wsus','WSUS').status,'permit',`${id} patches`);if(id!=='syslog')assert.equal(evaluateFlow(id,'syslog','Event forwarding').status,'permit',`${id} forwards events`);}
+for(const id of linuxMembers){assert.equal(evaluateFlow(id,'repo','Linux packages').status,'permit',`${id} patches from the repository`);assert.equal(evaluateFlow(id,'syslog','Syslog TLS').status,'permit',`${id} sends syslog`);}
+assert.deepEqual(linuxMembers,['splunk','nessus'],'Splunk and Nessus are the domain-joined Linux servers');
+// Tier 0 covers the tools that control the DCs; audit custody stays a separate role.
+for(const id of ['wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers the DC-facing scope of ${id}`);
+assert.equal(evaluateFlow('repo','dc1','Kerberos').status,'deny','The Linux repository is not a domain member');
+assert.equal(nodes.length,23,'No systems were added: 22 named systems plus the workstation group');
+assert.equal(evaluateFlow('workstations','dhcp','Network access').status,'permit','802.1X admission through the NPS role on SBD-DHCP01');
+assert(windowsMembers.includes('audit'),'SBD-AUDIT01 is domain-joined Windows');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
 console.log('Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.');
 

@@ -1,6 +1,6 @@
 # Patch, protect, and watch for weakness — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 Wave 5 keeps the proven state from drifting: updates and software arrive only through controlled channels, every endpoint runs managed protection, and a credentialed scanner turns the course 1.3 cadence into routine. In an air-gapped lab, every one of these systems feeds on content carried across the boundary — which is the recurring lesson.
 
@@ -15,7 +15,7 @@ Wave 5 keeps the proven state from drifting: updates and software arrive only th
 - [ ] Define three rings and their order: a pilot ring (the course 1.9 sample machines plus one member server), the broad ring (fleet and member servers), and the critical ring last (domain controllers and both VLAN 30 hosts) — updates earn their way up, never down.
 - [ ] Write the software rule: Windows updates come only from SBD-WSUS01, Linux packages only from SBD-REPO01, protection definitions only through SBD-EPO01, and anything else arrives as a documented exception — one source per type is what makes 'unauthorized software' a checkable claim.
 - [ ] Decide the air-gap feeding cadence: what content crosses on media, how often, hashed by whom — the course 1.3 transfer procedure, now on a schedule.
-- [ ] Add the register rows: fleet and servers to WSUS (8530), Linux consumers to REPO01 (HTTP), agent-to-ePO and ePO-to-agent ports per the product's documentation, and the scanner's credentialed reach into each VLAN — the one deliberate wide permit, owned and logged.
+- [ ] Add the register rows: every Windows system to WSUS (8530/8531), domain controllers included, the domain-joined Linux servers (SBD-SPLUNK01 and SBD-NESSUS01) to REPO01 (HTTP, GPG-signed packages), agent-to-ePO and ePO-to-agent ports per the product's documentation, and the scanner's credentialed reach into each VLAN — the one deliberate wide permit, owned and logged.
 
 **Verify:** The ring table names every system's ring, the one-source rule and feeding cadence are written, and the register carries the wave's rows with owners.
 
@@ -28,7 +28,7 @@ Notes / result / date: __________________________
 - [ ] Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — Windows Server 2025, Windows 11, and defender definitions — and nothing speculative.
 - [ ] Feed it offline: export the needed content on the connected side, hash it, carry it across, and import — the WSUS offline servicing path is the course 1.3 media procedure wearing an update hat.
 - [ ] Create WSUS computer groups matching the rings, and link ring GPOs at the OUs: update source SBD-WSUS01, the ring's group assignment, and install/restart windows that respect what each ring does for a living.
-- [ ] Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived.
+- [ ] Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived. Pilot and broad-ring approvals are Tier 1 work from SBD-ADMIN-SRV01; critical-ring approvals for the domain controllers are Tier 0 work from AdminJumpBox01.
 
 **Verify:** Every system reports to its ring's group, the pilot ring installed and reported the first approved cycle, and the promotion to later rings followed the written order.
 
@@ -65,7 +65,7 @@ Notes / result / date: __________________________
 ## Endpoint protection through SBD-EPO01
 
 - [ ] Build SBD-EPO01 in VLAN 50, fed its definitions through the offline process on the lesson-1 cadence, with its console reachable only from the admin plane — the register rows from lesson 1 carry agent traffic both ways.
-- [ ] Deploy agents to the pilot ring first, confirm check-ins, then follow the ring order through the fleet and member servers — the same earn-your-way-up discipline as updates.
+- [ ] Deploy agents to the pilot ring first, confirm check-ins, then follow the ring order through the fleet and member servers — the same earn-your-way-up discipline as updates. Agent policy for the domain controllers is a Tier 0 scope in ePO, changed only from AdminJumpBox01 with a Tier 0 account.
 - [ ] Apply the policy baseline: on-access protection, the scan schedule, and the data-loss-prevention policy scoped to what the model's DLP role calls for — each setting a decision in the record, not a default accepted silently.
 - [ ] Verify coverage against the living inventory — every endpoint present and checking in — and forward the server's threat events into the course 1.8 pipeline so detections land beside everything else; a standard test file makes the whole path fire once, on record.
 
@@ -77,7 +77,7 @@ Notes / result / date: __________________________
 
 ## SBD-NESSUS01 and the standing cadence
 
-- [ ] Build SBD-NESSUS01 in VLAN 50, plugins fed on the offline cadence, with a dedicated scan account — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1.
+- [ ] Build SBD-NESSUS01 on Linux in VLAN 50, joined to the sbd.test domain, plugins fed on the offline cadence, with dedicated scan accounts — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1. The account that scans the domain controllers is a Tier 0 credential, kept apart from the member-server scan account and used only for DC scan jobs.
 - [ ] Run the first credentialed scan VLAN by VLAN against the inventory, and triage like the course 1.3 rescan taught: every finding becomes fix-now, documented deviation, or POA&M candidate — never unexplained.
 - [ ] Wire results outward: findings into the analysis pipeline for trending, the triage into the living exception record, and the scan schedule into the cadence — quarterly with the DISA cycle, plus change-triggered, now automated enough to keep.
 - [ ] Close wave 5's own books: baselines for WSUS01, REPO01 (config-export pattern), MGMT01, EPO01, and NESSUS01, rescans where agents and policies changed existing systems, and the handoff — the network now sustains itself; wave 6 finally gives it something to serve.
