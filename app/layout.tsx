@@ -28,7 +28,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
           <div dangerouslySetInnerHTML={{__html: renderAppStores(appStores)}} />
           <nav className="header-socials" aria-label="Follow Secure By Design">
             <span>Follow along</span>
-            <div>{videoLibrary.platforms.filter(platform => platform.channelUrl).map(platform => <a key={platform.id} href={platform.channelUrl} target="_blank" rel="noopener noreferrer" aria-label={`Secure By Design on ${platform.name} (opens in a new tab)`}><img className="header-social-icon" src={`/social/${platform.id}-sbd.svg`} width="22" height="22" alt="" />{platform.name}</a>)}
+            <div>{videoLibrary.platforms.filter(platform => platform.channelUrl).map(platform => <a key={platform.id} href={platform.channelUrl} target="_blank" rel="noopener noreferrer" aria-label={`Secure By Design on ${platform.name} (opens in a new tab)`}><img className="header-social-icon" src={`/social/${platform.id}-sbd.svg`} width="22" height="22" alt="" /><span className="header-social-label">{platform.name}</span></a>)}
             </div>
           </nav>
           </div>
