@@ -1,2 +1,6 @@
-import {redirect} from 'next/navigation';
-export default function Page(){redirect('/career-goals');}
+import { notFound } from 'next/navigation';
+
+// Formerly redirected to /career-goals, which is offline (October 2026).
+export default function Resources() {
+  notFound();
+}

@@ -1,6 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {DatabaseSync} from 'node:sqlite';
 import {resourcesApi,resourceConsent} from '../server/resources.js';
 import worker from '../dist/server/index.js';
+import {combineCommunityPage} from '../server/community-page.js';
 function database(){const raw=new DatabaseSync(':memory:');raw.exec('PRAGMA foreign_keys=ON');for(const f of fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())raw.exec(fs.readFileSync('drizzle/'+f,'utf8'));const prepare=sql=>{let values=[];return{bind(...v){values=v;return this},async first(){return raw.prepare(sql).get(...values)||null},async all(){return{results:raw.prepare(sql).all(...values)}},async run(){return{meta:{changes:Number(raw.prepare(sql).run(...values).changes)}}}}};return{raw,prepare,async batch(statements){raw.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());raw.exec('COMMIT');return result}catch(e){raw.exec('ROLLBACK');throw e}}};}
 const origin='https://securebydesigninc.com',owner='owner@example.invalid';
 const req=(path,method='GET',data,authorized=false,extra={})=>new Request(origin+path,{method,headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.5',...(authorized?{'oai-authenticated-user-id':'owner','oai-authenticated-user-email':owner}:{}),...extra},body:data===undefined?undefined:JSON.stringify(data)});
@@ -44,10 +45,10 @@ test('per-source submission limits and CSV formula protection work',()=>mocked(a
  assert.equal((await resourcesApi(req('/api/resource-signups','POST',{...fixture(),email:'last@example.com'}),env)).status,429);assert.equal(mails.length,10);
  const confirm=mails[0].text.match(/#confirm\/([a-f0-9]{64})/)[1];await resourcesApi(req('/api/resource-preferences','POST',{action:'confirm',token:confirm}),env);const csv=await(await resourcesApi(req('/api/resource-subscribers/export','GET',undefined,true),env)).text();assert.ok(csv.includes("'=SUM(1,2)"));
 }));
-test('the built site serves both choices, protects subscriber management, and never mutates on email-link GET',()=>mocked(async mails=>{
- const env=setup(),ctx={waitUntil:()=>{}};const page=await(await worker.fetch(req('/careers'),env,ctx)).text();for(const id of ['career-goals-link','resource-form','resource-link'])assert.ok(page.includes('id="'+id+'"'));
+test('the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET',()=>mocked(async mails=>{
+ const env=setup(),ctx={waitUntil:()=>{}};const page=combineCommunityPage(fs.readFileSync('server/career-pages/careers.html','utf8'),fs.readFileSync('server/career-pages/career-explorer.html','utf8'));for(const id of ['career-goals-link','resource-form','resource-link'])assert.ok(page.includes('id="'+id+'"'));
  assert.equal((await worker.fetch(req('/resource-subscribers'),env,ctx)).status,302);
- assert.equal((await worker.fetch(req('/resource-subscribers','GET',undefined,true),env,ctx)).status,200);
+ assert.equal((await worker.fetch(req('/resource-subscribers','GET',undefined,true),env,ctx)).status,302,'forged oai-* headers are stripped');
  assert.equal((await worker.fetch(req('/resource-subscribers.html'),env,ctx)).status,404);
  assert.equal((await worker.fetch(req('/api/resource-signups','POST',fixture()),env,ctx)).status,202);
  assert.equal((await worker.fetch(req('/resource-preferences'),env,ctx)).status,200);assert.equal(row(env).status,'pending');

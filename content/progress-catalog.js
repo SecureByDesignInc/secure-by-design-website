@@ -7,7 +7,8 @@ export const progressCatalog = [
  ...[['orientation','See the system behind the screen'],['domain','Active Directory foundations'],['linux-discovery','Linux system discovery'],['monitoring','Security monitoring as a lifecycle'],['rmf','Follow the RMF lifecycle']].map(([id,title])=>({id:'path:'+id,title,href:'/cyber-range#your-path',group:'Learning path'})),
 ];
 // Retain every recognized ID for existing accounts; availability only changes the dashboard.
-export const activeProgressCatalog = progressCatalog.filter(item=>!['RMF lifecycle','Technical articles'].includes(item.group));
+// Journal and Cyber Range entries are offline (October 2026); their IDs stay recognized for saved progress.
+export const activeProgressCatalog = progressCatalog.filter(item=>!['RMF lifecycle','Technical articles','Learning path'].includes(item.group));
 const activeProgressIds = new Set(activeProgressCatalog.map(item=>item.id));
 /** @template {{id:string}} T @param {readonly T[]} records @returns {T[]} */
 export const filterActiveProgressRecords = records => records.filter(record=>activeProgressIds.has(record.id));

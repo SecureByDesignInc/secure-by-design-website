@@ -1,5 +1,6 @@
-import CareerWorksheet from './worksheet';
-import '../saleshook-effects.css';
-import '../resources/resources.css';
-export const metadata={title:'Career Goals & Support',description:'Share your career goals and the help you need. Complete a free worksheet and start a conversation with Secure By Design.'};
-export default function Page(){return <CareerWorksheet/>;}
+import { notFound } from 'next/navigation';
+
+// Community and career content is offline until the owner relaunches it (October 2026). The worksheet source stays in ./worksheet.tsx.
+export default function CareerGoals() {
+  notFound();
+}

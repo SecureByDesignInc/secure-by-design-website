@@ -1,7 +1,7 @@
 SECURE BY DESIGN
 BUILD THE IDENTITY FOUNDATION
 Windows Server 2025 - DC01 and DC02
-Course 1.1 | Materials edition 0.3 | Updated 4 October 2026
+Course 1.1 | Materials edition 0.4 | Updated 8 October 2026
 © 2026 Secure By Design Team LLC.
 
 1. Extract this entire folder from the ZIP.
@@ -15,8 +15,10 @@ Course 1.1 | Materials edition 0.3 | Updated 4 October 2026
    as text.
 
 WORKBOOK AND NOTICES
-The 12-page workbook includes foundations, configuration steps, verification
-prompts, evidence questions, and Notices and permissions on page 12.
+The 14-page workbook includes foundations (including the ports a domain
+member needs), configuration steps, verification prompts with an optional
+Packet Monitor capture, evidence questions, and Notices and permissions on
+page 14. QR codes open the matching steps in Inside the Network.
 The table of contents links directly to each section. The guide footer links
 to notices.html, which includes the rights notice and software license link.
 

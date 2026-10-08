@@ -30,6 +30,8 @@ Jon plans a controlled workstation for domain-management tasks. The team also lo
 
 So widen the question a little. Which people, machines, and services can change this environment? One administrator-group membership list won’t necessarily give you the whole answer.
 
+See what this protects against in [the attack drill, step 6](/inside-the-network#process=drill&step=6), where a stolen administrator session aims at a domain controller and is stopped.
+
 ## Make configuration changes explainable
 
 Remember testing Workstation Baseline in Staging in the Group Policy article? Jon knew what was changing, where it applied, and what Dylan should see afterward. The same thinking helps with security changes.

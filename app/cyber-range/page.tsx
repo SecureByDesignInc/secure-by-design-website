@@ -1,11 +1,6 @@
-import LearningPath from './learning-path';
-import './learning-path.css';
+import { notFound } from 'next/navigation';
 
-export const metadata = {
-  title: 'Learning Path & Cyber Range',
-  description: 'Build your cybersecurity learning path in three steps, then request access to the Cyber Range learning dashboard and labs.',
-};
-
+// Cyber Range is offline until the owner relaunches it (October 2026). The learning path source stays in ./learning-path.tsx; restore the previous page (git history) to publish it again.
 export default function CyberRange() {
-  return <main id="main" className="learning-path-page"><LearningPath /></main>;
+  notFound();
 }

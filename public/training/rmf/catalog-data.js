@@ -25,8 +25,9 @@ window.CATALOG = [
       "02.2 Boundary and data flows",
       "02.3 Governance and inherited services"
     ],
-    "build": "Draft a mission statement, boundary diagram, asset list, data flow narrative, stakeholder register, and assumptions log. Record the governing authority, approved standards, overlays, and review expectations.",
+    "build": "Draft a mission statement, boundary diagram, asset list, data flow narrative, stakeholder register, and assumptions log. Record the governing authority, approved standards, overlays, and review expectations. Check each information flow in your narrative against the connection map in Inside the Network, which shows every permitted, pending, and denied rule for a system.",
     "prove": "Explain whether a shared service, hypervisor, management path, or offline update transfer is inside the boundary, external, or inherited, and identify supporting responsibility evidence.",
+    "model": {"title": "Check the information flows", "text": "Open any system in Inside the Network and choose Show in 3D to draw every rule that names it: solid green for permitted, dashed amber for pending, dashed red for denied. Use it to test your data flow narrative and boundary diagram.", "href": "/inside-the-network#system=web", "label": "Open SBD-WEB01's connection map"},
     "sources": "[1,5,6]"
   },
   {
@@ -115,8 +116,9 @@ window.CATALOG = [
       "08.2 Examine interview and test",
       "08.3 Findings and assessment reporting"
     ],
-    "build": "Draft a Security Assessment Plan with objectives, methods, objects, scope, sampling rationale, responsibilities, and schedule. Execute sample procedures and prepare a Security Assessment Report (SAR) excerpt.",
+    "build": "Draft a Security Assessment Plan with objectives, methods, objects, scope, sampling rationale, responsibilities, and schedule. Execute sample procedures and prepare a Security Assessment Report (SAR) excerpt. Include negative tests: run the six attempts in the Inside the Network attack drill, record each expected and observed result in the Operational verification column of the network traffic matrix, and cite the matrix in your SAR excerpt.",
     "prove": "Link each conclusion to the assessment objective, evidence, actual observation, and limitation. Record unsupported objectives rather than treating a lack of evidence as a successful test.",
+    "model": {"title": "Run the attack drill as a negative test", "text": "The drill replays six attempts with known expected results: a PC to SQL, a PC to Splunk management, peer SMB, peer remote desktop, web to SQL, and a stolen admin session to a domain controller. Record what each should do and what you observe in the Operational verification column of the traffic matrix, available from the model's security policy panel.", "href": "/inside-the-network#process=drill", "label": "Open the attack drill"},
     "sources": "[3]"
   },
   {

@@ -1,6 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {DatabaseSync} from 'node:sqlite';
 import {contributionsApi,notify,contributionConsent} from '../server/contributions.js';
 import worker from '../dist/server/index.js';
+import {combineCommunityPage} from '../server/community-page.js';
+const communitySource=()=>combineCommunityPage(fs.readFileSync('server/career-pages/careers.html','utf8'),fs.readFileSync('server/career-pages/career-explorer.html','utf8'));
 function database(){const raw=new DatabaseSync(':memory:');raw.exec('PRAGMA foreign_keys=ON');for(const f of fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())raw.exec(fs.readFileSync('drizzle/'+f,'utf8'));const prepare=sql=>{let values=[];return{bind(...v){values=v;return this},async first(){return raw.prepare(sql).get(...values)||null},async all(){return{results:raw.prepare(sql).all(...values)}},async run(){return{meta:{changes:Number(raw.prepare(sql).run(...values).changes)}}}}};return{raw,prepare,async batch(statements){raw.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());raw.exec('COMMIT');return result}catch(e){raw.exec('ROLLBACK');throw e}}};}
 const origin='https://securebydesigninc.com',owner='owner@example.invalid';
 const req=(path,method='GET',data,authorized=false,extra={})=>new Request(origin+path,{method,headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.5',...(authorized?{'oai-authenticated-user-id':'owner','oai-authenticated-user-email':owner}:{}),...extra},body:data===undefined?undefined:JSON.stringify(data)});
@@ -11,15 +13,15 @@ function context(){const pending=[];return{waitUntil(p){pending.push(p)},async d
 async function mocked(callback){const before=globalThis.fetch,mails=[];globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.resend.com/emails');mails.push(JSON.parse(options.body));return Response.json({id:'mock-receipt'});};try{return await callback(mails);}finally{globalThis.fetch=before;}}
 const count=(env,table)=>env.DB.raw.prepare('SELECT count(*) AS n FROM '+table).get().n;
 
-test('combined Community page leads with participation and preserves explorer tools and legacy entry routes',async()=>{
- const env=setup(),ctx=context();const response=await worker.fetch(req('/careers'),env,ctx);assert.equal(response.status,200);const page=await response.text();
+test('Community pages are offline; the combined page source keeps participation first and its explorer tools for relaunch',async()=>{
+ const env=setup(),ctx=context();
+ for(const path of ['/careers','/career-explorer?from=bookmark','/career-explorer/roles','/career-explorer/roles/511'])assert.equal((await worker.fetch(req(path),env,ctx)).status,404,path);
+ const page=communitySource();
  for(const id of ['community','career-explorer','direction','market','stage-panel','role-detail','state-select','occupation-select','resource-form','contribution-form'])assert.ok(page.includes('id="'+id+'"'),id);
  assert.ok(page.indexOf('id="contribution-form"')<page.indexOf('id="career-explorer"'));
  assert.equal([...page.matchAll(/<main\b/g)].length,1);assert.equal([...page.matchAll(/<h1\b/g)].length,1);
  const ids=[...page.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,'duplicate IDs would break controls');
- const nav=page.match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)[1];assert.ok(nav.includes('href="/careers"'));assert.ok(!nav.includes('href="/career-explorer"'));
- for(const method of ['GET','HEAD']){const legacy=await worker.fetch(req('/career-explorer?from=bookmark',method),env,ctx);assert.equal(legacy.status,308);assert.equal(legacy.headers.get('location'),origin+'/careers?from=bookmark');}
- for(const path of ['/career-explorer/roles','/career-explorer/roles/511'])assert.equal((await worker.fetch(req(path),env,ctx)).status,200,path);
+ const nav=page.match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)[1];assert.ok(!nav.includes('href="/careers"'));assert.ok(!nav.includes('href="/career-explorer"'));
 });
 test('contributions save separately, notify only the owner, and deduplicate retries',()=>mocked(async mails=>{
  const env=setup(),ctx=context(),data=fixture();let response=await contributionsApi(req('/api/community-contributions','POST',data),env,ctx);assert.equal(response.status,201);await ctx.drain();
@@ -48,6 +50,6 @@ test('notification failure preserves the record and retry expiration prevents du
 test('daily source limit and missing configuration preserve usable records',async()=>{
  const env=setup(),ctx=context();delete env.RESEND_API_KEY;for(let i=0;i<5;i++)assert.equal((await contributionsApi(req('/api/community-contributions','POST',fixture()),env,ctx)).status,201);await ctx.drain();assert.equal((await contributionsApi(req('/api/community-contributions','POST',fixture()),env,ctx)).status,429);assert.equal(count(env,'community_contributions'),5);assert.equal(env.DB.raw.prepare('SELECT state FROM community_notifications').get().state,'pending');
 });
-test('built Community page retains all forms and private review routes reject unauthorized access',()=>mocked(async mails=>{
- const env=setup(),ctx=context();const page=await(await worker.fetch(req('/careers'),env,ctx)).text();for(const id of ['career-goals-link','resource-form','contribution-form','resource-link','contribute-link'])assert.ok(page.includes('id="'+id+'"'));assert.ok(page.includes('>Community</a>'));assert.equal((await worker.fetch(req('/community-contributions'),env,ctx)).status,302);assert.equal((await worker.fetch(req('/community-contributions','GET',undefined,true),env,ctx)).status,200);assert.equal((await worker.fetch(req('/community-contributions.html'),env,ctx)).status,404);assert.equal((await worker.fetch(req('/api/community-contributions'),env,ctx)).status,403);assert.equal((await worker.fetch(req('/api/community-contributions','POST',fixture()),env,ctx)).status,201);await ctx.drain();assert.equal(mails.length,1);
+test('Community source retains all forms; private review routes ignore client-supplied identity headers',()=>mocked(async mails=>{
+ const env=setup(),ctx=context();const page=communitySource();for(const id of ['career-goals-link','resource-form','contribution-form','resource-link','contribute-link'])assert.ok(page.includes('id="'+id+'"'));assert.equal((await worker.fetch(req('/community-contributions'),env,ctx)).status,302);assert.equal((await worker.fetch(req('/community-contributions','GET',undefined,true),env,ctx)).status,302);assert.equal((await worker.fetch(req('/api/community-contributions','GET',undefined,true),env,ctx)).status,403);assert.equal((await worker.fetch(req('/community-contributions.html'),env,ctx)).status,404);assert.equal((await worker.fetch(req('/api/community-contributions'),env,ctx)).status,403);assert.equal((await worker.fetch(req('/api/community-contributions','POST',fixture()),env,ctx)).status,201);await ctx.drain();assert.equal(mails.length,1);
 }));

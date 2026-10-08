@@ -25,6 +25,7 @@ export default function ConfigurationGuide({ course, configuration, standalone =
     return () => window.removeEventListener('hashchange', readHash);
   }, [configuration, standalone]);
   const lesson = configuration.lessons[active];
+  const model = (lesson as { model?: { href: string; label: string; text: string } }).model;
   const select = (index: number) => {
     setActive(index); setAnswers([]);
     if (standalone) window.history.replaceState(null, '', `#${configuration.lessons[index].id}`);
@@ -59,6 +60,7 @@ export default function ConfigurationGuide({ course, configuration, standalone =
         <h4>Work through the configuration</h4><ol className="vc-config-steps">{lesson.steps.map(step => <li key={step}>{step}</li>)}</ol>
         <h4>Inspect your configuration</h4><p className="vc-config-command-note">Run the relevant checks in an elevated PowerShell session on the host identified in the lesson. Adapt the example names and paths to your lab.</p><pre tabIndex={0} aria-label="PowerShell verification commands"><code>{lesson.command}</code></pre>
         <div className="vc-config-proof"><div><h4>What success looks like</h4><p>{lesson.check}</p></div><div><h4>Keep your evidence</h4><p>{lesson.evidence}</p></div></div>
+        {model && <aside className="vc-config-model" aria-label="See it inside the network"><h4>See it inside the network</h4><p>{model.text}</p><a href={model.href}>Open {model.label} in Inside the Network <ArrowRight size={14} aria-hidden="true" /></a></aside>}
         <p className="vc-config-video-note"><Video size={15} aria-hidden="true" />This lesson’s video walkthrough is in production. Its chapter timestamp will link here when the episode publishes.</p>
         {lesson.quizzes.map((quiz, quizIndex) => {
           const answer = answers[quizIndex] ?? null;

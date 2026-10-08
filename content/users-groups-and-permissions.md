@@ -35,6 +35,8 @@ Jon checks that the share permits the operation Dylan needs, then grants the Pok
 
 Now imagine Dylan needs read-only access to another project. We should model that requirement separately. Reusing the Pokemon group because it happens to exist would tie two unrelated access decisions together, and that gets confusing fast.
 
+You can see that hand-off in [Open a file, step 3](/inside-the-network#process=files&step=3): the workstation presents its ticket, and SBD-FS01 makes the access decision.
+
 ## A membership change is not an instant session reset
 
 Here’s another thing that can make a perfectly reasonable change look broken. Windows sessions use security information established during authentication. Updating a group doesn’t instantly rewrite every existing access token or application session.

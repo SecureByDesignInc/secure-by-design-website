@@ -6,10 +6,4 @@ Social links preserve native new-tab navigation, visible names, 44px targets, an
 
 ## Analytics
 
-The existing site-specific Plausible tracker is configured for `securebydesigninc.com` with outbound tracking enabled. Tagged footer links send the existing `Outbound Link: Click` event and the destination URL, with `platform` and `placement=footer` properties. Plausible's tagged-event handling skips its automatic outbound handler, avoiding duplicate outbound counts. No simulated counters or tracking panels appear on the website.
-
-Find counts in Plausible's Goals tab under `Outbound Link: Click`, filtering by each social destination URL. Custom property reporting depends on the account's available features; destination URL reporting uses the existing outbound goal.
-
-Standalone Community pages load `public/social-analytics.js` before the same Plausible tracker. Their initialization disables automatic pageviews, outbound links, downloads, and form submissions; only explicitly tagged social links trigger events. Source URLs omit queries and fragments, and referrers are removed. The Community content policy allows the exact existing tracker path and event endpoint without enabling inline scripts.
-
-Reference: https://plausible.io/docs/custom-event-goals and https://plausible.io/docs/outbound-link-click-tracking
+None. The owner cancelled Plausible on October 8, 2026, and its tracker, event tagging, `public/social-analytics.js`, and Content-Security-Policy entries were removed. Social links are plain outbound links. If analytics return, add the provider deliberately and update the Content-Security-Policy in `server/career-pages.js` and `server/career-role-pages.js`.

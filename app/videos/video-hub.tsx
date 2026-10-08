@@ -29,7 +29,8 @@ import {
   supportsIdentityScene,
 } from './video-utils';
 
-const PAGE_SIZE = 12;
+// Large enough that both paths (1.1–1.12 and 2.1–2.3) show without "Show more".
+const PAGE_SIZE = 24;
 
 function EpisodeTile({
   episode,
