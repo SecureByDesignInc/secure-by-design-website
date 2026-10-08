@@ -1,5 +1,6 @@
 // Read-only live check of sign-in after deploy. Creates no accounts.
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { generateKeyPairSync, randomBytes } from 'node:crypto';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE);
 const base = 'https://securebydesigninc.com';
 const out = 'audit-results/sign-in';
@@ -48,7 +49,13 @@ for (const width of [390, 1440]) {
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   const cdp = await context.newCDPSession(page);
   await cdp.send('WebAuthn.enable');
-  await cdp.send('WebAuthn.addVirtualAuthenticator', { options: { protocol: 'ctap2', transport: 'internal', hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } });
+  const { authenticatorId } = await cdp.send('WebAuthn.addVirtualAuthenticator', { options: { protocol: 'ctap2', transport: 'internal', hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } });
+  // A real passkey for this site that was never registered: the server must verify and refuse it.
+  const { privateKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
+  await cdp.send('WebAuthn.addCredential', { authenticatorId, credential: {
+    credentialId: randomBytes(32).toString('base64'), isResidentCredential: true, rpId: 'securebydesigninc.com',
+    privateKey: privateKey.export({ format: 'der', type: 'pkcs8' }).toString('base64'),
+    userHandle: Buffer.from('not-a-real-account').toString('base64'), signCount: 0 } });
 
   await safe(`my-progress ${width}`, async () => {
     await page.goto(`${base}/my-progress`, { waitUntil: 'networkidle' });
@@ -66,9 +73,10 @@ for (const width of [390, 1440]) {
       await button.click();
       const alert = page.locator('.reader-error[role=alert], .reader-error').first();
       await alert.waitFor({ timeout: 30000 });
-      check('unknown passkey shows an error instead of signing in', true, await alert.innerText());
+      const shown = await alert.innerText();
+      check('unregistered passkey is refused with a clear message', /isn.t registered/i.test(shown), shown);
       const me = await page.evaluate(async () => (await fetch('/api/sign-in/methods')).status);
-      check('still signed out after unknown passkey', me === 401, me);
+      check('still signed out after unregistered passkey', me === 401, me);
       await page.screenshot({ path: `${out}/shots/passkey-unknown-${width}.png` });
     }
   });
