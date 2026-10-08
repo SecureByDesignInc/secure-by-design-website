@@ -70,7 +70,7 @@ try {
     // and only the step's own systems keep labels.
     await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
     await page.locator('#scenarioButtons button').nth(scenarios.findIndex(s => s.id === 'files')).click();
-    await page.waitForTimeout(1200);
+    await page.waitForFunction(() => Math.abs(document.querySelector('.stage').getBoundingClientRect().top) < innerHeight / 2 && document.querySelector('.stage').getBoundingClientRect().top >= -1, null, { timeout: 8000 });
     const stageBox = await page.evaluate(() => { const r = document.querySelector('.stage').getBoundingClientRect(); return { top: r.top, bottom: r.bottom, height: innerHeight }; });
     assert(stageBox.top >= -1 && stageBox.top < stageBox.height / 2, `Stage is in view after choosing a process (${Math.round(stageBox.top)})`);
     assert.equal(await page.locator('#stageCounter').textContent(), '1 / 3');
@@ -89,6 +89,19 @@ try {
     await page.locator('#followToggle').click();
     assert.equal(await page.locator('#followToggle').getAttribute('aria-pressed'), 'false');
     await page.locator('#followToggle').click();
+    // Layout pass: the step diagram, the step's systems in the inspector, pause-after-step, and the Key popover.
+    await page.locator('#flowTab').click();
+    assert.equal(await page.locator('.ladder-row').count(), scenarios.find(s => s.id === 'files').steps.length, 'Sequence diagram has one row per step');
+    assert.equal(await page.locator('.ladder-row.current').getAttribute('data-step'), '1', 'Sequence diagram marks the current step');
+    assert.equal(await page.locator('#relationshipView').isHidden(), true, 'Step diagram replaces the relationship thumbnail during walkthroughs');
+    await page.locator('.ladder-row').nth(2).click();
+    assert.equal(await page.locator('#stepCounter').textContent(), 'Step 3 of 3', 'Diagram rows jump to their step');
+    assert.match(await page.locator('#stepSystems').textContent(), /In this step[\s\S]*SBD-FS01/, 'Inspector names the step\'s systems');
+    assert.match(await page.locator('#viewport canvas').getAttribute('aria-label'), /step 3 of 3/i, '3D description follows the step');
+    assert.equal(await page.locator('#autoAdvance').getAttribute('aria-pressed'), 'false', 'Playback pauses after each step by default');
+    await page.locator('#legendToggle').click();
+    assert.equal(await page.locator('#sceneKey').isVisible(), true, 'Key opens from the toolbar');
+    await page.locator('#legendToggle').click();
     assert.equal(await page.locator('#whatIfButtons button').count(), whatIfs.length);
     for (let i = 0; i < whatIfs.length; i++) {
       await page.locator('#whatIfButtons button').nth(i).click();
@@ -189,6 +202,10 @@ try {
   {
     const { context, page } = await open({ width: 390, height: 844 });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0, 'No horizontal scrolling on mobile');
+    assert.equal(await page.locator('#sceneTools').isVisible(), false, 'Phone tools start folded into a menu');
+    await page.locator('#toolsMenu').click();
+    assert.equal(await page.locator('#overview').isVisible(), true, 'The View options menu opens the tools');
+    assert.equal(await page.locator('#stageFullscreen').isVisible(), true, 'Phones get a full-screen button on the stage');
     await context.close();
   }
   // Reduced-motion preference starts paused with motion off.
@@ -206,7 +223,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();

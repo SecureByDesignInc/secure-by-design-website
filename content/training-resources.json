@@ -187,5 +187,392 @@
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
+  },
+  {
+    "id": "dns-configuration-pdf",
+    "title": "Configure DNS · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
+    "description": "14 pages · edition 1.0",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dns-configuration-word",
+    "title": "Configure DNS · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dns-configuration-checklist-page",
+    "title": "Configure DNS · Printable checklist",
+    "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "harden-baseline-pdf",
+    "title": "Harden the baseline · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
+    "description": "16 pages · edition 1.0",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "harden-baseline-word",
+    "title": "Harden the baseline · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "harden-baseline-checklist-page",
+    "title": "Harden the baseline · Printable checklist",
+    "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "harden-baseline-checklist",
+    "title": "Harden the baseline · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/harden-baseline/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "two-tier-pki-pdf",
+    "title": "Configure a Root CA & issuing CA · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
+    "description": "16 pages · edition 1.0",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "two-tier-pki-word",
+    "title": "Configure a Root CA & issuing CA · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "two-tier-pki-checklist-page",
+    "title": "Configure a Root CA & issuing CA · Printable checklist",
+    "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "connect-segment-pdf",
+    "title": "Connect and segment the network · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
+    "description": "18 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "connect-segment-word",
+    "title": "Connect and segment the network · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "connect-segment-checklist-page",
+    "title": "Connect and segment the network · Printable checklist",
+    "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "connect-segment-checklist",
+    "title": "Connect and segment the network · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/connect-segment/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "pki-services-pdf",
+    "title": "Finish the PKI services · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
+    "description": "14 pages · edition 1.0",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "pki-services-word",
+    "title": "Finish the PKI services · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "pki-services-checklist-page",
+    "title": "Finish the PKI services · Printable checklist",
+    "url": "https://securebydesigninc.com/training/pki-services/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "pki-services-checklist",
+    "title": "Finish the PKI services · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/pki-services/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "tiered-admin-pdf",
+    "title": "Addressing and tiered administration · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
+    "description": "16 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "tiered-admin-word",
+    "title": "Addressing and tiered administration · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "tiered-admin-checklist-page",
+    "title": "Addressing and tiered administration · Printable checklist",
+    "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "tiered-admin-checklist",
+    "title": "Addressing and tiered administration · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/tiered-admin/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "logging-pipeline-pdf",
+    "title": "See everything: the logging pipeline · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
+    "description": "16 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "logging-pipeline-word",
+    "title": "See everything: the logging pipeline · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "logging-pipeline-checklist-page",
+    "title": "See everything: the logging pipeline · Printable checklist",
+    "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "logging-pipeline-checklist",
+    "title": "See everything: the logging pipeline · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/logging-pipeline/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "workstation-fleet-pdf",
+    "title": "Bring in the fleet · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
+    "description": "18 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "workstation-fleet-word",
+    "title": "Bring in the fleet · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "workstation-fleet-checklist-page",
+    "title": "Bring in the fleet · Printable checklist",
+    "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "workstation-fleet-checklist",
+    "title": "Bring in the fleet · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/workstation-fleet/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "patch-protect-pdf",
+    "title": "Patch, protect, and watch for weakness · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
+    "description": "16 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "patch-protect-word",
+    "title": "Patch, protect, and watch for weakness · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "patch-protect-checklist-page",
+    "title": "Patch, protect, and watch for weakness · Printable checklist",
+    "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "patch-protect-checklist",
+    "title": "Patch, protect, and watch for weakness · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/patch-protect/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "business-services-pdf",
+    "title": "Stand up the business services · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.pdf",
+    "description": "14 pages · edition 1.0",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "business-services-word",
+    "title": "Stand up the business services · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "business-services-checklist-page",
+    "title": "Stand up the business services · Printable checklist",
+    "url": "https://securebydesigninc.com/training/business-services/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "business-services-checklist",
+    "title": "Stand up the business services · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/business-services/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "prove-recovery-pdf",
+    "title": "Prove you can recover · Workbook PDF",
+    "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
+    "description": "16 pages · edition 1.1",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "prove-recovery-word",
+    "title": "Prove you can recover · Editable workbook (Word)",
+    "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
+    "description": "Make the workbook your own.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "prove-recovery-checklist-page",
+    "title": "Prove you can recover · Printable checklist",
+    "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+    "description": "Print the configuration and evidence checklist.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "prove-recovery-checklist",
+    "title": "Prove you can recover · Configuration checklist",
+    "url": "https://securebydesigninc.com/training/prove-recovery/configuration-checklist.md",
+    "description": "Download a Markdown checklist for your configuration and evidence.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-evidence-manifest",
+    "title": "Package manifest",
+    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence/manifest",
+    "description": "Organize the evidence and submission records",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
   }
 ]

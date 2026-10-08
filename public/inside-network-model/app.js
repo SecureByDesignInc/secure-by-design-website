@@ -56,9 +56,37 @@ function tab(which){for(const name of ['flow','system','architecture']){$(name+'
 function setPlaying(on){playing=on&&moving;$('play').textContent=playing?'Pause sequence':'Play sequence';$('stagePlay').textContent=playing?'Pause':'Play';$('stagePlay').setAttribute('aria-label',playing?'Pause sequence':'Play sequence');$('play').setAttribute('aria-pressed',String(playing));$('sequenceState').textContent=playing?'Playing':'Paused';$('processPlayback').classList.toggle('is-playing',playing);}
 function renderFlow(){
  const s=sequences[current],step=s.steps[stepIndex],p=policy||stepPolicy(step);
- $('flowPanel').innerHTML=`<span class="eyebrow">STEP ${String(stepIndex+1).padStart(2,'0')} / ${String(s.steps.length).padStart(2,'0')}</span><h2>${esc(step.title)}</h2><p>${esc(step.description)}</p><span class="protocol-badge">${esc(step.protocol)}</span><div class="connection"><div class="endpoint"><span>FROM</span>${step.from?`<button data-system="${step.from}">${esc(name(step.from))}</button>`:'<button type="button" disabled>Authorized operator</button>'}</div><hr><div class="endpoint"><span>TO</span><button data-system="${step.to}">${esc(name(step.to))}</button></div></div><div class="fact-grid"><div><span>TRANSPORT</span><strong>${esc(step.transport)}</strong></div><div><span>INITIATOR / PROCESS</span><strong>${esc(step.initiation)}</strong></div><div><span>PORT CONTEXT</span><strong>${esc(step.detail)}</strong></div><div><span>CONNECTION TYPE</span><strong>${step.manual?'Offline process':step.unverified?'Logical relationship':'Service request'}</strong></div><div class="policy-fact ${p.kind}"><span>POLICY DECISION</span><strong>${esc(p.label)}</strong></div><div><span>ON THE WIRE</span><strong>${esc(step.manual?'Approved media · no network':step.wire||'Not specified')}</strong></div></div><h3>What the line means</h3><p>${esc(step.note)}</p><h3>What the motion shows</h3><p>${esc(motionLegend(step,p))}</p>${p.kind!=='manual'?`<div class="packet-actions"><button type="button" data-inspect="request">Inspect a packet</button>${(p.kind==='traffic'||p.kind==='rejected')&&step.reply!==false?'<button type="button" data-inspect="reply">Inspect a reply</button>':''}</div>`:''}${step.test?`<div class="drill-test"><span>ACCEPTANCE TEST</span><strong>${esc(step.test)}</strong></div>`:''}${s.drill?drillScorecard(s):''}<h3>Systems in this sequence</h3>${dependencies(s.dependencies)}<details><summary>Sequence context</summary><p>${esc(s.assumption)}</p></details>${sourceLink(step.source)}${courseBlock(processCourses[s.id],'Learn the skills')}`;
+ $('flowPanel').innerHTML=`${ladder(s,stepIndex)}<span class="eyebrow">STEP ${String(stepIndex+1).padStart(2,'0')} / ${String(s.steps.length).padStart(2,'0')}</span><h2>${esc(step.title)}</h2><p>${esc(step.description)}</p><span class="protocol-badge">${esc(step.protocol)}</span><div class="connection"><div class="endpoint"><span>FROM</span>${step.from?`<button data-system="${step.from}">${esc(name(step.from))}</button>`:'<button type="button" disabled>Authorized operator</button>'}</div><hr><div class="endpoint"><span>TO</span><button data-system="${step.to}">${esc(name(step.to))}</button></div></div><div class="fact-grid"><div><span>TRANSPORT</span><strong>${esc(step.transport)}</strong></div><div><span>INITIATOR / PROCESS</span><strong>${esc(step.initiation)}</strong></div><div><span>PORT CONTEXT</span><strong>${esc(step.detail)}</strong></div><div><span>CONNECTION TYPE</span><strong>${step.manual?'Offline process':step.unverified?'Logical relationship':'Service request'}</strong></div><div class="policy-fact ${p.kind}"><span>POLICY DECISION</span><strong>${esc(p.label)}</strong></div><div><span>ON THE WIRE</span><strong>${esc(step.manual?'Approved media · no network':step.wire||'Not specified')}</strong></div></div><h3>What the line means</h3><p>${esc(step.note)}</p><h3>What the motion shows</h3><p>${esc(motionLegend(step,p))}</p>${p.kind!=='manual'?`<div class="packet-actions"><button type="button" data-inspect="request">Inspect a packet</button>${(p.kind==='traffic'||p.kind==='rejected')&&step.reply!==false?'<button type="button" data-inspect="reply">Inspect a reply</button>':''}</div>`:''}${step.test?`<div class="drill-test"><span>ACCEPTANCE TEST</span><strong>${esc(step.test)}</strong></div>`:''}${s.drill?drillScorecard(s):''}<h3>Systems in this sequence</h3>${dependencies(s.dependencies)}<details><summary>Sequence context</summary><p>${esc(s.assumption)}</p></details>${sourceLink(step.source)}${courseBlock(processCourses[s.id],'Learn the skills')}`;
  bindSystems($('flowPanel'));
  $('flowPanel').querySelectorAll('[data-inspect]').forEach(b=>b.onclick=()=>inspectPacketFrom(b.dataset.inspect,b));
+ $('flowPanel').querySelectorAll('.ladder-row').forEach(row=>{const go=()=>{endRecording();setPlaying(false);changeStep(Number(row.dataset.step));};row.onclick=go;row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
+}
+// A sequence (ladder) diagram of the whole process: who talks to whom, in order, and what the policy decided.
+// It replaces the 3D relationship thumbnail while a walkthrough is shown.
+const ladderColors={traffic:'#7fe0b7',pending:'#e6bc82',deny:'#ee9294',manual:'#e6bc82',unreachable:'#ee9294',rejected:'#ee9294'};
+function ladder(s,currentStep){
+ const ids=[];for(const st of s.steps)for(const id of [st.from||'operator',st.to])if(!ids.includes(id))ids.push(id);
+ const W=320,colW=W/ids.length,top=40,rowH=46,H=top+rowH*s.steps.length+6,x=id=>colW*(ids.indexOf(id)+.5);
+ const short=id=>id==='operator'?'Operator':id==='workstations'?'Workstations':name(id).replace(/^SBD-/,'');
+ const fit=(text,width,size)=>{const max=Math.max(3,Math.floor(width/(size*.58)));return text.length>max?text.slice(0,max-1)+'…':text;};
+ const head=ids.map(id=>`<text x="${x(id)}" y="16" text-anchor="middle" class="ladder-head">${esc(fit(short(id),colW-4,10))}</text><line x1="${x(id)}" y1="24" x2="${x(id)}" y2="${H-4}" class="ladder-life"/>`).join('');
+ const rows=s.steps.map((st,i)=>{
+  const p=stepPolicy(st),color=ladderColors[p.kind]||'#a8c7db',a=x(st.from||'operator'),b=x(st.to),y=top+rowH*i+26,dir=b>=a?1:-1,blocked=p.kind==='pending'||p.kind==='deny';
+  const rule=p.kind==='manual'?'Offline':p.rule?.id==='DEFAULT-DENY'?'Default deny':p.rule?.id||'';
+  const label=`${i+1} · ${st.short}${rule?` · ${rule}`:''}`;
+  let mark='';
+  if(a===b)mark=`<path d="M${a} ${y-6} h18 v12 h-14" fill="none" stroke="${color}" stroke-width="2"/><path d="M${a+4} ${y+2} l-5 4 l5 4" fill="none" stroke="${color}" stroke-width="2"/>${blocked?`<text x="${a+24}" y="${y+4}" class="ladder-x" fill="${color}">✕</text>`:''}`;
+  else{
+   const end=blocked?a+(b-a)*.6:b-dir*4,dash=p.kind==='manual'||p.kind==='unreachable'?' stroke-dasharray="5 4"':'';
+   mark=`<line x1="${a}" y1="${y}" x2="${end}" y2="${y}" stroke="${color}" stroke-width="2"${dash}/>`;
+   mark+=blocked?(p.kind==='deny'?`<text x="${end}" y="${y+4}" text-anchor="middle" class="ladder-x" fill="${color}">✕</text>`:`<line x1="${end}" y1="${y-7}" x2="${end}" y2="${y+7}" stroke="${color}" stroke-width="3"/>`)
+    :`<path d="M${end-dir*6} ${y-5} L${end} ${y} L${end-dir*6} ${y+5}" fill="none" stroke="${color}" stroke-width="2"/>`;
+   if((p.kind==='traffic'||p.kind==='rejected')&&st.reply!==false)mark+=`<line x1="${b-dir*4}" y1="${y+8}" x2="${a+dir*4}" y2="${y+8}" stroke="${color}" stroke-width="1.2" stroke-dasharray="3 3" opacity=".75"/>`;
+  }
+  const center=a===b?a+40:(a+b)/2,width=a===b?colW*2:Math.abs(b-a)+colW*.8;
+  return `<g class="ladder-row${i===currentStep?' current':''}" data-step="${i}" role="button" tabindex="0" aria-label="Step ${i+1}: ${esc(st.title)}. ${esc(p.label)}"><rect x="2" y="${top+rowH*i+2}" width="${W-4}" height="${rowH-4}" rx="7" class="ladder-bg"/><text x="${Math.min(W-6,Math.max(6,center))}" y="${y-9}" text-anchor="middle" class="ladder-label">${esc(fit(label,Math.min(W-12,Math.max(width,150)),10.5))}</text>${mark}</g>`;
+ }).join('');
+ return `<figure class="ladder" aria-label="Sequence diagram for ${esc(s.label)}"><figcaption><span>SEQUENCE</span><span class="ladder-key"><i style="background:#7fe0b7"></i>Permitted<i style="background:#e6bc82"></i>Pending or manual<i style="background:#ee9294"></i>Denied</span></figcaption><svg viewBox="0 0 ${W} ${H}" width="100%" role="presentation">${head}${rows}</svg></figure>`;
 }
 function drillScorecard(s){
  const rows=s.steps.map((st,i)=>{const p=stepPolicy(st),where=sameVlan(st)?'host firewall':'core';return `<li class="${p.kind}"${i===stepIndex?' aria-current="step"':''}><span>${String(i+1).padStart(2,'0')} · ${esc(st.short)}</span><strong>${p.kind==='pending'?'Blocked · pending':p.kind==='deny'?'Stopped':'Allowed'}</strong><small>${esc(p.rule?.id==='DEFAULT-DENY'?'Default deny':p.rule?.id||'')} · ${where}</small></li>`;});
@@ -119,7 +147,7 @@ function placeTip(tip,info){
 let packetReturnFocus=null;
 function inspectPacketFrom(kind,button){
  if(!scene){toast('Packet inspection needs 3D graphics (WebGL 2).');return;}endRecording();setPlaying(false);packetReturnFocus=button;
- if(!scene.inspectPacket(kind)){packetReturnFocus=null;toast(kind==='reply'?'No reply is on the wire right now. Try again in a moment.':'No packet is on the wire right now. Try again in a moment.');}
+ if(!scene.inspectPacket(kind)){packetReturnFocus=null;toast(kind==='reply'?'This step sends no reply to inspect.':'This step has no packet to inspect.');}
 }
 function showPacketCard(info){
  const card=$('packetCard');
@@ -161,7 +189,7 @@ function inspect(id,{frame=true,reveal=true}={}){
 function controlChips(ids){return `<div class="control-chips">${ids.map(id=>`<button data-control="${esc(id)}" title="${esc(inventory.controls[id]?.[0])}">${esc(id)}</button>`).join('')}</div>`;}
 function bindControls(root){root.querySelectorAll('[data-control]').forEach(b=>b.onclick=()=>inspectControl(b.dataset.control));}
 // The traffic walkthroughs are optional: flow-only controls and the Flow details tab appear only while a process is shown.
-function setProcessMode(on){document.body.classList.toggle('process-active',on);$('flowTab').hidden=!on;if(!on)document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-current','false'));}
+function setProcessMode(on){document.body.classList.toggle('process-active',on);$('flowTab').hidden=!on;$('stepSystems').hidden=!on;document.querySelector('.flow-caption').classList.remove('step-complete');if(!on)scene?.setDescription?.('');if(!on)document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-current','false'));}
 function openTraffic(){const section=$('trafficSection');if(!section.open)section.open=true;}
 function architectureView(html,ids=[],relationship={type:'overview'}){document.querySelector('.flow-caption').classList.remove('is-step');setProcessMode(false);if(recorder?.active)recorder.stop(true);clearMarkers();setPlaying(false);tab('architecture');$('architectureContent').innerHTML=html;bindSystems($('architectureContent'));bindControls($('architectureContent'));scene?.highlight(ids);showRelationship(relationship);$('stageKind').textContent='NETWORK ARCHITECTURE';$('stageProtocol').textContent='Internal uplinks · permitted flows require explicit rules';$('announce').textContent=$('architectureContent').querySelector('h2')?.textContent||'Architecture selected';}
 function inspectVlan(id){const v=vlans.find(v=>v.id===id);if(!v)return;architectureView(`<span class="eyebrow">VIRTUAL LOCAL AREA NETWORK ${v.number}</span><h2>${esc(v.name)}</h2><div class="address-card"><strong>${v.subnet}</strong></div><p>${esc(v.boundary)}</p><h3>Systems & addresses</h3>${v.ids.map(id=>`<button class="asset-row" data-system="${id}"><strong>${esc(name(id))}</strong><span>${esc(getNode(id).role)}</span><code>${getNode(id).address}</code></button>`).join('')}<h3>Key functions</h3><ul>${v.functions.map(f=>`<li>${esc(f)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(v.controls)}`,v.ids,{type:'vlan',id});$('sceneTitle').textContent=`VLAN ${v.number} · ${v.name}`;$('sceneCaption').textContent=v.subnet;$('stageFlow').textContent=v.boundary;$('vlanLegend').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vlan===id)));publish(`vlan=${v.number}`);}
@@ -177,13 +205,16 @@ function renderSteps(){
 function clearMarkers(){document.querySelectorAll('#vlanLegend button').forEach(b=>b.setAttribute('aria-pressed','false'));}
 function changeStep(index){
  clearMarkers();
- const s=sequences[current],next=(index+s.steps.length)%s.steps.length;if(recorder?.beforeStep(next)===false)return;stepIndex=next;elapsed=0;const step=s.steps[stepIndex];policy=stepPolicy(step);
+ const s=sequences[current],next=(index+s.steps.length)%s.steps.length;if(recorder?.beforeStep(next)===false)return;stepIndex=next;elapsed=0;document.querySelector('.flow-caption').classList.remove('step-complete');const step=s.steps[stepIndex];policy=stepPolicy(step);
  document.documentElement.style.setProperty('--accent',s.color);
  $('sceneTitle').textContent=s.title;$('sceneCaption').textContent=s.caption;
  $('stageKind').textContent={manual:'OFFLINE PROCESS',traffic:'PERMITTED SERVICE REQUEST',pending:'BLOCKED PENDING VALIDATION',deny:'DENIED BY POLICY',unreachable:'NO RESPONSE',rejected:'CERTIFICATE REJECTED'}[policy.kind];
  $('stageFlow').textContent=step.title;$('stageProtocol').textContent=step.protocol;
  // The step's narration and controls sit on the stage, next to the motion they describe.
- $('stageDescription').textContent=step.description;$('stageCounter').textContent=`${stepIndex+1} / ${s.steps.length}`;document.querySelector('.flow-caption').classList.add('is-step');
+ $('stageDescription').textContent=step.description;
+ const endpoints=[step.from,step.to].filter((id,i,a)=>id&&getNode(id)&&a.indexOf(id)===i);
+ $('stepSystems').innerHTML=`<span>In this step</span>${step.from?'':'<b>Authorized operator</b><i aria-hidden="true">→</i>'}${endpoints.map((id,i)=>`${i?'<i aria-hidden="true">→</i>':''}<button data-system="${id}">${esc(name(id))}</button>`).join('')}`;bindSystems($('stepSystems'));
+ scene?.setDescription?.(`${s.label}, step ${stepIndex+1} of ${s.steps.length}: ${step.title}. ${policy.label}.`);$('stageCounter').textContent=`${stepIndex+1} / ${s.steps.length}`;document.querySelector('.flow-caption').classList.add('is-step');
  $('sequenceKicker').textContent=s.drill?'ATTACK DRILL / ACCEPTANCE TESTS':s.whatIf?`WHAT IF / ${s.label.toUpperCase()}`:`${String(current+1).padStart(2,'0')} / ${s.label.toUpperCase()}`;$('sequenceTitle').textContent=s.title;
  $('currentStepTitle').textContent=step.title;$('currentStepDescription').textContent=step.description;$('stepCounter').textContent=`Step ${stepIndex+1} of ${s.steps.length}`;
  setProcessMode(true);renderSteps();renderFlow();tab('flow');scene?.showStep(step,s.color,s.dependencies,policy,policy.kind==='manual'?null:gateText(policy,step));showRelationship({type:'flow',scenario:current,step:stepIndex});
@@ -194,11 +225,26 @@ function changeScenario(index,{fromRecorder=false}={}){if(recorder?.active&&!fro
 const processDescriptions={signin:'Addressing, DNS & authentication',files:'Names, tickets & share access',updates:'Approved import & WSUS delivery',logs:'Collection, analysis & retention',license:'Client entitlement requests',trust:'Manual certificate ceremonies',web:'Names, certificates & HTTPS'};
 $('scenarioButtons').innerHTML=scenarios.map((s,i)=>`<button aria-current="${i===0}" aria-controls="processPlayback" data-scenario="${i}" style="--process-color:${s.color}"><span class="process-card-title"><span class="process-number">${String(i+1).padStart(2,'0')}</span><strong>${esc(s.label)}</strong></span><span class="process-description">${esc(processDescriptions[s.id])}</span><span class="process-count">${s.steps.length} ${s.steps.length===1?'step':'steps'} <span aria-hidden="true">→</span></span></button>`).join('');
 $('whatIfButtons').innerHTML=whatIfs.map((s,i)=>`<button aria-current="false" aria-controls="processPlayback" data-scenario="${scenarios.length+i}" style="--process-color:${s.color}"${s.drill?' class="drill-button"':''}>${esc(s.label)}</button>`).join('');
+// Pause after each step by default, so the learner sets the pace; Auto-advance plays straight through.
+const advanceKey='sbd-inside-network-auto-advance';let autoAdvance=false;try{autoAdvance=localStorage.getItem(advanceKey)==='on';}catch{}
+function showAutoAdvance(){$('autoAdvance').setAttribute('aria-pressed',String(autoAdvance));$('autoAdvance').textContent=autoAdvance?'Auto-advance on':'Auto-advance off';}
+showAutoAdvance();
+$('autoAdvance').onclick=()=>{autoAdvance=!autoAdvance;showAutoAdvance();try{localStorage.setItem(advanceKey,autoAdvance?'on':'off');}catch{}};
+function stepComplete(){
+ elapsed=stepSeconds;const caption=document.querySelector('.flow-caption');if(caption.classList.contains('step-complete'))return;
+ caption.classList.add('step-complete');const last=stepIndex===sequences[current].steps.length-1;
+ $('sequenceState').textContent=last?'Process complete':'Step complete';
+ $('announce').textContent=last?'Process complete. Choose another process or replay this one.':'Step complete. Select Next to continue.';
+}
 // Choosing a process brings the 3D stage into view (not the panel below it), so the motion plays where the learner is looking.
 function revealStage(){const stage=document.querySelector('.stage'),r=stage.getBoundingClientRect();if(r.top>=0&&r.bottom<=innerHeight)return;stage.scrollIntoView({block:r.height>innerHeight?'start':'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 document.querySelectorAll('[data-scenario]').forEach(b=>b.onclick=()=>{changeScenario(Number(b.dataset.scenario));setPlaying(moving);revealStage();});
 // Opening the walkthroughs shows the processes; nothing plays until one is chosen.
 $('trafficSection').addEventListener('toggle',reportHeight);
+$('toolsMenu').onclick=()=>{const open=$('sceneTools').classList.toggle('open');$('toolsMenu').setAttribute('aria-expanded',String(open));};
+$('sceneTools').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.id!=='legendToggle'&&matchMedia('(max-width: 780px)').matches){$('sceneTools').classList.remove('open');$('toolsMenu').setAttribute('aria-expanded','false');}});
+$('stageFullscreen').onclick=()=>$('cinema').click();
+$('legendToggle').onclick=()=>{const open=document.body.classList.toggle('show-key');$('legendToggle').setAttribute('aria-expanded',String(open));$('legendToggle').setAttribute('aria-pressed',String(open));};
 $('stageBack').onclick=()=>$('back').click();$('stageNext').onclick=()=>$('next').click();$('stagePlay').onclick=()=>$('play').click();
 for(const group of [...vlans.map(v=>({label:`VLAN ${v.number} · ${v.name}`,ids:v.ids})),{label:'Offline systems',ids:systemOrder.filter(id=>!vlans.some(v=>v.ids.includes(id)))}]){
  const options=document.createElement('optgroup');options.label=group.label;
@@ -245,8 +291,8 @@ try{scene=createNetworkScene($('viewport'),nodes,inspect,()=>{if(!recorder?.acti
 // Inside the Network opens on the architecture explorer; traffic walkthroughs are optional, further down.
 architectureOverview();
 // Automated browser checks open the model with ?qa to reach the scene; nothing else uses this.
-if(new URLSearchParams(location.search).has('qa'))window.insideNetworkQA={packets:()=>scene?.debugPackets()||[],project:id=>scene?.debugProject(id),labels:()=>scene?.debugLabels()||[]};
-let previous=performance.now();function tick(now){const dt=Math.min((now-previous)/1000,.1);previous=now;if(playing&&moving&&!document.hidden&&!document.querySelector('dialog[open]')&&!recorder?.holding){elapsed+=dt*speed;if(elapsed>=stepSeconds)changeStep(stepIndex+1);}const bar=$('steps').querySelector('[aria-current=step] .step-progress');if(bar)bar.style.transform=`scaleX(${Math.min(1,elapsed/stepSeconds)})`;requestAnimationFrame(tick);}requestAnimationFrame(tick);
+if(new URLSearchParams(location.search).has('qa'))window.insideNetworkQA={packets:()=>scene?.debugPackets()||[],project:id=>scene?.debugProject(id),labels:()=>scene?.debugLabels()||[],state:()=>scene?.debugState()};
+let previous=performance.now();function tick(now){const dt=Math.min((now-previous)/1000,.1);previous=now;if(playing&&moving&&!document.hidden&&!document.querySelector('dialog[open]')&&!recorder?.holding){elapsed+=dt*speed;if(elapsed>=stepSeconds){if(autoAdvance||recorder?.active||document.body.classList.contains('cinema'))changeStep(stepIndex+1);else stepComplete();}}const bar=$('steps').querySelector('[aria-current=step] .step-progress');if(bar)bar.style.transform=`scaleX(${Math.min(1,elapsed/stepSeconds)})`;requestAnimationFrame(tick);}requestAnimationFrame(tick);
 
 // Let the host page grow with the mobile inspector, without nested scrolling.
 function reportHeight(){
