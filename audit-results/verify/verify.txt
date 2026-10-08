@@ -1,0 +1,18 @@
+V1 /training/dns-configuration: {"headEnd":8701,"titles":[{"at":24879,"inHead":false,"text":"Configure DNS | Secure By Design"}],"descs":[{"at":24926,"inHead":false}],"ogTags":0}
+V1 /training/dns-configuration/checklist: {"headEnd":8514,"titles":[{"at":23243,"inHead":false,"text":"Configure DNS — configuration checklist | Secure By Design"}],"descs":[{"at":23316,"inHead":false}],"ogTags":0}
+V1 /training: {"headEnd":9133,"titles":[{"at":3447,"inHead":true,"text":"Training Library | Secure By Design"}],"descs":[{"at":3497,"inHead":true}],"ogTags":0}
+V1 /: {"headEnd":8647,"titles":[{"at":2975,"inHead":true,"text":"Secure By Design — Cybersecurity Starts with Curiosity"}],"descs":[{"at":3044,"inHead":true}],"ogTags":0}
+V1 /privacy: {"headEnd":8051,"titles":[{"at":2412,"inHead":true,"text":"Privacy policy | Secure By Design"}],"descs":[{"at":2460,"inHead":true}],"ogTags":0}
+V5 www: {"status":301,"hsts":null,"location":"https://securebydesigninc.com/"}
+V2 #zones: {"lessonHeading":"Configure DNS","kicker":"LESSON 2 OF 5 · ABOUT 20 MIN","idExists":false,"url":"https://securebydesigninc.com/training/dns-configuration#zones"}
+V2 #records: {"lessonHeading":"Configure DNS","kicker":"LESSON 3 OF 5 · ABOUT 20 MIN","idExists":false,"url":"https://securebydesigninc.com/training/dns-configuration#records"}
+V2 #troubleshoot: {"lessonHeading":"Configure DNS","kicker":"LESSON 5 OF 5 · ABOUT 15 MIN","idExists":false,"url":"https://securebydesigninc.com/training/dns-configuration#troubleshoot"}
+V2 #verify: {"lessonHeading":"Configure DNS","kicker":"LESSON 4 OF 5 · ABOUT 20 MIN","idExists":false,"url":"https://securebydesigninc.com/training/dns-configuration#verify"}
+V2 sources on /training: []
+V3 __proto__: {"h1":"This page couldn’t load","bodyChars":70,"signInPanel":0,"errors":["Error: Minified React error #31; visit https://react.dev/errors/31?args[]=object%20with%20keys%20%7B%7D for the full message or use the non-minified dev environ","The above error occurred in a React component:\n\n    at p (<anonymous>)\n    at div (<anonymous>)\n    at b (https://securebydesigninc.com/_next/static/chunks/sign"]}
+V3 control (failed): {"alert":["We couldn’t complete that sign-in. Please try again or use another method."],"errors":[]}
+V13 back link: {"url":"https://securebydesigninc.com/training/dns-configuration","h1":"Configure DNS","errors":["[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352","e is not a function","[vinext] RSC prefetch setup error: TypeError: ne is not a function\n    at https://securebydesigninc.com/_next/static/chunks/link-cAel0-TL.js:2:4352"]}
+V13 next lesson: {"url":"https://securebydesigninc.com/training/dns-configuration#zones","heading":"Configure DNS"}
+V14 #about: {"exists":true,"text":"Built for curious mindsThere’s alwaysmore to understand.Secure By Design connect"}
+V15 header 390: {"headerPx":510,"viewport":844,"firstHeadingTop":568}
+V15 header 1440: {"headerPx":322,"viewport":900,"firstHeadingTop":421}
