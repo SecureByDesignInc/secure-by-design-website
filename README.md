@@ -71,7 +71,7 @@ Run `node scripts/check-rmf.mjs` against the retained local server to check acti
 
 ### Analytics
 
-The shared root layout includes the user-provided Plausible snippet for `securebydesigninc.com` once across all routes. Keep the script URL and initialization together; do not add another tracker or manual pageview calls. Plausible excludes localhost visits by default. After publishing, use Plausible's installation check to confirm live collection.
+The website has no analytics script of its own (Plausible was cancelled). If Cloudflare Web Analytics is enabled for the zone, Cloudflare injects its cookieless beacon at the edge; the privacy policy discloses it. App analytics are opt-in (PostHog).
 
 ### Conversational RMF chapters
 
