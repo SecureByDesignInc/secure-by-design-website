@@ -26,7 +26,7 @@ ok 3 - known mappings retain their correct proficiency and service scope
 ok 4 - each service and proficiency is deduplicated, with plain text only
 # Subtest: public role assets have no reference-site publicity or private provenance
 ok 5 - public role assets have no reference-site publicity or private provenance
-# (node:3568) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2282) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: stores a submission and outbox record; duplicate retries do not create duplicates
 ok 6 - stores a submission and outbox record; duplicate retries do not create duplicates
@@ -53,7 +53,7 @@ ok 15 - built site preserves the existing homepage and gates private career rout
 ok 16 - owner email test uses the requested inbox and reports acceptance without claiming delivery
 # Subtest: built website routes public submissions into its database and keeps records private
 ok 17 - built website routes public submissions into its database and keeps records private
-# (node:3580) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2294) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: all submitted email flows share one membership and link only after account verification
 ok 18 - all submitted email flows share one membership and link only after account verification
@@ -67,7 +67,7 @@ ok 21 - rate-limited submissions never create memberships
 # community_contribution_unavailable
 # Subtest: membership storage failure rolls back contact submissions and their notifications
 ok 22 - membership storage failure rolls back contact submissions and their notifications
-# (node:3593) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2307) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: combined Community page leads with participation and preserves explorer tools and legacy entry routes
 not ok 23 - combined Community page leads with participation and preserves explorer tools and legacy entry routes
@@ -103,7 +103,7 @@ ok 37 - mounted footer rejects duplicate in-flight clicks and re-enables control
 ok 38 - manual controls stay mounted during and after copying and support selecting the URL
 # Subtest: cleanup removes listeners and an old pending request cannot alter a remounted footer
 ok 39 - cleanup removes listeners and an old pending request cannot alter a remounted footer
-# (node:3612) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2326) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: the complete recognized progress catalog retains every original ID and its order
 ok 40 - the complete recognized progress catalog retains every original ID and its order
@@ -119,7 +119,7 @@ not ok 44 - journal-only accounts get zero active counts and Training Library di
 not ok 45 - new configuration progress resumes its exact lesson and counts in Network build
 # Subtest: backend still accepts all legacy journal IDs and reads preserve saved account records
 ok 46 - backend still accepts all legacy journal IDs and reads preserve saved account records
-# (node:3624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2338) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: native sign-in issues only a hashed, time-limited bearer session
 ok 47 - native sign-in issues only a hashed, time-limited bearer session
@@ -137,7 +137,7 @@ ok 52 - password reset through the existing website revokes native sessions
 ok 53 - native and browser sign-ins share the same brute-force limit
 # Subtest: native email enrollment is disabled by default and only uses verified bearer identity
 ok 54 - native email enrollment is disabled by default and only uses verified bearer identity
-# (node:3636) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2350) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: activity union is idempotent and isolated; browser credentials cannot write
 ok 55 - activity union is idempotent and isolated; browser credentials cannot write
@@ -145,7 +145,7 @@ ok 55 - activity union is idempotent and isolated; browser credentials cannot wr
 ok 56 - reject invalid dates, future rewards, spoofed ownership and partial invalid batches
 # Subtest: history pages are bounded and preserve every day without overlaps
 ok 57 - history pages are bounded and preserve every day without overlaps
-# (node:3648) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2362) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: native and browser share course progress and bookmarks, isolated by account
 ok 58 - native and browser share course progress and bookmarks, isolated by account
@@ -155,7 +155,7 @@ ok 59 - completion resists a delayed start update; removed bookmarks stay remove
 ok 60 - native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
 # Subtest: sync leaves archived reading and bookmark records intact
 ok 61 - sync leaves archived reading and bookmark records intact
-# (node:3660) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2374) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: anonymous readers see no account and cannot save
 ok 62 - anonymous readers see no account and cannot save
@@ -195,7 +195,7 @@ ok 73 - recovery changes the password, revokes older sessions and invalidates ot
 ok 74 - creating again cannot replace an existing password; recovery does not create unknown accounts
 # Subtest: password guesses are rate limited and password hashes never leave the API
 ok 75 - password guesses are rate limited and password hashes never leave the API
-# (node:3672) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (node:2386) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 # (Use `node --trace-warnings ...` to show where the warning was created)
 # Subtest: signup stays pending until the recipient confirms; unsubscribe is separate from career records
 ok 76 - signup stays pending until the recipient confirms; unsubscribe is separate from career records
@@ -252,4 +252,4 @@ ok 99 - the first recording remains unpublished and the retired formats are remo
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 11094.531907
+# duration_ms 7197.11735
