@@ -5,3 +5,27 @@
 
 .reader-account-form{border:0;padding:0;margin:0;min-width:0}
 .reader-auth-modes{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}.reader-auth-modes button[aria-pressed=true]{background:#173b56;color:#fff;border-color:#173b56}.reader-app-note{border-left:3px solid #168eb8;padding:10px 16px;background:#e3f2fb;color:#173b56;max-width:760px;line-height:1.6}.reader-auth input:focus-visible{outline:3px solid #079ac8;outline-offset:3px}.reader-auth h2{margin-top:0}.reader-auth{scroll-margin-top:24px}.reader-auth .reader-note{margin:4px 0 12px}.reader-auth>p:last-child{margin-top:22px}
+/* Sign in with Apple, Google, Microsoft, or a passkey */
+.sso{margin:20px 0 8px}
+.sso-buttons{display:grid;gap:10px;max-width:420px}
+.sso-button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:10px 16px;border-radius:9px;border:1px solid #8aaac2;background:#fff;color:#1f1f1f!important;font-weight:600;font-size:.975rem;text-decoration:none!important;cursor:pointer;font-family:inherit}
+.sso-button:hover{border-color:#173b56}
+.sso-apple{background:#000;border-color:#000;color:#fff!important}
+.sso-apple:hover{background:#1d1d1f;border-color:#1d1d1f}
+.sso-passkey{background:#173b56;border-color:#173b56;color:#fff!important}
+.sso-button:disabled{opacity:.7;cursor:progress}
+.sso-divider{display:flex;align-items:center;gap:12px;max-width:420px;margin:18px 0 0!important;color:#526b7f;font-size:.875rem}
+.sso-divider::before,.sso-divider::after{content:"";flex:1;border-top:1px solid #bfd6e6}
+.sign-in-methods{margin-top:24px;padding:22px;border:1px solid #bfd6e6;border-radius:16px;background:#fff}
+.sign-in-methods h3{margin:0 0 12px;font-size:1.2rem}
+.sign-in-method-list{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:10px}
+.sign-in-method-list li{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #d6e4ee;border-radius:10px}
+.sign-in-method-list li>div{flex:1;min-width:0;display:grid;gap:2px}
+.sign-in-method-list li span:not(.method-icon){font-size:.875rem;color:#526b7f;overflow-wrap:anywhere}
+.method-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#eef7fc;flex:0 0 34px}
+.sign-in-method-add{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sign-in-method-add .sso-button{min-height:44px}
+.reader-delete{border-color:#e2b9a7;background:#fff8f4}
+.reader-delete form{display:grid;gap:10px;max-width:420px}
+.reader-delete input{padding:11px;border:1px solid #c9a08f;border-radius:8px;font-size:1rem}
+

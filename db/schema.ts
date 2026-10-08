@@ -63,3 +63,17 @@ export const readerLearningActivity=sqliteTable('reader_learning_activity',{
  day:text('day').notNull(),lessonId:text('lesson_id').notNull(),
  review:integer('review').notNull(),perfect:integer('perfect').notNull()
 },t=>[primaryKey({columns:[t.userId,t.activityKey]})]);
+
+// Sign-in methods (0011): provider identities, passkeys, and short-lived sign-in flows.
+export const readerIdentities=sqliteTable('reader_identities',{
+ provider:text('provider').notNull(),subject:text('subject').notNull(),accountId:text('account_id').notNull().references(()=>readerAccounts.id,{onDelete:'cascade'}),
+ email:text('email'),refreshToken:text('refresh_token'),createdAt:text('created_at').notNull(),lastUsedAt:text('last_used_at')
+},t=>[primaryKey({columns:[t.provider,t.subject]}),index('idx_reader_identities_account').on(t.accountId)]);
+export const readerPasskeys=sqliteTable('reader_passkeys',{
+ credentialId:text('credential_id').primaryKey(),accountId:text('account_id').notNull().references(()=>readerAccounts.id,{onDelete:'cascade'}),
+ publicKey:text('public_key').notNull(),algorithm:integer('algorithm').notNull(),signCount:integer('sign_count').notNull().default(0),
+ transports:text('transports'),label:text('label'),createdAt:text('created_at').notNull(),lastUsedAt:text('last_used_at')
+},t=>[index('idx_reader_passkeys_account').on(t.accountId)]);
+export const readerAuthFlows=sqliteTable('reader_auth_flows',{
+ idHash:text('id_hash').primaryKey(),kind:text('kind').notNull(),data:text('data').notNull(),expiresAt:text('expires_at').notNull()
+},t=>[index('idx_reader_auth_flows_expires').on(t.expiresAt)]);

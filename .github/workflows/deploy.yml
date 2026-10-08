@@ -95,6 +95,20 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: Apply database migrations
+        # New files in drizzle/ are applied to the production D1 database before the new code goes live.
+        # Wrangler records applied files in d1_migrations, so each runs once. A failure stops the deploy.
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+          D1_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
+        run: |
+          printf '{"name":"d1-migrations","compatibility_date":"2026-01-01","d1_databases":[{"binding":"DB","database_name":"%s","database_id":"%s","migrations_dir":"drizzle"}]}\n' "${D1_NAME:-site-creator-d1}" "$D1_ID" > d1-migrations.json
+          set -o pipefail
+          pnpm exec wrangler d1 migrations apply DB --remote --config d1-migrations.json 2>&1 | tee migrations.log
+          set +o pipefail
+          { grep -E "Migrations to be applied|No migrations to apply|✅|applied" migrations.log || true; } | head -8 | while IFS= read -r line; do echo "::notice title=D1 migrations::$line"; done
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -129,7 +143,7 @@ jobs:
           for site in https://securebydesigninc.com https://www.securebydesigninc.com; do
             served=""
             for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-              served=$(curl -s -m 20 "$site/build-info.json?check=$GITHUB_RUN_ID-$attempt" | jq -r '.commit // empty' 2>/dev/null || true)
+              served=$(curl -sL -m 20 "$site/build-info.json?check=$GITHUB_RUN_ID-$attempt" | jq -r '.commit // empty' 2>/dev/null || true)
               [ "$served" = "$GITHUB_SHA" ] && break
               sleep 10
             done
@@ -137,10 +151,10 @@ jobs:
               echo "::error title=Domain check $site::Serving build '${served:-none}', expected $GITHUB_SHA. Check CLOUDFLARE_WORKER_NAME and the Worker's custom domains."
               fail=1; continue
             fi
-            training=$(curl -s -m 20 -o training.html -w '%{http_code}' "$site/training")
+            training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/training")
             tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
-            course=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
-            itn=$(curl -s -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
+            course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
+            itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
             echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/connect-segment $course | /inside-the-network $itn"
             if [ "$training" != 200 ] || [ "$tiles" -lt 15 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
               echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 15 tiles."

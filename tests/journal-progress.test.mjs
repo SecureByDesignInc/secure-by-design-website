@@ -69,6 +69,7 @@ function renderDashboard(records) {
       if (specifier === '../account/sign-in') return { default: () => null };
       // Membership UI is independent of the progress collection under test.
       if (specifier === '../memberships/plans') return { default: () => null };
+      if (specifier === './sign-in-methods') return { default: () => null, DeleteAccount: () => null };
       if (specifier === 'next/link') return { default: props => React.createElement('a', props) };
       return require(specifier);
     },

@@ -1,8 +1,15 @@
 'use client';
 import {useEffect,useState} from 'react';
+import ProviderButtons from './provider-buttons';
 type Mode='create'|'signin'|'reset';
 export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail?:string;onSignedIn:()=>Promise<void>}){
- const [ready,setReady]=useState(false);useEffect(()=>setReady(true),[]);
+ const [ready,setReady]=useState(false),[providerReturn,setProviderReturn]=useState('/my-progress');
+ useEffect(()=>{setReady(true);
+  // Send provider sign-ins straight to the page that asked for sign-in, when it is on this site.
+  const requested=new URLSearchParams(location.search).get('returnTo');
+  const here=new URL(location.href);for(const key of ['signin_error','signed_in','linked'])here.searchParams.delete(key);
+  try{const target=requested?new URL(requested,location.origin):null;setProviderReturn(target&&target.origin===location.origin?target.pathname+target.search+target.hash:here.pathname+here.search);}catch{setProviderReturn(here.pathname+here.search);}
+ },[]);
  const [mode,setMode]=useState<Mode>(existingEmail?'reset':'create');
  const [email,setEmail]=useState(existingEmail),[code,setCode]=useState(''),[password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState('');
  const [consent,setConsent]=useState(false),[sent,setSent]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
@@ -23,6 +30,7 @@ export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail
  return <section className="reader-welcome reader-auth" aria-labelledby="account-title" id="account">
   <h2 id="account-title">{sent?'Verify your email and set your password':mode==='signin'?'Welcome back.':mode==='reset'?'Set or reset your password.':'One account for your learning.'}</h2>
   <p>{existingEmail?'Add a password to your existing account. Your saved progress stays with you.':'Save completed training, materials, and your learning path across devices.'}</p>
+  {!existingEmail&&!sent&&mode!=='reset'&&<ProviderButtons returnTo={providerReturn} onSignedIn={onSignedIn}/>}
   <p className="reader-app-note">The iOS app is in invitation-only testing through TestFlight. Invited testers can use this same account to sync learning between the website and app. Android is coming soon.</p>
   <div className="reader-auth-modes" role="group" aria-label="Account options">
    <button type="button" aria-pressed={mode==='create'} disabled={busy} onClick={()=>changeMode('create')}>Create account</button>
@@ -38,6 +46,6 @@ export default function AccountForm({existingEmail='',onSignedIn}:{existingEmail
    {sent&&<button type="button" onClick={()=>changeMode(mode)}>Request a new code or change email</button>}
    {message&&<p role="status">{message}</p>}{error&&<p className="reader-error" role="alert">{error}</p>}
   </fieldset></form>
-  <p className="reader-note">A verified email and password are required for a permanent account. Your account and saved progress remain when you sign out. Reading stays open to everyone. Creating an account does not subscribe you to emails or grant lab access.</p>
+  <p className="reader-note">Sign in with Apple, Google, Microsoft, a passkey, or a verified email and password. Your account and saved progress remain when you sign out. Reading stays open to everyone. Creating an account does not subscribe you to emails or grant lab access.</p>
  </section>;
 }
