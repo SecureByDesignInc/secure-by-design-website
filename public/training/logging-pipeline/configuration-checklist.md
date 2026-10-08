@@ -1,13 +1,13 @@
 # See everything: the logging pipeline — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.
 
 ## Before you start
 
 - [ ] Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.
-- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, and SBD-AUDIT01 (10.0.50.40) and SBD-SPLUNK01 (10.0.50.10) per your platform plan for the repository and analysis roles.
+- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-AUDIT01 (10.0.50.40) and SBD-SPLUNK01 (10.0.50.10) per your platform plan for the repository and analysis roles, and a Linux VM for SBD-SENSOR01 (10.0.50.50) with a second, address-less capture interface.
 - [ ] Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system.
 
 ## Design collect, protect, analyze
@@ -53,7 +53,7 @@ Notes / result / date: __________________________
 
 - [ ] Create the archival job: on schedule, the collector exports its Forwarded Events and syslog intake to dated archive files and transfers them to SBD-AUDIT01's repository share — the only inbound write path the repository allows.
 - [ ] On arrival, hash each archive and append the hash to a catalog kept with the archives; an archive whose hash no longer matches is a finding, not a file.
-- [ ] Set the permissions to match lesson 1's decision: the archival process writes, a named auditors group reads, and no interactive account holds delete rights — retention-driven deletion runs as its own documented, logged process.
+- [ ] Set the permissions to match lesson 1's decision: the archival process writes, a named auditors group reads, and no interactive account holds delete rights — retention-driven deletion runs as its own documented, logged process, administered only from the audit custodian's seat, SBD-ADMIN-AUD01.
 - [ ] Fill in the AU table with what now exists: where each stage's data lives, its retention clock, and who can touch it — this table is the artifact course 2.2 will file.
 
 **Verify:** Dated archives arrive on schedule with catalog hashes that verify, the permission listing matches the access model exactly, and the AU table reflects reality.
@@ -75,11 +75,24 @@ Notes / result / date: __________________________
 
 Notes / result / date: __________________________
 
+## Watch the network with SBD-SENSOR01
+
+- [ ] Build SBD-SENSOR01 with an open-source sensor (Zeek or Suricata) loaded through the approved media process. Give it two interfaces: management at 10.0.50.50, and a capture interface with no address that only listens.
+- [ ] On the core router, mirror the routed VLAN interfaces to the capture interface (a SPAN or port-mirror session). Check the sensor's capture statistics at a busy moment; dropped packets mean the mirror or the sensor is undersized.
+- [ ] Forward the sensor's detections and connection logs to SBD-SPLUNK01 over the forwarder with TLS on TCP 9997, add register row F20 with its owner, and manage the sensor from VLAN 60 like the other security tools.
+- [ ] Build three alerts: a device address never seen before, any session to the quarantine VLAN course 1.9 will add, and repeated attempts on ports the register denies. Give each a named responder, like lesson 5's alert.
+
+**Verify:** The capture interface has no address, capture statistics show no drops at peak, and a test connection on an unregistered port appears as a sensor event in Splunk and fires its alert.
+
+**Evidence:** Keep the SPAN configuration, the sensor's interface listing, capture statistics, the F20 register row, and the alert that fired for the test connection.
+
+Notes / result / date: __________________________
+
 ## Prove the chain and delta scan
 
 - [ ] Generate the test event: one failed sign-in with a (disabled-password) tier account on a DC. Find it in the DC's Security log, in Forwarded Events on the collector, flag it for the next archive's verification on the repository, and watch the alert fire in analysis.
 - [ ] Repeat with the boundary: probe one unregistered port, then find that deny in the syslog stream and in search two — course 1.5's evidence pair now assembles itself.
-- [ ] Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, and SBD-SPLUNK01 (Windows hosts with the standard benchmark; a non-Windows analysis host gets its config export + hash treatment like the router), plus a DC rescan for the audit-policy deltas.
+- [ ] Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, SBD-SPLUNK01, and SBD-SENSOR01 (Windows hosts with the standard benchmark; a non-Windows analysis host gets its config export + hash treatment like the router), plus a DC rescan for the audit-policy deltas.
 - [ ] File the end-to-end trace as this course's signature evidence and write the handoff: the fleet course inherits a pipeline that will see its first domain join happen.
 
 **Verify:** The test event appears at every stage with consistent timestamps, the deny trace matches, the new hosts have baselines, and the DC rescan deltas are attributed to the audit policy.

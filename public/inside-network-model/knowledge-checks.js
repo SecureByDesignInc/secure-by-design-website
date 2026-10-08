@@ -15,7 +15,8 @@ export const knowledgeChecks={
  ],
  logs:[
   {question:'Which port does syslog over TLS use?',answers:['UDP 514','TCP 6514','TCP 443','TCP 1433'],correct:1,explanation:'RFC 5425 assigns TCP 6514 to syslog over TLS. Plain syslog commonly uses UDP 514, without encryption or delivery guarantees.'},
-  {question:'Why do the Splunk and archive deliveries stop at the core?',answers:['Their ingestion methods aren’t chosen yet, so rules F10 and F11 stay blocked','Splunk only accepts UDP','The audit repository is offline','Logs never leave VLAN 20'],correct:0,explanation:'Until the forwarding and archive methods are selected and validated, there is nothing specific to permit. Pending rules stay blocked.'}
+  {question:'How do the domain controllers’ security events reach the collector?',answers:['The collector logs in to each DC and copies the log','Each DC pushes them through a source-initiated event forwarding subscription (WinRM)','They are carried on approved media','Splunk reads them directly from the DCs'],correct:1,explanation:'With a source-initiated subscription set by Group Policy, sources push events to the collector over WinRM (rule F17). The collector never needs rights on the DCs.'},
+  {question:'Who can delete an archive on SBD-AUDIT01?',answers:['Any server operator','The archival job that wrote it','No interactive account; retention runs as a separate, approved process managed from SBD-ADMIN-AUD01','Splunk administrators'],correct:2,explanation:'The archival account can write but not delete. Only the audit custodian, from a dedicated seat, manages retention (AU-9(4)).'}
  ],
  license:[
   {question:'Why doesn’t the model show a port for the license check?',answers:['License servers never use the network','The port is classified','The licensing vendor and its protocol haven’t been identified','Licensing uses the SMB port'],correct:2,explanation:'Licensing protocols are product-specific. The model doesn’t guess a port; rule F12 stays pending until the vendor’s requirements are documented.'},
@@ -27,6 +28,7 @@ export const knowledgeChecks={
  ],
  web:[
   {question:'When the browser checks SBD-WEB01’s certificate, how does it trust the offline root?',answers:['It connects to the offline root','It uses the root certificate already installed on the client','It asks the core switch','It trusts any certificate on the internal network'],correct:1,explanation:'Trust anchors are distributed in advance. Validation happens on the client, so the root can stay offline.'},
+  {question:'Why can the revocation list travel over plain HTTP?',answers:['It is signed by the issuing CA, so tampering is detected, and it holds nothing secret','HTTP is encrypted inside the air gap','The core switch encrypts it','Browsers skip revocation checks anyway'],correct:0,explanation:'CRLs are signed. A client can verify one received over HTTP, which is why rule F18 permits HTTP 80 to pki.sbd.test.'},
   {question:'Which port does HTTPS use here?',answers:['TCP 80','TCP 8531','UDP 53','TCP 443'],correct:3,explanation:'HTTPS uses TCP 443. Rule F13 permits the workstations to reach SBD-WEB01 on it.'},
   {question:'The TLS session is up. What decides what the user can see in the application?',answers:['The application’s own authentication and authorization','The TLS certificate','The core switch','DNS'],correct:0,explanation:'TLS protects the connection. The application still has to authenticate users and authorize each request.'}
  ],

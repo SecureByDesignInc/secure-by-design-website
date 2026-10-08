@@ -33,7 +33,7 @@ export function createEquipment(lights) {
   }
   // Simple role icons for server faceplates, drawn locally (no image requests).
   const iconTextures=new Map();
-  const roles={dc1:'directory',dc2:'directory',dhcp:'address',syslog:'logs',wsus:'updates',time:'clock',subca:'certificate',templates:'certificate',fs:'folder',sql:'database',apps:'key',web:'web',splunk:'search',nessus:'scan',epo:'shield',audit:'archive',management:'gear',repo:'package',root:'key',workstations:'desktop',jump:'admin',jump1:'admin',jump2:'admin',core:'router',media:'media',backup:'archive'};
+  const roles={dc1:'directory',dc2:'directory',dhcp:'address',syslog:'logs',wsus:'updates',time:'clock',subca:'certificate',templates:'certificate',fs:'folder',sql:'database',apps:'key',web:'web',splunk:'search',nessus:'scan',epo:'shield',audit:'archive',management:'gear',repo:'package',root:'key',workstations:'desktop',jump:'admin',jump1:'admin',jump2:'admin',jump3:'admin',nps:'access',sensor:'eye',core:'router',media:'media',backup:'archive'};
   function drawIcon(ctx,role,color){
     ctx.strokeStyle='#e8f6ff';ctx.fillStyle='#e8f6ff';ctx.lineWidth=7;ctx.lineCap='round';ctx.lineJoin='round';
     const line=(...p)=>{ctx.beginPath();ctx.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)ctx.lineTo(p[i],p[i+1]);ctx.stroke();};
@@ -57,6 +57,8 @@ export function createEquipment(lights) {
       case 'gear':circle(64,64,18);for(let i=0;i<8;i++){const a=i*Math.PI/4;line(64+Math.cos(a)*30,64+Math.sin(a)*30,64+Math.cos(a)*44,64+Math.sin(a)*44);}circle(64,64,31);break;
       case 'desktop':rect(18,24,92,62,6);line(64,86,64,100);line(40,104,88,104);break;
       case 'admin':circle(64,40,18);ctx.beginPath();ctx.moveTo(26,106);ctx.quadraticCurveTo(28,66,64,66);ctx.quadraticCurveTo(100,66,102,106);ctx.stroke();line(84,90,94,100,110,80);break;
+      case 'access':rect(34,56,60,48,6);ctx.beginPath();ctx.arc(64,56,20,Math.PI,0);ctx.stroke();circle(64,78,6,true);line(64,84,64,94);break;
+      case 'eye':ctx.beginPath();ctx.moveTo(14,64);ctx.quadraticCurveTo(64,14,114,64);ctx.quadraticCurveTo(64,114,14,64);ctx.closePath();ctx.stroke();circle(64,64,16);circle(64,64,6,true);break;
       case 'router':circle(64,64,40);line(36,64,92,64);line(80,52,92,64,80,76);line(64,36,64,92);line(52,48,64,36,76,48);break;
       case 'media':rect(40,18,48,92,8);rect(52,30,24,14,3);line(54,92,74,92);break;
       case 'package':ctx.beginPath();ctx.moveTo(64,16);ctx.lineTo(106,38);ctx.lineTo(106,88);ctx.lineTo(64,110);ctx.lineTo(22,88);ctx.lineTo(22,38);ctx.closePath();ctx.stroke();line(22,38,64,60,106,38);line(64,60,64,110);break;
@@ -86,7 +88,7 @@ export function createEquipment(lights) {
     lights.push({material:status,phase:lights.length*.71});
     plate(parent,label,width-.7,0,y+.47,2.24,{height:.22,color:'#bfd0de'});
   }
-  function rack(parent,{code,color='#78a8c3',name='SERVER RACK',switching=true}={}) {
+  function rack(parent,{code,color='#78a8c3',name='SERVER RACK',switching=true,slots=null}={}) {
     box(parent,6.9,.3,6.2,0,.22,0,black);
     for(const x of [-3.22,3.22])for(const z of [-2.72,2.72])box(parent,.24,11.75,.24,x,6.23,z,black);
     for(const x of [-3.4,3.4])box(parent,.12,11.8,5.7,x,6.22,0,black);
@@ -96,7 +98,9 @@ export function createEquipment(lights) {
     const holes=[];
     for(const x of [-2.99,2.99])for(let i=0;i<36;i++)holes.push([x,.95+i*.295,2.675]);
     repeated(parent,holes,[.075,.09,.025],recess);
-    for(const y of [2,4.2,6.3,8.35,11.65])box(parent,5.85,.44,.11,0,y,2.55,black);
+    // Front rails sit between the server slots (five-server racks use tighter spacing).
+    const rails=slots&&slots.length>4?[...slots.slice(1).map((y,i)=>(y+slots[i])/2),11.65]:[2,4.2,6.3,8.35,11.65];
+    for(const y of rails)box(parent,5.85,slots&&slots.length>4?.3:.44,.11,0,y,2.55,black);
     box(parent,5.85,.65,4.5,0,1.13,0,metal);
     repeated(parent,Array.from({length:15},(_,i)=>[-2.2+i*.315,1.13,2.3]),[.11,.37,.025],recess);
     plate(parent,code+'  /  '+name,6.15,0,12.18,3.07,{height:.4,color});

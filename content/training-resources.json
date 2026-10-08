@@ -147,7 +147,7 @@
     "id": "logging-pipeline-guide",
     "title": "See everything: the logging pipeline · configuration guide",
     "url": "https://securebydesigninc.com/training/logging-pipeline",
-    "description": "Collect, protect & analyze before the fleet arrives · 6 lessons",
+    "description": "Collect, protect & analyze before the fleet arrives · 7 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -156,7 +156,7 @@
     "id": "workstation-fleet-guide",
     "title": "Bring in the fleet · configuration guide",
     "url": "https://securebydesigninc.com/training/workstation-fleet",
-    "description": "50 Windows 11 endpoints, managed from first boot · 6 lessons",
+    "description": "50 Windows 11 endpoints, managed from first boot · 7 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -183,7 +183,7 @@
     "id": "prove-recovery-guide",
     "title": "Prove you can recover · configuration guide",
     "url": "https://securebydesigninc.com/training/prove-recovery",
-    "description": "Backups with custody, one rehearsed restore & the closing record · 5 lessons",
+    "description": "Backups with custody, one rehearsed restore & the closing record · 6 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"

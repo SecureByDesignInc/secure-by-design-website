@@ -8,7 +8,7 @@ import {packetProfiles,describePacket} from '../public/inside-network-model/pack
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
 import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
-import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances} from '../public/inside-network-model/security.js';
+import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers} from '../public/inside-network-model/security.js';
 
 const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
 const controls={...inventory.controls,...additionalControls};
@@ -49,7 +49,9 @@ assert.equal(outcome('cert-expired'),'traffic,rejected');
 assert.equal(outcome('pc-to-sql'),'deny');
 assert.equal(outcome('peer-rdp'),'deny');
 assert.equal(stepPolicy(sequences.find(s=>s.id==='peer-rdp').steps[0]).rule.id,'D02');
-assert.equal(outcome('signin'),'pending,traffic,traffic,pending','Pending DHCP relay and directory profile stay blocked in the motion');
+assert.equal(outcome('signin'),'pending,traffic,traffic,traffic','Pending DHCP relay stays blocked; the settled directory profile (F03) is permitted');
+assert.equal(outcome('logs'),'traffic,traffic,traffic,traffic','Every log hop is a registered path: WEF, syslog TLS, forwarder, archive');
+assert.equal(outcome('web'),'traffic,traffic,traffic,traffic','Revocation checking has a path (F18)');
 // The attack drill replays the design's acceptance tests: every attempt is stopped by the rule that test names.
 const drill=sequences.find(s=>s.id==='drill');
 assert(drill?.drill&&drill.whatIf,'Attack drill is listed with the what-ifs');
@@ -90,13 +92,21 @@ assert.equal(evaluateFlow('jump2','dc1','Management').status,'deny');
 assert.equal(evaluateFlow('jump','workstations','Management').status,'deny');
 assert.equal(evaluateFlow('jump1','dc1','Management').status,'deny');
 assert(!adminMatrix.find(r=>r.id==='servers').targets.includes('audit'));
+// Every domain member reaches the domain controllers, and every Windows system reaches WSUS and the collector.
+for(const id of windowsMembers){for(const service of ['DNS','Kerberos','Directory'])assert.equal(evaluateFlow(id,'dc1',service).status,'permit',`${id} → DC ${service}`);if(id!=='wsus')assert.equal(evaluateFlow(id,'wsus','WSUS').status,'permit',`${id} patches`);if(id!=='syslog')assert.equal(evaluateFlow(id,'syslog','Event forwarding').status,'permit',`${id} forwards events`);assert.equal(evaluateFlow(id,'templates','PKI publication').status,'permit',`${id} checks revocation`);}
+// Tier 0 covers the tools that control the DCs; the audit custodian has a separate seat.
+for(const id of ['nps','wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers ${id}`);
+assert.equal(adminMatrix.find(r=>r.id==='audit').host,'jump3');
+assert.equal(evaluateFlow('jump1','audit','Management').status,'deny','Server seat cannot administer the audit archive');
+assert.equal(evaluateFlow('jump1','nps','Management').status,'deny','NPS is Tier 0');
+assert.equal(evaluateFlow('sensor','dc1','Kerberos').status,'deny','The Linux sensor is not a domain member');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
 console.log('Security policy checks passed: default deny, unresolved flows blocked, cross-tier separation, single instances, and no root network path.');
 
 const room=dataCenterLayout(vlans),positions=new Set();
 assert.deepEqual(new Set(room.flatMap(zone=>zone.ids)),new Set(memberships),'Every networked system appears in the data center');
 for(const zone of room){
- assert(zone.ids.length<=(zone.kind==='rack'?4:50),'Equipment fits its cabinet');
+ assert(zone.ids.length<=(zone.kind==='rack'?5:zone.kind==='desks'?4:50),'Equipment fits its cabinet');
  for(const [index,id]of zone.ids.entries()){
   const point=equipmentPosition(zone,index);
   assert(point.every(Number.isFinite),`Valid equipment position for ${id}`);

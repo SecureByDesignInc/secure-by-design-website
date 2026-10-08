@@ -247,6 +247,40 @@
       ]
     },
     {
+      "id": "nps",
+      "name": "SBD-NPS01",
+      "role": "Network access control (RADIUS)",
+      "segment": "VLAN 20 · Identity & services",
+      "address": "10.0.20.50",
+      "purpose": "Admit devices to the network and authenticate switch administrators.",
+      "services": [
+        {
+          "name": "RADIUS",
+          "port": "UDP 1812 authentication · 1813 accounting",
+          "note": "Only the access and core switches are RADIUS clients."
+        },
+        {
+          "name": "802.1X EAP-TLS",
+          "port": "Machine certificates",
+          "note": "No password-based EAP methods."
+        }
+      ],
+      "controls": [
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "AU-12",
+          "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
       "id": "subca",
       "name": "SBD-SUBCA01",
       "role": "Issuing certificate authority",
@@ -534,12 +568,46 @@
       ]
     },
     {
+      "id": "sensor",
+      "name": "SBD-SENSOR01",
+      "role": "Network sensor (Zeek / Suricata)",
+      "segment": "VLAN 50 · Security & monitoring",
+      "address": "10.0.50.50",
+      "purpose": "Watch the traffic between VLANs for what host agents miss.",
+      "services": [
+        {
+          "name": "Capture interface",
+          "port": "No address",
+          "note": "Receives a SPAN copy of the core’s routed interfaces; never transmits."
+        },
+        {
+          "name": "Alert forwarding",
+          "port": "TCP 9997 with TLS",
+          "note": "Detections and flow records to Splunk (F20)."
+        }
+      ],
+      "controls": [
+        {
+          "id": "SI-4",
+          "title": "System Monitoring"
+        },
+        {
+          "id": "SI-4(2)",
+          "title": "Automated Tools and Mechanisms for Real-time Analysis"
+        },
+        {
+          "id": "SI-4(4)",
+          "title": "Inbound and Outbound Communications Traffic"
+        }
+      ]
+    },
+    {
       "id": "jump",
       "name": "AdminJumpBox01",
-      "role": "Identity / PKI administration only",
+      "role": "Tier 0 administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.10",
-      "purpose": "Provide dedicated identity and PKI administration from the Tier 0 host.",
+      "purpose": "Provide dedicated Tier 0 administration: identity, PKI, and every system that can control them.",
       "services": [
         {
           "name": "Remote management",
@@ -625,6 +693,35 @@
         {
           "id": "AU-12",
           "title": "Audit Record Generation"
+        }
+      ]
+    },
+    {
+      "id": "jump3",
+      "name": "SBD-ADMIN-AUD01",
+      "role": "Audit custody only",
+      "segment": "VLAN 60 · Tiered administration",
+      "address": "10.0.60.40",
+      "purpose": "Give the audit custodian a seat no server operator can use.",
+      "services": [
+        {
+          "name": "Remote management",
+          "port": "SBD-AUDIT01 retention only",
+          "note": "Server operators cannot sign in here."
+        }
+      ],
+      "controls": [
+        {
+          "id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "id": "AU-9(4)",
+          "title": "Access by Subset of Privileged Users"
+        },
+        {
+          "id": "IA-2(1)",
+          "title": "Identification and Authentication (Organizational Users) | Multi-factor Authentication to Privileged Accounts"
         }
       ]
     },
@@ -803,6 +900,14 @@
         {
           "id": "CP-9",
           "title": "System Backup"
+        },
+        {
+          "id": "SC-22",
+          "title": "Architecture and Provisioning for Name/Address Resolution Service"
+        },
+        {
+          "id": "SC-23",
+          "title": "Session Authenticity"
         }
       ]
     },
@@ -815,7 +920,8 @@
         "SBD-DHCP01",
         "SBD-SYSLOG01",
         "SBD-WSUS01",
-        "SBD-TIME01"
+        "SBD-TIME01",
+        "SBD-NPS01"
       ],
       "controls": [
         {
@@ -907,7 +1013,8 @@
         "SBD-SPLUNK01",
         "SBD-NESSUS01",
         "SBD-EPO01",
-        "SBD-AUDIT01"
+        "SBD-AUDIT01",
+        "SBD-SENSOR01"
       ],
       "controls": [
         {
@@ -933,6 +1040,10 @@
         {
           "id": "SI-4",
           "title": "System Monitoring"
+        },
+        {
+          "id": "SI-4(4)",
+          "title": "Inbound and Outbound Communications Traffic"
         }
       ]
     },
@@ -940,11 +1051,12 @@
       "number": 60,
       "name": "Tiered administration",
       "subnet": "10.0.60.0/24",
-      "boundary": "Separate identity/PKI, server, and endpoint administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
+      "boundary": "Separate Tier 0, server, endpoint, and audit-custody administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
       "systems": [
         "AdminJumpBox01",
         "SBD-ADMIN-SRV01",
-        "SBD-ADMIN-PC01"
+        "SBD-ADMIN-PC01",
+        "SBD-ADMIN-AUD01"
       ],
       "controls": [
         {
@@ -1033,6 +1145,14 @@
         {
           "id": "SC-7",
           "title": "Boundary Protection"
+        },
+        {
+          "id": "IA-3",
+          "title": "Device Identification and Authentication"
+        },
+        {
+          "id": "IA-2(2)",
+          "title": "Multi-factor Authentication to Non-privileged Accounts"
         }
       ]
     }
@@ -1073,7 +1193,7 @@
           "from": "50 Windows 11 PCs",
           "to": "SBD-DC01",
           "protocol": "LDAP · TCP 389 / LDAPS · TCP 636",
-          "description": "Directory clients retrieve the information they need from Active Directory. Protection and binding behavior depend on the client and server configuration.",
+          "description": "The workstation reads its computer and policy objects from Active Directory, then fetches Group Policy from SYSVOL over SMB. Rule F03 permits the full directory profile for domain members.",
           "test": ""
         }
       ]
@@ -1146,8 +1266,16 @@
       "id": "logs",
       "label": "Follow a log",
       "title": "Turn an event into useful evidence.",
-      "caption": "From a Linux source to collection, analysis, and retention.",
+      "caption": "From Windows and Linux sources to collection, analysis, and retention.",
       "steps": [
+        {
+          "title": "Forward a domain controller event",
+          "from": "SBD-DC01",
+          "to": "SBD-SYSLOG01",
+          "protocol": "EVENT FORWARDING · WinRM TCP 5985",
+          "description": "SBD-DC01 pushes the subscribed security events to the collector. The collector never reaches into the source: the subscription is source-initiated, set by Group Policy.",
+          "test": ""
+        },
         {
           "title": "Deliver a source event",
           "from": "SBD-REPO01",
@@ -1160,16 +1288,16 @@
           "title": "Ingest for investigation",
           "from": "SBD-SYSLOG01",
           "to": "SBD-SPLUNK01",
-          "protocol": "INTEGRATION · TRANSPORT TO DEFINE",
-          "description": "The collection layer supplies events to Splunk for indexing and investigation. The exact forwarder, API, or input method must be chosen.",
+          "protocol": "SPLUNK FORWARDER · TCP 9997 + TLS",
+          "description": "The forwarder on the collector sends the Windows events and syslog intake to Splunk for indexing, searches, and alerts.",
           "test": ""
         },
         {
           "title": "Retain an audit copy",
           "from": "SBD-SYSLOG01",
           "to": "SBD-AUDIT01",
-          "protocol": "ARCHIVE DELIVERY · METHOD TO DEFINE",
-          "description": "An approved archive process preserves the records needed for review and retention. This is a proposed collector-to-repository relationship.",
+          "protocol": "ARCHIVE · SMB 3 · TCP 445",
+          "description": "On schedule, the collector writes dated archive files to the repository share on SBD-AUDIT01. Each archive is hashed and cataloged on arrival.",
           "test": ""
         }
       ]
@@ -1226,7 +1354,7 @@
       "id": "web",
       "label": "Use a web app",
       "title": "A browser trusts the internal web service.",
-      "caption": "Name resolution, certificate trust, and an encrypted session.",
+      "caption": "Name resolution, certificate trust, revocation, and an encrypted session.",
       "steps": [
         {
           "title": "Resolve the web server",
@@ -1242,6 +1370,14 @@
           "to": "SBD-WEB01",
           "protocol": "HTTPS · TCP 443",
           "description": "The browser opens a TLS session. SBD-WEB01 presents a certificate from the internal issuing CA, and the client checks the name, validity dates, and chain to the trusted offline root.",
+          "test": ""
+        },
+        {
+          "title": "Check revocation",
+          "from": "50 Windows 11 PCs",
+          "to": "SBD-PKI-MGMT01",
+          "protocol": "CRL / AIA · HTTP TCP 80",
+          "description": "The client follows the CRL distribution point in the certificate to pki.sbd.test on SBD-PKI-MGMT01 and downloads the issuing CA’s current revocation list.",
           "test": ""
         },
         {
@@ -1496,5 +1632,5 @@
   "offline": [
     "SBD-ROOTCA01"
   ],
-  "controlCount": 47
+  "controlCount": 59
 }

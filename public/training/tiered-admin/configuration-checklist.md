@@ -1,19 +1,19 @@
 # Addressing and tiered administration — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 This course builds the control plane before the fleet exists: DHCP for the workstation VLAN, and a tiered administration model where privileged sessions only ever start from dedicated hosts. The model's rule is strict — the jump systems administer; they browse nothing, read no mail, and accept no inbound sessions from user space.
 
 ## Before you start
 
 - [ ] Complete course 1.5: the routed network with its ACL register, and course 1.3's OU structure with the Admin OU in place.
-- [ ] Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the three administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30).
+- [ ] Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the four administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30), and SBD-ADMIN-AUD01 (.40).
 - [ ] Decide the privileged accounts: separate admin identities per tier, never daily-driver accounts with admin rights.
 
 ## Design the tiers and the address plan
 
-- [ ] Define three tiers against what exists: Tier 0 is the identity and trust fabric (DCs, both CAs, PKI-MGMT01), Tier 1 the member servers, Tier 2 the user endpoints. Map each tier to its OU from course 1.3 and to the admin system that will manage it.
-- [ ] Write the credential rule per tier: a Tier 0 account signs in only on Tier 0 systems and AdminJumpBox01; Tier 1 admins work from SBD-ADMIN-SRV01; Tier 2 from SBD-ADMIN-PC01. Each administrator gets separate per-tier accounts — the daily account holds no admin rights anywhere.
+- [ ] Define three tiers against what exists, using Microsoft's rule: anything that can control a Tier 0 system is Tier 0. Tier 0 is the identity and trust fabric (DCs, both CAs, PKI-MGMT01) plus what controls it — the hypervisor hosts and their console, the core router's management, NPS when course 1.9 adds it, and the DC-facing parts of the tools that patch, protect, scan, monitor, and back up the DCs. Tier 1 is the member servers; Tier 2 the user endpoints. Map each tier to its OU from course 1.3 and to the admin system that will manage it.
+- [ ] Write the credential rule per tier: a Tier 0 account signs in only on Tier 0 systems and AdminJumpBox01; Tier 1 admins work from SBD-ADMIN-SRV01; Tier 2 from SBD-ADMIN-PC01. The audit custodian gets a fourth seat, SBD-ADMIN-AUD01, that no server operator can use. Each administrator gets separate per-tier accounts — the daily account holds no admin rights anywhere.
 - [ ] Plan the DHCP design: scope 10.0.80.100–149 for the workstation VLAN, options for router 10.0.80.1, the two DCs as DNS, and the sbd.test domain; the core router relays VLAN 80 broadcasts to SBD-DHCP01; everything else stays static.
 - [ ] Add the register rows this course needs: VLAN 60 to each tier's management ports, DHCP relay from the core to SBD-DHCP01, and explicit denies from VLAN 80 into VLAN 60 — user space never initiates toward the admin plane.
 
@@ -38,12 +38,12 @@ Notes / result / date: __________________________
 
 ## Build the administration systems
 
-- [ ] Build AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs, joined into an Admin OU sub-structure so course 1.3's hardening GPOs apply from first boot.
+- [ ] Build AdminJumpBox01, SBD-ADMIN-SRV01, SBD-ADMIN-PC01, and SBD-ADMIN-AUD01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs, joined into an Admin OU sub-structure so course 1.3's hardening GPOs apply from first boot.
 - [ ] Strip them to purpose: no browsing to anything but internal admin interfaces, no mail, no file shares hosted, and the management tools for exactly their tier — RSAT on the server seats, endpoint tooling on the PC seat.
-- [ ] Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986) from the specific admin host each tier allows, and keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.
+- [ ] Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986) from the specific admin host each tier allows, the router's management on VLAN 100 from AdminJumpBox01 only, and SBD-AUDIT01's retention administration from SBD-ADMIN-AUD01 only. Keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.
 - [ ] Require the admin hosts' own local firewalls to accept management inbound from nowhere — sessions originate here, they never terminate here.
 
-**Verify:** All three hosts sit in the Admin OU with the hardening GPOs applied, management ports answer from the correct admin host per tier, and nothing in user space can open a session toward VLAN 60.
+**Verify:** All four hosts sit in the Admin OU with the hardening GPOs applied, management ports answer from the correct admin host per tier, and nothing in user space can open a session toward VLAN 60.
 
 **Evidence:** Record each host's build sheet, OU placement, gpresult output, and the register rows for its permitted management paths.
 
@@ -77,12 +77,12 @@ Notes / result / date: __________________________
 
 ## Delta scan and hand off
 
-- [ ] Run first baselines on SBD-DHCP01 and the three admin hosts with the standard benchmark and tool versions, and rescan the domain controllers — the logon-rights GPOs are the expected delta there.
+- [ ] Run first baselines on SBD-DHCP01 and the four admin hosts with the standard benchmark and tool versions, and rescan the domain controllers — the logon-rights GPOs are the expected delta there.
 - [ ] Add this course's rows to the living records: the deny-logon and Protected Users decisions into the exception record where they interact with STIG values, and the new permit and deny rows into the register with owners.
 - [ ] Confirm the admin hosts appear in the hardening course's quarterly cadence; privileged seats are rescanned first from now on, not last.
-- [ ] Write the handoff: administration now has a home, which means the logging course can require that SIEM consoles and collectors are managed only from VLAN 60 — say so explicitly for course 1.8.
+- [ ] Write the handoff: administration now has a home, which means the logging course can require that SIEM consoles and collectors are managed only from VLAN 60 — with the DC-facing scopes from the Tier 0 seat and audit retention from SBD-ADMIN-AUD01 — say so explicitly for course 1.8.
 
-**Verify:** Four baselines and the DC rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.
+**Verify:** Five baselines and the DC rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.
 
 **Evidence:** Finish the checklist: scan set, updated records, the tier matrix, and the handoff note.
 

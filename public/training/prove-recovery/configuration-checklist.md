@@ -1,20 +1,20 @@
 # Prove you can recover — configuration checklist
 
-Secure By Design · Edition 1.0 · 7 October 2026
+Secure By Design · Edition 1.1 · 7 October 2026
 
 The model's final chapter: a network that cannot come back was never really built. This course backs up what matters — directory, certificate authority, policy, boundary, and the log record — proves one real restore in isolation, and files the tested-recovery evidence the authorization path expects.
 
 ## Before you start
 
 - [ ] Complete courses 1.1–1.11: the full network, its records, and the protected log archive all exist.
-- [ ] Provision protected backup storage reachable only by the backup process, plus an isolated recovery network segment (or host) for the restore rehearsal.
+- [ ] Provision a protected backup volume on each server, written only by its backup job, an offline backup cabinet with removable media and a custody register, and an isolated recovery network segment (or host) for the restore rehearsal.
 - [ ] Have the custody records handy: the DSRM passwords from course 1.1 and the CA key protection decisions from course 1.4 — recovery is where those promises come due.
 
 ## Decide what recovery must prove
 
 - [ ] Write the recovery set in dependency order — the same order the path built it: the directory first (everything trusts it), then the CA's database and keys, Group Policy, the router configuration, the log archive, and the living records themselves (register, inventory, exception record).
-- [ ] Set the two numbers per item: how much history may be lost (recovery point) and how long restoration may take (recovery time) — lab-honest values you will actually measure against in lesson 4, not aspirations.
-- [ ] Decide backup placement: a protected location written only by the backup process, readable by the recovery role, with one copy's custody offline on media — the air-gapped network's version of an off-site copy.
+- [ ] Set the two numbers per item: how much history may be lost (recovery point) and how long restoration may take (recovery time) — lab-honest values you will actually measure against in lesson 5, not aspirations.
+- [ ] Decide backup placement: each server's protected backup volume is written only by the backup process and readable by the recovery role, and a custodian carries copies to the offline backup cabinet on media — the air-gapped network's version of an off-site copy. There is no network path to the cabinet.
 - [ ] Confirm the standing custody items: the DSRM passwords are sealed and findable, and the root CA's protected backup from the course 1.4 ceremony is accounted for — recovery depends on secrets that must exist before the bad day.
 
 **Verify:** The recovery set is ordered by dependency with point and time objectives per item, the backup placement and access rules are written, and the DSRM and root-key custody records check out.
@@ -28,7 +28,7 @@ Notes / result / date: __________________________
 - [ ] Schedule Windows Server Backup system state jobs on SBD-DC01 and SBD-DC02 to the protected target — two controllers, two independent backups, because replication is availability and was never recovery (course 1.1's point, now kept).
 - [ ] After the first run, verify each backup's completion, record its version identifier, and hash the catalog entry into the evidence set — an unverified backup is a hope with a timestamp.
 - [ ] Enable the Active Directory Recycle Bin (a one-way, forest-level action from the Tier 0 seat, recorded as the change it is) so a deleted user or OU comes back intact without touching system state at all.
-- [ ] Write the restore decision tree: deleted object → Recycle Bin; corrupted or lost DC → system state restore (lesson 4's rehearsal); whole-forest loss → the Microsoft forest recovery guide, referenced and staged with the evidence rather than improvised on the day.
+- [ ] Write the restore decision tree: deleted object → Recycle Bin; corrupted or lost DC → system state restore (lesson 5's rehearsal); whole-forest loss → the Microsoft forest recovery guide, referenced and staged with the evidence rather than improvised on the day.
 
 **Verify:** Both DCs show scheduled, completed system state versions on the protected target, the Recycle Bin reports an enabled scope, and the decision tree names the tool for each failure class.
 
@@ -49,10 +49,23 @@ Notes / result / date: __________________________
 
 Notes / result / date: __________________________
 
+## Carry the copies to the offline cabinet
+
+- [ ] Assign custodians by tier: a Tier 0 custodian handles DC system state and the issuing CA's database and key backup; the audit custodian handles the log archive from SBD-AUDIT01; a server custodian handles member-server backups. No one carries a tier they do not hold.
+- [ ] For each copy, write the media ID, hash the backup on its protected volume, copy it to encrypted removable media, and verify the hash on the media before it leaves the room.
+- [ ] Carry the media to the offline backup cabinet and record the handoff in the custody register: who, what, when, the hashes, and the storage slot. This is the course 1.3 media procedure used for backups.
+- [ ] Pull one copy back as a test: find it from the register, verify its hash, and confirm it is readable. Lesson 5's rehearsal restores from a copy that has made this round trip.
+
+**Verify:** Every item in the recovery set has an offline copy with matching hashes on the volume and the media, a custody entry with a named custodian of the right tier, and one copy has been retrieved and verified.
+
+**Evidence:** Keep the custodian assignments, the hash pairs, the custody register entries, and the retrieval test record.
+
+Notes / result / date: __________________________
+
 ## Rehearse a real restore, in isolation
 
 - [ ] Stage the rehearsal: the isolated recovery segment has no path to the production VLANs — a restored controller believing it is authoritative must never meet the live directory; that isolation rule is written before the restore starts.
-- [ ] Restore SBD-DC02's system state from the protected backup onto the recovery segment, timing the work from decision to directory-services-running against the lesson-1 objective.
+- [ ] Restore SBD-DC02's system state from the offline copy retrieved in lesson 4 onto the recovery segment, timing the work from decision to directory-services-running against the lesson-1 objective.
 - [ ] Verify the restored directory the course 1.1 way — services, shares, a directory query — then record what the rehearsal taught: steps that surprised you, the measured time, and the decision-tree updates; then tear the rehearsal down completely.
 - [ ] Back in production, run the everyday restore: delete a disposable test object, bring it back from the Recycle Bin with attributes intact, and file both rehearsals — the big one and the small one — as the tested-recovery evidence.
 

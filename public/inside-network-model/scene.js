@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/orbit';
 import {vlans,facilities} from './architecture.js';
 import {createEquipment} from './equipment.js';
-import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from './data-center-layout.js';
+import {dataCenterLayout,equipmentPosition,rackSlots,roomBounds,facilityPositions,offlinePosition} from './data-center-layout.js';
 
 // A polyline with exact arc-length parameters. Traffic routes follow the overhead cable trays.
 class Route extends THREE.Curve{
@@ -148,7 +148,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const hitMaterial=new THREE.MeshBasicMaterial({visible:false}),zoneOutlines=[];
  for(const zone of layout){
   const color=colors[zone.id],fadeKey='zone-'+zone.id;
-  if(zone.kind==='rack'){const rack=new THREE.Group();rack.position.set(zone.x,0,zone.z);rack.userData.fadeKey=fadeKey;physical.add(rack);equipment.rack(rack,{code:zone.rack,color,name:`VLAN ${zone.number}`});}
+  if(zone.kind==='rack'){const rack=new THREE.Group();rack.position.set(zone.x,0,zone.z);rack.userData.fadeKey=fadeKey;physical.add(rack);equipment.rack(rack,{code:zone.rack,color,name:`VLAN ${zone.number}`,slots:rackSlots(zone.ids.length)});}
   // Rack names stay readable in the full-room view: compact labels that step up on a leader line when crowded.
   screenLabel(labelTexture(`VLAN ${zone.number}${zone.kind==='rack'?' · '+zone.rack:''}`,zone.name,color,320),{kind:'zone',zone:zone.id,px:126,color,position:new THREE.Vector3(zone.x,zone.kind==='rack'?12.9:5.6,zone.z)});
   const outline=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(zone.w,.015,zone.d)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.26}));

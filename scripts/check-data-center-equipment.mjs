@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {createEquipment} from '../public/inside-network-model/equipment.js';
 import {inventory} from '../public/inside-network-model/inventory.js';
 import {vlans,buildArchitectureNodes} from '../public/inside-network-model/architecture.js';
-import {dataCenterLayout,equipmentPosition} from '../public/inside-network-model/data-center-layout.js';
+import {dataCenterLayout,equipmentPosition,rackSlots} from '../public/inside-network-model/data-center-layout.js';
 
 // Geometry-only validation; this does not validate texture pixels or WebGL rendering.
 // A minimal canvas surface lets CanvasTexture objects exist without a renderer.
@@ -17,7 +17,7 @@ kit.room(scene);
 const nodes=buildArchitectureNodes(inventory.nodes);
 for(const zone of dataCenterLayout(vlans)){
  const rack=new THREE.Group();rack.position.set(zone.x,0,zone.z);scene.add(rack);
- if(zone.kind==='rack')kit.rack(rack,{code:zone.rack,color:zone.color});
+ if(zone.kind==='rack')kit.rack(rack,{code:zone.rack,color:zone.color,slots:rackSlots(zone.ids.length)});
  for(const [i,id]of zone.ids.entries()){
   const device=new THREE.Group();device.position.set(...equipmentPosition(zone,i));scene.add(device);
   if(zone.kind==='rack')kit.server(device,nodes.find(n=>n.id===id),zone.color);
