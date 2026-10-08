@@ -8,12 +8,16 @@
 /* Sign in with Apple, Google, Microsoft, or a passkey */
 .sso{margin:20px 0 8px}
 .sso-buttons{display:grid;gap:10px;max-width:420px}
-.sso-button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:10px 16px;border-radius:9px;border:1px solid #8aaac2;background:#fff;color:#1f1f1f!important;font-weight:600;font-size:.975rem;text-decoration:none!important;cursor:pointer;font-family:inherit}
-.sso-button:hover{border-color:#173b56}
-.sso-apple{background:#000;border-color:#000;color:#fff!important}
-.sso-apple:hover{background:#1d1d1f;border-color:#1d1d1f}
-.sso-passkey{background:#173b56;border-color:#173b56;color:#fff!important}
-.sso-button:disabled{opacity:.7;cursor:progress}
+/* Sign-in buttons often sit inside .reader-page, whose generic button rule would otherwise replace their colors. */
+.sso-button,.reader-page .sso-button{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:10px 16px;border-radius:9px;border:1px solid #8aaac2;background:#fff;color:#1f1f1f!important;font-weight:600;font-size:.975rem;text-decoration:none!important;cursor:pointer;font-family:inherit}
+.sso-button:hover,.reader-page .sso-button:hover{border-color:#173b56}
+.sso-apple,.reader-page .sso-apple{background:#000;border-color:#000;color:#fff!important}
+.sso-apple:hover,.reader-page .sso-apple:hover{background:#1d1d1f;border-color:#1d1d1f}
+.sso-passkey,.reader-page .sso-passkey{background:#173b56;border-color:#173b56;color:#fff!important}
+.sso-passkey:hover:not(:disabled),.reader-page .sso-passkey:hover:not(:disabled){background:#0f2c42;border-color:#0f2c42}
+.sso-button:disabled,.reader-page .sso-button:disabled{opacity:.7;cursor:progress}
+.reader-page button.reader-primary{background:#1269a8;border-color:#1269a8;color:#fff!important;padding:12px 20px;border-radius:9px;font-size:.95rem;font-weight:600}
+.reader-page button.reader-primary:hover:not(:disabled){background:#0f5a90;border-color:#0f5a90}
 .sso-divider{display:flex;align-items:center;gap:12px;max-width:420px;margin:18px 0 0!important;color:#526b7f;font-size:.875rem}
 .sso-divider::before,.sso-divider::after{content:"";flex:1;border-top:1px solid #bfd6e6}
 .sign-in-methods{margin-top:24px;padding:22px;border:1px solid #bfd6e6;border-radius:16px;background:#fff}
