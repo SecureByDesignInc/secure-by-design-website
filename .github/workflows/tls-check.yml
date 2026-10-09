@@ -16,9 +16,9 @@ jobs:
       - name: Protocol handshakes
         run: |
           for v in tls1 tls1_1 tls1_2 tls1_3; do
-            out=$(echo | timeout 15 openssl s_client -connect securebydesigninc.com:443 -servername securebydesigninc.com -$v -cipher 'ALL:@SECLEVEL=0' 2>&1)
-            proto=$(echo "$out" | grep -m1 -E "^ *Protocol *:" | sed 's/.*: *//'); cipher=$(echo "$out" | grep -m1 -E "^ *Cipher *:|Cipher is" | sed 's/.*[:,] *//')
-            if echo "$out" | grep -q "BEGIN CERTIFICATE\|Server certificate"; then r="accepted ($proto, $cipher)"; else r="refused"; fi
+            out=$(echo | timeout 15 openssl s_client -connect securebydesigninc.com:443 -servername securebydesigninc.com -$v -cipher 'ALL:@SECLEVEL=0' 2>&1 || true)
+            proto=$(echo "$out" | grep -m1 -E "^ *Protocol *:" | sed 's/.*: *//' || true); cipher=$(echo "$out" | grep -m1 -E "^ *Cipher *:|Cipher is" | sed 's/.*[:,] *//' || true)
+            if echo "$out" | grep -q "BEGIN CERTIFICATE"; then r="accepted ($proto, $cipher)"; else r="refused"; fi
             echo "::notice title=$v::$r"
           done
       - name: Cipher list
@@ -26,4 +26,4 @@ jobs:
           sudo apt-get install -y -qq nmap > /dev/null 2>&1
           nmap --script ssl-enum-ciphers -p 443 securebydesigninc.com > nmap.txt 2>&1 || true
           echo "::notice title=Protocols offered::$(grep -E '^\|   (TLSv|SSLv)' nmap.txt | tr -d '|:' | xargs)"
-          echo "::notice title=3DES / weak ciphers::$(grep -ciE '3DES|DES-CBC3|RC4|NULL|EXPORT' nmap.txt) matches | grade: $(grep -E 'least strength' nmap.txt | tr -d '|' | xargs)"
+          echo "::notice title=3DES / weak ciphers::$(grep -ciE '3DES|DES-CBC3|RC4|NULL|EXPORT' nmap.txt || true) matches | grade: $(grep -E 'least strength' nmap.txt | tr -d '|' | xargs)"
