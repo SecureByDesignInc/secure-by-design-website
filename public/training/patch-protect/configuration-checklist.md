@@ -1,6 +1,6 @@
 # Patch, protect, and watch for weakness — configuration checklist
 
-Secure By Design · Edition 1.3 · 8 October 2026
+Secure By Design · Edition 1.4 · 9 October 2026
 
 This course keeps the proven state from drifting: updates and software arrive only through controlled channels, every endpoint runs managed protection, and a credentialed scanner turns the course 1.3 cadence into routine. In an air-gapped lab, every one of these systems feeds on content carried across the boundary — which is the recurring lesson.
 
@@ -33,7 +33,7 @@ Notes / result / date: __________________________
 
 ## Build SBD-WSUS01 and the ring policies
 
-- [ ] Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — Windows Server 2025, Windows 11, and defender definitions — and nothing speculative. Microsoft announced in September 2024 that WSUS is deprecated and no longer actively developed, but it is still included in Windows Server 2025 and supported for production deployments, with security and quality updates under the product lifecycle.
+- [ ] Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — the Windows Server and Windows client releases in use, and Defender definitions — and nothing speculative. Microsoft announced in September 2024 that WSUS is deprecated and no longer actively developed, but it is still included in current Windows Server releases and supported for production deployments, with security and quality updates under the product lifecycle.
 - [ ] Feed it offline: export the needed content on the connected side, hash it, carry it across, and import — the WSUS offline servicing path is the course 1.3 media procedure wearing an update hat.
 - [ ] Create WSUS computer groups matching the rings, and link ring GPOs at the OUs: update source SBD-WSUS01, the ring's group assignment, and install/restart windows that respect what each ring does for a living. The critical ring's GPO links to the Domain Controllers and Tier 0 Servers OUs.
 - [ ] Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived. Pilot and broad-ring approvals are Tier 1 work from SBD-ADMIN-SRV01; critical-ring approvals for the domain controllers and the two Tier 0 servers are Tier 0 work from AdminJumpBox01. Add SBD-WSUS01 to the SBD Tier 0 Console Hosts group and restart it so the new membership applies: the console reaches the server as a Kerberos network logon, the one Tier 0 logon type course 1.5's deny policy leaves open there, as its exception record states.

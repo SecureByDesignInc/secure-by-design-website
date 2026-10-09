@@ -661,7 +661,7 @@
       "services": [
         {
           "name": "Remote management",
-          "port": "RDP 3389 · WinRM 5985–5986 · SSH 22 to Linux · HTTPS consoles",
+          "port": "RDP 3389 · WinRM 5985–5986 · AD Web Services 9389 to the DCs · SSH 22 to Linux · HTTPS consoles",
           "note": "Rule A01: Tier 0 targets only, with MFA and named accounts."
         }
       ],
@@ -819,12 +819,12 @@
     },
     {
       "id": "workstations",
-      "name": "50 Windows 11 PCs",
+      "name": "50 Windows PCs",
       "role": "User workstations × 50",
       "segment": "VLAN 80 · User workstations",
       "address": "10.0.80.100–199",
       "location": "Office · user desks",
-      "purpose": "Represent 50 Windows 11 user endpoints.",
+      "purpose": "Represent 50 Windows user endpoints.",
       "services": [
         {
           "name": "Addressing",
@@ -1146,7 +1146,7 @@
       "subnet": "10.0.80.0/24",
       "boundary": "Dedicated client segment. Block peer SMB/RDP and direct administrative access; allow documented identity and resource dependencies only.",
       "systems": [
-        "50 Windows 11 PCs"
+        "50 Windows PCs"
       ],
       "controls": [
         {
@@ -1189,7 +1189,7 @@
       "steps": [
         {
           "title": "Obtain a network address",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DHCP01",
           "protocol": "DHCP · UDP 67 / 68",
           "description": "A new client requests an address and receives lease settings. The exchange includes discovery, offer, request, and acknowledgement.",
@@ -1197,7 +1197,7 @@
         },
         {
           "title": "Locate directory services",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The workstation asks internal DNS to locate domain services. DNS records connect service names to reachable hosts.",
@@ -1205,7 +1205,7 @@
         },
         {
           "title": "Authenticate to the domain",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "Kerberos · TCP / UDP 88",
           "description": "The client proves its identity to the domain controller’s Key Distribution Center and obtains a ticket-granting ticket.",
@@ -1213,7 +1213,7 @@
         },
         {
           "title": "Read directory information",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "LDAP · TCP 389 / LDAPS · TCP 636",
           "description": "The workstation reads its computer and policy objects from Active Directory, then fetches Group Policy from SYSVOL over SMB. Rule F03 permits the full directory profile for domain members.",
@@ -1229,7 +1229,7 @@
       "steps": [
         {
           "title": "Resolve the file server",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The client resolves the file server’s name before opening a connection. The diagram uses SBD-FS01 as the named destination.",
@@ -1237,7 +1237,7 @@
         },
         {
           "title": "Request a service ticket",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "Kerberos · TCP / UDP 88",
           "description": "The workstation uses its ticket-granting ticket to request a ticket for the file service. It then presents that service ticket to the server.",
@@ -1245,7 +1245,7 @@
         },
         {
           "title": "Open the approved share",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-FS01",
           "protocol": "SMB · TCP 445",
           "description": "The client requests a file over SMB. The server applies the relevant share and filesystem permissions before allowing access.",
@@ -1269,7 +1269,7 @@
         },
         {
           "title": "Check update metadata",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-WSUS01",
           "protocol": "HTTPS · TCP 8531",
           "description": "The client contacts the internal WSUS service for update metadata using the TLS-enabled configuration.",
@@ -1277,7 +1277,7 @@
         },
         {
           "title": "Retrieve signed update content",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-WSUS01",
           "protocol": "HTTP · TCP 8530",
           "description": "WSUS uses its HTTP connection for update payloads, with signatures protecting payload authenticity. TLS is used for metadata rather than every WSUS path.",
@@ -1333,7 +1333,7 @@
       "steps": [
         {
           "title": "Request a license",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-APPS01",
           "protocol": "VENDOR LICENSING · REGISTERED PORT",
           "description": "An approved client contacts the licensing service to check or obtain its entitlement. Protocol, direction, persistence, and offline behavior depend on the product.",
@@ -1381,7 +1381,7 @@
       "steps": [
         {
           "title": "Resolve the web server",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The browser resolves the web service’s internal name before connecting. DNS returns SBD-WEB01’s address on VLAN 40.",
@@ -1389,7 +1389,7 @@
         },
         {
           "title": "Verify the server certificate",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-WEB01",
           "protocol": "HTTPS · TCP 443",
           "description": "The browser opens a TLS session. SBD-WEB01 presents a certificate from the internal issuing CA, and the client checks the name, validity dates, and chain to the trusted offline root.",
@@ -1397,7 +1397,7 @@
         },
         {
           "title": "Check revocation",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-PKI-MGMT01",
           "protocol": "CRL / AIA · HTTP TCP 80",
           "description": "The client follows the CRL distribution point in the certificate to pki.sbd.test on SBD-PKI-MGMT01 and downloads the issuing CA’s current revocation list.",
@@ -1405,7 +1405,7 @@
         },
         {
           "title": "Request the application",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-WEB01",
           "protocol": "HTTPS · TCP 443",
           "description": "Inside the encrypted session, the browser sends HTTP requests and receives the application’s responses. The application decides what the signed-in user may see.",
@@ -1423,7 +1423,7 @@
       "steps": [
         {
           "title": "Query SBD-DC01",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The workstation sends its DNS query to its first configured DNS server. SBD-DC01 is offline, so no reply comes back.",
@@ -1431,7 +1431,7 @@
         },
         {
           "title": "Retry with SBD-DC02",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC02",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The client retries with its next configured DNS server. SBD-DC02 also provides DNS for the domain and answers.",
@@ -1439,7 +1439,7 @@
         },
         {
           "title": "Authenticate with SBD-DC02",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC02",
           "protocol": "Kerberos · TCP / UDP 88",
           "description": "DNS service records list both domain controllers, and the client’s domain controller locator finds SBD-DC02 responding. SBD-DC02’s Key Distribution Center issues the ticket-granting ticket.",
@@ -1455,7 +1455,7 @@
       "steps": [
         {
           "title": "Resolve the web server",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-DC01",
           "protocol": "DNS · TCP / UDP 53",
           "description": "The browser resolves the web service’s internal name, exactly as on a normal day.",
@@ -1463,7 +1463,7 @@
         },
         {
           "title": "Present an expired certificate",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-WEB01",
           "protocol": "HTTPS · TCP 443",
           "description": "SBD-WEB01 presents a certificate whose validity period has ended. The browser checks the dates, stops the connection, and shows a certificate error.",
@@ -1479,7 +1479,7 @@
       "steps": [
         {
           "title": "Connect straight to SBD-SQL01",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-SQL01",
           "protocol": "SQL · TCP 1433",
           "description": "A workstation tries to reach the database server directly. The core finds no matching exception, so default deny drops the session.",
@@ -1495,8 +1495,8 @@
       "steps": [
         {
           "title": "Open remote desktop to another PC",
-          "from": "50 Windows 11 PCs",
-          "to": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
+          "to": "50 Windows PCs",
           "protocol": "RDP · TCP / UDP 3389",
           "description": "A workstation tries a remote desktop session to a peer on the same VLAN. The destination’s host firewall refuses it.",
           "test": ""
@@ -1511,7 +1511,7 @@
       "steps": [
         {
           "title": "A compromised PC tries the database",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-SQL01",
           "protocol": "SQL · TCP 1433",
           "description": "Malware on one workstation reaches straight for SBD-SQL01. No exception exists for workstation-to-SQL traffic, so the core drops the attempt.",
@@ -1519,7 +1519,7 @@
         },
         {
           "title": "It looks for the security tools",
-          "from": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
           "to": "SBD-SPLUNK01",
           "protocol": "MANAGEMENT · Splunk Web · TCP 8000",
           "description": "Taking over a security tool would blind the defenders. The PC tries Splunk’s web interface. No rule lets user workstations reach security-tool management, so default deny drops it.",
@@ -1527,16 +1527,16 @@
         },
         {
           "title": "It tries a neighbor’s file shares",
-          "from": "50 Windows 11 PCs",
-          "to": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
+          "to": "50 Windows PCs",
           "protocol": "SMB · TCP 445",
           "description": "Next, the PC tries the shares on another workstation in VLAN 80. The traffic never crosses the core, so the neighbor’s host firewall refuses it.",
           "test": "Client-to-SQL, client-to-management, and peer SMB/RDP fail."
         },
         {
           "title": "It tries remote desktop to a neighbor",
-          "from": "50 Windows 11 PCs",
-          "to": "50 Windows 11 PCs",
+          "from": "50 Windows PCs",
+          "to": "50 Windows PCs",
           "protocol": "RDP · TCP / UDP 3389",
           "description": "The PC tries a remote desktop session to a peer. The destination’s host firewall refuses it.",
           "test": "Client-to-SQL, client-to-management, and peer SMB/RDP fail."

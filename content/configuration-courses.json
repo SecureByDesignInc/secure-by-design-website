@@ -3,7 +3,7 @@
     "id": "dns-configuration",
     "prerequisites": [
       "Complete course 1.1, the DC01 + DC02 identity build, with both domain controllers healthy. Both were promoted with the DNS server option selected, and SBD-DC02 still uses SBD-DC01 for DNS.",
-      "Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.",
+      "Use an isolated Windows Server practice environment and an account delegated to manage DNS.",
       "Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.",
       "The network's routing and VLAN segmentation are already in place, with a documented service-path register."
     ],
@@ -315,7 +315,7 @@
           "Query the domain controller locator service (SRV) records against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove discovery works, and a locator answer does not by itself prove that every listed controller is reachable.",
           "Run the DNS diagnostics against every domain controller, then the replication summary. Classify root-hint, forwarder, and delegation findings against the documented isolated design instead of treating them as faults, and investigate everything else.",
           "During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise.",
-          "Optional: see the locator query on the wire. On SBD-DC02, in an elevated PowerShell window, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server 2025, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed."
+          "Optional: see the locator query on the wire. On SBD-DC02, in an elevated PowerShell window, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed."
         ],
         "command": "foreach ($server in '10.0.10.10','10.0.10.11') {\n  Write-Output \"DNS server: $server\"\n  Resolve-DnsName 'SBD-DC01.sbd.test' -Type A -Server $server\n  Resolve-DnsName 'SBD-DC02.sbd.test' -Type A -Server $server\n  Resolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server $server\n}\ndcdiag /test:DNS /e /v\nrepadmin /replsummary\n# Optional, on SBD-DC02: capture the locator query\nNew-Item -ItemType Directory C:\\Evidence -Force\npktmon filter remove\npktmon filter add DNS -p 53\npktmon start --capture --comp nics --pkt-size 0 --file-name C:\\Evidence\\dc-locator.etl\nResolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server 10.0.10.10\npktmon stop\npktmon etl2txt C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.txt\npktmon etl2pcap C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.pcapng\npktmon filter remove",
         "check": "Both DNS servers return both controllers' host records and the domain controller locator records, the DCDiag DNS findings are explained, replication is healthy, and the client still resolves internal names when either resolver is unavailable. If you ran the capture, it shows the query from 10.0.10.11 and the answer from 10.0.10.10.",
@@ -557,7 +557,7 @@
     "id": "two-tier-pki",
     "prerequisites": [
       "Complete courses 1.1–1.3 (identity, DNS and time, and the hardened baseline); verify domain health and internal name resolution.",
-      "Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup, SBD-SUBCA01 joined to sbd.test, and SBD-PKI-MGMT01 as a hardened member server at 10.0.30.30 in the Servers OU (course 1.5 moves it, with the issuing CA, to a Tier 0 Servers OU).",
+      "Prepare separate Windows Server hosts: SBD-ROOTCA01 in a disconnected workgroup, SBD-SUBCA01 joined to sbd.test, and SBD-PKI-MGMT01 as a hardened member server at 10.0.30.30 in the Servers OU (course 1.5 moves it, with the issuing CA, to a Tier 0 Servers OU).",
       "Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation; confirm the network's service-path register permits HTTP to pki.sbd.test."
     ],
     "labNote": "This course builds the whole PKI: a standalone offline Root CA, an enterprise subordinate/issuing CA, the pki.sbd.test publication site on SBD-PKI-MGMT01, and template administration on its own seat. The root stays disconnected; approved removable media carries requests and public artifacts. Publication stays plain HTTP by design — clients must be able to fetch revocation data before they can validate any certificate.",
@@ -627,7 +627,7 @@
         "steps": [
           "Draw the hierarchy: offline standalone root → enterprise issuing CA → approved server/client certificates. There is no network connection to the root.",
           "Record final host and CA names, key provider, algorithm, key sizes, hashes, validity periods, renewal owners, and recovery arrangements. Start from this lab's example values in the next step and change any that your own policy requires: they are examples, not universal requirements.",
-          "Example values for this lab: the root CA uses an RSA 4096 key with SHA-256 and a 20-year certificate, and publishes a base CRL every 26 weeks with an overlap period and no delta CRL, refreshed at each offline ceremony. The issuing CA uses RSA 4096 (3072 at minimum) with SHA-256 and a 10-year certificate, a weekly base CRL, and a daily delta CRL. End-entity certificates last one to two years. NIST SP 800-57 Part 1 rates RSA 2048 at 112 bits of security, which it accepts for new signatures only through 2030, so a CA that will still be signing after 2030 uses at least 3072 bits (128 bits of security); Windows Server 2025 requires at least 2,048-bit RSA for TLS server authentication.",
+          "Example values for this lab: the root CA uses an RSA 4096 key with SHA-256 and a 20-year certificate, and publishes a base CRL every 26 weeks with an overlap period and no delta CRL, refreshed at each offline ceremony. The issuing CA uses RSA 4096 (3072 at minimum) with SHA-256 and a 10-year certificate, a weekly base CRL, and a daily delta CRL. End-entity certificates last one to two years. NIST SP 800-57 Part 1 rates RSA 2048 at 112 bits of security, which it accepts for new signatures only through 2030, so a CA that will still be signing after 2030 uses at least 3072 bits (128 bits of security); current Windows Server releases require at least 2,048-bit RSA for TLS server authentication.",
           "Know where each value is set. You choose the key, the hash, and the root's 20-year validity in the AD CS Configuration wizard. Each CA's CAPolicy.inf sets its CRL periods (CRLPeriod, CRLPeriodUnits, CRLDeltaPeriod, CRLDeltaPeriodUnits), which certutil -setreg can change later. The issuing CA's 10-year lifetime is set on the root (CA\\ValidityPeriod and CA\\ValidityPeriodUnits) before the signing ceremony, because a subordinate CA's lifetime comes from the CA that signs it.",
           "Plan a stable internal publication name such as pki.sbd.test. The Authority Information Access (AIA) location supplies issuer certificates; the CRL Distribution Point (CDP) supplies certificate revocation lists.",
           "Choose the publication host, paths, access rules, and refresh schedule before issuing certificates. Clients inside this air-gapped network must reach those locations without relying on the public internet."
@@ -1150,7 +1150,7 @@
         "summary": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those.",
         "objectives": [
           "Duplicate and configure the computer and web server templates against the approved plan.",
-          "Set key sizes and validity that satisfy the Windows Server 2025 minimums.",
+          "Set key sizes and validity that satisfy current Windows Server minimums.",
           "Publish only the needed templates, scoped to a pilot group first."
         ],
         "steps": [
@@ -1178,10 +1178,10 @@
             "answers": [
               "512 bits for speed",
               "1,024 bits",
-              "2,048-bit RSA at minimum — Windows Server 2025 enforces it for TLS server authentication"
+              "2,048-bit RSA at minimum — current Windows Server releases enforce it for TLS server authentication"
             ],
             "correct": 2,
-            "explanation": "Windows Server 2025 requires at least 2,048-bit RSA keys for TLS server authentication, so a plan below that produces certificates the platform itself will reject."
+            "explanation": "Current Windows Server releases require at least 2,048-bit RSA keys for TLS server authentication, so a plan below that produces certificates the platform itself will reject."
           },
           {
             "question": "Why publish to a pilot group before the whole domain?",
@@ -1196,7 +1196,7 @@
         ],
         "recap": [
           "Two named templates exist, configured on purpose, nothing else published.",
-          "Key sizes meet the 2025 floor; permissions are pilot-scoped.",
+          "Key sizes meet the platform's 2,048-bit floor; permissions are pilot-scoped.",
           "Every template carries its change record."
         ],
         "next": "The final lesson proves enrollment and revocation end to end and runs the delta scans.",
@@ -1292,7 +1292,7 @@
     "id": "harden-baseline",
     "prerequisites": [
       "Complete the identity build and DNS courses with replication and name resolution verified on both controllers.",
-      "Use the isolated Windows Server 2025 environment and an account approved for organizational unit and Group Policy administration.",
+      "Use the isolated Windows Server environment and an account approved for organizational unit and Group Policy administration.",
       "Have an approved connected system and removable-media procedure for bringing downloaded hardening content into the lab."
     ],
     "labNote": "This course designs the organizational unit (OU) structure, applies the Defense Information Systems Agency (DISA) Security Technical Implementation Guide (STIG) Group Policy package, and verifies the result with Security Content Automation Protocol (SCAP) scans. Paths, versions, and session locations below are examples — adapt them to your tooling. Expect STIG settings to change behavior: that is the point, and the reason everything is scanned and recorded.",
@@ -1479,8 +1479,8 @@
           "Preserve raw results as evidence with hashes and versions."
         ],
         "steps": [
-          "On each domain controller, run SCC with the Windows Server 2025 STIG benchmark and the directory-related content staged for this course. Save each session's results with the host name and date.",
-          "Open the results and read, don't just count. Note which checks already pass: Windows Server 2025 ships with defaults such as required signing on outbound SMB connections and LDAP sealing on new deployments, so part of the STIG is green before you touch anything.",
+          "On each domain controller, run SCC with the Windows Server STIG benchmark for your release and the directory-related content staged for this course. Save each session's results with the host name and date.",
+          "Open the results and read, don't just count. Note which checks already pass: current Windows Server releases ship with defaults such as required signing on outbound SMB connections and LDAP sealing on new deployments, so part of the STIG is green before you touch anything.",
           "Separate the automated results from the manual checks. SCAP answers what a scanner can read; items marked for manual review go to STIG Viewer for a human answer in lesson 5.",
           "Store the raw result files unmodified, with recorded hashes. The baseline is evidence; a cleaned-up copy is a summary, not the record."
         ],
@@ -1499,14 +1499,14 @@
             "explanation": "The baseline is the comparison point. Without it, the rescan proves only a state, not what your hardening changed."
           },
           {
-            "question": "Several checks pass before any hardening. What is the likely reason on Windows Server 2025?",
+            "question": "Several checks pass before any hardening. What is the likely reason on a current Windows Server release?",
             "answers": [
               "The scanner is misconfigured",
               "Earlier lessons secretly applied GPOs",
               "The OS ships secure defaults, such as required SMB signing, that satisfy those checks"
             ],
             "correct": 2,
-            "explanation": "Windows Server 2025 raised several security defaults, so a fresh build already meets part of the benchmark."
+            "explanation": "Current Windows Server releases raised several security defaults, so a fresh build already meets part of the benchmark."
           },
           {
             "question": "What happens with checks the scanner marks for manual review?",
@@ -1730,7 +1730,7 @@
     "id": "tiered-admin",
     "prerequisites": [
       "Complete course 1.4: the finished two-tier PKI with its publication site and templates, plus course 1.3's OU structure with the Admin OU in place. The network's routing and default-deny segmentation, with its access control list (ACL) register, are already in place.",
-      "Provision Windows Server 2025 hosts for SBD-DHCP01 (10.0.20.10) and the three administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30).",
+      "Provision Windows Server hosts for SBD-DHCP01 (10.0.20.10) and the three administration systems in VLAN 60: AdminJumpBox01 (.10), SBD-ADMIN-SRV01 (.20), SBD-ADMIN-PC01 (.30).",
       "Decide the privileged accounts: separate admin identities per tier, never daily-driver accounts with admin rights."
     ],
     "labNote": "This course builds the control plane before the fleet exists: DHCP for the workstation VLAN, and a tiered administration model where privileged sessions only ever start from dedicated hosts. The model's rule is strict — the jump systems administer; they browse nothing, read no mail, and accept no inbound sessions from user space.",
@@ -1938,8 +1938,8 @@
           "Register and restrict their management paths."
         ],
         "steps": [
-          "Create two computer sub-OUs under the Admin OU — Admin Servers for AdminJumpBox01 and SBD-ADMIN-SRV01, Admin Workstations for SBD-ADMIN-PC01 — and link course 1.3's Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) to them before any seat joins: the member-server policies to Admin Servers and the Windows 11 policies from the same package to Admin Workstations. Course 1.3 linked them only to the Domain Controllers and Servers OUs, so without this step the seats would boot unhardened.",
-          "Build AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 as clean Windows Server 2025 (or Windows 11, for the endpoint seat) installs and join each into its sub-OU, so the hardening applies from first boot.",
+          "Create two computer sub-OUs under the Admin OU — Admin Servers for AdminJumpBox01 and SBD-ADMIN-SRV01, Admin Workstations for SBD-ADMIN-PC01 — and link course 1.3's Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) to them before any seat joins: the member-server policies to Admin Servers and the Windows client policies from the same package to Admin Workstations. Course 1.3 linked them only to the Domain Controllers and Servers OUs, so without this step the seats would boot unhardened.",
+          "Build AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 as clean Windows Server (or Windows client, for the endpoint seat) installs and join each into its sub-OU, so the hardening applies from first boot.",
           "Strip them to purpose: no browsing to anything but internal admin interfaces, no mail, no file shares hosted, and the management tools for exactly their tier — Remote Server Administration Tools (RSAT) on the server seats, endpoint tooling on the PC seat.",
           "Register the management paths: VLAN 60 to Tier 0 and Tier 1 ports (remote desktop 3389, remote management 5985–5986, SSH 22 for the domain-joined Linux servers) from the specific admin host each tier allows, and the router's management on VLAN 100 from AdminJumpBox01 only. Keep the VLAN 80 → VLAN 60 deny from lesson 1 in force.",
           "Require the admin hosts' own local firewalls to accept management inbound from nowhere — sessions originate here, they never terminate here."
@@ -2004,7 +2004,7 @@
           "Create the Tier 0 Servers OU (OU=Tier 0 Servers,OU=SBD,DC=sbd,DC=test) with deletion protection, link course 1.3's member-server STIG GPOs to it so nothing loses its hardening, and move SBD-SUBCA01 and SBD-PKI-MGMT01 there. Both are Tier 0, and the Servers OU is about to deny Tier 0 sign-ins — left there, they would lock Tier 0 out of its own systems.",
           "Create one tier logon GPO for the Servers OU — now Tier 1 only — and one for the Workstations OU, and never link either to the Domain Controllers or Tier 0 Servers OUs. User rights don't merge across GPOs: for each right, the highest-precedence GPO that sets it wins, so each list repeats the entries course 1.3's STIG GPO sets for that right (such as Domain Admins and Enterprise Admins), and the tier GPO links above the STIG GPO. On the Servers OU, give the Tier 0 admin group (SBD Tier 0 Admins in this sample) Deny log on locally, Deny log on through Remote Desktop Services, Deny log on as a batch job, and Deny log on as a service. On the Workstations OU, give both the Tier 0 and Tier 1 groups those four denies plus Deny access to this computer from the network.",
           "On the Servers OU, set Deny access to this computer from the network — the Tier 0 group plus the STIG's entries — in a separate GPO that excludes the SBD Tier 0 Console Hosts group through security filtering (deny Apply group policy). Course 1.8 adds SBD-WSUS01 and SBD-EPO01 to that group, so those two keep only the STIG's own setting. From AdminJumpBox01, Tier 0 manages the domain controllers' WSUS update ring and their agent policy in Trellix ePolicy Orchestrator (ePO) through those two consoles, using Tier 0 task accounts outside Domain Admins and Enterprise Admins (which the STIG denies network logon on member servers); a Kerberos network logon leaves no reusable credentials on the server. Record the exception — the two servers, the accounts, the reason, and its owner — in the course 1.3 exception record.",
-          "Add Tier 0 administrators to the Protected Users group so the domain refuses their weaker authentication paths, and note the Windows Server 2025 behavior that supports this design: RC4 ticket-granting tickets are gone and legacy remote password changes are blocked for protected accounts. Protected Users accounts also cannot be delegated, which keeps the console exception free of reusable credentials.",
+          "Add Tier 0 administrators to the Protected Users group so the domain refuses their weaker authentication paths, and note the current Windows Server behavior that supports this design: RC4 ticket-granting tickets are gone and legacy remote password changes are blocked for protected accounts. Protected Users accounts also cannot be delegated, which keeps the console exception free of reusable credentials.",
           "Keep the built-in safety valves: one documented break-glass account, excluded from the deny policies, with its password sealed and its every use alarmed in a later logging course.",
           "Record the multifactor decision the model calls for on VLAN 60 — smart card or certificate-based sign-in for privileged accounts is the natural follow-on to course 1.4's templates; write the decision and its target date even if implementation waits."
         ],
@@ -2071,7 +2071,7 @@
         "recap": [
           "Tier 0 servers have their own OU, so the deny policies never lock Tier 0 out.",
           "Lower tiers refuse higher-tier credentials by policy, with events to prove it; the console network-logon exception is recorded.",
-          "Tier 0 accounts sit in Protected Users, backed by 2025's stricter defaults.",
+          "Tier 0 accounts sit in Protected Users, backed by current Windows Server's stricter defaults.",
           "Break-glass and MFA are written decisions, not loose ends."
         ],
         "next": "Lesson 5 tests the whole plane — the paths that must work and the sign-ins that must fail.",
@@ -2221,7 +2221,7 @@
     "id": "logging-pipeline",
     "prerequisites": [
       "Complete course 1.5: the admin plane exists, and this course's systems are managed only from VLAN 60.",
-      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain with its time service (chrony or ntpd) pointed at both domain controllers, and SBD-AUDIT01 (10.0.50.40) as Windows Server 2025 joined to the domain.",
+      "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain with its time service (chrony or ntpd) pointed at both domain controllers, and SBD-AUDIT01 (10.0.50.40) as Windows Server joined to the domain.",
       "Have the network's service-path register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system."
     ],
     "labNote": "This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.",
@@ -2646,8 +2646,8 @@
     "id": "workstation-fleet",
     "prerequisites": [
       "Complete courses 1.4–1.6: working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline, on the network's routed, segmented VLANs.",
-      "Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
-      "Confirm the Workstations OU, the container redirects from course 1.3, and the Defense Information Systems Agency (DISA) Windows 11 Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) from the course 1.3 package are ready to link.",
+      "Prepare a patched Windows reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
+      "Confirm the Workstations OU, the container redirects from course 1.3, and the Defense Information Systems Agency (DISA) Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) for your Windows client release, from the course 1.3 package, are ready to link.",
       "Confirm the VLAN 80 access switch supports 802.1X port authentication, including a monitor (audit) mode that logs each result without blocking traffic. No new server is needed: the Network Policy Server (NPS) role goes on SBD-DHCP01."
     ],
     "labNote": "Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.",
@@ -2712,13 +2712,13 @@
         "objectives": [
           "Finalize the reference image and naming plan for fifty endpoints.",
           "Create a least-privilege join account scoped to the Workstations OU.",
-          "Link the Windows 11 STIG policies and the workstation firewall policy to the Workstations OU before any join."
+          "Link the Windows client STIG policies and the workstation firewall policy to the Workstations OU before any join."
         ],
         "steps": [
-          "Finalize the Windows 11 reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.",
+          "Finalize the Windows reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.",
           "Write the naming and rollout plan: SBD-PC01–SBD-PC50, addressed by the course 1.5 DHCP scope, joined in waves (pilot of three, then batches) rather than all fifty at once.",
           "Create a dedicated domain-join account delegated only the create-computer-objects right on the Workstations OU — no broader privilege rides along with fifty join operations. The course 1.3 redirect already guarantees machines land in that OU.",
-          "Link the DISA Windows 11 STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that Windows 11's own secure defaults will already satisfy some checks, just as Server 2025 did.",
+          "Link the DISA Windows client STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that the Windows client's own secure defaults will already satisfy some checks, just as Windows Server's did.",
           "Create the workstation firewall GPO (SBD Workstation Firewall in this sample) on the Workstations OU: Windows Defender Firewall on for every profile with inbound traffic blocked by default, and inbound rules that allow SMB (TCP 445), Remote Desktop (TCP 3389), and remote management (TCP 5985–5986) only from SBD-ADMIN-PC01 at 10.0.60.30 — course 1.8 adds SBD-NESSUS01 for credentialed scans. No rule allows SMB or Remote Desktop between workstations: traffic inside VLAN 80 never reaches the router, so this policy, not the core router's rules, enforces the register's peer denies."
         ],
         "command": "Get-FileHash -Algorithm SHA256 C:\\Staging\\Win11-Reference.vhdx\nGet-ADOrganizationalUnit -Identity 'OU=Workstations,OU=SBD,DC=sbd,DC=test'\nGet-GPInheritance -Target 'OU=Workstations,OU=SBD,DC=sbd,DC=test'\nGet-GPOReport -Name 'SBD Workstation Firewall' -ReportType Html -Path C:\\Evidence\\workstation-fleet\\workstation-firewall.html",
@@ -2807,7 +2807,7 @@
           {
             "question": "How does a brand-new machine end up hardened without anyone touching it?",
             "answers": [
-              "Windows 11 hardens itself completely",
+              "Windows hardens itself completely",
               "Redirect lands it in the Workstations OU, where the pre-linked STIG policies apply at first boot",
               "The DHCP server pushes the STIG"
             ],
@@ -2817,7 +2817,7 @@
           {
             "question": "Why test pilot-to-pilot SMB and expect failure?",
             "answers": [
-              "SMB is removed from Windows 11",
+              "SMB is removed from Windows",
               "The pilots are in different domains",
               "Each PC's firewall policy denies peer SMB and Remote Desktop — lateral movement inside VLAN 80 is cut at the destination host"
             ],
@@ -3076,7 +3076,7 @@
             "question": "Why prove the fleet by sample instead of checking all fifty by hand?",
             "answers": [
               "A defined sample with a failure rule is verifiable and honest at scale — and identical provenance is what the image hash bought you",
-              "Checking is impossible on Windows 11",
+              "Checking is impossible on Windows",
               "Only pilots can be checked"
             ],
             "correct": 0,
@@ -3130,28 +3130,28 @@
         "id": "scan",
         "title": "Delta scan the fleet and hand off",
         "minutes": 20,
-        "summary": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over.",
+        "summary": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows client benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over.",
         "objectives": [
-          "Baseline sampled endpoints with the Windows 11 STIG benchmark.",
+          "Baseline sampled endpoints with the Windows client STIG benchmark.",
           "Rescan the infrastructure this course touched.",
           "Hand the fleet inventory to course 1.8's management tooling."
         ],
         "steps": [
-          "Run the SCAP Compliance Checker (SCC) with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
+          "Run the SCAP Compliance Checker (SCC) with the Windows client STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
           "Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (the new NPS role and a scope in daily use); attribute each delta to its lesson.",
           "Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.8's management tooling will take ownership of keeping it current.",
           "Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what course 1.8 builds next."
         ],
         "command": "Get-ChildItem C:\\Evidence\\workstation-fleet -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\workstation-fleet\\*",
-        "check": "Sampled endpoints hold dated Windows 11 baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.",
+        "check": "Sampled endpoints hold dated Windows client baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.",
         "evidence": "Finish the checklist: endpoint baselines, infrastructure rescans, the fleet inventory, and the handoff note to course 1.8.",
         "quizzes": [
           {
             "question": "Which benchmark do the endpoints get?",
             "answers": [
-              "Windows Server 2025, close enough",
+              "The Windows Server benchmark, close enough",
               "The router's config export",
-              "The Windows 11 STIG benchmark — the fleet's own standard from the same DISA package"
+              "The Windows client STIG benchmark — the fleet's own standard from the same DISA package"
             ],
             "correct": 2,
             "explanation": "The GPO package staged in course 1.3 carried the endpoint STIGs too; the fleet is scanned against its own content."
@@ -3309,7 +3309,7 @@
           "Approve and verify a first update cycle through the pilot ring."
         ],
         "steps": [
-          "Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — Windows Server 2025, Windows 11, and defender definitions — and nothing speculative. Microsoft announced in September 2024 that WSUS is deprecated and no longer actively developed, but it is still included in Windows Server 2025 and supported for production deployments, with security and quality updates under the product lifecycle.",
+          "Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — the Windows Server and Windows client releases in use, and Defender definitions — and nothing speculative. Microsoft announced in September 2024 that WSUS is deprecated and no longer actively developed, but it is still included in current Windows Server releases and supported for production deployments, with security and quality updates under the product lifecycle.",
           "Feed it offline: export the needed content on the connected side, hash it, carry it across, and import — the WSUS offline servicing path is the course 1.3 media procedure wearing an update hat.",
           "Create WSUS computer groups matching the rings, and link ring GPOs at the OUs: update source SBD-WSUS01, the ring's group assignment, and install/restart windows that respect what each ring does for a living. The critical ring's GPO links to the Domain Controllers and Tier 0 Servers OUs.",
           "Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived. Pilot and broad-ring approvals are Tier 1 work from SBD-ADMIN-SRV01; critical-ring approvals for the domain controllers and the two Tier 0 servers are Tier 0 work from AdminJumpBox01. Add SBD-WSUS01 to the SBD Tier 0 Console Hosts group and restart it so the new membership applies: the console reaches the server as a Kerberos network logon, the one Tier 0 logon type course 1.5's deny policy leaves open there, as its exception record states."
@@ -3690,7 +3690,7 @@
         "steps": [
           "Write the service-path rows: fleet to FS01 (SMB 445); fleet to APPS01 on its licensing port, recorded per application; fleet to WEB01 (HTTPS 443); WEB01 to APPS01 for the application API (HTTPS 443); and APPS01 — and only APPS01 — to SQL01 (TCP 1433 with TLS). Add an explicit deny from WEB01 to SQL01: the web tier has no database dependency. All four servers share VLAN 40, so the router never sees their traffic to each other — each server's host firewall enforces those rows. Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.",
           "Register WEB01's Linux maintenance rows as well: packages from SBD-REPO01 only (HTTP with GPG-signed packages) and syslog over TLS to the collector, SBD-SYSLOG01 (TCP 6514) — the same paths the other domain-joined Linux servers, SBD-SPLUNK01 and SBD-NESSUS01, use. Course 1.8's repository row named only those two because WEB01 did not exist yet.",
-          "Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note Windows Server 2025's delegated managed service accounts as the migration path for any legacy service account this lab later inherits.",
+          "Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note delegated managed service accounts, new in current Windows Server releases, as the migration path for any legacy service account this lab later inherits.",
           "Create the access groups under the course 1.3 Groups OU — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.",
           "Request the server certificates through the course 1.4 process: one SBD Server Authentication certificate each for SQL01, APPS01 (for its application API), and WEB01, enrolled from the template, with the publication site serving their revocation story."
         ],
@@ -3754,7 +3754,7 @@
         "steps": [
           "Build SBD-FS01 in the Servers OU and create the planned shares, granting NTFS permissions to the lesson-1 role groups only — share permissions stay simple, the filesystem carries the detail, and no named human appears in an access control list (ACL).",
           "Enable access-based enumeration so users see only what their roles permit — the quiet UX of least privilege.",
-          "Confirm the SMB posture. Windows 11 version 24H2 Pro, Enterprise, and Education require SMB signing for both inbound and outbound connections, but Windows Server 2025 requires it only for its own outbound connections — so require signing on SBD-FS01 as well (RequireSecuritySignature in its SMB server configuration), and opt the sensitive share into SMB encryption. Verify both on a live connection from a fleet machine rather than assuming the defaults.",
+          "Confirm the SMB posture. Current Windows client releases (Pro, Enterprise, and Education) require SMB signing for both inbound and outbound connections, but current Windows Server releases require it only for their own outbound connections — so require signing on SBD-FS01 as well (RequireSecuritySignature in its SMB server configuration), and opt the sensitive share into SMB encryption. Verify both on a live connection from a fleet machine rather than assuming the defaults.",
           "Test as members of two different roles from fleet machines: each sees and opens exactly its shares, the other's are invisible and denied, and the denial lands in the pipeline like every other refusal on this network."
         ],
         "command": "Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData   # on FS01\nGet-SmbServerConfiguration | Select-Object RequireSecuritySignature   # on FS01: expected True\nGet-SmbConnection -ServerName SBD-FS01 | Select-Object ShareName, Dialect, Signed, Encrypted   # on the fleet machine, during the test session\nicacls D:\\Shares\\Projects | Select-String 'SBD'",
@@ -3784,7 +3784,7 @@
               "Nothing extra"
             ],
             "correct": 0,
-            "explanation": "Defaults differ by edition and direction — Windows Server 2025 requires signing only for its own outbound connections — so the evidence standard of this whole path is observed behavior: inspect the connection itself."
+            "explanation": "Defaults differ by edition and direction — current Windows Server releases require signing only for their own outbound connections — so the evidence standard of this whole path is observed behavior: inspect the connection itself."
           },
           {
             "question": "A user can't see a share their colleague uses. What is that?",

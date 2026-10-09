@@ -143,7 +143,7 @@ try {
     await page.evaluate(() => scrollTo(0, 0));
     const pcs = await page.evaluate(() => window.insideNetworkQA.project('workstations'));
     await page.mouse.move(pcs.x, pcs.y);
-    assert.match(await page.locator('#hoverTip').textContent(), /50 Windows 11 PCs/, 'Hover tooltip');
+    assert.match(await page.locator('#hoverTip').textContent(), /50 Windows PCs/, 'Hover tooltip');
     await page.mouse.move(2, 2);
     // The overview names every VLAN on the floating topology layer.
     const islandLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).length);

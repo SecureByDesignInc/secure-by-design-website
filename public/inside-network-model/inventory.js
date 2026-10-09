@@ -331,7 +331,7 @@ export const inventory = {
     },
     {
       "id": "workstations",
-      "name": "50 Windows 11 PCs",
+      "name": "50 Windows PCs",
       "role": "User workstations × 50",
       "zone": "users",
       "controls": [
@@ -340,7 +340,7 @@ export const inventory = {
         "SI-2",
         "SI-3"
       ],
-      "known": "Fifty Windows 11 user workstations, displayed as one selectable group. Individual hostnames and domain-join status were not provided.",
+      "known": "Fifty Windows user workstations, displayed as one selectable group. Individual hostnames and domain-join status were not provided.",
       "design": [
         "Apply approved hardening and minimize local administrative access.",
         "Deploy and verify patching, protection, and required logging.",

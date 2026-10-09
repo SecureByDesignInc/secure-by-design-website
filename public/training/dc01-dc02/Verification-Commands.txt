@@ -1,14 +1,16 @@
-SECURE BY DESIGN - DC01 AND DC02
-Sample: sbd.test, 10.0.10.10 and 10.0.10.11
-Read-only checks. Run in your environment with the necessary Windows server tools and access.
-Review results; no checks are automatically run by this package.
+SECURE BY DESIGN - PROMOTE PRIMARY & SECONDARY DOMAIN CONTROLLER
+Course 1.1 | Materials edition 0.6 | Updated 9 October 2026
+Sample: sbd.test; SBD-DC01 10.0.10.10 and SBD-DC02 10.0.10.11 on VLAN 10, gateway 10.0.10.1
+Read-only checks. Run them on the controllers (later, from the Tier 0 administration host)
+with the Windows Server tools and access they need. Review every result; nothing in this
+file runs by itself.
 
 Give every system a purpose
 hostname
 Get-NetIPConfiguration
 w32tm /query /status
 
-Expected observations: The two names and static addresses match your plan, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.
+Expected observations: The two names and static addresses match your plan, the default gateway is 10.0.10.1, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.
 
 Create the first domain controller
 Get-ADDomain | Select-Object DNSRoot, NetBIOSName
@@ -33,8 +35,11 @@ repadmin /showrepl *
 Get-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog
 netdom query fsmo
 Get-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02
+# On each controller: network profile and host firewall
+Get-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory
+Get-NetFirewallProfile | Select-Object Name, Enabled
 
-Expected observations: Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, and SYSVOL and NETLOGON are shared on both. Save output with host, time, and interpretation; a command that ran is not a pass.
+Expected observations: Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with its firewall on. Save output with host, time, and interpretation; a command that ran is not a pass.
 
 Leave a build someone else can understand
 Get-ADDomain |

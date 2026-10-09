@@ -1,0 +1,52 @@
+SECURE BY DESIGN - STAND UP THE BUSINESS SERVICES
+Course 1.9 | Materials edition 1.3 | Updated 9 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Design the service paths and identities
+Get-ADServiceAccount -Filter * | Select-Object Name, Enabled
+Get-ADGroup -SearchBase 'OU=Groups,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name
+Test-NetConnection 10.0.40.20 -Port 1433   # expected before build: TcpTestSucceeded False
+
+What success looks like: The register carries every service row — the SQL path restricted to APPS01 alone, the WEB01-to-SQL01 deny, and WEB01's repository and syslog rows — the gMSAs and role groups exist, and the three server certificates are issued and recorded.
+
+2. Build SBD-FS01 with least-privilege shares
+Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData   # on FS01
+Get-SmbServerConfiguration | Select-Object RequireSecuritySignature   # on FS01: expected True
+Get-SmbConnection -ServerName SBD-FS01 | Select-Object ShareName, Dialect, Signed, Encrypted   # on the fleet machine, during the test session
+icacls D:\Shares\Projects | Select-String 'SBD'
+
+What success looks like: Shares grant to role groups only, FS01 requires signing, a live connection from the fleet shows Signed True — or, on the encrypted share, Encrypted True, where Signed reads False even though an encrypted connection is also signed — and the two-role test proves both the access and the invisible-denied behavior.
+
+3. Build SBD-SQL01 behind its applications
+Get-Service MSSQLSERVER -ComputerName SBD-SQL01 | Select-Object Status
+# From SBD-APPS01, the registered caller: expected TcpTestSucceeded True.
+Test-NetConnection SBD-SQL01.sbd.test -Port 1433
+# From a fleet machine: expected TcpTestSucceeded False.
+Test-NetConnection SBD-SQL01.sbd.test -Port 1433
+# From SBD-WEB01 (Linux): expected to be refused or time out.
+nc -zv SBD-SQL01.sbd.test 1433
+certutil -verify -urlfetch C:\Evidence\services\sql01.cer
+
+What success looks like: The service runs as the gMSA, connections are certificate-encrypted with a validating chain, APPS01's access works by database role, and both direct attempts fail with a record: SBD-WEB01's at SQL01's host firewall, the fleet's at the router.
+
+4. Build SBD-APPS01 and SBD-WEB01
+Test-NetConnection SBD-WEB01.sbd.test -Port 443   # from a fleet machine
+certutil -verify -urlfetch C:\Evidence\services\web01.cer
+Test-NetConnection SBD-SQL01.sbd.test -Port 1433   # from the fleet: expected False
+# On SBD-WEB01 (Linux): domain membership, the API answers, the database does not.
+realm list
+curl -sS -o /dev/null -w '%{http_code}\n' https://SBD-APPS01.sbd.test/   # use your application's health path
+nc -zv SBD-SQL01.sbd.test 1433   # expected: refused or timed out
+
+What success looks like: The licensing path works as registered, SBD-WEB01 is domain-joined with SSSD and patches only from SBD-REPO01, the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration, and the end-to-end request proves fleet → web → application → database with both shortcuts denied.
+
+5. Reconcile, scan, and hand off
+Get-ChildItem C:\Evidence\business-services -Recurse | Select-Object Name, LastWriteTime
+Get-FileHash -Algorithm SHA256 C:\Evidence\business-services\*
+
+What success looks like: The matrix covers every VLAN 40 row with paired permit/deny proof, the four hosts carry baselines or config records with triaged scan findings, and inventory, register, and exception record all reflect the finished services.
+
+© 2026 Secure By Design Team LLC

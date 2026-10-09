@@ -6,8 +6,8 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
+  BookOpen,
   Download,
-  FileText,
   Maximize2,
   Move,
   Network,
@@ -111,8 +111,8 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
       >
         <CompanionHeading
           id={`episode-resources-${episode.id}`}
-          intro="Start with the interactive guide or download the workbook and verification commands. Everything you need is included below."
-          action={{ href: episode.training.package, label: 'Download all materials', icon: <Download size={16} />, download: true }}
+          intro="Start with the interactive guide, or download every training material in one file."
+          action={{ href: episode.training.guide, label: 'Open the full guide', icon: <BookOpen size={16} /> }}
         />
         <div className="vc-episode-content">
           <CompanionMaterials
@@ -123,9 +123,7 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
             summary={`${episode.training.pages} pages of explanations, configuration steps, security reasoning, and evidence prompts.`}
             guide={{ href: episode.training.guide, title: 'Open the interactive guide', detail: '3D network · chapter checks · your notes', icon: <Network size={20} />, trailing: <ArrowUpRight size={19} /> }}
             links={[
-              { href: episode.training.pdf, title: 'Companion workbook', detail: `PDF · ${episode.training.pages} pages`, icon: <FileText size={19} />, trailing: <ArrowUpRight size={16} />, newTab: true },
-              { href: episode.training.word, title: 'Editable workbook', detail: 'Word document', icon: <FileText size={19} />, trailing: <Download size={16} />, download: true },
-              { href: episode.training.package, title: 'The complete learning package', detail: 'Guide, workbooks, and verification commands', icon: <Download size={19} />, trailing: <ArrowDown size={16} />, download: true },
+              { href: episode.training.package, title: 'Download the training materials', detail: `ZIP · offline guide, ${episode.training.pages}-page workbook (PDF and Word), and verification commands`, icon: <Download size={19} />, trailing: <ArrowDown size={16} />, download: true },
             ]}
             edition={(episode.training.materialsEdition || episode.training.copyrightOwner || episode.training.notices) && <>
               {episode.training.materialsEdition && (

@@ -1,13 +1,13 @@
 # See everything: the logging pipeline — configuration checklist
 
-Secure By Design · Edition 1.3 · 8 October 2026
+Secure By Design · Edition 1.4 · 9 October 2026
 
 This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.
 
 ## Before you start
 
 - [ ] Complete course 1.5: the admin plane exists, and this course's systems are managed only from VLAN 60.
-- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain with its time service (chrony or ntpd) pointed at both domain controllers, and SBD-AUDIT01 (10.0.50.40) as Windows Server 2025 joined to the domain.
+- [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain with its time service (chrony or ntpd) pointed at both domain controllers, and SBD-AUDIT01 (10.0.50.40) as Windows Server joined to the domain.
 - [ ] Have the network's service-path register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system.
 
 ## Design collect, protect, analyze

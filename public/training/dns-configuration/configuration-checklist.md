@@ -1,13 +1,13 @@
 # Configure DNS and time — configuration checklist
 
-Secure By Design · Edition 1.3 · 9 October 2026
+Secure By Design · Edition 1.4 · 9 October 2026
 
 The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the PDC emulator, SBD-DC01.
 
 ## Before you start
 
 - [ ] Complete course 1.1, the DC01 + DC02 identity build, with both domain controllers healthy. Both were promoted with the DNS server option selected, and SBD-DC02 still uses SBD-DC01 for DNS.
-- [ ] Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.
+- [ ] Use an isolated Windows Server practice environment and an account delegated to manage DNS.
 - [ ] Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.
 - [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register.
 
@@ -89,7 +89,7 @@ Notes / result / date: __________________________
 - [ ] Query the domain controller locator service (SRV) records against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove discovery works, and a locator answer does not by itself prove that every listed controller is reachable.
 - [ ] Run the DNS diagnostics against every domain controller, then the replication summary. Classify root-hint, forwarder, and delegation findings against the documented isolated design instead of treating them as faults, and investigate everything else.
 - [ ] During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise.
-- [ ] Optional: see the locator query on the wire. On SBD-DC02, in an elevated PowerShell window, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server 2025, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed.
+- [ ] Optional: see the locator query on the wire. On SBD-DC02, in an elevated PowerShell window, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed.
 
 **Commands:**
 

@@ -1,8 +1,8 @@
 {
   "id": "sbd-dc01-dc02",
   "version": "0.1.0",
-  "title": "Build the identity foundation",
-  "subtitle": "Windows Server 2025 · Active Directory",
+  "title": "Promote Primary & Secondary Domain Controller",
+  "subtitle": "Windows Server · Active Directory",
   "status": "Written training available · Video coming soon",
   "video": {
     "youtubeId": null,
@@ -10,7 +10,7 @@
     "tiktokUrl": null,
     "timestamps": null
   },
-  "scope": "Two new Windows Server 2025 Desktop Experience virtual machines on an isolated network. The names and addresses are sample values; replace them with your own plan. The steps follow Microsoft documentation and have not been run on your systems, so confirm each result in your own environment.",
+  "scope": "Two new Windows Server (Desktop Experience) virtual machines on VLAN 10, the domain controllers' own segment of an isolated network. The names and addresses are sample values; replace them with your own plan. The steps follow Microsoft documentation and have not been run on your systems, so confirm each result in your own environment.",
   "sources": [
     {
       "id": "install",
@@ -71,6 +71,11 @@
       "id": "ad-firewall",
       "title": "Microsoft · Configure a firewall for AD domains and trusts",
       "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/config-firewall-for-ad-domains-and-trusts"
+    },
+    {
+      "id": "dc-security",
+      "title": "Microsoft · Securing domain controllers against attack",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/securing-domain-controllers-against-attack"
     }
   ],
   "chapters": [
@@ -79,16 +84,16 @@
       "short": "Plan the build",
       "title": "Give every system a purpose",
       "tag": "01 / PREPARE",
-      "outcome": "Record the starting configuration and explain what the two controllers will do.",
-      "intro": "Start by understanding the services you are about to build. Then record the names, addresses, and dependencies for two controllers in the same domain.",
+      "outcome": "Record the starting configuration, place both controllers on their own segment, and explain what they will do.",
+      "intro": "Start by understanding the services you are about to build and where they will live. Then record the names, addresses, and dependencies for two controllers in the same domain.",
       "steps": [
         [
           "Prepare two separate VMs",
-          "Use new, patched Windows Server 2025 Desktop Experience installations with console access and the required administrative credentials. Keep the virtual network isolated. Obtain approved media and updates through your established offline process."
+          "Use new, patched Windows Server installations (Desktop Experience) with console access and the required administrative credentials. Connect both to VLAN 10, the segment reserved for domain controllers; nothing else joins it. Obtain approved media and updates through your established offline process."
         ],
         [
           "Record names and addresses",
-          "Rename the servers SBD-DC01 and SBD-DC02 and restart as needed. Use 10.0.10.10/24 and 10.0.10.11/24 for this sample. No gateway is needed for this same-subnet exercise; the wider network requires its own approved routing plan."
+          "Rename the servers SBD-DC01 and SBD-DC02 and restart as needed. Use 10.0.10.10/24 and 10.0.10.11/24 with 10.0.10.1, the core's VLAN 10 address, as the default gateway. Every other segment reaches the controllers only through the core, which denies anything a rule doesn't permit."
         ],
         [
           "Point DC02 at DC01 and check the clocks",
@@ -97,21 +102,21 @@
       ],
       "commandLabel": "Inspect each server before promotion",
       "command": "hostname\nGet-NetIPConfiguration\nw32tm /query /status",
-      "expected": "The two names and static addresses match your plan, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.",
+      "expected": "The two names and static addresses match your plan, the default gateway is 10.0.10.1, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.",
       "mistake": "Renaming a domain controller later is a separate procedure with its own steps and checks. Set each server's final name and static address before you promote it.",
-      "network": "Both controllers are planned. The platform and network exist, but domain services have not been built yet.",
+      "network": "Both controllers are planned on VLAN 10, the domain controllers' own segment. The platform and network exist, but domain services have not been built yet.",
       "control": {
         "id": "CM-2",
         "name": "Baseline Configuration",
         "phase": "Prepare → Implement",
         "body": "Start with a record of the intended components and settings. As the build changes, keep that record aligned with what actually exists.",
         "question": "Which values are design decisions, and which observations show the actual starting state?",
-        "evidence": "A dated build sheet containing hostnames, addresses, OS builds, and the chosen domain name."
+        "evidence": "A dated build sheet containing hostnames, addresses, segment and gateway, OS builds, and the chosen domain name."
       },
-      "evidencePrompt": "Record your VM names, OS builds, addresses, time source, and any differences from the sample.",
+      "evidencePrompt": "Record your VM names, OS builds, addresses, segment and gateway, time source, and any differences from the sample.",
       "checklist": [
         "I recorded the two distinct hostnames and static addresses.",
-        "I pointed SBD-DC02 at SBD-DC01 and confirmed the isolated network.",
+        "I placed both servers on VLAN 10 and pointed SBD-DC02 at SBD-DC01.",
         "I documented the time source and remaining prerequisites."
       ],
       "quiz": {
@@ -129,12 +134,14 @@
         "rmf",
         "controls",
         "ad-overview",
+        "dc-security",
         "fsmo",
         "group-policy",
         "authentication"
       ],
       "foundationIds": [
-        "ad"
+        "ad",
+        "segment"
       ]
     },
     {
@@ -151,7 +158,7 @@
         ],
         [
           "Create the forest",
-          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. For this all-2025 sample, select Windows Server 2025 functional levels. Leave the DNS server option selected; the wizard's DNS delegation warning is expected, and course 1.2 explains both. The first controller in a forest is always a global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
+          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. Because both controllers run the same Windows Server release, select the highest forest and domain functional levels the wizard offers. Leave the DNS server option selected; the wizard's DNS delegation warning is expected, and course 1.2 explains both. The first controller in a forest is always a global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
         ],
         [
           "Review and promote",
@@ -258,7 +265,7 @@
       "short": "Verify the domain",
       "title": "Ask the domain to prove it works",
       "tag": "04 / VERIFY",
-      "outcome": "Check each controller's health, replication in both directions, and the roles each controller holds.",
+      "outcome": "Check each controller's health, replication in both directions, the roles each holds, and its host firewall.",
       "intro": "A service can be running while the domain is unhealthy. Test each controller by name so every result tells you which controller you checked. Capture actual results and failures in your evidence record.",
       "steps": [
         [
@@ -272,11 +279,15 @@
         [
           "Confirm both controllers' roles",
           "List both controllers with their global catalog status, then the operations master (FSMO) role holders; in this build SBD-DC01 holds all five. Confirm SYSVOL and NETLOGON are shared on SBD-DC02 as well. If they are not, its first SYSVOL replication has not finished."
+        ],
+        [
+          "Confirm the second layer",
+          "On each controller, confirm the network profile is DomainAuthenticated and Windows Defender Firewall is on for the Domain, Private, and Public profiles. A controller that reports the Public or Private profile is applying a different firewall rule set than the domain expects; find out why before you rely on it."
         ]
       ],
       "commandLabel": "Read-only domain health checks",
-      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog\nnetdom query fsmo\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02",
-      "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, and SYSVOL and NETLOGON are shared on both. Save output with host, time, and interpretation; a command that ran is not a pass.",
+      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog\nnetdom query fsmo\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02\n# On each controller: network profile and host firewall\nGet-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory\nGet-NetFirewallProfile | Select-Object Name, Enabled",
+      "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with its firewall on. Save output with host, time, and interpretation; a command that ran is not a pass.",
       "mistake": "A successful ping proves only that an address answers. It doesn't show that the directory replicates, that SYSVOL is shared, or that a controller can authenticate anyone.",
       "network": "Follow a health check from the administration viewpoint to either controller, and switch the target to check the other. The arc between the controllers is the replication you confirm in both directions.",
       "control": {
@@ -287,11 +298,11 @@
         "question": "What do these checks establish, and what authentication behavior still needs its own test?",
         "evidence": "DCDiag output for each controller, replication results in both directions, the role list, and a short statement of what was and was not tested."
       },
-      "evidencePrompt": "For each controller, record the DCDiag results, replication status in both directions, the roles it holds, the test time, and what the results establish.",
+      "evidencePrompt": "For each controller, record the DCDiag results, replication status in both directions, the roles it holds, its network profile and firewall state, the test time, and what the results establish.",
       "checklist": [
         "I ran DCDiag against SBD-DC01 and SBD-DC02 separately.",
         "I confirmed replication succeeds in both directions.",
-        "I recorded each controller's roles and the limits of these checks."
+        "I recorded each controller's roles, network profile, and firewall state, and the limits of these checks."
       ],
       "quiz": {
         "prompt": "repadmin /replsummary reports no failures. What does that establish?",
@@ -307,6 +318,7 @@
         "diag",
         "replication",
         "fsmo",
+        "ad-firewall",
         "controls"
       ],
       "foundationIds": [
@@ -328,7 +340,7 @@
       "steps": [
         [
           "Describe the final state",
-          "Record the domain, both controllers, site placement, and actual role holders. Preserve the distinction between the intended design and observed configuration."
+          "Record the domain, both controllers, their segment and gateway, site placement, and actual role holders. Preserve the distinction between the intended design and observed configuration."
         ],
         [
           "Keep a small evidence set",
@@ -414,6 +426,41 @@
       ]
     },
     {
+      "id": "segment",
+      "title": "Where do the controllers live?",
+      "summary": "On a segment of their own, behind a core that denies by default.",
+      "blocks": [
+        [
+          "A segment reserved for controllers",
+          "SBD-DC01 and SBD-DC02 sit on VLAN 10 (10.0.10.0/24), a segment that holds domain controllers and nothing else. Workstations, member servers, security tools, and administrators sit on segments of their own. The core joins the segments, and its VLAN 10 address, 10.0.10.1, is the controllers' default gateway."
+        ],
+        [
+          "Deny by default, allow by exception",
+          "The core denies every session between segments unless a documented rule permits it, and it logs what it denies. Domain members reach the controllers only for the services in \"What crosses the network?\" Replication between SBD-DC01 and SBD-DC02 stays inside VLAN 10, so the core never routes it."
+        ],
+        [
+          "Only Tier 0 manages a controller",
+          "Remote Desktop and PowerShell remoting to a controller are allowed only from the Tier 0 administration host, AdminJumpBox01 on VLAN 60, which course 1.5 builds. Until it exists, manage both controllers from the virtual machine console. Workstations and member servers can't open a management session to a controller, even with valid credentials."
+        ],
+        [
+          "Two layers, and no internet",
+          "Windows Defender Firewall stays on in every profile, so traffic a mistaken core rule lets through still meets a filter on the controller. Leave Remote Desktop off until the Tier 0 host exists, then accept it only from that host. No segment has a route to the internet: controllers never browse, download, or update from outside, and approved media is the only way in."
+        ]
+      ],
+      "takeaway": "A controller's segment is part of its security: VLAN 10 for controllers only, default deny at the core, management only from Tier 0, and a host firewall behind it all.",
+      "prompt": "A workstation on VLAN 80 can open Remote Desktop to SBD-DC01. Which two layers failed, and where would you look first?",
+      "sources": [
+        "dc-security",
+        "ad-firewall",
+        "controls"
+      ],
+      "model": {
+        "href": "https://securebydesigninc.com/inside-the-network#vlan=10",
+        "label": "VLAN 10",
+        "text": "The domain controllers' segment, its two controllers, and every rule that reaches them through the core."
+      }
+    },
+    {
       "id": "redundancy",
       "title": "Why use two domain controllers?",
       "summary": "Keep the directory available when one server is unavailable.",
@@ -424,7 +471,7 @@
         ],
         [
           "Both controllers do useful work",
-          "Both writable DCs can process normal directory changes and authentication requests. Replication shares directory changes between them. They are not a primary server and an idle spare. Certain operations still depend on a single FSMO role holder, so role placement and recovery need their own plan."
+          "Both writable DCs can process normal directory changes and authentication requests. Replication shares directory changes between them. “Primary” and “secondary” describe the order you promote them, not a primary server and an idle spare. Certain operations still depend on a single FSMO role holder, so role placement and recovery need their own plan."
         ],
         [
           "Make the redundancy real",
@@ -453,8 +500,8 @@
       "summary": "The ports a domain member needs to reach its domain controllers.",
       "blocks": [
         [
-          "A flat lab hides the conversation",
-          "Your lab is one flat network, so nothing stands between a client and DC01. In a segmented network, every one of these conversations has to be allowed on purpose. Inside the Network shows them crossing the core switch."
+          "Every conversation crosses the core",
+          "Domain members sit on other segments, so each conversation in this table crosses the core, which allows it only because a rule says so. Inside the Network shows each one crossing the core switch."
         ],
         [
           "Sign-in is only the start",
@@ -462,7 +509,7 @@
         ]
       ],
       "table": {
-        "caption": "What a domain member sends to its domain controllers, after name resolution (course 1.2)",
+        "caption": "What crosses the core to the domain controllers, after name resolution (course 1.2)",
         "head": [
           "Purpose",
           "Port",
@@ -506,12 +553,12 @@
           ],
           [
             "Administration",
-            "TCP 9389",
-            "AD Web Services for PowerShell and Administrative Center, from administration hosts only"
+            "TCP 3389 · 5985–5986 · 9389",
+            "Remote Desktop, PowerShell remoting, and AD Web Services, only from the Tier 0 administration host"
           ]
         ]
       },
-      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rule F03 permits this directory profile for domain members, with LDAP signing and channel binding required.",
+      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rules F02, F03, and F09 permit this profile for domain members, with LDAP signing and channel binding required, and rule A01 limits administration to the Tier 0 host. Everything else is denied.",
       "prompt": "A workstation gets Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
       "sources": [
         "ports",

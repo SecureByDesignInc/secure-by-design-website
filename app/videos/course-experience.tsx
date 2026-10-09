@@ -11,7 +11,6 @@ import {
   ArrowUpRight,
   BookOpen,
   Check,
-  ClipboardList,
   Download,
   FileText,
   Maximize2,
@@ -92,13 +91,12 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
   const authorization = course.kind === 'authorization';
   const columns = steps.length <= 6 ? steps.length : Math.ceil(steps.length / 2);
 
+  // One download per tile: a configuration course's workbook (PDF and Word), checklist and
+  // verification commands travel together in its ZIP (scripts/prepare-training-packages.py).
   const links: CompanionLink[] = configuration
-    ? [
-        ...(training.pdf ? [{ href: training.pdf, title: 'Companion workbook', detail: `PDF · ${training.pages} pages`, icon: <FileText size={19} />, trailing: <ArrowUpRight size={16} />, newTab: true }] : []),
-        ...(training.word ? [{ href: training.word, title: 'Editable workbook', detail: 'Word document', icon: <FileText size={19} />, trailing: <Download size={16} />, download: true }] : []),
-        ...(training.checklistPage ? [{ href: training.checklistPage, title: 'Printable checklist', detail: 'Configuration and evidence checklist', icon: <ClipboardList size={19} />, trailing: <ArrowUpRight size={16} /> }] : []),
-        ...(training.checklist ? [{ href: training.checklist, title: 'Checklist for your notes', detail: 'Markdown file', icon: <Download size={19} />, trailing: <Download size={16} />, download: true }] : []),
-      ]
+    ? training.package
+      ? [{ href: training.package, title: 'Download the training materials', detail: `ZIP · ${training.pages}-page workbook (PDF and Word), checklist, and verification commands`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true }]
+      : []
     : [
         ...(training.relatedResources ?? []).map(resource => ({ href: resource.href, title: resource.title, detail: resource.detail, icon: <BookOpen size={19} />, trailing: <ArrowUpRight size={16} /> })),
         ...(training.word ? [{ href: training.word, title: 'The full authorization catalog', detail: `All three parts · Word document · ${training.pages} pages`, icon: <FileText size={19} />, trailing: <Download size={16} />, download: true }] : []),
@@ -110,7 +108,7 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
         <CompanionHeading
           id={`course-resources-${course.id}`}
           intro={configuration
-            ? 'Start with the interactive guide or download the workbook and checklist. Everything you need is included below.'
+            ? 'Start with the interactive guide, or download every training material in one file.'
             : 'Start with this part’s interactive training or download the full catalog. Everything you need is included below.'}
           action={{ href: training.guide, label: configuration ? 'Open the full guide' : 'Open the training', icon: <BookOpen size={16} /> }}
         />
