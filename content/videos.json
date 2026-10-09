@@ -26,12 +26,11 @@
       "id": "dc01-dc02",
       "number": "1.1",
       "title": "Build the identity foundation",
-      "subtitle": "DC01 + DC02 / Active Directory & DNS",
-      "description": "Configure Active Directory and DNS on Windows Server 2025, understand why two controllers matter, and keep a record of the build.",
+      "subtitle": "DC01 + DC02 / Active Directory",
+      "description": "Build Active Directory on two Windows Server 2025 domain controllers, understand why two controllers matter, verify the domain's health, and keep a record of the build.",
       "tags": [
         "Windows Server 2025",
-        "Active Directory",
-        "DNS"
+        "Active Directory"
       ],
       "youtubeId": null,
       "systems": [
@@ -44,9 +43,9 @@
         "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
         "package": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
         "cover": "/training/dc01-dc02/workbook-cover.webp",
-        "pages": 14,
-        "materialsEdition": "0.4",
-        "updated": "8 October 2026",
+        "pages": 12,
+        "materialsEdition": "0.5",
+        "updated": "9 October 2026",
         "copyrightOwner": "Secure By Design Team LLC",
         "copyrightYear": 2026,
         "notices": "/training/dc01-dc02/notices.html"
@@ -56,7 +55,7 @@
           "id": "prepare",
           "label": "Plan the build",
           "title": "Give every system a purpose",
-          "description": "Understand AD and DNS before choosing names, addresses, and the starting configuration.",
+          "description": "Understand Active Directory before choosing names, addresses, and the starting configuration.",
           "network": "DC01 and DC02 are planned. The connections show where identity services will take shape.",
           "timestamp": null
         },
@@ -64,7 +63,7 @@
           "id": "dc01",
           "label": "Configure DC01",
           "title": "Create the first service point",
-          "description": "Create the forest and bring Active Directory Domain Services and DNS online on DC01.",
+          "description": "Create the forest and bring Active Directory Domain Services online on DC01.",
           "network": "DC01 is configured. DC02 remains a planned system until it joins this same domain.",
           "timestamp": null
         },
@@ -78,10 +77,10 @@
         },
         {
           "id": "verify",
-          "label": "Verify DNS",
-          "title": "Follow the discovery path",
-          "description": "Query each DNS server and compare the returned service records and addresses with your plan.",
-          "network": "Select either controller below to trace a DNS query from the client through the switch.",
+          "label": "Verify the domain",
+          "title": "Check the domain's health",
+          "description": "Run DCDiag against each controller, confirm replication in both directions, and record the roles each one holds.",
+          "network": "Select either controller below to follow a health check from the administration viewpoint.",
           "timestamp": null
         },
         {
@@ -89,15 +88,15 @@
           "label": "Keep evidence",
           "title": "Leave a build you can explain",
           "description": "Record the configuration, observed results, and follow-up work in your training companion.",
-          "network": "Identity and DNS now have two service points. Your build record connects choices with evidence.",
+          "network": "The directory now has two service points. Your build record connects choices with evidence.",
           "timestamp": null
         }
       ],
       "scene": "identity-dc",
       "networkLabel": "VLAN 10 / IDENTITY",
-      "outcomeSummary": "One domain. Two writable controllers. DNS discovery and replication you can explain and verify.",
+      "outcomeSummary": "One domain. Two writable controllers. Replication and health checks you can explain and verify.",
       "outcomes": [
-        "Understand AD & DNS",
+        "Understand Active Directory",
         "Configure both controllers",
         "Verify and keep evidence"
       ],
@@ -429,11 +428,11 @@
       "kind": "configuration",
       "moduleCount": 6,
       "lessonCount": 6,
-      "estimatedHours": 2.0,
+      "estimatedHours": 2.3,
       "stages": [
         {
           "title": "Map names to the network",
-          "detail": "A DNS plan explains which server owns a name and how a client finds that server. Begin with the working directory build, then extend it deliberately."
+          "detail": "DNS tells every domain member where its domain controllers are. Learn what it answers, set each controller's DNS client order, and record which server owns each name and how a client finds it."
         },
         {
           "title": "Configure forward and reverse zones",
@@ -445,7 +444,7 @@
         },
         {
           "title": "Prove resolution and directory discovery",
-          "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records."
+          "detail": "Test each server explicitly before testing client fallback, then optionally watch a locator query on the wire. A correct DNS answer proves neither a sign-in nor access to a resource."
         },
         {
           "title": "Make SBD-DC01 the domain's time source",
@@ -459,8 +458,8 @@
       "training": {
         "guide": "/training/dns-configuration",
         "checklist": "/training/dns-configuration/configuration-checklist.md",
-        "materialsEdition": "1.2",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.3",
+        "updated": "9 October 2026",
         "checklistPage": "/training/dns-configuration/checklist",
         "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
@@ -469,8 +468,8 @@
       },
       "number": "1.2",
       "title": "Configure DNS and time",
-      "subtitle": "Zones, records, the domain time hierarchy & troubleshooting",
-      "description": "Build dependable internal name resolution and time on DC01 and DC02. Configure forward and reverse zones, manage service records, make the PDC emulator the domain's time source, and prove both in the air-gapped training network.",
+      "subtitle": "Service discovery, zones, records, domain time & troubleshooting",
+      "description": "Learn how DNS lets every domain member find its domain controllers, then build dependable internal name resolution and time on DC01 and DC02: set each controller's DNS order, configure forward and reverse zones, manage service records, make the PDC emulator the domain's time source, and prove both in the air-gapped training network.",
       "tags": [
         "Windows Server 2025",
         "DNS",
@@ -483,12 +482,12 @@
         "SBD-DC02"
       ],
       "artLabels": [
-        "Forward + reverse zones",
+        "Discovery + zones",
         "Records + domain time",
         "Verify names and time"
       ],
       "outcomes": [
-        "Plan authoritative internal DNS and client settings.",
+        "Explain how DNS lets members find domain controllers, and plan internal DNS and client settings.",
         "Configure secure AD-integrated zones and maintain records.",
         "Test both resolvers, directory discovery, and client fallback.",
         "Make the PDC emulator the domain's time source and verify the time hierarchy end to end."

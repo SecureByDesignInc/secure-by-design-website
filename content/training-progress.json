@@ -19,7 +19,7 @@
   },
   {
     "id": "training:dc01-dc02:verify",
-    "title": "Ask the services to prove they work",
+    "title": "Ask the domain to prove it works",
     "href": "/training/dc01-dc02/index.html#verify",
     "group": "Network build"
   },

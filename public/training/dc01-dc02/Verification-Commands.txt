@@ -6,17 +6,16 @@ Review results; no checks are automatically run by this package.
 Give every system a purpose
 hostname
 Get-NetIPConfiguration
-Get-DnsClientServerAddress -AddressFamily IPv4
 w32tm /query /status
 
-Expected observations: The two names and static addresses match your plan. DC02 points to 10.0.10.10 for DNS. Record actual time-source output; a configured address alone does not prove time synchronization.
+Expected observations: The two names and static addresses match your plan, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.
 
 Create the first domain controller
 Get-ADDomain | Select-Object DNSRoot, NetBIOSName
-Get-Service NTDS,DNS,Netlogon
+Get-Service NTDS,Netlogon
 Get-SmbShare -Name SYSVOL,NETLOGON
 
-Expected observations: The domain is sbd.test with NetBIOS name SBD. NTDS, DNS, and Netlogon are running, and SYSVOL and NETLOGON shares exist. Investigate missing services or shares before moving on.
+Expected observations: The domain is sbd.test with NetBIOS name SBD. NTDS and Netlogon are running, and SYSVOL and NETLOGON shares exist. Investigate missing services or shares before moving on.
 
 Give the domain a second service point
 Get-ADDomainController -Filter * |
@@ -26,31 +25,16 @@ repadmin /showrepl SBD-DC02
 
 Expected observations: Both hostnames appear with the intended addresses and global catalog roles. After initial convergence, replication checks show successful recent attempts and no unresolved replication failures. Inspect errors rather than assuming the restart completed replication.
 
-Ask the services to prove they work
-$servers = '10.0.10.10','10.0.10.11'
-foreach ($server in $servers) {
-  Write-Output "DNS server: $server"
-  Resolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server $server
-  Resolve-DnsName 'SBD-DC01.sbd.test' -Type A -Server $server
-  Resolve-DnsName 'SBD-DC02.sbd.test' -Type A -Server $server
-}
-dcdiag /test:DNS /e /v
+Ask the domain to prove it works
+dcdiag /s:SBD-DC01
+dcdiag /s:SBD-DC02
 repadmin /replsummary
+repadmin /showrepl *
+Get-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog
+netdom query fsmo
+Get-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02
 
-Expected observations: Each DNS service returns domain locator records for the configured controllers and the correct host addresses. Review DCDiag findings and replication failures individually. Save output with host, time, and interpretation; do not record an automatic pass because the command ran.
-
-Optional: see it on the wire (run on SBD-DC02 in an elevated PowerShell window)
-New-Item -ItemType Directory C:\Evidence -Force
-pktmon filter remove
-pktmon filter add DNS -p 53
-pktmon start --capture --comp nics --pkt-size 0 --file-name C:\Evidence\dc-locator.etl
-Resolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server 10.0.10.10
-pktmon stop
-pktmon etl2txt C:\Evidence\dc-locator.etl --out C:\Evidence\dc-locator.txt
-pktmon etl2pcap C:\Evidence\dc-locator.etl --out C:\Evidence\dc-locator.pcapng
-pktmon filter remove
-
-Expected observations: Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming SBD-DC01 and SBD-DC02 on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark. Keep the capture with your evidence; it contains only the traffic the filter allowed.
+Expected observations: Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, and SYSVOL and NETLOGON are shared on both. Save output with host, time, and interpretation; a command that ran is not a pass.
 
 Leave a build someone else can understand
 Get-ADDomain |
