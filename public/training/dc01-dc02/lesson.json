@@ -92,7 +92,7 @@
         ],
         [
           "Point DC02 at DC01 and check the clocks",
-          "Set SBD-DC02's preferred Domain Name System (DNS) server to 10.0.10.10 so it can find the domain when you promote it; course 1.2 explains the DNS design. Confirm both clocks agree and document the intended internal time source."
+          "Set SBD-DC02's preferred Domain Name System (DNS) server to 10.0.10.10 so it can find the domain when you promote it, and leave it that way; course 1.2 explains the DNS design. Confirm both clocks agree and document the intended internal time source."
         ]
       ],
       "commandLabel": "Inspect each server before promotion",
@@ -151,7 +151,7 @@
         ],
         [
           "Create the forest",
-          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. For this all-2025 sample, select Windows Server 2025 functional levels. Leave the DNS server option selected; course 1.2 explains it. The first controller in a forest is always a global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
+          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. For this all-2025 sample, select Windows Server 2025 functional levels. Leave the DNS server option selected; the wizard's DNS delegation warning is expected, and course 1.2 explains both. The first controller in a forest is always a global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
         ],
         [
           "Review and promote",
@@ -211,7 +211,7 @@
         ],
         [
           "Finish and inspect",
-          "Review site placement, replication source, and prerequisite results; install and restart. Leave DC02's DNS setting as it is; course 1.2 sets the final order for both controllers once replication is healthy."
+          "Review site placement, replication source, and prerequisite results; install and restart."
         ]
       ],
       "commandLabel": "Inspect both controllers and replication",
@@ -271,11 +271,11 @@
         ],
         [
           "Confirm both controllers' roles",
-          "List both controllers with their global catalog status and the operations master (FSMO) roles each holds; in this build SBD-DC01 holds all five. Confirm SYSVOL and NETLOGON are shared on SBD-DC02 as well. If they are not, its first SYSVOL replication has not finished."
+          "List both controllers with their global catalog status, then the operations master (FSMO) role holders; in this build SBD-DC01 holds all five. Confirm SYSVOL and NETLOGON are shared on SBD-DC02 as well. If they are not, its first SYSVOL replication has not finished."
         ]
       ],
       "commandLabel": "Read-only domain health checks",
-      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * |\n  Select-Object HostName, IsGlobalCatalog, OperationMasterRoles\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02",
+      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog\nnetdom query fsmo\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02",
       "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, and SYSVOL and NETLOGON are shared on both. Save output with host, time, and interpretation; a command that ran is not a pass.",
       "mistake": "A successful ping proves only that an address answers. It doesn't show that the directory replicates, that SYSVOL is shared, or that a controller can authenticate anyone.",
       "network": "Follow a health check from the administration viewpoint to either controller, and switch the target to check the other. The arc between the controllers is the replication you confirm in both directions.",
@@ -283,7 +283,7 @@
         "id": "IA-2",
         "name": "Identification and Authentication (Organizational Users)",
         "phase": "Assess",
-        "body": "Healthy, replicating controllers are what let organizational users sign in to the domain. These checks show the identity service is in place on both servers; they do not demonstrate every authentication requirement, such as multifactor authentication or account policy.",
+        "body": "Healthy, replicating controllers are a precondition for organizational users signing in to the domain. These checks show the identity service is in place on both servers; they do not demonstrate every authentication requirement, such as multifactor authentication or account policy.",
         "question": "What do these checks establish, and what authentication behavior still needs its own test?",
         "evidence": "DCDiag output for each controller, replication results in both directions, the role list, and a short statement of what was and was not tested."
       },
@@ -296,12 +296,12 @@
       "quiz": {
         "prompt": "repadmin /replsummary reports no failures. What does that establish?",
         "answers": [
-          "Replication between the controllers succeeded when you ran it",
+          "The most recent replication attempts between the controllers succeeded",
           "Every authentication control is satisfied",
           "The system is authorized to operate"
         ],
         "correct": 0,
-        "feedback": "The summary describes replication at that moment. Authentication requirements, recovery, and authorization need their own evidence and decisions."
+        "feedback": "The summary describes the latest attempts at that moment. Authentication requirements, recovery, and authorization need their own evidence and decisions."
       },
       "sources": [
         "diag",
@@ -315,7 +315,7 @@
       "model": {
         "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=3",
         "label": "Sign in, step 3",
-        "text": "Everything you verified here is what this step depends on: the workstation proves its identity to the Key Distribution Center on SBD-DC01."
+        "text": "This step depends on the controllers you just verified: the workstation proves its identity to the Key Distribution Center on SBD-DC01."
       }
     },
     {

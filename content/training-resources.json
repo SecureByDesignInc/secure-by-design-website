@@ -39,7 +39,7 @@
     "id": "dns-configuration-guide",
     "title": "Configure DNS and time · Interactive guide",
     "url": "https://securebydesigninc.com/training/dns-configuration",
-    "description": "Zones, records, the domain time hierarchy & troubleshooting",
+    "description": "Service discovery, zones, records, domain time & troubleshooting",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"

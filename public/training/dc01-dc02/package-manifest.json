@@ -18,23 +18,23 @@
   "files": [
     {
       "name": "index.html",
-      "bytes": 1388318,
-      "sha256": "1130e4a983c63eb2980ee39d86e3a448e2fe1a1ede9f40f25a03744dd6cd22d0"
+      "bytes": 1388298,
+      "sha256": "12e613d44c34a5036ac1c2ac1ffdbe10ccb5184ff0a5996327b23736fef611b4"
     },
     {
       "name": "lesson.json",
-      "bytes": 30233,
-      "sha256": "bd6eff0129c1f6bf9057fa7471dbc0c4c286d7202c2353c39b622d1215abd852"
+      "bytes": 30213,
+      "sha256": "5380a7b2573e6389348ea9ba544e310b95c44bbe059844b48749dfcfa46d82aa"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.docx",
-      "bytes": 313611,
-      "sha256": "bd993b0d95a242ee5f8b71dc1c26e9b5eb1fddc5f705b43977910ee35f690168"
+      "bytes": 313590,
+      "sha256": "2f9457dbf3c32058c3359be564c542ef16ae69c68b8eb7a9e4d1f54f8f03e593"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.pdf",
-      "bytes": 253817,
-      "sha256": "6975772e758fd0280c5c48234449b9f76e1cc66b955c829810d54ab8b27e2f84"
+      "bytes": 253829,
+      "sha256": "85cd95833ddf4c3ec0c21b4f249375b58ab213425e474df0dbeece6e9f4443d3"
     },
     {
       "name": "START-HERE.txt",
@@ -48,8 +48,8 @@
     },
     {
       "name": "Verification-Commands.txt",
-      "bytes": 2468,
-      "sha256": "e177b2603520167053e1dad6018a9f017e717a6e514f27c456ded71c66a58619"
+      "bytes": 2462,
+      "sha256": "f24108f1913a7967531988ea56c9307c4f26b68586dde2a4c6f043a3e64869a4"
     },
     {
       "name": "notices.html",

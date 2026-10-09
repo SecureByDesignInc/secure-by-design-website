@@ -16,23 +16,26 @@ The addresses and names below continue the training example. Match every change 
 - [ ] Start with what DNS answers. An A record maps a host name to an IPv4 address (AAAA maps to IPv6), so SBD-DC01.sbd.test resolves to 10.0.10.10. Service (SRV) records advertise which servers offer a service: a domain member asks for _ldap._tcp.dc._msdcs.sbd.test, resolves a listed controller's name, contacts it, and only then authenticates. DNS never checks a password, and it works on an isolated network with no internet access.
 - [ ] Record the domain, each subnet, both DNS addresses, and the owner of each service name. Keep host records and service aliases distinguishable.
 - [ ] On each domain controller, confirm the DNS Server service is installed and running; an address typed into a network adapter installs nothing. Then open DNS Manager and review the sbd.test and _msdcs.sbd.test zones that promotion created, without creating duplicates. The DNS delegation warning from course 1.1's promotion is expected: no parent zone exists above the isolated .test namespace, so no action is needed.
-- [ ] Set each controller's DNS client order. Promotion pointed SBD-DC01 at itself (the loopback address, 127.0.0.1) while it was the only controller, and SBD-DC02 pointed at SBD-DC01 so it could find the domain. Course 1.1 confirmed replication in both directions, so now list the partner controller first and the loopback address second on each, and never an outside resolver. Domain members list both controllers; a public resolver is not an alternate for this environment.
+- [ ] Set each controller's DNS client order. Promotion pointed SBD-DC01 at itself (the loopback address, 127.0.0.1) while it was the only controller, and SBD-DC02 pointed at SBD-DC01 so it could find the domain. Run the replication summary first; once replication succeeds in both directions, list the partner controller first and the loopback address second on each, and never an outside resolver. Domain members list both controllers; a public resolver is not an alternate for this environment.
 - [ ] Confirm the network's service-path register permits DNS: every networked system to both domain controllers on TCP and UDP 53 (rule F01 in Inside the Network). A member has to find a controller before any Kerberos, LDAP, or Group Policy traffic can start.
 - [ ] Decide whether any separate internal namespace needs a conditional forwarder. With no recursive dependencies, document a no-recursion design; do not add internet forwarders or delete every root hint as a shortcut.
 
 **Commands:**
 
 ```
-Get-WindowsFeature DNS
-Get-Service DNS
-Get-DnsClientServerAddress -AddressFamily IPv4
-# SBD-DC01, then SBD-DC02: partner first, loopback second (adapter name varies)
-Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses 10.0.10.11,127.0.0.1
-Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses 10.0.10.10,127.0.0.1
+Invoke-Command SBD-DC01,SBD-DC02 { Get-WindowsFeature DNS; Get-Service DNS }
+repadmin /replsummary
+Get-DnsClientServerAddress -AddressFamily IPv4 -CimSession SBD-DC01,SBD-DC02
+# After replication succeeds both ways (adapter name varies):
+Set-DnsClientServerAddress -CimSession SBD-DC01 -InterfaceAlias Ethernet `
+  -ServerAddresses 10.0.10.11,127.0.0.1
+Set-DnsClientServerAddress -CimSession SBD-DC02 -InterfaceAlias Ethernet `
+  -ServerAddresses 10.0.10.10,127.0.0.1
+Get-DnsClientServerAddress -AddressFamily IPv4 -CimSession SBD-DC01,SBD-DC02
 Get-DnsServerZone -ComputerName SBD-DC01
 ```
 
-**Verify:** Both controllers run the DNS Server service and list their partner first and the loopback address second; domain members list both controllers and nothing outside. The existing AD zones, the forwarding and recursion decision, and the register rows that permit DNS are recorded.
+**Verify:** Both controllers run the DNS Server service and, once replication succeeds both ways, list their partner first and the loopback address second. Members list both controllers only; the AD zones, the recursion decision, and the register rows that permit DNS are recorded.
 
 **Evidence:** Save the address/name worksheet, each controller's DNS client order and the reason for it, and the initial zone inventory before changing anything else.
 
@@ -40,7 +43,7 @@ Notes / result / date: __________________________
 
 ## Configure forward and reverse zones
 
-- [ ] In DNS Manager, inspect sbd.test Properties. Confirm that it is AD-integrated and choose the domain or forest replication scope that matches the DNS servers intended to host it.
+- [ ] In DNS Manager, inspect sbd.test Properties. Confirm that it is AD-integrated and choose the domain or forest replication scope that matches the DNS servers intended to host it. Domain-wide zones live in the DomainDnsZones partition and forest-wide zones in ForestDnsZones, the partitions you saw in course 1.1's replication and DCDiag output.
 - [ ] Use secure dynamic updates for the AD-integrated zone. Review delegation and permissions before broadening who can change records.
 - [ ] Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist. Select the approved replication scope and secure updates.
 - [ ] Review zone-transfer settings. AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly.
@@ -86,7 +89,7 @@ Notes / result / date: __________________________
 - [ ] Query the domain controller locator service (SRV) records against both servers. These records let a client discover domain controllers; an ordinary host lookup does not prove discovery works, and a locator answer does not by itself prove that every listed controller is reachable.
 - [ ] Run the DNS diagnostics against every domain controller, then the replication summary. Classify root-hint, forwarder, and delegation findings against the documented isolated design instead of treating them as faults, and investigate everything else.
 - [ ] During an approved lab test, make one DNS server unavailable to the test client and verify resolution through the other. Restore connectivity and repeat for the opposite server. Do not interrupt shared production services for this exercise.
-- [ ] Optional: see the locator query on the wire. On SBD-DC02, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server 2025, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed.
+- [ ] Optional: see the locator query on the wire. On SBD-DC02, in an elevated PowerShell window, capture port 53 with Packet Monitor (pktmon), which is built into Windows Server 2025, while you query SBD-DC01, so the request crosses the network. Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming both controllers on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark, and keep the capture with your evidence; it holds only the traffic the filter allowed.
 
 **Commands:**
 
@@ -113,7 +116,7 @@ pktmon filter remove
 
 **Verify:** Both DNS servers return both controllers' host records and the domain controller locator records, the DCDiag DNS findings are explained, replication is healthy, and the client still resolves internal names when either resolver is unavailable. If you ran the capture, it shows the query from 10.0.10.11 and the answer from 10.0.10.10.
 
-**Evidence:** Keep paired lookup results with the server queried, the DCDiag and replication output, the failover test record with start, restore, and final verification times, any capture file, and a short statement of what the results do and don't establish.
+**Evidence:** Keep paired lookup results with the server queried, the DCDiag and replication output, the failover test record with start, restore, and final verification times, any capture file, and a short statement of what the results do and don't establish: DNS helps users find the identity service, but a correct answer proves nothing about authentication.
 
 Notes / result / date: __________________________
 
@@ -181,6 +184,7 @@ Notes / result / date: __________________________
 - [Microsoft · Packet Monitor (pktmon)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pktmon)
 - [Microsoft · Service overview and network port requirements](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements)
 - [Microsoft · AD DS configuration wizard page descriptions](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/ad-ds-installation-and-removal-wizard-page-descriptions)
+- [Microsoft · Install-ADDSForest](https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest)
 - [Microsoft · Windows Time service](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-top)
 - [Microsoft · Windows Time service tools and settings](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings)
 
