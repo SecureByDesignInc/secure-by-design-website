@@ -44,11 +44,14 @@ jobs:
           echo "::notice title=Deployments (oldest first, up to 15)::$(head -60 deployments.txt | paste -sd'|' | cut -c1-3500)"
           echo "::notice title=Deployment sources::$(grep -E '^Source' deployments.txt | sort | uniq -c | tr '\n' '|')"
           echo "::notice title=Deployment authors::$(grep -E '^Author' deployments.txt | sort | uniq -c | tr '\n' '|')"
-      - name: Database contents (counts only)
+      - name: Database contents (counts and earliest dates only)
         run: |
           printf '{"name":"inventory","compatibility_date":"2026-01-01","d1_databases":[{"binding":"DB","database_name":"%s","database_id":"%s"}]}\n' "${D1_NAME:-site-creator-d1}" "$D1_ID" > d1.json
-          tables=$(pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE '\_cf%' ESCAPE '\' AND name NOT LIKE 'sqlite%' ORDER BY name" | jq -r '.[0].results[].name')
-          q=$(for t in $tables; do printf "SELECT '%s' AS t, count(*) AS n FROM \"%s\" UNION ALL " "$t" "$t"; done | sed 's/ UNION ALL $//')
-          out=$(pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "$q" | jq -r '.[0].results[] | "\(.t): \(.n)"' | paste -sd',' -)
-          echo "::notice title=Rows per table::$out"
-          echo "::notice title=Time Travel::$(pnpm exec wrangler d1 time-travel info DB --config d1.json 2>&1 | grep -iE 'bookmark|timestamp' | head -3 | paste -sd'|' -)"
+          run() { pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "$1" 2>&1; }
+          for t in reader_accounts community_memberships career_records resource_subscribers community_contributions reader_progress membership_waitlist; do
+            col=created_at; [ "$t" = community_memberships ] && col=joined_at; [ "$t" = reader_progress ] && col=updated_at
+            r=$(run "SELECT count(*) AS n, min($col) AS first, max($col) AS last FROM $t" | jq -r 'if type=="array" then (.[0].results[0] | "\(.n) rows, first \(.first // "-"), last \(.last // "-")") else "n/a" end' 2>/dev/null || echo "n/a")
+            [ -z "$r" ] && r="n/a (table or column missing)"
+            echo "$t: $r" >> counts.txt
+          done
+          echo "::notice title=Rows and dates::$(paste -sd'|' counts.txt)"
