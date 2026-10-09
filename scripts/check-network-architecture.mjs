@@ -126,6 +126,8 @@ for(const host of hosts){
 }
 const hostOf=id=>hosts.find(h=>h.vms.includes(id));
 assert.notEqual(hostOf('dc1'),hostOf('dc2'),'The two domain controllers run on different hosts');
+for(const dc of ['dc1','dc2'])assert.deepEqual(hostOf(dc).vms,[dc],`${dc} has its hypervisor host to itself`);
+assert(!['dc1','dc2'].some(dc=>hostOf(dc)===hostOf('subca')),'The issuing CA never shares a host with a domain controller');
 for(const id of ['dc1','dc2','subca','templates'])assert(hostOf(id).vms.every(v=>['dc1','dc2','subca','templates'].includes(v)),`${id} shares a host only with identity and PKI servers`);
 for(const v of vlans)if(v.ids.length>1&&v.ids.every(id=>hostOf(id))){const vmHosts=new Set(v.ids.map(id=>hostOf(id)?.id));if(v.id!=='v10'&&v.id!=='v30')assert.equal(vmHosts.size,1,`VLAN ${v.number} servers share a host, so same-VLAN traffic stays on its virtual switch`);}
 assert.equal(where.get('time').kind,'appliance','The reference clock is a rack appliance, not a virtual machine');
@@ -137,4 +139,4 @@ for(const [k,[x,z]] of Object.entries(trayNodes))assert(!inRoom('vault',x,z)&&!i
 for(const [a,b] of trayEdges)assert(trayNodes[a][0]===trayNodes[b][0]||trayNodes[a][1]===trayNodes[b][1],`Tray ${a}-${b} runs straight`);
 for(const p of [[...roomBounds.min],[...roomBounds.max]])assert(p.every(Number.isFinite));
 assert.equal(walkExits.vault.parent,'media','The vault opens only into the media room');
-console.log('Building checks passed: every system placed, domain controllers on separate hosts, same-VLAN servers sharing a host, a clock appliance, and no cable trays in the media room or vault.');
+console.log('Building checks passed: every system placed, domain controllers on their own hosts, the CA apart from them, same-VLAN servers sharing a host, a clock appliance, and no cable trays in the media room or vault.');

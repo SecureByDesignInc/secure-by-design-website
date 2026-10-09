@@ -192,7 +192,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const rackGroups=new Map();
  for(const r of racks){
   const g=new THREE.Group();g.position.set(r.x,0,r.z);if(r.row==='B')g.rotation.y=Math.PI;g.userData.fadeKey='rack-'+r.id;physical.add(g);rackGroups.set(r.id,g);
-  if(r.kind==='compute'){equipment.rack(g,{code:r.code,name:r.name,color:'#8fb8cc',switching:false});equipment.patchPanel(g,10.95);equipment.blanking(g,[3.6,9.6,1.95]);}
+  if(r.kind==='compute'){equipment.rack(g,{code:r.code,name:r.name,color:'#8fb8cc',switching:false});equipment.patchPanel(g,10.95);equipment.blanking(g,[3.6,9.6,1.95].filter(y=>!hosts.some(h=>h.rack===r.id&&Math.abs(h.y-y)<1)));}
   else if(r.kind==='reserved'){equipment.rack(g,{code:r.code,name:r.name,color:'#6c7f8c',switching:false});equipment.blanking(g,[2.1,3.1,4.1,5.1,6.1,7.1,8.1,9.1,10.1,11.1]);}
   else if(r.kind!=='network')equipment.cabinet(g,r.kind);
   equipment.contact(r.x,r.z,8.4,7.6);

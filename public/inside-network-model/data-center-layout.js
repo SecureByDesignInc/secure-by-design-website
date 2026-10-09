@@ -19,10 +19,10 @@ export const rooms = [
 export const coldAisle = {x0:-24.6, x1:10.6, z0:-13.9, z1:-6.1};
 export const racks = [
   {id:'r01', code:'R01', kind:'network', x:-21, z:-17, row:'A', name:'NETWORK CORE'},
-  {id:'r02', code:'R02', kind:'compute', x:-14, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV01 · SBD-HV02'},
+  {id:'r02', code:'R02', kind:'compute', x:-14, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV01 · HV02 · HV03'},
   {id:'cool-a', code:'CRAC', kind:'cooling', x:-7, z:-17, row:'A'},
-  {id:'r03', code:'R03', kind:'compute', x:0, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV03 · SBD-HV04'},
-  {id:'r04', code:'R04', kind:'compute', x:7, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV05 · SBD-HV06'},
+  {id:'r03', code:'R03', kind:'compute', x:0, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV04 · SBD-HV05'},
+  {id:'r04', code:'R04', kind:'compute', x:7, z:-17, row:'A', name:'HYPERVISOR HOSTS', label:'Hypervisor hosts', sub:'SBD-HV06 · SBD-HV07'},
   {id:'ups-1', code:'UPS', kind:'ups', x:-21, z:-3, row:'B'},
   {id:'r05', code:'R05', kind:'reserved', x:-14, z:-3, row:'B', name:'RESERVED'},
   {id:'cool-b', code:'CRAC', kind:'cooling', x:-7, z:-3, row:'B'},
@@ -30,16 +30,17 @@ export const racks = [
   {id:'pdu-1', code:'PDU', kind:'power', x:7, z:-3, row:'B'}
 ];
 
-// Each server runs as a virtual machine on a hypervisor host. Domain controllers and CAs use their own hosts,
-// and the two domain controllers sit on different hosts. Servers that talk within one VLAN share a host,
+// Each server runs as a virtual machine on a hypervisor host. Each domain controller has a host of its own,
+// and the issuing CA (with its template administration host) runs on a third, so no CA shares a host with a DC. Servers that talk within one VLAN share a host,
 // so that traffic stays on the host's virtual switch.
 export const hosts = [
-  {id:'hv01', name:'SBD-HV01', rack:'r02', y:7.9, vms:['dc1','subca']},
-  {id:'hv02', name:'SBD-HV02', rack:'r02', y:5.75, vms:['dc2','templates']},
-  {id:'hv03', name:'SBD-HV03', rack:'r03', y:7.9, vms:['dhcp','syslog','wsus']},
-  {id:'hv04', name:'SBD-HV04', rack:'r03', y:5.75, vms:['fs','sql','apps','web']},
-  {id:'hv05', name:'SBD-HV05', rack:'r04', y:7.9, vms:['splunk','nessus','epo','audit']},
-  {id:'hv06', name:'SBD-HV06', rack:'r04', y:5.75, vms:['management','repo']}
+  {id:'hv01', name:'SBD-HV01', rack:'r02', y:7.9, vms:['dc1']},
+  {id:'hv02', name:'SBD-HV02', rack:'r02', y:5.75, vms:['dc2']},
+  {id:'hv03', name:'SBD-HV03', rack:'r02', y:3.6, vms:['subca','templates']},
+  {id:'hv04', name:'SBD-HV04', rack:'r03', y:7.9, vms:['dhcp','syslog','wsus']},
+  {id:'hv05', name:'SBD-HV05', rack:'r03', y:5.75, vms:['fs','sql','apps','web']},
+  {id:'hv06', name:'SBD-HV06', rack:'r04', y:7.9, vms:['splunk','nessus','epo','audit']},
+  {id:'hv07', name:'SBD-HV07', rack:'r04', y:5.75, vms:['management','repo']}
 ];
 // The reference clock is a rack appliance rather than a virtual machine.
 export const appliances = [{id:'time', rack:'r01', y:4.6}];

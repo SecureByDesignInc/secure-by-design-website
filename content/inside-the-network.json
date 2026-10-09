@@ -27,20 +27,26 @@
         "name": "SBD-HV01",
         "rack": "R02",
         "systems": [
-          "SBD-DC01",
-          "SBD-SUBCA01"
+          "SBD-DC01"
         ]
       },
       {
         "name": "SBD-HV02",
         "rack": "R02",
         "systems": [
-          "SBD-DC02",
-          "SBD-PKI-MGMT01"
+          "SBD-DC02"
         ]
       },
       {
         "name": "SBD-HV03",
+        "rack": "R02",
+        "systems": [
+          "SBD-SUBCA01",
+          "SBD-PKI-MGMT01"
+        ]
+      },
+      {
+        "name": "SBD-HV04",
         "rack": "R03",
         "systems": [
           "SBD-DHCP01",
@@ -49,7 +55,7 @@
         ]
       },
       {
-        "name": "SBD-HV04",
+        "name": "SBD-HV05",
         "rack": "R03",
         "systems": [
           "SBD-FS01",
@@ -59,7 +65,7 @@
         ]
       },
       {
-        "name": "SBD-HV05",
+        "name": "SBD-HV06",
         "rack": "R04",
         "systems": [
           "SBD-SPLUNK01",
@@ -69,7 +75,7 @@
         ]
       },
       {
-        "name": "SBD-HV06",
+        "name": "SBD-HV07",
         "rack": "R04",
         "systems": [
           "SBD-MGMT01",
@@ -215,7 +221,7 @@
       "role": "DHCP server + NPS (802.1X)",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.10",
-      "location": "Virtual machine on SBD-HV03 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Provide client lease settings for the approved address space, and admit devices to VLAN 80 ports with 802.1X.",
       "services": [
         {
@@ -259,7 +265,7 @@
       "role": "Log message server",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.20",
-      "location": "Virtual machine on SBD-HV03 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Receive and route the chosen log messages.",
       "services": [
         {
@@ -299,7 +305,7 @@
       "role": "Windows update service",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.30",
-      "location": "Virtual machine on SBD-HV03 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Distribute approved Windows updates inside the air gap.",
       "services": [
         {
@@ -356,7 +362,7 @@
       "role": "Issuing certificate authority",
       "segment": "VLAN 30 · PKI infrastructure",
       "address": "10.0.30.20",
-      "location": "Virtual machine on SBD-HV01 · rack R02 · server room",
+      "location": "Virtual machine on SBD-HV03 · rack R02 · server room",
       "purpose": "Issue certificates under the approved subordinate CA policy.",
       "services": [
         {
@@ -391,7 +397,7 @@
       "role": "Certificate template administration",
       "segment": "VLAN 30 · PKI infrastructure",
       "address": "10.0.30.30",
-      "location": "Virtual machine on SBD-HV02 · rack R02 · server room",
+      "location": "Virtual machine on SBD-HV03 · rack R02 · server room",
       "purpose": "Certificate templates are directory objects. This host provides the administrative tools to manage them.",
       "services": [
         {
@@ -421,7 +427,7 @@
       "role": "File share server",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.10",
-      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Serve shared files while enforcing resource permissions.",
       "services": [
         {
@@ -451,7 +457,7 @@
       "role": "SQL server",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.20",
-      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Host the application databases for SBD-APPS01, the only registered SQL consumer.",
       "services": [
         {
@@ -485,7 +491,7 @@
       "role": "License server + application API",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.30",
-      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Answer licensing requests from approved clients and application API calls from SBD-WEB01; the only registered SQL consumer.",
       "services": [
         {
@@ -525,7 +531,7 @@
       "role": "Internal Apache web server · Linux, domain-joined",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.40",
-      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Serve approved internal web applications over HTTPS.",
       "services": [
         {
@@ -560,7 +566,7 @@
       "role": "Splunk SIEM",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.10",
-      "location": "Virtual machine on SBD-HV05 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Linux, domain-joined. Single server instance, sized for a small network; no cluster or standby. Index and investigate the security events that are actually collected.",
       "services": [
         {
@@ -586,7 +592,7 @@
       "role": "Tenable / Nessus",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.20",
-      "location": "Virtual machine on SBD-HV05 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Linux, domain-joined. Single Tenable/Nessus server instance, sized for a small network; no cluster or standby. Assess authorized targets for known vulnerabilities.",
       "services": [
         {
@@ -612,7 +618,7 @@
       "role": "Trellix ePO + DLP",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.30",
-      "location": "Virtual machine on SBD-HV05 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Single Trellix ePO/DLP server instance, sized for a small network; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
       "services": [
         {
@@ -642,7 +648,7 @@
       "role": "Audit log repository · Windows, domain-joined",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.40",
-      "location": "Virtual machine on SBD-HV05 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Windows, domain-joined. Retain security records under the approved retention policy.",
       "services": [
         {
@@ -766,7 +772,7 @@
       "role": "Management tools server",
       "segment": "VLAN 70 · Management tools",
       "address": "10.0.70.10",
-      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV07 · rack R04 · server room",
       "purpose": "Management tools. Define administrative accounts, permitted targets, and protocols.",
       "services": [
         {
@@ -800,7 +806,7 @@
       "role": "Linux repository server",
       "segment": "VLAN 70 · Management tools",
       "address": "10.0.70.20",
-      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
+      "location": "Virtual machine on SBD-HV07 · rack R04 · server room",
       "purpose": "Serve the approved Linux package collection.",
       "services": [
         {
