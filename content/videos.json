@@ -133,25 +133,49 @@
           "number": "01",
           "title": "RMF and authorization fundamentals",
           "detail": "Explain the relationship between the RMF lifecycle, the Body of Evidence, the authorization package, and the authorization decision.",
-          "href": "/training/rmf/index.html#catalog/01"
+          "href": "/training/rmf/index.html#catalog/01",
+          "hours": "1",
+          "lessons": [
+            "01.1 Risk and mission impact",
+            "01.2 Roles and accountability",
+            "01.3 How the package fits together"
+          ]
         },
         {
           "number": "02",
           "title": "Prepare and define the system",
           "detail": "Establish what is being authorized, why it exists, and which organizational and system preparation decisions must be made before documentation expands.",
-          "href": "/training/rmf/index.html#catalog/02"
+          "href": "/training/rmf/index.html#catalog/02",
+          "hours": "1.5",
+          "lessons": [
+            "02.1 Mission and stakeholders",
+            "02.2 Boundary and data flows",
+            "02.3 Governance and inherited services"
+          ]
         },
         {
           "number": "03",
           "title": "Categorize information and impacts",
           "detail": "Justify confidentiality, integrity, and availability impacts using information types and mission consequences. Treat privacy applicability as an explicit decision.",
-          "href": "/training/rmf/index.html#catalog/03"
+          "href": "/training/rmf/index.html#catalog/03",
+          "hours": "1.5",
+          "lessons": [
+            "03.1 Information types and impact",
+            "03.2 Categorization rationale",
+            "03.3 Federal and national security contexts"
+          ]
         },
         {
           "number": "04",
           "title": "Select and tailor controls",
           "detail": "Translate the approved categorization and applicable requirements into a justified, assignable control set. Distinguish the control catalog from a selected baseline.",
-          "href": "/training/rmf/index.html#catalog/04"
+          "href": "/training/rmf/index.html#catalog/04",
+          "hours": "2",
+          "lessons": [
+            "04.1 Baselines and overlays",
+            "04.2 Tailoring and parameters",
+            "04.3 Ownership and inheritance"
+          ]
         }
       ],
       "training": {
@@ -160,7 +184,8 @@
         "pages": 10,
         "materialsEdition": "1.3",
         "updated": "8 October 2026",
-        "relatedResources": []
+        "relatedResources": [],
+        "cover": "/training/rmf/catalog-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 1,
@@ -176,7 +201,9 @@
         "02",
         "03",
         "04"
-      ]
+      ],
+      "outcomeSummary": "A defined system, a justified categorization, and a control set with an owner and a reason for every choice.",
+      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     },
     {
       "id": "rmf-body-of-evidence",
@@ -205,31 +232,61 @@
           "number": "05",
           "title": "Write the system security plan",
           "detail": "Write a System Security Plan (SSP) that describes the actual system and explains how selected controls are implemented.",
-          "href": "/training/rmf/index.html#catalog/05"
+          "href": "/training/rmf/index.html#catalog/05",
+          "hours": "2",
+          "lessons": [
+            "05.1 System description and environment",
+            "05.2 Implementation statements",
+            "05.3 Policies and supporting plans"
+          ]
         },
         {
           "number": "06",
           "title": "Connect implementation to proof",
           "detail": "Collect technical and operational evidence that addresses the selected requirement and can support an assessment.",
-          "href": "/training/rmf/index.html#catalog/06"
+          "href": "/training/rmf/index.html#catalog/06",
+          "hours": "2",
+          "lessons": [
+            "06.1 Configuration and STIG evidence",
+            "06.2 Security operations evidence",
+            "06.3 Coverage and evidence limitations"
+          ]
         },
         {
           "number": "07",
           "title": "Organize the Body of Evidence",
           "detail": "Make evidence easy to retrieve, trace, and maintain across system changes and assessment cycles.",
-          "href": "/training/rmf/index.html#catalog/07"
+          "href": "/training/rmf/index.html#catalog/07",
+          "hours": "1.5",
+          "lessons": [
+            "07.1 Evidence index and identifiers",
+            "07.2 Control traceability",
+            "07.3 Currency and version control"
+          ]
         },
         {
           "number": "08",
           "title": "Plan and perform assessment",
           "detail": "Turn implementation claims into assessable objectives and distinguish a planned test from an observed result.",
-          "href": "/training/rmf/index.html#catalog/08"
+          "href": "/training/rmf/index.html#catalog/08",
+          "hours": "2",
+          "lessons": [
+            "08.1 Assessment scope and independence",
+            "08.2 Examine interview and test",
+            "08.3 Findings and assessment reporting"
+          ]
         },
         {
           "number": "09",
           "title": "Manage findings and residual risk",
           "detail": "Translate weaknesses into mission-relevant risk and an accountable response. Explain the difference between technical severity and contextual risk.",
-          "href": "/training/rmf/index.html#catalog/09"
+          "href": "/training/rmf/index.html#catalog/09",
+          "hours": "1.5",
+          "lessons": [
+            "09.1 Findings and risk analysis",
+            "09.2 Writing an actionable POA&M",
+            "09.3 Remediation and verification"
+          ]
         }
       ],
       "training": {
@@ -244,7 +301,8 @@
             "detail": "Ten examples with editable Markdown and CSV starters",
             "href": "/training/rmf/index.html#evidence"
           }
-        ]
+        ],
+        "cover": "/training/rmf/catalog-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 2,
@@ -261,7 +319,9 @@
         "07",
         "08",
         "09"
-      ]
+      ],
+      "outcomeSummary": "Implementation, assessment, and evidence organized so a reviewer can trace every control to proof.",
+      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     },
     {
       "id": "rmf-authorization-to-operate",
@@ -290,19 +350,37 @@
           "number": "10",
           "title": "Assemble the authorization package",
           "detail": "Build a reviewable package whose claims, assessment results, and open risks agree across documents.",
-          "href": "/training/rmf/index.html#catalog/10"
+          "href": "/training/rmf/index.html#catalog/10",
+          "hours": "2",
+          "lessons": [
+            "10.1 Package structure and manifest",
+            "10.2 Consistency and readiness review",
+            "10.3 Submission workflow"
+          ]
         },
         {
           "number": "11",
           "title": "Present the authorization decision",
           "detail": "Communicate mission need, the assessed security posture, unresolved risk, and proposed risk responses to the decision maker.",
-          "href": "/training/rmf/index.html#catalog/11"
+          "href": "/training/rmf/index.html#catalog/11",
+          "hours": "1.5",
+          "lessons": [
+            "11.1 Briefing residual risk",
+            "11.2 AO review and questions",
+            "11.3 Decision and operating conditions"
+          ]
         },
         {
           "number": "12",
           "title": "Monitor and maintain authorization",
           "detail": "Keep the authorization evidence useful as the system, threats, personnel, and dependencies change.",
-          "href": "/training/rmf/index.html#catalog/12"
+          "href": "/training/rmf/index.html#catalog/12",
+          "hours": "1.5",
+          "lessons": [
+            "12.1 Monitoring strategy and measures",
+            "12.2 Change impact and reassessment",
+            "12.3 Updating the package"
+          ]
         }
       ],
       "training": {
@@ -322,7 +400,8 @@
             "detail": "Organize the evidence and submission records",
             "href": "/training/rmf/index.html#evidence/manifest"
           }
-        ]
+        ],
+        "cover": "/training/rmf/catalog-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 3,
@@ -338,7 +417,9 @@
         "11",
         "12"
       ],
-      "capstoneHours": 4
+      "capstoneHours": 4,
+      "outcomeSummary": "A complete package, an honest risk picture, and a decision the authorizing official can defend.",
+      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     },
     {
       "id": "dns-configuration",
@@ -383,7 +464,8 @@
         "checklistPage": "/training/dns-configuration/checklist",
         "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
-        "pages": 16
+        "pages": 16,
+        "cover": "/training/dns-configuration/workbook-cover.webp"
       },
       "number": "1.2",
       "title": "Configure DNS and time",
@@ -410,7 +492,9 @@
         "Configure secure AD-integrated zones and maintain records.",
         "Test both resolvers, directory discovery, and client fallback.",
         "Make the PDC emulator the domain's time source and verify the time hierarchy end to end."
-      ]
+      ],
+      "outcomeSummary": "Names that resolve from either controller. A clock the whole domain trusts. Both proven, not assumed.",
+      "networkLabel": "VLAN 10 / NAMES & TIME"
     },
     {
       "id": "two-tier-pki",
@@ -471,7 +555,8 @@
         "checklistPage": "/training/two-tier-pki/checklist",
         "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
-        "pages": 24
+        "pages": 24,
+        "cover": "/training/two-tier-pki/workbook-cover.webp"
       },
       "number": "1.4",
       "title": "Configure the two-tier PKI",
@@ -502,7 +587,9 @@
         "Configure the offline root and sign an issuing CA request through controlled media transfer.",
         "Publish certificates and CRLs at the exact URLs issued certificates carry, from pki.sbd.test.",
         "Move template administration to a delegated seat and prove autoenrollment and revocation end to end."
-      ]
+      ],
+      "outcomeSummary": "An offline root, a working issuing CA, and trust data served at exactly the URLs every certificate carries.",
+      "networkLabel": "OFFLINE + VLAN 30 / PKI"
     },
     {
       "id": "harden-baseline",
@@ -547,7 +634,8 @@
         "checklistPage": "/training/harden-baseline/checklist",
         "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
         "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
-        "pages": 16
+        "pages": 16,
+        "cover": "/training/harden-baseline/workbook-cover.webp"
       },
       "number": "1.3",
       "title": "Harden the baseline",
@@ -574,7 +662,9 @@
         "Design OUs for delegation and policy targeting, and redirect the default containers.",
         "Import the DISA GPO package and link STIG policies by organizational unit.",
         "Verify hardening with baseline and rescan SCAP results, reconciled checklists, and documented exceptions."
-      ]
+      ],
+      "outcomeSummary": "An OU design built for delegation. DISA settings applied, scanned, and every exception written down.",
+      "networkLabel": "VLAN 10 / IDENTITY"
     },
     {
       "categoryOrder": 5,
@@ -647,8 +737,11 @@
         "checklistPage": "/training/tiered-admin/checklist",
         "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
-        "pages": 17
-      }
+        "pages": 17,
+        "cover": "/training/tiered-admin/workbook-cover.webp"
+      },
+      "outcomeSummary": "Addresses handed out on purpose, and privileged sessions that only ever start from the right seat.",
+      "networkLabel": "VLAN 20 + 60 / ADMINISTRATION"
     },
     {
       "categoryOrder": 6,
@@ -720,8 +813,11 @@
         "checklistPage": "/training/logging-pipeline/checklist",
         "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
-        "pages": 16
-      }
+        "pages": 16,
+        "cover": "/training/logging-pipeline/workbook-cover.webp"
+      },
+      "outcomeSummary": "Every important event collected, protected from tampering, and answering a search someone actually runs.",
+      "networkLabel": "VLAN 20 + 50 / MONITORING"
     },
     {
       "categoryOrder": 7,
@@ -797,8 +893,11 @@
         "checklistPage": "/training/workstation-fleet/checklist",
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "pages": 18
-      }
+        "pages": 18,
+        "cover": "/training/workstation-fleet/workbook-cover.webp"
+      },
+      "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",
+      "networkLabel": "VLAN 20 + 30 + 80 / WORKSTATIONS"
     },
     {
       "categoryOrder": 8,
@@ -872,8 +971,11 @@
         "checklistPage": "/training/patch-protect/checklist",
         "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
-        "pages": 16
-      }
+        "pages": 16,
+        "cover": "/training/patch-protect/workbook-cover.webp"
+      },
+      "outcomeSummary": "Updates by ring, software from approved sources, managed protection, and a scanner that keeps everyone honest.",
+      "networkLabel": "VLAN 20 + 50 + 70 / MANAGEMENT"
     },
     {
       "categoryOrder": 9,
@@ -942,8 +1044,11 @@
         "checklistPage": "/training/business-services/checklist",
         "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
-        "pages": 14
-      }
+        "pages": 14,
+        "cover": "/training/business-services/workbook-cover.webp"
+      },
+      "outcomeSummary": "Files, licensing, and a three-tier web application, each reachable only by its documented path.",
+      "networkLabel": "VLAN 40 / SERVICES"
     },
     {
       "categoryOrder": 10,
@@ -1016,8 +1121,11 @@
         "checklistPage": "/training/prove-recovery/checklist",
         "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
-        "pages": 16
-      }
+        "pages": 16,
+        "cover": "/training/prove-recovery/workbook-cover.webp"
+      },
+      "outcomeSummary": "Backups with custody, one real restore performed in isolation, and the evidence that you can come back.",
+      "networkLabel": "VLAN 10 + 30 + 50 / RECOVERY"
     }
   ],
   "categories": [

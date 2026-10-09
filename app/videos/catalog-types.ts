@@ -58,7 +58,12 @@ export type TrainingCourse = {
   moduleIds?: string[];
   capstoneHours?: number;
   outcomes: string[];
-  stages: { title: string; detail: string; number?: string; href?: string }[];
+  /** One-line promise shown above the outcomes in the expanded tile. */
+  outcomeSummary?: string;
+  /** Where the course's systems sit in Inside the Network, shown in the lesson explorer. */
+  networkLabel?: string;
+  /** RMF parts list each module's lessons and study hours (kept equal to public/training/rmf/catalog-data.js by a test). */
+  stages: { title: string; detail: string; number?: string; href?: string; hours?: string; lessons?: string[] }[];
   training: {
     guide: string;
     pdf?: string;
@@ -66,6 +71,8 @@ export type TrainingCourse = {
     checklist?: string;
     checklistPage?: string;
     pages?: number;
+    /** Workbook cover image (the first page of the workbook or catalog). */
+    cover?: string;
     materialsEdition: string;
     updated: string;
     relatedResources?: { title: string; detail: string; href: string }[];
