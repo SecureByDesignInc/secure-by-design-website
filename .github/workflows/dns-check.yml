@@ -1,0 +1,28 @@
+name: DNS check
+
+# Audit helper (not for main): the domain's mail-authentication and DNSSEC records as the world sees them.
+on:
+  push:
+    branches: ['audit/dns']
+
+permissions:
+  contents: read
+
+jobs:
+  dns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Records
+        run: |
+          d=securebydesigninc.com
+          q() { dig +short "$@" @1.1.1.1 | tr '\n' ' '; }
+          echo "::notice title=DMARC::$(q TXT _dmarc.$d)"
+          echo "::notice title=SPF and apex TXT::$(q TXT $d)"
+          echo "::notice title=MX::$(q MX $d)"
+          echo "::notice title=notify subdomain::MX $(q MX notify.$d) | TXT $(q TXT notify.$d) | send.notify TXT $(q TXT send.notify.$d) | send.notify MX $(q MX send.notify.$d)"
+          for s in resend default google selector1 selector2 k1 hostway mail dkim s1 s2 mxvault; do
+            for host in "$s._domainkey.$d" "$s._domainkey.notify.$d"; do r=$(q TXT "$host"); [ -n "$r" ] && echo "$host => ${r:0:120}" >> dkim.txt; done
+          done
+          echo "::notice title=DKIM keys found::$(cat dkim.txt 2>/dev/null | tr '\n' '|' || echo none)"
+          echo "::notice title=DNSSEC::DS at parent: $(q DS $d) | DNSKEY count: $(dig +short DNSKEY $d @1.1.1.1 | wc -l) | AD flag: $(dig +dnssec $d A @1.1.1.1 | grep -c ' ad ')"
