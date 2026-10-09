@@ -1,0 +1,27 @@
+name: Registration check
+
+# Audit helper (not for main): what the public registration data shows, without printing personal details.
+on:
+  push:
+    branches: ['audit/whois']
+
+permissions:
+  contents: read
+
+jobs:
+  rdap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Registry and registrar data
+        run: |
+          d=securebydesigninc.com
+          reg=$(curl -s -m 20 "https://rdap.verisign.com/com/v1/domain/$d")
+          echo "::notice title=Registry status::$(echo "$reg" | jq -r '[.status[]?] | join(", ")') | DNSSEC signed: $(echo "$reg" | jq -r '.secureDNS.delegationSigned') | registrar: $(echo "$reg" | jq -r '.entities[]? | select(.roles[]?=="registrar") | .vcardArray[1][]? | select(.[0]=="fn") | .[3]')"
+          rr=$(echo "$reg" | jq -r '.links[]? | select(.rel=="related") | .href' | head -1)
+          [ -n "$rr" ] && body=$(curl -s -m 20 -L "$rr") || body=""
+          sudo apt-get install -y -qq whois > /dev/null 2>&1
+          w=$(whois -h "$(whois $d | grep -i 'Registrar WHOIS Server' | head -1 | awk '{print $NF}')" $d 2>/dev/null || true)
+          all="$body $w"
+          has() { echo "$all" | grep -qi "$1" && echo yes || echo no; }
+          echo "::notice title=Registrar data::RDAP fetched: $([ -n "$body" ] && echo yes || echo no) | WHOIS fetched: $([ -n "$w" ] && echo yes || echo no) | shows the owner's surname: $(has mifflin) | shows the street address: $(has 'State St') | shows the phone number: $(has 3918041) | shows the hotmail address: $(has hotmail) | mentions privacy/redaction: $(has 'privacy\|redacted\|proxy\|protect')"
