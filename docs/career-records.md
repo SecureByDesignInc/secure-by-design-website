@@ -1,19 +1,19 @@
 # Career records
 
-The existing learning module remains at `/`. `/careers` collects the revised background and career-goals form. `/career-records` is an owner-only review area. API authorization uses the Sites dispatch-provided signed-in identity and an explicit owner email setting; signing in as another visitor does not grant access.
+The existing learning module remains at `/`. `/careers` collects the revised background and career-goals form. `/career-records` is an owner-only review area. API authorization uses a My Account session for the `OWNER_EMAIL` address that signed in within the last 12 hours; any other account gets 403, and client-supplied `oai-*` headers are ignored. The public forms are closed (POST returns 410) until relaunch.
 
 Structured responses, submission dates, review status, check-in dates, and owner notes are stored in the Site's D1 database. The intake is not an appointment scheduler. Check-in dates do not currently generate reminder emails. Form drafts stay in memory until submitted. Private records are never embedded in static assets.
 
 ## Deployment settings
 
-Set `OWNER_EMAIL` to the verified email used by the existing Sites owner account, not automatically to the notification inbox. Set `SITE_ORIGIN` to the Site's published HTTPS origin. The notification recipient is intentionally fixed to the user's requested `support@securebydesigninc.com` on the server.
+Set `OWNER_EMAIL` to the email of the owner's My Account login, not automatically to the notification inbox. Set `SITE_ORIGIN` to `https://securebydesigninc.com`. The notification recipient is intentionally fixed to the user's requested `support@securebydesigninc.com` on the server.
 
 Email uses the Resend HTTPS API. Before activating email:
 
 1. Create a Resend account and verify a sending domain you control. Follow https://resend.com/docs/dashboard/domains/introduction. Use the DNS records Resend supplies; do not invent or overwrite unrelated records.
-2. Create a sending API key. Store it as the secret `RESEND_API_KEY` in Sites runtime settings, never in source or chat.
+2. Create a sending API key. Store it as the secret `RESEND_API_KEY` in the Worker's settings in Cloudflare, never in source or chat.
 3. Set `NOTIFICATION_FROM` to an address on that verified sending domain. It need not be the receiving support mailbox.
-4. Deploy the saved site version to apply the settings.
+4. Secrets apply to the running Worker immediately; code changes deploy when merged to `main`.
 5. Open the private records area and send a test email. Confirm receipt in the support inbox, then send pending notifications. Provider acceptance alone does not establish inbox delivery.
 
 Source references: https://resend.com/docs/api-reference/emails/send-email and https://resend.com/docs/dashboard/emails/idempotency-keys.

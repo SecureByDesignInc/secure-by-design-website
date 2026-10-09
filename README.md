@@ -83,6 +83,6 @@ The separate RMF system profile and evidence-guide examples retain the air-gappe
 
 Use Node.js 22.13 or later and pnpm. Run `pnpm install`, then `pnpm dev`. Run `pnpm build` for a production build. Markdown content is prepared automatically before development and production builds.
 
-`.openai/hosting.json` identifies the existing public site. Editing or running a local preview does not change the live site; publishing is a separate action. Use the Sites publishing workflow for this existing site and keep credentials out of files and Git configuration.
+Editing or running a local preview does not change the live site. Publishing happens when a pull request is merged to `main`: GitHub Actions builds, tests and deploys to the owner's Cloudflare Worker (see `.github/workflows/deploy.yml`). Keep credentials out of files and Git configuration. `.openai/hosting.json` is left from the retired ChatGPT Sites project; the build still reads its binding names.
 
 The separate `secure-by-design-ai-concept` folder contains the reviewed design history and its local preview. Apply future approved changes to this production source before publishing.
