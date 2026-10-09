@@ -1,0 +1,54 @@
+name: Cloudflare inventory (read-only)
+
+# Audit helper (not for main): lists what the site depends on in the owner's Cloudflare account, to check
+# whether the old ChatGPT Sites project still manages any of it. Reads only; prints counts, never row data.
+on:
+  push:
+    branches: ['audit/cf-inventory']
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WORKER: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+      D1_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+      D1_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Account inventory
+        run: |
+          api() { curl -s -m 30 -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4$1"; }
+          note() { echo "::notice title=$1::$(echo "$2" | tr '\n' '|' | cut -c1-3500)"; }
+          note "Workers" "$(api /accounts/$CLOUDFLARE_ACCOUNT_ID/workers/scripts | jq -r 'if .success then (.result[] | "\(.id) · created \(.created_on[0:10]) · modified \(.modified_on[0:10])") else "error: \(.errors|tostring)" end')"
+          note "Worker custom domains" "$(api /accounts/$CLOUDFLARE_ACCOUNT_ID/workers/domains | jq -r 'if .success then (.result[] | "\(.hostname) → \(.service)") else "error: \(.errors|tostring)" end')"
+          note "D1 databases" "$(api /accounts/$CLOUDFLARE_ACCOUNT_ID/d1/database | jq -r 'if .success then (.result[] | "\(.name) · \(.uuid[0:8]) · created \(.created_at[0:10]) · \(.file_size) bytes") else "error: \(.errors|tostring)" end')"
+          note "Zone" "$(api '/zones?name=securebydesigninc.com' | jq -r 'if .success then (.result[] | "\(.name) · \(.status) · nameservers \(.name_servers|join(", ")) · original registrar \(.original_registrar // "?")") else "error: \(.errors|tostring)" end')"
+          note "Token" "$(api /user/tokens/verify | jq -r '.result.status // .errors[0].message')"
+      - name: Who has deployed the site Worker
+        run: |
+          pnpm exec wrangler deployments list --name "$WORKER" 2>&1 | grep -E "Created|Author|Source|Message" | sed 's/^ *//' | awk 'NR<=60' > deployments.txt || true
+          echo "::notice title=Deployments (oldest first, up to 15)::$(head -60 deployments.txt | paste -sd'|' | cut -c1-3500)"
+          echo "::notice title=Deployment sources::$(grep -E '^Source' deployments.txt | sort | uniq -c | tr '\n' '|')"
+          echo "::notice title=Deployment authors::$(grep -E '^Author' deployments.txt | sort | uniq -c | tr '\n' '|')"
+      - name: Database contents (counts only)
+        run: |
+          printf '{"name":"inventory","compatibility_date":"2026-01-01","d1_databases":[{"binding":"DB","database_name":"%s","database_id":"%s"}]}\n' "${D1_NAME:-site-creator-d1}" "$D1_ID" > d1.json
+          tables=$(pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE '\_cf%' ESCAPE '\' AND name NOT LIKE 'sqlite%' ORDER BY name" | jq -r '.[0].results[].name')
+          q=$(for t in $tables; do printf "SELECT '%s' AS t, count(*) AS n FROM \"%s\" UNION ALL " "$t" "$t"; done | sed 's/ UNION ALL $//')
+          out=$(pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "$q" | jq -r '.[0].results[] | "\(.t): \(.n)"' | paste -sd',' -)
+          echo "::notice title=Rows per table::$out"
+          echo "::notice title=Time Travel::$(pnpm exec wrangler d1 time-travel info DB --config d1.json 2>&1 | grep -iE 'bookmark|timestamp' | head -3 | paste -sd'|' -)"
