@@ -16,7 +16,7 @@ jobs:
       - name: Course pages and files
         run: |
           S=https://securebydesigninc.com
-          get() { curl -s -m 30 -A 'Mozilla/5.0 live-check' "$S$1"; }
+          get() { curl -sL -m 30 -A 'Mozilla/5.0 live-check' "$S$1" | sed 's/<!-- -->//g'; }
           has() { if get "$1" | grep -q -- "$2"; then echo "yes"; else echo "NO"; fi; }
           hasnt() { if get "$1" | grep -q -- "$2"; then echo "STILL"; else echo "gone"; fi; }
           sum() { curl -s -m 60 "$S$1" | sha256sum | cut -c1-16; }
@@ -26,4 +26,5 @@ jobs:
           echo "::notice title=1.1 files::zip $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip) · pdf $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf) · cover $(sum /training/dc01-dc02/workbook-cover.webp) · commands showrepl* $(has /training/dc01-dc02/Verification-Commands.txt 'repadmin /showrepl \*')"
           echo "::notice title=1.2 files::pdf $(sum /training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf) · checklist loopback $(has /training/dns-configuration/configuration-checklist.md '127.0.0.1') · checklist pktmon $(has /training/dns-configuration/configuration-checklist.md 'pktmon')"
           echo "::notice title=1.2 guide page::plan text $(has /training/dns-configuration 'turns names into addresses') · edition 1.3 $(has /training/dns-configuration 'Edition 1.3')"
+          echo "::notice title=Guide redirect::$(curl -s -o /dev/null -m 20 -w '%{http_code} -> %{redirect_url}' $S/training/dc01-dc02/index.html)"
           echo "::notice title=Catalog and home::library subtitle $(has /training 'DC01 + DC02 / Active Directory') · old subtitle $(hasnt /training 'Active Directory &amp; DNS') · home text $(has / 'Build two Active Directory domain controllers') · model detail $(has /inside-network-model/courses.js 'Two Active Directory domain controllers')"
