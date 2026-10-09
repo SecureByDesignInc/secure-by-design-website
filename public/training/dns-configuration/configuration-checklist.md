@@ -1,14 +1,15 @@
-# Configure DNS — configuration checklist
+# Configure DNS and time — configuration checklist
 
-Secure By Design · Edition 1.1 · 8 October 2026
+Secure By Design · Edition 1.2 · 8 October 2026
 
-The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS dependency.
+The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the internal reference clock, SBD-TIME01.
 
 ## Before you start
 
 - [ ] Complete the DC01 + DC02 identity build with both domain controllers healthy.
 - [ ] Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.
 - [ ] Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.
+- [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register; SBD-TIME01 answers at 10.0.20.40 (a stand-in Windows Server 2025 host is fine in a practice lab).
 
 ## Map names to the network
 
@@ -97,6 +98,29 @@ repadmin /replsummary
 
 Notes / result / date: __________________________
 
+## Stand up SBD-TIME01 and the time hierarchy
+
+- [ ] Confirm SBD-TIME01 at 10.0.20.40 answers as an NTP server. In the model it is a rack appliance; in a practice lab a small Windows Server 2025 host with the Windows Time service configured as an NTP server can stand in for it. In an air-gapped network its clock is the reference by declaration — record the source decision (an approved hardware source, or the stand-in host's clock) with its expected accuracy and drift threshold.
+- [ ] On SBD-DC01, the domain controller holding the PDC emulator role, configure Windows Time to use SBD-TIME01 as its manual peer and mark it reliable. Only the PDC emulator points at TIME01: SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.
+- [ ] Confirm the network's service-path register permits time — members to both domain controllers on UDP 123, and SBD-DC01 alone to SBD-TIME01. Write the time design into the build record now: course 1.3's hardening Group Policy objects (GPOs) must leave it intact, and if a Security Technical Implementation Guide (STIG) value disagrees with it, that course's deviation record is where the decision lives.
+- [ ] Verify the chain end to end: TIME01 serving, the PDC emulator sourcing from it, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold.
+
+**Commands:**
+
+```
+Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
+# On the PDC emulator, then on SBD-DC02 and a member server:
+w32tm /query /source
+w32tm /query /status
+w32tm /stripchart /computer:10.0.20.40 /samples:3 /dataonly   # from SBD-DC01 only
+```
+
+**Verify:** The PDC emulator reports SBD-TIME01 as its source, SBD-DC02 and the member server report a domain controller, and measured offsets sit inside the documented threshold.
+
+**Evidence:** Record the time design decisions, the source and status output from both controllers and the member, the stripchart offsets, and the register rows that permit time: members to the domain controllers, and SBD-DC01 to SBD-TIME01.
+
+Notes / result / date: __________________________
+
 ## Find the fault and record the fix
 
 - [ ] For a failing lookup, record the exact name, record type, client, resolver, timestamp, and error. Compare the fully qualified name with any short-name search behavior.
@@ -126,5 +150,7 @@ Notes / result / date: __________________________
 - [Microsoft · Manage DNS resource records](https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records)
 - [Microsoft · Resolve-DnsName](https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname)
 - [Microsoft · Dcdiag](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag)
+- [Microsoft · Windows Time service](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-top)
+- [Microsoft · Windows Time service tools and settings](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings)
 
 © 2026 Secure By Design Team LLC

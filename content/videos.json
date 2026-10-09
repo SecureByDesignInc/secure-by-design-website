@@ -346,9 +346,9 @@
       "categoryId": "network-build",
       "categoryOrder": 2,
       "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "estimatedHours": 1.5,
+      "moduleCount": 6,
+      "lessonCount": 6,
+      "estimatedHours": 2.0,
       "stages": [
         {
           "title": "Map names to the network",
@@ -367,43 +367,50 @@
           "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records."
         },
         {
+          "title": "Stand up SBD-TIME01 and the time hierarchy",
+          "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Point the PDC emulator at the internal reference clock and let the domain hierarchy carry time to everything else."
+        },
+        {
           "title": "Find the fault and record the fix",
-          "detail": "Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name."
+          "detail": "Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name — or, for a sign-in failure, the clock."
         }
       ],
       "training": {
         "guide": "/training/dns-configuration",
         "checklist": "/training/dns-configuration/configuration-checklist.md",
-        "materialsEdition": "1.1",
+        "materialsEdition": "1.2",
         "updated": "8 October 2026",
         "checklistPage": "/training/dns-configuration/checklist",
         "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
-        "pages": 14
+        "pages": 16
       },
       "number": "1.2",
-      "title": "Configure DNS",
-      "subtitle": "Zones, records, replication & troubleshooting",
-      "description": "Build dependable internal name resolution on DC01 and DC02. Configure forward and reverse zones, manage service records, and prove DNS redundancy in the air-gapped training network.",
+      "title": "Configure DNS and time",
+      "subtitle": "Zones, records, the domain time hierarchy & troubleshooting",
+      "description": "Build dependable internal name resolution and time on DC01 and DC02. Configure forward and reverse zones, manage service records, point the domain at the internal reference clock, and prove both in the air-gapped training network.",
       "tags": [
         "Windows Server 2025",
         "DNS",
-        "Name resolution"
+        "Name resolution",
+        "Time service"
       ],
       "platform": "Windows Server 2025",
       "systems": [
         "SBD-DC01",
-        "SBD-DC02"
+        "SBD-DC02",
+        "SBD-TIME01"
       ],
       "artLabels": [
         "Forward + reverse zones",
-        "Records + replication",
-        "Verify name resolution"
+        "Records + domain time",
+        "Verify names and time"
       ],
       "outcomes": [
         "Plan authoritative internal DNS and client settings.",
         "Configure secure AD-integrated zones and maintain records.",
-        "Test both resolvers, directory discovery, and client fallback."
+        "Test both resolvers, directory discovery, and client fallback.",
+        "Point the PDC emulator at SBD-TIME01 and verify the domain time hierarchy end to end."
       ]
     },
     {
@@ -412,9 +419,9 @@
       "categoryId": "network-build",
       "categoryOrder": 4,
       "kind": "configuration",
-      "moduleCount": 6,
-      "lessonCount": 6,
-      "estimatedHours": 2.8,
+      "moduleCount": 10,
+      "lessonCount": 10,
+      "estimatedHours": 4.5,
       "stages": [
         {
           "title": "Design the two-tier trust hierarchy",
@@ -433,49 +440,69 @@
           "detail": "A signing ceremony connects an approved request to an approved CA identity. A matching filename alone is not proof that the root should trust the request."
         },
         {
-          "title": "Activate issuance and publish trust data",
-          "detail": "A running CA is only one part of a working PKI. Clients also need the approved trust anchor, the intermediate certificate, and current revocation information at the advertised locations."
+          "title": "Activate the issuing CA and distribute trust",
+          "detail": "A signed certificate is not yet a working CA. Install it, start Certificate Services, set the AIA and CDP locations every issued certificate will carry, and distribute the approved root through managed domain policy."
+        },
+        {
+          "title": "Build the pki.sbd.test publication site",
+          "detail": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network."
+        },
+        {
+          "title": "Publish the trust data at its advertised URLs",
+          "detail": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything."
+        },
+        {
+          "title": "Separate template administration",
+          "detail": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open."
+        },
+        {
+          "title": "Publish the first working templates",
+          "detail": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those."
         },
         {
           "title": "Validate enrollment, revocation, and recovery",
-          "detail": "Finish from a clean domain client. Verify the experience of a relying system, including what happens when a certificate is no longer trusted."
+          "detail": "Finish from a clean domain client the way a relying system sees it: a pilot machine enrolls on its own, validates against the live publication site, and rejects a certificate you revoke — then the change-triggered scans record what this course did."
         }
       ],
       "training": {
         "guide": "/training/two-tier-pki",
         "checklist": "/training/two-tier-pki/configuration-checklist.md",
-        "materialsEdition": "1.1",
+        "materialsEdition": "2.0",
         "updated": "8 October 2026",
         "checklistPage": "/training/two-tier-pki/checklist",
         "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
-        "pages": 16
+        "pages": 24
       },
       "number": "1.4",
-      "title": "Configure a Root CA & issuing CA",
-      "subtitle": "Offline root + subordinate CA / Two-tier PKI",
-      "description": "Build a two-tier public key infrastructure with an offline standalone Root CA and an enterprise subordinate/issuing CA. Follow the signing ceremony, publish trust and revocation data, and validate enrollment.",
+      "title": "Configure the two-tier PKI",
+      "subtitle": "Offline root, issuing CA, pki.sbd.test publication & templates",
+      "description": "Build a complete two-tier public key infrastructure: an offline standalone Root CA and an enterprise issuing CA, signed through a controlled ceremony, with trust data served from pki.sbd.test at the exact embedded URLs, template administration on its own seat, and enrollment and revocation proven end to end.",
       "tags": [
         "Windows Server 2025",
         "PKI",
         "Root CA",
         "Subordinate CA",
-        "AD CS"
+        "AD CS",
+        "Certificate templates",
+        "AIA and CDP"
       ],
       "platform": "Windows Server 2025",
       "systems": [
         "SBD-ROOTCA01",
-        "SBD-SUBCA01"
+        "SBD-SUBCA01",
+        "SBD-PKI-MGMT01"
       ],
       "artLabels": [
         "Offline Root CA",
-        "Subordinate / issuing CA",
-        "Trust + revocation"
+        "Issuing CA + pki.sbd.test",
+        "Templates + enrollment"
       ],
       "outcomes": [
         "Design the CA hierarchy and its publication dependencies.",
         "Configure the offline root and sign an issuing CA request through controlled media transfer.",
-        "Publish trust data and prove certificate enrollment and revocation."
+        "Publish certificates and CRLs at the exact URLs issued certificates carry, from pki.sbd.test.",
+        "Move template administration to a delegated seat and prove autoenrollment and revocation end to end."
       ]
     },
     {
@@ -516,7 +543,7 @@
       "training": {
         "guide": "/training/harden-baseline",
         "checklist": "/training/harden-baseline/configuration-checklist.md",
-        "materialsEdition": "1.1",
+        "materialsEdition": "1.2",
         "updated": "8 October 2026",
         "checklistPage": "/training/harden-baseline/checklist",
         "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
@@ -551,152 +578,8 @@
       ]
     },
     {
-      "id": "connect-segment",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
       "categoryOrder": 5,
-      "kind": "configuration",
-      "moduleCount": 7,
-      "lessonCount": 7,
-      "estimatedHours": 3.0,
-      "stages": [
-        {
-          "title": "Design the segmentation and service paths",
-          "detail": "A VLAN is a boundary only if something enforces it. Before touching the router, write the policy: default deny between VLANs, and an exception register where every permitted path names its source, destination, port, and reason."
-        },
-        {
-          "title": "Build the core router",
-          "detail": "The core is a virtual machine the lab controls: one interface per VLAN, the planned gateway address on each, and no default route anywhere — there is nowhere outside this network to go."
-        },
-        {
-          "title": "Enforce default-deny with the register",
-          "detail": "Now the policy becomes configuration: deny between VLANs by default, permit exactly the register's rows, and log what gets dropped so the denials are visible evidence, not silence."
-        },
-        {
-          "title": "Stand up SBD-TIME01 and the time hierarchy",
-          "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Build the internal reference, point the PDC emulator at it, and let the domain hierarchy carry time to everything else."
-        },
-        {
-          "title": "Prove the paths and the denials",
-          "detail": "A segmented network is proven twice: every registered path works from where it is supposed to work, and the paths you never granted fail — visibly, in the log."
-        },
-        {
-          "title": "Protect the router's own management",
-          "detail": "The router enforces every boundary, so whoever manages it controls them all. Give its management a separate network, a short list of who may reach it, a log of every change, and a versioned copy of every configuration."
-        },
-        {
-          "title": "Delta scan the change and hand off",
-          "detail": "Course 1.3's rule was simple: every role addition gets a scan. Two systems joined the network and every existing one gained a gateway — that is a change worth measuring."
-        }
-      ],
-      "training": {
-        "guide": "/training/connect-segment",
-        "checklist": "/training/connect-segment/configuration-checklist.md",
-        "materialsEdition": "1.2",
-        "updated": "8 October 2026",
-        "checklistPage": "/training/connect-segment/checklist",
-        "pdf": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
-        "word": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
-        "pages": 18
-      },
       "number": "1.5",
-      "title": "Connect and segment the network",
-      "subtitle": "Core routing, default-deny ACLs & internal time",
-      "description": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
-      "tags": [
-        "Windows Server 2025",
-        "Segmentation",
-        "Routing",
-        "Access control",
-        "Time service"
-      ],
-      "platform": "Windows Server 2025",
-      "systems": [
-        "SBD-CORE01",
-        "SBD-TIME01"
-      ],
-      "artLabels": [
-        "Route the eight VLANs",
-        "Default-deny + register",
-        "Internal time source"
-      ],
-      "outcomes": [
-        "Design and enforce default-deny segmentation with a justified exception register.",
-        "Build the core router and prove permitted paths and logged denials per VLAN.",
-        "Stand up SBD-TIME01 and verify the domain time hierarchy end to end."
-      ]
-    },
-    {
-      "categoryOrder": 6,
-      "number": "1.6",
-      "estimatedHours": 2,
-      "title": "Finish the PKI services",
-      "subtitle": "pki.sbd.test publication & template administration",
-      "description": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
-      "tags": [
-        "Windows Server 2025",
-        "PKI",
-        "AD CS",
-        "Certificate templates",
-        "AIA and CDP"
-      ],
-      "platform": "Windows Server 2025",
-      "systems": [
-        "SBD-PKI-MGMT01",
-        "SBD-SUBCA01"
-      ],
-      "artLabels": [
-        "pki.sbd.test live",
-        "Templates, delegated",
-        "Enrollment proven"
-      ],
-      "outcomes": [
-        "Publish certificates and CRLs at the exact URLs issued certificates carry.",
-        "Move template administration to a delegated seat with a written change process.",
-        "Prove pilot autoenrollment and live revocation retrieval across the routed network."
-      ],
-      "id": "pki-services",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "stages": [
-        {
-          "title": "Build the pki.sbd.test publication site",
-          "detail": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network."
-        },
-        {
-          "title": "Publish the trust data at its advertised URLs",
-          "detail": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything."
-        },
-        {
-          "title": "Separate template administration",
-          "detail": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open."
-        },
-        {
-          "title": "Publish the first working templates",
-          "detail": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those."
-        },
-        {
-          "title": "Validate enrollment and delta scan",
-          "detail": "Close the loop the way course 1.4 did, but now across the routed network: a pilot machine enrolls automatically, validates against the live publication site, and the change-triggered scans record what this course did."
-        }
-      ],
-      "training": {
-        "guide": "/training/pki-services",
-        "checklist": "/training/pki-services/configuration-checklist.md",
-        "materialsEdition": "1.1",
-        "updated": "8 October 2026",
-        "checklistPage": "/training/pki-services/checklist",
-        "pdf": "/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
-        "word": "/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
-        "pages": 14
-      }
-    },
-    {
-      "categoryOrder": 7,
-      "number": "1.7",
       "estimatedHours": 2.8,
       "title": "Addressing and tiered administration",
       "subtitle": "DHCP, admin seats & where privilege may sign in",
@@ -760,7 +643,7 @@
       "training": {
         "guide": "/training/tiered-admin",
         "checklist": "/training/tiered-admin/configuration-checklist.md",
-        "materialsEdition": "1.2",
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "checklistPage": "/training/tiered-admin/checklist",
         "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
@@ -769,8 +652,8 @@
       }
     },
     {
-      "categoryOrder": 8,
-      "number": "1.8",
+      "categoryOrder": 6,
+      "number": "1.6",
       "estimatedHours": 2.5,
       "title": "See everything: the logging pipeline",
       "subtitle": "Collect, protect & analyze before the fleet arrives",
@@ -833,7 +716,7 @@
       "training": {
         "guide": "/training/logging-pipeline",
         "checklist": "/training/logging-pipeline/configuration-checklist.md",
-        "materialsEdition": "1.2",
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "checklistPage": "/training/logging-pipeline/checklist",
         "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
@@ -842,8 +725,8 @@
       }
     },
     {
-      "categoryOrder": 9,
-      "number": "1.9",
+      "categoryOrder": 7,
+      "number": "1.7",
       "estimatedHours": 3.2,
       "title": "Bring in the fleet",
       "subtitle": "50 Windows 11 endpoints, managed from first boot",
@@ -892,7 +775,7 @@
         },
         {
           "title": "Autoenroll the fleet's certificates",
-          "detail": "Course 1.6 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+          "detail": "Course 1.4 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
         },
         {
           "title": "Admit only enrolled devices with 802.1X",
@@ -904,13 +787,13 @@
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.10's tooling will take over."
+          "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over."
         }
       ],
       "training": {
         "guide": "/training/workstation-fleet",
         "checklist": "/training/workstation-fleet/configuration-checklist.md",
-        "materialsEdition": "1.2",
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
@@ -919,8 +802,8 @@
       }
     },
     {
-      "categoryOrder": 10,
-      "number": "1.10",
+      "categoryOrder": 8,
+      "number": "1.8",
       "estimatedHours": 2.5,
       "title": "Patch, protect, and watch for weakness",
       "subtitle": "WSUS rings, approved sources, ePO & credentialed scanning",
@@ -971,7 +854,7 @@
         },
         {
           "title": "SBD-MGMT01 and the living inventory",
-          "detail": "The course 1.9 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70."
+          "detail": "The course 1.7 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70."
         },
         {
           "title": "Endpoint protection through SBD-EPO01",
@@ -985,7 +868,7 @@
       "training": {
         "guide": "/training/patch-protect",
         "checklist": "/training/patch-protect/configuration-checklist.md",
-        "materialsEdition": "1.2",
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "checklistPage": "/training/patch-protect/checklist",
         "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
@@ -994,8 +877,8 @@
       }
     },
     {
-      "categoryOrder": 11,
-      "number": "1.11",
+      "categoryOrder": 9,
+      "number": "1.9",
       "estimatedHours": 2.7,
       "title": "Stand up the business services",
       "subtitle": "Files, database, licensing & web — by documented paths",
@@ -1055,7 +938,7 @@
       "training": {
         "guide": "/training/business-services",
         "checklist": "/training/business-services/configuration-checklist.md",
-        "materialsEdition": "1.1",
+        "materialsEdition": "1.2",
         "updated": "8 October 2026",
         "checklistPage": "/training/business-services/checklist",
         "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
@@ -1064,8 +947,8 @@
       }
     },
     {
-      "categoryOrder": 12,
-      "number": "1.12",
+      "categoryOrder": 10,
+      "number": "1.10",
       "estimatedHours": 2.5,
       "title": "Prove you can recover",
       "subtitle": "Backups with custody, one rehearsed restore & the closing record",
@@ -1129,7 +1012,7 @@
       "training": {
         "guide": "/training/prove-recovery",
         "checklist": "/training/prove-recovery/configuration-checklist.md",
-        "materialsEdition": "1.2",
+        "materialsEdition": "1.3",
         "updated": "8 October 2026",
         "checklistPage": "/training/prove-recovery/checklist",
         "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
@@ -1142,7 +1025,7 @@
     {
       "id": "network-build",
       "title": "Build the Network",
-      "description": "Build the complete air-gapped network, one course at a time: identity and DNS, a hardened baseline, two-tier PKI, segmentation and time, tiered administration, logging, the workstation fleet, patching and scanning, business services, and proven recovery. Follow the courses in order, from 1.1 to 1.12."
+      "description": "Build the complete air-gapped network, one course at a time: identity, DNS and time, a hardened baseline, the two-tier PKI, tiered administration, logging, the workstation fleet, patching and scanning, business services, and proven recovery. Follow the courses in order, from 1.1 to 1.10."
     },
     {
       "id": "network-authorization",

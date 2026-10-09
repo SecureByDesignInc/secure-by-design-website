@@ -13,6 +13,8 @@ These files were moved out of `public/` because nothing live uses them: no page 
 | `secure-by-design.png` | Unused 1.8 MB brand image. |
 | `architecture/secure-by-design-network.png` | The supplied reference network diagram (2.6 MB), not shown on any page; see README.md. |
 | `app-stores/mac-app-store.svg`, `app-stores/microsoft-store.svg` | Store badges removed from `content/app-stores.json` (only App Store and Google Play remain). |
+| `training/connect-segment/` | Retired course 1.5, “Connect and segment the network”: workbook (Word and PDF), checklist, and `course.json` with its course and catalog entries. Removed from the library on 8 October 2026 — routing and segmentation are outside the library's scope; its time lesson moved into course 1.2. |
+| `training/pki-services/` | Former course 1.6, “Finish the PKI services”, the same set. Its lessons now live in course 1.4, “Configure the two-tier PKI”. |
 
 Kept in `public/` because something live still uses them: `career-explorer/explorer.css` (written by `scripts/prepare-career-explorer.mjs` during `pnpm dev`/`pnpm build`), `career-roles/` (read by `tests/career-roles.test.mjs`), `career-form.js` and `career-fields.js` (`tests/careers.test.mjs` expects `/career-form.js`; the owner page script `career-records.js` imports `career-fields.js`), and `career.css`, `career-shell.css`, `career-records.js`, `community-review.js`, `resource-subscribers.js` and `resource-preferences.js` (the owner record pages and the email preference page).
 

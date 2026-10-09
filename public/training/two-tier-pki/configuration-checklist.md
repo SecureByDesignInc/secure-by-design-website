@@ -1,14 +1,14 @@
-# Configure a Root CA & issuing CA — configuration checklist
+# Configure the two-tier PKI — configuration checklist
 
-Secure By Design · Edition 1.1 · 8 October 2026
+Secure By Design · Edition 2.0 · 8 October 2026
 
-This course chooses a standalone offline Root CA and an enterprise subordinate/issuing CA for the training build. The root stays disconnected; approved removable media carries requests and public artifacts. The internal publication service must be provisioned separately.
+This course builds the whole PKI: a standalone offline Root CA, an enterprise subordinate/issuing CA, the pki.sbd.test publication site on SBD-PKI-MGMT01, and template administration on its own seat. The root stays disconnected; approved removable media carries requests and public artifacts. Publication stays plain HTTP by design — clients must be able to fetch revocation data before they can validate any certificate.
 
 ## Before you start
 
-- [ ] Complete courses 1.1–1.3 (identity, DNS, and the hardened baseline); verify domain health and internal name resolution.
-- [ ] Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup and SBD-SUBCA01 joined to sbd.test.
-- [ ] Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation.
+- [ ] Complete courses 1.1–1.3 (identity, DNS and time, and the hardened baseline); verify domain health and internal name resolution.
+- [ ] Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup, SBD-SUBCA01 joined to sbd.test, and SBD-PKI-MGMT01 as a hardened member server at 10.0.30.30 in the Servers OU (course 1.5 moves it, with the issuing CA, to a Tier 0 Servers OU).
+- [ ] Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation; confirm the network's service-path register permits HTTP to pki.sbd.test.
 
 ## Design the two-tier trust hierarchy
 
@@ -102,12 +102,12 @@ Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.cer, C:\CAConfig\RootCA.cer
 
 Notes / result / date: __________________________
 
-## Activate issuance and publish trust data
+## Activate the issuing CA and distribute trust
 
 - [ ] Verify the returned artifacts and import the approved root certificate into the issuing server's trusted root store. Complete CA certificate installation through Certification Authority and start Certificate Services.
-- [ ] Configure the issuing CA's AIA/CDP settings before issuing test certificates. Publish current root and issuing certificates and CRLs to the planned internal locations, preserving the actual filenames referenced by their extensions.
-- [ ] Distribute the approved root trust through the managed domain policy and arrange the required intermediate/directory publication with delegated administrators. Public CA certificates and CRLs may be readable to clients; private keys and backups must never enter that web directory.
-- [ ] Publish only the certificate templates required for the lab. Review purpose, subject construction, key settings, validity, and enrollment permissions; grant a small test group the minimum enrollment rights first.
+- [ ] Configure the issuing CA's AIA and CDP settings before issuing any certificate, pointing them at the planned pki.sbd.test locations. Every certificate the CA signs carries these URLs, so they are fixed now and served exactly as written in lessons 6 and 7.
+- [ ] Distribute the approved root trust through the managed domain policy and arrange the required intermediate/directory publication with delegated administrators.
+- [ ] Hold off on certificate templates: lessons 8 and 9 give template administration its own seat and publish only the templates the plan needs.
 
 **Commands:**
 
@@ -120,30 +120,117 @@ certutil -store Root
 certutil -store CA
 ```
 
-**Verify:** Issuance is configured, the approved trust chain reaches the client, and the exact published URLs return the current files from the internal network.
+**Verify:** Certificate Services is running, the AIA and CDP settings carry the planned pki.sbd.test URLs, and the approved root reaches domain clients through policy.
 
-**Evidence:** Keep publication mappings, permissions, template settings, trust-distribution policy, and retrieval results.
+**Evidence:** Keep the CA installation record, the AIA and CDP settings, and the trust-distribution policy.
+
+Notes / result / date: __________________________
+
+## Build the pki.sbd.test publication site
+
+- [ ] On SBD-PKI-MGMT01, install the Web Server role and create a site (or virtual directory) whose folder will hold the published certificates and revocation lists. Serve .cer, .crt, and .crl files; nothing else belongs in this directory.
+- [ ] Confirm the pki.sbd.test alias from course 1.2 resolves to 10.0.30.30 from a client in another VLAN, and that the service-path register's HTTP row permits the path.
+- [ ] Leave the site on plain HTTP. Revocation checking has to work before any certificate can be trusted — putting the CRL behind HTTPS creates a loop where validating the site needs the very file it serves.
+- [ ] Restrict who can write to the publication folder: the CA's publishing process and the PKI administrators, nobody else. Clients read; they never write.
+
+**Commands:**
+
+```
+Resolve-DnsName pki.sbd.test
+Test-NetConnection pki.sbd.test -Port 80
+Get-Website | Select-Object Name, State, PhysicalPath
+```
+
+**Verify:** pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80, and the publication folder's permissions separate writers from readers.
+
+**Evidence:** Record the site configuration, folder permissions, the DNS resolution output from a cross-VLAN client, and the register row that permits the path.
+
+Notes / result / date: __________________________
+
+## Publish the trust data at its advertised URLs
+
+- [ ] Compare the issuing CA's configured AIA and CDP URLs against the publication folder's layout. Every embedded URL must map to a real file path on the site — the filenames are not yours to improve.
+- [ ] Copy the current root certificate, root CRL, issuing certificate, and issuing CRL into the folder. The root's files still arrive by approved media; the issuing CA's can be written directly by its publishing process.
+- [ ] Configure the issuing CA's CRL publication to write into the site's folder on its schedule, so each new CRL replaces the old file at the same name before it expires.
+- [ ] From a clean client in another VLAN, fetch each URL and run the full verification: the chain must build and revocation data must come from the live site, not a cache.
+
+**Commands:**
+
+```
+certutil -verify -urlfetch C:\Evidence\pki\test.cer
+certutil -URL http://pki.sbd.test/RootCA.crl
+Get-ChildItem C:\inetpub\pkiroot | Select-Object Name, LastWriteTime
+```
+
+**Verify:** Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.
+
+**Evidence:** Keep the URL-to-file mapping table, the folder listing with timestamps, and the urlfetch output from the clean client.
+
+Notes / result / date: __________________________
+
+## Separate template administration
+
+- [ ] Install the certificate management tools on SBD-PKI-MGMT01 and confirm the Certificate Templates console can read the directory's template store from there.
+- [ ] Create a PKI administrators group in the directory, place it under the Admin OU from course 1.3, and delegate the template permissions to that group — membership is the record of who may change what the CA signs.
+- [ ] Remove day-to-day template editing from everywhere else: the issuing CA's console stays for CA operations, not template design, and no Tier-0 account edits templates as routine work.
+- [ ] Write the change process: a template change names its requester, its reviewer, the versioning action (edit, duplicate, or supersede), and lands in the evidence record like any other configuration change.
+
+**Commands:**
+
+```
+Get-ADGroup 'SBD PKI Admins' -Properties Members | Select-Object Name, Members
+certutil -template | Select-String 'TemplatePropCommonName' | Select-Object -First 10
+```
+
+**Verify:** The templates console works from SBD-PKI-MGMT01, the PKI administrators group holds the delegated permissions, and the written change process names requester, reviewer, and versioning action.
+
+**Evidence:** Keep the delegation record, the group membership listing, and the signed-off template change process.
+
+Notes / result / date: __________________________
+
+## Publish the first working templates
+
+- [ ] From the administration seat, duplicate the Computer template as SBD Computer Authentication. Set the approved key provider, a key size of at least 2,048 bits, a validity period within lesson 1's one-to-two-year example, subject built from directory information, and autoenrollment permission for a pilot computer group only.
+- [ ] Duplicate the Web Server template as SBD Server Authentication for the business services in course 1.9: enrollment permission for the server administrators, no autoenrollment, and exportable keys only if the recovery plan explicitly says so.
+- [ ] Record each template's version, settings, and justification through the lesson-3 change process before publishing.
+- [ ] Publish exactly these two templates on the issuing CA and remove any default template the plan does not call for — an unpublished template cannot be mis-enrolled.
+
+**Commands:**
+
+```
+certutil -CATemplates -config 'SBD-SUBCA01\SBD Issuing CA'
+certutil -template 'SBDComputerAuthentication' | Select-String 'msPKI-Certificate-Name-Flag','msPKI-Minimal-Key-Size'
+```
+
+**Verify:** The CA publishes exactly the two planned templates, each shows the approved key size and permissions, and both carry a completed change record.
+
+**Evidence:** Keep each template's configuration export, its change record, and the CA's published-template listing.
 
 Notes / result / date: __________________________
 
 ## Validate enrollment, revocation, and recovery
 
-- [ ] Enroll a disposable test certificate using the approved template. Export only its public certificate as test.cer and inspect the subject, purpose, issuer, and validity.
-- [ ] On a clean validation client, verify the chain and retrieval using the command below. Inspect each AIA/CDP URL and current CRL dates; cached success is insufficient evidence of publication reachability.
-- [ ] Revoke only the disposable test certificate, publish an updated issuing CRL, and verify that a fresh client evaluation detects revocation. Diagnose retrieval or stale-publication problems rather than turning off revocation checks.
-- [ ] Record owners and reminders for root/issuing CRL publication, certificate renewal, backup, and an isolated recovery rehearsal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry.
+- [ ] Enable the autoenrollment policy for the pilot computer group, refresh policy on a pilot machine, and confirm it receives an SBD Computer Authentication certificate without a human touching the request.
+- [ ] On that machine, export the public certificate and run the full verification: the chain must reach the approved root and every AIA and CDP URL must answer from pki.sbd.test with current CRL dates — cached success is not evidence of publication.
+- [ ] Enroll a disposable test certificate, revoke only that one, publish an updated issuing CRL, and verify that a fresh client evaluation detects the revocation. Diagnose retrieval or stale-publication problems rather than turning off revocation checks.
+- [ ] Record owners and reminders for root and issuing CRL publication, certificate renewal, backup, and an isolated recovery rehearsal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry.
+- [ ] Rescan SBD-SUBCA01 and take SBD-PKI-MGMT01's first baseline with the same benchmark and tool versions as always; the publication site and template changes are the expected deltas.
+- [ ] File the course evidence: enrollment output, urlfetch and revocation results, template records, renewal owners, and the scan set — the PKI chapter is finished.
 
 **Commands:**
 
 ```
-# On the validation client; test.cer is the disposable public certificate.
-certutil -dump test.cer
+gpupdate /force
+certutil -pulse
+Get-ChildItem Cert:\LocalMachine\My | Select-Object Subject, NotAfter, Thumbprint
+certutil -verify -urlfetch C:\Evidence\pki\pilot.cer
+# After revoking the disposable test certificate and publishing the new CRL:
 certutil -urlfetch -verify test.cer
 ```
 
-**Verify:** A valid test certificate chains to the approved root and retrieves current revocation data. After revocation and publication, the test certificate is rejected for the expected reason.
+**Verify:** The pilot enrolls hands-free and verifies with live retrieval from pki.sbd.test; after revocation and publication the test certificate is rejected for the expected reason; both VLAN 30 hosts have current, attributed scan results.
 
-**Evidence:** Finish the PKI checklist with enrollment, retrieval and revocation results, renewal dates, backup verification, and recovery ownership.
+**Evidence:** Finish the PKI checklist with the pilot's certificate details, urlfetch and revocation results, renewal dates and recovery owners, and the delta-scan comparison for SUBCA01 plus the PKI-MGMT01 baseline.
 
 Notes / result / date: __________________________
 
@@ -157,5 +244,8 @@ Notes / result / date: __________________________
 - [Microsoft · Publish trust data and validate clients](https://learn.microsoft.com/en-us/training/modules/certificate-services-root-issuing-authority/6-publish-trust-data-validate-clients)
 - [Microsoft · Certutil reference](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil)
 - [NIST · SP 800-57 Part 1 Rev. 5, Recommendation for key management](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final)
+- [Microsoft · Manage certificate templates](https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/manage-certificate-templates)
+- [Microsoft · Configure certificate autoenrollment](https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment)
+- [Microsoft · What's new in Windows Server 2025](https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025)
 
 © 2026 Secure By Design Team LLC

@@ -1,21 +1,21 @@
 # See everything: the logging pipeline — configuration checklist
 
-Secure By Design · Edition 1.2 · 8 October 2026
+Secure By Design · Edition 1.3 · 8 October 2026
 
 This course builds the model's collect → protect → analyze chain before the fleet arrives, so every later system is observed from its first boot. Collection is configuration you can show; protection is permissions and retention you can defend; analysis is a search someone actually runs.
 
 ## Before you start
 
-- [ ] Complete course 1.7: the admin plane exists, and this course's systems are managed only from VLAN 60.
+- [ ] Complete course 1.5: the admin plane exists, and this course's systems are managed only from VLAN 60.
 - [ ] Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server 2025, SBD-SPLUNK01 (10.0.50.10) on Linux joined to the sbd.test domain with its time service (chrony or ntpd) pointed at both domain controllers, and SBD-AUDIT01 (10.0.50.40) as Windows Server 2025 joined to the domain.
-- [ ] Have the course 1.5 register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system.
+- [ ] Have the network's service-path register ready for the new rows: event forwarding to the collector, syslog from the core router, and the forwarder path into the analysis system.
 
 ## Design collect, protect, analyze
 
 - [ ] Write the role sentence for each host: the collector receives Windows events and the core router's syslog; the repository holds the protected, long-retention copy; the analysis system indexes a working copy for search and alerting. One copy to keep, one copy to question.
-- [ ] Scope the first collection to what already produces evidence: both DCs' Security logs, the core router's deny log from course 1.5, and the admin hosts' sign-in events — the fleet joins this scope in the next course, not now.
+- [ ] Scope the first collection to what already produces evidence: both DCs' Security logs, the core router's deny log, and the admin hosts' sign-in events — the fleet joins this scope in the next course, not now.
 - [ ] Decide the AU-family answers and write them down: retention length per stage, who may read each stage, and that nobody — including administrators — writes or deletes in the repository outside the archival process (that is the AU-9 protection story).
-- [ ] Add the register rows: DC and admin-host event forwarding to the collector (WinRM 5985), router syslog UDP 514 to the collector, and the forwarder path from collector to the analysis system; all three systems are managed only from VLAN 60 per course 1.7's handoff.
+- [ ] Add the register rows: DC and admin-host event forwarding to the collector (WinRM 5985), router syslog UDP 514 to the collector, and the forwarder path from collector to the analysis system; all three systems are managed only from VLAN 60 per course 1.5's handoff.
 
 **Commands:**
 
@@ -35,7 +35,7 @@ Notes / result / date: __________________________
 
 - [ ] Review what the Defense Information Systems Agency (DISA) Group Policy objects (GPOs) from course 1.3 already audit — much of the advanced audit policy arrived with the STIGs. This lesson reconciles and fills gaps rather than starting over.
 - [ ] Confirm the categories the design depends on are at least at the STIG values on the DCs: Logon/Logoff, Account Management, Directory Service Changes, and Policy Change — success and failure where the design says so.
-- [ ] Extend the same policy to the admin hosts' OU so privileged sessions write the sign-in trail lesson 5 of course 1.7 started capturing by hand.
+- [ ] Extend the same policy to the admin hosts' OU so privileged sessions write the sign-in trail lesson 5 of course 1.5 started capturing by hand.
 - [ ] Any place this course wants more auditing than the STIG sets, make it a documented addition in the GPO structure — never a local, invisible tweak — and note it in the exception/addition record.
 
 **Commands:**
@@ -55,7 +55,7 @@ Notes / result / date: __________________________
 
 - [ ] On SBD-SYSLOG01, enable the Windows Event Collector service and create a source-initiated subscription for the designed event IDs from the DCs and admin hosts, delivered into the Forwarded Events log.
 - [ ] By GPO on the relevant OUs, set the subscription manager to the collector and grant the Network Service read access to the Security log — the sources push; the collector never reaches into them.
-- [ ] Add a syslog intake on the collector for UDP 514 and point the core router's deny logging at it, so course 1.5's boundary decisions land beside the Windows record.
+- [ ] Add a syslog intake on the collector for UDP 514 and point the core router's deny logging at it, so the network boundary's decisions land beside the Windows record.
 - [ ] Confirm the register rows are the only paths in use: WinRM from the source OUs to the collector, syslog from the core, and nothing listening that the design didn't ask for.
 
 **Commands:**
@@ -97,7 +97,7 @@ Notes / result / date: __________________________
 
 - [ ] Install the analysis platform on SBD-SPLUNK01 and bring in the collector's two streams — the forwarded Windows events and the router syslog — over the registered forwarder path; the repository stays out of this flow by design.
 - [ ] Build search one: failed sign-ins (event 4625) involving the tier admin accounts, grouped by source host — the tiering course's denials now have a dashboard.
-- [ ] Build search two: router denies by source VLAN and destination port — course 1.5's boundary, now trending; and search three: time-service events and offsets, so clock drift surfaces before Kerberos complains.
+- [ ] Build search two: router denies by source VLAN and destination port — the network boundary, now trending; and search three: time-service events and offsets, so clock drift surfaces before Kerberos complains.
 - [ ] Turn the first search into an alert with a threshold, a named responder from the admin plane, and a written first-response step — an alert nobody owns is a log entry with extra steps. Console access to all of this: VLAN 60 only, per the handoff.
 
 **Commands:**
@@ -117,7 +117,7 @@ Notes / result / date: __________________________
 ## Prove the chain and delta scan
 
 - [ ] Generate the test event: one failed sign-in on a DC with a wrong password for a tier admin account. Find it in the DC's Security log, in Forwarded Events on the collector, flag it for the next archive's verification on the repository, and watch the alert fire in analysis.
-- [ ] Repeat with the boundary: probe one unregistered port, then find that deny in the syslog stream and in search two — course 1.5's evidence pair now assembles itself.
+- [ ] Repeat with the boundary: probe one unregistered port, then find that deny in the syslog stream and in search two — the boundary's evidence pair — attempt and deny — now assembles itself.
 - [ ] Run the cadence: first baselines for SBD-SYSLOG01, SBD-AUDIT01, and SBD-SPLUNK01 (Windows hosts with the standard benchmark; SBD-SPLUNK01 runs Linux, so scan it with the DISA STIG benchmark for its distribution), plus a DC rescan for the audit-policy deltas.
 - [ ] File the end-to-end trace as this course's signature evidence and write the handoff: the fleet course inherits a pipeline that will see its first domain join happen.
 
@@ -131,7 +131,7 @@ Get-FileHash -Algorithm SHA256 C:\Evidence\logging-pipeline\*
 
 **Verify:** The test event appears at every stage with consistent timestamps, the deny trace matches, the new hosts have baselines, and the DC rescan deltas are attributed to the audit policy.
 
-**Evidence:** Keep the four-stage trace of the test event, the deny trace, the scan set, and the handoff note to course 1.9.
+**Evidence:** Keep the four-stage trace of the test event, the deny trace, the scan set, and the handoff note to course 1.7.
 
 Notes / result / date: __________________________
 

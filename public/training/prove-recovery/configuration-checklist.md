@@ -1,12 +1,12 @@
 # Prove you can recover — configuration checklist
 
-Secure By Design · Edition 1.2 · 8 October 2026
+Secure By Design · Edition 1.3 · 8 October 2026
 
 The model's final chapter: a network that cannot come back was never really built. This course backs up what matters — directory, certificate authority, policy, boundary, and the log record — proves one real restore in isolation, and files the tested-recovery evidence the authorization path expects.
 
 ## Before you start
 
-- [ ] Complete courses 1.1–1.11: the full network, its records, and the protected log archive all exist.
+- [ ] Complete courses 1.1–1.9: the full network, its records, and the protected log archive all exist.
 - [ ] Provision a protected backup volume on each server, written only by its backup job, an offline backup cabinet with removable media and a custody register, and an isolated recovery network segment (or host) for the restore rehearsal.
 - [ ] Have the custody records handy: the Directory Services Restore Mode (DSRM) passwords from course 1.1 and the CA key protection decisions from course 1.4 — recovery is where those promises come due.
 

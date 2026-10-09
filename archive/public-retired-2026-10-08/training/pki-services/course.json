@@ -1,0 +1,429 @@
+{
+  "configuration": {
+    "id": "pki-services",
+    "prerequisites": [
+      "Complete courses 1.4 and 1.5: a working two-tier PKI and the routed, default-deny network with pki.sbd.test reachable over HTTP per the register.",
+      "Build SBD-PKI-MGMT01 as a hardened Windows Server 2025 member server at 10.0.30.30 in the Servers OU (course 1.7 moves it, with the issuing CA, to a Tier 0 Servers OU).",
+      "Have the issuing CA's AIA and CDP URL plan from course 1.4 at hand — the filenames published here must match those embedded URLs exactly."
+    ],
+    "labNote": "This course finishes the PKI chapter: the pki.sbd.test publication site goes live on SBD-PKI-MGMT01, and certificate template administration moves to that host, off the issuing CA. Publication stays plain HTTP by design — clients must be able to fetch revocation data before they can validate any certificate.",
+    "sources": [
+      {
+        "id": "design",
+        "title": "Microsoft · PKI design considerations",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/pki-design-considerations"
+      },
+      {
+        "id": "templates",
+        "title": "Microsoft · Manage certificate templates",
+        "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/manage-certificate-templates"
+      },
+      {
+        "id": "autoenroll",
+        "title": "Microsoft · Configure certificate autoenrollment",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment"
+      },
+      {
+        "id": "certutil",
+        "title": "Microsoft · Certutil reference",
+        "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"
+      },
+      {
+        "id": "whatsnew",
+        "title": "Microsoft · What's new in Windows Server 2025",
+        "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "publication",
+        "title": "Build the pki.sbd.test publication site",
+        "minutes": 30,
+        "summary": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network.",
+        "objectives": [
+          "Stand up the HTTP publication site on SBD-PKI-MGMT01.",
+          "Confirm the DNS alias from course 1.2 points at the publication host.",
+          "Explain why CDP and AIA publication uses HTTP, not HTTPS."
+        ],
+        "steps": [
+          "On SBD-PKI-MGMT01, install the Web Server role and create a site (or virtual directory) whose folder will hold the published certificates and revocation lists. Serve .cer, .crt, and .crl files; nothing else belongs in this directory.",
+          "Confirm the pki.sbd.test alias from course 1.2 resolves to 10.0.30.30 from a client in another VLAN, and that the register's HTTP row from course 1.5 permits the path.",
+          "Leave the site on plain HTTP. Revocation checking has to work before any certificate can be trusted — putting the CRL behind HTTPS creates a loop where validating the site needs the very file it serves.",
+          "Restrict who can write to the publication folder: the CA's publishing process and the PKI administrators, nobody else. Clients read; they never write."
+        ],
+        "command": "Resolve-DnsName pki.sbd.test\nTest-NetConnection pki.sbd.test -Port 80\nGet-Website | Select-Object Name, State, PhysicalPath",
+        "check": "pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80, and the publication folder's permissions separate writers from readers.",
+        "evidence": "Record the site configuration, folder permissions, the DNS resolution output from a cross-VLAN client, and the register row that permits the path.",
+        "quizzes": [
+          {
+            "question": "Why does the publication site stay on plain HTTP?",
+            "answers": [
+              "HTTPS licenses cost money",
+              "Clients need the CRL to validate certificates — serving it over HTTPS creates a dependency loop",
+              "HTTP is faster than HTTPS in every case"
+            ],
+            "correct": 1,
+            "explanation": "Revocation data must be reachable before trust can be evaluated. The files are public and signed; integrity comes from the signatures, not the transport."
+          },
+          {
+            "question": "What belongs in the publication directory?",
+            "answers": [
+              "Public CA certificates and CRLs only",
+              "The issuing CA's private key backup",
+              "Administrator scripts and passwords"
+            ],
+            "correct": 0,
+            "explanation": "The same rule as course 1.4: clients need the public trust artifacts; secrets never enter a client-readable path."
+          },
+          {
+            "question": "Which earlier work made this lesson a one-page job?",
+            "answers": [
+              "Nothing — it stands alone",
+              "Course 1.1's domain controller promotion",
+              "The DNS alias reserved in 1.2 and the HTTP register row from 1.5"
+            ],
+            "correct": 2,
+            "explanation": "pki.sbd.test was reserved two courses ago and the path through the boundary was registered in 1.5 — the sequence pays off here."
+          }
+        ],
+        "recap": [
+          "pki.sbd.test now answers from SBD-PKI-MGMT01 over HTTP.",
+          "Only public artifacts live in the folder; only PKI processes write to it.",
+          "The transport is HTTP on purpose — revocation precedes trust."
+        ],
+        "next": "Lesson 2 fills the site with the real trust data and proves the embedded URLs work.",
+        "sources": [
+          "design",
+          "certutil"
+        ]
+      },
+      {
+        "id": "publish-trust",
+        "title": "Publish the trust data at its advertised URLs",
+        "minutes": 25,
+        "summary": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything.",
+        "objectives": [
+          "Publish the root and issuing certificates and current CRLs at the exact embedded URLs.",
+          "Configure the issuing CA to refresh its published files automatically.",
+          "Prove live retrieval and chain building from a cross-VLAN client."
+        ],
+        "steps": [
+          "Compare the issuing CA's configured AIA and CDP URLs against the publication folder's layout. Every embedded URL must map to a real file path on the site — the filenames are not yours to improve.",
+          "Copy the current root certificate, root CRL, issuing certificate, and issuing CRL into the folder. The root's files still arrive by approved media; the issuing CA's can be written directly by its publishing process.",
+          "Configure the issuing CA's CRL publication to write into the site's folder on its schedule, so each new CRL replaces the old file at the same name before it expires.",
+          "From a clean client in another VLAN, fetch each URL and run the full verification: the chain must build and revocation data must come from the live site, not a cache."
+        ],
+        "command": "certutil -verify -urlfetch C:\\Evidence\\pki\\test.cer\ncertutil -URL http://pki.sbd.test/RootCA.crl\nGet-ChildItem C:\\inetpub\\pkiroot | Select-Object Name, LastWriteTime",
+        "check": "Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.",
+        "evidence": "Keep the URL-to-file mapping table, the folder listing with timestamps, and the urlfetch output from the clean client.",
+        "model": {
+          "href": "/inside-the-network#process=web&step=3",
+          "label": "Use a web app, step 3",
+          "text": "A client checks revocation at the URL you publish on pki.sbd.test."
+        },
+        "quizzes": [
+          {
+            "question": "Why can't the published filenames be renamed to something tidier?",
+            "answers": [
+              "The web server forbids renames",
+              "Issued certificates already embed the exact URLs; clients fetch those literally",
+              "The hardening baseline assigns the filenames"
+            ],
+            "correct": 1,
+            "explanation": "The same lesson course 1.4 taught at signing time: extensions are fixed at issuance, so publication conforms to them, never the reverse."
+          },
+          {
+            "question": "How do new root CRLs reach the site in this lab?",
+            "answers": [
+              "By approved removable media from the offline ceremony",
+              "Over a direct network share from the root",
+              "They never need refreshing"
+            ],
+            "correct": 0,
+            "explanation": "The root has no network path. Its refreshed CRL travels like everything else that crosses that boundary — reviewed, hashed, carried."
+          },
+          {
+            "question": "What does certutil -verify -urlfetch add over opening the certificate?",
+            "answers": [
+              "It prints the certificate in color",
+              "Nothing",
+              "It follows the embedded URLs live, proving publication and reachability rather than cached trust"
+            ],
+            "correct": 2,
+            "explanation": "The -urlfetch option is the end-to-end test: chain building plus live AIA and CDP retrieval through the routed network."
+          }
+        ],
+        "recap": [
+          "Published filenames mirror the embedded URLs exactly.",
+          "The issuing CA refreshes its files on schedule; the root's arrive by media.",
+          "A clean cross-VLAN client proves the chain and live revocation."
+        ],
+        "next": "Lesson 3 moves template administration off the CA and onto this host.",
+        "sources": [
+          "certutil",
+          "design"
+        ]
+      },
+      {
+        "id": "template-admin",
+        "title": "Separate template administration",
+        "minutes": 25,
+        "summary": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open.",
+        "objectives": [
+          "Establish SBD-PKI-MGMT01 as the only administration seat for templates.",
+          "Delegate template permissions to a named PKI administrators group.",
+          "Record the template change process before any template changes."
+        ],
+        "steps": [
+          "Install the certificate management tools on SBD-PKI-MGMT01 and confirm the Certificate Templates console can read the directory's template store from there.",
+          "Create a PKI administrators group in the directory, place it under the Admin OU from course 1.3, and delegate the template permissions to that group — membership is the record of who may change what the CA signs.",
+          "Remove day-to-day template editing from everywhere else: the issuing CA's console stays for CA operations, not template design, and no Tier-0 account edits templates as routine work.",
+          "Write the change process: a template change names its requester, its reviewer, the versioning action (edit, duplicate, or supersede), and lands in the evidence record like any other configuration change."
+        ],
+        "command": "Get-ADGroup 'SBD PKI Admins' -Properties Members | Select-Object Name, Members\ncertutil -template | Select-String 'TemplatePropCommonName' | Select-Object -First 10",
+        "check": "The templates console works from SBD-PKI-MGMT01, the PKI administrators group holds the delegated permissions, and the written change process names requester, reviewer, and versioning action.",
+        "evidence": "Keep the delegation record, the group membership listing, and the signed-off template change process.",
+        "quizzes": [
+          {
+            "question": "Why do certificate templates deserve their own administration seat?",
+            "answers": [
+              "Templates are directory objects that define what the CA will sign — editing them is a trust decision",
+              "The CA console cannot display templates",
+              "Templates take too much disk space on the CA"
+            ],
+            "correct": 0,
+            "explanation": "A template edit changes what enrollment can produce. Separating the seat and naming the editors makes that power visible and auditable."
+          },
+          {
+            "question": "Where does the PKI administrators group live?",
+            "answers": [
+              "The default Users container",
+              "Under the Admin OU from course 1.3, with the other privileged groups",
+              "On the offline root"
+            ],
+            "correct": 1,
+            "explanation": "The OU design already has a home for privileged identity — this group joins it so delegation and policy follow the same structure."
+          },
+          {
+            "question": "A template needs a change. What is the first artifact?",
+            "answers": [
+              "The edited template itself",
+              "A restart of Certificate Services",
+              "The change record: requester, reviewer, and the versioning action"
+            ],
+            "correct": 2,
+            "explanation": "The record precedes the change, the same discipline as the course 1.5 exception register — configuration follows documentation, not the other way around."
+          }
+        ],
+        "recap": [
+          "SBD-PKI-MGMT01 is the template administration seat.",
+          "A named group under the Admin OU holds the delegated power.",
+          "Template changes have a written process before they have edits."
+        ],
+        "next": "Lesson 4 uses that process to publish the lab's first working templates.",
+        "sources": [
+          "templates",
+          "design"
+        ]
+      },
+      {
+        "id": "first-templates",
+        "title": "Publish the first working templates",
+        "minutes": 25,
+        "summary": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those.",
+        "objectives": [
+          "Duplicate and configure the computer and web server templates against the approved plan.",
+          "Set key sizes and validity that satisfy the Windows Server 2025 minimums.",
+          "Publish only the needed templates, scoped to a pilot group first."
+        ],
+        "steps": [
+          "From the administration seat, duplicate the Computer template as SBD Computer Authentication. Set the approved key provider, a key size of at least 2,048 bits, a validity period within course 1.4's one-to-two-year example, subject built from directory information, and autoenrollment permission for a pilot computer group only.",
+          "Duplicate the Web Server template as SBD Server Authentication for the business services in course 1.11: enrollment permission for the server administrators, no autoenrollment, and exportable keys only if the recovery plan explicitly says so.",
+          "Record each template's version, settings, and justification through the lesson-3 change process before publishing.",
+          "Publish exactly these two templates on the issuing CA and remove any default template the plan does not call for — an unpublished template cannot be mis-enrolled."
+        ],
+        "command": "certutil -CATemplates -config 'SBD-SUBCA01\\SBD Issuing CA'\ncertutil -template 'SBDComputerAuthentication' | Select-String 'msPKI-Certificate-Name-Flag','msPKI-Minimal-Key-Size'",
+        "check": "The CA publishes exactly the two planned templates, each shows the approved key size and permissions, and both carry a completed change record.",
+        "evidence": "Keep each template's configuration export, its change record, and the CA's published-template listing.",
+        "quizzes": [
+          {
+            "question": "Why duplicate the built-in templates instead of editing them?",
+            "answers": [
+              "Built-ins cannot be published at all",
+              "Duplication preserves the originals and gives your version its own name, version, and record",
+              "Duplicates issue faster"
+            ],
+            "correct": 1,
+            "explanation": "Working on a named copy keeps the baseline intact and makes your settings — and their history — unmistakably yours."
+          },
+          {
+            "question": "What floor applies to the template key sizes on this network?",
+            "answers": [
+              "512 bits for speed",
+              "1,024 bits",
+              "2,048-bit RSA at minimum — Windows Server 2025 enforces it for TLS server authentication"
+            ],
+            "correct": 2,
+            "explanation": "Windows Server 2025 requires at least 2,048-bit RSA keys for TLS server authentication, so a plan below that produces certificates the platform itself will reject."
+          },
+          {
+            "question": "Why publish to a pilot group before the whole domain?",
+            "answers": [
+              "A small blast radius proves the template before autoenrollment touches fifty machines in course 1.9",
+              "Pilots are a licensing requirement",
+              "Templates expire if unused"
+            ],
+            "correct": 0,
+            "explanation": "The fleet course will turn autoenrollment loose at scale. Proving the template on a pilot first is the same test-then-widen habit as the Group Policy work."
+          }
+        ],
+        "recap": [
+          "Two named templates exist, configured on purpose, nothing else published.",
+          "Key sizes meet the 2025 floor; permissions are pilot-scoped.",
+          "Every template carries its change record."
+        ],
+        "next": "The final lesson proves enrollment end to end and runs the delta scans.",
+        "sources": [
+          "templates",
+          "autoenroll",
+          "whatsnew"
+        ]
+      },
+      {
+        "id": "validate",
+        "title": "Validate enrollment and delta scan",
+        "minutes": 15,
+        "summary": "Close the loop the way course 1.4 did, but now across the routed network: a pilot machine enrolls automatically, validates against the live publication site, and the change-triggered scans record what this course did.",
+        "objectives": [
+          "Prove pilot autoenrollment through the published template.",
+          "Verify chain and revocation against pki.sbd.test from the enrolled client.",
+          "Run the course's delta scans and file the evidence."
+        ],
+        "steps": [
+          "Enable the autoenrollment policy for the pilot computer group, refresh policy on a pilot machine, and confirm it receives an SBD Computer Authentication certificate without a human touching the request.",
+          "On that machine, run the full verification: the chain must reach the approved root and every revocation URL must answer from pki.sbd.test across the boundary.",
+          "Rescan SBD-SUBCA01 and take SBD-PKI-MGMT01's first baseline with the same benchmark and tool versions as always; the publication site and template changes are the expected deltas.",
+          "File the course evidence: enrollment output, urlfetch results, template records, and the scan set — the PKI chapter is finished."
+        ],
+        "command": "gpupdate /force\ncertutil -pulse\nGet-ChildItem Cert:\\LocalMachine\\My | Select-Object Subject, NotAfter, Thumbprint\ncertutil -verify -urlfetch C:\\Evidence\\pki\\pilot.cer",
+        "check": "The pilot enrolls hands-free, verification passes with live retrieval from pki.sbd.test, and both VLAN 30 hosts have current, attributed scan results.",
+        "evidence": "Keep the pilot's certificate details, the urlfetch output, and the delta-scan comparison for SUBCA01 plus the PKI-MGMT01 baseline.",
+        "model": {
+          "href": "/inside-the-network#process=cert-expired",
+          "label": "What if a certificate expired?",
+          "text": "The network permits the connection; the client refuses the expired certificate."
+        },
+        "quizzes": [
+          {
+            "question": "What does a hands-free pilot enrollment prove?",
+            "answers": [
+              "Template permissions, autoenrollment policy, the CA, DNS, and the routed path all agree — the whole chain works",
+              "Only that Group Policy refreshed",
+              "That the root CA is online"
+            ],
+            "correct": 0,
+            "explanation": "Autoenrollment succeeds only when every layer this path has built cooperates — which is exactly why it is the closing test."
+          },
+          {
+            "question": "Which hosts get scanned at the end of this course?",
+            "answers": [
+              "Only the pilot workstation",
+              "SBD-SUBCA01 (rescan) and SBD-PKI-MGMT01 (first baseline)",
+              "The offline root over the network"
+            ],
+            "correct": 1,
+            "explanation": "The cadence is change-triggered: the CA changed and a new host joined, so one rescan and one baseline."
+          },
+          {
+            "question": "What makes the PKI chapter complete at the end of this course?",
+            "answers": [
+              "The 3D model updates itself",
+              "Fifty workstations are joined",
+              "Publication, template administration, and working enrollment — the PKI chapter's remaining pieces — are all in evidence"
+            ],
+            "correct": 2,
+            "explanation": "Course 1.4 built the hierarchy; this course finished its services. The courses that follow can rely on certificates as a solved problem."
+          }
+        ],
+        "recap": [
+          "Pilot autoenrollment works end to end across the routed network.",
+          "Live revocation retrieval from pki.sbd.test is proven, not assumed.",
+          "Delta scans and evidence close the PKI chapter."
+        ],
+        "next": "That completes course 1.6. Course 1.7 brings DHCP and the tiered administration plane online before any fleet exists.",
+        "sources": [
+          "autoenroll",
+          "certutil"
+        ]
+      }
+    ]
+  },
+  "catalog": {
+    "categoryOrder": 6,
+    "number": "1.6",
+    "estimatedHours": 2,
+    "title": "Finish the PKI services",
+    "subtitle": "pki.sbd.test publication & template administration",
+    "description": "Give the PKI its services: the pki.sbd.test publication site on SBD-PKI-MGMT01, trust data at the exact embedded URLs, template administration on its own seat, and the lab's first working templates proven by pilot autoenrollment.",
+    "tags": [
+      "Windows Server 2025",
+      "PKI",
+      "AD CS",
+      "Certificate templates",
+      "AIA and CDP"
+    ],
+    "platform": "Windows Server 2025",
+    "systems": [
+      "SBD-PKI-MGMT01",
+      "SBD-SUBCA01"
+    ],
+    "artLabels": [
+      "pki.sbd.test live",
+      "Templates, delegated",
+      "Enrollment proven"
+    ],
+    "outcomes": [
+      "Publish certificates and CRLs at the exact URLs issued certificates carry.",
+      "Move template administration to a delegated seat with a written change process.",
+      "Prove pilot autoenrollment and live revocation retrieval across the routed network."
+    ],
+    "id": "pki-services",
+    "afterEpisode": "dc01-dc02",
+    "categoryId": "network-build",
+    "kind": "configuration",
+    "moduleCount": 5,
+    "lessonCount": 5,
+    "stages": [
+      {
+        "title": "Build the pki.sbd.test publication site",
+        "detail": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network."
+      },
+      {
+        "title": "Publish the trust data at its advertised URLs",
+        "detail": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything."
+      },
+      {
+        "title": "Separate template administration",
+        "detail": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open."
+      },
+      {
+        "title": "Publish the first working templates",
+        "detail": "The default template set is a menu, not a deployment. Duplicate the two templates this network actually needs — computer authentication and server authentication — set their cryptography deliberately, and publish only those."
+      },
+      {
+        "title": "Validate enrollment and delta scan",
+        "detail": "Close the loop the way course 1.4 did, but now across the routed network: a pilot machine enrolls automatically, validates against the live publication site, and the change-triggered scans record what this course did."
+      }
+    ],
+    "training": {
+      "guide": "/training/pki-services",
+      "checklist": "/training/pki-services/configuration-checklist.md",
+      "materialsEdition": "1.1",
+      "updated": "8 October 2026",
+      "checklistPage": "/training/pki-services/checklist",
+      "pdf": "/training/pki-services/SecureByDesign-pki-services-Workbook.pdf",
+      "word": "/training/pki-services/SecureByDesign-pki-services-Workbook.docx",
+      "pages": 14
+    }
+  }
+}

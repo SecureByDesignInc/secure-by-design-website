@@ -1,22 +1,22 @@
 # Stand up the business services — configuration checklist
 
-Secure By Design · Edition 1.1 · 8 October 2026
+Secure By Design · Edition 1.2 · 8 October 2026
 
 The users finally get what the network exists for: files, licensing, and an internal web application with its application tier and database. The model's rule governs the whole course — permit only documented business service paths — so every service arrives with its register rows, its service identity, and its certificate, and nothing reaches it any other way.
 
 ## Before you start
 
-- [ ] Complete courses 1.5–1.10: the routed, watched, managed network with working PKI services and the ring/source rules in force.
+- [ ] Complete courses 1.4–1.8: working PKI services and the watched, managed network with the ring/source rules in force, on the routed, segmented VLANs.
 - [ ] Provision the VLAN 40 hosts: SBD-FS01 (10.0.40.10), SBD-SQL01 (10.0.40.20), SBD-APPS01 (10.0.40.30), and SBD-WEB01 (10.0.40.40, Linux with Apache, joined to the sbd.test domain with SSSD like SBD-SPLUNK01 and SBD-NESSUS01).
-- [ ] Have the course 1.5 register and the course 1.6 SBD Server Authentication template ready — every service here gets a documented path and a real certificate.
+- [ ] Have the network's service-path register and the course 1.4 SBD Server Authentication template ready — every service here gets a documented path and a real certificate.
 
 ## Design the service paths and identities
 
 - [ ] Write the service-path rows: fleet to FS01 (SMB 445); fleet to APPS01 on its licensing port, recorded per application; fleet to WEB01 (HTTPS 443); WEB01 to APPS01 for the application API (HTTPS 443); and APPS01 — and only APPS01 — to SQL01 (TCP 1433 with TLS). Add an explicit deny from WEB01 to SQL01: the web tier has no database dependency. All four servers share VLAN 40, so the router never sees their traffic to each other — each server's host firewall enforces those rows. Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.
-- [ ] Register WEB01's Linux maintenance rows as well: packages from SBD-REPO01 only (HTTP with GPG-signed packages) and syslog over TLS to the collector, SBD-SYSLOG01 (TCP 6514) — the same paths the other domain-joined Linux servers, SBD-SPLUNK01 and SBD-NESSUS01, use. Course 1.10's repository row named only those two because WEB01 did not exist yet.
+- [ ] Register WEB01's Linux maintenance rows as well: packages from SBD-REPO01 only (HTTP with GPG-signed packages) and syslog over TLS to the collector, SBD-SYSLOG01 (TCP 6514) — the same paths the other domain-joined Linux servers, SBD-SPLUNK01 and SBD-NESSUS01, use. Course 1.8's repository row named only those two because WEB01 did not exist yet.
 - [ ] Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note Windows Server 2025's delegated managed service accounts as the migration path for any legacy service account this lab later inherits.
 - [ ] Create the access groups under the course 1.3 Groups OU — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.
-- [ ] Request the server certificates through the course 1.6 process: one SBD Server Authentication certificate each for SQL01, APPS01 (for its application API), and WEB01, enrolled from the template, with the publication site serving their revocation story.
+- [ ] Request the server certificates through the course 1.4 process: one SBD Server Authentication certificate each for SQL01, APPS01 (for its application API), and WEB01, enrolled from the template, with the publication site serving their revocation story.
 
 **Commands:**
 
@@ -84,7 +84,7 @@ Notes / result / date: __________________________
 
 - [ ] Build SBD-APPS01 in the Servers OU and run both of its services under managed identities: the licensing service, verified from the fleet on its registered vendor port, and the application API on HTTPS 443 with its SBD Server Authentication certificate, answering SBD-WEB01 only. APPS01 is the network's one SQL consumer — and the template for any future service: identity, row, evidence.
 - [ ] Build SBD-WEB01 on Linux and join it to the sbd.test domain with SSSD, as SBD-SPLUNK01 and SBD-NESSUS01 are joined. Point its packages at SBD-REPO01 only, its syslog over TLS at the collector, and its time service at both domain controllers, and harden the web tier against DISA's Apache guidance — the server's assessable record follows the Linux pattern: hardened configuration exported and hashed, checklist items answered in STIG Viewer.
-- [ ] Install the SBD Server Authentication certificate with its chain and serve the internal application over HTTPS — the 2,048-bit key floor from course 1.6's templates applies here as everywhere.
+- [ ] Install the SBD Server Authentication certificate with its chain and serve the internal application over HTTPS — the 2,048-bit key floor from course 1.4's templates applies here as everywhere.
 - [ ] Prove the chain from a fleet machine: the HTTPS page loads with a validating certificate, and its data travels fleet → WEB01 → APPS01 → SQL01, every hop a register row. Then prove the shortcuts stay shut: a direct attempt from SBD-WEB01 to SQL01 on 1433 is refused by SQL01's host firewall, and the fleet still cannot touch 1433 at all — three courses of design visible in one browser request.
 
 **Commands:**
@@ -107,10 +107,10 @@ Notes / result / date: __________________________
 
 ## Reconcile, scan, and hand off
 
-- [ ] Run the full-register reconciliation one more time: every business-service row proven from its real source, every adjacent deny probed and logged, including WEB01 to SQL01 — the VLAN 40 section of the matrix joins the evidence beside courses 1.5 and 1.7's.
+- [ ] Run the full-register reconciliation one more time: every business-service row proven from its real source, every adjacent deny probed and logged, including WEB01 to SQL01 — the VLAN 40 section of the matrix joins the evidence beside course 1.5's.
 - [ ] Run the cadence: SCAP baselines for FS01, SQL01, and APPS01; the config-export record for WEB01; a credentialed scan of VLAN 40 from SBD-NESSUS01 with its findings triaged into the three classifications.
 - [ ] Update the living records: the four hosts, their identities, certificates, and rings into the SBD-MGMT01 inventory; the new rows' owners into the register; any service-hardening deviations into the exception record.
-- [ ] Write the handoff: every modeled system except the recovery design is now built, watched, patched, and evidenced — course 1.12 proves the network can come back from the dead, and then path 2 takes the whole record to authorization.
+- [ ] Write the handoff: every modeled system except the recovery design is now built, watched, patched, and evidenced — course 1.10 proves the network can come back from the dead, and then path 2 takes the whole record to authorization.
 
 **Commands:**
 
@@ -121,7 +121,7 @@ Get-FileHash -Algorithm SHA256 C:\Evidence\business-services\*
 
 **Verify:** The matrix covers every VLAN 40 row with paired permit/deny proof, the four hosts carry baselines or config records with triaged scan findings, and inventory, register, and exception record all reflect the finished services.
 
-**Evidence:** Finish the checklist: the reconciliation matrix, the scan and triage set, the updated living records, and the handoff note to course 1.12.
+**Evidence:** Finish the checklist: the reconciliation matrix, the scan and triage set, the updated living records, and the handoff note to course 1.10.
 
 Notes / result / date: __________________________
 

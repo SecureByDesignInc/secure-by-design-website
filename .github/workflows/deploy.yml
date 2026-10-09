@@ -136,11 +136,11 @@ jobs:
             fi
             training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/training")
             tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
-            course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/connect-segment")
+            course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/two-tier-pki")
             itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
-            echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/connect-segment $course | /inside-the-network $itn"
-            if [ "$training" != 200 ] || [ "$tiles" -lt 15 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
-              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 15 tiles."
+            echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/two-tier-pki $course | /inside-the-network $itn"
+            if [ "$training" != 200 ] || [ "$tiles" -lt 13 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 13 tiles."
               fail=1
             fi
           done
