@@ -288,7 +288,7 @@ The owner asked for every approved-but-unpublished item and the live-audit fixes
 - **Worker hardening.** `server/index.js` strips client-supplied `oai-*` headers (ChatGPT Sites used to inject them; on Cloudflare they would let anyone claim the owner identity), redirects `http://` to `https://`, and adds HSTS. Owner record pages therefore need a new sign-in method before they can be used on Cloudflare.
 - **Training Library** shows up to 24 tiles before “Show more”, so both paths are visible. The deploy check now expects at least 15 tiles and reports the HTTPS redirect. CI runs the full `tests/` suite after the build. `scripts/check-rmf.mjs` checks the offline Journal's `/rmf-series` guide, so it is not run until the Journal returns.
 - **Sitemap.** `scripts/prepare-sitemap.mjs` (run by `prepare-content.mjs`) writes `public/sitemap.xml` and `public/robots.txt` from the published pages only.
-- **Analytics** were removed (Plausible cancelled).
+- **Analytics** were removed (Plausible cancelled). Superseded the same evening: the owner keeps Cloudflare Web Analytics (see the audit fixes below).
 
 ## Privacy policy and account deletion — October 8, 2026
 
@@ -309,4 +309,4 @@ The owner asked for every fix recommended in the 8 October website audit (findin
 - **Materials.** Configuration courses are at materials edition 1.1/1.2 and the RMF catalog at 1.3 (8 October 2026). `scripts/prepare-checklists.mjs` (run by `prepare-content.mjs`) generates the Markdown checklists from `content/configuration-courses.json`. After changing course content, run `python3 scripts/sync-workbooks.py` and re-export the PDFs with LibreOffice, then update `training.pages`; check the page-break pairs listed in the script.
 - **Design.** The shared header is compact on phones (store badges and socials share rows, socials are icon-only with accessible names, the navigation is one scrollable row); the AGENTS.md proportions above still hold. The homepage's course path is built from `content/videos.json`. Guide headers link Home and My Account. three.js vendor files are minified in place; the homepage shader loads after idle and is skipped for reduced motion and Save-Data. Retired public files are in `archive/public-retired-2026-10-08/`.
 - **Checks.** Pull requests run the Browser check workflow (build, run with Wrangler, open every page in Chromium for CSP blocks, script errors, failed requests, missing headers, Back links, share tags and owner/form behaviour). Dependabot opens weekly npm and GitHub Actions updates.
-
+- **Website analytics.** The owner keeps Cloudflare Web Analytics (8 October 2026). Cloudflare injects the cookieless beacon at the edge; keep `static.cloudflareinsights.com` (script-src) and `cloudflareinsights.com` (connect-src) in both Content Security Policies and the privacy policy's “Website page counts” disclosure. Don't add another tracker without the owner.

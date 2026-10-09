@@ -71,7 +71,7 @@ Run `node scripts/check-rmf.mjs` against the retained local server to check acti
 
 ### Analytics
 
-The website has no analytics script of its own (Plausible was cancelled). If Cloudflare Web Analytics is enabled for the zone, Cloudflare injects its cookieless beacon at the edge; the privacy policy discloses it. App analytics are opt-in (PostHog).
+The website uses Cloudflare Web Analytics (the owner's choice, 8 October 2026; Plausible was cancelled). Cloudflare injects its cookieless beacon at the edge, so there is no analytics code in this repository. Keep `https://static.cloudflareinsights.com` in the Content Security Policy's `script-src` and `https://cloudflareinsights.com` in `connect-src` (`server/security-headers.js` and `public/_headers`), and keep the privacy policy's “Website page counts” section accurate. App analytics are opt-in (PostHog).
 
 ### Conversational RMF chapters
 
