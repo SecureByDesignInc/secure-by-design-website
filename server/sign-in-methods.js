@@ -300,6 +300,9 @@ export async function signInApi(request, env, { fetcher = fetch } = {}) {
       if (!recent(reader)) return reauth();
       const code = randomToken();
       await saveFlow(env, code, 'app-handoff', { accountId: reader.id, challenge: data.challenge }, 2);
+      // iOS 17.4+ builds receive the code on an HTTPS address only the Secure By Design app can claim (Associated
+      // Domains); older builds and Android use the app's custom scheme. Either way the PKCE verifier stays in the app.
+      if (data.callback === 'https') return reply({ redirect: new URL(`/app-auth/callback?code=${code}`, request.url).toString() });
       return reply({ redirect: `${APP_SCHEME}://auth?code=${code}` });
     }
     if (route === '/api/sign-in/delete-account') {

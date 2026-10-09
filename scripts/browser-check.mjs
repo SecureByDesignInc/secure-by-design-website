@@ -130,6 +130,8 @@ for (const form of ['/api/career-submissions', '/api/community-contributions', '
 }
 await check('security.txt', { path: '/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
 await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
+await check('apple-app-site-association', { path: '/.well-known/apple-app-site-association' }, async r => r.status === 200 && (r.headers.get('content-type') || '').includes('application/json') && (await r.text()).includes('PZK2PZT6KP.com.securebydesigninc.secureByDesignApp'));
+await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA' }, async r => r.status === 200 && (await r.text()).includes('securebydesign://auth?code=AAAAAAAAAAAAAAAAAAAAAAAA'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
 await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.status === 200 && (await r.arrayBuffer()).byteLength < 20000);

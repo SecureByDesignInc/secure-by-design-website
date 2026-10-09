@@ -12,7 +12,7 @@ export default function AppSignIn(){
  useEffect(()=>{const value=new URLSearchParams(location.search).get('challenge');setChallenge(value&&/^[A-Za-z0-9_-]{43}$/.test(value)?value:'');},[]);
  async function continueToApp(){
   setBusy(true);setError('');
-  try{const r=await fetch('/api/sign-in/app-handoff',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({challenge})});const d=await r.json();
+  try{const r=await fetch('/api/sign-in/app-handoff',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({challenge,callback:new URLSearchParams(location.search).get('callback')==='https'?'https':undefined})});const d=await r.json();
    // Opening the app needs a sign-in from the last 15 minutes, so an old session can't be handed over by a link.
    if(d.reauth){await fetch('/api/reader-auth/signout',{method:'POST'});setNotice('For your security, sign in again to open the app.');setBusy(false);await refresh();return;}
    if(!r.ok)throw new Error(d.error);location.assign(d.redirect);}
