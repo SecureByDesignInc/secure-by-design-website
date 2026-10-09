@@ -1,0 +1,35 @@
+# Sign-in live check
+
+0 failed of 31
+
+- ✅ providers endpoint — 200 {"providers":{"apple":false,"google":false,"microsoft":false},"passkeys":true} cache=private, no-store
+- ✅ unconfigured provider start redirects with an error code — 303 /my-progress?signin_error=unavailable#account
+- ✅ methods require a session — 401
+- ✅ cross-site passkey request refused — 403
+- ✅ cross-site delete refused — 403
+- ✅ app exchange rejects an unknown code — 400 {"error":"That sign-in expired. Try again."}
+- ✅ app hand-off requires a signed-in session — 401
+- ✅ app callback page answers a well-formed code and refuses others — 200 no-store | bad 400 | none 400
+- ✅ apple-app-site-association lists the app for links and sign-in — 200 application/json {"applinks":{"details":[{"appIDs":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"],"components":[{"/":"/app-auth/*","comment":"Sign-in hand-off back to the Secure By Design app"}]}]},"webcredent
+- ✅ www redirects to apex keeping the query — 301 https://securebydesigninc.com/app-sign-in?challenge=abc
+- ✅ my-progress shows passkey sign-in (390)
+- ✅ passkey button text is readable (390) — 11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)
+- ✅ provider buttons hidden until keys exist (390) — 0 shown
+- ✅ no horizontal scroll on my-progress (390) — 0px
+- ✅ app-sign-in shows the sign-in form (390)
+- ✅ no horizontal scroll on app-sign-in (390) — 0px
+- ✅ app-sign-in without a challenge explains itself (390)
+- ✅ privacy mentions passkeys and self-service deletion (390)
+- ✅ no page errors (390)
+- ✅ my-progress shows passkey sign-in (1440)
+- ✅ passkey button text is readable (1440) — 11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)
+- ✅ provider buttons hidden until keys exist (1440) — 0 shown
+- ✅ no horizontal scroll on my-progress (1440) — 0px
+- ✅ passkey options from the site — {"status":200,"body":{"publicKey":{"challenge":"OAwq1RGq8r9dIiiFJsLOiwuRrnWcnyhhEIurKKXi5ts","rpId":"securebydesigninc.com","userVerification":"required","timeout":300000,"allowCredentials":[]}}}
+- ✅ unregistered passkey is refused with a clear message — This passkey isn’t registered with Secure By Design. Sign in another way, then add it in My Account.
+- ✅ still signed out after unregistered passkey — 401
+- ✅ app-sign-in shows the sign-in form (1440)
+- ✅ no horizontal scroll on app-sign-in (1440) — 0px
+- ✅ app-sign-in without a challenge explains itself (1440)
+- ✅ privacy mentions passkeys and self-service deletion (1440)
+- ✅ no page errors (1440) — Failed to load resource: the server responded with a status of 401 () || Failed to load resource: the server responded with a status of 401 ()

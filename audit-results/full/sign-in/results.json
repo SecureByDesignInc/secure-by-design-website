@@ -1,0 +1,157 @@
+[
+  {
+    "name": "providers endpoint",
+    "ok": true,
+    "detail": "200 {\"providers\":{\"apple\":false,\"google\":false,\"microsoft\":false},\"passkeys\":true} cache=private, no-store"
+  },
+  {
+    "name": "unconfigured provider start redirects with an error code",
+    "ok": true,
+    "detail": "303 /my-progress?signin_error=unavailable#account"
+  },
+  {
+    "name": "methods require a session",
+    "ok": true,
+    "detail": "401"
+  },
+  {
+    "name": "cross-site passkey request refused",
+    "ok": true,
+    "detail": "403"
+  },
+  {
+    "name": "cross-site delete refused",
+    "ok": true,
+    "detail": "403"
+  },
+  {
+    "name": "app exchange rejects an unknown code",
+    "ok": true,
+    "detail": "400 {\"error\":\"That sign-in expired. Try again.\"}"
+  },
+  {
+    "name": "app hand-off requires a signed-in session",
+    "ok": true,
+    "detail": "401"
+  },
+  {
+    "name": "app callback page answers a well-formed code and refuses others",
+    "ok": true,
+    "detail": "200 no-store | bad 400 | none 400"
+  },
+  {
+    "name": "apple-app-site-association lists the app for links and sign-in",
+    "ok": true,
+    "detail": "200 application/json {\"applinks\":{\"details\":[{\"appIDs\":[\"PZK2PZT6KP.com.securebydesigninc.secureByDesignApp\"],\"components\":[{\"/\":\"/app-auth/*\",\"comment\":\"Sign-in hand-off back to the Secure By Design app\"}]}]},\"webcredent"
+  },
+  {
+    "name": "www redirects to apex keeping the query",
+    "ok": true,
+    "detail": "301 https://securebydesigninc.com/app-sign-in?challenge=abc"
+  },
+  {
+    "name": "my-progress shows passkey sign-in (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "passkey button text is readable (390)",
+    "ok": true,
+    "detail": "11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)"
+  },
+  {
+    "name": "provider buttons hidden until keys exist (390)",
+    "ok": true,
+    "detail": "0 shown"
+  },
+  {
+    "name": "no horizontal scroll on my-progress (390)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in shows the sign-in form (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no horizontal scroll on app-sign-in (390)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in without a challenge explains itself (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "privacy mentions passkeys and self-service deletion (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors (390)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "my-progress shows passkey sign-in (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "passkey button text is readable (1440)",
+    "ok": true,
+    "detail": "11.69:1 rgb(255, 255, 255) on rgb(23, 59, 86)"
+  },
+  {
+    "name": "provider buttons hidden until keys exist (1440)",
+    "ok": true,
+    "detail": "0 shown"
+  },
+  {
+    "name": "no horizontal scroll on my-progress (1440)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "passkey options from the site",
+    "ok": true,
+    "detail": "{\"status\":200,\"body\":{\"publicKey\":{\"challenge\":\"OAwq1RGq8r9dIiiFJsLOiwuRrnWcnyhhEIurKKXi5ts\",\"rpId\":\"securebydesigninc.com\",\"userVerification\":\"required\",\"timeout\":300000,\"allowCredentials\":[]}}}"
+  },
+  {
+    "name": "unregistered passkey is refused with a clear message",
+    "ok": true,
+    "detail": "This passkey isn’t registered with Secure By Design. Sign in another way, then add it in My Account."
+  },
+  {
+    "name": "still signed out after unregistered passkey",
+    "ok": true,
+    "detail": "401"
+  },
+  {
+    "name": "app-sign-in shows the sign-in form (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no horizontal scroll on app-sign-in (1440)",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "app-sign-in without a challenge explains itself (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "privacy mentions passkeys and self-service deletion (1440)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors (1440)",
+    "ok": true,
+    "detail": "Failed to load resource: the server responded with a status of 401 () || Failed to load resource: the server responded with a status of 401 ()"
+  }
+]

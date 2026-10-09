@@ -1,0 +1,22 @@
+== public/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip
+Archive:  public/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+  1392277  2026-10-08 16:15   index.html
+    34976  2026-10-08 15:55   lesson.json
+   320964  2026-10-08 15:58   SecureByDesign-DC01-DC02-Workbook.docx
+   297837  2026-10-08 15:58   SecureByDesign-DC01-DC02-Workbook.pdf
+     3018  2026-10-08 15:59   START-HERE.txt
+     1081  2026-10-08 14:52   THREE-LICENSE.txt
+     3375  2026-10-08 14:52   Verification-Commands.txt
+     3997  2026-10-08 14:52   notices.html
+     4581  2026-10-08 15:48   account-progress.js
+     3739  2026-10-08 16:18   guide-share.js
+     1947  2026-10-08 16:18   guide-share.css
+     2135  2026-10-08 16:18   package-manifest.json
+---------                     -------
+  2069927                     12 files
+== stray entries
+none
+manifest keys: ['package', 'version', 'entryPoint', 'copyrightOwner', 'copyrightYear', 'materialsEdition', 'updated', 'components', 'files'] | entries: 11
+manifest problems: 0

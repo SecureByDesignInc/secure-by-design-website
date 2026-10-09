@@ -1,0 +1,54 @@
+--- GET without a session
+/api/sign-in/providers -> 200 application/json 78B  | {"providers":{"apple":false,"google":false,"microsoft":false},"passkeys":true}
+/api/sign-in/methods -> 401 application/json 46B  | {"error":"Sign in to manage sign-in methods."}
+/api/reader-auth/session -> 405 application/json 31B  | {"error":"Method not allowed."}
+/api/reader-progress -> 200 application/json 56B  | {"user":null,"profile":null,"records":[],"bookmarks":[]}
+/api/reader-progress/profile -> 401 application/json 42B  | {"error":"Sign in to save your progress."}
+/api/reader-progress/bookmarks/ -> 401 application/json 42B  | {"error":"Sign in to save your progress."}
+/api/native-auth/session -> 403 application/json 58B  | {"error":"Use the Secure By Design app for this request."}
+/api/native-progress -> 403 application/json 58B  | {"error":"Use the Secure By Design app for this request."}
+/api/native-activity -> 403 application/json 58B  | {"error":"Use the Secure By Design app for this request."}
+/api/native-onboarding -> 403 application/json 58B  | {"error":"Use the Secure By Design app for this request."}
+/api/community-contributions -> 403 application/json 72B  | {"error":"Sign in with the site owner account to review contributions."}
+/api/community-contributions/status -> 403 application/json 72B  | {"error":"Sign in with the site owner account to review contributions."}
+/api/resource-signups -> 403 application/json 68B  | {"error":"Sign in with the site owner account to view subscribers."}
+/api/resource-subscribers -> 403 application/json 68B  | {"error":"Sign in with the site owner account to view subscribers."}
+/api/resource-subscribers/export -> 403 application/json 68B  | {"error":"Sign in with the site owner account to view subscribers."}
+/api/resource-preferences -> 403 application/json 68B  | {"error":"Sign in with the site owner account to view subscribers."}
+/api/career-submissions -> 403 application/json 70B  | {"error":"Sign in with the site owner account to view these records."}
+/api/career-records -> 403 application/json 70B  | {"error":"Sign in with the site owner account to view these records."}
+/api/career-notifications -> 403 application/json 70B  | {"error":"Sign in with the site owner account to view these records."}
+/career-records -> 302  0B https://securebydesigninc.com/my-progress?returnTo=%2Fcareer-records#account | 
+/career-records/x -> 404 text/html; charset=utf-8 26801B  | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" href="/brand-lock.svg" as="image"/><link rel="prelo
+/resource-subscribers -> 302  0B https://securebydesigninc.com/my-progress?returnTo=%2Fresource-subscribers#account | 
+/community-contributions -> 302  0B https://securebydesigninc.com/my-progress?returnTo=%2Fcommunity-contributions#account | 
+/resource-preferences -> 200 text/html; charset=utf-8 5701B  | <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Email preferences | Secure By Design</title><meta name="robots" co
+/api/sign-in/google/start?intent=signin&returnTo=/my-progress -> 303  0B https://securebydesigninc.com/my-progress?signin_error=unavailable#account | 
+/api/sign-in/apple/start?intent=signin&returnTo=//evil.example -> 303  0B https://securebydesigninc.com/my-progress?signin_error=unavailable#account | 
+/app-auth/callback -> 400 text/html; charset=utf-8 717B  | <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Return to the app | Secure B
+/app-auth/callback?code=%3Cscript%3E -> 400 text/html; charset=utf-8 717B  | <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Return to the app | Secure B
+/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA -> 200 text/html; charset=utf-8 814B  | <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Return to the app | Secure B
+--- POST from this site's origin without a session (expect 401/403/410, never 200)
+POST /api/sign-in/app-handoff -> 401 | {"error":"Sign in to continue."}
+POST /api/sign-in/methods/remove -> 401 | {"error":"Sign in to continue."}
+POST /api/sign-in/delete-account -> 401 | {"error":"Sign in to continue."}
+POST /api/sign-in/passkey/register-options -> 401 | {"error":"Sign in before adding a passkey."}
+POST /api/reader-progress/profile -> 401 | {"error":"Sign in to save your progress."}
+POST /api/resource-subscribers/unsubscribe -> 403 | {"error":"Sign in with the site owner account to view subscribers."}
+POST /api/community-contributions/notify -> 403 | {"error":"Sign in with the site owner account to review contributions."}
+POST /api/career-notifications/test -> 403 | {"error":"Sign in with the site owner account to view these records."}
+POST /api/career-notifications/retry -> 403 | {"error":"Sign in with the site owner account to view these records."}
+POST /api/career-submissions -> 410 | {"error":"This form is closed for now. Nothing was submitted."}
+POST /api/community-contributions -> 410 | {"error":"This form is closed for now. Nothing was submitted."}
+POST /api/resource-signups -> 410 | {"error":"This form is closed for now. Nothing was submitted."}
+POST /api/native-auth/delete-account -> 403 | {"error":"Use the Secure By Design app for this request."}
+POST /api/native-auth/signout -> 403 | {"error":"Use the Secure By Design app for this request."}
+POST /api/reader-auth/signout -> 200 | {"signedOut":true}
+--- POST from another site (expect 403)
+POST /api/reader-auth/request (evil origin) -> 403 | {"error":"Reload this page and try again."}
+POST /api/reader-auth/signin (evil origin) -> 403 | {"error":"Reload this page and try again."}
+POST /api/sign-in/passkey/options (evil origin) -> 403 | {"error":"Reload this page and try again."}
+POST /api/sign-in/delete-account (evil origin) -> 403 | {"error":"Reload this page and try again."}
+POST /api/reader-progress/profile (evil origin) -> 401 | {"error":"Sign in to save your progress."}
+--- forged ChatGPT identity headers on the owner page (expect a redirect to sign in, not the page)
+career-records with oai headers -> 302 https://securebydesigninc.com/my-progress?returnTo=%2Fcareer-records#account

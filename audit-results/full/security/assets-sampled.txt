@@ -1,0 +1,6 @@
+/_next/static/chunks/Icon-p31uH7n4.js
+/_next/static/chunks/app-elements-MmRVnLC5.js
+/_next/static/chunks/app-rsc-cache-busting-DUXm4US3.js
+/_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js
+/_next/static/chunks/book-open-FcOBV2-M.js
+/_next/static/chunks/createLucideIcon-CAkK5FPT.js

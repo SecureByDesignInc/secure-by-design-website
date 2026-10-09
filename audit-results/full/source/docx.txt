@@ -1,0 +1,97 @@
+== public/training/business-services/SecureByDesign-business-services-Workbook.docx (118729 bytes)
+<dc:title>Stand up the business services — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx (120429 bytes)
+<dc:title>Connect and segment the network — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx (320964 bytes)
+<dc:title>Build the identity foundation — DC01 + DC02 companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>2</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+  <Pages>14
+  <Words>2564
+  <Application>Microsoft Macintosh Word
+== public/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx (116067 bytes)
+<dc:title>Configure DNS — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx (118592 bytes)
+<dc:title>Harden the baseline — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx (118499 bytes)
+<dc:title>See everything: the logging pipeline — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx (119576 bytes)
+<dc:title>Patch, protect, and watch for weakness — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/pki-services/SecureByDesign-pki-services-Workbook.docx (116609 bytes)
+<dc:title>Finish the PKI services — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx (119426 bytes)
+<dc:title>Prove you can recover — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx (50866 bytes)
+<dc:title>Risk Management Framework, Body of Evidence &amp; Authorization to Operate — Training Catalog</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-04T00:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T00:00:00Z</dcterms:modified>
+  <Pages>1
+  <Words>0
+  <Application>Microsoft Macintosh Word
+== public/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx (120785 bytes)
+<dc:title>Addressing and tiered administration — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx (118678 bytes)
+<dc:title>Configure a Root CA &amp; issuing CA — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>
+== public/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx (121773 bytes)
+<dc:title>Bring in the fleet — companion workbook</dc:title>
+<dc:creator>Secure By Design</dc:creator>
+<cp:lastModifiedBy>Secure By Design</cp:lastModifiedBy>
+<cp:revision>1</cp:revision>
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-10-08T12:00:00Z</dcterms:modified>

@@ -1,0 +1,63 @@
+/.git/HEAD                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.git/config                                  404 text/html; charset=utf-8 26786B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.env                                         404 text/html; charset=utf-8 26765B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.env.example                                 404 text/html; charset=utf-8 26789B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.dev.vars                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/package.json                                 404 text/html; charset=utf-8 26789B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/pnpm-lock.yaml                               404 text/html; charset=utf-8 26795B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/wrangler.json                                404 text/html; charset=utf-8 26792B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/wrangler.toml                                404 text/html; charset=utf-8 26792B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/wrangler.jsonc                               404 text/html; charset=utf-8 26795B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/dist/server/wrangler.json                    404 text/html; charset=utf-8 26828B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/server/index.js                              404 text/html; charset=utf-8 26798B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/server/reader-auth.js                        404 text/html; charset=utf-8 26816B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/index.js                                     404 text/html; charset=utf-8 26777B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.openai/hosting.json                         404 text/html; charset=utf-8 26813B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/AGENTS.md                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/README.md                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/CLAUDE.md                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/archive/                                     308  0B | 
+/archive/public-retired-2026-10-08/           308  0B | 
+/audit-results/                               308  0B | 
+/drizzle/0011_sign_in_methods.sql             404 text/html; charset=utf-8 27011B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/db/schema.ts                                 404 text/html; charset=utf-8 26789B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/content/membership-plans.json                404 text/html; charset=utf-8 27002B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/content/configuration-courses.json           404 text/html; charset=utf-8 27017B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.DS_Store                                    404 text/html; charset=utf-8 26780B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/_headers                                     200  0B | 
+/_redirects                                   404 text/html; charset=utf-8 26783B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.well-known/security.txt                     200 text/plain; charset=utf-8 170B | Contact: mailto:support@securebydesigninc.com Expires: 2027-09-30T00:00:00.000Z Preferred-Languages: en Canonical: https
+/security.txt                                 200 text/plain; charset=utf-8 170B | Contact: mailto:support@securebydesigninc.com Expires: 2027-09-30T00:00:00.000Z Preferred-Languages: en Canonical: https
+/.well-known/apple-app-site-association       200 application/json 270B | {"applinks":{"details":[{"appIDs":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"],"components":[{"/":"/app-auth/*
+/apple-app-site-association                   200 application/json 270B | {"applinks":{"details":[{"appIDs":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"],"components":[{"/":"/app-auth/*
+/.well-known/assetlinks.json                  404 text/html; charset=utf-8 26996B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.well-known/change-password                  404 text/html; charset=utf-8 26996B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/.well-known/webauthn                         404 text/html; charset=utf-8 26813B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/admin                                        404 text/html; charset=utf-8 26768B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/wp-admin/                                    308  0B | 
+/wp-login.php                                 404 text/html; charset=utf-8 26789B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/phpinfo.php                                  404 text/html; charset=utf-8 26786B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/server-status                                404 text/html; charset=utf-8 26792B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/api                                          404 text/html; charset=utf-8 26762B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/api/                                         404 text/html; charset=utf-8 26765B | <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-s
+/assets/                                      308  0B | 
+/build-info.json                              200 application/json 87B | {"commit":"6534624f50493671ec4745c604d915c9c092e9cc","builtAt":"2026-10-09T03:01:40Z"} 
+/cdn-cgi/trace                                200 text/plain 216B | fl=467f204 h=securebydesigninc.com ip=52.159.247.192 ts=1791520027.000 visit_scheme=https uag=curl/8.5.0 colo=SJC sliver
+/training/                                    308  0B | 
+/training/dc01-dc02/                          200 text/html 1392277B | <!doctype html> <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-sc
+/inside-network-model/                        308  0B | 
+/tests/                                       308  0B | 
+/scripts/                                     308  0B | 
+/node_modules/                                308  0B | 
+--- source maps for sampled assets
+/_next/static/chunks/Icon-p31uH7n4.js.map -> 404 9B
+/_next/static/chunks/app-elements-MmRVnLC5.js.map -> 404 9B
+/_next/static/chunks/app-rsc-cache-busting-DUXm4US3.js.map -> 404 9B
+/_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js.map -> 404 9B
+/_next/static/chunks/book-open-FcOBV2-M.js.map -> 404 9B
+/_next/static/chunks/createLucideIcon-CAkK5FPT.js.map -> 404 9B
+--- security.txt
+Contact: mailto:support@securebydesigninc.com
+Expires: 2027-09-30T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://securebydesigninc.com/.well-known/security.txt

@@ -1,0 +1,757 @@
+TAP version 13
+# Subtest: all 58 indexed roles have unique codes, descriptions, and matching detail records
+ok 1 - all 58 indexed roles have unique codes, descriptions, and matching detail records
+  ---
+  duration_ms: 1.733467
+  type: 'test'
+  ...
+# Subtest: pending roles never expose historical qualification mappings
+ok 2 - pending roles never expose historical qualification mappings
+  ---
+  duration_ms: 0.449865
+  type: 'test'
+  ...
+# Subtest: known mappings retain their correct proficiency and service scope
+ok 3 - known mappings retain their correct proficiency and service scope
+  ---
+  duration_ms: 0.256963
+  type: 'test'
+  ...
+# Subtest: each service and proficiency is deduplicated, with plain text only
+ok 4 - each service and proficiency is deduplicated, with plain text only
+  ---
+  duration_ms: 4.043256
+  type: 'test'
+  ...
+# Subtest: public role assets have no reference-site publicity or private provenance
+ok 5 - public role assets have no reference-site publicity or private provenance
+  ---
+  duration_ms: 10.227734
+  type: 'test'
+  ...
+# (node:2370) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stores a submission and outbox record; duplicate retries do not create duplicates
+ok 6 - stores a submission and outbox record; duplicate retries do not create duplicates
+  ---
+  duration_ms: 45.189814
+  type: 'test'
+  ...
+# Subtest: owner authorization applies to every private API and needs a recent sign-in with the owner account
+ok 7 - owner authorization applies to every private API and needs a recent sign-in with the owner account
+  ---
+  duration_ms: 16.309319
+  type: 'test'
+  ...
+# Subtest: rejects missing acknowledgement, malformed email, bad date, unknown fields, and oversized bodies
+ok 8 - rejects missing acknowledgement, malformed email, bad date, unknown fields, and oversized bodies
+  ---
+  duration_ms: 7.917755
+  type: 'test'
+  ...
+# Subtest: rejects cross-origin mutations and enforces a durable per-day submission limit
+ok 9 - rejects cross-origin mutations and enforces a durable per-day submission limit
+  ---
+  duration_ms: 10.639618
+  type: 'test'
+  ...
+# Subtest: saves follow-up and rejects stale updates without losing notes
+ok 10 - saves follow-up and rejects stale updates without losing notes
+  ---
+  duration_ms: 7.705285
+  type: 'test'
+  ...
+# Subtest: email failure preserves the saved record; retries use the same key and no private answers
+ok 11 - email failure preserves the saved record; retries use the same key and no private answers
+  ---
+  duration_ms: 6.406585
+  type: 'test'
+  ...
+# Subtest: expired uncertain email attempts require review instead of risking duplicate delivery
+ok 12 - expired uncertain email attempts require review instead of risking duplicate delivery
+  ---
+  duration_ms: 6.531049
+  type: 'test'
+  ...
+# career_records_unavailable
+# Subtest: record and notification insertion is atomic on database failure
+ok 13 - record and notification insertion is atomic on database failure
+  ---
+  duration_ms: 8.166
+  type: 'test'
+  ...
+# Subtest: missing database fails clearly and never reports a saved record
+ok 14 - missing database fails clearly and never reports a saved record
+  ---
+  duration_ms: 4.33275
+  type: 'test'
+  ...
+# Subtest: built site keeps the homepage, takes Community offline, and ignores client-supplied identity headers
+ok 15 - built site keeps the homepage, takes Community offline, and ignores client-supplied identity headers
+  ---
+  duration_ms: 265.352351
+  type: 'test'
+  ...
+# Subtest: owner email test uses the requested inbox and reports acceptance without claiming delivery
+ok 16 - owner email test uses the requested inbox and reports acceptance without claiming delivery
+  ---
+  duration_ms: 4.127985
+  type: 'test'
+  ...
+# Subtest: built website keeps the retired career form closed and records private
+ok 17 - built website keeps the retired career form closed and records private
+  ---
+  duration_ms: 3.563395
+  type: 'test'
+  ...
+# (node:2383) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all submitted email flows share one membership and link only after account verification
+ok 18 - all submitted email flows share one membership and link only after account verification
+  ---
+  duration_ms: 642.972649
+  type: 'test'
+  ...
+# Subtest: a resource signup enrolls immediately but email confirmation does not create account access
+ok 19 - a resource signup enrolls immediately but email confirmation does not create account access
+  ---
+  duration_ms: 6.908879
+  type: 'test'
+  ...
+# Subtest: invalid forms, failed authentication, and failed account email delivery never enroll
+ok 20 - invalid forms, failed authentication, and failed account email delivery never enroll
+  ---
+  duration_ms: 359.299779
+  type: 'test'
+  ...
+# Subtest: rate-limited submissions never create memberships
+ok 21 - rate-limited submissions never create memberships
+  ---
+  duration_ms: 31.090627
+  type: 'test'
+  ...
+# career_records_unavailable
+# community_contribution_unavailable
+# Subtest: membership storage failure rolls back contact submissions and their notifications
+ok 22 - membership storage failure rolls back contact submissions and their notifications
+  ---
+  duration_ms: 11.098578
+  type: 'test'
+  ...
+# (node:2396) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Community pages are offline; the combined page source keeps participation first and its explorer tools for relaunch
+ok 23 - Community pages are offline; the combined page source keeps participation first and its explorer tools for relaunch
+  ---
+  duration_ms: 205.4039
+  type: 'test'
+  ...
+# Subtest: contributions save separately, notify only the owner, and deduplicate retries
+ok 24 - contributions save separately, notify only the owner, and deduplicate retries
+  ---
+  duration_ms: 15.226552
+  type: 'test'
+  ...
+# Subtest: invalid links, consent, oversized input and foreign origins are rejected
+ok 25 - invalid links, consent, oversized input and foreign origins are rejected
+  ---
+  duration_ms: 7.193012
+  type: 'test'
+  ...
+# Subtest: owner-only review and status changes never publish or email the contributor
+ok 26 - owner-only review and status changes never publish or email the contributor
+  ---
+  duration_ms: 8.264765
+  type: 'test'
+  ...
+# Subtest: notification failure preserves the record and retry expiration prevents duplicate delivery
+ok 27 - notification failure preserves the record and retry expiration prevents duplicate delivery
+  ---
+  duration_ms: 5.232899
+  type: 'test'
+  ...
+# Subtest: daily source limit and missing configuration preserve usable records
+ok 28 - daily source limit and missing configuration preserve usable records
+  ---
+  duration_ms: 9.50274
+  type: 'test'
+  ...
+# Subtest: Community source retains all forms; private review routes ignore client-supplied identity headers
+ok 29 - Community source retains all forms; private review routes ignore client-supplied identity headers
+  ---
+  duration_ms: 7.232205
+  type: 'test'
+  ...
+# Subtest: every public page shares the homepage without page, query, or fragment data
+ok 30 - every public page shares the homepage without page, query, or fragment data
+  ---
+  duration_ms: 1.041586
+  type: 'test'
+  ...
+# Subtest: private, unknown, external, and malformed destinations share only the homepage
+ok 31 - private, unknown, external, and malformed destinations share only the homepage
+  ---
+  duration_ms: 1.008234
+  type: 'test'
+  ...
+# Subtest: native sharing starts immediately with the Secure By Design title and homepage
+ok 32 - native sharing starts immediately with the Secure By Design title and homepage
+  ---
+  duration_ms: 0.869383
+  type: 'test'
+  ...
+# Subtest: native cancellation never writes to the clipboard
+ok 33 - native cancellation never writes to the clipboard
+  ---
+  duration_ms: 0.233599
+  type: 'test'
+  ...
+# Subtest: unsupported or failed native sharing waits for a successful homepage copy
+ok 34 - unsupported or failed native sharing waits for a successful homepage copy
+  ---
+  duration_ms: 8.541011
+  type: 'test'
+  ...
+# Subtest: missing or rejected clipboard access uses manual copying without false success
+ok 35 - missing or rejected clipboard access uses manual copying without false success
+  ---
+  duration_ms: 0.35655
+  type: 'test'
+  ...
+# Subtest: footer markup exposes a labeled manual link and persistent polite status
+ok 36 - footer markup exposes a labeled manual link and persistent polite status
+  ---
+  duration_ms: 0.464573
+  type: 'test'
+  ...
+# Subtest: mounted footer rejects duplicate in-flight clicks and re-enables controls afterward
+ok 37 - mounted footer rejects duplicate in-flight clicks and re-enables controls afterward
+  ---
+  duration_ms: 2.4272
+  type: 'test'
+  ...
+# Subtest: manual controls stay mounted during and after copying and support selecting the URL
+ok 38 - manual controls stay mounted during and after copying and support selecting the URL
+  ---
+  duration_ms: 2.631613
+  type: 'test'
+  ...
+# Subtest: cleanup removes listeners and an old pending request cannot alter a remounted footer
+ok 39 - cleanup removes listeners and an old pending request cannot alter a remounted footer
+  ---
+  duration_ms: 1.274123
+  type: 'test'
+  ...
+# (node:2415) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: the complete recognized progress catalog retains every original ID and its order
+ok 40 - the complete recognized progress catalog retains every original ID and its order
+  ---
+  duration_ms: 2.260226
+  type: 'test'
+  ...
+# Subtest: the shared progress catalog imports only minimal article metadata rather than article prose
+ok 41 - the shared progress catalog imports only minimal article metadata rather than article prose
+  ---
+  duration_ms: 1.864873
+  type: 'test'
+  ...
+# Subtest: dashboard filtering preserves stored objects while excluding offline Journal and Cyber Range records
+ok 42 - dashboard filtering preserves stored objects while excluding offline Journal and Cyber Range records
+  ---
+  duration_ms: 0.396124
+  type: 'test'
+  ...
+# Subtest: rendered dashboard counts only active training; offline Journal and Cyber Range records stay stored but hidden
+ok 43 - rendered dashboard counts only active training; offline Journal and Cyber Range records stay stored but hidden
+  ---
+  duration_ms: 21.009174
+  type: 'test'
+  ...
+# Subtest: journal-only accounts get zero active counts and Training Library discovery without journal resume links
+ok 44 - journal-only accounts get zero active counts and Training Library discovery without journal resume links
+  ---
+  duration_ms: 11.144163
+  type: 'test'
+  ...
+# Subtest: new configuration progress resumes its exact lesson and counts in Network build
+ok 45 - new configuration progress resumes its exact lesson and counts in Network build
+  ---
+  duration_ms: 12.936881
+  type: 'test'
+  ...
+# Subtest: backend still accepts all legacy journal IDs and reads preserve saved account records
+ok 46 - backend still accepts all legacy journal IDs and reads preserve saved account records
+  ---
+  duration_ms: 60.838249
+  type: 'test'
+  ...
+# (node:2427) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native sign-in issues only a hashed, time-limited bearer session
+ok 47 - native sign-in issues only a hashed, time-limited bearer session
+  ---
+  duration_ms: 267.183397
+  type: 'test'
+  ...
+# Subtest: unknown, incorrect and legacy accounts cannot create native sessions
+ok 48 - unknown, incorrect and legacy accounts cannot create native sessions
+  ---
+  duration_ms: 551.335799
+  type: 'test'
+  ...
+# Subtest: browser and native session credentials are not interchangeable
+ok 49 - browser and native session credentials are not interchangeable
+  ---
+  duration_ms: 370.667615
+  type: 'test'
+  ...
+# Subtest: native routes reject browser origins and unversioned requests
+ok 50 - native routes reject browser origins and unversioned requests
+  ---
+  duration_ms: 3.14597
+  type: 'test'
+  ...
+# Subtest: sign-out and session expiration revoke native access
+ok 51 - sign-out and session expiration revoke native access
+  ---
+  duration_ms: 387.175183
+  type: 'test'
+  ...
+# Subtest: password reset through the existing website revokes native sessions
+ok 52 - password reset through the existing website revokes native sessions
+  ---
+  duration_ms: 365.223699
+  type: 'test'
+  ...
+# Subtest: native and browser sign-ins share the same brute-force limit
+ok 53 - native and browser sign-ins share the same brute-force limit
+  ---
+  duration_ms: 1784.549871
+  type: 'test'
+  ...
+# Subtest: native email enrollment is disabled by default and only uses verified bearer identity
+ok 54 - native email enrollment is disabled by default and only uses verified bearer identity
+  ---
+  duration_ms: 196.760962
+  type: 'test'
+  ...
+# (node:2439) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: activity union is idempotent and isolated; browser credentials cannot write
+ok 55 - activity union is idempotent and isolated; browser credentials cannot write
+  ---
+  duration_ms: 45.943943
+  type: 'test'
+  ...
+# Subtest: reject invalid dates, future rewards, spoofed ownership and partial invalid batches
+ok 56 - reject invalid dates, future rewards, spoofed ownership and partial invalid batches
+  ---
+  duration_ms: 13.084318
+  type: 'test'
+  ...
+# Subtest: history pages are bounded and preserve every day without overlaps
+ok 57 - history pages are bounded and preserve every day without overlaps
+  ---
+  duration_ms: 20.570318
+  type: 'test'
+  ...
+# (node:2451) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native and browser share course progress and bookmarks, isolated by account
+ok 58 - native and browser share course progress and bookmarks, isolated by account
+  ---
+  duration_ms: 52.373457
+  type: 'test'
+  ...
+# Subtest: completion resists a delayed start update; removed bookmarks stay removed
+ok 59 - completion resists a delayed start update; removed bookmarks stay removed
+  ---
+  duration_ms: 7.722487
+  type: 'test'
+  ...
+# Subtest: native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
+ok 60 - native sync rejects browser credentials, spoofed owners, invalid IDs and partial batches
+  ---
+  duration_ms: 12.767452
+  type: 'test'
+  ...
+# Subtest: sync leaves archived reading and bookmark records intact
+ok 61 - sync leaves archived reading and bookmark records intact
+  ---
+  duration_ms: 8.023622
+  type: 'test'
+  ...
+# (node:2463) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: anonymous readers see no account and cannot save
+ok 62 - anonymous readers see no account and cannot save
+  ---
+  duration_ms: 30.415381
+  type: 'test'
+  ...
+# Subtest: progress and profile persist and are isolated by authenticated identity
+ok 63 - progress and profile persist and are isolated by authenticated identity
+  ---
+  duration_ms: 24.708423
+  type: 'test'
+  ...
+# Subtest: rejects cross-origin writes, unrecognized items, statuses and client-supplied ownership
+ok 64 - rejects cross-origin writes, unrecognized items, statuses and client-supplied ownership
+  ---
+  duration_ms: 9.56084
+  type: 'test'
+  ...
+# Subtest: clearing progress deletes only the current reader and supports re-enrollment
+ok 65 - clearing progress deletes only the current reader and supports re-enrollment
+  ---
+  duration_ms: 10.504793
+  type: 'test'
+  ...
+# Reader progress storage failed Error: no such table: reader_progress
+#     at Object.run (file:///home/runner/work/secure-by-design-website/secure-by-design-website/tests/reader-progress.test.mjs:10:401)
+#     at readerProgressApi (file:///home/runner/work/secure-by-design-website/secure-by-design-website/server/reader-progress.js:40:238)
+#     at async TestContext.<anonymous> (file:///home/runner/work/secure-by-design-website/secure-by-design-website/tests/reader-progress.test.mjs:17:221)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+#   code: 'ERR_SQLITE_ERROR',
+#   errcode: 1,
+#   errstr: 'SQL logic error'
+# }
+# Subtest: storage failures report unavailable without claiming a save
+ok 66 - storage failures report unavailable without claiming a save
+  ---
+  duration_ms: 6.043402
+  type: 'test'
+  ...
+# Subtest: email verification creates an account, uses one-time codes, and logout revokes the session
+ok 67 - email verification creates an account, uses one-time codes, and logout revokes the session
+  ---
+  duration_ms: 237.23386
+  type: 'test'
+  ...
+# Subtest: codes expire and lock after five wrong guesses; sign-in requests are rate limited
+ok 68 - codes expire and lock after five wrong guesses; sign-in requests are rate limited
+  ---
+  duration_ms: 15.17245
+  type: 'test'
+  ...
+# Subtest: email failure never creates an account; forged ChatGPT identity is not a reader session
+ok 69 - email failure never creates an account; forged ChatGPT identity is not a reader session
+  ---
+  duration_ms: 6.547557
+  type: 'test'
+  ...
+# Subtest: password is mandatory; mismatches and short passwords cannot create an account
+ok 70 - password is mandatory; mismatches and short passwords cannot create an account
+  ---
+  duration_ms: 190.773416
+  type: 'test'
+  ...
+# Subtest: password sign-in restores progress in another session and rejects wrong or unknown credentials
+ok 71 - password sign-in restores progress in another session and rejects wrong or unknown credentials
+  ---
+  duration_ms: 725.844762
+  type: 'test'
+  ...
+# Subtest: legacy accounts retain their identity and progress when setting a password
+ok 72 - legacy accounts retain their identity and progress when setting a password
+  ---
+  duration_ms: 184.273395
+  type: 'test'
+  ...
+# Subtest: recovery changes the password, revokes older sessions and invalidates other codes
+ok 73 - recovery changes the password, revokes older sessions and invalidates other codes
+  ---
+  duration_ms: 720.582157
+  type: 'test'
+  ...
+# Subtest: creating again cannot replace an existing password; recovery does not create unknown accounts
+ok 74 - creating again cannot replace an existing password; recovery does not create unknown accounts
+  ---
+  duration_ms: 537.796243
+  type: 'test'
+  ...
+# Subtest: password guesses are rate limited and password hashes never leave the API
+ok 75 - password guesses are rate limited and password hashes never leave the API
+  ---
+  duration_ms: 1754.484464
+  type: 'test'
+  ...
+# (node:2475) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: signup stays pending until the recipient confirms; unsubscribe is separate from career records
+ok 76 - signup stays pending until the recipient confirms; unsubscribe is separate from career records
+  ---
+  duration_ms: 48.603704
+  type: 'test'
+  ...
+# Subtest: signup validation and origin checks prevent accidental enrollment and unsafe private access
+ok 77 - signup validation and origin checks prevent accidental enrollment and unsafe private access
+  ---
+  duration_ms: 6.950306
+  type: 'test'
+  ...
+# Subtest: duplicates do not spam or reset active subscribers and per-address retry limits persist
+ok 78 - duplicates do not spam or reset active subscribers and per-address retry limits persist
+  ---
+  duration_ms: 18.162981
+  type: 'test'
+  ...
+# Subtest: expired tokens and unverified attempts never become active, including when delivery fails
+ok 79 - expired tokens and unverified attempts never become active, including when delivery fails
+  ---
+  duration_ms: 7.13279
+  type: 'test'
+  ...
+# Subtest: per-source submission limits and CSV formula protection work
+ok 80 - per-source submission limits and CSV formula protection work
+  ---
+  duration_ms: 29.565852
+  type: 'test'
+  ...
+# Subtest: the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET
+ok 81 - the built site keeps email preferences working, protects subscriber management, and never mutates on email-link GET
+  ---
+  duration_ms: 10.643104
+  type: 'test'
+  ...
+# Subtest: paths on this site are kept as they are
+ok 82 - paths on this site are kept as they are
+  ---
+  duration_ms: 1.030075
+  type: 'test'
+  ...
+# Subtest: anything that leaves the site is refused
+ok 83 - anything that leaves the site is refused
+  ---
+  duration_ms: 0.446049
+  type: 'test'
+  ...
+# Subtest: very long or non-printable return paths are refused
+ok 84 - very long or non-printable return paths are refused
+  ---
+  duration_ms: 0.192262
+  type: 'test'
+  ...
+# Subtest: the Worker entry exports only its default handler
+ok 85 - the Worker entry exports only its default handler
+  ---
+  duration_ms: 1.634852
+  type: 'test'
+  ...
+# Subtest: pages get the policy and every response gets the protections
+ok 86 - pages get the policy and every response gets the protections
+  ---
+  duration_ms: 29.120175
+  type: 'test'
+  ...
+# Subtest: a stricter page policy is kept, and redirects stay redirects
+ok 87 - a stricter page policy is kept, and redirects stay redirects
+  ---
+  duration_ms: 0.808408
+  type: 'test'
+  ...
+# Subtest: the policy keeps other sites from framing pages and blocks plugins
+ok 88 - the policy keeps other sites from framing pages and blocks plugins
+  ---
+  duration_ms: 0.224612
+  type: 'test'
+  ...
+# (node:2502) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Google sign-in creates an account for a verified email and starts a browser session
+ok 89 - Google sign-in creates an account for a verified email and starts a browser session
+  ---
+  duration_ms: 58.140711
+  type: 'test'
+  ...
+# Subtest: a verified provider email reaches the existing account instead of creating another
+ok 90 - a verified provider email reaches the existing account instead of creating another
+  ---
+  duration_ms: 9.582943
+  type: 'test'
+  ...
+# Subtest: unverified emails never create or take over accounts
+ok 91 - unverified emails never create or take over accounts
+  ---
+  duration_ms: 26.398172
+  type: 'test'
+  ...
+# Subtest: Microsoft personal accounts and Apple form_post sign-ins work
+ok 92 - Microsoft personal accounts and Apple form_post sign-ins work
+  ---
+  duration_ms: 20.677585
+  type: 'test'
+  ...
+# Sign in with Google failed: Nonce mismatch
+# Sign in with Google failed: Wrong audience
+# Sign in with Google failed: Token expired
+# Subtest: forged or replayed callbacks are rejected
+ok 93 - forged or replayed callbacks are rejected
+  ---
+  duration_ms: 31.409606
+  type: 'test'
+  ...
+# Subtest: linking adds a provider to the signed-in account and refuses one linked elsewhere
+ok 94 - linking adds a provider to the signed-in account and refuses one linked elsewhere
+  ---
+  duration_ms: 21.253086
+  type: 'test'
+  ...
+# Subtest: providers without keys stay hidden and redirect with a clear error
+ok 95 - providers without keys stay hidden and redirect with a clear error
+  ---
+  duration_ms: 3.966151
+  type: 'test'
+  ...
+# Passkey sign-in failed: Wrong origin
+# Passkey sign-in failed: Device unlock required
+# Subtest: passkeys register to the signed-in account and sign in without a password
+ok 96 - passkeys register to the signed-in account and sign in without a password
+  ---
+  duration_ms: 39.652501
+  type: 'test'
+  ...
+# Subtest: methods can be listed and removed, but never the last one
+ok 97 - methods can be listed and removed, but never the last one
+  ---
+  duration_ms: 14.002355
+  type: 'test'
+  ...
+# Subtest: the app trades a one-time code and PKCE verifier for a native session, even without a password
+ok 98 - the app trades a one-time code and PKCE verifier for a native session, even without a password
+  ---
+  duration_ms: 9.963297
+  type: 'test'
+  ...
+# Subtest: deleting an account removes its records and keeps only an unsubscribe record
+ok 99 - deleting an account removes its records and keeps only an unsubscribe record
+  ---
+  duration_ms: 9.023502
+  type: 'test'
+  ...
+# Subtest: sign-in buttons keep their own colors inside reader pages
+ok 100 - sign-in buttons keep their own colors inside reader pages
+  ---
+  duration_ms: 0.728389
+  type: 'test'
+  ...
+# Subtest: training native sharing starts immediately and shares only the homepage
+ok 101 - training native sharing starts immediately and shares only the homepage
+  ---
+  duration_ms: 1.472666
+  type: 'test'
+  ...
+# Subtest: cancelling native sharing does not overwrite the clipboard
+ok 102 - cancelling native sharing does not overwrite the clipboard
+  ---
+  duration_ms: 0.231365
+  type: 'test'
+  ...
+# Subtest: unavailable native sharing copies the homepage and waits for completion
+ok 103 - unavailable native sharing copies the homepage and waits for completion
+  ---
+  duration_ms: 1.016459
+  type: 'test'
+  ...
+# Subtest: non-cancellation share failures fall back to copying
+ok 104 - non-cancellation share failures fall back to copying
+  ---
+  duration_ms: 0.341893
+  type: 'test'
+  ...
+# Subtest: missing or denied clipboard access offers manual copying
+ok 105 - missing or denied clipboard access offers manual copying
+  ---
+  duration_ms: 0.236264
+  type: 'test'
+  ...
+# Subtest: related build courses stay together before authorization and materials remain available
+ok 106 - related build courses stay together before authorization and materials remain available
+  ---
+  duration_ms: 2.414316
+  type: 'test'
+  ...
+# Subtest: category groups preserve course identity and omit groups with no matches
+ok 107 - category groups preserve course identity and omit groups with no matches
+  ---
+  duration_ms: 0.583917
+  type: 'test'
+  ...
+# Subtest: authorization parts cover the existing course once and preserve saved progress and resource destinations
+ok 108 - authorization parts cover the existing course once and preserve saved progress and resource destinations
+  ---
+  duration_ms: 1.851448
+  type: 'test'
+  ...
+# Subtest: configuration lessons have complete guides, checklists, quizzes and shared progress identifiers
+ok 109 - configuration lessons have complete guides, checklists, quizzes and shared progress identifiers
+  ---
+  duration_ms: 5.808311
+  type: 'test'
+  ...
+# Subtest: identity scene requires the supported model and its exact ordered chapter stages
+ok 110 - identity scene requires the supported model and its exact ordered chapter stages
+  ---
+  duration_ms: 0.387839
+  type: 'test'
+  ...
+# Subtest: search covers every catalog field without case or surrounding whitespace sensitivity
+ok 111 - search covers every catalog field without case or surrounding whitespace sensitivity
+  ---
+  duration_ms: 0.343004
+  type: 'test'
+  ...
+# Subtest: topic and query combine while topic matching remains exact
+ok 112 - topic and query combine while topic matching remains exact
+  ---
+  duration_ms: 0.340038
+  type: 'test'
+  ...
+# Subtest: topics are unique, sorted, and derived only from available episodes
+ok 113 - topics are unique, sorted, and derived only from available episodes
+  ---
+  duration_ms: 7.334668
+  type: 'test'
+  ...
+# Subtest: a large catalog preserves editorial order and original episode objects
+ok 114 - a large catalog preserves editorial order and original episode objects
+  ---
+  duration_ms: 3.307092
+  type: 'test'
+  ...
+# Subtest: unpublished or invalid video IDs do not produce an iframe URL
+ok 115 - unpublished or invalid video IDs do not produce an iframe URL
+  ---
+  duration_ms: 0.477908
+  type: 'test'
+  ...
+# Subtest: published video IDs use the privacy-enhanced player and safe chapter offsets
+ok 116 - published video IDs use the privacy-enhanced player and safe chapter offsets
+  ---
+  duration_ms: 0.58551
+  type: 'test'
+  ...
+# Subtest: every advertised training resource is present and remains on this site
+ok 117 - every advertised training resource is present and remains on this site
+  ---
+  duration_ms: 0.371047
+  type: 'test'
+  ...
+# Subtest: the first recording remains unpublished and the retired formats are removed
+ok 118 - the first recording remains unpublished and the retired formats are removed
+  ---
+  duration_ms: 0.554401
+  type: 'test'
+  ...
+1..118
+# tests 118
+# suites 0
+# pass 118
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13683.585475
+tests exit 0

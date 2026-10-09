@@ -1,0 +1,21 @@
+== scripts/check-data-center-equipment.mjs
+Equipment geometry checks passed: 814 mesh draws reduced to 191; 33,546 triangles retained; positions and offline indicators preserved.
+exit 0
+== scripts/check-network-architecture.mjs
+Architecture checks passed: 22 named systems, eight VLANs, unique addresses, 7 valid sequences plus 5 what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.
+Security policy checks passed: default deny, the three-tier SQL path, the domain time hierarchy, cross-tier separation, single instances, and no root network path.
+Building checks passed: every system placed, domain controllers on their own hosts, the CA apart from them, same-VLAN servers sharing a host, a clock appliance, and no cable trays in the media room or vault.
+exit 0
+== scripts/check-network-browser.mjs
+Browser checks skipped: Playwright is not installed.
+exit 0
+== scripts/check-network-relationships.mjs
+Relationship checks passed: 12866 views, all controls/VLANs/practices, every policy combination, and manual/offline isolation.
+exit 0
+== scripts/check-rmf.mjs
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+exit 0

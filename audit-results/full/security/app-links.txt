@@ -1,0 +1,6 @@
+direct: 200 application/json
+{"applinks":{"details":[{"appIDs":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"],"components":[{"/":"/app-auth/*","comment":"Sign-in hand-off back to the Secure By Design app"}]}]},"webcredentials":{"apps":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"]}}
+root path: 200 application/json
+Apple CDN: 200
+{"applinks":{"details":[{"appIDs":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"],"components":[{"/":"/app-auth/*","comment":"Sign-in hand-off back to the Secure By Design app"}]}]},"webcredentials":{"apps":["PZK2PZT6KP.com.securebydesigninc.secureByDesignApp"]}}
+Android assetlinks: 404

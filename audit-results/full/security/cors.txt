@@ -1,0 +1,57 @@
+=== GET /api/sign-in/providers with Origin https://evil.example
+HTTP/2 200 
+=== OPTIONS /api/sign-in/providers
+HTTP/2 405 
+=== GET /api/sign-in/methods with Origin https://evil.example
+HTTP/2 401 
+=== OPTIONS /api/sign-in/methods
+HTTP/2 405 
+=== GET /api/reader-progress with Origin https://evil.example
+HTTP/2 200 
+vary: Cookie
+=== OPTIONS /api/reader-progress
+HTTP/2 401 
+=== GET /api/reader-auth/signin with Origin https://evil.example
+HTTP/2 405 
+=== OPTIONS /api/reader-auth/signin
+HTTP/2 405 
+=== GET /api/reader-auth/request with Origin https://evil.example
+HTTP/2 405 
+=== OPTIONS /api/reader-auth/request
+HTTP/2 405 
+=== GET /api/native-auth/signin with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/native-auth/signin
+HTTP/2 403 
+=== GET /api/native-auth/exchange with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/native-auth/exchange
+HTTP/2 403 
+=== GET /api/sign-in/app-handoff with Origin https://evil.example
+HTTP/2 405 
+=== OPTIONS /api/sign-in/app-handoff
+HTTP/2 405 
+=== GET /api/sign-in/passkey/options with Origin https://evil.example
+HTTP/2 405 
+=== OPTIONS /api/sign-in/passkey/options
+HTTP/2 405 
+=== GET /api/resource-signups with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/resource-signups
+HTTP/2 405 
+=== GET /api/career-submissions with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/career-submissions
+HTTP/2 405 
+=== GET /api/community-contributions with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/community-contributions
+HTTP/2 405 
+=== GET /api/native-progress with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/native-progress
+HTTP/2 403 
+=== GET /api/resource-subscribers/export with Origin https://evil.example
+HTTP/2 403 
+=== OPTIONS /api/resource-subscribers/export
+HTTP/2 405 

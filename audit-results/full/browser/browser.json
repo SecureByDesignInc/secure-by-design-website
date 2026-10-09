@@ -1,0 +1,3425 @@
+{
+ "at": "2026-10-09T04:27:59.825Z",
+ "pages": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1157,
+   "ttfb": 269,
+   "dcl": 520,
+   "lcp": null,
+   "requests": 44,
+   "kb": 482,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=447"
+   ],
+   "heightPx": 5406,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020001C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "[.WebGL-0x2c40172e300]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x2c40172e300]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1020,
+   "ttfb": 61,
+   "dcl": 358,
+   "lcp": null,
+   "requests": 44,
+   "kb": 482,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3677,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020001C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3178,
+   "ttfb": 88,
+   "dcl": 305,
+   "lcp": null,
+   "requests": 38,
+   "kb": 339,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=458"
+   ],
+   "heightPx": 3435,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A07020001C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3831,
+   "ttfb": 85,
+   "dcl": 342,
+   "lcp": null,
+   "requests": 38,
+   "kb": 339,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1810,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0802C091C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 988,
+   "ttfb": 111,
+   "dcl": 390,
+   "lcp": null,
+   "requests": 47,
+   "kb": 488,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7916,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 993,
+   "ttfb": 83,
+   "dcl": 230,
+   "lcp": null,
+   "requests": 47,
+   "kb": 489,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2947,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1014,
+   "ttfb": 242,
+   "dcl": 433,
+   "lcp": null,
+   "requests": 36,
+   "kb": 320,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=445"
+   ],
+   "heightPx": 7542,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Privacy policy | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 834,
+   "ttfb": 62,
+   "dcl": 235,
+   "lcp": null,
+   "requests": 36,
+   "kb": 320,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4474,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Privacy policy | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1227,
+   "ttfb": 54,
+   "dcl": 287,
+   "lcp": null,
+   "requests": 7,
+   "kb": 433,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5390,
+   "smallTargets": 3,
+   "fonts": [],
+   "title": "Build the identity foundation | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".model-link"
+     ],
+     "summary": "Fix any of the following:\n  The null landmark is contained in another landmark."
+    },
+    {
+     "id": "landmark-unique",
+     "impact": "moderate",
+     "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+     "nodes": 1,
+     "targets": [
+      ".chapters"
+     ],
+     "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+    },
+    {
+     "id": "region",
+     "impact": "moderate",
+     "help": "All page content should be contained by landmarks",
+     "nodes": 1,
+     "targets": [
+      ".hero > div:nth-child(1)"
+     ],
+     "summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0802C091C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1223,
+   "ttfb": 52,
+   "dcl": 294,
+   "lcp": null,
+   "requests": 7,
+   "kb": 433,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3763,
+   "smallTargets": 3,
+   "fonts": [],
+   "title": "Build the identity foundation | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      ".model-link"
+     ],
+     "summary": "Fix any of the following:\n  The null landmark is contained in another landmark."
+    },
+    {
+     "id": "landmark-unique",
+     "impact": "moderate",
+     "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+     "nodes": 1,
+     "targets": [
+      ".chapters"
+     ],
+     "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+    },
+    {
+     "id": "region",
+     "impact": "moderate",
+     "help": "All page content should be contained by landmarks",
+     "nodes": 1,
+     "targets": [
+      ".hero"
+     ],
+     "summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0802C091C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 672,
+   "ttfb": 38,
+   "dcl": 150,
+   "lcp": null,
+   "requests": 12,
+   "kb": 50,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4436,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 811,
+   "ttfb": 37,
+   "dcl": 126,
+   "lcp": null,
+   "requests": 12,
+   "kb": 50,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2951,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 876,
+   "ttfb": 63,
+   "dcl": 285,
+   "lcp": null,
+   "requests": 43,
+   "kb": 344,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=397"
+   ],
+   "heightPx": 5772,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 990,
+   "ttfb": 163,
+   "dcl": 370,
+   "lcp": null,
+   "requests": 43,
+   "kb": 344,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3416,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 895,
+   "ttfb": 57,
+   "dcl": 295,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 7671,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 923,
+   "ttfb": 67,
+   "dcl": 291,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4268,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 919,
+   "ttfb": 63,
+   "dcl": 235,
+   "lcp": null,
+   "requests": 43,
+   "kb": 346,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=1045"
+   ],
+   "heightPx": 5947,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1040,
+   "ttfb": 94,
+   "dcl": 317,
+   "lcp": null,
+   "requests": 43,
+   "kb": 346,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3497,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 961,
+   "ttfb": 52,
+   "dcl": 267,
+   "lcp": null,
+   "requests": 43,
+   "kb": 348,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=894"
+   ],
+   "heightPx": 6493,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 885,
+   "ttfb": 67,
+   "dcl": 295,
+   "lcp": null,
+   "requests": 43,
+   "kb": 348,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3664,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 874,
+   "ttfb": 66,
+   "dcl": 281,
+   "lcp": null,
+   "requests": 43,
+   "kb": 344,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=448"
+   ],
+   "heightPx": 5781,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1060,
+   "ttfb": 246,
+   "dcl": 466,
+   "lcp": null,
+   "requests": 43,
+   "kb": 344,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3416,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 899,
+   "ttfb": 61,
+   "dcl": 238,
+   "lcp": null,
+   "requests": 43,
+   "kb": 349,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=599"
+   ],
+   "heightPx": 6913,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 1079,
+   "ttfb": 57,
+   "dcl": 285,
+   "lcp": null,
+   "requests": 43,
+   "kb": 349,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3942,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 849,
+   "ttfb": 56,
+   "dcl": 269,
+   "lcp": null,
+   "requests": 43,
+   "kb": 346,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=786"
+   ],
+   "heightPx": 6262,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 977,
+   "ttfb": 50,
+   "dcl": 270,
+   "lcp": null,
+   "requests": 43,
+   "kb": 346,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3661,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "landmark-complementary-is-top-level",
+     "impact": "moderate",
+     "help": "Aside should not be contained in another landmark",
+     "nodes": 1,
+     "targets": [
+      "aside"
+     ],
+     "summary": "Fix any of the following:\n  The complementary landmark is contained in another landmark."
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 864,
+   "ttfb": 64,
+   "dcl": 214,
+   "lcp": null,
+   "requests": 43,
+   "kb": 350,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=966"
+   ],
+   "heightPx": 7255,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 908,
+   "ttfb": 87,
+   "dcl": 311,
+   "lcp": null,
+   "requests": 43,
+   "kb": 350,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4000,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 855,
+   "ttfb": 60,
+   "dcl": 275,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=815"
+   ],
+   "heightPx": 6226,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 903,
+   "ttfb": 78,
+   "dcl": 247,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3551,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 902,
+   "ttfb": 58,
+   "dcl": 316,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=714"
+   ],
+   "heightPx": 6516,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 865,
+   "ttfb": 63,
+   "dcl": 275,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3724,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 879,
+   "ttfb": 68,
+   "dcl": 295,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=880"
+   ],
+   "heightPx": 6041,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 867,
+   "ttfb": 53,
+   "dcl": 269,
+   "lcp": null,
+   "requests": 43,
+   "kb": 347,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3495,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 837,
+   "ttfb": 52,
+   "dcl": 244,
+   "lcp": null,
+   "requests": 40,
+   "kb": 334,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7425,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 843,
+   "ttfb": 58,
+   "dcl": 272,
+   "lcp": null,
+   "requests": 40,
+   "kb": 335,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4607,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure DNS — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 865,
+   "ttfb": 61,
+   "dcl": 221,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 10439,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 881,
+   "ttfb": 84,
+   "dcl": 305,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6157,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Configure a Root CA & issuing CA — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 846,
+   "ttfb": 59,
+   "dcl": 272,
+   "lcp": null,
+   "requests": 40,
+   "kb": 336,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 9273,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 844,
+   "ttfb": 56,
+   "dcl": 256,
+   "lcp": null,
+   "requests": 40,
+   "kb": 336,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5635,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Harden the baseline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 885,
+   "ttfb": 61,
+   "dcl": 306,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 11697,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/connect-segment/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 883,
+   "ttfb": 72,
+   "dcl": 240,
+   "lcp": null,
+   "requests": 40,
+   "kb": 338,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6673,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Connect and segment the network — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 825,
+   "ttfb": 48,
+   "dcl": 256,
+   "lcp": null,
+   "requests": 40,
+   "kb": 335,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7468,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/pki-services/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 881,
+   "ttfb": 70,
+   "dcl": 303,
+   "lcp": null,
+   "requests": 40,
+   "kb": 335,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4628,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Finish the PKI services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 888,
+   "ttfb": 69,
+   "dcl": 303,
+   "lcp": null,
+   "requests": 40,
+   "kb": 339,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 12586,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 863,
+   "ttfb": 65,
+   "dcl": 187,
+   "lcp": null,
+   "requests": 40,
+   "kb": 338,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6824,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Addressing and tiered administration — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 846,
+   "ttfb": 66,
+   "dcl": 275,
+   "lcp": null,
+   "requests": 40,
+   "kb": 336,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 9158,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 853,
+   "ttfb": 67,
+   "dcl": 274,
+   "lcp": null,
+   "requests": 40,
+   "kb": 336,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5447,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "See everything: the logging pipeline — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 843,
+   "ttfb": 64,
+   "dcl": 272,
+   "lcp": null,
+   "requests": 40,
+   "kb": 339,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 12562,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/workstation-fleet/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 850,
+   "ttfb": 53,
+   "dcl": 264,
+   "lcp": null,
+   "requests": 40,
+   "kb": 339,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7161,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Bring in the fleet — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 877,
+   "ttfb": 63,
+   "dcl": 284,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 10746,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/patch-protect/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 877,
+   "ttfb": 73,
+   "dcl": 230,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5981,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Patch, protect, and watch for weakness — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 859,
+   "ttfb": 57,
+   "dcl": 281,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 10067,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/business-services/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 845,
+   "ttfb": 50,
+   "dcl": 273,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 5622,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Stand up the business services — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 847,
+   "ttfb": 65,
+   "dcl": 272,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 10823,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/prove-recovery/checklist",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 865,
+   "ttfb": 79,
+   "dcl": 278,
+   "lcp": null,
+   "requests": 40,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 6033,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Prove you can recover — configuration checklist | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "help": "Elements must meet minimum color contrast ratio thresholds",
+     "nodes": 1,
+     "targets": [
+      ".vc-checklist-copyright"
+     ],
+     "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.32 (foreground color: #486d81, background color: #071521, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+    }
+   ],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/app-sign-in?challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 840,
+   "ttfb": 46,
+   "dcl": 229,
+   "lcp": null,
+   "requests": 41,
+   "kb": 326,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=445"
+   ],
+   "heightPx": 2050,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Sign in to the app | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/app-sign-in?challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 835,
+   "ttfb": 42,
+   "dcl": 223,
+   "lcp": null,
+   "requests": 41,
+   "kb": 325,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1464,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Sign in to the app | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.098,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 2751,
+   "ttfb": 59,
+   "dcl": 419,
+   "lcp": null,
+   "requests": 25,
+   "kb": 375,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2228,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0802C091C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-network-model/model.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 3573,
+   "ttfb": 55,
+   "dcl": 432,
+   "lcp": null,
+   "requests": 25,
+   "kb": 375,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 932,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "[GroupMarkerNotSet(crbug.com/242999)!:A0802C091C150000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/notices.html",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 651,
+   "ttfb": 55,
+   "dcl": 131,
+   "lcp": null,
+   "requests": 3,
+   "kb": 3,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1591,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Notices and permissions | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/notices.html",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 617,
+   "ttfb": 51,
+   "dcl": 99,
+   "lcp": null,
+   "requests": 3,
+   "kb": 3,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1318,
+   "smallTargets": 0,
+   "fonts": [],
+   "title": "Notices and permissions | Secure By Design",
+   "skipLink": false,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/audit-missing-page",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 404,
+   "loadMs": 776,
+   "ttfb": 40,
+   "dcl": 207,
+   "lcp": null,
+   "requests": 34,
+   "kb": 313,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=445"
+   ],
+   "heightPx": 1171,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": [
+    "404 https://securebydesigninc.com/audit-missing-page"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/audit-missing-page",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 404,
+   "loadMs": 806,
+   "ttfb": 52,
+   "dcl": 239,
+   "lcp": null,
+   "requests": 34,
+   "kb": 313,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 922,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "Geist Mono"
+   ],
+   "title": "Secure By Design — Cybersecurity & System Administration",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "axe": [],
+   "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [],
+   "badResponses": [
+    "404 https://securebydesigninc.com/audit-missing-page"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/resource-preferences",
+   "viewport": "390x844",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 776,
+   "ttfb": 35,
+   "dcl": 242,
+   "lcp": null,
+   "requests": 18,
+   "kb": 122,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=445"
+   ],
+   "heightPx": 950,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Email preferences | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "error": "page.addScriptTag: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline exec",
+   "consoleErrors": [
+    "Refused to load the script 'https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920' because it violates the following Content Security Policy directive: \"script-src 'self'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a f",
+    "Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline execution.\n"
+   ],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [
+    "csp https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/resource-preferences",
+   "viewport": "1440x900",
+   "browser": "chromium",
+   "status": 200,
+   "loadMs": 682,
+   "ttfb": 35,
+   "dcl": 173,
+   "lcp": null,
+   "requests": 18,
+   "kb": 122,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 900,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Email preferences | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0.001,
+   "error": "page.addScriptTag: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline exec",
+   "consoleErrors": [
+    "Refused to load the script 'https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920' because it violates the following Content Security Policy directive: \"script-src 'self'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a f",
+    "Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self'\". Either the 'unsafe-inline' keyword, a hash ('sha256-iAlwwIFwc2DmTzTOol/5GJL1vJVnWwd2kluXCd2KaLs='), or a nonce ('nonce-...') is required to enable inline execution.\n"
+   ],
+   "consoleWarnings": [
+    "Error with Permissions-Policy header: Unrecognized feature: 'bluetooth'.",
+    "Deprecated API for given entry type."
+   ],
+   "failedRequests": [
+    "csp https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+   ],
+   "badResponses": []
+  }
+ ],
+ "crossBrowser": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1549,
+   "ttfb": -333,
+   "dcl": 189,
+   "lcp": null,
+   "requests": 40,
+   "kb": 468,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=446"
+   ],
+   "heightPx": 5329,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1582,
+   "ttfb": -397,
+   "dcl": 273,
+   "lcp": null,
+   "requests": 40,
+   "kb": 468,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3656,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist"
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1252,
+   "ttfb": -195,
+   "dcl": 207,
+   "lcp": null,
+   "requests": 43,
+   "kb": 453,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7850,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1451,
+   "ttfb": -180,
+   "dcl": 239,
+   "lcp": null,
+   "requests": 43,
+   "kb": 453,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2928,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1405,
+   "ttfb": -183,
+   "dcl": 194,
+   "lcp": null,
+   "requests": 39,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 7602,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1422,
+   "ttfb": -402,
+   "dcl": 199,
+   "lcp": null,
+   "requests": 39,
+   "kb": 337,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4255,
+   "smallTargets": 1,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1473,
+   "ttfb": -191,
+   "dcl": 174,
+   "lcp": null,
+   "requests": 44,
+   "kb": 362,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7886,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1394,
+   "ttfb": -203,
+   "dcl": 194,
+   "lcp": null,
+   "requests": 44,
+   "kb": 362,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4009,
+   "smallTargets": 3,
+   "fonts": [
+    "Geist",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1846,
+   "ttfb": -192,
+   "dcl": 181,
+   "lcp": null,
+   "requests": 34,
+   "kb": 330,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=450"
+   ],
+   "heightPx": 3425,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1914,
+   "ttfb": -177,
+   "dcl": 189,
+   "lcp": null,
+   "requests": 33,
+   "kb": 330,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1926,
+   "smallTargets": 0,
+   "fonts": [
+    "Geist",
+    "\"Geist Fallback\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "390x844",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1057,
+   "ttfb": 86,
+   "dcl": 518,
+   "lcp": null,
+   "requests": 12,
+   "kb": 48,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4394,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "1440x900",
+   "browser": "webkit",
+   "status": 200,
+   "loadMs": 1070,
+   "ttfb": 85,
+   "dcl": 525,
+   "lcp": null,
+   "requests": 12,
+   "kb": 48,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2934,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1209,
+   "ttfb": 78,
+   "dcl": 530,
+   "lcp": null,
+   "requests": 42,
+   "kb": 522,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=446"
+   ],
+   "heightPx": 5378,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/_next/static/chun",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1004,
+   "ttfb": 58,
+   "dcl": 288,
+   "lcp": null,
+   "requests": 42,
+   "kb": 521,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 3677,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Secure By Design — Cybersecurity Starts with Curiosity",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/_next/static/chun",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1034,
+   "ttfb": 73,
+   "dcl": 413,
+   "lcp": null,
+   "requests": 45,
+   "kb": 527,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 7917,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1010,
+   "ttfb": 85,
+   "dcl": 389,
+   "lcp": null,
+   "requests": 45,
+   "kb": 527,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2947,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Training Library | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1085,
+   "ttfb": 64,
+   "dcl": 403,
+   "lcp": null,
+   "requests": 44,
+   "kb": 386,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "code. right=635"
+   ],
+   "heightPx": 7606,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/two-tier-pki",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1047,
+   "ttfb": 67,
+   "dcl": 365,
+   "lcp": null,
+   "requests": 44,
+   "kb": 393,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4297,
+   "smallTargets": 1,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Configure a Root CA & issuing CA | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1032,
+   "ttfb": 51,
+   "dcl": 384,
+   "lcp": null,
+   "requests": 46,
+   "kb": 411,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 8053,
+   "smallTargets": 3,
+   "fonts": [
+    "\"Geist\"",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1006,
+   "ttfb": 57,
+   "dcl": 351,
+   "lcp": null,
+   "requests": 46,
+   "kb": 411,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 4142,
+   "smallTargets": 3,
+   "fonts": [
+    "\"Geist\"",
+    "\"Geist Mono\""
+   ],
+   "title": "My Account | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1230,
+   "ttfb": 73,
+   "dcl": 353,
+   "lcp": null,
+   "requests": 36,
+   "kb": 378,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=450"
+   ],
+   "heightPx": 3442,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+    "Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Content-Security-Policy: Ignoring ‘x-frame-options’ because of ‘frame-ancestors’ directive.\"]",
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/inside-network-mo",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 1263,
+   "ttfb": 72,
+   "dcl": 353,
+   "lcp": null,
+   "requests": 36,
+   "kb": 378,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 1810,
+   "smallTargets": 0,
+   "fonts": [
+    "\"Geist\""
+   ],
+   "title": "Inside the Network | Secure By Design",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [
+    "THREE.WebGLRenderer: A WebGL context could not be created. Reason:  WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+    "Error"
+   ],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Content-Security-Policy: Ignoring ‘x-frame-options’ because of ‘frame-ancestors’ directive.\"]",
+    "[JavaScript Warning: \"Failed to create WebGL context: WebGL creation failed: \n* AllowWebgl2:false restricts context creation on this system. ()\" {file: \"https://securebydesigninc.com/inside-network-mo",
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "390x844",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 731,
+   "ttfb": 39,
+   "dcl": 175,
+   "lcp": null,
+   "requests": 15,
+   "kb": 90,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ],
+   "heightPx": 4437,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "viewport": "1440x900",
+   "browser": "firefox",
+   "status": 200,
+   "loadMs": 814,
+   "ttfb": 42,
+   "dcl": 178,
+   "lcp": null,
+   "requests": 14,
+   "kb": 90,
+   "big": [],
+   "overflowPx": 0,
+   "overflowEls": [],
+   "heightPx": 2950,
+   "smallTargets": 4,
+   "fonts": [],
+   "title": "RMF and authorization fundamentals | Secure By Design Training",
+   "skipLink": true,
+   "lang": "en",
+   "cls": 0,
+   "consoleErrors": [],
+   "consoleWarnings": [
+    "[JavaScript Warning: \"Ignoring unsupported entryTypes: layout-shift.\" {file: \"debugger eval code line 291 > eval\" line: 1}]"
+   ],
+   "failedRequests": [],
+   "badResponses": []
+  }
+ ],
+ "interactions": [
+  {
+   "area": "Training Library",
+   "name": "loads tiles and search narrows results",
+   "ok": true,
+   "detail": "tiles 15; \"DNS\" → 2; nonsense → 0 (empty state true); after clear → 15; DNS mentioned true"
+  },
+  {
+   "area": "Training Library",
+   "name": "category filter",
+   "ok": true,
+   "detail": "choices: All training\n15 | Build the Network\n12 | Network Authorization\n3; visible tiles: 12"
+  },
+  {
+   "area": "Training Library",
+   "name": "open a tile shows its materials, downloads respond",
+   "ok": true,
+   "detail": "expanded=1; 200 dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip; 200 dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf; 200 dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx"
+  },
+  {
+   "area": "Sharing",
+   "name": "Pass it on copies the homepage URL (no native share in headless)",
+   "ok": true,
+   "detail": "clipboard=\"https://securebydesigninc.com/\" status=\"Link copied. Ready to pass it on. Showing 15 of 15 courses \""
+  },
+  {
+   "area": "Course page",
+   "name": "DNS course: lessons, quiz answer feedback, checklist and workbook links",
+   "ok": true,
+   "detail": "h1=\"Configure DNS\" headings=2 quiz=no radio quiz inputs files: 200 SecureByDesign-dns-configuration-Workbook.pdf; 200 SecureByDesign-dns-configuration-Workbook.docx; 200 checklist; 200 configuration-checklist.md"
+  },
+  {
+   "area": "Course page",
+   "name": "Mark a lesson complete without an account (guest progress)",
+   "ok": true,
+   "detail": "no completion button found"
+  },
+  {
+   "area": "Inside the Network",
+   "name": "frame loads a WebGL scene; text version opens; traffic section opens",
+   "ok": true,
+   "detail": "canvases in frame=1; text section opens=false; traffic=clicked"
+  },
+  {
+   "area": "Inside the Network",
+   "name": "model views render (default, topology off, overview) at phone and desktop sizes",
+   "ok": true,
+   "detail": "default@1440: canvas=1 errors=0 | default@390: canvas=1 errors=0 | topology-off@1440: canvas=1 errors=0 | topology-off@390: canvas=1 errors=0 | overview@1440: canvas=1 errors=0 | overview@390: canvas=1 errors=0 | dc1@1440: canvas=1 errors=0 | dc1@390: canvas=1 errors=0"
+  },
+  {
+   "area": "Inside the Network",
+   "name": "deep link #process=… selects a process",
+   "ok": true,
+   "detail": "page url now https://securebydesigninc.com/inside-the-network#process=web-app&step=1"
+  },
+  {
+   "area": "My Account",
+   "name": "sign-in form validates empty and malformed input without sending anything",
+   "ok": true,
+   "detail": "validation signals=4, invalid inputs=2, POSTs sent=0"
+  },
+  {
+   "area": "My Account",
+   "name": "membership options visible to visitors",
+   "ok": true,
+   "detail": "$0 | $20 / month | $15/month, locked in while subscribed. | $99 / month | $267 per quarter (save 10%): one full portfo | $0"
+  },
+  {
+   "area": "Keyboard",
+   "name": "first 20 Tab stops on the homepage show a visible focus style",
+   "ok": true,
+   "detail": "20 stops; without visible focus: none; first: a Skip to content | a Secure By Design\nEDUCATE. EMPO | a YouTube | a TikTok"
+  },
+  {
+   "area": "Display",
+   "name": "dark-mode and reduced-motion renders (screenshots)",
+   "ok": true,
+   "detail": "saved"
+  },
+  {
+   "area": "Errors",
+   "name": "pages during interactions threw no errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "reflow": [
+  {
+   "url": "https://securebydesigninc.com/",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=348",
+    "a.nav-link right=447"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=324"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dns-configuration",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=324",
+    "code. right=397"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/my-progress",
+   "overflowPx": 0,
+   "overflowEls": []
+  },
+  {
+   "url": "https://securebydesigninc.com/inside-the-network",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=356",
+    "a.nav-link right=455"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/privacy",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a.nav-link right=346",
+    "a.nav-link right=445"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/rmf/",
+   "overflowPx": 0,
+   "overflowEls": [
+    "a. right=572",
+    "a. right=732"
+   ]
+  },
+  {
+   "url": "https://securebydesigninc.com/training/dc01-dc02/",
+   "overflowPx": 0,
+   "overflowEls": []
+  }
+ ]
+}

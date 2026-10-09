@@ -1,0 +1,50 @@
+== source maps in dist
+== client bundle totals
+js: 85 files, 2804 KB
+css: 16 files, 474 KB
+== largest client files
+1392277	dist/client/training/dc01-dc02/index.html
+1086827	dist/client/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip
+542708	dist/client/_next/static/chunks/three.module-BKRIy6WH.js
+389591	dist/client/inside-network-model/vendor/three.core.js
+376171	dist/client/inside-network-model/vendor/three.module.js
+347450	dist/client/_next/static/chunks/video-hub-CXp0Q0uL.js
+320964	dist/client/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx
+297837	dist/client/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf
+257797	dist/client/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf
+247723	dist/client/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf
+245140	dist/client/_next/static/css/index.BF6TU42i.css
+238664	dist/client/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf
+229756	dist/client/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf
+225629	dist/client/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf
+223786	dist/client/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf
+222914	dist/client/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf
+222527	dist/client/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf
+209616	dist/client/training/business-services/SecureByDesign-business-services-Workbook.pdf
+203195	dist/client/_next/static/chunks/index-C7NEfmvM.js
+195659	dist/client/training/pki-services/SecureByDesign-pki-services-Workbook.pdf
+191892	dist/client/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf
+190152	dist/client/_next/static/chunks/framework-JGc2HF7T.js
+121773	dist/client/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx
+120785	dist/client/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx
+120429	dist/client/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx
+119576	dist/client/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx
+119426	dist/client/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx
+118729	dist/client/training/business-services/SecureByDesign-business-services-Workbook.docx
+118678	dist/client/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx
+118592	dist/client/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx
+118499	dist/client/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx
+116609	dist/client/training/pki-services/SecureByDesign-pki-services-Workbook.docx
+116067	dist/client/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx
+108114	dist/client/career-roles/catalog.json
+99836	dist/client/inside-network-model/scene.js
+83142	dist/client/_next/static/chunks/progress-dashboard-D4lw8TZX.js
+76924	dist/client/og/secure-by-design.jpg
+75786	dist/client/partners/tenable-light.svg
+75681	dist/client/partners/tenable.svg
+67899	dist/client/career-roles/roles/211.json
+== references in client bundle
+== secret-looking strings in client bundle and public/
+re_By_Design_RMF_Training_Catalog
+== server bundle size
+3.3M	dist/server

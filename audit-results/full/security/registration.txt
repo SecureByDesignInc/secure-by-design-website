@@ -1,0 +1,5 @@
+registry status: client transfer prohibited
+DNSSEC delegation signed: false
+registrar: DomainPeople, Inc.
+events: registration 2026-07-24 | expiration 2027-07-24 | last changed 2026-10-07 | last update of RDAP database 2026-10-09
+nameservers: BENEDICT.NS.CLOUDFLARE.COM, DESI.NS.CLOUDFLARE.COM

@@ -1,0 +1,66 @@
+== token: active
+== zone: securebydesigninc.com · active · plan Free Website · nameservers benedict.ns.cloudflare.com, desi.ns.cloudflare.com · original registrar domainpeople, inc. (id: 65)
+== workers
+secure-by-design-website · created 2026-10-07 · modified 2026-10-09
+== worker custom domains
+securebydesigninc.com → secure-by-design-website (production)
+www.securebydesigninc.com → secure-by-design-website (production)
+== workers.dev route for secure-by-design-website
+{"enabled":false,"previews_enabled":false}
+== zone worker routes
+== D1 databases
+securebydesign · aa31a619 · created 2026-10-07 · 262144 bytes · 0 tables
+== KV namespaces
+0 namespaces: 
+== R2 buckets
+error: [{"code":10042,"message":"Please enable R2 through the Cloudflare Dashboard."}]
+== Pages projects
+0 projects: 
+== Turnstile widgets
+0 widgets: 
+== Web Analytics sites
+securebydesigninc.com · auto_install true · created 2026-10-07
+== account members (count and roles only)
+1 members; roles: Super Administrator - All Privileges; statuses: accepted
+== zone settings
+0rtt = off
+always_online = off
+always_use_https = on
+automatic_https_rewrites = on
+brotli = on
+browser_check = on
+challenge_ttl = 1800
+ciphers = []
+early_hints = off
+ech = on
+email_obfuscation = on
+hotlink_protection = off
+http3 = on
+ip_geolocation = on
+min_tls_version = 1.2
+opportunistic_encryption = on
+security_header = {"strict_transport_security":{"enabled":false,"max_age":0,"include_subdomains":false,"preload":false,"nosniff":false}}
+security_level = medium
+server_side_exclude = on
+ssl = full
+tls_1_3 = on
+tls_client_auth = off
+websockets = on
+== DNSSEC
+error: [{"code":10000,"message":"Authentication error","documentation_url":"https://developers.cloudflare.com/api/resources/dns/subresources/dnssec"}]
+== DNS records
+error: [{"code":10000,"message":"Authentication error","documentation_url":"https://developers.cloudflare.com/api/resources/dns/subresources/records/methods/list"}]
+== certificate packs
+error: [{"code":9109,"message":"Unauthorized to access requested resource"}]
+== rulesets
+error: [{"code":10000,"message":"Authentication error","documentation_url":"https://developers.cloudflare.com/api/resources/rulesets/methods/list"}]
+== http_request_firewall_custom rules
+none or error: Authentication error
+== http_ratelimit rules
+none or error: Authentication error
+== http_request_firewall_managed rules
+none or error: Authentication error
+== bot management
+[{"code":10000,"message":"Authentication error","documentation_url":"https://developers.cloudflare.com/api/resources/bot_management/methods/get"}]
+== page rules
+error: [{"code":9109,"message":"Unauthorized to access requested resource"}]

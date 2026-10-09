@@ -1,0 +1,559 @@
+=== /
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:55 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=kp7M4EwbuIN5PkPbYtT3T6N42wqT6OSvnchWXZWhS8GGzxASuO7atMbkwhBnxRwSEXK%2Fd76Wa1MzlPOV86sBPrNix6Y5to%2BC81fgaPHYWodi3tQrNRJytwyxIOgRMMht7cNV2sRptfw%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1426f6bfc53-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:56 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Mp96ycfcz%2BuGuZvXBz5K%2BCBQlrATKecvDSlGOpjlgxM31iiZjakLinusyPory%2FAyC6Nf0lXb82ckhLx264OgqoZT1d9sUQQQ35rGMCjxZB3tkSJ9ck%2BTqj01UnuYrOF7J0XoGSLkKUs%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa142eae7f977-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training/dns-configuration
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:56 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=xP3E3xw%2BS9Uj1quS7JXe%2Bq57Hshu0UXLsa98lVHPzGm4vjOp5TkXEdFEgJPkdEJF9ZMdGs%2F1wAvhVsGF6mQIcPZe%2Fx44%2FUWIGIjXY9lSW43ihFL%2FCiarDmP2x13UP8xEYKHvsa7tdrg%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa145cd168b3c-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training/dns-configuration/checklist
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:56 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=WWqSlz8mk2g0SF9unO2712phx4365Om7uEKcAdJcH%2Bl3LlnR4ewiGOUHQvNjCcTpsrovuDCqA%2BIGu1Hv9gOT8m28IoOzcIGwssfoPWxi6hgyoGn9b2FU8X2sBPzavyHDxA%2BHvff7pdQ%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1465fc62ca1-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /inside-the-network
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=bxDmG7KllSHYTYfLm%2BNSglnuDrOK%2FELWSoZPsYtLOWRwy9ZLZQVBPaq%2BZ65q%2Be8J0P1a57UsPuJryFGWnpoZbs5OLpAfFbATjZkuGLB6pP7c4Yhj6QWJDtetSUwrGzkCr5rPAbV68kw%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1488a79ed3f-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /inside-network-model/model.html
+HTTP/2 307 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-length: 0
+location: /inside-network-model/model
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=GK%2F41%2Fg4NkwtcURhlQPDe84Lg9e0vhsjqf%2B2A3eyjTd7Gqkr7LyI6cTeJHtBE%2BlgmHCVFra9otzZaXnNDWYGe7wZDiuPRZ8bSgik3j4GSYrS%2BFcG0fKqkVf%2Byz4M3PS%2BJX%2Be%2FdN8tAo%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a47aa14a7c6741ce-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /my-progress
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-store, must-revalidate
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=3gCjiIkEbqyMPRqJNhR0ucAvhnPnOnuJSdKklOJ2nyE6B4mB%2BRrhcKlw5QxVJ7SAQLrUow5Z%2Buh3osdhtesMJSH8seUDmu%2BpEzcjsXMoNjUTpSmBoiAUKJo1nI4G0%2Fvwi%2BSUS3yrVyQ%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa14acaf41601-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /privacy
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2B1%2BMrkeM0cxTQOsQIBrAhmGycgcH8sQmywoa2r4QWLlMiT59WDQt2r27BPhpITJkhD3cxkaaYQmj8rtDrzWuBvpCWnG3PIuXiaaZzy0Uh6eudVMO7%2BCXt85Ml5FeHoCgelJZrJXYjpM%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa14b9f67a473-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /app-sign-in?challenge=x
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-store, must-revalidate
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=lESE8ie%2FJPBqfTzhsnhdZyGwQ0DJqZnj0IehkepTjKlgDzIcLh5mZbTUNvaeg%2FH1qOGJDBox28LBhCG1AD6C6SAPNxSCEEuX9r2OMczBfJTPlHlWjV55mupee7J2H4hv6WtydmHtn8I%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa14dcf8267e3-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training/dc01-dc02/
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' data: https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=NvlbZpk7uhFgiIYpy3IfOOD8HIPslnpHGoLpCiRth701W2yfYWvHDz087PqPVesAnudBXRd7J8jXJbubFfbUxfU1IRdA50QY1FyTdU5PMV2lgrbsSxOoaQrDXUSEzqHsBbJtSIACgBo%3D"}]}
+etag: W/"d6bda2310aff59d10cc1cd725e5e3d4a"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa14e6b2dcf23-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training/rmf/
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:57 GMT
+content-type: text/html
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=kvM5ryTu13D08UZCam2NmhKcgTymSbXN9L4%2Fz49V6xha6ZB1SZOVPT3OQ%2FZTKvgW8Kp6dvlc%2BNQzBdDHZ2AC5JNREXtCsZrtwLuQROVuZUvVXshakfVHHehGOoTp3WbDvc9T1kfvoCU%3D"}]}
+etag: W/"0b496318b45900cc7f3ccbce454cfa8a"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa14f184fde42-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: application/pdf
+content-length: 191892
+cf-cache-status: MISS
+cache-control: public, max-age=0, must-revalidate
+etag: "964bd6f9d354fcb4bea36cc2f9a80661"
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=dmojf2XXNg2S8QDDhdr%2BAVp9vdRaVF1WDlRtXwVxaO6MwJ2FONoXs7jC6fQnJ1glwNe1gV6uccu5eLdNmOXAYnYtiIvWImZ4cYwzHwDhJOgPTaBt2bRDJ45BSsjEi%2B26KsujbgYPZHs%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a47aa14f7d771688-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /sitemap.xml
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: application/xml
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=VFqlR7FmdWit26g%2BSvV7GgiRBM7X9LUy1VyZDTNxDY4ZnnYur6tikToesZr7RDWv1CdZeTZHLfs0RLTfjYI0Kr4epJwxrUCus7cH%2Feib1I2GUYWnoxREPeKE70r5jLfVjwRgCnq1d9M%3D"}]}
+etag: W/"2f97791e17a6a42409689fb2ea48cf0c"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa151480eeb29-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /robots.txt
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/plain
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Aa4Ab0cea9sq0KJT7ASD%2Fyd6BwZOb%2B4ZoRD0HG6vD%2BAeEHyqGAYw%2BRujyft6AsrFrUH3tKtj8iBXVBTeZuovXvX3%2FGPqwVDgEJmV%2BPqq7gdaVMSoiKNT8G0zPewKZBgQCZMpd8ppnrY%3D"}]}
+etag: W/"7076761fc8a902446d5af1a9559de778"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa151acdb49ec-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /favicon.ico
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: image/vnd.microsoft.icon
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=pO2m2pHBcj4pKLldHF4us9hjY5tqQX%2BBWmZ8aFTa9lFE5FMUBDmUU06kqnlQdY79BjqcYLSzbpF2kL4xBhaxE9XIMZM06N85AexHev7TJlpMta3E5EVz8tfbzyasj%2B8l%2FMdzCx0prFk%3D"}]}
+etag: W/"d167f4939d8527f361399feeb74ae876"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1525ecb4f08-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /favicon.svg
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: image/svg+xml
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=82pqkgKOrXGRws0nzpXdYTj%2Fy2%2FbU5DJaRMqSDROu2PYhcWiic7TjBwgEYMK9%2FnljnKP%2FU9k5OK1oAhADVquo92Zta3YJjQQWzhLln%2B3zZTOW7bm%2BJQtkRbCuknA0DJ04PzNLpuVtPY%3D"}]}
+etag: W/"1366a441241633232c75f11bf582fa83"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa152bc33cf22-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /brand-lock.svg
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: image/svg+xml
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=AYKHJfcUJVJ%2FauFjII2LfO37KwFZ60F0g31p6PEVlPj%2BErnnWun032Ng7Oy5SP4%2Fw8InMZp%2BtKxpMwqks3Kjmlq%2BDJbGRAYvk5P%2BWN5eNrWFucEA7aRXjHd2gDe%2FfrdnGL%2BR1NCbldQ%3D"}]}
+etag: W/"c09154c1a4c21f8b6b4c0acc898bc1fb"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa15378f1ac07-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /og/secure-by-design.jpg
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: image/jpeg
+content-length: 76924
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+etag: "2e24de83de6368192a8fb264758a720c"
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=K2Mp94V0vdHjcDp7BTavvAv5O%2B4KHAYWmIPFlkVRggFCKQq61BXiCr8bYJvT%2F4XCRbqxNqJMW6e9x5jbSLkEbKxxlmvP0GljL%2BrEBxBdzVoUJ1mHzY8Om3vPTD5cCs4VRIwpxodUWiw%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: a47aa153d9627af8-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /api/sign-in/providers
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: application/json
+cache-control: private, no-store
+strict-transport-security: max-age=31536000; includeSubDomains
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=B8Dakeyk%2BFSnSAciEUSS4rw15jgQlmKdtBELaOilP2aOY%2BZPh7cG6ZlJ%2F6IZCeqWhcKuOcNblGoG4nQ%2BQHSyeoRNCDFZmXIpT%2FF4qC6Dd5lq7d5gci9mHxELH5nCOniKw22idw0VysM%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1544e492c2d-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /.well-known/security.txt
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/plain; charset=utf-8
+cache-control: public, max-age=86400
+strict-transport-security: max-age=31536000; includeSubDomains
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=zy%2BA8lf6bncKu6UwuiKsG7Nb%2BThYDCgQd1I4iV%2BBo0haI6bH36RLEWxwmF9RoOfRdHieyYstCB%2BDiazhfG9sP%2F7Japd2bors%2FaLJszQwp9ahUEAzfGve45gjXpBxmkh%2FaTNjhRyHfAk%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa154994d22c6-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /.well-known/apple-app-site-association
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: application/json
+cache-control: public, max-age=3600
+strict-transport-security: max-age=31536000; includeSubDomains
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=cLGuPcue3I%2FALWRe7sHtgeCgGk%2BUDS9xDtGHmUk85gMCU510%2FHuPcoDDA5jhvnBBC2%2Ftz8bpkHEe2FSIVFVZC8HN6%2FTlNLGJdRCiyYhT6ibsdyUv9I6Pt6oK1HdHt8CHGaathbCQMlo%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa154fef9f9d4-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-store
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: no-referrer
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=MlNppod67S%2F0PfmAmxhGdOK80oDfzXU7TfWtgxiqv%2BO%2FKYpOipSew8MJiE%2FgKn%2Fin12SuHzQw0oEgSj5h8sWzPe1r1DLORtMct%2BwmihAm3ciB%2BGRbL9YwxziDKM08A9b0oH3F%2FAxrzo%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1554eb7eb2a-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /no-such-page-audit
+HTTP/2 404 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/html; charset=utf-8
+link: </_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch, Next-Url, X-Vinext-Interception-Context, X-Vinext-Mounted-Slots, X-Vinext-Rsc-Render-Mode
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ATFM4%2BMjmaza2ui8e7uCkv2l5DgyVd6HMwGzDwuOpGYpsF3BLtbnnRcFWZ9c82%2FSFYgasvQAvO15S5e8qabmrrstqlGYJKHOLshwq8NzKTMkfbEUMAJdx33Wp1ak26n1fX4sGEAj7vw%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa155981dac07-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/Icon-p31uH7n4.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=oWyUav8D4Gqhe1lX1aTaiB5SkrVoGzT%2B%2BvQQndTLHn0r3siRqToM%2B%2BLQ6nlwRxLY5L1%2B9cDPmM4vABdmXd3%2FWnwS7yayFNrwvJvsGX2RGKE%2FiCVvApPwxDN93o%2BU%2Fgar3X7zBvYcFhc%3D"}]}
+etag: W/"795edb8a6a11a46366ef1689bfb8a8ce"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1561b85fa96-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/app-elements-MmRVnLC5.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:58 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=fDLHzueCKsfGjnTapuRm56h0OOXnQKGpoF25QHJz6hyQs5wCkUOdNUKoSZKL%2BqzM87IoC4vGsUJwTi3dnE%2BvhxLI2PRvqgdE6zpVC1%2BuLEsZS2ClI8wDlGrAD8nkhAVce%2BDMGJqgwsQ%3D"}]}
+etag: W/"ff5acf0914a6fafe5da1b810ec1fe08a"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1569dc8eb24-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/app-rsc-cache-busting-DUXm4US3.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:59 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=F45E5YTD4x4PCsDFks%2F%2FlX792CnaDVgkU%2FLtkn9%2FbZAkMDIrWekZ7RojGbUqBuFj9HC4mAktlR97cLwXXbeOmG3OvXCrZWQpfUGcq90z19SxU34HgD2xSoZzsQ%2By7%2FLS4vkLLmQHOlI%3D"}]}
+etag: W/"d954b20dc8fa499f5b7f59dcca68f4a1"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa156ff71eb2c-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:59 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=piX73a0SUtLZM3qzfclXyqesH%2BBB2OJ30UM%2BLqK3I%2FTLJYYdv%2BgzVXJNMyXMW7Defow6QTOY1wIXCsOgm3l%2Ba9UhYs5YzH%2FjESDVjqOh%2FGBGiD5okPqEr7z9%2FeeOGM5DY9Hi01qUZLY%3D"}]}
+etag: W/"75555a52cbaeecb8138573b89c0ee0c3"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa157bef812a1-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/book-open-FcOBV2-M.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:59 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=2wz3NVkcWc9DWE1qk5QaEzyS6YGrVIbna791Rm5sEPRSZzABIi4s1UkfnrhOgyUiU6iMcpdtVUEDT3CANPaAJE%2BATxnK%2BfFQSZNcPL8KQ2dG9dQIuuy1Vdm3xHZqxJYryeCp1ZpP6s0%3D"}]}
+etag: W/"09863069aa54ac7242e428e079f2531c"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1580c70c6c6-SJC
+alt-svc: h3=":443"; ma=86400
+
+=== /_next/static/chunks/createLucideIcon-CAkK5FPT.js
+HTTP/2 200 
+date: Fri, 09 Oct 2026 04:26:59 GMT
+content-type: text/javascript
+cf-cache-status: HIT
+cache-control: public, max-age=0, must-revalidate
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+strict-transport-security: max-age=31536000; includeSubDomains
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=OjIm8OksA7afD8pPmE4snFCsnQmaKDTBSYwChgm1FOxSm5iRklAAuHSuY2m%2F0AKJ4wmoDbrKAQZb%2Bn0xDZr8selwhhXfh8eKBZhqprOUQ%2BD6t7iRUxWObl5KJDd4lbjb5mK5wnLmC1I%3D"}]}
+etag: W/"861fbb90812f1a1aa66cf51bc2e0fa6b"
+content-encoding: br
+server: cloudflare
+cf-ray: a47aa1585e317803-SJC
+alt-svc: h3=":443"; ma=86400
+

@@ -1,0 +1,16 @@
+== workers.dev host
+HTTP/2 404 
+date: Fri, 09 Oct 2026 04:27:29 GMT
+content-type: text/plain; charset=UTF-8
+content-length: 17
+cache-control: private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+expires: Thu, 01 Jan 1970 00:00:01 GMT
+referrer-policy: same-origin
+x-frame-options: SAMEORIGIN
+workers.dev /api/sign-in/providers -> 404
+== ChatGPT Sites hosts
+secure-by-design-monitoring-lab.wladozer.chatgpt.site -> 404  | <title>Not Found
+securebydesign.wladozer.chatgpt.site -> 404  | <title>Not Found
+secure-by-design.wladozer.chatgpt.site -> 404  | <title>Not Found
+securebydesigninc.wladozer.chatgpt.site -> 404  | <title>Not Found
+secure-by-design-website.wladozer.chatgpt.site -> 404  | <title>Not Found

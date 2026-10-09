@@ -1,0 +1,149 @@
+# Crawl 2026-10-09T04:27:03.861Z
+34 pages crawled, 0 not 200; sitemap 28; assets 79 (0 not 200); external 69 (2 failing); fragments 113 (73 missing ids)
+
+## Pages
+- 200 https://securebydesigninc.com/privacy | 190ms 56KB | title: Privacy policy | Secure By Design | desc: 110 | canon: https://securebydesigninc.com/privacy | og:image: y | h1: 1 | noalt: 0 | words 1193
+- 200 https://securebydesigninc.com/ | 268ms 49KB | title: Secure By Design — Cybersecurity Starts with Curiosity | desc: 129 | canon: https://securebydesigninc.com | og:image: y | h1: 1 | noalt: 0 | words 523
+- 200 https://securebydesigninc.com/training | 319ms 150KB | title: Training Library | Secure By Design | desc: 154 | canon: https://securebydesigninc.com/training | og:image: y | h1: 1 | noalt: 0 | words 1412
+- 200 https://securebydesigninc.com/inside-the-network | 397ms 167KB | title: Inside the Network | Secure By Design | desc: 241 | canon: https://securebydesigninc.com/inside-the-network | og:image: y | h1: 1 | noalt: 0 | words 3871
+- 200 https://securebydesigninc.com/training/dns-configuration | 46ms 68KB | title:  | desc: 181 | canon: https://securebydesigninc.com/training/dns-configuration | og:image: y | h1: 1 | noalt: 0 | words 663
+- 200 https://securebydesigninc.com/training/rmf/ | 65ms 4KB | title: Risk Management Framework, Body of Evidence & Authorization to Operate | Secure By Design | desc: 148 | canon: https://securebydesigninc.com/training/rmf/ | og:image: n | h1: 1 | noalt: 0 | words 129
+- 200 https://securebydesigninc.com/training/two-tier-pki | 87ms 80KB | title:  | desc: 208 | canon: https://securebydesigninc.com/training/two-tier-pki | og:image: y | h1: 1 | noalt: 0 | words 1021
+- 200 https://securebydesigninc.com/training/dc01-dc02/ | 139ms 1360KB | title: Build the identity foundation | Secure By Design | desc: 0 | canon: https://securebydesigninc.com/training/dc01-dc02/ | og:image: n | h1: 1 | noalt: 0 | words 242
+- 200 https://securebydesigninc.com/training/pki-services | 33ms 70KB | title:  | desc: 229 | canon: https://securebydesigninc.com/training/pki-services | og:image: y | h1: 1 | noalt: 0 | words 765
+- 200 https://securebydesigninc.com/training/harden-baseline | 56ms 75KB | title:  | desc: 225 | canon: https://securebydesigninc.com/training/harden-baseline | og:image: y | h1: 1 | noalt: 0 | words 771
+- 200 https://securebydesigninc.com/training/tiered-admin | 79ms 84KB | title:  | desc: 259 | canon: https://securebydesigninc.com/training/tiered-admin | og:image: y | h1: 1 | noalt: 0 | words 1005
+- 200 https://securebydesigninc.com/training/connect-segment | 111ms 83KB | title:  | desc: 223 | canon: https://securebydesigninc.com/training/connect-segment | og:image: y | h1: 1 | noalt: 0 | words 910
+- 200 https://securebydesigninc.com/training/patch-protect | 31ms 78KB | title:  | desc: 300 | canon: https://securebydesigninc.com/training/patch-protect | og:image: y | h1: 1 | noalt: 0 | words 832
+- 200 https://securebydesigninc.com/training/logging-pipeline | 44ms 76KB | title:  | desc: 273 | canon: https://securebydesigninc.com/training/logging-pipeline | og:image: y | h1: 1 | noalt: 0 | words 867
+- 200 https://securebydesigninc.com/training/business-services | 61ms 79KB | title:  | desc: 347 | canon: https://securebydesigninc.com/training/business-services | og:image: y | h1: 1 | noalt: 0 | words 941
+- 200 https://securebydesigninc.com/training/workstation-fleet | 69ms 88KB | title:  | desc: 285 | canon: https://securebydesigninc.com/training/workstation-fleet | og:image: y | h1: 1 | noalt: 0 | words 1083
+- 200 https://securebydesigninc.com/training/dns-configuration/checklist | 45ms 69KB | title:  | desc: 181 | canon: https://securebydesigninc.com/training/dns-configuration/checklist | og:image: y | h1: 1 | noalt: 0 | words 1033
+- 200 https://securebydesigninc.com/training/prove-recovery | 57ms 80KB | title:  | desc: 294 | canon: https://securebydesigninc.com/training/prove-recovery | og:image: y | h1: 1 | noalt: 0 | words 848
+- 200 https://securebydesigninc.com/training/two-tier-pki/checklist | 68ms 86KB | title:  | desc: 208 | canon: https://securebydesigninc.com/training/two-tier-pki/checklist | og:image: y | h1: 1 | noalt: 0 | words 1656
+- 200 https://securebydesigninc.com/training/harden-baseline/checklist | 89ms 80KB | title:  | desc: 225 | canon: https://securebydesigninc.com/training/harden-baseline/checklist | og:image: y | h1: 1 | noalt: 0 | words 1464
+- 200 https://securebydesigninc.com/training/logging-pipeline/checklist | 35ms 80KB | title:  | desc: 273 | canon: https://securebydesigninc.com/training/logging-pipeline/checklist | og:image: y | h1: 1 | noalt: 0 | words 1539
+- 200 https://securebydesigninc.com/training/pki-services/checklist | 57ms 72KB | title:  | desc: 229 | canon: https://securebydesigninc.com/training/pki-services/checklist | og:image: y | h1: 1 | noalt: 0 | words 1151
+- 200 https://securebydesigninc.com/training/connect-segment/checklist | 66ms 91KB | title:  | desc: 223 | canon: https://securebydesigninc.com/training/connect-segment/checklist | og:image: y | h1: 1 | noalt: 0 | words 2047
+- 200 https://securebydesigninc.com/training/tiered-admin/checklist | 80ms 98KB | title:  | desc: 259 | canon: https://securebydesigninc.com/training/tiered-admin/checklist | og:image: y | h1: 1 | noalt: 0 | words 2336
+- 200 https://securebydesigninc.com/training/business-services/checklist | 30ms 85KB | title:  | desc: 347 | canon: https://securebydesigninc.com/training/business-services/checklist | og:image: y | h1: 1 | noalt: 0 | words 1760
+- 200 https://securebydesigninc.com/training/workstation-fleet/checklist | 42ms 97KB | title:  | desc: 285 | canon: https://securebydesigninc.com/training/workstation-fleet/checklist | og:image: y | h1: 1 | noalt: 0 | words 2219
+- 200 https://securebydesigninc.com/training/prove-recovery/checklist | 62ms 88KB | title:  | desc: 294 | canon: https://securebydesigninc.com/training/prove-recovery/checklist | og:image: y | h1: 1 | noalt: 0 | words 1876
+- 200 https://securebydesigninc.com/training/patch-protect/checklist | 70ms 88KB | title:  | desc: 300 | canon: https://securebydesigninc.com/training/patch-protect/checklist | og:image: y | h1: 1 | noalt: 0 | words 1832
+- 200 https://securebydesigninc.com/training/rmf/index.html | 25ms 4KB | title: Risk Management Framework, Body of Evidence & Authorization to Operate | Secure By Design | desc: 148 | canon: https://securebydesigninc.com/training/rmf/ | og:image: n | h1: 1 | noalt: 0 | words 129
+- 200 https://securebydesigninc.com/inside-network-model/model.html | 42ms 13KB | title: Inside the Network | Secure By Design | desc: 0 | canon: - | og:image: n | h1: 1 | noalt: 0 | words 294
+- 200 https://securebydesigninc.com/my-progress | 48ms 49KB | title: My Account | Secure By Design | desc: 89 | canon: https://securebydesigninc.com/my-progress | og:image: y | h1: 1 | noalt: 0 | words 550
+- 200 https://securebydesigninc.com/training/dc01-dc02/index.html | 136ms 1360KB | title: Build the identity foundation | Secure By Design | desc: 0 | canon: https://securebydesigninc.com/training/dc01-dc02/ | og:image: n | h1: 1 | noalt: 0 | words 242
+- 200 https://securebydesigninc.com/inside-network-model/model | 30ms 13KB | title: Inside the Network | Secure By Design | desc: 0 | canon: - | og:image: n | h1: 1 | noalt: 0 | words 294
+- 200 https://securebydesigninc.com/training/dc01-dc02/notices.html | 75ms 4KB | title: Notices and permissions | Secure By Design | desc: 0 | canon: - | og:image: n | h1: 1 | noalt: 0 | words 191
+
+## Non-200 internal assets
+
+## External failing
+- 429  https://www.instagram.com/securebydesigninc/ from https://securebydesigninc.com/privacy, https://securebydesigninc.com/, https://securebydesigninc.com/training, https://securebydesigninc.com/inside-the-network, https://securebydesigninc.com/training/dns-configuration
+- 403  https://docs.redhat.com/en from https://securebydesigninc.com/training/patch-protect/checklist
+
+## Missing fragment ids
+- #delete-account on https://securebydesigninc.com/my-progress from https://securebydesigninc.com/privacy
+- #catalog on https://securebydesigninc.com/training/rmf/ from https://securebydesigninc.com/training/rmf/
+- #evidence on https://securebydesigninc.com/training/rmf/ from https://securebydesigninc.com/training/rmf/
+- #capstone on https://securebydesigninc.com/training/rmf/ from https://securebydesigninc.com/training/rmf/
+- #sources on https://securebydesigninc.com/training/rmf/ from https://securebydesigninc.com/training/rmf/
+- #process=trust on https://securebydesigninc.com/inside-the-network from https://securebydesigninc.com/training/two-tier-pki
+- #view=overview on https://securebydesigninc.com/inside-the-network from https://securebydesigninc.com/training/connect-segment
+- #process=logs on https://securebydesigninc.com/inside-the-network from https://securebydesigninc.com/training/logging-pipeline
+- #plan on https://securebydesigninc.com/training/dns-configuration from https://securebydesigninc.com/training/dns-configuration/checklist
+- #zones on https://securebydesigninc.com/training/dns-configuration from https://securebydesigninc.com/training/dns-configuration/checklist
+- #records on https://securebydesigninc.com/training/dns-configuration from https://securebydesigninc.com/training/dns-configuration/checklist
+- #verify on https://securebydesigninc.com/training/dns-configuration from https://securebydesigninc.com/training/dns-configuration/checklist
+- #troubleshoot on https://securebydesigninc.com/training/dns-configuration from https://securebydesigninc.com/training/dns-configuration/checklist
+- #design on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #root on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #request on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #sign on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #publish on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #validate on https://securebydesigninc.com/training/two-tier-pki from https://securebydesigninc.com/training/two-tier-pki/checklist
+- #ou-design on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #staging on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #baseline on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #apply on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #rescan on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #maintain on https://securebydesigninc.com/training/harden-baseline from https://securebydesigninc.com/training/harden-baseline/checklist
+- #design on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #auditing on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #collector on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #protect on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #analyze on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #prove on https://securebydesigninc.com/training/logging-pipeline from https://securebydesigninc.com/training/logging-pipeline/checklist
+- #publication on https://securebydesigninc.com/training/pki-services from https://securebydesigninc.com/training/pki-services/checklist
+- #publish-trust on https://securebydesigninc.com/training/pki-services from https://securebydesigninc.com/training/pki-services/checklist
+- #template-admin on https://securebydesigninc.com/training/pki-services from https://securebydesigninc.com/training/pki-services/checklist
+- #first-templates on https://securebydesigninc.com/training/pki-services from https://securebydesigninc.com/training/pki-services/checklist
+- #validate on https://securebydesigninc.com/training/pki-services from https://securebydesigninc.com/training/pki-services/checklist
+- #design on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #router on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #acls on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #time on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #prove on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #management on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #scan on https://securebydesigninc.com/training/connect-segment from https://securebydesigninc.com/training/connect-segment/checklist
+- #design on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #dhcp on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #admin-hosts on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #logon-restrictions on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #prove on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #scan on https://securebydesigninc.com/training/tiered-admin from https://securebydesigninc.com/training/tiered-admin/checklist
+- #design on https://securebydesigninc.com/training/business-services from https://securebydesigninc.com/training/business-services/checklist
+- #fileserver on https://securebydesigninc.com/training/business-services from https://securebydesigninc.com/training/business-services/checklist
+- #database on https://securebydesigninc.com/training/business-services from https://securebydesigninc.com/training/business-services/checklist
+- #apps-web on https://securebydesigninc.com/training/business-services from https://securebydesigninc.com/training/business-services/checklist
+- #prove-scan on https://securebydesigninc.com/training/business-services from https://securebydesigninc.com/training/business-services/checklist
+- #prepare on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #pilot on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #laps on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #certificates on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #nac on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #scale on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #scan on https://securebydesigninc.com/training/workstation-fleet from https://securebydesigninc.com/training/workstation-fleet/checklist
+- #requirements on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #directory on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #trust-state on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #offline-copies on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #rehearse on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #record on https://securebydesigninc.com/training/prove-recovery from https://securebydesigninc.com/training/prove-recovery/checklist
+- #design on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+- #wsus on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+- #repo on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+- #mgmt on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+- #epo on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+- #nessus on https://securebydesigninc.com/training/patch-protect from https://securebydesigninc.com/training/patch-protect/checklist
+
+## Expectations
+- {"kind":"redirect","from":"/about","expect":"/#about","hops":[{"url":"https://securebydesigninc.com/about","status":308},{"url":"https://securebydesigninc.com/#about","status":200}]}
+- {"kind":"redirect","from":"/account","expect":"/my-progress","hops":[{"url":"https://securebydesigninc.com/account","status":307},{"url":"https://securebydesigninc.com/my-progress#account","status":200}]}
+- {"kind":"redirect","from":"/memberships","expect":"/my-progress#memberships","hops":[{"url":"https://securebydesigninc.com/memberships","status":308},{"url":"https://securebydesigninc.com/my-progress#memberships","status":200}]}
+- {"kind":"redirect","from":"/videos","expect":"/training","hops":[{"url":"https://securebydesigninc.com/videos","status":308},{"url":"https://securebydesigninc.com/training","status":200}]}
+- {"kind":"redirect","from":"/learning-library","expect":"/training","hops":[{"url":"https://securebydesigninc.com/learning-library","status":308},{"url":"https://securebydesigninc.com/training","status":200}]}
+- {"kind":"redirect","from":"/rmf-series/system","expect":null,"hops":[{"url":"https://securebydesigninc.com/rmf-series/system","status":404}]}
+- {"kind":"redirect","from":"/career-explorer","expect":null,"hops":[{"url":"https://securebydesigninc.com/career-explorer","status":404}]}
+- {"kind":"redirect","from":"/training/dc01-dc02/index.html","expect":"/training/dc01-dc02/","hops":[{"url":"https://securebydesigninc.com/training/dc01-dc02/index.html","status":307},{"url":"https://securebydesigninc.com/training/dc01-dc02/","status":200}]}
+- {"kind":"redirect","from":"/training/rmf/index.html","expect":"/training/rmf/","hops":[{"url":"https://securebydesigninc.com/training/rmf/index.html","status":307},{"url":"https://securebydesigninc.com/training/rmf/","status":200}]}
+- {"kind":"redirect","from":"/.well-known/security.txt","expect":null,"hops":[{"url":"https://securebydesigninc.com/.well-known/security.txt","status":200}]}
+- {"kind":"redirect","from":"/apple-app-site-association","expect":null,"hops":[{"url":"https://securebydesigninc.com/apple-app-site-association","status":200}]}
+- {"kind":"status","path":"/blog","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/blogs","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/rmf-series","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/blog/what-is-active-directory","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/cyber-range","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/how-to","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/guides-and-labs","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/careers","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/career-goals","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/resources","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/resource-options","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"status","path":"/learning-library","status":308,"location":"/training","title":"","h1":""}
+- {"kind":"status","path":"/audit-missing-page-1791520023119","status":404,"location":null,"title":"Secure By Design — Cybersecurity & System Administration","h1":"This page isn’t here."}
+- {"kind":"host","from":"http://securebydesigninc.com/","hops":[{"url":"http://securebydesigninc.com/","status":301},{"url":"https://securebydesigninc.com/","status":200}],"finalStatus":200}
+- {"kind":"host","from":"http://www.securebydesigninc.com/","hops":[{"url":"http://www.securebydesigninc.com/","status":301},{"url":"https://www.securebydesigninc.com/","status":301},{"url":"https://securebydesigninc.com/","status":200}],"finalStatus":200}
+- {"kind":"host","from":"https://www.securebydesigninc.com/training?x=1","hops":[{"url":"https://www.securebydesigninc.com/training?x=1","status":301},{"url":"https://securebydesigninc.com/training?x=1","status":200}],"finalStatus":200}
+- {"kind":"host","from":"https://secure-by-design-website.securebydesign.workers.dev/","hops":[{"url":"https://secure-by-design-website.securebydesign.workers.dev/","status":404}],"finalStatus":404}

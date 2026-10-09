@@ -1,0 +1,236 @@
+{
+ "base": "https://securebydesigninc.com",
+ "results": [
+  {
+   "path": "/",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/inside-the-network",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/privacy",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/dc01-dc02/",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/rmf/",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/dns-configuration",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/two-tier-pki",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/harden-baseline",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/connect-segment",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/pki-services",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/tiered-admin",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/logging-pipeline",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/workstation-fleet",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/patch-protect",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/business-services",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/prove-recovery",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/dns-configuration/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/two-tier-pki/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/harden-baseline/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/connect-segment/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/pki-services/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/tiered-admin/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/logging-pipeline/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/workstation-fleet/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/patch-protect/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/business-services/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/training/prove-recovery/checklist",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/my-progress",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/account?returnTo=%2Ftraining",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/app-sign-in",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/inside-network-model/model.html",
+   "status": 200,
+   "problems": [],
+   "notes": []
+  },
+  {
+   "path": "/does-not-exist",
+   "status": 404,
+   "problems": [],
+   "notes": []
+  }
+ ],
+ "backLinks": [
+  "/training/dns-configuration -> /training ok",
+  "/training/dns-configuration/checklist -> /training/dns-configuration ok"
+ ],
+ "share": [
+  "browser /: title in head (\"Secure By Design — Cybersecurity Starts with Curiosity\"), description in head, og:image in head, canonical in head",
+  "browser /training/dns-configuration: title in body (\"Configure DNS | Secure By Design\"), description not in head, og:image in body, canonical not in head",
+  "browser /training/dns-configuration/checklist: title in body (\"Configure DNS — configuration checklist | Secure By Design\"), description not in head, og:image in body, canonical not in head",
+  "Googlebot /: title in head (\"Secure By Design — Cybersecurity Starts with Curiosity\"), description in head, og:image in head, canonical in head",
+  "Googlebot /training/dns-configuration: title in body (\"Configure DNS | Secure By Design\"), description not in head, og:image in body, canonical not in head",
+  "Googlebot /training/dns-configuration/checklist: title in body (\"Configure DNS — configuration checklist | Secure By Design\"), description not in head, og:image in body, canonical not in head",
+  "facebookexternalhit /: title in head (\"Secure By Design — Cybersecurity Starts with Curiosity\"), description in head, og:image in head, canonical in head",
+  "facebookexternalhit /training/dns-configuration: title in head (\"Configure DNS | Secure By Design\"), description in head, og:image in head, canonical in head",
+  "facebookexternalhit /training/dns-configuration/checklist: title in head (\"Configure DNS — configuration checklist | Secure By Design\"), description in head, og:image in head, canonical in head",
+  "Slackbot /: title in head (\"Secure By Design — Cybersecurity Starts with Curiosity\"), description in head, og:image in head, canonical in head",
+  "Slackbot /training/dns-configuration: title in head (\"Configure DNS | Secure By Design\"), description in head, og:image in head, canonical in head",
+  "Slackbot /training/dns-configuration/checklist: title in head (\"Configure DNS — configuration checklist | Secure By Design\"), description in head, og:image in head, canonical in head"
+ ],
+ "server": [
+  "ok owner page sends visitors to sign in: 302 https://securebydesigninc.com/my-progress?returnTo=%2Fcareer-records#account",
+  "ok forged ChatGPT identity is ignored: 302 https://securebydesigninc.com/my-progress?returnTo=%2Fcareer-records#account",
+  "ok /api/career-submissions is closed: 410 ",
+  "ok /api/community-contributions is closed: 410 ",
+  "ok /api/resource-signups is closed: 410 ",
+  "ok security.txt: 200 ",
+  "ok /.well-known/security.txt: 200 ",
+  "ok apple-app-site-association: 200 ",
+  "ok app sign-in callback page: 200 ",
+  "ok favicon.ico: 200 ",
+  "ok share picture: 200 ",
+  "ok logo size under 20 KB: 200 "
+ ],
+ "analytics": "GET static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920 200 || POST securebydesigninc.com/cdn-cgi/rum 204"
+}

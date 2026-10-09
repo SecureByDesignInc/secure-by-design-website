@@ -1,0 +1,68 @@
+== securebydesigninc.com A
+172.67.171.63
+104.21.29.17
+== securebydesigninc.com AAAA
+2606:4700:3031::ac43:ab3f
+2606:4700:3031::6815:1d11
+== securebydesigninc.com NS
+benedict.ns.cloudflare.com.
+desi.ns.cloudflare.com.
+== securebydesigninc.com MX
+10 mx.siteprotect.com.
+== securebydesigninc.com TXT
+"v=spf1 include:mfg.siteprotect.com ~all"
+== securebydesigninc.com CAA
+== securebydesigninc.com SOA
+benedict.ns.cloudflare.com. dns.cloudflare.com. 2416997338 10000 2400 604800 1800
+== www
+104.21.29.17
+172.67.171.63
+== _dmarc.securebydesigninc.com
+TXT: "v=DMARC1; p=none; rua=mailto:05002d810e8549a8a6cd91ac516f754a@dmarc-reports.cloudflare.net" 
+MX: 
+CNAME: 
+== notify.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== send.notify.securebydesigninc.com
+TXT: send.forge.rmta.net. "v=spf1 ip4:52.3.252.119 ip4:44.222.39.36 ip4:199.249.231.0/24 ~all" 
+MX: send.forge.rmta.net. 10 feedback.forge.rmta.net. 
+CNAME: send.forge.rmta.net. 
+== _dmarc.notify.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== resend._domainkey.notify.securebydesigninc.com
+TXT: "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDn26rDNgFxwCZ0GnHHFD2+P8RQgJbQV4b/d8tVjwbBVi8r8pZIFGO6+r8hf/xsOIY0bUs0u0WcElz41U3iSlWq65vcTje+IaiodEohV98hPYQZ8lN6wRg33v2YECLnjshQNMJm+4fNB/URMFafxo/uCehouxbXkeum7brHFV4rBwIDAQAB" 
+MX: 
+CNAME: 
+== resend._domainkey.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== _mta-sts.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== mta-sts.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== _smtp._tls.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== default._bimi.securebydesigninc.com
+TXT: 
+MX: 
+CNAME: 
+== DKIM selectors tried
+resend._domainkey.notify.securebydesigninc.com => "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDn26rDNgFxwCZ0GnHHFD2+P8RQgJbQV4b/d8tVjwbBVi8r8pZ...
+== DNSSEC DS (parent)
+== DNSKEY
+256 3 13 oJMRESz5E4gYzS/q6XDrvU1qMPYIjCWzJaOau8XNEZeqCYKD5ar
+257 3 13 mdsswUyr3DPW132mOi8V9xESWE8jTo0dxCjjnopKl+GqJxpVXck
+== AD flag via 1.1.1.1
+;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+; EDNS: version: 0, flags: do; udp: 1232

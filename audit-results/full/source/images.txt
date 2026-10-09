@@ -1,0 +1,26 @@
+== images in public (bytes, dimensions)
+76924 public/og/secure-by-design.jpg 1x1
+75786 public/partners/tenable-light.svg 
+75681 public/partners/tenable.svg 
+34087 public/apple-touch-icon.png 180 x 180
+25094 public/training/dc01-dc02/workbook-cover.webp 612x792
+10805 public/brand-lock.svg 
+10804 public/app-stores/app-store.svg 
+8546 public/favicon.svg 
+4904 public/app-stores/google-play.png 646 x 250
+2968 public/social/instagram-color.svg 
+2783 public/partners/red-hat-light.svg 
+2459 public/partners/red-hat.svg 
+2116 public/social/instagram-sbd.svg 
+2101 public/social/instagram.svg 
+1814 public/social/tiktok-color.svg 
+1389 public/social/discord-sbd.svg 
+1374 public/social/discord.svg 
+945 public/social/discord-color.svg 
+837 public/social/github-sbd.svg 
+722 public/social/tiktok-sbd.svg 
+707 public/social/tiktok.svg 
+513 public/social/youtube-color.svg 
+474 public/social/youtube-sbd.svg 
+459 public/social/youtube.svg 
+252 public/social/x.svg 

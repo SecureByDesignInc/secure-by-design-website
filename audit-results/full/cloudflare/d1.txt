@@ -1,0 +1,26 @@
+== tables and row counts
+app_email_enrollments: 0
+career_notifications: 0
+career_records: 0
+career_submission_limits: 0
+community_contribution_limits: 0
+community_contributions: 0
+community_memberships: 1
+community_notifications: 0
+d1_migrations: 12
+membership_waitlist: 0
+reader_accounts: 1
+reader_auth_flows: 1
+reader_auth_limits: 4
+reader_bookmarks: 0
+reader_challenges: 0
+reader_identities: 0
+reader_learning_activity: 0
+reader_passkeys: 0
+reader_profiles: 0
+reader_progress: 0
+reader_sessions: 1
+resource_signup_limits: 0
+resource_subscribers: 0
+== applied migrations
+0000_luxuriant_mandrill.sql 0001_windy_mister_sinister.sql 0002_wakeful_titanium_man.sql 0003_nosy_gamma_corps.sql 0004_round_human_cannonball.sql 0005_spooky_obadiah_stane.sql 0006_powerful_raider.sql 0007_ordinary_chronomancer.sql 0008_third_marvel_apes.sql 0009_amused_thunderbird.sql 0010_founding_waitlist.sql 0011_sign_in_methods.sql 
