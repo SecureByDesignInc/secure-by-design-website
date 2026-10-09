@@ -4,6 +4,7 @@ import { writeFileSync } from 'node:fs';
 import { inventory } from '../public/inside-network-model/inventory.js';
 import { vlans, buildArchitectureNodes, additionalControls } from '../public/inside-network-model/architecture.js';
 import { scenarios, whatIfs, technical, protocols } from '../public/inside-network-model/technical.js';
+import { locationText, hosts, rooms, racks } from '../public/inside-network-model/data-center-layout.js';
 
 const controls = { ...inventory.controls, ...additionalControls };
 const nodes = buildArchitectureNodes(inventory.nodes);
@@ -29,6 +30,7 @@ const systems = order.map(id => {
     role: node.role,
     segment: vlan ? `VLAN ${vlan.number} · ${vlan.name}` : 'Offline · not domain-joined',
     address: node.address ?? 'No network address (offline)',
+    location: locationText(id),
     purpose: detail.purpose,
     services: detail.services.map(({ name, port, note }) => ({ name, port, note: note ?? '' })),
     controls: node.controls.map(control),
@@ -65,6 +67,11 @@ const whatIfText = whatIfs.map(sequenceText);
 const reference = protocols.map(([service, transport, meaning]) => ({ service, transport, meaning }));
 
 const offline = systems.filter(system => !vlanFor(system.id)).map(system => system.name);
-const text = { systems, segments, processes, whatIfs: whatIfText, protocols: reference, offline, controlCount: Object.keys(controls).length };
+// The building and its hosting, from the same layout the 3D room uses.
+const building = {
+  rooms: rooms.filter(room => room.name).map(room => ({ name: room.name[0] + room.name.slice(1).toLowerCase(), detail: room.sub })),
+  hosts: hosts.map(host => ({ name: host.name, rack: racks.find(rack => rack.id === host.rack).code, systems: host.vms.map(name) })),
+};
+const text = { building, systems, segments, processes, whatIfs: whatIfText, protocols: reference, offline, controlCount: Object.keys(controls).length };
 writeFileSync(new URL('../content/inside-the-network.json', import.meta.url), JSON.stringify(text, null, 2) + '\n');
 console.log(`Prepared Inside the Network text: ${systems.length} systems, ${segments.length} VLANs, ${processes.length} traffic processes.`);

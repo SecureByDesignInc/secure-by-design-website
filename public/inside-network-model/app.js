@@ -9,22 +9,16 @@ import {trafficRules,securityPractices} from './security.js';
 import {createNetworkScene} from './scene.js';
 import {vlans,buildArchitectureNodes,additionalControls,facilities,families} from './architecture.js';
 import {mountSecurityDesign} from './security-ui.js';
-import {dataCenterLayout} from './data-center-layout.js';
+import {locationText} from './data-center-layout.js';
 import {createRelationshipView} from './relationship-scene.js';
 import {relatedControlIds} from './relationship-model.js';
 import {mountRelationshipExplorer} from './relationship-explorer.js';
 const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nodes=buildArchitectureNodes(inventory.nodes);
-const roomLayout=dataCenterLayout(vlans);
-function roomLocation(id){
- const zone=roomLayout.find(zone=>zone.ids.includes(id));
- if(!zone)return 'Offline root cabinet';
- if(zone.kind==='rack')return `${zone.rack} · Server position ${zone.ids.indexOf(id)+1}`;
- return zone.kind==='desks'?'Administration work area':'Windows 11 workstation area';
-}
+const roomLocation=id=>locationText(id);
 const systemOrder=[...vlans.flatMap(v=>v.ids),...nodes.filter(n=>!vlans.some(v=>v.ids.includes(n.id))).map(n=>n.id)];
 Object.assign(inventory.controls,additionalControls);
-let current=0,stepIndex=0,elapsed=0,speed=1,stepSeconds=10,selected='dc1',scene,relationships,relationshipBrowser,recorder,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,moving=playing,view='',ready=false,policy=null,connectionsOn=false,layout='physical';
+let current=0,stepIndex=0,elapsed=0,speed=1,stepSeconds=10,selected='dc1',scene,relationships,relationshipBrowser,recorder,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,moving=playing,view='',ready=false,policy=null,connectionsOn=false,layout='logical';
 const getNode=id=>nodes.find(n=>n.id===id),name=id=>getNode(id)?.name||facilities.find(f=>f.id===id)?.name||'Authorized operator';
 const sourceLink=id=>sources[id]?`<a class="source-link" target="_blank" rel="noopener noreferrer" href="${sources[id][1]}">${esc(sources[id][0])}</a>`:'';
 const dependencies=ids=>`<div class="dependency-list">${ids.map(id=>`<button data-system="${id}"><span>${esc(name(id))}</span><small>Inspect</small></button>`).join('')}</div>`;
@@ -33,7 +27,7 @@ const vlanOf=id=>vlans.find(v=>v.ids.includes(id))?.id;
 const sameVlan=step=>!!step.from&&vlanOf(step.from)===vlanOf(step.to);
 function motionLegend(step,p){
  if(p.kind==='manual')return step.walk?'The amber floor path is a person carrying approved media. It is not a network connection.':'Highlights mark a manual, offline process.';
- const local=sameVlan(step),route=layout==='logical'?'travel from the VLAN island to the core switch':'rise into the overhead cable trays and ride them to the core switch';
+ const local=sameVlan(step),route='rise into the overhead cable trays and ride them to the core switch';
  return [
   p.kind==='pending'?(local?'Requests stop at an amber gate at the destination’s host firewall: the rule is written but blocked until validated. Traffic inside one VLAN never reaches the core.':`Requests ${route} and stop at an amber gate: the rule is written but blocked until validated.`)
   :p.kind==='deny'?(local?'Requests stop at a red gate at the destination’s host firewall and are dropped with a red flash. Traffic inside one VLAN never reaches the core.':`Requests ${route}, pause for the rule check, and are dropped with a red flash: no exception matches, so default deny applies.`)
@@ -164,7 +158,7 @@ function showPacketCard(info){
 // ---- Room and logical views; standard and cinematic looks ----
 function onView(next,morphing){
  layout=next;$('viewToggle').setAttribute('aria-pressed',String(next==='logical'));
- if(morphing){$('announce').textContent=next==='logical'?'Logical view: each VLAN is an island around the core switch. The offline area stays apart.':'Room view: the equipment in the data center.';publish(view);if(!$('flowPanel').hidden)renderFlow();}
+ if(morphing){$('announce').textContent=next==='logical'?'Topology shown: each VLAN is a platform around the core switch, floating over the building. The offline area stays apart.':'Topology hidden: the building only.';publish(view);if(!$('flowPanel').hidden)renderFlow();}
 }
 const lookKey='sbd-inside-network-look';
 function setLook(name,{save=true}={}){
@@ -192,17 +186,17 @@ function bindControls(root){root.querySelectorAll('[data-control]').forEach(b=>b
 function setProcessMode(on){document.body.classList.toggle('process-active',on);$('flowTab').hidden=!on;$('stepSystems').hidden=!on;document.querySelector('.flow-caption').classList.remove('step-complete');if(!on)scene?.setDescription?.('');if(!on)document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-current','false'));}
 function openTraffic(){const section=$('trafficSection');if(!section.open)section.open=true;}
 function architectureView(html,ids=[],relationship={type:'overview'}){document.querySelector('.flow-caption').classList.remove('is-step');setProcessMode(false);if(recorder?.active)recorder.stop(true);clearMarkers();setPlaying(false);tab('architecture');$('architectureContent').innerHTML=html;bindSystems($('architectureContent'));bindControls($('architectureContent'));scene?.highlight(ids);showRelationship(relationship);$('stageKind').textContent='NETWORK ARCHITECTURE';$('stageProtocol').textContent='Internal uplinks · permitted flows require explicit rules';$('announce').textContent=$('architectureContent').querySelector('h2')?.textContent||'Architecture selected';}
-function inspectVlan(id){const v=vlans.find(v=>v.id===id);if(!v)return;architectureView(`<span class="eyebrow">VIRTUAL LOCAL AREA NETWORK ${v.number}</span><h2>${esc(v.name)}</h2><div class="address-card"><strong>${v.subnet}</strong></div><p>${esc(v.boundary)}</p><h3>Systems & addresses</h3>${v.ids.map(id=>`<button class="asset-row" data-system="${id}"><strong>${esc(name(id))}</strong><span>${esc(getNode(id).role)}</span><code>${getNode(id).address}</code></button>`).join('')}<h3>Key functions</h3><ul>${v.functions.map(f=>`<li>${esc(f)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(v.controls)}`,v.ids,{type:'vlan',id});$('sceneTitle').textContent=`VLAN ${v.number} · ${v.name}`;$('sceneCaption').textContent=v.subnet;$('stageFlow').textContent=v.boundary;$('vlanLegend').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vlan===id)));publish(`vlan=${v.number}`);}
+function inspectVlan(id){const v=vlans.find(v=>v.id===id);if(!v)return;architectureView(`<span class="eyebrow">VIRTUAL LOCAL AREA NETWORK ${v.number}</span><h2>${esc(v.name)}</h2><div class="address-card"><strong>${v.subnet}</strong></div><p>${esc(v.boundary)}</p><h3>Systems & addresses</h3>${v.ids.map(id=>`<button class="asset-row" data-system="${id}"><strong>${esc(name(id))}</strong><span>${esc(getNode(id).role)}</span><code>${getNode(id).address}</code></button>`).join('')}<h3>Key functions</h3><ul>${v.functions.map(f=>`<li>${esc(f)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(v.controls)}`,v.ids,{type:'vlan',id});$('sceneTitle').textContent=`VLAN ${v.number} · ${v.name}`;$('sceneCaption').textContent=v.subnet;$('stageFlow').textContent=v.boundary;publish(`vlan=${v.number}`);}
 function inspectControl(id){const c=inventory.controls[id];if(!c)return;const matched=nodes.filter(n=>n.controls.includes(id)||vlans.find(v=>v.ids.includes(n.id))?.controls.includes(id));const supporting=facilities.filter(f=>f.controls.includes(id));architectureView(`<span class="eyebrow">NIST SP 800-53 · REVISION 5</span><h2>${esc(id)} · ${esc(c[0])}</h2><p>${esc(c[1])}</p><h3>Related systems in this design</h3>${matched.length?dependencies(matched.map(n=>n.id)):'<p>This is a governance or process responsibility, not an individual server function.</p>'}${supporting.map(f=>`<h3>${esc(f.name)}</h3><p>${esc(f.detail)}</p>`).join('')}<h3>Control implementation</h3><p>Document the selected requirement, responsible owner, implementation, and supporting evidence.</p>${courseBlock(['rmf'],'Prepare it for authorization')}`,[...matched.map(n=>n.id),...supporting.map(f=>f.id)],{type:'control',id});$('sceneTitle').textContent=`${id} · ${c[0]}`;$('sceneCaption').textContent='Systems and processes associated with this control.';$('stageFlow').textContent=c[0];publish(`control=${encodeURIComponent(id)}`);}
 function inspectFacility(id){const f=facilities.find(f=>f.id===id);architectureView(`<span class="eyebrow">ARCHITECTURE & OPERATIONS</span><h2>${esc(f.name)}</h2><p>${esc(f.detail)}</p><ul>${f.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul><h3>Control relationships</h3>${controlChips(f.controls)}`,[id],{type:'facility',id});$('sceneTitle').textContent=f.name;$('sceneCaption').textContent=id==='core'?'Layer 3 routing · allow by exception':'Human-controlled process · no live network link';$('stageFlow').textContent=f.name;$('stageProtocol').textContent=id==='core'?'Internal switching and routing':'Controlled offline operations';publish(`facility=${id}`);}
-function architectureOverview(){architectureView(`<span class="eyebrow">AIR-GAPPED ENTERPRISE</span><h2>Architecture at a glance</h2><p>Explore server cabinets, a two-switch network rack, administration desks, and the workstation area. Select equipment to see the services it represents and follow a request through the room.</p><div class="address-card"><span>INTERNAL DOMAIN</span><strong>sbd.test</strong></div><h3>Boundary principles</h3><ul><li>No internet, cloud services, or external network connection.</li><li>Approved removable media under human control.</li><li>Offline, non-domain-joined root CA.</li><li>Three scoped administration hosts with MFA and session audit requirements.</li><li>One server each for Splunk, Tenable/Nessus, and Trellix ePO/DLP.</li><li>Default-deny policy, host isolation, and protected recovery procedures.</li></ul><details><summary>Equipment and hosting</summary><p>The room uses unbranded equipment to represent the existing systems. Rack positions organize this view; hardware makes, models, and virtualization host assignments have not been specified.</p></details><h3>Core controls</h3>${controlChips(['SC-7','AC-4','AC-6','MP-7','CA-7'])}`);$('sceneTitle').textContent='Inside the data center.';$('sceneCaption').textContent='Server racks, network equipment, and separate offline operations.';$('stageFlow').textContent='Select a segment or device to explore';$('vlanLegend').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));publish('view=overview');}
+function architectureOverview(){architectureView(`<span class="eyebrow">AIR-GAPPED ENTERPRISE</span><h2>Architecture at a glance</h2><p>A small air-gapped enterprise: a locked server room, an administration room, an office of 50 users, and a media room with an offline vault, all off one corridor. The network topology floats above the building; dashed tethers show where each system physically lives. Select a segment, a room, or a device.</p><div class="address-card"><span>INTERNAL DOMAIN</span><strong>sbd.test</strong></div><h3>Boundary principles</h3><ul><li>No internet, cloud services, or external network connection.</li><li>Approved removable media under human control.</li><li>Offline, non-domain-joined root CA.</li><li>Three scoped administration hosts with MFA and session audit requirements.</li><li>One server each for Splunk, Tenable/Nessus, and Trellix ePO/DLP.</li><li>Default-deny policy, host isolation, and protected recovery procedures.</li></ul><details><summary>Equipment and hosting</summary><p>Equipment is vendor neutral. Servers run as virtual machines on six hypervisor hosts (SBD-HV01–06) in racks R02–R04; the domain controllers and CAs have their own hosts, and the two domain controllers sit on different hosts. Servers that talk within one VLAN share a host, so that traffic stays on its virtual switch. The reference clock (SBD-TIME01) is a rack appliance in R01 beside the core switches. Two rack rows share a contained cold aisle with in-row cooling and UPS power.</p></details><h3>Core controls</h3>${controlChips(['SC-7','AC-4','AC-6','MP-7','CA-7'])}`);$('sceneTitle').textContent='Inside the network.';$('sceneCaption').textContent='The building below, its network topology above. Select a segment, a room, or a device.';$('stageFlow').textContent='Select a segment or device to explore';publish('view=overview');}
 function renderSteps(){
  const s=sequences[current];$('steps').style.setProperty('--step-count',s.steps.length);
  const stepLabel=step=>{const k=stepPolicy(step).kind;return k==='manual'?'OFFLINE PROCESS':k==='pending'?'BLOCKED · PENDING':k==='deny'?'DENIED':k==='unreachable'?'NO RESPONSE':k==='rejected'?'REJECTED':esc(step.protocol.split(' · ')[0]);};
  $('steps').innerHTML=s.steps.map((step,i)=>`<button data-step="${i}" aria-current="${i===stepIndex?'step':'false'}"><span class="step-number">${String(i+1).padStart(2,'0')}</span><span><strong>${esc(step.short)}</strong><small>${stepLabel(step)}</small></span><i class="step-progress"></i></button>`).join('');
  $('steps').querySelectorAll('button').forEach(b=>b.onclick=()=>{endRecording();setPlaying(false);changeStep(Number(b.dataset.step));});
 }
-function clearMarkers(){document.querySelectorAll('#vlanLegend button').forEach(b=>b.setAttribute('aria-pressed','false'));}
+function clearMarkers(){}
 function changeStep(index){
  clearMarkers();
  const s=sequences[current],next=(index+s.steps.length)%s.steps.length;if(recorder?.beforeStep(next)===false)return;stepIndex=next;elapsed=0;document.querySelector('.flow-caption').classList.remove('step-complete');const step=s.steps[stepIndex];policy=stepPolicy(step);
@@ -277,17 +271,13 @@ $('sourceLinks').innerHTML=Object.values(sources).map(([name,url])=>`<li><a href
 $('protocolRows').innerHTML=protocols.map(([service,transport,meaning,source])=>`<tr><td>${esc(service)}</td><td>${esc(transport)}</td><td>${esc(meaning)}${sourceLink(source)}</td></tr>`).join('');
 $('reference').onclick=()=>$('referenceDialog').showModal();
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
-$('vlanLegend').innerHTML=vlans.map(v=>`<button data-vlan="${v.id}" aria-pressed="false" style="--vlan-color:${v.color}"><b>VLAN ${v.number}</b><span>${esc(v.name)}</span><code>${v.subnet}</code></button>`).join('');
-$('vlanCount').textContent=`${vlans.length} VLANs`;
-$('vlanLegend').querySelectorAll('button').forEach(b=>b.onclick=()=>{inspectVlan(b.dataset.vlan);$('vlanPanel').open=false;$('vlanToggle').focus();});
-$('vlanPanel').addEventListener('keydown',event=>{if(event.key==='Escape'&&$('vlanPanel').open){event.stopPropagation();$('vlanPanel').open=false;$('vlanToggle').focus();}});
 function inspectFamily(family){if(!family){architectureOverview();return;}const ids=Object.keys(inventory.controls).filter(id=>id.startsWith(family+'-'));architectureView(`<span class="eyebrow">CONTROL FAMILY · REVISION 5</span><h2>${esc(families.find(f=>f[0]===family)[1])}</h2><p>Select a control to highlight its related systems and processes.</p>${ids.map(id=>`<div class="family-control">${controlChips([id])}<p>${esc(inventory.controls[id][0])}</p></div>`).join('')}`,relatedControlIds(family,{family:true}),{type:'family',id:family});$('sceneTitle').textContent=`${family} · Control relationships`;$('sceneCaption').textContent='Systems, processes, and control relationships.';$('stageFlow').textContent='Explore a control in the inspector';}
-relationshipBrowser=mountRelationshipExplorer($('relationshipView'),{facilities,families,onOpen:()=>setPlaying(false),onSelect:choice=>{if(choice.type==='family')inspectFamily(choice.id);else if(choice.type==='security')security.overview();else inspectFacility(choice.id);}});
+relationshipBrowser=mountRelationshipExplorer($('relationshipView'),{facilities,families,vlans,onOpen:()=>setPlaying(false),onSelect:choice=>{if(choice.type==='vlan')inspectVlan(choice.id);else if(choice.type==='family')inspectFamily(choice.id);else if(choice.type==='security')security.overview();else inspectFacility(choice.id);}});
 relationships=createRelationshipView($('relationshipView'),{onSelect:selectRelationship,onMotion:setMotion,motion:moving});
 renderSystem();changeScenario(0);setMotion(moving);setPlaying(playing);
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{if(event.matches)setMotion(false);});
 window.addEventListener('pagehide',event=>{if(!event.persisted)relationships?.dispose();});
-try{scene=createNetworkScene($('viewport'),nodes,inspect,()=>{if(!recorder?.active)setPlaying(false);},{onHover:showHoverTip,onPacket:showPacketCard,onView});}catch(e){console.error(e);$('loading').hidden=false;$('loading').innerHTML='<strong>3D graphics unavailable</strong><span>Use a browser with WebGL 2 and hardware acceleration.</span><span>All technical explanations remain available.</span>';}
+try{scene=createNetworkScene($('viewport'),nodes,inspect,()=>{if(!recorder?.active)setPlaying(false);},{onHover:showHoverTip,onPacket:showPacketCard,onView,onVlan:id=>inspectVlan(id)});}catch(e){console.error(e);$('loading').hidden=false;$('loading').innerHTML='<strong>3D graphics unavailable</strong><span>Use a browser with WebGL 2 and hardware acceleration.</span><span>All technical explanations remain available.</span>';}
 // Inside the Network opens on the architecture explorer; traffic walkthroughs are optional, further down.
 architectureOverview();
 // Automated browser checks open the model with ?qa to reach the scene; nothing else uses this.
@@ -312,8 +302,8 @@ $('export').onclick=async()=>{
 };
 
 // ---- Shareable links: #process=web&step=2, #system=dc1, #vlan=40, #control=SC-7 ----
-// The logical layout travels with the link: #process=web&step=2&layout=logical
-const withLayout=hash=>layout==='logical'?(hash?`${hash}&layout=logical`:'layout=logical'):hash;
+// A hidden topology layer travels with the link: #process=web&step=2&topology=off (older layout=logical links show it)
+const withLayout=hash=>layout==='physical'?(hash?`${hash}&topology=off`:'topology=off'):hash;
 function publish(hash){
  view=hash;if(!ready)return;
  const full=withLayout(hash);
@@ -322,7 +312,7 @@ function publish(hash){
 }
 function applyHash(raw){
  const params=new URLSearchParams(String(raw||'').replace(/^#/,''));
- if(scene){const wanted=params.get('layout')==='logical'?'logical':'physical';if(scene.getView()!==wanted)scene.setView(wanted);}
+ if(scene){const wanted=params.get('topology')==='off'?'physical':'logical';if(scene.getView()!==wanted)scene.setView(wanted);}
  if(params.has('process')){const index=sequences.findIndex(s=>s.id===params.get('process'));if(index<0)return false;openTraffic();changeScenario(index);setPlaying(false);changeStep(Math.max(1,Math.min(sequences[index].steps.length,Number(params.get('step'))||1))-1);return true;}
  if(params.has('system')&&getNode(params.get('system'))){inspect(params.get('system'),{reveal:false});return true;}
  const vlan=vlans.find(v=>String(v.number)===params.get('vlan'));if(vlan){inspectVlan(vlan.id);return true;}
@@ -331,7 +321,7 @@ function applyHash(raw){
  if(params.get('view')==='overview'){architectureOverview();return true;}
  return false;
 }
-$('viewToggle').onclick=()=>{if(!scene){toast('The logical view needs 3D graphics (WebGL 2).');return;}scene.setView(layout==='logical'?'physical':'logical');};
+$('viewToggle').onclick=()=>{if(!scene){toast('The topology needs 3D graphics (WebGL 2).');return;}scene.setView(layout==='logical'?'physical':'logical');};
 $('lookToggle').onclick=()=>{if(!scene){toast('The cinematic look needs 3D graphics (WebGL 2).');return;}endRecording();setLook(scene.getTheme()==='cinematic'?'standard':'cinematic');};
 try{if(localStorage.getItem(lookKey)==='cinematic')setLook('cinematic',{save:false});}catch{}
 applyHash(location.hash);ready=true;

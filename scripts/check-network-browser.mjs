@@ -145,9 +145,9 @@ try {
     await page.mouse.move(pcs.x, pcs.y);
     assert.match(await page.locator('#hoverTip').textContent(), /50 Windows 11 PCs/, 'Hover tooltip');
     await page.mouse.move(2, 2);
-    // Rack names are readable in the full-room view.
-    const zoneLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'zone' && l.show).length);
-    assert(zoneLabels >= 6, `Most rack names show in the full-room view (${zoneLabels} of 8)`);
+    // The overview names every VLAN on the floating topology layer.
+    const islandLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).length);
+    assert(islandLabels >= 6, `Most VLAN names show on the topology layer (${islandLabels} of 8)`);
     // Connection map for one system.
     await page.selectOption('#systemSelect', 'dc1');
     await page.locator('#connectionsToggle').click();
@@ -156,11 +156,12 @@ try {
     await page.locator('#connectionsToggle').click();
     await page.selectOption('#systemSelect', 'sql');
     assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F22[\s\S]*Denied[\s\S]*F14/, 'SBD-SQL01 lists its one registered consumer and the web-to-SQL deny');
-    // Logical view (with a shareable link) and the cinematic look.
+    // The topology layer is on by default; hiding it travels with the link. Then the cinematic look.
+    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Topology shows by default');
     await page.locator('#viewToggle').click();
-    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true');
-    await page.waitForFunction(() => location.hash.includes('layout=logical'));
-    await page.waitForTimeout(1800);
+    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'false');
+    await page.waitForFunction(() => location.hash.includes('topology=off'));
+    await page.waitForTimeout(1200);
     await page.locator('#viewToggle').click();
     await page.locator('#lookToggle').click();
     assert.equal(await page.locator('#lookToggle').getAttribute('aria-pressed'), 'true');
@@ -168,9 +169,13 @@ try {
     await page.locator('#lookToggle').click();
     const systems = await page.locator('#systemSelect option').evaluateAll(options => options.map(option => option.value));
     for (const id of systems) { await page.selectOption('#systemSelect', id); assert((await page.locator('#systemContent h2').textContent()).length > 0); }
-    for (let i = 0; i < await page.locator('#vlanLegend button').count(); i++) {
-      await page.locator('#vlanToggle').click();
-      await page.locator('#vlanLegend button').nth(i).click();
+    // Network segments live in Explore (keyboard and screen-reader access to every VLAN).
+    for (let i = 0; i < 8; i++) {
+      await page.locator('#relationshipExplore').click();
+      await page.locator('#relationshipExplorer .relationship-choice').first().click();
+      const segments = page.locator('#relationshipExplorer .segment-choice');
+      assert.equal(await segments.count(), 8, 'Explore lists all eight VLANs');
+      await segments.nth(i).click();
       assert.match(await page.locator('#architectureContent h2').textContent(), /\S/);
     }
     await page.locator('#reference').click();
@@ -193,11 +198,11 @@ try {
   }
   // Shareable links open the linked step.
   {
-    const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2&layout=logical' });
+    const { context, page } = await open({ width: 1280, height: 800 }, { hash: '#process=web&step=2&topology=off' });
     assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 4');
     assert.equal(await page.locator('#trafficSection').evaluate(el => el.open), true, 'Process links open the walkthroughs');
     assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
-    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Links can open the logical view');
+    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'false', 'Links can hide the topology layer');
     await context.close();
   }
   // Mobile layout stays within the viewport.
@@ -225,7 +230,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable rack names, connection map, logical view, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable VLAN names on the topology layer, connection map, topology toggle, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();

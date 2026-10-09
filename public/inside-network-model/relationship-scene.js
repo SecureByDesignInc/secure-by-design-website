@@ -12,9 +12,10 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
  scene.add(new THREE.HemisphereLight('#d7efff','#263646',2.6));
  const key=new THREE.DirectionalLight('#d7eaff',3);key.position.set(-4,8,7);scene.add(key);
  const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
- const pause=$('[data-relationship-motion]');pause.onclick=()=>onMotion(!motion);
- const fallback=message=>{$('[data-relationship-fallback]').hidden=false;$('[data-relationship-fallback]').textContent=message;viewport.classList.add('is-unavailable');};
- try{
+ const pause=$('[data-relationship-motion]');if(pause)pause.onclick=()=>onMotion(!motion);
+ const fallback=message=>{if(!viewport)return;$('[data-relationship-fallback]').hidden=false;$('[data-relationship-fallback]').textContent=message;viewport.classList.add('is-unavailable');};
+ // The floating topology layer in the main scene replaced the 3D thumbnail; without a viewport this keeps only the list.
+ if(viewport)try{
   renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
   renderer.setClearColor('#0a1b2b');
@@ -96,10 +97,10 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
  }
  function wake(){last=0;if(!frame&&renderer&&motion&&visible&&!document.hidden&&!lost&&!disposed)frame=requestAnimationFrame(animate);}
  function resize(){
-  if(!renderer||disposed)return;const width=viewport.clientWidth,height=viewport.clientHeight;if(!width||!height)return;
+  if(!renderer||disposed||!viewport)return;const width=viewport.clientWidth,height=viewport.clientHeight;if(!width||!height)return;
   renderer.setSize(width,height,false);const aspect=width/height,half=Math.max(3.6,4.6/aspect);camera.left=-half*aspect;camera.right=half*aspect;camera.top=half;camera.bottom=-half;camera.updateProjectionMatrix();draw();wake();
  }
- function setMotion(on){motion=on;pause.textContent=on?'Pause':'Play';pause.setAttribute('aria-label',on?'Pause network motion':'Play network motion');pause.setAttribute('aria-pressed',String(on));if(!on){cancelAnimationFrame(frame);frame=0;}else wake();draw();}
+ function setMotion(on){motion=on;if(pause){pause.textContent=on?'Pause':'Play';pause.setAttribute('aria-label',on?'Pause network motion':'Play network motion');pause.setAttribute('aria-pressed',String(on));}if(!on){cancelAnimationFrame(frame);frame=0;}else wake();draw();}
  function show(context){
   model=relationshipModel(context);time=0;
   $('[data-relationship-title]').textContent=model.title;$('[data-relationship-caption]').textContent=model.caption;$('[data-relationship-legend]').textContent=model.legend;
@@ -124,8 +125,8 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
  function contextRestored(){lost=false;viewport.classList.remove('is-unavailable');$('[data-relationship-fallback]').hidden=true;resize();}
  renderer?.domElement.addEventListener('click',select);renderer?.domElement.addEventListener('pointermove',hover);
  renderer?.domElement.addEventListener('webglcontextlost',contextLost);renderer?.domElement.addEventListener('webglcontextrestored',contextRestored);
- const observer=new ResizeObserver(resize);observer.observe(viewport);
- const intersection=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else{cancelAnimationFrame(frame);frame=0;}});intersection.observe(viewport);
+ const observer=new ResizeObserver(resize);if(viewport)observer.observe(viewport);
+ const intersection=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else{cancelAnimationFrame(frame);frame=0;}});if(viewport)intersection.observe(viewport);
  const visibility=()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else wake();};document.addEventListener('visibilitychange',visibility);
  function dispose(){disposed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();document.removeEventListener('visibilitychange',visibility);disposeContent();renderer?.dispose();renderer?.domElement.remove();}
  setMotion(motion);

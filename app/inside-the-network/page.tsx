@@ -5,7 +5,7 @@ import { sharePreview } from '../share-preview';
 
 export const metadata = {
   title: 'Inside the Network',
-  description: 'Explore a 3D data center with server racks, network equipment, and animated traffic. Explore protocols, services, dependencies, and security practices with NIST SP 800-53 control mappings.',
+  description: 'Explore a 3D model of an air-gapped building, its server room and offices, with the network topology floating above and animated traffic. Explore protocols, services, dependencies, and security practices with NIST SP 800-53 control mappings.',
   ...sharePreview('Inside the Network | Secure By Design', 'Explore a 3D data center with server racks, network equipment, and animated traffic, mapped to NIST SP 800-53 security controls.', '/inside-the-network'),
 };
 
@@ -24,13 +24,21 @@ export default function InsideTheNetworkPage() {
           <div className="network-text-grid">
             {network.systems.map(system => <article key={system.id}>
               <h3>{system.name}</h3>
-              <p className="network-text-meta">{system.role} · {system.segment} · <code>{system.address}</code></p>
+              <p className="network-text-meta">{system.role} · {system.segment} · <code>{system.address}</code> · {system.location}</p>
               <p>{system.purpose}</p>
               {system.services.length > 0 && <ul className="network-text-services">
                 {system.services.map(service => <li key={service.name}><strong>{service.name}</strong> {service.port}{service.note && <span className="network-text-note"> · {service.note}</span>}</li>)}
               </ul>}
               <ul className="network-text-controls" aria-label={`${system.name} security controls`}>{system.controls.map(control => <li key={control.id}><strong>{control.id}</strong> {control.title}</li>)}</ul>
             </article>)}
+          </div>
+        </details>
+
+        <details>
+          <summary>Building and hosting <span>{network.building.rooms.length} rooms · {network.building.hosts.length} hosts</span></summary>
+          <div className="network-text-grid">
+            {network.building.rooms.map(room => <article key={room.name}><h3>{room.name}</h3><p>{room.detail}</p></article>)}
+            {network.building.hosts.map(host => <article key={host.name}><h3>{host.name}</h3><p className="network-text-meta">Hypervisor host · rack {host.rack}</p><p>{host.systems.join(', ')}</p></article>)}
           </div>
         </details>
 

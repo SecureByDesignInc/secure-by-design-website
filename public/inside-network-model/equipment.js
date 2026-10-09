@@ -3,8 +3,8 @@ import * as THREE from 'three';
 // Locally modeled, unbranded equipment. No remote models or texture requests.
 export function createEquipment(lights) {
   const unit = new THREE.BoxGeometry(1, 1, 1);
-  const metal = new THREE.MeshStandardMaterial({color:'#46505b',metalness:.75,roughness:.38});
-  const black = new THREE.MeshStandardMaterial({color:'#141a20',metalness:.5,roughness:.5});
+  const metal = new THREE.MeshStandardMaterial({color:'#55606b',metalness:.7,roughness:.38});
+  const black = new THREE.MeshStandardMaterial({color:'#1d252d',metalness:.45,roughness:.5});
   const silver = new THREE.MeshStandardMaterial({color:'#b8bec5',metalness:.8,roughness:.32});
   const recess = new THREE.MeshStandardMaterial({color:'#05090d',roughness:.9});
   const rubber = new THREE.MeshStandardMaterial({color:'#242b30',roughness:.95});
@@ -157,48 +157,188 @@ export function createEquipment(lights) {
     plate(parent,label,4.8,0,6.13,1.7,{height:.38,color});
     box(parent,.14,.2,.11,2.15,5.86,1.7,black);
   }
-  function room(scene) {
-    const floorCanvas=document.createElement('canvas');floorCanvas.width=floorCanvas.height=256;
-    const ctx=floorCanvas.getContext('2d');ctx.fillStyle='#73838e';ctx.fillRect(0,0,256,256);
-    ctx.fillStyle='#44535f';ctx.fillRect(0,0,256,3);ctx.fillRect(0,0,3,256);
-    ctx.fillStyle='#82909a';ctx.fillRect(4,4,248,2);ctx.fillRect(4,4,2,248);
-    const texture=new THREE.CanvasTexture(floorCanvas);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(25,26);texture.anisotropy=4;
-    const floor=new THREE.MeshStandardMaterial({map:texture,roughness:.62,metalness:.15});themed.floor=floor;
-    box(scene,64,.65,66,3,-.4,8,floor).userData.floor=true;
-    const wall=new THREE.MeshStandardMaterial({color:'#708392',roughness:.75,metalness:.1});themed.wall=wall;
-    // Each wall fades as one piece when it stands between the camera and the active equipment.
-    const backWall=new THREE.Group();backWall.userData.fadeKey='wall-back';scene.add(backWall);
-    box(backWall,64,14,.3,3,6.45,-24.5,wall);
-    for(let i=0;i<13;i++)box(backWall,.045,12,.04,-27+i*4.9,6.6,-24.31,metal);
-    plate(backWall,'SECURE BY DESIGN  /  DATA CENTER',28,-5,11.5,-24.25,{height:1.02,color:'#dceaf2',background:'#334551'});
-    const leftWall=new THREE.Group();leftWall.userData.fadeKey='wall-left';scene.add(leftWall);
-    box(leftWall,.3,6.2,65,-29.1,2.6,8,wall);
-    // A cutaway ceiling keeps all devices accessible to the orbit camera.
-    const strip=new THREE.MeshBasicMaterial({color:'#dfedff'});themed.strip=strip;
-    for(const z of [-14,7]){
-      box(scene,43,.22,.9,-3,15.5,z,black);
-      box(scene,41.5,.06,.62,-3,15.35,z,strip);
-      for(const x of [-23,17])box(scene,.06,2.4,.06,x,16.55,z,metal);
+  // ---- Building: rooms off one corridor, cut away like an architectural model ----
+  // Back exterior walls (north, west) stand full height; every other wall is cut at knee height with a light cap,
+  // so the rooms read clearly from above while nothing hides the equipment.
+  const wall=new THREE.MeshStandardMaterial({color:'#2f3c48',roughness:.85,metalness:.05});
+  const cap=new THREE.MeshStandardMaterial({color:'#c3ced6',roughness:.7,metalness:.05});
+  const trim=new THREE.MeshStandardMaterial({color:'#56636e',roughness:.6,metalness:.4});
+  const door=new THREE.MeshStandardMaterial({color:'#4a5966',roughness:.55,metalness:.35});
+  const steel=new THREE.MeshStandardMaterial({color:'#5d5a52',roughness:.45,metalness:.6});
+  const glass=new THREE.MeshStandardMaterial({color:'#7fb2c4',transparent:true,opacity:.14,roughness:.15,metalness:.05,depthWrite:false});
+  const strip=new THREE.MeshBasicMaterial({color:'#dfedff'});
+  const floorTextures={};
+  function floorTexture(kind){
+    if(floorTextures[kind])return floorTextures[kind];
+    const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');
+    const paint={raised:['#202a33','#33414d',4],carpet:['#1b2530','#212d39',1],concrete:['#262e35','#2e3840',2],vault:['#24262a','#33363b',2],perforated:['#26313b','#3a4855',4]}[kind];
+    ctx.fillStyle=paint[0];ctx.fillRect(0,0,256,256);
+    if(kind==='carpet'){for(let i=0;i<1600;i++){ctx.fillStyle=i%2?'#1f2a35':'#18212b';ctx.fillRect(Math.random()*256,Math.random()*256,2,2);}ctx.fillStyle=paint[1];ctx.fillRect(0,0,256,2);ctx.fillRect(0,0,2,256);}
+    else if(kind==='perforated'){ctx.fillStyle='#141b22';for(let y=18;y<240;y+=14)for(let x=18;x<240;x+=14){ctx.beginPath();ctx.arc(x,y,3.2,0,Math.PI*2);ctx.fill();}ctx.fillStyle=paint[1];ctx.fillRect(0,0,256,paint[2]);ctx.fillRect(0,0,paint[2],256);}
+    else{ctx.fillStyle=paint[1];ctx.fillRect(0,0,256,paint[2]);ctx.fillRect(0,0,paint[2],256);}
+    const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;
+    return floorTextures[kind]=texture;
+  }
+  const floorMaterials={};
+  function floorMaterial(kind,w,d){
+    const tile={raised:3,carpet:5,concrete:8,vault:4,perforated:3}[kind];
+    const texture=floorTexture(kind).clone();texture.needsUpdate=true;texture.repeat.set(w/tile,d/tile);
+    const material=new THREE.MeshStandardMaterial({map:texture,roughness:kind==='carpet'?.95:.7,metalness:kind==='concrete'?.05:.12});
+    (floorMaterials[kind]||(floorMaterials[kind]=[])).push(material);return material;
+  }
+  function floorSlab(scene,x0,x1,z0,z1,kind,y=-.33){
+    const w=x1-x0,d=z1-z0,mesh=new THREE.Mesh(new THREE.BoxGeometry(w,.65,d),floorMaterial(kind,w,d));
+    mesh.position.set((x0+x1)/2,y,(z0+z1)/2);mesh.receiveShadow=true;mesh.userData.floor=true;scene.add(mesh);return mesh;
+  }
+  const CUT=4.6,FULL=14;
+  // A wall run along x (axis 'x') or z, with door openings [from,to] cut out of it.
+  function wallRun(group,axis,fixed,from,to,{height=CUT,openings=[]}={}){
+    const spans=[];let cursor=from;
+    for(const [a,b] of [...openings].sort((p,q)=>p[0]-q[0])){if(a>cursor)spans.push([cursor,a]);cursor=b;}
+    if(cursor<to)spans.push([cursor,to]);
+    for(const [a,b] of spans){
+      const len=b-a,mid=(a+b)/2,t=.32;
+      if(axis==='x'){box(group,len,height,t,mid,height/2,fixed,wall);if(height<FULL)box(group,len+.02,.14,t+.08,mid,height+.07,fixed,cap);}
+      else{box(group,t,height,len,fixed,height/2,mid,wall);if(height<FULL)box(group,t+.08,.14,len+.02,fixed,height+.07,mid,cap);}
     }
-    for(const z of [-19,1]){
-      for(const x of [-24,15])box(scene,.11,.75,.12,x,13.7,z,metal);
-      box(scene,40,.12,.1,-4.5,13.4,z-.65,metal);box(scene,40,.12,.1,-4.5,13.4,z+.65,metal);
-      repeated(scene,Array.from({length:32},(_,i)=>[-24+i*1.25,13.38,z]),[.08,.1,1.4],metal);
-      for(let i=0;i<3;i++)box(scene,39,.05,.07,-4.5,13.53,z-.3+i*.2,rubber);
+  }
+  // A door leaf standing open, a frame, and (for secured rooms) a badge reader on the corridor side.
+  function doorway(group,axis,fixed,at,{badge=false,vault=false,side=1}={}){
+    const half=2,leaf=vault?steel:door;
+    if(axis==='x'){
+      for(const s of [-1,1])box(group,.24,CUT+.25,.5,at+s*half,(CUT+.25)/2,fixed,trim);
+      const pivot=new THREE.Group();pivot.position.set(at-half,0,fixed);pivot.rotation.y=side*-1.15;group.add(pivot);
+      box(pivot,3.8,CUT-.2,vault?.36:.14,1.9,(CUT-.2)/2+.05,0,leaf);
+      if(vault)box(pivot,.14,1.2,.5,3.2,2.2,side*.25,trim);
+      if(badge){box(group,.36,.62,.16,at+half+.75,3.05,fixed+side*.3,black);box(group,.12,.12,.04,at+half+.75,3.22,fixed+side*.4,led('#6fd08d'));}
+      box(group,4,.04,.7,at,.02,fixed,trim);
+    }else{
+      for(const s of [-1,1])box(group,.5,CUT+.25,.24,fixed,(CUT+.25)/2,at+s*half,trim);
+      box(group,.7,.04,4,fixed,.02,at,trim);
     }
-    // Cooling cabinet and vented floor tiles are environmental furnishings.
-    box(scene,3.1,9,4,-24.2,4.35,-4.3,white);
-    repeated(scene,Array.from({length:26},(_,i)=>[-24.2,.45+i*.3,-2.23]),[2.6,.09,.09],black);
-    plate(scene,'COOLING',2.6,-24.2,8.16,-2.2,{height:.35});
-    const vents=[];for(const x of [-17,-8,1,10])for(let i=0;i<12;i++)vents.push([x,-.045,-6.4+i*.19]);
-    repeated(scene,vents,[2.1,.012,.065],black);
-    // Low partitions separate the operations/workstation area from rack aisles.
-    const glass=new THREE.MeshStandardMaterial({color:'#6c9bab',transparent:true,opacity:.15,roughness:.18,metalness:.05,depthWrite:false});themed.glass=glass;
-    for(const x of [-23,-15,-7]){box(scene,7.5,4.4,.065,x,2.08,21,glass);box(scene,.1,4.55,.1,x-3.8,2.13,21,metal);}
-    box(scene,24,.08,.1,-15,4.38,21,metal);
-    // Offline bay is visually separated and has no network cable tray.
-    box(scene,10,.07,.11,24,.02,18,metal);
-    plate(scene,'OFFLINE OPERATIONS',10,24,6.8,39.02,{height:.6,color:'#e0c494'});
+  }
+  function building(scene,{rooms,coldAisle}){
+    for(const r of rooms)floorSlab(scene,r.x0,r.x1,r.z0,r.z1,r.floor);
+    // Perforated supply tiles down the contained cold aisle.
+    const perforated=new THREE.Mesh(new THREE.PlaneGeometry(coldAisle.x1-coldAisle.x0-.4,coldAisle.z1-coldAisle.z0-.6),floorMaterial('perforated',coldAisle.x1-coldAisle.x0,coldAisle.z1-coldAisle.z0));
+    perforated.rotation.x=-Math.PI/2;perforated.position.set((coldAisle.x0+coldAisle.x1)/2,.006,(coldAisle.z0+coldAisle.z1)/2);perforated.userData.floor=true;scene.add(perforated);
+    const named=id=>rooms.find(r=>r.id===id),server=named('server'),admin=named('admin'),office=named('office'),media=named('media'),vault=named('vault');
+    const gap=(r)=>[r.door.at-2,r.door.at+2];
+    // Exterior: full-height back walls, cut-away front walls.
+    const north=new THREE.Group();north.userData.fadeKey='wall-north';scene.add(north);
+    wallRun(north,'x',-26.16,-30.3,46.3,{height:FULL});
+    for(let x=-26;x<46;x+=6)box(north,.06,13,.05,x,6.8,-25.98,trim);
+    plate(north,'SECURE BY DESIGN  /  SERVER ROOM',22,-6,12.2,-25.96,{height:.9,color:'#dceaf2',background:'#2b3946'});
+    const west=new THREE.Group();west.userData.fadeKey='wall-west';scene.add(west);
+    wallRun(west,'z',-30.16,-26,44.3,{height:FULL});
+    const south=new THREE.Group();south.userData.fadeKey='wall-south';scene.add(south);wallRun(south,'x',44.16,-30.3,46.3,{height:3.2});
+    const east=new THREE.Group();east.userData.fadeKey='wall-east';scene.add(east);wallRun(east,'z',46.16,-26,44.3,{height:3.2});
+    // Interior: the corridor walls with their doors, and the walls between rooms.
+    const inner=new THREE.Group();inner.userData.fadeKey='walls-inner';scene.add(inner);
+    wallRun(inner,'x',4,-30,46,{openings:[gap(server),gap(admin)]});
+    wallRun(inner,'x',12,-30,46,{openings:[gap(office),gap(media)]});
+    wallRun(inner,'z',20,-26,4);wallRun(inner,'z',20,12,44);
+    wallRun(inner,'x',24,20,46,{openings:[gap(vault)]});
+    doorway(inner,'x',4,server.door.at,{badge:true,side:1});
+    doorway(inner,'x',4,admin.door.at,{badge:true,side:1});
+    doorway(inner,'x',12,office.door.at,{side:-1});
+    doorway(inner,'x',12,media.door.at,{badge:true,side:-1});
+    doorway(inner,'x',24,vault.door.at,{badge:true,vault:true,side:-1});
+    // Cold-aisle containment: glass end doors keep supply air in front of the equipment.
+    const containment=new THREE.Group();containment.userData.fadeKey='containment';scene.add(containment);
+    for(const x of [coldAisle.x0,coldAisle.x1]){
+      const depth=coldAisle.z1-coldAisle.z0,mid=(coldAisle.z0+coldAisle.z1)/2;
+      box(containment,.08,11.6,depth-.2,x,6.1,mid,glass);
+      box(containment,.16,.3,depth,x,12.05,mid,trim);for(const z of [coldAisle.z0,coldAisle.z1,mid])box(containment,.16,11.9,.16,x,5.95,z,trim);
+    }
+    plate(containment,'COLD AISLE',3.6,coldAisle.x1+.12,10.6,(coldAisle.z0+coldAisle.z1)/2,{height:.5,color:'#9fd8ee'}).rotation.y=Math.PI/2;
+    // Environmental fit-out: fire suppression and a monitoring panel in the server room's open corner.
+    const corner=new THREE.Group();corner.userData.fadeKey='server-corner';scene.add(corner);
+    const tank=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,6.4,18),new THREE.MeshStandardMaterial({color:'#7d4646',roughness:.5,metalness:.4}));tank.position.set(18,3.2,-24);tank.castShadow=true;corner.add(tank);
+    box(corner,2.4,3,.3,15,6,-25.7,black);box(corner,2,1.1,.04,15,6.5,-25.54,new THREE.MeshStandardMaterial({color:'#2a6a7a',emissive:'#2a6a7a',emissiveIntensity:.35}));
+    plate(corner,'ENVIRONMENT',2.2,15,5.15,-25.53,{height:.3});
+    // Ceiling light strips over the working areas (the ceiling itself is cut away).
+    for(const [x,z,len] of [[-7,-10,30],[-7,24,40],[-7,36,40],[33,-10,20]]){box(scene,len,.2,.7,x,15.4,z,black);box(scene,len-1.4,.06,.48,x,15.26,z,strip);}
+  }
+  // Overhead ladder tray between two points at the same height, with hangers.
+  function trayRun(scene,[x1,z1],[x2,z2],y){
+    const along=x1!==x2,len=Math.abs(along?x2-x1:z2-z1),mx=(x1+x2)/2,mz=(z1+z2)/2;if(len<.01)return;
+    for(const s of [-.7,.7]){if(along)box(scene,len+1.4,.16,.08,mx,y,mz+s,metal);else box(scene,.08,.16,len+1.4,mx+s,y,mz,metal);}
+    const rungs=[];for(let t=0;t<=len;t+=1.2){const p=along?[Math.min(x1,x2)+t,y-.04,mz]:[mx,y-.04,Math.min(z1,z2)+t];rungs.push(p);}
+    repeated(scene,rungs,along?[.08,.08,1.4]:[1.4,.08,.08],metal);
+    for(let i=0;i<2;i++){if(along)box(scene,len,.06,.08,mx,y+.06,mz-.22+i*.38,rubber);else box(scene,.08,.06,len,mx-.22+i*.38,y+.06,mz,rubber);}
+    for(let t=2;t<len;t+=8){const px=along?Math.min(x1,x2)+t:mx,pz=along?mz:Math.min(z1,z2)+t;for(const s of [-.7,.7])box(scene,.06,2.2,.06,along?px:px+s,y+1.15,along?pz+s:pz,metal);}
+  }
+  // ---- Server room furniture ----
+  function patchPanel(parent,y,width=5.6){box(parent,width,.36,.6,0,y,2.3,black);repeated(parent,Array.from({length:24},(_,i)=>[-(width-.9)/2+i*(width-.9)/23,y,2.61]),[.14,.16,.03],recess);}
+  function blanking(parent,ys){for(const y of ys)box(parent,5.85,.9,.08,0,y,2.5,black);}
+  function hypervisor(parent,{name,tiles}){
+    const h=1.55;
+    box(parent,5.7,h,4.6,0,0,0,metal);box(parent,5.55,h-.09,.1,0,0,2.35,black);
+    for(const x of [-2.83,2.83]){box(parent,.16,h-.1,.12,x,0,2.44,silver);box(parent,.055,.5,.16,x,0,2.55,black);}
+    const status=led('#70c888');lights.push({material:status,phase:lights.length*.71});box(parent,.11,.11,.035,2.62,.6,2.44,status);
+    plate(parent,name+'  ·  HYPERVISOR',3.4,-.7,.6,2.51,{height:.22,color:'#c7d6e2',background:'#131d26'});
+    for(const t of tiles){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1.24,.98),new THREE.MeshBasicMaterial({map:tileTexture(t)}));mesh.position.set(t.x,-.15,2.515);parent.add(mesh);}
+    cable(parent,[[2.65,-.3,-2.35],[3,-.5,-2.7],[3,-1.2,-2.7]],'#52788e');
+  }
+  const tileTextures=new Map();
+  function tileTexture({id,name,color,vlan}){
+    const key=id+color;if(tileTextures.has(key))return tileTextures.get(key);
+    const c=document.createElement('canvas');c.width=256;c.height=202;const ctx=c.getContext('2d');
+    ctx.fillStyle='#0c1621';ctx.fillRect(0,0,256,202);ctx.fillStyle=color;ctx.fillRect(0,0,256,18);
+    ctx.strokeStyle='#26384a';ctx.lineWidth=4;ctx.strokeRect(2,2,252,198);
+    ctx.save();ctx.translate(12,44);ctx.scale(.62,.62);drawIcon(ctx,roleOf(id)||'gear',color);ctx.restore();
+    ctx.fillStyle='#eef8ff';ctx.textAlign='left';ctx.textBaseline='middle';ctx.font='700 46px Segoe UI,Arial';ctx.fillText(name,98,92,150);
+    ctx.fillStyle=color;ctx.font='600 26px Segoe UI,Arial';ctx.fillText(`VLAN ${vlan}`,98,140,150);
+    const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;tileTextures.set(key,texture);return texture;
+  }
+  // A full-height cabinet front with a label: cooling, UPS, or power distribution.
+  function cabinet(parent,kind){
+    const body=kind==='cooling'?white:black;
+    box(parent,6.9,12.1,6.2,0,6.15,0,body);box(parent,6.6,11.6,.1,0,6.15,3.1,kind==='cooling'?metal:black);
+    if(kind==='cooling'){repeated(parent,Array.from({length:34},(_,i)=>[0,1.2+i*.3,3.17]),[5.6,.1,.06],black);plate(parent,'IN-ROW COOLING',4.6,0,11.55,3.2,{height:.42,color:'#bfe3f2'});}
+    else{
+      box(parent,2,1.1,.06,0,9.6,3.18,new THREE.MeshStandardMaterial({color:'#24606e',emissive:'#24606e',emissiveIntensity:.35}));
+      const modules=[];for(let i=0;i<6;i++)modules.push([0,1.4+i*1.1,3.18]);repeated(parent,modules,[5.6,.9,.06],metal);
+      plate(parent,kind==='ups'?'UPS':'POWER DISTRIBUTION',4.6,0,11.55,3.2,{height:.42,color:'#e2c690'});
+    }
+  }
+  function idf(parent){
+    box(parent,4.6,9,4,0,4.5,0,black);for(const x of [-2.15,2.15])box(parent,.16,8.6,.16,x,4.5,2,silver);
+    networkSwitch(parent,7.2,{width:3.8,label:'ACCESS 01',ports:24});networkSwitch(parent,6.2,{width:3.8,label:'ACCESS 02',ports:24});
+    patchPanel(parent,8.2,3.8);plate(parent,'IDF · OFFICE ACCESS',3.9,0,8.85,2.25,{height:.3,color:'#9fd0e8'});
+  }
+  // ---- People: simple, faceless figures ----
+  const skin=new THREE.MeshStandardMaterial({color:'#b5aea4',roughness:.8});
+  const clothing=['#4f6476','#5c6a63','#6b6255','#45566b','#5b5e70','#617383'].map(color=>new THREE.MeshStandardMaterial({color,roughness:.85}));
+  const headGeometry=new THREE.SphereGeometry(1,18,14),torsoGeometry=new THREE.CapsuleGeometry(1,1,4,12);
+  // Seated at a desk, in the desk's own coordinates (the desk group's scale applies).
+  function seated(desk,index=0){
+    const g=new THREE.Group();g.position.set(0,0,1.62);desk.add(g);const cloth=clothing[index%clothing.length];
+    const torso=new THREE.Mesh(torsoGeometry,cloth);torso.scale.set(.3,.36,.2);torso.position.set(0,1.62,.08);torso.castShadow=true;g.add(torso);
+    const head=new THREE.Mesh(headGeometry,skin);head.scale.setScalar(.2);head.position.set(0,2.32,-.02);head.castShadow=true;g.add(head);
+    for(const s of [-1,1]){box(g,.2,.18,.62,s*.15,1.0,-.24,cloth);box(g,.17,.82,.18,s*.15,.55,-.56,rubber);}
+    const arms=new THREE.Group();g.add(arms);for(const s of [-1,1])box(arms,.13,.13,.66,s*.3,1.6,-.42,cloth);
+    return {group:g,arms,head};
+  }
+  // Standing, in world units, for people carrying media between rooms.
+  function standing(parent,index=0){
+    const g=new THREE.Group();parent.add(g);const cloth=clothing[(index+2)%clothing.length];
+    const torso=new THREE.Mesh(torsoGeometry,cloth);torso.scale.set(.95,1.05,.62);torso.position.y=5.6;torso.castShadow=true;g.add(torso);
+    const head=new THREE.Mesh(headGeometry,skin);head.scale.setScalar(.62);head.position.y=7.75;head.castShadow=true;g.add(head);
+    const legs=[-1,1].map(s=>{const pivot=new THREE.Group();pivot.position.set(s*.42,3.7,0);g.add(pivot);const leg=new THREE.Mesh(unit,rubber);leg.scale.set(.48,3.6,.52);leg.position.y=-1.8;leg.castShadow=true;pivot.add(leg);return pivot;});
+    for(const s of [-1,1]){const arm=new THREE.Mesh(unit,cloth);arm.scale.set(.32,2.6,.34);arm.position.set(s*1.22,5.4,0);g.add(arm);}
+    return {group:g,legs};
+  }
+  // ---- Contact shadows: soft dark pads under equipment and furniture, drawn in one instanced batch ----
+  const aoCanvas=document.createElement('canvas');aoCanvas.width=aoCanvas.height=128;
+  {const ctx=aoCanvas.getContext('2d');for(let i=0;i<24;i++){const k=i/24;ctx.fillStyle=`rgba(0,0,0,${.06})`;const m=6+k*44;ctx.beginPath();ctx.roundRect(m,m,128-2*m,128-2*m,26-k*14);ctx.fill();}}
+  const aoTexture=new THREE.CanvasTexture(aoCanvas),aoPads=[];
+  function contact(x,z,w,d){aoPads.push([x,z,w,d]);}
+  function contactShadows(scene){
+    if(!aoPads.length)return null;
+    const mesh=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:aoTexture,color:'#000000',transparent:true,opacity:.85,depthWrite:false}),aoPads.length);
+    const m=new THREE.Matrix4();aoPads.forEach(([x,z,w,d],i)=>{m.makeScale(w,1,d).setPosition(x,.012,z);mesh.setMatrixAt(i,m);});mesh.renderOrder=1;mesh.userData.floor=true;scene.add(mesh);return mesh;
   }
   // Batched materials get a per-instance fade. Faded instances use screen-door transparency (ordered dither),
   // so racks in front of the active systems become see-through without breaking depth sorting.
@@ -254,14 +394,15 @@ export function createEquipment(lights) {
     for(const {mesh,dim,byKey} of registry.meshes){const indices=byKey.get(key);if(!indices)continue;for(const i of indices)dim[i]=value;mesh.geometry.attributes.aDim.needsUpdate=true;}
   }
   // Standard keeps the established look; cinematic darkens the room so traffic and status lights carry the scene.
-  const themed={metal,black,silver,rubber,white,recess};
+  const themed={metal,black,silver,rubber,white,recess,wall,cap,trim,door,glass,strip};
   const themes={
-    standard:{floor:'#ffffff',wall:'#708392',strip:'#dfedff',glass:'#6c9bab',white:'#b5c0c8',metal:'#46505b',black:'#141a20',silver:'#b8bec5',rubber:'#242b30',recess:'#05090d'},
-    cinematic:{floor:'#3a4954',wall:'#16212b',strip:'#7fdcf0',glass:'#2f5866',white:'#33424e',metal:'#2b343d',black:'#090d12',silver:'#6d7a86',rubber:'#141a1f',recess:'#020406'}
+    standard:{floor:'#ffffff',wall:'#2f3c48',cap:'#c3ced6',trim:'#56636e',door:'#4a5966',strip:'#dfedff',glass:'#7fb2c4',white:'#a9b4bd',metal:'#55606b',black:'#1d252d',silver:'#b8bec5',rubber:'#242b30',recess:'#05090d'},
+    cinematic:{floor:'#b9c3cb',wall:'#1d2833',cap:'#7d8a95',trim:'#2f3a44',door:'#26313b',strip:'#7fdcf0',glass:'#2f5866',white:'#33424e',metal:'#2b343d',black:'#090d12',silver:'#6d7a86',rubber:'#141a1f',recess:'#020406'}
   };
   function setTheme(name){
     const colors=themes[name]||themes.standard;
     for(const [key,material] of Object.entries(themed)){if(!colors[key])continue;material.color.set(colors[key]);fadeClones.get(material)?.color.set(colors[key]);}
+    for(const list of Object.values(floorMaterials))for(const material of list)material.color.set(colors.floor);
   }
-  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,room,batch,setFade,setDim,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
+  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,building,trayRun,patchPanel,blanking,hypervisor,cabinet,idf,seated,standing,contact,contactShadows,batch,setFade,setDim,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
 }

@@ -1311,9 +1311,9 @@
         "check": "The register exists with every current path justified, the gateway plan is written, and the pre-routing state of both DCs is captured as the before picture.",
         "evidence": "Keep the segmentation policy statement, the exception register with owners, and the captured pre-routing output.",
         "model": {
-          "href": "/inside-the-network#view=overview&layout=logical",
-          "label": "the logical view",
-          "text": "Each VLAN becomes an island around the core switch, so you can check your segment plan against the design."
+          "href": "/inside-the-network#view=overview",
+          "label": "the network topology",
+          "text": "Each VLAN is a platform around the core switch, floating over the building, so you can check your segment plan against the design and see where each system physically lives."
         },
         "quizzes": [
           {

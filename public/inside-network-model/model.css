@@ -394,3 +394,7 @@ body.process-active #relationshipView{display:none}
  body.show-key .scene-help{display:none}
 }
 body.cinema .stage-toolbar{display:none}
+/* Phones: give the building and its topology more of the stage (October 8, 2026). */
+@media(max-width:780px){.stage{height:600px}.stage-heading p{display:none}.stage-heading h2{font-size:21px;margin:6px 0 0}.flow-caption:not(.is-step){padding:9px 12px}.flow-caption:not(.is-step) small{display:none}.flow-caption:not(.is-step) strong{font-size:13px;margin:4px 0 0}}
+/* Explore: network segments carry their VLAN colour. */
+.segment-choice{border-left:3px solid var(--node-color,#6fd4ea)!important}

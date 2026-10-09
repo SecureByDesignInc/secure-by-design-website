@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {createEquipment} from '../public/inside-network-model/equipment.js';
 import {inventory} from '../public/inside-network-model/inventory.js';
 import {vlans,buildArchitectureNodes} from '../public/inside-network-model/architecture.js';
-import {dataCenterLayout,equipmentPosition} from '../public/inside-network-model/data-center-layout.js';
+import {rooms,coldAisle,racks,hosts,tileOffset,officeDesks,deskScale,offlinePosition,trayNodes,trayEdges,trayHeight} from '../public/inside-network-model/data-center-layout.js';
 
 // Geometry-only validation; this does not validate texture pixels or WebGL rendering.
 // A minimal canvas surface lets CanvasTexture objects exist without a renderer.
@@ -13,19 +13,17 @@ globalThis.document={createElement(name){
  return {width:0,height:0,getContext(){return new Proxy({},{get:(target,key)=>key in target?target[key]:()=>{},set:(target,key,value)=>{target[key]=value;return true;}});}};
 }};
 const scene=new THREE.Scene(),lights=[],kit=createEquipment(lights);
-kit.room(scene);
-const nodes=buildArchitectureNodes(inventory.nodes);
-for(const zone of dataCenterLayout(vlans)){
- const rack=new THREE.Group();rack.position.set(zone.x,0,zone.z);scene.add(rack);
- if(zone.kind==='rack')kit.rack(rack,{code:zone.rack,color:zone.color});
- for(const [i,id]of zone.ids.entries()){
-  const device=new THREE.Group();device.position.set(...equipmentPosition(zone,i));scene.add(device);
-  if(zone.kind==='rack')kit.server(device,nodes.find(n=>n.id===id),zone.color);
-  else if(zone.kind==='desks')kit.workstation(device);
-  else for(let j=0;j<50;j++)kit.workstation(device,(j%10-4.5)*1.82,(Math.floor(j/10)-2)*2.08,.5);
- }
+kit.building(scene,{rooms,coldAisle});
+const nodes=buildArchitectureNodes(inventory.nodes),color=id=>vlans.find(v=>v.ids.includes(id))?.color||'#8fb8cc';
+for(const r of racks){
+ const g=new THREE.Group();g.position.set(r.x,0,r.z);if(r.row==='B')g.rotation.y=Math.PI;scene.add(g);
+ if(r.kind==='compute'||r.kind==='reserved'||r.kind==='network'){kit.rack(g,{code:r.code,color:'#8fb8cc',switching:false});kit.patchPanel(g,10.95);}else kit.cabinet(g,r.kind);
 }
-const offline=new THREE.Group();offline.position.set(24,7.25,8);scene.add(offline);
+for(const host of hosts){const r=racks.find(k=>k.id===host.rack),g=new THREE.Group();g.position.set(r.x,host.y,r.z);scene.add(g);kit.hypervisor(g,{name:host.name,tiles:host.vms.map((id,i)=>({id,name:id.toUpperCase(),color:color(id),vlan:10,x:tileOffset(host,i)}))});}
+const office=new THREE.Group();scene.add(office);for(const [x,z] of officeDesks){const desk=kit.workstation(office,x,z,deskScale);kit.seated(desk,0);}
+for(const [a,b] of trayEdges)kit.trayRun(scene,trayNodes[a],trayNodes[b],trayHeight);
+const idf=new THREE.Group();scene.add(idf);kit.idf(idf);
+const offline=new THREE.Group();offline.position.set(offlinePosition[0],7.25,offlinePosition[1]);scene.add(offline);
 const ledCount=lights.length;kit.server(offline,nodes.find(n=>n.id==='root'),'#e5c58e',{offline:true});
 assert.equal(lights.length,ledCount,'Offline root has no animated network lights');
 const stats=()=>{let draws=0,triangles=0;scene.traverse(o=>{if(o.isMesh){draws++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3*(o.isInstancedMesh?o.count:1);}});return {draws,triangles};};
