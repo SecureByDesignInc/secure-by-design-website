@@ -32,7 +32,7 @@ async function route(request,env,ctx){
  const path=new URL(request.url).pathname;
  // Vulnerability-report contact (RFC 9116). public/.well-known/security.txt normally answers first.
  if(path==='/.well-known/security.txt'||path==='/security.txt')return new Response(securityTxt,{headers:{'content-type':'text/plain; charset=utf-8','cache-control':'public, max-age=86400'}});
- if(request.method==='POST'&&retiredForms.has(path.replace(/\/$/,'')))return Response.json({error:'This form is closed for now. Nothing was submitted.'},{status:410,headers:{'cache-control':'no-store'}});
+ if(request.method==='POST'&&retiredForms.has(path.replace(/\/$/,''))){try{await request.body?.cancel();}catch{}return Response.json({error:'This form is closed for now. Nothing was submitted.'},{status:410,headers:{'cache-control':'no-store'}});}
  if(/^\/api\/native-activity(\/|$)/.test(path))return nativeActivityApi(request,env);
  if(/^\/api\/native-progress(\/|$)/.test(path))return nativeProgressApi(request,env);
  if(/^\/api\/native-auth(\/|$)/.test(path))return nativeAuthApi(request,env);
