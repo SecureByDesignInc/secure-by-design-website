@@ -1,0 +1,44 @@
+name: Live check
+
+# Audit helper (not for main): runs the browser check and header checks against the live site.
+on:
+  push:
+    branches: ['audit/live']
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install a test browser
+        run: |
+          npm i --prefix "$RUNNER_TEMP/pw" playwright@1.56.0 > /dev/null 2>&1
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium > /dev/null 2>&1
+      - name: Headers and redirects
+        run: |
+          h() { curl -sI -m 20 "$1" | tr -d '\r' | grep -iE "^(HTTP|location|strict-transport-security|content-security-policy|x-frame-options|x-content-type-options|referrer-policy|permissions-policy|content-type|content-length):" | sed 's/content-security-policy: .*/content-security-policy: (present)/I' | tr '\n' ' '; }
+          echo "::notice title=Home::$(h https://securebydesigninc.com/)"
+          echo "::notice title=www redirect::$(h https://www.securebydesigninc.com/training)"
+          echo "::notice title=http redirect::$(h http://securebydesigninc.com/training)"
+          echo "::notice title=Static guide::$(h https://securebydesigninc.com/training/rmf/)"
+          echo "::notice title=Logo::$(h https://securebydesigninc.com/brand-lock.svg)"
+          echo "::notice title=security.txt::$(h https://securebydesigninc.com/.well-known/security.txt) | body: $(curl -s -m 20 https://securebydesigninc.com/.well-known/security.txt | head -c 200 | tr '\n' ' ')"
+          echo "::notice title=workers.dev::$(curl -s -o /dev/null -m 20 -w '%{http_code}' https://secure-by-design-website.securebydesign.workers.dev/ || echo unreachable)"
+          echo "::notice title=_headers file::$(curl -s -o /dev/null -m 20 -w '%{http_code}' https://securebydesigninc.com/_headers)"
+          echo "::notice title=Retired form::$(curl -s -m 20 -X POST -H 'origin: https://securebydesigninc.com' -H 'content-type: application/json' -d '{}' -w ' %{http_code}' https://securebydesigninc.com/api/career-submissions)"
+          echo "::notice title=Owner page::$(curl -s -o /dev/null -m 20 -w '%{http_code} %{redirect_url}' https://securebydesigninc.com/career-records)"
+          echo "::notice title=Analytics beacon::$(curl -s -m 20 https://securebydesigninc.com/ | grep -o 'static.cloudflareinsights.com[^"]*' | head -1)"
+      - name: Open every page in Chromium
+        env:
+          PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
+        run: |
+          curl -s https://securebydesigninc.com/sitemap.xml -o sitemap.xml
+          mkdir -p dist/client && cp sitemap.xml dist/client/sitemap.xml
+          node scripts/browser-check.mjs https://securebydesigninc.com
