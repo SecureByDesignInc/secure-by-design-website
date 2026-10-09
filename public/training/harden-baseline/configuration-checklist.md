@@ -1,6 +1,6 @@
 # Harden the baseline — configuration checklist
 
-Secure By Design · Edition 1.1 · 8 October 2026
+Secure By Design · Edition 1.2 · 8 October 2026
 
 This course designs the organizational unit (OU) structure, applies the Defense Information Systems Agency (DISA) Security Technical Implementation Guide (STIG) Group Policy package, and verifies the result with Security Content Automation Protocol (SCAP) scans. Paths, versions, and session locations below are examples — adapt them to your tooling. Expect STIG settings to change behavior: that is the point, and the reason everything is scanned and recorded.
 
@@ -15,7 +15,7 @@ This course designs the organizational unit (OU) structure, applies the Defense 
 - [ ] Design the structure by administration: a top-level SBD OU containing Servers, Workstations, Users, Groups, and an Admin OU for privileged accounts. The built-in Domain Controllers OU stays where it is and keeps its name.
 - [ ] Create the planned OUs with accidental-deletion protection enabled. Record each OU's purpose and who will administer its contents; an OU with no delegation or policy purpose is clutter.
 - [ ] Redirect the default Computers and Users containers to managed OUs with redircmp and redirusr. Group Policy cannot be linked to the default containers, so anything landing there would get only domain-level policy, never the OU-linked hardening.
-- [ ] Keep privileged accounts and systems separate: the Admin OU holds the identities that administer domain controllers. The issuing CA from course 1.4 joins the Servers OU for now; course 1.7 gives Tier 0 servers their own OU. Do not nest deeper than the delegation plan requires.
+- [ ] Keep privileged accounts and systems separate: the Admin OU holds the identities that administer domain controllers. The issuing CA from course 1.4 joins the Servers OU for now; course 1.5 gives Tier 0 servers their own OU. Do not nest deeper than the delegation plan requires.
 
 **Commands:**
 
@@ -120,7 +120,7 @@ Notes / result / date: __________________________
 ## Set the rescan cadence and exception record
 
 - [ ] Consolidate the deviation records into one exception list: setting, reason, risk note, owner, and review date. This list travels into the authorization path as part of the Body of Evidence.
-- [ ] Set the standing cadence: review each quarterly DISA release for applicable updates, and rescan after any role addition or significant configuration change. Course 1.5's closing delta scan is the first scheduled instance, and course 1.6 scans the PKI servers the same way.
+- [ ] Set the standing cadence: review each quarterly DISA release for applicable updates, and rescan after any role addition or significant configuration change. Course 1.4's closing delta scans of the PKI servers are the first scheduled instance.
 - [ ] Export the Group Policy reports and back up the GPO set so the applied policy state is recoverable and reviewable without a live console.
 - [ ] Write the handoff note a future administrator or assessor would need: where the evidence lives, which versions produced it, and what is intentionally open.
 

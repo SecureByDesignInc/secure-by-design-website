@@ -29,7 +29,7 @@ import {
   supportsIdentityScene,
 } from './video-utils';
 
-// Large enough that both paths (1.1–1.12 and 2.1–2.3) show without "Show more".
+// Large enough that both paths (1.1–1.10 and 2.1–2.3) show without "Show more".
 const PAGE_SIZE = 24;
 
 function EpisodeTile({

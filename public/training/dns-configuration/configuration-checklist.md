@@ -1,14 +1,15 @@
-# Configure DNS — configuration checklist
+# Configure DNS and time — configuration checklist
 
-Secure By Design · Edition 1.1 · 8 October 2026
+Secure By Design · Edition 1.2 · 8 October 2026
 
-The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS dependency.
+The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the PDC emulator, SBD-DC01.
 
 ## Before you start
 
 - [ ] Complete the DC01 + DC02 identity build with both domain controllers healthy.
 - [ ] Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.
 - [ ] Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.
+- [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register.
 
 ## Map names to the network
 
@@ -97,6 +98,34 @@ repadmin /replsummary
 
 Notes / result / date: __________________________
 
+## Make SBD-DC01 the domain's time source
+
+- [ ] Confirm which domain controller holds the PDC emulator role — SBD-DC01 in this sample. The PDC emulator of the forest root domain sits at the top of the Windows Time hierarchy, so it is the one system you configure; everything else follows it.
+- [ ] On SBD-DC01, mark Windows Time as a reliable time source with no external peer, so it serves time from its own clock. In an air-gapped network that clock is the reference by declaration: record how it is set and checked — for example, compared on a schedule against an approved reference and corrected by an administrator, with each correction recorded — and the drift threshold you will hold it to.
+- [ ] Turn off the hypervisor's time synchronization for both domain controller virtual machines, so the host clock cannot silently override the PDC emulator. SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.
+- [ ] Confirm the network's service-path register permits time — every member to both domain controllers on UDP 123 — and write the time design into the build record: course 1.3's hardening Group Policy objects (GPOs) must leave it intact, and if a Security Technical Implementation Guide (STIG) value disagrees with it, that course's deviation record is where the decision lives.
+- [ ] Verify the chain end to end: SBD-DC01 serving as the reliable source, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold.
+
+**Commands:**
+
+```
+Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
+# On SBD-DC01 (the PDC emulator): serve time from its own clock as the reliable source
+w32tm /config /reliable:yes /update
+Restart-Service w32time
+w32tm /query /source   # on SBD-DC01: Local CMOS Clock
+# On SBD-DC02 and a member server:
+w32tm /query /source   # expected: a domain controller
+w32tm /query /status
+w32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly
+```
+
+**Verify:** SBD-DC01 reports itself as the reliable source (Local CMOS Clock), SBD-DC02 and the member server report a domain controller, host time synchronization is off for both domain controllers, and measured offsets sit inside the documented threshold.
+
+**Evidence:** Record the time design decisions (how DC01's clock is set and checked, and the drift threshold), the source and status output from both controllers and the member, the stripchart offsets, the hypervisor setting for both domain controller VMs, and the register rows that permit time: every member to the domain controllers.
+
+Notes / result / date: __________________________
+
 ## Find the fault and record the fix
 
 - [ ] For a failing lookup, record the exact name, record type, client, resolver, timestamp, and error. Compare the fully qualified name with any short-name search behavior.
@@ -126,5 +155,7 @@ Notes / result / date: __________________________
 - [Microsoft · Manage DNS resource records](https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records)
 - [Microsoft · Resolve-DnsName](https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname)
 - [Microsoft · Dcdiag](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag)
+- [Microsoft · Windows Time service](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-top)
+- [Microsoft · Windows Time service tools and settings](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings)
 
 © 2026 Secure By Design Team LLC

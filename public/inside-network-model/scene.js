@@ -209,11 +209,6 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
     fitBox:new THREE.Box3(new THREE.Vector3(r.x-9,0,r.z-4),new THREE.Vector3(r.x+9,13,r.z+13)),labelOffset:new THREE.Vector3(0,.55,.7)});
   }
  }
- // Network core rack: two core switches, patch panels, and the reference clock appliance.
- const timeNode=nodes.find(n=>n.id==='time'),timeRack=racks.find(r=>r.id==='r01');
- {const g=new THREE.Group();g.position.set(timeRack.x,appliances[0].y,timeRack.z);g.userData.fadeKey='facility-core';physical.add(g);equipment.server(g,timeNode,vlanOf('time').color);
-  addObject('time',{group:g,dimensions:[5.8,1,5],anchor:new THREE.Vector3(0,.2,2.75),fadeKey:'facility-core',zone:'r01',color:vlanOf('time').color,
-   fitBox:new THREE.Box3(new THREE.Vector3(timeRack.x-9,0,timeRack.z-4),new THREE.Vector3(timeRack.x+9,13,timeRack.z+13)),labelOffset:new THREE.Vector3(0,.5,3.1)});}
  // Administration: three dedicated seats, the Tier 0 seat behind its own glass screen.
  const adminSeats=new Map();
  for(const [id,[x,z]] of Object.entries(adminDesks)){

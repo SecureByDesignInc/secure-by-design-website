@@ -92,10 +92,10 @@ assert.equal(evaluateFlow('web','sql','SQL').status,'deny','SBD-WEB01 has no dat
 assert.equal(evaluateFlow('web','apps','Application API').status,'permit','SBD-WEB01 calls the application API (F21)');
 assert.equal(evaluateFlow('apps','sql','SQL').status,'permit','SBD-APPS01 is the only registered SQL consumer (F22)');
 assert.equal(evaluateFlow('workstations','apps','Licensing').status,'permit');
-// Windows Time follows the domain hierarchy: members sync from the DCs, and only the PDC emulator (SBD-DC01) from SBD-TIME01.
-for(const id of domainMembers.filter(id=>!['dc1','time'].includes(id)))assert.equal(evaluateFlow(id,'dc1','Time').status,'permit',`${id} syncs time from the DCs`);
-assert.equal(evaluateFlow('dc1','time','Time').status,'permit');
-for(const id of ['dc2','workstations','fs','splunk'])assert.equal(evaluateFlow(id,'time','Time').status,'deny',`${id} does not sync from SBD-TIME01`);
+// Windows Time follows the domain hierarchy: the PDC emulator (SBD-DC01) is the reliable source, serving its own clock, and every other member syncs from the DCs.
+for(const id of domainMembers.filter(id=>id!=='dc1'))assert.equal(evaluateFlow(id,'dc1','Time').status,'permit',`${id} syncs time from the DCs`);
+assert(!byId.has('time'),'There is no separate time server; SBD-DC01 is the time source');
+assert(trafficRules.filter(r=>r.service==='Time').every(r=>r.to.every(id=>['dc1','dc2'].includes(id))),'Time rules point only at the domain controllers');
 assert.equal(evaluateFlow('jump2','dc1','Management').status,'deny');
 assert.equal(evaluateFlow('jump','workstations','Management').status,'deny');
 assert.equal(evaluateFlow('jump1','dc1','Management').status,'deny');
@@ -110,7 +110,7 @@ assert(!windowsMembers.includes('web'),'SBD-WEB01 gets no WSUS or event-forwardi
 // Tier 0 covers the tools that control the DCs; audit custody stays a separate role.
 for(const id of ['wsus','epo','nessus','splunk'])assert(adminMatrix.find(r=>r.id==='identity').targets.includes(id),`Tier 0 administers the DC-facing scope of ${id}`);
 assert.equal(evaluateFlow('repo','dc1','Kerberos').status,'deny','The Linux repository is not a domain member');
-assert.equal(nodes.length,23,'No systems were added: 22 named systems plus the workstation group');
+assert.equal(nodes.length,22,'21 named systems plus the workstation group (SBD-TIME01 was removed in October 2026; SBD-DC01 is the time source)');
 assert.equal(evaluateFlow('workstations','dhcp','Network access').status,'permit','802.1X admission through the NPS role on SBD-DHCP01');
 assert(windowsMembers.includes('audit'),'SBD-AUDIT01 is domain-joined Windows');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
@@ -130,7 +130,6 @@ for(const dc of ['dc1','dc2'])assert.deepEqual(hostOf(dc).vms,[dc],`${dc} has it
 assert(!['dc1','dc2'].some(dc=>hostOf(dc)===hostOf('subca')),'The issuing CA never shares a host with a domain controller');
 for(const id of ['dc1','dc2','subca','templates'])assert(hostOf(id).vms.every(v=>['dc1','dc2','subca','templates'].includes(v)),`${id} shares a host only with identity and PKI servers`);
 for(const v of vlans)if(v.ids.length>1&&v.ids.every(id=>hostOf(id))){const vmHosts=new Set(v.ids.map(id=>hostOf(id)?.id));if(v.id!=='v10'&&v.id!=='v30')assert.equal(vmHosts.size,1,`VLAN ${v.number} servers share a host, so same-VLAN traffic stays on its virtual switch`);}
-assert.equal(where.get('time').kind,'appliance','The reference clock is a rack appliance, not a virtual machine');
 for(const [id,p] of where){if(p.kind==='desk')assert(inRoom('admin',adminDeskX(id),adminDeskZ(id)),`${id} sits in the administration room`);}
 function adminDeskX(id){return where.get(id).x;}function adminDeskZ(id){return where.get(id).z;}
 assert(inRoom('vault',...offlinePosition),'Offline root stays in the vault');
@@ -139,4 +138,4 @@ for(const [k,[x,z]] of Object.entries(trayNodes))assert(!inRoom('vault',x,z)&&!i
 for(const [a,b] of trayEdges)assert(trayNodes[a][0]===trayNodes[b][0]||trayNodes[a][1]===trayNodes[b][1],`Tray ${a}-${b} runs straight`);
 for(const p of [[...roomBounds.min],[...roomBounds.max]])assert(p.every(Number.isFinite));
 assert.equal(walkExits.vault.parent,'media','The vault opens only into the media room');
-console.log('Building checks passed: every system placed, domain controllers on their own hosts, the CA apart from them, same-VLAN servers sharing a host, a clock appliance, and no cable trays in the media room or vault.');
+console.log('Building checks passed: every system placed, domain controllers on their own hosts, the CA apart from them, same-VLAN servers sharing a host, and no cable trays in the media room or vault.');

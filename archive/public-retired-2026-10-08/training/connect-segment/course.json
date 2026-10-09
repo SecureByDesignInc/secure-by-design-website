@@ -1,0 +1,585 @@
+{
+  "configuration": {
+    "id": "connect-segment",
+    "prerequisites": [
+      "Complete courses 1.1–1.4: verified domain controllers, DNS, the hardened baseline with its scan cadence, and the two-tier PKI.",
+      "Provision a new virtual machine for the layer-3 router (SBD-CORE01 in this sample) with one interface per VLAN, and a Windows Server 2025 VM for SBD-TIME01 at 10.0.20.40.",
+      "Have the Inside the Network VLAN plan at hand: VLANs 10–80 on 10.0.X.0/24 subnets plus management VLAN 100 for network devices, with .1 reserved as each gateway in this sample."
+    ],
+    "labNote": "This course connects the eight VLANs through a router the lab controls, enforces default-deny between them with a documented exception register, and stands up the internal time service. The router platform is your choice — the lessons describe what to configure and verify every result from the Windows side, so the checks work whatever appliance you pick. The network still has no path across the air gap.",
+    "sources": [
+      {
+        "id": "fw",
+        "title": "Microsoft · Configure a firewall for Active Directory domains",
+        "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/config-firewall-for-ad-domains-and-trusts"
+      },
+      {
+        "id": "time",
+        "title": "Microsoft · Windows Time service",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-top"
+      },
+      {
+        "id": "w32tm",
+        "title": "Microsoft · Windows Time service tools and settings",
+        "url": "https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings"
+      },
+      {
+        "id": "tnc",
+        "title": "Microsoft · Test-NetConnection",
+        "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection"
+      },
+      {
+        "id": "route",
+        "title": "Microsoft · Get-NetRoute",
+        "url": "https://learn.microsoft.com/en-us/powershell/module/nettcpip/get-netroute"
+      },
+      {
+        "id": "controls",
+        "title": "NIST · SP 800-53 Rev. 5 security controls",
+        "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "design",
+        "title": "Design the segmentation and service paths",
+        "minutes": 25,
+        "summary": "A VLAN is a boundary only if something enforces it. Before touching the router, write the policy: default deny between VLANs, and an exception register where every permitted path names its source, destination, port, and reason.",
+        "objectives": [
+          "Translate the Inside the Network VLAN plan into a default-deny segmentation policy.",
+          "Draft the access control list (ACL) exception register from the documented service paths.",
+          "Record the gateway addressing and routing decisions before any device is built."
+        ],
+        "steps": [
+          "List the eight VLANs with their subnets and purposes from the network plan. Reserve .1 in each subnet as the gateway for this sample, and record that no route crosses the air-gapped boundary.",
+          "Write the policy sentence first: traffic between VLANs is denied unless a register entry permits it. Segmentation alone does not establish enforcement — the access control lists do.",
+          "Draft the register's first entries from paths the built systems already need: every VLAN to the domain controllers for DNS, Kerberos, LDAP, SMB, RPC, and time (UDP 123), because domain members take their time from the domain controllers; SBD-DC01, the primary domain controller (PDC) emulator, to SBD-TIME01 — the only system that syncs from the reference clock; and the admin VLAN to the tiers it manages. One row per path: source, destination, service and port, justification, owner.",
+          "Mark the paths that do not exist yet (workstation pools, business services) as planned rows, and decide the change process: who may add a register entry, and what evidence each addition needs."
+        ],
+        "command": "# Record the pre-routing state on each DC — today there is no gateway.\nGet-NetIPConfiguration\nGet-NetRoute -AddressFamily IPv4 | Select-Object DestinationPrefix, NextHop | Sort-Object DestinationPrefix -Unique",
+        "check": "The register exists with every current path justified, the gateway plan is written, and the pre-routing state of both DCs is captured as the before picture.",
+        "evidence": "Keep the segmentation policy statement, the exception register with owners, and the captured pre-routing output.",
+        "model": {
+          "href": "/inside-the-network#view=overview",
+          "label": "the network topology",
+          "text": "Each VLAN is a platform around the core switch, floating over the building, so you can check your segment plan against the design and see where each system physically lives."
+        },
+        "quizzes": [
+          {
+            "question": "What makes a VLAN an enforced boundary?",
+            "answers": [
+              "The VLAN number itself",
+              "The access control lists that deny traffic between VLANs by default",
+              "Giving each VLAN a different color in the diagram"
+            ],
+            "correct": 1,
+            "explanation": "Segmentation describes the layout; the ACLs are the enforcement. Without them, routing simply connects everything."
+          },
+          {
+            "question": "What belongs in every exception register row?",
+            "answers": [
+              "Source, destination, service and port, justification, and an owner",
+              "Only the port number",
+              "The VLAN colors"
+            ],
+            "correct": 0,
+            "explanation": "A permitted path without a recorded reason and owner cannot be defended at assessment time — or safely removed later."
+          },
+          {
+            "question": "Why capture the DCs' routing state before the router exists?",
+            "answers": [
+              "The output configures the router automatically",
+              "Routing cannot be inspected after a gateway is set",
+              "It is the before picture that makes the connectivity change measurable"
+            ],
+            "correct": 2,
+            "explanation": "The same before-and-after habit as the hardening course: record the starting state so the change itself becomes evidence."
+          }
+        ],
+        "recap": [
+          "Default deny between VLANs; the register holds the exceptions.",
+          "Every permitted path has a source, destination, port, reason, and owner.",
+          "Gateways are planned (.1 per subnet) and the air gap stays unrouted."
+        ],
+        "next": "Lesson 2 builds the router that will enforce this design.",
+        "sources": [
+          "controls",
+          "fw",
+          "route"
+        ]
+      },
+      {
+        "id": "router",
+        "title": "Build the core router",
+        "minutes": 25,
+        "summary": "The core is a virtual machine the lab controls: one interface per VLAN, the planned gateway address on each, and no default route anywhere — there is nowhere outside this network to go.",
+        "objectives": [
+          "Deploy the layer-3 router VM with an interface in every VLAN.",
+          "Assign the planned gateway addresses with routing enabled and no external route.",
+          "Point the built systems at their gateways and prove basic reachability."
+        ],
+        "steps": [
+          "Create the router VM (SBD-CORE01 in this sample) with one virtual interface attached to each of the eight VLAN networks. Record the platform and version you chose; the register, not the vendor syntax, is the course's deliverable.",
+          "Assign each interface its subnet's .1 address and enable routing between the interfaces. Do not configure a default route or any path toward the hypervisor's outside networks — the air gap is a routing decision too.",
+          "Set the gateway on the built systems: 10.0.10.1 on both domain controllers and 10.0.30.1 on the issuing CA. The offline root gets nothing; it stays off the network entirely.",
+          "From a host in another VLAN, prove the route: reach each gateway, then a DC address. Leave the ACLs permissive for this one lesson so routing and filtering failures cannot be confused — lesson 3 locks it down."
+        ],
+        "command": "Get-NetIPConfiguration | Select-Object InterfaceAlias, IPv4Address, IPv4DefaultGateway\nTest-NetConnection 10.0.10.1\nTest-NetConnection 10.0.10.10 -TraceRoute",
+        "check": "Each built system shows its planned gateway, the trace crosses the router in one hop, and the router holds no route toward anything outside the lab.",
+        "evidence": "Record the router platform and version, its interface and address table, the gateway changes on each system, and the trace output.",
+        "quizzes": [
+          {
+            "question": "Why does the router get no default route?",
+            "answers": [
+              "Default routes are slower",
+              "The network is air-gapped — a route toward the outside would quietly break that boundary",
+              "Routers cannot hold more than eight routes"
+            ],
+            "correct": 1,
+            "explanation": "The air gap is maintained in configuration as much as in cabling. A default route toward the hypervisor's networks would undo it."
+          },
+          {
+            "question": "Why leave ACLs permissive during this one lesson?",
+            "answers": [
+              "ACLs are optional in a lab",
+              "So a failed test clearly means a routing problem, not a filtering decision",
+              "The register is written later"
+            ],
+            "correct": 1,
+            "explanation": "Changing one layer at a time keeps faults attributable — the same discipline as the DNS troubleshooting lesson."
+          },
+          {
+            "question": "Which system never receives a gateway?",
+            "answers": [
+              "SBD-DC02",
+              "SBD-SUBCA01",
+              "SBD-ROOTCA01 — the offline root stays off the network"
+            ],
+            "correct": 2,
+            "explanation": "The root's protection is having no network path at all. Routing reaches it never, by design."
+          }
+        ],
+        "recap": [
+          "One router interface per VLAN, .1 as each gateway, routing on.",
+          "No default route — the air gap survives in the routing table.",
+          "Reachability is proven before any filtering begins."
+        ],
+        "next": "Lesson 3 turns the register into enforced access control lists.",
+        "sources": [
+          "route",
+          "tnc"
+        ]
+      },
+      {
+        "id": "acls",
+        "title": "Enforce default-deny with the register",
+        "minutes": 30,
+        "summary": "Now the policy becomes configuration: deny between VLANs by default, permit exactly the register's rows, and log what gets dropped so the denials are visible evidence, not silence.",
+        "objectives": [
+          "Implement default-deny filtering between all VLANs.",
+          "Permit the Active Directory, PKI, and time service paths from the register.",
+          "Log denied traffic so enforcement produces evidence."
+        ],
+        "steps": [
+          "Apply the inter-VLAN default-deny rule on the router, with logging for denied packets. The log of what was blocked is as much evidence as the list of what was allowed.",
+          "Permit the directory paths from every VLAN to VLAN 10 per Microsoft's Active Directory port documentation: DNS (53), Kerberos (88 and 464), LDAP (389/636), global catalog (3268/3269), SMB (445), and the RPC endpoint mapper with its dynamic range — the register row for RPC should name the range decision explicitly.",
+          "Permit time the way Windows Time actually flows: UDP 123 from every VLAN to both domain controllers, and UDP 123 from SBD-DC01 alone to SBD-TIME01. Permit HTTP to the pki.sbd.test publication service in VLAN 30 so clients can fetch certificates and revocation lists.",
+          "Record the VLAN 80 peer denies now — workstation-to-workstation SMB and Remote Desktop — as host-firewall rows: traffic inside one VLAN never reaches the router, so course 1.9 enforces them with each PC's own firewall. Then read back the full rule set against the register line by line — anything configured but not registered gets removed or registered, never ignored."
+        ],
+        "command": "# From a test host outside VLAN 10: permitted paths answer, everything else fails.\nTest-NetConnection SBD-DC01.sbd.test -Port 53\nTest-NetConnection SBD-DC01.sbd.test -Port 88\nTest-NetConnection SBD-DC01.sbd.test -Port 389\nTest-NetConnection 10.0.10.10 -Port 3389   # expected: TcpTestSucceeded False",
+        "check": "Registered paths succeed, an unregistered port fails and appears in the router's deny log, and the rule set matches the register with no unexplained entries in either direction.",
+        "evidence": "Keep the exported rule set, the register cross-check, the permitted-path test output, and a captured deny-log entry for the blocked test.",
+        "model": {
+          "href": "/inside-the-network#process=pc-to-sql",
+          "label": "What if a PC tries SQL?",
+          "text": "Default deny at the core stops a workstation from reaching the database directly."
+        },
+        "quizzes": [
+          {
+            "question": "A rule exists on the router but not in the register. What happens?",
+            "answers": [
+              "It stays — the router is authoritative",
+              "It is removed or registered with justification; configuration and register must agree",
+              "It is ignored until the next quarter"
+            ],
+            "correct": 1,
+            "explanation": "The register is the authority an assessor reads. Configuration that drifted from it is either undocumented access or dead weight."
+          },
+          {
+            "question": "Why log denied traffic?",
+            "answers": [
+              "Denials are evidence that enforcement works, and the first clue when a legitimate path was missed",
+              "Logs make the router faster",
+              "Logging is only required on port 3389"
+            ],
+            "correct": 0,
+            "explanation": "A silent deny proves nothing and hides mistakes. The log turns the boundary into something you can demonstrate."
+          },
+          {
+            "question": "Which port set does a domain member need to reach the DCs?",
+            "answers": [
+              "Only ICMP",
+              "Just port 80",
+              "DNS, Kerberos, LDAP, global catalog, SMB, and RPC — the documented AD port set"
+            ],
+            "correct": 2,
+            "explanation": "Active Directory is several cooperating services. Microsoft's firewall documentation lists the ports a member actually uses."
+          }
+        ],
+        "recap": [
+          "Default deny is in force; the register's rows are the only openings.",
+          "Denied traffic is logged — enforcement you can show, not assume.",
+          "Rule set and register reconcile exactly, both directions."
+        ],
+        "next": "Lesson 4 gives the network its clock.",
+        "sources": [
+          "fw",
+          "tnc"
+        ]
+      },
+      {
+        "id": "time",
+        "title": "Stand up SBD-TIME01 and the time hierarchy",
+        "minutes": 35,
+        "summary": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Build the internal reference, point the PDC emulator at it, and let the domain hierarchy carry time to everything else.",
+        "objectives": [
+          "Configure SBD-TIME01 as the lab's internal reference clock.",
+          "Point the PDC emulator at it and keep the rest on the domain hierarchy.",
+          "Document the accuracy, fallback, and drift decisions the model calls for."
+        ],
+        "steps": [
+          "Build SBD-TIME01 at 10.0.20.40 as a workgroup or domain-joined Windows Server 2025 host with the Windows Time service configured as an NTP server. In an air-gapped lab its clock is the reference by declaration — record the source decision (host clock, or an approved hardware source) with its expected accuracy and drift threshold.",
+          "On SBD-DC01, the domain controller holding the PDC emulator role, configure Windows Time to use SBD-TIME01 as its manual peer and mark it reliable. Only the PDC emulator points at TIME01: SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.",
+          "Confirm the register's time rows are active — members to both domain controllers on UDP 123, and SBD-DC01 alone to SBD-TIME01 — and that the hardening Group Policy objects (GPOs) from course 1.3 do not conflict with the time settings. If a Security Technical Implementation Guide (STIG) value and this design disagree, the deviation record from that course is where the decision lives.",
+          "Verify the chain end to end: TIME01 serving, the PDC emulator sourcing from it, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold."
+        ],
+        "command": "Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test\n# On the PDC emulator, then on SBD-DC02 and a member server:\nw32tm /query /source\nw32tm /query /status\nw32tm /stripchart /computer:10.0.20.40 /samples:3 /dataonly   # from SBD-DC01 only",
+        "check": "The PDC emulator reports SBD-TIME01 as its source, SBD-DC02 and the member server report a domain controller, and measured offsets sit inside the documented threshold.",
+        "evidence": "Record the time design decisions, the source and status output from both controllers and the member, the stripchart offsets, and the register rows that permit time: members to the domain controllers, and SBD-DC01 to SBD-TIME01.",
+        "model": {
+          "href": "/inside-the-network#system=time",
+          "label": "SBD-TIME01",
+          "text": "The time server, its address, and every rule in the register that names it."
+        },
+        "quizzes": [
+          {
+            "question": "Which system syncs directly with SBD-TIME01?",
+            "answers": [
+              "Every domain member individually",
+              "The domain controller holding the PDC emulator role",
+              "Only the offline root CA"
+            ],
+            "correct": 1,
+            "explanation": "The PDC emulator is the domain's time authority; everything else follows the domain hierarchy from there."
+          },
+          {
+            "question": "What does the air gap change about time design?",
+            "answers": [
+              "Nothing — pool.ntp.org still works",
+              "Kerberos stops needing accurate time",
+              "There is no internet source, so the internal reference and its drift threshold are documented decisions"
+            ],
+            "correct": 2,
+            "explanation": "With no external source, accuracy is whatever the lab declares and monitors — which is why the model tags this host AU-8 and SC-45."
+          },
+          {
+            "question": "Why does time matter to authentication at all?",
+            "answers": [
+              "Kerberos rejects tickets outside its allowed clock skew, so drifting clocks become sign-in failures",
+              "DNS records expire hourly",
+              "Passwords change with the clock"
+            ],
+            "correct": 0,
+            "explanation": "Kerberos builds replay protection on timestamps. Skew beyond the tolerance breaks authentication before anything looks wrong."
+          },
+          {
+            "question": "Where does a domain workstation get its time in this design?",
+            "answers": [
+              "From SBD-TIME01 directly",
+              "From a domain controller over UDP 123, following the domain hierarchy",
+              "From the core router"
+            ],
+            "correct": 1,
+            "explanation": "Windows Time follows the domain hierarchy: members sync from a domain controller, the other domain controller from the PDC emulator, and only the PDC emulator from SBD-TIME01. That is why the register permits UDP 123 from every VLAN to the domain controllers, not to SBD-TIME01."
+          }
+        ],
+        "recap": [
+          "TIME01 is the declared reference; its accuracy decisions are written down.",
+          "Only the PDC emulator peers with it; the hierarchy carries the rest.",
+          "Offsets are measured and inside the threshold, not assumed."
+        ],
+        "next": "Lesson 5 proves the whole boundary — what passes, what fails, and that both are intended.",
+        "sources": [
+          "time",
+          "w32tm"
+        ]
+      },
+      {
+        "id": "prove",
+        "title": "Prove the paths and the denials",
+        "minutes": 25,
+        "summary": "A segmented network is proven twice: every registered path works from where it is supposed to work, and the paths you never granted fail — visibly, in the log.",
+        "objectives": [
+          "Test the permitted-path matrix from each VLAN against the register.",
+          "Prove representative denials and capture their log entries.",
+          "Confirm the directory still behaves correctly across the routed network."
+        ],
+        "steps": [
+          "From a test host in each populated VLAN, run the register's permitted paths as a scripted matrix: directory ports and time to VLAN 10, and HTTP to pki.sbd.test. Record source VLAN, destination, port, and result for every row.",
+          "Run the deliberate failures: a port no register row permits, from a VLAN that should not reach it — for example, time straight to SBD-TIME01 from a test host outside VLAN 20, since only SBD-DC01 may reach it. Confirm the failure and find its entry in the router's deny log — the pair is the evidence.",
+          "Re-run the course 1.2 and 1.4 verification habits across the boundary: resolve the domain SRV records and fetch pki.sbd.test's certificate revocation list from outside VLANs 10 and 30.",
+          "File the matrix and the deny-log captures with the register. Any mismatch — a registered path failing or an unregistered path passing — is a finding to resolve before the course ends, not a note."
+        ],
+        "command": "$targets = @(@('SBD-DC01.sbd.test',53),@('SBD-DC01.sbd.test',88),@('SBD-DC01.sbd.test',389),@('pki.sbd.test',80))\nforeach ($t in $targets) { Test-NetConnection $t[0] -Port $t[1] | Select-Object ComputerName, RemotePort, TcpTestSucceeded }\nw32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly   # time over UDP 123 answers\nw32tm /stripchart /computer:10.0.20.40 /samples:1 /dataonly   # from a test host outside VLAN 20: expected to fail (only SBD-DC01 may reach TIME01)\nResolve-DnsName _ldap._tcp.dc._msdcs.sbd.test -Type SRV",
+        "check": "Every register row passes from its source VLAN, every probed unregistered path fails with a logged deny, and directory discovery works across the routed network.",
+        "evidence": "Keep the test matrix with timestamps, the time queries, the deny-log captures, and the cross-VLAN SRV and CRL retrieval output.",
+        "model": {
+          "href": "/inside-the-network#process=drill",
+          "label": "the attack drill",
+          "text": "Six attempts that your ACLs and host firewalls must stop. Use them as your denial tests."
+        },
+        "quizzes": [
+          {
+            "question": "What is the complete evidence for one denial?",
+            "answers": [
+              "The failed connection test paired with its entry in the router's deny log",
+              "A screenshot of the register",
+              "The absence of complaints"
+            ],
+            "correct": 0,
+            "explanation": "The failed probe shows the client's view; the log shows the boundary made the decision. Together they prove enforcement."
+          },
+          {
+            "question": "Why does the matrix test time with w32tm /stripchart rather than Test-NetConnection?",
+            "answers": [
+              "Test-NetConnection is slower",
+              "NTP runs over UDP 123 and Test-NetConnection only probes TCP, so w32tm sends real time queries",
+              "w32tm also checks DNS"
+            ],
+            "correct": 1,
+            "explanation": "Honest evidence names what a test can and cannot show — the same habit the identity course taught. A TCP probe to port 123 would prove nothing about a UDP service."
+          },
+          {
+            "question": "A registered path fails during the matrix run. What is that?",
+            "answers": [
+              "Expected behavior",
+              "A finding to resolve before the course ends",
+              "A reason to delete the register row quietly"
+            ],
+            "correct": 1,
+            "explanation": "The register is the intended state. Reality disagreeing with it is exactly what the matrix exists to catch."
+          }
+        ],
+        "recap": [
+          "Permits proven per VLAN; denials proven with their log entries.",
+          "Directory discovery and CRL retrieval work across the boundary.",
+          "Register and reality reconcile before the course moves on."
+        ],
+        "next": "Lesson 6 locks down the router's own management — the one system that enforces everyone else's rules.",
+        "sources": [
+          "tnc",
+          "fw"
+        ]
+      },
+      {
+        "id": "management",
+        "title": "Protect the router's own management",
+        "minutes": 25,
+        "summary": "The router enforces every boundary, so whoever manages it controls them all. Give its management a separate network, a short list of who may reach it, a log of every change, and a versioned copy of every configuration.",
+        "objectives": [
+          "Move the router's management interface onto a dedicated management VLAN.",
+          "Restrict management access to the Tier 0 administration seat and secure protocols.",
+          "Log router changes and keep versioned, hashed configuration backups."
+        ],
+        "steps": [
+          "Create management VLAN 100 (10.0.100.0/24) for network-device management only, and bind the router's SSH and HTTPS management to its address there, 10.0.100.1. Disable Telnet, plain HTTP, and every management service the platform enables by default that the design does not use.",
+          "Permit management sessions to 10.0.100.1 only from AdminJumpBox01's planned address (10.0.60.10), which course 1.7 builds — until then, manage from the hypervisor console only. Add the row to the register: the router enforces Tier 0 boundaries, so its management is Tier 0.",
+          "Give each administrator a named account on the router and keep one sealed break-glass account; shared logins hide who changed what. Course 1.8 sends the router's syslog, including its deny log, to the collector; write that as a dated follow-up in the register now.",
+          "Export the running configuration after every approved change, hash it, and keep every version. Compare the newest export with the running configuration on a schedule; a difference with no change record is a finding."
+        ],
+        "command": "# From a host outside VLAN 100 (expected: TcpTestSucceeded False):\nTest-NetConnection 10.0.100.1 -Port 22\n# Configuration versions with hashes:\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\connect-segment\\router-config-*.txt",
+        "check": "Management answers only on VLAN 100 and only from the permitted source, insecure management services are off, and each configuration version has a hash and a matching change record.",
+        "evidence": "Keep the management-access rule export, a refused connection test from a user VLAN, the list of disabled services, and the hashed configuration versions with their change records.",
+        "quizzes": [
+          {
+            "question": "Why does the router's management get its own VLAN?",
+            "answers": [
+              "So user and server traffic can never reach the interface that changes the rules",
+              "Because routers cannot route their own traffic",
+              "To make the configuration file smaller"
+            ],
+            "correct": 0,
+            "explanation": "A separate management network, reachable only from the admin plane, removes the most direct way to take over the device that enforces every boundary."
+          },
+          {
+            "question": "Which tier manages the core router in this design?",
+            "answers": [
+              "Tier 2, because every user depends on it",
+              "Tier 1, like any member server",
+              "Tier 0, because it enforces the boundaries that protect the domain controllers"
+            ],
+            "correct": 2,
+            "explanation": "Anything that can change the protections around Tier 0 can control Tier 0. The router's access lists are one of those protections."
+          },
+          {
+            "question": "The running configuration differs from the latest backup, and there is no change record. What is it?",
+            "answers": [
+              "Normal drift",
+              "A finding to investigate",
+              "Proof that backups work"
+            ],
+            "correct": 1,
+            "explanation": "Every change should be approved and recorded. An unexplained difference means either a missed record or an unauthorized change."
+          }
+        ],
+        "recap": [
+          "Router management lives on VLAN 100, reachable from the Tier 0 seat only.",
+          "Insecure management services are off; logins are named, with one sealed break-glass account.",
+          "Every configuration version is hashed and tied to a change record."
+        ],
+        "next": "The final lesson runs the change-triggered scans this network addition owes the 1.3 cadence.",
+        "sources": [
+          "controls",
+          "tnc"
+        ]
+      },
+      {
+        "id": "scan",
+        "title": "Delta scan the change and hand off",
+        "minutes": 15,
+        "summary": "Course 1.3's rule was simple: every role addition gets a scan. Two systems joined the network and every existing one gained a gateway — that is a change worth measuring.",
+        "objectives": [
+          "Run the change-triggered scans on the touched Windows systems.",
+          "Capture and hash the router configuration as its own baseline.",
+          "Hand the register and evidence into the standing cadence."
+        ],
+        "steps": [
+          "Rescan both domain controllers with the same benchmark and tool versions as course 1.3, and take SBD-TIME01's first baseline scan. Attribute any movement to this course's changes — the gateway and time settings are the expected deltas.",
+          "Export the router's configuration, hash the export, and store it with the evidence. The router has no Security Content Automation Protocol (SCAP) benchmark in this lab, so its config export, register reconciliation, and deny log stand as its assessable record — say so explicitly in the evidence notes.",
+          "Add the new rows to the hardening course's exception and deviation record where the two overlap (time settings, any firewall interplay), and set the register's named owner and review date alongside the scan cadence.",
+          "Write the handoff line for the next course: the network now routes, filters, and keeps time — course 1.6's PKI publication host and template administration build on exactly these paths."
+        ],
+        "command": "Get-ChildItem C:\\Evidence\\connect-segment -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\connect-segment\\*",
+        "check": "The DC rescans show only the expected deltas, TIME01 has a dated baseline, the router export is hashed and reconciled with the register, and owners and review dates are set.",
+        "evidence": "Finish the course checklist: scan results, router export and hash, the reconciled register with owner and review date, and the handoff note.",
+        "quizzes": [
+          {
+            "question": "Why does this course end with scans at all?",
+            "answers": [
+              "Scans are only for domain controllers",
+              "The 1.3 cadence is change-triggered, and this course changed every system's network posture",
+              "A vendor release required it this week"
+            ],
+            "correct": 1,
+            "explanation": "The cadence from the hardening course is event-driven: a new gateway on every host and two new systems is exactly such an event."
+          },
+          {
+            "question": "The router has no SCAP benchmark here. What stands in as its assessable record?",
+            "answers": [
+              "Nothing — unscannable systems are exempt",
+              "Its hashed configuration export, the register reconciliation, and the deny log",
+              "A photo of the VM console"
+            ],
+            "correct": 1,
+            "explanation": "Evidence is whatever lets a reviewer verify the state. For the router, that is its exported configuration tied to the register it enforces."
+          },
+          {
+            "question": "Which earlier record absorbs this course's time and firewall decisions?",
+            "answers": [
+              "The hardening course's exception and deviation record",
+              "The workbook from course 1.1 only",
+              "The offline root's ceremony log"
+            ],
+            "correct": 0,
+            "explanation": "One living exception record, started in 1.3, keeps every deliberate departure in a single place the authorization path can assess."
+          }
+        ],
+        "recap": [
+          "Change-triggered scans ran; deltas are attributed.",
+          "The router's record is its hashed export plus the register and deny log.",
+          "Owners, review dates, and the handoff to course 1.6 are written."
+        ],
+        "next": "That completes course 1.5. Course 1.6 finishes the PKI services: the pki.sbd.test publication site on SBD-PKI-MGMT01 and certificate template administration.",
+        "sources": [
+          "controls"
+        ]
+      }
+    ]
+  },
+  "catalog": {
+    "id": "connect-segment",
+    "afterEpisode": "dc01-dc02",
+    "categoryId": "network-build",
+    "categoryOrder": 5,
+    "kind": "configuration",
+    "moduleCount": 7,
+    "lessonCount": 7,
+    "estimatedHours": 3.0,
+    "stages": [
+      {
+        "title": "Design the segmentation and service paths",
+        "detail": "A VLAN is a boundary only if something enforces it. Before touching the router, write the policy: default deny between VLANs, and an exception register where every permitted path names its source, destination, port, and reason."
+      },
+      {
+        "title": "Build the core router",
+        "detail": "The core is a virtual machine the lab controls: one interface per VLAN, the planned gateway address on each, and no default route anywhere — there is nowhere outside this network to go."
+      },
+      {
+        "title": "Enforce default-deny with the register",
+        "detail": "Now the policy becomes configuration: deny between VLANs by default, permit exactly the register's rows, and log what gets dropped so the denials are visible evidence, not silence."
+      },
+      {
+        "title": "Stand up SBD-TIME01 and the time hierarchy",
+        "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Build the internal reference, point the PDC emulator at it, and let the domain hierarchy carry time to everything else."
+      },
+      {
+        "title": "Prove the paths and the denials",
+        "detail": "A segmented network is proven twice: every registered path works from where it is supposed to work, and the paths you never granted fail — visibly, in the log."
+      },
+      {
+        "title": "Protect the router's own management",
+        "detail": "The router enforces every boundary, so whoever manages it controls them all. Give its management a separate network, a short list of who may reach it, a log of every change, and a versioned copy of every configuration."
+      },
+      {
+        "title": "Delta scan the change and hand off",
+        "detail": "Course 1.3's rule was simple: every role addition gets a scan. Two systems joined the network and every existing one gained a gateway — that is a change worth measuring."
+      }
+    ],
+    "training": {
+      "guide": "/training/connect-segment",
+      "checklist": "/training/connect-segment/configuration-checklist.md",
+      "materialsEdition": "1.2",
+      "updated": "8 October 2026",
+      "checklistPage": "/training/connect-segment/checklist",
+      "pdf": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.pdf",
+      "word": "/training/connect-segment/SecureByDesign-connect-segment-Workbook.docx",
+      "pages": 18
+    },
+    "number": "1.5",
+    "title": "Connect and segment the network",
+    "subtitle": "Core routing, default-deny ACLs & internal time",
+    "description": "Bring the eight VLANs online through a router the lab controls. Enforce default deny with a documented exception register, stand up the internal time service, and prove every permitted path and denial from the Windows side.",
+    "tags": [
+      "Windows Server 2025",
+      "Segmentation",
+      "Routing",
+      "Access control",
+      "Time service"
+    ],
+    "platform": "Windows Server 2025",
+    "systems": [
+      "SBD-CORE01",
+      "SBD-TIME01"
+    ],
+    "artLabels": [
+      "Route the eight VLANs",
+      "Default-deny + register",
+      "Internal time source"
+    ],
+    "outcomes": [
+      "Design and enforce default-deny segmentation with a justified exception register.",
+      "Build the core router and prove permitted paths and logged denials per VLAN.",
+      "Stand up SBD-TIME01 and verify the domain time hierarchy end to end."
+    ]
+  }
+}

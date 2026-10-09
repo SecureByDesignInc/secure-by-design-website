@@ -39,8 +39,20 @@ const redirect=(location,https)=>new Response(null,{status:301,headers:{location
 // Retired Community forms (careers, contributions, resource sign-ups) are closed until relaunch: no new
 // personal data, no email. Owner reads and the email-preference links in sent emails keep working.
 const retiredForms=new Set(['/api/career-submissions','/api/community-contributions','/api/resource-signups']);
+// October 2026 library restructure: course 1.5 (connect-segment) was removed, and course 1.6 (pki-services)
+// merged into course 1.4 (two-tier-pki). Old links land on the Training Library or the merged course.
+function retiredCourse(url){
+ const path=url.pathname;
+ if(/^\/training\/connect-segment(\/|$)/.test(path))return new URL('/training',url).toString();
+ if(/^\/training\/pki-services(\/|$)/.test(path)){
+  const merged=new URL(path.replace(/^\/training\/pki-services\/SecureByDesign-pki-services-Workbook\./,'/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.').replace(/^\/training\/pki-services/,'/training/two-tier-pki'),url);
+  merged.search=url.search;return merged.toString();
+ }
+ return null;
+}
 async function route(request,env,ctx){
  const path=new URL(request.url).pathname;
+ const moved=retiredCourse(new URL(request.url));if(moved)return redirect(moved,false);
  // Vulnerability-report contact (RFC 9116). public/.well-known/security.txt normally answers first.
  if(path==='/.well-known/apple-app-site-association'||path==='/apple-app-site-association')return new Response(appSiteAssociation,{headers:{'content-type':'application/json','cache-control':'public, max-age=3600'}});
  if(path==='/app-auth/callback')return appCallbackPage(new URL(request.url));

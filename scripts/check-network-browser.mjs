@@ -152,7 +152,7 @@ try {
     await page.selectOption('#systemSelect', 'dc1');
     await page.locator('#connectionsToggle').click();
     assert.equal(await page.locator('#connectionsToggle').getAttribute('aria-pressed'), 'true');
-    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*F03[\s\S]*F08/, 'Connections list every rule for the system');
+    assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F01[\s\S]*F03[\s\S]*F09/, 'Connections list every rule for the system');
     await page.locator('#connectionsToggle').click();
     await page.selectOption('#systemSelect', 'sql');
     assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F22[\s\S]*Denied[\s\S]*F14/, 'SBD-SQL01 lists its one registered consumer and the web-to-SQL deny');

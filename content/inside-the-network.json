@@ -147,6 +147,14 @@
         {
           "id": "AC-6",
           "title": "Least Privilege"
+        },
+        {
+          "id": "AU-8",
+          "title": "Time Stamps"
+        },
+        {
+          "id": "SC-45",
+          "title": "System Time Synchronization"
         }
       ]
     },
@@ -327,32 +335,6 @@
         {
           "id": "CM-6",
           "title": "Configuration Settings"
-        }
-      ]
-    },
-    {
-      "id": "time",
-      "name": "SBD-TIME01",
-      "role": "Internal authoritative time",
-      "segment": "VLAN 20 · Identity & services",
-      "address": "10.0.20.40",
-      "location": "Rack appliance · R01 · server room",
-      "purpose": "Internal reference clock. Source accuracy, fallback, and drift thresholds must be approved without adding an external network connection.",
-      "services": [
-        {
-          "name": "Internal authoritative time",
-          "port": "Listeners to define",
-          "note": ""
-        }
-      ],
-      "controls": [
-        {
-          "id": "AU-8",
-          "title": "Time Stamps"
-        },
-        {
-          "id": "SC-45",
-          "title": "System Time Synchronization"
         }
       ]
     },
@@ -964,8 +946,7 @@
       "systems": [
         "SBD-DHCP01",
         "SBD-SYSLOG01",
-        "SBD-WSUS01",
-        "SBD-TIME01"
+        "SBD-WSUS01"
       ],
       "controls": [
         {

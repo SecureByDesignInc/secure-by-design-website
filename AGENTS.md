@@ -327,3 +327,23 @@ The owner approved Claude's 3D review (rooms, realistic rack rows, vendor-neutra
 - **Look and labels.** Darker floors and desaturated equipment so traffic carries the colour; contact shadows under equipment; quiet glass labels with a colour bar (policy and transfer badges keep a full outline). Packets swell as they leave and ripple on arrival. When a server-room system is shown, row B and the containment glass step aside. Phones get a taller stage and a compact heading and caption.
 - **Checks.** `check-network-architecture.mjs` asserts the building and hosting rules above; `check-data-center-equipment.mjs` builds the new kit; `check-network-browser.mjs` checks VLAN names on the layer, the Topology toggle and link, and Explore's segments.
 - **App links (8 October 2026).** `/.well-known/apple-app-site-association` (served by the Worker as JSON) lets the iOS app (team PZK2PZT6KP, `com.securebydesigninc.secureByDesignApp`) claim `/app-auth/*` (applinks) and use it as an `ASWebAuthenticationSession` HTTPS callback (webcredentials). `/api/sign-in/app-handoff` returns `https://securebydesigninc.com/app-auth/callback?code=…` when the app passes `callback=https` (iOS 17.4+), else `securebydesign://auth?code=…`. `/app-auth/callback` is a fallback page that offers the custom-scheme link. Android App Links (`assetlinks.json`) wait for the Play signing fingerprint.
+
+## Training library restructure — October 8, 2026 (night)
+
+The owner restructured the Build the Network path. These notes supersede earlier course numbers and course lists (including the October 6–8 notes that cite courses 1.5–1.12, and the deploy check's 15-tile count).
+
+- **Course 1.5 removed.** “Connect and segment the network” is out: this is not a networking course. Later courses assume the network's routing, VLANs, default-deny segmentation and its documented service-path (ACL) register already exist; they still add register rows, read the core router's deny log, and probe denials, but never build or configure the router. Inside the Network still shows the core router and every rule. Don't restore router-building lessons.
+- **Time moved into course 1.2,** now “Configure DNS and time” (lesson 5, `time`). See the SBD-TIME01 removal below: the PDC emulator, SBD-DC01, is the time source.
+- **PKI is one course.** Former 1.6 “Finish the PKI services” merged into 1.4, now “Configure the two-tier PKI” (10 lessons, slug `two-tier-pki`): design, root, request, sign, activate (`publish`), publication site, publish trust, template administration, first templates, and one closing `validate` lesson.
+- **Numbering.** The path runs 1.1–1.10: tiered admin 1.5, logging 1.6, fleet 1.7, patching 1.8, business services 1.9, recovery 1.10. Slugs did not change.
+- **Old links and saved progress.** `server/index.js` sends `/training/connect-segment…` to `/training` and `/training/pki-services…` to the matching `/training/two-tier-pki…` path. `drizzle/0012_course_restructure.sql` carries saved progress and learning activity to the moved lessons' new IDs (a completed record wins). Retired materials are in `archive/public-retired-2026-10-08/training/`.
+- **Workbooks.** The 1.2 and 1.4 workbooks gained lesson pages (cloned in place, then filled by `scripts/sync-workbooks.py`). Changed courses moved up a materials edition; 1.4 is edition 2.0.
+
+## SBD-TIME01 removed — October 8, 2026 (night)
+
+The owner removed SBD-TIME01 from the training and from Inside the Network: learners use the domain controller as the NTP source. This supersedes every earlier note about TIME01, the rack-appliance clock, and rule F08.
+
+- **Design.** SBD-DC01, the PDC emulator, is the domain's authoritative time source. It is marked reliable and serves time from its own clock (no external peer); how that clock is checked against an approved reference and corrected, and its drift threshold, are documented decisions. Hypervisor time synchronization is off for both domain controller VMs. SBD-DC02 and every other domain member follow the domain hierarchy (F09, UDP 123 to the domain controllers); Linux members point chrony or ntpd at both domain controllers. AU-8 and SC-45 now sit on SBD-DC01.
+- **Model.** The TIME01 system, its address (10.0.20.40), the rack appliance in R01, and rule F08 are gone; the rule numbering keeps its gap rather than renumbering F09–F22. The model now has 21 named systems plus the workstation group. The traffic matrix, implementation plan and text version were regenerated.
+- **Course 1.2 lesson 5** is “Make SBD-DC01 the domain's time source” (ID `time` unchanged, so saved progress carries over).
+

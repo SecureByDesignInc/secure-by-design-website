@@ -26,7 +26,7 @@ The eight review priorities are implemented in the website model through `securi
 
 The user confirmed one server instance each for Splunk, Tenable/Nessus, and Trellix ePO/DLP. Preserve these constraints: no cluster, standby, or extra product nodes. AUDIT01 is separate retained storage, not a Splunk replica. Model recovery from protected backups and vendor-supported recovery material, including log queues, deferred scans, and verification of agent behavior during an ePO/DLP outage. Do not invent application/database co-location requirements.
 
-Added planning nodes are TIME01, ADMIN-SRV01, and ADMIN-PC01. The existing jump box is scoped to identity/PKI. Host rules and separate identities enforce the three administration scopes inside VLAN 60. This is an example design; no real system was configured. Current acceptance tests also verify policy outcomes and offline-root isolation.
+Added planning nodes are ADMIN-SRV01 and ADMIN-PC01 (TIME01 was added here too and removed on 8 October 2026; SBD-DC01, the PDC emulator, is the time source). The existing jump box is scoped to identity/PKI. Host rules and separate identities enforce the three administration scopes inside VLAN 60. This is an example design; no real system was configured. Current acceptance tests also verify policy outcomes and offline-root isolation.
 
 ## Data-center equipment view — October 5, 2026
 
