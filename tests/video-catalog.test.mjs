@@ -81,6 +81,9 @@ test('authorization parts cover the existing course once and preserve saved prog
     assert.equal(part.training.guide, `/training/rmf/index.html#catalog/${selected[0].id}`);
     for (const [index, module] of selected.entries()) {
       assert.equal(part.stages[index].href, `/training/rmf/index.html#catalog/${module.id}`);
+      // The expanded tile's module explorer lists these; keep them equal to the module catalog.
+      assert.deepEqual(part.stages[index].lessons, module.lessons);
+      assert.equal(part.stages[index].hours, module.hours);
       assert(progress.some(entry => entry.id === `training:rmf-boe-ato:${module.id}` && entry.href === part.stages[index].href));
     }
     for (const resource of part.training.relatedResources) {
@@ -330,3 +333,13 @@ test('the first recording remains unpublished and the retired formats are remove
       /micro.?doses|FORMAT 0[12]|quick-clips/i,
     );
 });
+
+test('every course tile carries the companion details the expanded tile shows', () => {
+  for (const course of library.courses) {
+    assert.ok(course.training.cover && existsSync(new URL('../public' + course.training.cover, import.meta.url)), `${course.id} cover`);
+    assert.ok(course.outcomeSummary, `${course.id} outcome summary`);
+    assert.ok(course.networkLabel, `${course.id} network label`);
+    assert.ok(course.artLabels?.length >= 2, `${course.id} outcome labels`);
+  }
+});
+

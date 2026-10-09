@@ -1,24 +1,285 @@
-import { BookOpen, Download, FileText, Share2 } from 'lucide-react';
+'use client';
+
+// The expanded tile for a course. It mirrors the identity build's companion
+// (episode-experience.tsx): the same heading, materials panel and recording column,
+// then a lesson explorer in place of the 3D build explorer. Full lessons, knowledge
+// checks and saved progress stay in the course's own guide.
+import { useEffect, useState, type CSSProperties } from 'react';
+import Link from 'next/link';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  ClipboardList,
+  Download,
+  FileText,
+  Maximize2,
+  Network,
+  Pause,
+  Play,
+} from 'lucide-react';
 import type { TrainingCourse } from './catalog-types';
-import TrainingShare from './training-share';
-import ConfigurationGuide from './configuration-guide';
+import { CompanionHeading, CompanionMaterials, CompanionWatch, type CompanionLink } from './companion';
 import configurationCourses from '../../content/configuration-courses.json';
+
+type Configuration = (typeof configurationCourses)[number];
+type Step = {
+  id: string;
+  label: string;
+  summary: string;
+  note?: { label: string; text: string };
+  duration?: string;
+  listHeading: string;
+  objectives: string[];
+  open: { href: string; label: string };
+  model?: { href: string; label: string; text: string };
+};
+
+const pad = (value: number) => String(value).padStart(2, '0');
+// The poster names at most two systems, like the identity build's "DC01 + DC02".
+function posterSystems(course: TrainingCourse) {
+  if (!course.systems.length) return course.title;
+  const names = course.systems.map(system => system.replace(/^SBD-/, ''));
+  return names.slice(0, 2).join(' + ');
+}
+
+function lessonSteps(course: TrainingCourse, configuration: Configuration): Step[] {
+  return configuration.lessons.map((lesson, index) => ({
+    id: lesson.id,
+    label: lesson.title,
+    summary: lesson.summary,
+    note: { label: 'WHAT SUCCESS LOOKS LIKE', text: lesson.check },
+    duration: `ABOUT ${lesson.minutes} MIN`,
+    listHeading: 'In this lesson you will',
+    objectives: lesson.objectives,
+    open: { href: `${course.training.guide}#${lesson.id}`, label: `Open lesson ${index + 1} in the guide` },
+    model: (lesson as { model?: Step['model'] }).model,
+  }));
+}
+
+function moduleSteps(course: TrainingCourse): Step[] {
+  return course.stages.map((stage, index) => ({
+    id: stage.number ?? pad(index + 1),
+    label: stage.title,
+    summary: stage.detail,
+    note: { label: 'IN THE NETWORK', text: 'Apply this module to the Inside the Network practice system you built in the Build the Network courses.' },
+    duration: stage.hours ? `ABOUT ${stage.hours} ${stage.hours === '1' ? 'HOUR' : 'HOURS'}` : undefined,
+    listHeading: 'Lessons in this module',
+    objectives: stage.lessons ?? [],
+    open: { href: stage.href ?? course.training.guide, label: `Open module ${stage.number ?? pad(index + 1)}` },
+  }));
+}
 
 export default function CourseExperience({ course }: { course: TrainingCourse }) {
   const configuration = configurationCourses.find(item => item.id === course.id);
-  if (configuration) return <ConfigurationGuide course={course} configuration={configuration} />;
-  return <section className="vc-course-experience" aria-labelledby={`course-resources-${course.id}`}>
-    <div className="vc-course-resources">
-      <div className="vc-training-top"><span className="vc-training-label"><BookOpen size={17} />YOUR TRAINING MATERIALS</span><span className="vc-included-badge"><Share2 size={14} aria-hidden="true" />Learn it. Share it.</span></div>
-      {course.seriesPart && <p className="vc-kicker">NETWORK AUTHORIZATION · PART {course.seriesPart} OF 3</p>}
-      <h4 id={`course-resources-${course.id}`}>{course.title}</h4>
-      <p>{course.description}</p>
-      <p>Follow a Learn, See, Build, Prove sequence through {course.moduleCount} modules and {course.lessonCount} lesson primers. Apply each task to the system you build in <a href="/inside-the-network">Inside the Network</a>.</p>
-      <a className="vc-guide-link" href={course.training.guide}><span><BookOpen size={22} /><span><b>Open {course.title} training</b><small>Start this part’s lessons, practice tasks, and knowledge checks</small></span></span></a>
-      <div className="vc-download-list">{course.training.relatedResources?.map(resource => <a key={resource.href} href={resource.href}><BookOpen size={20} /><span><b>{resource.title}</b><small>{resource.detail}</small></span></a>)}{course.training.word && <a href={course.training.word} download><FileText size={20} /><span><b>Download the full authorization catalog</b><small>All three parts · Editable Word document · {course.training.pages} pages</small></span><Download size={18} /></a>}</div>
-      <TrainingShare />
-      <div className="vc-training-edition"><p>Edition {course.training.materialsEdition} · Updated {course.training.updated}</p><p>{course.estimatedHours} estimated study hours{course.capstoneHours ? `: ${course.estimatedHours - course.capstoneHours} guided hours plus a ${course.capstoneHours} hour capstone` : ' of guided learning'}.</p></div>
+  const steps = configuration ? lessonSteps(course, configuration) : moduleSteps(course);
+  const unit = configuration ? 'lesson' : 'module';
+  const [active, setActive] = useState(0);
+  const [tour, setTour] = useState(false);
+  useEffect(() => {
+    if (!tour) return;
+    const timer = setInterval(() => setActive(value => (value + 1) % steps.length), 4200);
+    return () => clearInterval(timer);
+  }, [tour, steps.length]);
+  const current = steps[active] ?? steps[0];
+  if (!current) return null;
+  const select = (index: number) => {
+    setActive(index);
+    setTour(false);
+  };
+  const training = course.training;
+  const authorization = course.kind === 'authorization';
+  const columns = steps.length <= 6 ? steps.length : Math.ceil(steps.length / 2);
+
+  const links: CompanionLink[] = configuration
+    ? [
+        ...(training.pdf ? [{ href: training.pdf, title: 'Companion workbook', detail: `PDF · ${training.pages} pages`, icon: <FileText size={19} />, trailing: <ArrowUpRight size={16} />, newTab: true }] : []),
+        ...(training.word ? [{ href: training.word, title: 'Editable workbook', detail: 'Word document', icon: <FileText size={19} />, trailing: <Download size={16} />, download: true }] : []),
+        ...(training.checklistPage ? [{ href: training.checklistPage, title: 'Printable checklist', detail: 'Configuration and evidence checklist', icon: <ClipboardList size={19} />, trailing: <ArrowUpRight size={16} /> }] : []),
+        ...(training.checklist ? [{ href: training.checklist, title: 'Checklist for your notes', detail: 'Markdown file', icon: <Download size={19} />, trailing: <Download size={16} />, download: true }] : []),
+      ]
+    : [
+        ...(training.relatedResources ?? []).map(resource => ({ href: resource.href, title: resource.title, detail: resource.detail, icon: <BookOpen size={19} />, trailing: <ArrowUpRight size={16} /> })),
+        ...(training.word ? [{ href: training.word, title: 'The full authorization catalog', detail: `All three parts · Word document · ${training.pages} pages`, icon: <FileText size={19} />, trailing: <Download size={16} />, download: true }] : []),
+      ];
+
+  return (
+    <div className="vc-experience">
+      <section className="vc-episode" aria-labelledby={`course-resources-${course.id}`}>
+        <CompanionHeading
+          id={`course-resources-${course.id}`}
+          intro={configuration
+            ? 'Start with the interactive guide or download the workbook and checklist. Everything you need is included below.'
+            : 'Start with this part’s interactive training or download the full catalog. Everything you need is included below.'}
+          action={{ href: training.guide, label: configuration ? 'Open the full guide' : 'Open the training', icon: <BookOpen size={16} /> }}
+        />
+        <div className="vc-episode-content">
+          <CompanionMaterials
+            id={`training-${course.id}`}
+            cover={training.cover}
+            coverAlt={configuration
+              ? `Secure By Design companion workbook for ${course.title}`
+              : 'Secure By Design Risk Management Framework training catalog'}
+            heading={['Keep the knowledge.', authorization ? 'Authorize with confidence.' : 'Build with confidence.']}
+            summary={configuration
+              ? `${training.pages} pages of explanations, configuration steps, verification commands, and evidence prompts.`
+              : `All three parts in one ${training.pages}-page editable catalog: modules, study hours, and sources.`}
+            guide={{
+              href: training.guide,
+              title: configuration ? 'Open the interactive guide' : `Open ${course.title} training`,
+              detail: configuration ? `${steps.length} lessons · knowledge checks · your progress` : 'Lessons, practice tasks, and knowledge checks',
+              icon: <BookOpen size={20} />,
+              trailing: <ArrowUpRight size={19} />,
+            }}
+            links={links}
+            edition={<>
+              <p>Course {course.number} · Materials edition {training.materialsEdition} · Updated {training.updated}</p>
+              <p>
+                {course.estimatedHours} estimated study hours
+                {course.capstoneHours ? `: ${course.estimatedHours - course.capstoneHours} guided hours plus a ${course.capstoneHours} hour capstone` : ''}.
+              </p>
+              {authorization && <p>The three Network Authorization tiles share one course. Your module progress and evidence workspace carry across all three parts.</p>}
+              <p>© 2026 Secure By Design Team LLC.</p>
+            </>}
+          />
+          <CompanionWatch
+            title={course.title}
+            embedUrl={null}
+            servers={course.systems.length > 0}
+            tag={authorization ? `NETWORK AUTHORIZATION · PART ${course.seriesPart} OF 3` : course.tags[0]}
+            systems={posterSystems(course)}
+            detail={course.tags.slice(1, 3).join(' & ')}
+            outcomesLabel={authorization ? 'WHAT YOU WILL PREPARE' : 'WHAT YOU WILL BUILD'}
+            outcomeSummary={course.outcomeSummary}
+            outcomes={course.artLabels ?? course.outcomes}
+          />
+        </div>
+      </section>
+
+      <section className="vc-explorer" aria-labelledby={`lesson-explorer-${course.id}`}>
+        <div className="vc-explorer-heading">
+          <div className="vc-stage-title">
+            <BookOpen size={21} />
+            <div>
+              <p className="vc-kicker">{configuration ? 'INTERACTIVE LESSON EXPLORER' : 'INTERACTIVE MODULE EXPLORER'}</p>
+              <h4 id={`lesson-explorer-${course.id}`}>{course.subtitle}</h4>
+            </div>
+          </div>
+          <div className="vc-scene-tools">
+            <a href={training.guide}>
+              <BookOpen size={15} />
+              <span>Full guide</span>
+            </a>
+            <Link href="/inside-the-network" aria-label="Explore the complete network">
+              <Maximize2 size={15} />
+              <span>Full network</span>
+            </Link>
+          </div>
+        </div>
+        <div className="vc-scene-layout">
+          <aside className="vc-build-inspector" aria-live="polite">
+            <div className="vc-inspector-marker">
+              <span>{pad(active + 1)}</span>
+              <p>
+                {authorization ? 'THE AUTHORIZATION STORY' : 'THE BUILD STORY'}
+                <br />
+                <b>{steps.length} connected {unit}s</b>
+              </p>
+            </div>
+            <h5>{current.label}</h5>
+            <p>{current.summary}</p>
+            {current.note && (
+              <div className="vc-network-note">
+                <span>{current.note.label}</span>
+                <p>{current.note.text}</p>
+              </div>
+            )}
+            <button
+              type="button"
+              className="vc-story-button"
+              aria-pressed={tour}
+              onClick={() => {
+                setTour(value => !value);
+                if (!tour) setActive(0);
+              }}
+            >
+              {tour ? <Pause size={15} /> : <Play size={15} />}
+              {tour ? 'Pause the course story' : 'Play the course story'}
+            </button>
+          </aside>
+          <div className="vc-scene-wrap vc-lesson-stage">
+            <div className="vc-scene-meta">
+              <span>
+                <i />
+                {course.systems.length ? course.systems.join(' + ') : 'Inside the Network practice system'}
+              </span>
+              <span>{course.networkLabel}</span>
+            </div>
+            <div className="vc-lesson-stage-body">
+              <span className="vc-lesson-stage-number" aria-hidden="true">{pad(active + 1)}</span>
+              <p className="vc-kicker">
+                {unit.toUpperCase()} {active + 1} OF {steps.length}
+                {current.duration ? ` · ${current.duration}` : ''}
+              </p>
+              {current.objectives.length > 0 ? (
+                <>
+                  <h5>{current.listHeading}</h5>
+                  <ul>
+                    {current.objectives.map(objective => (
+                      <li key={objective}>
+                        <Check size={15} aria-hidden="true" />
+                        {objective}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <h5>{current.label}</h5>
+              )}
+              <div className="vc-lesson-stage-actions">
+                <a href={current.open.href}>
+                  {current.open.label}
+                  <ArrowUpRight size={16} />
+                </a>
+                {current.model && (
+                  <a href={current.model.href}>
+                    <Network size={15} />
+                    See {current.model.label} inside the network
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="vc-orbit-hint">
+              <BookOpen size={13} />{' '}
+              {configuration
+                ? 'Full steps, verification commands, and knowledge checks are in the guide'
+                : 'Full lessons, practice tasks, and knowledge checks are in the training'}
+            </div>
+          </div>
+        </div>
+        <nav
+          className="vc-chapters vc-chapters-lessons"
+          aria-label={`${course.title} ${unit}s`}
+          style={{ '--lesson-columns': columns } as CSSProperties}
+        >
+          {steps.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-current={index === active ? 'step' : undefined}
+              onClick={() => select(index)}
+            >
+              <span>{pad(index + 1)}</span>
+              <div>
+                <b>{item.label}</b>
+                <small>{index === active ? 'Exploring now' : `Explore ${unit}`}</small>
+              </div>
+              <ArrowRight size={15} />
+            </button>
+          ))}
+        </nav>
+      </section>
     </div>
-    <div className="vc-course-path"><p className="vc-kicker">THE LEARNING PATH</p><h4>What you’ll work through</h4><ol>{course.stages.map((stage, index) => <li key={stage.title}><span>{stage.number ?? String(index + 1).padStart(2, '0')}</span><div><h5>{stage.href ? <a href={stage.href}>{stage.title}</a> : stage.title}</h5><p>{stage.detail}</p></div></li>)}</ol><p className="vc-course-note">These tiles share one complete authorization course. Your existing module progress and evidence workspace carry across all three parts.</p></div>
-  </section>;
+  );
 }

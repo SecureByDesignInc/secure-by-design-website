@@ -2,13 +2,10 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  BookOpen,
-  Check,
   Download,
   FileText,
   Maximize2,
@@ -17,14 +14,12 @@ import {
   Pause,
   Play,
   RotateCcw,
-  Share2,
-  Video,
 } from 'lucide-react';
 import type { CatalogScene } from './catalog-scene';
 import { getYouTubeEmbedUrl, supportsIdentityScene } from './video-utils';
 
 import type { Episode } from './catalog-types';
-import TrainingShare from './training-share';
+import { CompanionHeading, CompanionMaterials, CompanionWatch } from './companion';
 
 const motionQuery = '(prefers-reduced-motion: reduce)';
 const subscribeMotion = (listener: () => void) => {
@@ -114,195 +109,51 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
         className="vc-episode"
         aria-labelledby={`episode-resources-${episode.id}`}
       >
-        <header className="vc-episode-heading">
-          <div>
-            <p className="vc-kicker">YOUR COURSE COMPANION</p>
-            <h4 id={`episode-resources-${episode.id}`}>
-              Your training materials.
-            </h4>
-            <p>
-              Start with the interactive guide or download the workbook and
-              verification commands. Everything you need is included below.
-            </p>
-          </div>
-          <a href={episode.training.package} download>
-            <Download size={16} />
-            Download all materials
-          </a>
-        </header>
+        <CompanionHeading
+          id={`episode-resources-${episode.id}`}
+          intro="Start with the interactive guide or download the workbook and verification commands. Everything you need is included below."
+          action={{ href: episode.training.package, label: 'Download all materials', icon: <Download size={16} />, download: true }}
+        />
         <div className="vc-episode-content">
-          <aside
-            className="vc-training"
-            aria-labelledby={`training-${episode.id}`}
-          >
-            <div className="vc-training-top">
-              <span className="vc-training-label">
-                <BookOpen size={15} />
-                YOUR TRAINING MATERIALS
-              </span>
-              <span className="vc-included-badge">
-                <Share2 size={14} aria-hidden="true" />
-                Learn it. Share it.
-              </span>
-            </div>
-            <div className="vc-workbook-intro">
-              <Image
-                src={episode.training.cover}
-                width={154}
-                height={199}
-                alt={`Secure By Design companion workbook for ${episode.title}`}
-                loading="lazy"
-                unoptimized
-              />
-              <div>
-                <h5 id={`training-${episode.id}`}>
-                  Keep the knowledge.
-                  <br />
-                  Build with confidence.
-                </h5>
+          <CompanionMaterials
+            id={`training-${episode.id}`}
+            cover={episode.training.cover}
+            coverAlt={`Secure By Design companion workbook for ${episode.title}`}
+            heading={['Keep the knowledge.', 'Build with confidence.']}
+            summary={`${episode.training.pages} pages of explanations, configuration steps, security reasoning, and evidence prompts.`}
+            guide={{ href: episode.training.guide, title: 'Open the interactive guide', detail: '3D network · chapter checks · your notes', icon: <Network size={20} />, trailing: <ArrowUpRight size={19} /> }}
+            links={[
+              { href: episode.training.pdf, title: 'Companion workbook', detail: `PDF · ${episode.training.pages} pages`, icon: <FileText size={19} />, trailing: <ArrowUpRight size={16} />, newTab: true },
+              { href: episode.training.word, title: 'Editable workbook', detail: 'Word document', icon: <FileText size={19} />, trailing: <Download size={16} />, download: true },
+              { href: episode.training.package, title: 'The complete learning package', detail: 'Guide, workbooks, and verification commands', icon: <Download size={19} />, trailing: <ArrowDown size={16} />, download: true },
+            ]}
+            edition={(episode.training.materialsEdition || episode.training.copyrightOwner || episode.training.notices) && <>
+              {episode.training.materialsEdition && (
                 <p>
-                  {episode.training.pages} pages of explanations, configuration
-                  steps, security reasoning, and evidence prompts.
+                  Course {episode.number} · Materials edition{' '}
+                  {episode.training.materialsEdition}
+                  {episode.training.updated && <> · Updated {episode.training.updated}</>}
                 </p>
-              </div>
-            </div>
-            <a className="vc-guide-link" href={episode.training.guide}>
-              <span>
-                <Network size={20} />
-                <span>
-                  <b>Open the interactive guide</b>
-                  <small>3D network · chapter checks · your notes</small>
-                </span>
-              </span>
-              <ArrowUpRight size={19} />
-            </a>
-            <div className="vc-download-list">
-              <a href={episode.training.pdf} target="_blank" rel="noopener">
-                <FileText size={19} />
-                <span>
-                  <b>Companion workbook</b>
-                  <small>PDF · {episode.training.pages} pages</small>
-                </span>
-                <ArrowUpRight size={16} />
-              </a>
-              <a href={episode.training.word} download>
-                <FileText size={19} />
-                <span>
-                  <b>Editable workbook</b>
-                  <small>Word document</small>
-                </span>
-                <Download size={16} />
-              </a>
-              <a href={episode.training.package} download>
-                <Download size={19} />
-                <span>
-                  <b>The complete learning package</b>
-                  <small>Guide, workbooks, and verification commands</small>
-                </span>
-                <ArrowDown size={16} />
-              </a>
-            </div>
-            <TrainingShare />
-            {(episode.training.materialsEdition ||
-              episode.training.copyrightOwner ||
-              episode.training.notices) && (
-              <div className="vc-training-edition" aria-label="Edition and notices">
-                {episode.training.materialsEdition && (
-                  <p>
-                    Course {episode.number} · Materials edition{' '}
-                    {episode.training.materialsEdition}
-                    {episode.training.updated && (
-                      <> · Updated {episode.training.updated}</>
-                    )}
-                  </p>
-                )}
-                {episode.training.copyrightOwner && (
-                  <p>
-                    © {episode.training.copyrightYear}{' '}
-                    {episode.training.copyrightOwner}.
-                  </p>
-                )}
-                {episode.training.notices && (
-                  <a href={episode.training.notices}>Notices and permissions</a>
-                )}
-              </div>
-            )}
-          </aside>
-          <div className="vc-watch">
-            <div className="vc-video-surface">
-              {embedUrl ? (
-                <iframe
-                  key={embedUrl}
-                  src={embedUrl}
-                  title={`${episode.title} — video walkthrough`}
-                  loading="lazy"
-                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              ) : (
-                <div className="vc-recording-poster">
-                  <div className="vc-poster-top">
-                    <span>SECURE BY DESIGN</span>
-                    <span>THE NETWORK BUILD SERIES</span>
-                  </div>
-                  <div className="vc-poster-systems" aria-hidden="true">
-                    {supportsScene ? (
-                      <>
-                        <div className="vc-server-mini">
-                          <i />
-                          <i />
-                          <i />
-                          <i />
-                        </div>
-                        <span className="vc-poster-link" />
-                        <div className="vc-server-mini">
-                          <i />
-                          <i />
-                          <i />
-                          <i />
-                        </div>
-                      </>
-                    ) : (
-                      <Network size={76} />
-                    )}
-                  </div>
-                  <div className="vc-poster-bottom">
-                    <div>
-                      <span>{episode.tags[0]}</span>
-                      <h5>{episode.systems.join(' + ')}</h5>
-                      <p>{episode.tags.slice(1).join(' & ')}</p>
-                    </div>
-                    <span className="vc-coming">
-                      <Video size={15} />
-                      Video coming soon
-                    </span>
-                  </div>
-                </div>
               )}
-            </div>
-            <div className="vc-watch-note">
-              <Video size={19} />
-              <p>
-                {embedUrl
-                  ? 'Watch the course video here, with the training materials alongside you.'
-                  : 'The recording is on its way. Start exploring with the interactive guide and companion workbook.'}
-              </p>
-            </div>
-            <div className="vc-learning-outcomes">
-              <span>WHAT YOU WILL BUILD</span>
-              <p>{episode.outcomeSummary}</p>
-              <div>
-                {episode.outcomes.map((text) => (
-                  <span key={text}>
-                    <Check size={14} />
-                    {text}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
+              {episode.training.copyrightOwner && (
+                <p>
+                  © {episode.training.copyrightYear}{' '}
+                  {episode.training.copyrightOwner}.
+                </p>
+              )}
+              {episode.training.notices && <a href={episode.training.notices}>Notices and permissions</a>}
+            </>}
+          />
+          <CompanionWatch
+            title={episode.title}
+            embedUrl={embedUrl}
+            servers={supportsScene}
+            tag={episode.tags[0]}
+            systems={episode.systems.join(' + ')}
+            detail={episode.tags.slice(1).join(' & ')}
+            outcomeSummary={episode.outcomeSummary}
+            outcomes={episode.outcomes}
+          />
         </div>
       </section>
 
