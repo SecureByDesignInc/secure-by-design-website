@@ -1,0 +1,207 @@
+name: Site re-audit
+# Audit-only branch (not for main): read-only checks of securebydesigninc.com, the source at this commit, and the
+# owner's Cloudflare account (counts and settings only, never row data or secret values). Deploys nothing.
+on:
+  push:
+    branches: [audit/reaudit]
+    paths-ignore: ['audit-results/**']
+permissions:
+  contents: write
+concurrency:
+  group: re-audit
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i --prefix .github/audit/full cheerio@1.0.0 > /dev/null 2>&1
+      - name: Crawl and link check
+        continue-on-error: true
+        run: node .github/audit/full/crawl.mjs
+      - name: Spelling in rendered page text
+        continue-on-error: true
+        run: pip install -q codespell==2.3.0 && codespell --count audit-results/full/crawl/text > audit-results/full/crawl/codespell-pages.txt 2>&1; tail -3 audit-results/full/crawl/codespell-pages.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: crawl, path: audit-results/full, retention-days: 3 }
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm i --prefix .github/audit/full playwright@1.55.0 axe-core@4.10.3 > /dev/null 2>&1
+          .github/audit/full/node_modules/.bin/playwright install --with-deps chromium webkit firefox > /dev/null 2>&1
+      - name: Browser checks
+        continue-on-error: true
+        run: node .github/audit/full/browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: browser, path: audit-results/full, retention-days: 3 }
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Lighthouse
+        continue-on-error: true
+        run: .github/audit/full/lighthouse.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: lighthouse, path: audit-results/full, retention-days: 3 }
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Security checks
+        continue-on-error: true
+        run: .github/audit/full/security.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: security, path: audit-results/full, retention-days: 3 }
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CLOUDFLARE_WORKER_NAME: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+      CLOUDFLARE_D1_DATABASE_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
+      CLOUDFLARE_D1_DATABASE_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - name: Source checks
+        continue-on-error: true
+        run: .github/audit/full/source.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: source, path: audit-results/full, retention-days: 3 }
+  signin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm i --prefix /tmp/pw playwright@1.55.0 > /dev/null 2>&1
+          /tmp/pw/node_modules/.bin/playwright install --with-deps chromium > /dev/null 2>&1
+      - name: Sign-in checks on the live site
+        continue-on-error: true
+        run: PLAYWRIGHT_MODULE=/tmp/pw/node_modules/playwright/index.mjs node .github/audit/full/sign-in-live.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: signin, path: audit-results/full, retention-days: 3 }
+  live-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: |
+          npm i --prefix "$RUNNER_TEMP/pw" playwright@1.56.0 > /dev/null 2>&1
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium > /dev/null 2>&1
+      - name: The repository's browser check, against the live site
+        continue-on-error: true
+        env:
+          PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
+        run: |
+          mkdir -p dist/client audit-results/full/live-check
+          curl -s https://securebydesigninc.com/sitemap.xml -o dist/client/sitemap.xml
+          node scripts/browser-check.mjs https://securebydesigninc.com > audit-results/full/live-check/output.txt 2>&1; echo "exit $?" >> audit-results/full/live-check/output.txt
+          cp browser-check.json audit-results/full/live-check/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: live-check, path: audit-results/full, retention-days: 3 }
+  cloudflare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WORKER: ${{ vars.CLOUDFLARE_WORKER_NAME }}
+      D1_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
+      D1_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile > /dev/null 2>&1
+      - name: Account inventory (settings, counts and names only)
+        continue-on-error: true
+        run: |
+          OUT=audit-results/full/cloudflare; mkdir -p "$OUT"
+          A=$CLOUDFLARE_ACCOUNT_ID
+          api() { curl -s -m 30 -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4$1"; }
+          zone=$(api '/zones?name=securebydesigninc.com' | jq -r '.result[0].id // empty')
+          {
+          echo "== token: $(api /user/tokens/verify | jq -r '.result.status // .errors[0].message')"
+          echo "== zone: $(api '/zones?name=securebydesigninc.com' | jq -r '.result[0] | "\(.name) · \(.status) · plan \(.plan.name) · nameservers \(.name_servers|join(", ")) · original registrar \(.original_registrar // "?")"')"
+          echo "== workers"; api /accounts/$A/workers/scripts | jq -r 'if .success then (.result[] | "\(.id) · created \(.created_on[0:10]) · modified \(.modified_on[0:10])") else "error: \(.errors|tostring)" end'
+          echo "== worker custom domains"; api /accounts/$A/workers/domains | jq -r 'if .success then (.result[] | "\(.hostname) → \(.service) (\(.environment))") else "error: \(.errors|tostring)" end'
+          echo "== workers.dev route for $WORKER"; api /accounts/$A/workers/scripts/$WORKER/subdomain | jq -c '.result // .errors'
+          echo "== zone worker routes"; api /zones/$zone/workers/routes | jq -r 'if .success then (.result[]? | "\(.pattern) → \(.script)") else "error: \(.errors|tostring)" end'
+          echo "== D1 databases"; api /accounts/$A/d1/database | jq -r 'if .success then (.result[] | "\(.name) · \(.uuid[0:8]) · created \(.created_at[0:10]) · \(.file_size) bytes · \(.num_tables) tables") else "error: \(.errors|tostring)" end'
+          echo "== KV namespaces"; api /accounts/$A/storage/kv/namespaces | jq -r 'if .success then ((.result|length|tostring) + " namespaces: " + ([.result[].title]|join(", "))) else "error: \(.errors|tostring)" end'
+          echo "== R2 buckets"; api /accounts/$A/r2/buckets | jq -r 'if .success then ((.result.buckets|length|tostring) + " buckets") else "error: \(.errors|tostring)" end'
+          echo "== Pages projects"; api /accounts/$A/pages/projects | jq -r 'if .success then ((.result|length|tostring) + " projects: " + ([.result[].name]|join(", "))) else "error: \(.errors|tostring)" end'
+          echo "== Turnstile widgets"; api /accounts/$A/challenges/widgets | jq -r 'if .success then ((.result|length|tostring) + " widgets: " + ([.result[] | "\(.name) (\(.domains|join(" ")))"]|join(", "))) else "error: \(.errors|tostring)" end'
+          echo "== Web Analytics sites"; api "/accounts/$A/rum/site_info/list" | jq -r 'if .success then (.result[]? | "\(.ruleset.zone_name // .host // "?") · auto_install \(.auto_install) · created \(.created[0:10])") else "error: \(.errors|tostring)" end'
+          echo "== account members (count and roles only)"; api /accounts/$A/members | jq -r 'if .success then ((.result|length|tostring) + " members; roles: " + ([.result[].roles[]?.name]|unique|join(", ")) + "; statuses: " + ([.result[].status]|unique|join(", "))) else "error: \(.errors|tostring)" end'
+          echo "== zone settings"; api /zones/$zone/settings | jq -r 'if .success then (.result[] | select(.id|test("^(min_tls_version|ssl|tls_1_3|always_use_https|automatic_https_rewrites|security_header|http3|0rtt|brotli|early_hints|browser_check|security_level|challenge_ttl|email_obfuscation|server_side_exclude|hotlink_protection|opportunistic_encryption|ip_geolocation|websockets|always_online|tls_client_auth|ciphers|ech)$")) | "\(.id) = \(.value|tostring)") else "error: \(.errors|tostring)" end'
+          echo "== DNSSEC"; api /zones/$zone/dnssec | jq -r 'if .success then "status \(.result.status) · algorithm \(.result.algorithm) · digest type \(.result.digest_type) · modified \(.result.modified_on[0:10])" else "error: \(.errors|tostring)" end'
+          echo "== DNS records"; api "/zones/$zone/dns_records?per_page=200" | jq -r 'if .success then (.result[] | "\(.type)\t\(.name)\t\(if .type=="TXT" then (.content[0:70]) else .content end)\tproxied=\(.proxied)") else "error: \(.errors|tostring)" end'
+          echo "== certificate packs"; api "/zones/$zone/ssl/certificate_packs?status=all" | jq -r 'if .success then (.result[] | "\(.type) · \(.status) · \(.hosts|join(", ")) · authority \(.certificate_authority // "?") · validity \(.validity_days // "?") days") else "error: \(.errors|tostring)" end'
+          echo "== rulesets"; api /zones/$zone/rulesets | jq -r 'if .success then (.result[] | "\(.phase) · \(.kind) · \(.name)") else "error: \(.errors|tostring)" end'
+          for ph in http_request_firewall_custom http_ratelimit http_request_firewall_managed; do echo "== $ph rules"; api /zones/$zone/rulesets/phases/$ph/entrypoint | jq -r 'if .success then (.result.rules[]? | "\(.action) · enabled \(.enabled) · \(.description // "") · \(.expression[0:160])") else "none or error: \(.errors[0].message // "")" end'; done
+          echo "== bot management"; api /zones/$zone/bot_management | jq -c '.result // .errors'
+          echo "== page rules"; api /zones/$zone/pagerules | jq -r 'if .success then ((.result|length|tostring) + " page rules") else "error: \(.errors|tostring)" end'
+          } > "$OUT/inventory.txt" 2>&1
+          pnpm exec wrangler secret list --name "$WORKER" 2>/dev/null | jq -r '.[].name' > "$OUT/worker-secret-names.txt" 2>&1 || echo "could not list" > "$OUT/worker-secret-names.txt"
+          pnpm exec wrangler deployments list --name "$WORKER" 2>&1 | grep -E "Created|Author|Source|Message" | sed 's/^ *//' | tail -40 > "$OUT/deployments.txt" || true
+          printf '{"name":"inventory","compatibility_date":"2026-01-01","d1_databases":[{"binding":"DB","database_name":"%s","database_id":"%s"}]}\n' "$D1_NAME" "$D1_ID" > d1.json
+          run() { pnpm exec wrangler d1 execute DB --remote --config d1.json --json --command "$1" 2>/dev/null; }
+          {
+          echo "== tables and row counts"
+          for t in $(run "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '_cf_%' ORDER BY name" | jq -r '.[0].results[].name'); do
+            echo "$t: $(run "SELECT count(*) AS n FROM \"$t\"" | jq -r '.[0].results[0].n')"
+          done
+          echo "== applied migrations"; run "SELECT name FROM d1_migrations ORDER BY id" | jq -r '.[0].results[]?.name' 2>/dev/null | tr '\n' ' '
+          } > "$OUT/d1.txt" 2>&1
+          wc -l "$OUT"/*.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: cloudflare, path: audit-results/full, retention-days: 3 }
+  collect:
+    needs: [crawl, browser, lighthouse, security, source, signin, live-check, cloudflare]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: /tmp/parts }
+      - name: Save results to this branch
+        run: |
+          rm -rf audit-results/full && mkdir -p audit-results/full
+          for d in /tmp/parts/*/; do cp -r "$d"/. audit-results/full/; done
+          du -sh audit-results/full; find audit-results/full -type f | wc -l
+          git config user.name "Secure By Design"
+          git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
+          git add audit-results
+          git commit -qm "Re-audit results" || echo "nothing to commit"
+          git push origin HEAD:audit/reaudit
