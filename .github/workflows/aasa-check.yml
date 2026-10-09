@@ -1,0 +1,23 @@
+name: App links check
+
+# Audit helper (not for main): the live apple-app-site-association file, directly and through Apple's CDN.
+on:
+  push:
+    branches: ['audit/aasa']
+
+permissions:
+  contents: read
+
+jobs:
+  aasa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch
+        run: |
+          direct=$(curl -s -m 20 -o aasa.json -w '%{http_code} %{content_type} %{redirect_url}' https://securebydesigninc.com/.well-known/apple-app-site-association)
+          echo "::notice title=Direct::$direct | appIDs: $(jq -c '[.applinks.details[].appIDs[]?, .webcredentials.apps[]?]' aasa.json 2>/dev/null)"
+          cdn=$(curl -s -m 20 -o cdn.json -w '%{http_code}' https://app-site-association.cdn-apple.com/a/v1/securebydesigninc.com)
+          echo "::notice title=Apple CDN::$cdn | $(head -c 300 cdn.json | tr '\n' ' ')"
+          cb=$(curl -s -m 20 -o /dev/null -w '%{http_code}' 'https://securebydesigninc.com/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA')
+          echo "::notice title=Callback page::$cb"
