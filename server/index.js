@@ -23,6 +23,17 @@ function withoutPlatformIdentity(request){
  return new Request(request,{headers});
 }
 const securityTxt='Contact: mailto:support@securebydesigninc.com\nExpires: 2027-09-30T00:00:00.000Z\nPreferred-Languages: en\nCanonical: https://securebydesigninc.com/.well-known/security.txt\n';
+// Apple app links: the Secure By Design app (team PZK2PZT6KP) may open /app-auth/* and receive sign-in callbacks there.
+const appId='PZK2PZT6KP.com.securebydesigninc.secureByDesignApp';
+const appSiteAssociation=JSON.stringify({applinks:{details:[{appIDs:[appId],components:[{'/':'/app-auth/*',comment:'Sign-in hand-off back to the Secure By Design app'}]}]},webcredentials:{apps:[appId]}});
+// Shown only if a sign-in callback opens in a browser instead of the app: one tap hands the one-time code to the app.
+// The code expires in two minutes and is useless without the PKCE verifier the app holds.
+function appCallbackPage(url){
+ const code=url.searchParams.get('code')||'';
+ const valid=/^[A-Za-z0-9_-]{16,128}$/.test(code);
+ const body=valid?`<h1>Return to the Secure By Design app</h1><p>If the app didn't open on its own, tap the button. The link works once and expires in two minutes.</p><p><a class="button" href="securebydesign://auth?code=${code}">Open the app</a></p>`:`<h1>Open sign-in from the app</h1><p>This page finishes signing in to the Secure By Design app. Open the app, go to My Account, and choose Sign in.</p>`;
+ return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Return to the app | Secure By Design</title><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:32rem;margin:15vh auto;padding:0 1.25rem;color:#0b2e4e;line-height:1.5}h1{font-size:1.5rem}.button{display:inline-block;min-height:44px;padding:.75rem 1.25rem;border-radius:.6rem;background:#1269b9;color:#fff;text-decoration:none;font-weight:600}</style></head><body>${body}</body></html>`,{status:valid?200:400,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','referrer-policy':'no-referrer'}});
+}
 const localHosts=new Set(['localhost','127.0.0.1','[::1]']);
 const redirect=(location,https)=>new Response(null,{status:301,headers:{location,...(https?{'strict-transport-security':hsts}:{})}});
 // Retired Community forms (careers, contributions, resource sign-ups) are closed until relaunch: no new
@@ -31,6 +42,8 @@ const retiredForms=new Set(['/api/career-submissions','/api/community-contributi
 async function route(request,env,ctx){
  const path=new URL(request.url).pathname;
  // Vulnerability-report contact (RFC 9116). public/.well-known/security.txt normally answers first.
+ if(path==='/.well-known/apple-app-site-association'||path==='/apple-app-site-association')return new Response(appSiteAssociation,{headers:{'content-type':'application/json','cache-control':'public, max-age=3600'}});
+ if(path==='/app-auth/callback')return appCallbackPage(new URL(request.url));
  if(path==='/.well-known/security.txt'||path==='/security.txt')return new Response(securityTxt,{headers:{'content-type':'text/plain; charset=utf-8','cache-control':'public, max-age=86400'}});
  if(request.method==='POST'&&retiredForms.has(path.replace(/\/$/,''))){try{await request.body?.cancel();}catch{}return Response.json({error:'This form is closed for now. Nothing was submitted.'},{status:410,headers:{'cache-control':'no-store'}});}
  if(/^\/api\/native-activity(\/|$)/.test(path))return nativeActivityApi(request,env);

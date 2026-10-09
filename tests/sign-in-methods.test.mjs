@@ -291,6 +291,11 @@ test('the app trades a one-time code and PKCE verifier for a native session, eve
   assert.equal(user.email, 'app@example.com');
   const session = await nativeAuthApi(native('/api/native-auth/session', null, token), e);
   assert.equal(session.status, 200);
+  // iOS 17.4+ builds ask for the HTTPS callback the app claims through Associated Domains.
+  const https = await (await signInApi(api('/api/sign-in/app-handoff', { challenge, callback: 'https' }, cookie), e)).json();
+  assert.match(https.redirect, /^https:\/\/securebydesigninc\.com\/app-auth\/callback\?code=[A-Za-z0-9_-]+$/);
+  const viaHttps = await nativeAuthApi(native('/api/native-auth/exchange', { code: new URL(https.redirect).searchParams.get('code'), verifier }), e);
+  assert.equal(viaHttps.status, 200);
   // Browser requests cannot use the native exchange.
   const fromBrowser = await nativeAuthApi(new Request(origin + '/api/native-auth/exchange', { method: 'POST', body: '{}', headers: { origin, 'x-sbd-client': 'native-v1', 'content-type': 'application/json' } }), e);
   assert.equal(fromBrowser.status, 403);
