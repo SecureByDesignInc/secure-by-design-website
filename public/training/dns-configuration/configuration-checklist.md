@@ -2,14 +2,14 @@
 
 Secure By Design · Edition 1.2 · 8 October 2026
 
-The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the internal reference clock, SBD-TIME01.
+The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the PDC emulator, SBD-DC01.
 
 ## Before you start
 
 - [ ] Complete the DC01 + DC02 identity build with both domain controllers healthy.
 - [ ] Use an isolated Windows Server 2025 practice environment and an account delegated to manage DNS.
 - [ ] Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.
-- [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register; SBD-TIME01 answers at 10.0.20.40 (a stand-in Windows Server 2025 host is fine in a practice lab).
+- [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register.
 
 ## Map names to the network
 
@@ -98,26 +98,31 @@ repadmin /replsummary
 
 Notes / result / date: __________________________
 
-## Stand up SBD-TIME01 and the time hierarchy
+## Make SBD-DC01 the domain's time source
 
-- [ ] Confirm SBD-TIME01 at 10.0.20.40 answers as an NTP server. In the model it is a rack appliance; in a practice lab a small Windows Server 2025 host with the Windows Time service configured as an NTP server can stand in for it. In an air-gapped network its clock is the reference by declaration — record the source decision (an approved hardware source, or the stand-in host's clock) with its expected accuracy and drift threshold.
-- [ ] On SBD-DC01, the domain controller holding the PDC emulator role, configure Windows Time to use SBD-TIME01 as its manual peer and mark it reliable. Only the PDC emulator points at TIME01: SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.
-- [ ] Confirm the network's service-path register permits time — members to both domain controllers on UDP 123, and SBD-DC01 alone to SBD-TIME01. Write the time design into the build record now: course 1.3's hardening Group Policy objects (GPOs) must leave it intact, and if a Security Technical Implementation Guide (STIG) value disagrees with it, that course's deviation record is where the decision lives.
-- [ ] Verify the chain end to end: TIME01 serving, the PDC emulator sourcing from it, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold.
+- [ ] Confirm which domain controller holds the PDC emulator role — SBD-DC01 in this sample. The PDC emulator of the forest root domain sits at the top of the Windows Time hierarchy, so it is the one system you configure; everything else follows it.
+- [ ] On SBD-DC01, mark Windows Time as a reliable time source with no external peer, so it serves time from its own clock. In an air-gapped network that clock is the reference by declaration: record how it is set and checked — for example, compared on a schedule against an approved reference and corrected by an administrator, with each correction recorded — and the drift threshold you will hold it to.
+- [ ] Turn off the hypervisor's time synchronization for both domain controller virtual machines, so the host clock cannot silently override the PDC emulator. SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.
+- [ ] Confirm the network's service-path register permits time — every member to both domain controllers on UDP 123 — and write the time design into the build record: course 1.3's hardening Group Policy objects (GPOs) must leave it intact, and if a Security Technical Implementation Guide (STIG) value disagrees with it, that course's deviation record is where the decision lives.
+- [ ] Verify the chain end to end: SBD-DC01 serving as the reliable source, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold.
 
 **Commands:**
 
 ```
 Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
-# On the PDC emulator, then on SBD-DC02 and a member server:
-w32tm /query /source
+# On SBD-DC01 (the PDC emulator): serve time from its own clock as the reliable source
+w32tm /config /reliable:yes /update
+Restart-Service w32time
+w32tm /query /source   # on SBD-DC01: Local CMOS Clock
+# On SBD-DC02 and a member server:
+w32tm /query /source   # expected: a domain controller
 w32tm /query /status
-w32tm /stripchart /computer:10.0.20.40 /samples:3 /dataonly   # from SBD-DC01 only
+w32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly
 ```
 
-**Verify:** The PDC emulator reports SBD-TIME01 as its source, SBD-DC02 and the member server report a domain controller, and measured offsets sit inside the documented threshold.
+**Verify:** SBD-DC01 reports itself as the reliable source (Local CMOS Clock), SBD-DC02 and the member server report a domain controller, host time synchronization is off for both domain controllers, and measured offsets sit inside the documented threshold.
 
-**Evidence:** Record the time design decisions, the source and status output from both controllers and the member, the stripchart offsets, and the register rows that permit time: members to the domain controllers, and SBD-DC01 to SBD-TIME01.
+**Evidence:** Record the time design decisions (how DC01's clock is set and checked, and the drift threshold), the source and status output from both controllers and the member, the stripchart offsets, the hypervisor setting for both domain controller VMs, and the register rows that permit time: every member to the domain controllers.
 
 Notes / result / date: __________________________
 

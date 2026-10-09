@@ -33,7 +33,7 @@ export function createEquipment(lights) {
   }
   // Simple role icons for server faceplates, drawn locally (no image requests).
   const iconTextures=new Map();
-  const roles={dc1:'directory',dc2:'directory',dhcp:'address',syslog:'logs',wsus:'updates',time:'clock',subca:'certificate',templates:'certificate',fs:'folder',sql:'database',apps:'key',web:'web',splunk:'search',nessus:'scan',epo:'shield',audit:'archive',management:'gear',repo:'package',root:'key',workstations:'desktop',jump:'admin',jump1:'admin',jump2:'admin',core:'router',media:'media',backup:'archive'};
+  const roles={dc1:'directory',dc2:'directory',dhcp:'address',syslog:'logs',wsus:'updates',subca:'certificate',templates:'certificate',fs:'folder',sql:'database',apps:'key',web:'web',splunk:'search',nessus:'scan',epo:'shield',audit:'archive',management:'gear',repo:'package',root:'key',workstations:'desktop',jump:'admin',jump1:'admin',jump2:'admin',core:'router',media:'media',backup:'archive'};
   function drawIcon(ctx,role,color){
     ctx.strokeStyle='#e8f6ff';ctx.fillStyle='#e8f6ff';ctx.lineWidth=7;ctx.lineCap='round';ctx.lineJoin='round';
     const line=(...p)=>{ctx.beginPath();ctx.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)ctx.lineTo(p[i],p[i+1]);ctx.stroke();};

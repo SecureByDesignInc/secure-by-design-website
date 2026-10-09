@@ -367,8 +367,8 @@
           "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records."
         },
         {
-          "title": "Stand up SBD-TIME01 and the time hierarchy",
-          "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Point the PDC emulator at the internal reference clock and let the domain hierarchy carry time to everything else."
+          "title": "Make SBD-DC01 the domain's time source",
+          "detail": "Kerberos tolerates minutes of skew, not more, and an air-gapped network has no internet time to lean on. Make the PDC emulator the domain's reliable time source and let the domain hierarchy carry its time to everything else."
         },
         {
           "title": "Find the fault and record the fix",
@@ -388,7 +388,7 @@
       "number": "1.2",
       "title": "Configure DNS and time",
       "subtitle": "Zones, records, the domain time hierarchy & troubleshooting",
-      "description": "Build dependable internal name resolution and time on DC01 and DC02. Configure forward and reverse zones, manage service records, point the domain at the internal reference clock, and prove both in the air-gapped training network.",
+      "description": "Build dependable internal name resolution and time on DC01 and DC02. Configure forward and reverse zones, manage service records, make the PDC emulator the domain's time source, and prove both in the air-gapped training network.",
       "tags": [
         "Windows Server 2025",
         "DNS",
@@ -398,8 +398,7 @@
       "platform": "Windows Server 2025",
       "systems": [
         "SBD-DC01",
-        "SBD-DC02",
-        "SBD-TIME01"
+        "SBD-DC02"
       ],
       "artLabels": [
         "Forward + reverse zones",
@@ -410,7 +409,7 @@
         "Plan authoritative internal DNS and client settings.",
         "Configure secure AD-integrated zones and maintain records.",
         "Test both resolvers, directory discovery, and client fallback.",
-        "Point the PDC emulator at SBD-TIME01 and verify the domain time hierarchy end to end."
+        "Make the PDC emulator the domain's time source and verify the time hierarchy end to end."
       ]
     },
     {

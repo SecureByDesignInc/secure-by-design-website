@@ -55,7 +55,7 @@
   },
   {
     "id": "training:dns-configuration:time",
-    "title": "Stand up SBD-TIME01 and the time hierarchy",
+    "title": "Make SBD-DC01 the domain's time source",
     "href": "/training/dns-configuration#time",
     "group": "Network build"
   },

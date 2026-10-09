@@ -42,8 +42,8 @@ export const hosts = [
   {id:'hv06', name:'SBD-HV06', rack:'r04', y:7.9, vms:['splunk','nessus','epo','audit']},
   {id:'hv07', name:'SBD-HV07', rack:'r04', y:5.75, vms:['management','repo']}
 ];
-// The reference clock is a rack appliance rather than a virtual machine.
-export const appliances = [{id:'time', rack:'r01', y:4.6}];
+// Rack appliances that are systems in the model (none at present; every server is a virtual machine).
+export const appliances = [];
 
 export const hostHeight = 1.55, tileWidth = 1.24, tileGap = .1;
 const rackOf = id => racks.find(r => r.id === id);

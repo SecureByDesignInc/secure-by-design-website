@@ -16,7 +16,7 @@ export const courses={
 export const systemCourses={
  dc1:['identity','dns','harden','recovery'],dc2:['identity','dns','harden','recovery'],
  root:['pki'],subca:['pki'],templates:['pki'],
- time:['dns'],dhcp:['admin','fleet'],jump:['admin'],jump1:['admin'],jump2:['admin'],
+ dhcp:['admin','fleet'],jump:['admin'],jump1:['admin'],jump2:['admin'],
  syslog:['logging'],audit:['logging','recovery'],splunk:['logging'],
  workstations:['fleet'],
  wsus:['patch'],repo:['patch'],management:['patch'],epo:['patch'],nessus:['patch'],
