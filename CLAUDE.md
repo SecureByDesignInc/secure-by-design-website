@@ -16,8 +16,8 @@ Use Node.js 22.13 or later and pnpm. Install dependencies with `pnpm install`, s
 
 ## Hosting and data
 
-The live website is https://securebydesigninc.com and is hosted through the existing ChatGPT Sites project identified by `.openai/hosting.json`. This GitHub copy is for source collaboration. GitHub changes do not automatically publish to the existing website. Coordinate integration and publishing through the existing Sites workflow; do not create a replacement production site or change the domain without the owner requesting it.
+The live website is https://securebydesigninc.com. It runs on the owner's own Cloudflare account: the Worker `secure-by-design-website` (custom domains securebydesigninc.com and www), its D1 database, and the DNS zone. Merges to `main` build, test and deploy through `.github/workflows/deploy.yml` using the repository's Cloudflare secrets; pull requests run the build, tests and the Browser check first. Don't create a replacement production site or change the domain without the owner requesting it.
 
-This handoff contains source and static assets, not the live D1 database, reader accounts, private submissions, deployment credentials, or runtime secrets. `.env.example` contains blank/example configuration. Configure secrets through the appropriate hosting environment. Some server features require Cloudflare/Sites bindings and environment variables.
+The original ChatGPT Sites projects were retired on 8 October 2026 after the move; their data was copied into the Cloudflare D1 database. `.openai/hosting.json` and the Sites Vite plugin remain only because the build reads binding names from them. Runtime secrets (`RESEND_API_KEY`, `OWNER_EMAIL`, sign-in provider keys) live in the Worker's settings in Cloudflare, never in the repository.
 
-This is a source snapshot with a fresh GitHub history, not an automatic bidirectional sync. The application code was not changed or rebuilt for this transfer. The generated TypeScript build cache was omitted.
+This repository is now the website's source of truth; it began as a source snapshot of the Sites project with a fresh GitHub history.
