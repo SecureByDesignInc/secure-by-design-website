@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export type CatalogScene = {
-  update: (chapter: number, moving: boolean, resolver: 'dc1' | 'dc2') => void;
+  update: (chapter: number, moving: boolean, target: 'dc1' | 'dc2') => void;
   reset: () => void;
   dispose: () => void;
 };
@@ -25,7 +25,7 @@ export function createCatalogScene(
   renderer.domElement.setAttribute('role', 'img');
   renderer.domElement.setAttribute(
     'aria-label',
-    'Interactive 3D build: DC01, DC02, DNS client, and evidence record. Drag to orbit, scroll to zoom. Arrow keys rotate and Home resets. Use the chapter buttons for the same selections.',
+    'Interactive 3D build: DC01, DC02, health-check console, and evidence record. Drag to orbit, scroll to zoom. Arrow keys rotate and Home resets. Use the chapter buttons for the same selections.',
   );
   host.appendChild(renderer.domElement);
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -191,8 +191,8 @@ export function createCatalogScene(
     rings.push(ring);
     selectable(group, chapter);
   }
-  server(-4.5, 'SBD-DC01', 'AD DS / DNS · 10.0.10.10', 1);
-  server(4.5, 'SBD-DC02', 'AD DS / DNS · 10.0.10.11', 2);
+  server(-4.5, 'SBD-DC01', 'AD DS · 10.0.10.10', 1);
+  server(4.5, 'SBD-DC02', 'AD DS · 10.0.10.11', 2);
   const core = new THREE.Group();
   core.position.set(0, 0, 1.4);
   scene.add(core);
@@ -213,7 +213,7 @@ export function createCatalogScene(
   box(client, [1.89, 1.09, 0.06], [0, 1.6, 0.1], '#3685a6', 0.25);
   box(client, [0.18, 0.73, 0.2], [0, 0.66, 0], '#56748a');
   box(client, [1.2, 0.1, 0.75], [0, 0.26, 0], '#385e78');
-  const clientLabel = label('DNS DISCOVERY', 'Select to trace the query', 3.8);
+  const clientLabel = label('HEALTH CHECKS', 'Select to test a controller', 3.8);
   clientLabel.position.set(0, 2.7, 0);
   client.add(clientLabel);
   nodeMaterials.push({ materials: materials.slice(clientStart), chapter: 3 });
@@ -285,7 +285,7 @@ export function createCatalogScene(
       0.85,
     ),
     repLine = lines.at(-1)!;
-  const dnsA = connection(
+  const checkA = connection(
       [
         [-2, 1.5, 5],
         [0, 0.7, 1.4],
@@ -295,8 +295,8 @@ export function createCatalogScene(
       '#58adff',
       0.7,
     ),
-    dnsLineA = lines.at(-1)!;
-  const dnsB = connection(
+    checkLineA = lines.at(-1)!;
+  const checkB = connection(
       [
         [-2, 1.5, 5],
         [0, 0.7, 1.4],
@@ -306,7 +306,7 @@ export function createCatalogScene(
       '#58adff',
       0.7,
     ),
-    dnsLineB = lines.at(-1)!;
+    checkLineB = lines.at(-1)!;
   const particles = Array.from({ length: 12 }, (_, i) => {
     const particle = new THREE.Mesh(
       new THREE.SphereGeometry(i < 6 ? 0.075 : 0.085, 10, 8),
@@ -317,15 +317,15 @@ export function createCatalogScene(
   });
   let stage = 2,
     moving = false,
-    resolver = 'dc1',
+    target = 'dc1',
     elapsed = 0,
     previous = performance.now(),
     visible = true,
     disposed = false;
-  function update(chapter: number, animate: boolean, query: 'dc1' | 'dc2') {
+  function update(chapter: number, animate: boolean, next: 'dc1' | 'dc2') {
     stage = chapter;
     moving = animate;
-    resolver = query;
+    target = next;
     for (const node of nodeMaterials)
       for (const m of node.materials)
         m.opacity = stage >= node.chapter ? 1 : 0.25;
@@ -334,8 +334,8 @@ export function createCatalogScene(
         stage === i + 1 ? 0.95 : stage >= i + 1 ? 0.44 : 0.12;
     });
     repLine.visible = stage >= 2;
-    dnsLineA.visible = stage >= 3 && query === 'dc1';
-    dnsLineB.visible = stage >= 3 && query === 'dc2';
+    checkLineA.visible = stage >= 3 && next === 'dc1';
+    checkLineB.visible = stage >= 3 && next === 'dc2';
     particles.forEach((particle, i) => {
       particle.visible = i < 6 ? stage >= 2 : stage >= 3;
     });
@@ -425,7 +425,7 @@ export function createCatalogScene(
     particles.forEach((particle, i) => {
       const t = (elapsed * 0.18 + (i % 6) / 6) % 1;
       particle.position.copy(
-        (i < 6 ? replication : resolver === 'dc1' ? dnsA : dnsB).getPoint(
+        (i < 6 ? replication : target === 'dc1' ? checkA : checkB).getPoint(
           i % 2 ? t : 1 - t,
         ),
       );

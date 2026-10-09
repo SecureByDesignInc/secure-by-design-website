@@ -221,13 +221,13 @@
   font-size: 11px !important;
   margin-top: 20px;
 }
-.vc-resolvers {
+.vc-check-targets {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
   margin-top: 16px;
 }
-.vc-resolvers button {
+.vc-check-targets button {
   font-size: 10px;
   border: 1px solid #3c5f75;
   border-radius: 5px;
@@ -235,7 +235,7 @@
   padding: 7px 9px;
   color: #b4ccdc;
 }
-.vc-resolvers button[aria-pressed='true'] {
+.vc-check-targets button[aria-pressed='true'] {
   background: #7dd8e6;
   border-color: #7dd8e6;
   color: #082337;
@@ -1025,7 +1025,7 @@
   .vc-story-button {
     grid-column: 1;
   }
-  .vc-resolvers {
+  .vc-check-targets {
     grid-column: 2;
     grid-row: 4;
   }

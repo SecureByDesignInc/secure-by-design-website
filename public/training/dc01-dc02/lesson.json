@@ -2,7 +2,7 @@
   "id": "sbd-dc01-dc02",
   "version": "0.1.0",
   "title": "Build the identity foundation",
-  "subtitle": "Windows Server 2025 · Active Directory and DNS",
+  "subtitle": "Windows Server 2025 · Active Directory",
   "status": "Written training available · Video coming soon",
   "video": {
     "youtubeId": null,
@@ -18,19 +18,14 @@
       "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/install-active-directory-domain-services--level-100-"
     },
     {
-      "id": "dns",
-      "title": "Microsoft · DNS client configuration",
-      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/best-practices-for-dns-client-settings"
-    },
-    {
       "id": "diag",
       "title": "Microsoft · DCDiag verification",
       "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag"
     },
     {
-      "id": "resolve",
-      "title": "Microsoft · Resolve-DnsName",
-      "url": "https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname?view=windowsserver2025-ps"
+      "id": "replication",
+      "title": "Microsoft · Diagnose Active Directory replication failures",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/diagnose-replication-failures"
     },
     {
       "id": "rmf",
@@ -46,21 +41,6 @@
       "id": "ad-overview",
       "title": "Microsoft · What is Active Directory Domain Services?",
       "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview"
-    },
-    {
-      "id": "dns-overview",
-      "title": "Microsoft · What is DNS?",
-      "url": "https://learn.microsoft.com/en-us/windows-server/networking/dns/dns-overview"
-    },
-    {
-      "id": "dns-zones",
-      "title": "Microsoft · Active Directory-integrated DNS zones",
-      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/active-directory-integrated-dns-zones"
-    },
-    {
-      "id": "dc-locator",
-      "title": "Microsoft · Locating domain controllers",
-      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/dc-locator-changes"
     },
     {
       "id": "dc-availability",
@@ -91,11 +71,6 @@
       "id": "ad-firewall",
       "title": "Microsoft · Configure a firewall for AD domains and trusts",
       "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/config-firewall-for-ad-domains-and-trusts"
-    },
-    {
-      "id": "pktmon",
-      "title": "Microsoft · Packet Monitor (pktmon)",
-      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pktmon"
     }
   ],
   "chapters": [
@@ -116,14 +91,14 @@
           "Rename the servers SBD-DC01 and SBD-DC02 and restart as needed. Use 10.0.10.10/24 and 10.0.10.11/24 for this sample. No gateway is needed for this same-subnet exercise; the wider network requires its own approved routing plan."
         ],
         [
-          "Set the DNS starting point",
-          "For the first DC that will host DNS, use its own static address, 10.0.10.10. Point DC02 at DC01 before promotion. Verify clocks are aligned and document the intended internal time source. Do not add an internet resolver or external forwarder to this isolated network."
+          "Point DC02 at DC01 and check the clocks",
+          "Set SBD-DC02's preferred Domain Name System (DNS) server to 10.0.10.10 so it can find the domain when you promote it; course 1.2 explains the DNS design. Confirm both clocks agree and document the intended internal time source."
         ]
       ],
       "commandLabel": "Inspect each server before promotion",
-      "command": "hostname\nGet-NetIPConfiguration\nGet-DnsClientServerAddress -AddressFamily IPv4\nw32tm /query /status",
-      "expected": "The two names and static addresses match your plan. DC02 points to 10.0.10.10 for DNS. Record actual time-source output; a configured address alone does not prove time synchronization.",
-      "mistake": "A DNS server address configured on a network adapter does not install DNS. DC01 will not answer DNS queries until its DNS service is installed and running.",
+      "command": "hostname\nGet-NetIPConfiguration\nw32tm /query /status",
+      "expected": "The two names and static addresses match your plan, and SBD-DC02 lists 10.0.10.10 as its DNS server. Record actual time-source output; a configured address alone does not prove time synchronization.",
+      "mistake": "Renaming a domain controller later is a separate procedure with its own steps and checks. Set each server's final name and static address before you promote it.",
       "network": "Both controllers are planned. The platform and network exist, but domain services have not been built yet.",
       "control": {
         "id": "CM-2",
@@ -133,38 +108,33 @@
         "question": "Which values are design decisions, and which observations show the actual starting state?",
         "evidence": "A dated build sheet containing hostnames, addresses, OS builds, and the chosen domain name."
       },
-      "evidencePrompt": "Record your VM names, OS builds, addresses, DNS settings, and any differences from the sample.",
+      "evidencePrompt": "Record your VM names, OS builds, addresses, time source, and any differences from the sample.",
       "checklist": [
         "I recorded the two distinct hostnames and static addresses.",
-        "I confirmed the isolated network and DNS starting point.",
+        "I pointed SBD-DC02 at SBD-DC01 and confirmed the isolated network.",
         "I documented the time source and remaining prerequisites."
       ],
       "quiz": {
-        "prompt": "Before promoting DC02, where should it look for the existing domain's DNS?",
+        "prompt": "Why set each server's final name and static address before promotion?",
         "answers": [
-          "DC01, once its domain DNS is available",
-          "A public DNS resolver",
-          "Only itself, before DNS is installed"
+          "Changing them on a domain controller later is a separate procedure",
+          "Promotion assigns a name and address automatically",
+          "The domain takes its name from the first server's hostname"
         ],
         "correct": 0,
-        "feedback": "DC02 needs to locate the existing directory through DNS. In this sample, DC01 provides that service first."
+        "feedback": "Promotion records the server as a domain controller under its current name. Settle the name and address first; renaming a controller later has its own procedure and checks."
       },
       "sources": [
         "install",
-        "dns",
         "rmf",
         "controls",
         "ad-overview",
         "fsmo",
-        "dns-overview",
-        "dns-zones",
-        "dc-locator",
         "group-policy",
         "authentication"
       ],
       "foundationIds": [
-        "ad",
-        "dns"
+        "ad"
       ]
     },
     {
@@ -172,7 +142,7 @@
       "short": "Build DC01",
       "title": "Create the first domain controller",
       "tag": "02 / CONFIGURE",
-      "outcome": "Create the sample forest and bring AD DS and DNS online on DC01.",
+      "outcome": "Create the sample forest and bring AD DS online on DC01.",
       "intro": "A new forest establishes the directory's initial boundary. Here, sbd.test is a sample domain, not an existing company domain. Follow this path only for a new forest.",
       "steps": [
         [
@@ -181,30 +151,30 @@
         ],
         [
           "Create the forest",
-          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. For this all-2025 sample, select Windows Server 2025 functional levels. Include DNS and the global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
+          "Select Promote this server to a domain controller, then Add a new forest. Enter sbd.test. For this all-2025 sample, select Windows Server 2025 functional levels. Leave the DNS server option selected; course 1.2 explains it. The first controller in a forest is always a global catalog. Enter and confirm a unique Directory Services Restore Mode password on the server."
         ],
         [
           "Review and promote",
-          "Review DNS options, the SBD NetBIOS name, paths, and prerequisite results. A parent-zone delegation is not required for this isolated .test forest. Resolve blocking errors, install, and allow the restart. Then inspect the services and domain."
+          "Review the SBD NetBIOS name, paths, and prerequisite results. Read any warnings, resolve blocking errors, install, and allow the restart. Then inspect the services and domain."
         ]
       ],
       "commandLabel": "Verify DC01 after the restart",
-      "command": "Get-ADDomain | Select-Object DNSRoot, NetBIOSName\nGet-Service NTDS,DNS,Netlogon\nGet-SmbShare -Name SYSVOL,NETLOGON",
-      "expected": "The domain is sbd.test with NetBIOS name SBD. NTDS, DNS, and Netlogon are running, and SYSVOL and NETLOGON shares exist. Investigate missing services or shares before moving on.",
+      "command": "Get-ADDomain | Select-Object DNSRoot, NetBIOSName\nGet-Service NTDS,Netlogon\nGet-SmbShare -Name SYSVOL,NETLOGON",
+      "expected": "The domain is sbd.test with NetBIOS name SBD. NTDS and Netlogon are running, and SYSVOL and NETLOGON shares exist. Investigate missing services or shares before moving on.",
       "mistake": "Installing the AD DS role is only the first part. The promotion wizard creates the domain controller; a completed role installation alone is not a completed forest.",
-      "network": "DC01 now provides AD DS and DNS. DC02 is still planned; no replication relationship is shown yet.",
+      "network": "DC01 now hosts the sbd.test domain. DC02 is still planned; no replication relationship is shown yet.",
       "control": {
         "id": "CM-6",
         "name": "Configuration Settings",
         "phase": "Implement",
         "body": "Record the settings you selected and why. An installation result is useful evidence, but a defensible configuration record also identifies the applicable requirement and any approved exception.",
-        "question": "Why were these domain, DNS, and functional-level settings chosen?",
+        "question": "Why were these domain and functional-level settings chosen?",
         "evidence": "Promotion settings, prerequisite results, and post-restart domain and service checks. Keep recovery passwords out of the evidence."
       },
       "evidencePrompt": "Record the domain, promotion outcome, service checks, and the file names of your screenshots or saved output. Do not enter passwords.",
       "checklist": [
         "I checked the domain name after restart.",
-        "I verified NTDS, DNS, Netlogon, SYSVOL, and NETLOGON.",
+        "I verified NTDS, Netlogon, SYSVOL, and NETLOGON.",
         "I documented configuration choices without recording credentials."
       ],
       "quiz": {
@@ -233,22 +203,22 @@
       "steps": [
         [
           "Reach the existing directory",
-          "On DC02, confirm DNS points to 10.0.10.10. Query the domain service records and resolve SBD-DC01.sbd.test. Check network reachability and clock alignment before promotion."
+          "On DC02, check that DC01 answers at 10.0.10.10 and that both clocks agree before promotion."
         ],
         [
           "Add a controller to this domain",
-          "Install the AD DS role and management tools. In the promotion wizard choose Add a domain controller to an existing domain, enter sbd.test, and authenticate with an authorized Domain Admin account. Select DNS and global catalog, leave Read only domain controller unselected, and set the DSRM password securely."
+          "Install the AD DS role and management tools. In the promotion wizard choose Add a domain controller to an existing domain, enter sbd.test, and authenticate with an authorized Domain Admin account. Leave the DNS server and global catalog options selected, leave Read only domain controller unselected, and set the DSRM password securely."
         ],
         [
           "Finish and inspect",
-          "Review site placement, replication source, and prerequisite results; install and restart. Keep DC02 using DC01 for DNS until initial inbound replication is healthy. Then document the final internal resolver order for both DCs, retaining a reachable partner and self as appropriate to the design."
+          "Review site placement, replication source, and prerequisite results; install and restart. Leave DC02's DNS setting as it is; course 1.2 sets the final order for both controllers once replication is healthy."
         ]
       ],
       "commandLabel": "Inspect both controllers and replication",
       "command": "Get-ADDomainController -Filter * |\n  Select-Object HostName, IPv4Address, IsGlobalCatalog\nrepadmin /replsummary\nrepadmin /showrepl SBD-DC02",
       "expected": "Both hostnames appear with the intended addresses and global catalog roles. After initial convergence, replication checks show successful recent attempts and no unresolved replication failures. Inspect errors rather than assuming the restart completed replication.",
       "mistake": "Choosing Add a new forest creates a different directory. For this chapter, DC02 joins the domain established by DC01.",
-      "network": "Both controllers provide AD DS and DNS. The animated relationship represents directory replication, not a measured packet capture.",
+      "network": "Both controllers serve the sbd.test domain. The animated relationship represents directory replication, not a measured packet capture.",
       "control": {
         "id": "CP-9",
         "name": "System Backup",
@@ -275,11 +245,9 @@
       },
       "sources": [
         "install",
-        "dns",
         "controls",
         "dc-availability",
-        "fsmo",
-        "dc-locator"
+        "fsmo"
       ],
       "foundationIds": [
         "redundancy"
@@ -287,76 +255,67 @@
     },
     {
       "id": "verify",
-      "short": "Verify DNS",
-      "title": "Ask the services to prove they work",
+      "short": "Verify the domain",
+      "title": "Ask the domain to prove it works",
       "tag": "04 / VERIFY",
-      "outcome": "Query each DNS service explicitly and inspect domain-controller health.",
-      "intro": "A service can be running while its configuration is wrong. Query each DNS server by address so the result tells you which server answered. Capture actual results and failures in your evidence record.",
+      "outcome": "Check each controller's health, replication in both directions, and the roles each controller holds.",
+      "intro": "A service can be running while the domain is unhealthy. Test each controller by name so every result tells you which controller you checked. Capture actual results and failures in your evidence record.",
       "steps": [
         [
-          "Query each DNS service",
-          "Run the checks below in an administrative Windows PowerShell session with the server tools available. Query the domain controller locator SRV records separately on DC01 and DC02. SRV means service record."
+          "Test each controller",
+          "In an elevated PowerShell window on either controller, run DCDiag against SBD-DC01 and then SBD-DC02. Its default tests cover connectivity, advertising, replication, SYSVOL, services, and role holders. Read each test's result, not just the last line."
         ],
         [
-          "Check the host records",
-          "Resolve SBD-DC01.sbd.test and SBD-DC02.sbd.test against both DNS servers. Expect 10.0.10.10 and 10.0.10.11 respectively. A locator response does not, by itself, prove that every listed host is reachable."
+          "Check replication both ways",
+          "Run the replication summary, then list each controller's inbound partners. Expect recent successful attempts from DC01 to DC02 and from DC02 to DC01, with no failures. If an error appears right after promotion, wait a few minutes and run the checks again; record any error that persists."
         ],
         [
-          "Review health in context",
-          "Run DCDiag and review each result. In an isolated environment, classify any external-resolution failures against the intended design. The workstation in this scene is a test viewpoint; joining and validating a real Windows client is an optional extension after routing and client prerequisites are ready."
+          "Confirm both controllers' roles",
+          "List both controllers with their global catalog status and the operations master (FSMO) roles each holds; in this build SBD-DC01 holds all five. Confirm SYSVOL and NETLOGON are shared on SBD-DC02 as well. If they are not, its first SYSVOL replication has not finished."
         ]
       ],
-      "commandLabel": "Read-only DNS and health checks",
-      "command": "$servers = '10.0.10.10','10.0.10.11'\nforeach ($server in $servers) {\n  Write-Output \"DNS server: $server\"\n  Resolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server $server\n  Resolve-DnsName 'SBD-DC01.sbd.test' -Type A -Server $server\n  Resolve-DnsName 'SBD-DC02.sbd.test' -Type A -Server $server\n}\ndcdiag /test:DNS /e /v\nrepadmin /replsummary",
-      "expected": "Each DNS service returns domain locator records for the configured controllers and the correct host addresses. Review DCDiag findings and replication failures individually. Save output with host, time, and interpretation; do not record an automatic pass because the command ran.",
-      "mistake": "A successful ping confirms limited IP reachability, not DNS service discovery, directory replication, or authentication.",
-      "network": "Follow a DNS query from the test viewpoint to either DC. Switch the resolver to see the alternative service path. The core represents the routing dependency when a client is on another VLAN.",
+      "commandLabel": "Read-only domain health checks",
+      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * |\n  Select-Object HostName, IsGlobalCatalog, OperationMasterRoles\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02",
+      "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, and SYSVOL and NETLOGON are shared on both. Save output with host, time, and interpretation; a command that ran is not a pass.",
+      "mistake": "A successful ping proves only that an address answers. It doesn't show that the directory replicates, that SYSVOL is shared, or that a controller can authenticate anyone.",
+      "network": "Follow a health check from the administration viewpoint to either controller, and switch the target to check the other. The arc between the controllers is the replication you confirm in both directions.",
       "control": {
         "id": "IA-2",
         "name": "Identification and Authentication (Organizational Users)",
         "phase": "Assess",
-        "body": "DNS is a dependency that helps users locate identity services. DNS test output supports understanding that dependency; it does not demonstrate all authentication requirements, such as multifactor authentication or account policy.",
+        "body": "Healthy, replicating controllers are what let organizational users sign in to the domain. These checks show the identity service is in place on both servers; they do not demonstrate every authentication requirement, such as multifactor authentication or account policy.",
         "question": "What do these checks establish, and what authentication behavior still needs its own test?",
-        "evidence": "Separate query results for each resolver, health-test output, and a short statement of what was and was not tested."
+        "evidence": "DCDiag output for each controller, replication results in both directions, the role list, and a short statement of what was and was not tested."
       },
-      "evidencePrompt": "For each DNS server, record the observed SRV and A-record results, test time, failures, and what the results establish.",
+      "evidencePrompt": "For each controller, record the DCDiag results, replication status in both directions, the roles it holds, the test time, and what the results establish.",
       "checklist": [
-        "I queried DC01 and DC02 separately.",
-        "I compared returned names and addresses with the plan.",
-        "I reviewed errors and recorded the limits of these checks."
+        "I ran DCDiag against SBD-DC01 and SBD-DC02 separately.",
+        "I confirmed replication succeeds in both directions.",
+        "I recorded each controller's roles and the limits of these checks."
       ],
       "quiz": {
-        "prompt": "What does a successful DNS locator query establish?",
+        "prompt": "repadmin /replsummary reports no failures. What does that establish?",
         "answers": [
-          "The queried server returned the requested service records",
+          "Replication between the controllers succeeded when you ran it",
           "Every authentication control is satisfied",
           "The system is authorized to operate"
         ],
         "correct": 0,
-        "feedback": "The query demonstrates a particular DNS response. Reachability, authentication, control effectiveness, and authorization require additional evidence and decisions."
+        "feedback": "The summary describes replication at that moment. Authentication requirements, recovery, and authorization need their own evidence and decisions."
       },
       "sources": [
-        "resolve",
         "diag",
+        "replication",
+        "fsmo",
         "controls"
       ],
       "foundationIds": [
         "ports"
       ],
-      "wire": {
-        "title": "Optional: see it on the wire",
-        "intro": "Packet Monitor (pktmon) is built into Windows Server 2025. Run it on SBD-DC02 in an elevated PowerShell window while you query DC01, so the request crosses the network. Then compare the capture with the packet card for Sign in, step 2.",
-        "label": "Capture the locator query on SBD-DC02",
-        "command": "New-Item -ItemType Directory C:\\Evidence -Force\npktmon filter remove\npktmon filter add DNS -p 53\npktmon start --capture --comp nics --pkt-size 0 --file-name C:\\Evidence\\dc-locator.etl\nResolve-DnsName '_ldap._tcp.dc._msdcs.sbd.test' -Type SRV -Server 10.0.10.10\npktmon stop\npktmon etl2txt C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.txt\npktmon etl2pcap C:\\Evidence\\dc-locator.etl --out C:\\Evidence\\dc-locator.pcapng\npktmon filter remove",
-        "expected": "Expect a query from 10.0.10.11 to 10.0.10.10 on UDP port 53 and an answer naming SBD-DC01 and SBD-DC02 on port 389. Read the text file, or open the .pcapng file in a packet analyzer such as Wireshark. Keep the capture with your evidence; it contains only the traffic the filter allowed.",
-        "sources": [
-          "pktmon"
-        ]
-      },
       "model": {
-        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=2",
-        "label": "Sign in, step 2",
-        "text": "Compare your capture with the packet card for this step."
+        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=3",
+        "label": "Sign in, step 3",
+        "text": "Everything you verified here is what this step depends on: the workstation proves its identity to the Key Distribution Center on SBD-DC01."
       }
     },
     {
@@ -369,7 +328,7 @@
       "steps": [
         [
           "Describe the final state",
-          "Record the domain, both controllers, DNS resolver choices, site placement, and actual role holders. Preserve the distinction between the intended design and observed configuration."
+          "Record the domain, both controllers, site placement, and actual role holders. Preserve the distinction between the intended design and observed configuration."
         ],
         [
           "Keep a small evidence set",
@@ -390,7 +349,7 @@
         "name": "Maintain the configuration and its evidence",
         "phase": "Assess → Monitor",
         "body": "Risk Management Framework (RMF) assessment evaluates selected controls using evidence. Monitoring revisits the security state as the system changes. These learning examples must be tailored to the applicable requirements; selected control labels do not establish compliance or authorization.",
-        "question": "What change would make you rerun a DNS or replication check?",
+        "question": "What change would make you rerun a replication or health check?",
         "evidence": "The build record, dated verification output, unresolved issues, and the next review trigger."
       },
       "evidencePrompt": "Summarize the final state, reference your evidence files, and list remaining work with a next action or review trigger.",
@@ -446,7 +405,7 @@
           "Organizational units (OUs) organize objects and support delegated administration and Group Policy. Group Policy applies centrally managed settings to users and computers. A global catalog helps find directory objects across a forest; both controllers in this course provide that role."
         ]
       ],
-      "takeaway": "AD DS provides directory and identity services. DNS helps clients find those services. Each has a distinct job.",
+      "takeaway": "AD DS stores the directory, and every domain controller serves it. Authentication proves who someone is; authorization decides what they may reach.",
       "prompt": "Explain the difference between the sbd.test domain and the SBD-DC01 server.",
       "sources": [
         "ad-overview",
@@ -455,48 +414,13 @@
       ]
     },
     {
-      "id": "dns",
-      "title": "What is DNS?",
-      "summary": "The name and service directory that makes AD discoverable.",
-      "blocks": [
-        [
-          "Names become reachable addresses",
-          "Domain Name System (DNS) answers queries about names. An A record maps a hostname to an IPv4 address; an AAAA record maps it to an IPv6 address. In this sample, SBD-DC01.sbd.test resolves to 10.0.10.10. DNS also works on an isolated network without internet access."
-        ],
-        [
-          "AD needs service discovery",
-          "Service (SRV) records advertise which servers provide a service. A client uses DNS to discover suitable domain controllers, resolves their hostnames, and contacts a controller for authentication. DNS does not validate the password. A running DC can still be difficult to find if the DNS records or client settings are wrong."
-        ],
-        [
-          "What a zone contains",
-          "A DNS zone holds records for a portion of the namespace. With an AD-integrated zone, records are stored in AD DS and replicated to DNS servers within the configured replication scope. Secure dynamic updates restrict which identities may change records. Check the zone scope and update policy on the completed build."
-        ],
-        [
-          "Two roles, two kinds of checks",
-          "Installing DNS and installing AD DS provide different services, even when they run on the same server. Query each DNS server for SRV and host records, then check directory replication separately. A correct DNS answer proves neither a successful sign-in nor access to a protected resource."
-        ]
-      ],
-      "takeaway": "Discovery sequence: ask DNS for a domain service → resolve the server name → contact a reachable DC → authenticate.",
-      "prompt": "If you can reach 10.0.10.10 but cannot discover sbd.test, which DNS records and client settings would you inspect?",
-      "sources": [
-        "dns-overview",
-        "dns-zones",
-        "dc-locator"
-      ],
-      "model": {
-        "href": "https://securebydesigninc.com/inside-the-network#process=signin&step=2",
-        "label": "Sign in, step 2",
-        "text": "The workstation asks DNS for the same domain controller locator records you query in Verify. Open the packet card to see the question and the answer."
-      }
-    },
-    {
       "id": "redundancy",
       "title": "Why use two domain controllers?",
-      "summary": "Keep identity and DNS services available when one server is unavailable.",
+      "summary": "Keep the directory available when one server is unavailable.",
       "blocks": [
         [
           "Remove the single-server dependency",
-          "With one DC, its outage removes the only live directory service point. With two healthy, reachable controllers, clients can discover a surviving DC for supported operations. This also lets you patch or restart one server while the other continues serving requests. Reconnection may take time; uninterrupted service is not guaranteed."
+          "With one DC, its outage removes the only live directory service point. With two healthy, reachable controllers, clients can use a surviving DC for supported operations. This also lets you patch or restart one server while the other continues serving requests. Reconnection may take time; uninterrupted service is not guaranteed."
         ],
         [
           "Both controllers do useful work",
@@ -504,25 +428,23 @@
         ],
         [
           "Make the redundancy real",
-          "Microsoft recommends at least two virtualized DCs per domain on different virtualization hosts. Two VMs on one host share that host as a failure point. Consider shared storage, power, and network dependencies too. Run DNS on both here, verify zone replication, and configure clients to use both internal DNS addresses."
+          "Microsoft recommends at least two virtualized DCs per domain on different virtualization hosts. Two VMs on one host share that host as a failure point. Consider shared storage, power, and network dependencies too."
         ],
         [
           "Availability still needs recovery",
           "Replication can spread an accidental deletion or harmful change to both servers. Keep protected backups and test recovery separately. Two is a starting point for this design, not a universal capacity target: additional sites, users, and recovery needs may require more controllers."
         ]
       ],
-      "takeaway": "Before relying on DC02, verify replication and DNS, review shared dependencies, and test client discovery during an approved maintenance window.",
+      "takeaway": "Before relying on DC02, verify replication, review shared dependencies, and confirm both controllers pass their health checks.",
       "prompt": "If both controllers run on the same physical host, which outage would still stop both services?",
       "sources": [
         "dc-availability",
-        "fsmo",
-        "dc-locator",
-        "dns"
+        "fsmo"
       ],
       "model": {
-        "href": "https://securebydesigninc.com/inside-the-network#process=dc-down",
-        "label": "What if DC01 is down?",
-        "text": "The query to DC01 gets no answer, the workstation retries with SBD-DC02, and sign-in continues."
+        "href": "https://securebydesigninc.com/inside-the-network#process=dc-down&step=3",
+        "label": "DC01 is down, step 3",
+        "text": "With SBD-DC01 offline, the workstation authenticates with SBD-DC02 instead, so sign-in continues."
       }
     },
     {
@@ -535,23 +457,18 @@
           "Your lab is one flat network, so nothing stands between a client and DC01. In a segmented network, every one of these conversations has to be allowed on purpose. Inside the Network shows them crossing the core switch."
         ],
         [
-          "Discovery and sign-in are only the start",
-          "DNS finds a domain controller and Kerberos proves who is signing in. After that, the member reads the directory over LDAP, pulls Group Policy and scripts from SYSVOL over SMB, and uses RPC for NetLogon. Time matters too: Kerberos rejects clocks that drift too far apart."
+          "Sign-in is only the start",
+          "Kerberos proves who is signing in. After that, the member reads the directory over LDAP, pulls Group Policy and scripts from SYSVOL over SMB, and uses RPC for NetLogon. Time matters too: Kerberos rejects clocks that drift too far apart."
         ]
       ],
       "table": {
-        "caption": "What a domain member sends to its domain controllers",
+        "caption": "What a domain member sends to its domain controllers, after name resolution (course 1.2)",
         "head": [
           "Purpose",
           "Port",
           "What it carries"
         ],
         "rows": [
-          [
-            "Name and service discovery",
-            "TCP/UDP 53",
-            "DNS, including the SRV records that locate domain controllers"
-          ],
           [
             "Authentication",
             "TCP/UDP 88",
@@ -594,8 +511,8 @@
           ]
         ]
       },
-      "takeaway": "Allowing DNS and Kerberos isn't enough. Finding a domain controller, applying Group Policy, and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rule F03 permits this directory profile for domain members, with LDAP signing and channel binding required.",
-      "prompt": "A workstation can resolve names and get Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
+      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rule F03 permits this directory profile for domain members, with LDAP signing and channel binding required.",
+      "prompt": "A workstation gets Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
       "sources": [
         "ports",
         "ad-firewall"

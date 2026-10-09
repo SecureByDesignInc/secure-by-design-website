@@ -44,7 +44,7 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
   const [tour, setTour] = useState(false);
   const [fallback, setFallback] = useState(false);
   const [ready, setReady] = useState(false);
-  const [resolver, setResolver] = useState<'dc1' | 'dc2'>('dc1');
+  const [target, setTarget] = useState<'dc1' | 'dc2'>('dc1');
   const [videoStart, setVideoStart] = useState<number | null>(null);
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<CatalogScene | null>(null);
@@ -83,8 +83,8 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
   }, [supportsScene, episode]);
 
   useEffect(() => {
-    scene.current?.update(chapter, moving, resolver);
-  }, [chapter, moving, resolver, ready]);
+    scene.current?.update(chapter, moving, target);
+  }, [chapter, moving, target, ready]);
   useEffect(() => {
     if (!tour || !episode) return;
     const timer = setInterval(
@@ -220,17 +220,18 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
             </div>
             {supportsScene && chapter >= 3 && (
               <div
-                className="vc-resolvers"
-                aria-label="Choose a DNS query path"
+                className="vc-check-targets"
+                role="group"
+                aria-label="Choose a controller to check"
               >
                 {(['dc1', 'dc2'] as const).map((id) => (
                   <button
                     key={id}
                     type="button"
-                    aria-pressed={resolver === id}
-                    onClick={() => setResolver(id)}
+                    aria-pressed={target === id}
+                    onClick={() => setTarget(id)}
                   >
-                    Query {id === 'dc1' ? 'DC01' : 'DC02'}
+                    Check {id === 'dc1' ? 'DC01' : 'DC02'}
                   </button>
                 ))}
               </div>
