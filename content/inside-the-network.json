@@ -1,4 +1,89 @@
 {
+  "building": {
+    "rooms": [
+      {
+        "name": "Server room",
+        "detail": "Badge access · logged entry"
+      },
+      {
+        "name": "Administration",
+        "detail": "Tiered admin seats"
+      },
+      {
+        "name": "Office",
+        "detail": "50 user workstations"
+      },
+      {
+        "name": "Media room",
+        "detail": "Controlled import and export"
+      },
+      {
+        "name": "Offline vault",
+        "detail": "No network cabling"
+      }
+    ],
+    "hosts": [
+      {
+        "name": "SBD-HV01",
+        "rack": "R02",
+        "systems": [
+          "SBD-DC01"
+        ]
+      },
+      {
+        "name": "SBD-HV02",
+        "rack": "R02",
+        "systems": [
+          "SBD-DC02"
+        ]
+      },
+      {
+        "name": "SBD-HV03",
+        "rack": "R02",
+        "systems": [
+          "SBD-SUBCA01",
+          "SBD-PKI-MGMT01"
+        ]
+      },
+      {
+        "name": "SBD-HV04",
+        "rack": "R03",
+        "systems": [
+          "SBD-DHCP01",
+          "SBD-SYSLOG01",
+          "SBD-WSUS01"
+        ]
+      },
+      {
+        "name": "SBD-HV05",
+        "rack": "R03",
+        "systems": [
+          "SBD-FS01",
+          "SBD-SQL01",
+          "SBD-APPS01",
+          "SBD-WEB01"
+        ]
+      },
+      {
+        "name": "SBD-HV06",
+        "rack": "R04",
+        "systems": [
+          "SBD-SPLUNK01",
+          "SBD-NESSUS01",
+          "SBD-EPO01",
+          "SBD-AUDIT01"
+        ]
+      },
+      {
+        "name": "SBD-HV07",
+        "rack": "R04",
+        "systems": [
+          "SBD-MGMT01",
+          "SBD-REPO01"
+        ]
+      }
+    ]
+  },
   "systems": [
     {
       "id": "dc1",
@@ -6,6 +91,7 @@
       "role": "AD DS + DNS",
       "segment": "VLAN 10 · Domain controllers",
       "address": "10.0.10.10",
+      "location": "Virtual machine on SBD-HV01 · rack R02 · server room",
       "purpose": "Find services, authenticate identities, and answer directory requests.",
       "services": [
         {
@@ -70,6 +156,7 @@
       "role": "AD DS + DNS",
       "segment": "VLAN 10 · Domain controllers",
       "address": "10.0.10.11",
+      "location": "Virtual machine on SBD-HV02 · rack R02 · server room",
       "purpose": "Provide another AD DS and DNS service point.",
       "services": [
         {
@@ -134,6 +221,7 @@
       "role": "DHCP server + NPS (802.1X)",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.10",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Provide client lease settings for the approved address space, and admit devices to VLAN 80 ports with 802.1X.",
       "services": [
         {
@@ -177,6 +265,7 @@
       "role": "Log message server",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.20",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Receive and route the chosen log messages.",
       "services": [
         {
@@ -216,6 +305,7 @@
       "role": "Windows update service",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.30",
+      "location": "Virtual machine on SBD-HV04 · rack R03 · server room",
       "purpose": "Distribute approved Windows updates inside the air gap.",
       "services": [
         {
@@ -246,6 +336,7 @@
       "role": "Internal authoritative time",
       "segment": "VLAN 20 · Identity & services",
       "address": "10.0.20.40",
+      "location": "Rack appliance · R01 · server room",
       "purpose": "Internal reference clock. Source accuracy, fallback, and drift thresholds must be approved without adding an external network connection.",
       "services": [
         {
@@ -271,6 +362,7 @@
       "role": "Issuing certificate authority",
       "segment": "VLAN 30 · PKI infrastructure",
       "address": "10.0.30.20",
+      "location": "Virtual machine on SBD-HV03 · rack R02 · server room",
       "purpose": "Issue certificates under the approved subordinate CA policy.",
       "services": [
         {
@@ -305,6 +397,7 @@
       "role": "Certificate template administration",
       "segment": "VLAN 30 · PKI infrastructure",
       "address": "10.0.30.30",
+      "location": "Virtual machine on SBD-HV03 · rack R02 · server room",
       "purpose": "Certificate templates are directory objects. This host provides the administrative tools to manage them.",
       "services": [
         {
@@ -334,6 +427,7 @@
       "role": "File share server",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.10",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Serve shared files while enforcing resource permissions.",
       "services": [
         {
@@ -363,6 +457,7 @@
       "role": "SQL server",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.20",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Host the application databases for SBD-APPS01, the only registered SQL consumer.",
       "services": [
         {
@@ -396,6 +491,7 @@
       "role": "License server + application API",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.30",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Answer licensing requests from approved clients and application API calls from SBD-WEB01; the only registered SQL consumer.",
       "services": [
         {
@@ -435,6 +531,7 @@
       "role": "Internal Apache web server · Linux, domain-joined",
       "segment": "VLAN 40 · Servers & data",
       "address": "10.0.40.40",
+      "location": "Virtual machine on SBD-HV05 · rack R03 · server room",
       "purpose": "Serve approved internal web applications over HTTPS.",
       "services": [
         {
@@ -469,6 +566,7 @@
       "role": "Splunk SIEM",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.10",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Linux, domain-joined. Single server instance, sized for a small network; no cluster or standby. Index and investigate the security events that are actually collected.",
       "services": [
         {
@@ -494,6 +592,7 @@
       "role": "Tenable / Nessus",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.20",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Linux, domain-joined. Single Tenable/Nessus server instance, sized for a small network; no cluster or standby. Assess authorized targets for known vulnerabilities.",
       "services": [
         {
@@ -519,6 +618,7 @@
       "role": "Trellix ePO + DLP",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.30",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Single Trellix ePO/DLP server instance, sized for a small network; no cluster or standby. Manage the chosen endpoint protection and DLP policies.",
       "services": [
         {
@@ -548,6 +648,7 @@
       "role": "Audit log repository · Windows, domain-joined",
       "segment": "VLAN 50 · Security & monitoring",
       "address": "10.0.50.40",
+      "location": "Virtual machine on SBD-HV06 · rack R04 · server room",
       "purpose": "Windows, domain-joined. Retain security records under the approved retention policy.",
       "services": [
         {
@@ -573,6 +674,7 @@
       "role": "Tier 0 administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.10",
+      "location": "Administration room · dedicated admin seat",
       "purpose": "Provide dedicated Tier 0 administration: identity, PKI, and every system that can control them.",
       "services": [
         {
@@ -602,6 +704,7 @@
       "role": "Server administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.20",
+      "location": "Administration room · dedicated admin seat",
       "purpose": "Dedicated privileged workstation for approved member-server targets. Separate operator roles further restrict security tools and protected audit storage.",
       "services": [
         {
@@ -635,6 +738,7 @@
       "role": "Endpoint administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.30",
+      "location": "Administration room · dedicated admin seat",
       "purpose": "Dedicated privileged workstation for the 50 client endpoints. No AD, CA, or server administrative sessions.",
       "services": [
         {
@@ -668,6 +772,7 @@
       "role": "Management tools server",
       "segment": "VLAN 70 · Management tools",
       "address": "10.0.70.10",
+      "location": "Virtual machine on SBD-HV07 · rack R04 · server room",
       "purpose": "Management tools. Define administrative accounts, permitted targets, and protocols.",
       "services": [
         {
@@ -701,6 +806,7 @@
       "role": "Linux repository server",
       "segment": "VLAN 70 · Management tools",
       "address": "10.0.70.20",
+      "location": "Virtual machine on SBD-HV07 · rack R04 · server room",
       "purpose": "Serve the approved Linux package collection.",
       "services": [
         {
@@ -735,6 +841,7 @@
       "role": "User workstations × 50",
       "segment": "VLAN 80 · User workstations",
       "address": "10.0.80.100–199",
+      "location": "Office · user desks",
       "purpose": "Represent 50 Windows 11 user endpoints.",
       "services": [
         {
@@ -778,6 +885,7 @@
       "role": "Offline root CA · workgroup",
       "segment": "Offline · not domain-joined",
       "address": "No network address (offline)",
+      "location": "Offline vault · secure cabinet",
       "purpose": "Protect the trust anchor and perform authorized offline ceremonies.",
       "services": [
         {

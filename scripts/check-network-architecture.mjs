@@ -7,7 +7,7 @@ import {stepPolicy,serviceFor} from '../public/inside-network-model/flow-policy.
 import {packetProfiles,describePacket} from '../public/inside-network-model/packets.js';
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
-import {dataCenterLayout,equipmentPosition,roomBounds,facilityPositions,offlinePosition} from '../public/inside-network-model/data-center-layout.js';
+import {placements,hosts,racks,rooms,roomBounds,facilityPositions,offlinePosition,trayNodes,trayEdges,walkExits,tileOffset,tileWidth,tileGap} from '../public/inside-network-model/data-center-layout.js';
 import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers,linuxMembers,domainMembers} from '../public/inside-network-model/security.js';
 
 const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
@@ -116,18 +116,27 @@ assert(windowsMembers.includes('audit'),'SBD-AUDIT01 is domain-joined Windows');
 for(const node of nodes)for(const service of policyServices){assert.equal(evaluateFlow(node.id,'root',service).status,'deny');assert.equal(evaluateFlow('root',node.id,service).status,'deny');}
 console.log('Security policy checks passed: default deny, the three-tier SQL path, the domain time hierarchy, cross-tier separation, single instances, and no root network path.');
 
-const room=dataCenterLayout(vlans),positions=new Set();
-assert.deepEqual(new Set(room.flatMap(zone=>zone.ids)),new Set(memberships),'Every networked system appears in the data center');
-for(const zone of room){
- assert(zone.ids.length<=(zone.kind==='rack'?4:50),'Equipment fits its cabinet');
- for(const [index,id]of zone.ids.entries()){
-  const point=equipmentPosition(zone,index);
-  assert(point.every(Number.isFinite),`Valid equipment position for ${id}`);
-  assert(point.every((value,axis)=>value>=roomBounds.min[axis]&&value<=roomBounds.max[axis]),`${id} stays inside the room`);
-  assert(!positions.has(point.join(',')),`No overlapping equipment for ${id}`);positions.add(point.join(','));
- }
+const where=placements(),inRoom=(id,x,z)=>{const r=rooms.find(r=>r.id===id);return x>=r.x0&&x<=r.x1&&z>=r.z0&&z<=r.z1;};
+assert.deepEqual(new Set([...where.keys()].filter(id=>id!=='root')),new Set(memberships),'Every networked system has a place in the building');
+assert.equal(where.get('root').room,'vault','The offline root sits in the vault');
+for(const host of hosts){
+ const rack=racks.find(r=>r.id===host.rack);assert.equal(rack.kind,'compute',`${host.name} is in a compute rack`);
+ const span=host.vms.length*tileWidth+(host.vms.length-1)*tileGap;assert(span<=5.5,`${host.name}'s virtual machines fit its faceplate`);
+ assert(host.vms.every((id,i)=>Number.isFinite(tileOffset(host,i))),`${host.name} tiles are placed`);
 }
-assert(!room.some(zone=>zone.ids.includes('root')),'Offline root is outside the cabled rack layout');
-assert(offlinePosition[0]>Math.max(...room.filter(zone=>zone.kind==='rack').map(zone=>zone.x+zone.w/2)),'Offline root stays separate from the server racks');
-for(const id of ['core','media','backup'])assert(facilityPositions[id]?.every(Number.isFinite));
-console.log('Data-center checks passed: all systems represented, distinct equipment positions, valid room bounds, and a separate offline bay.');
+const hostOf=id=>hosts.find(h=>h.vms.includes(id));
+assert.notEqual(hostOf('dc1'),hostOf('dc2'),'The two domain controllers run on different hosts');
+for(const dc of ['dc1','dc2'])assert.deepEqual(hostOf(dc).vms,[dc],`${dc} has its hypervisor host to itself`);
+assert(!['dc1','dc2'].some(dc=>hostOf(dc)===hostOf('subca')),'The issuing CA never shares a host with a domain controller');
+for(const id of ['dc1','dc2','subca','templates'])assert(hostOf(id).vms.every(v=>['dc1','dc2','subca','templates'].includes(v)),`${id} shares a host only with identity and PKI servers`);
+for(const v of vlans)if(v.ids.length>1&&v.ids.every(id=>hostOf(id))){const vmHosts=new Set(v.ids.map(id=>hostOf(id)?.id));if(v.id!=='v10'&&v.id!=='v30')assert.equal(vmHosts.size,1,`VLAN ${v.number} servers share a host, so same-VLAN traffic stays on its virtual switch`);}
+assert.equal(where.get('time').kind,'appliance','The reference clock is a rack appliance, not a virtual machine');
+for(const [id,p] of where){if(p.kind==='desk')assert(inRoom('admin',adminDeskX(id),adminDeskZ(id)),`${id} sits in the administration room`);}
+function adminDeskX(id){return where.get(id).x;}function adminDeskZ(id){return where.get(id).z;}
+assert(inRoom('vault',...offlinePosition),'Offline root stays in the vault');
+assert(inRoom('media',...facilityPositions.media)&&inRoom('vault',...facilityPositions.backup)&&inRoom('server',...facilityPositions.core),'Media handling, backups, and the core sit in their rooms');
+for(const [k,[x,z]] of Object.entries(trayNodes))assert(!inRoom('vault',x,z)&&!inRoom('media',x,z),`Cable tray node ${k} stays out of the media room and vault`);
+for(const [a,b] of trayEdges)assert(trayNodes[a][0]===trayNodes[b][0]||trayNodes[a][1]===trayNodes[b][1],`Tray ${a}-${b} runs straight`);
+for(const p of [[...roomBounds.min],[...roomBounds.max]])assert(p.every(Number.isFinite));
+assert.equal(walkExits.vault.parent,'media','The vault opens only into the media room');
+console.log('Building checks passed: every system placed, domain controllers on their own hosts, the CA apart from them, same-VLAN servers sharing a host, a clock appliance, and no cable trays in the media room or vault.');
