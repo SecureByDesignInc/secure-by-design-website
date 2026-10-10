@@ -444,7 +444,7 @@
         ],
         [
           "Two layers, and no internet",
-          "Windows Defender Firewall stays on in every profile and blocks what no rule allows, so an unopened port stays closed even if a core rule is wrong. Keep Remote Desktop off. The directory, remoting, and AD Web Services rules accept any address until course 1.5 limits the management rules to the Tier 0 host, so until then the core decides who reaches them. No segment routes to the internet; approved media is the only way in."
+          "Windows Defender Firewall stays on in every profile and blocks what no rule allows, so an unopened port stays closed even if a core rule is wrong. Keep Remote Desktop off. The directory rules accept any address, and the remoting and AD Web Services rules do too until course 1.5 limits them to the Tier 0 host, so the core decides who reaches those ports. No segment routes to the internet; approved media is the only way in."
         ]
       ],
       "takeaway": "A controller's segment is part of its security: VLAN 10 for controllers only, default deny at the core, management only from Tier 0, and the host firewall on in every profile.",

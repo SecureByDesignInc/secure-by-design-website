@@ -19,22 +19,22 @@
     {
       "name": "index.html",
       "bytes": 1392656,
-      "sha256": "6264f0ad2b6194acc54024e55f32f959ffb532d564486da02b85167848a2af13"
+      "sha256": "6988fbce7181bc4f520e329749414089389d49faaf7c0c4457b2781313e92f64"
     },
     {
       "name": "lesson.json",
       "bytes": 34591,
-      "sha256": "8d9d2f9bcf4eaa03a5156e90618a3898b2c14f39fd5c27a250ba21f77176bd80"
+      "sha256": "fa0a4590eb0e79e9d536511978277d87503d47d0cb0e84d5a864b55be30b37f4"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.docx",
-      "bytes": 316478,
-      "sha256": "85a394f56a56820d4e54a40ebf008abc8b4f74ec591dc6a7dab34df5a0c95f79"
+      "bytes": 316484,
+      "sha256": "71d7b4f72611022850d43cd421775de7ceb22de9e26039ea9d8ddc2ba4c23d51"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.pdf",
-      "bytes": 287068,
-      "sha256": "125902db27992dd1accb24df6bc67544c843aa10c495e48641f3c3fadfb176bd"
+      "bytes": 287076,
+      "sha256": "1aabe6261a11f7ca04f93797314c110462321061bdb7b207912115462d757e97"
     },
     {
       "name": "START-HERE.txt",
