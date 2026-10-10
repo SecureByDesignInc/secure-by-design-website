@@ -1,12 +1,112 @@
-.reader-section-links{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.5rem 0}
-.reader-section-links a{display:inline-flex;align-items:center;min-height:44px;padding:.65rem 1rem;border:1px solid #9dbed3;border-radius:999px;background:#f0f8fd;font-weight:600;text-decoration:none}
-.reader-membership-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin:1.5rem 0 2rem;padding:1.4rem;border:1px solid #aacbdf;border-radius:20px;background:linear-gradient(120deg,#edf8ff,#e3f3fc)}
+/* My Account (/my-progress) and the app sign-in page (/app-sign-in).
+   Both use the site's dark design, like the homepage and the Training Library (owner request,
+   9 October 2026). <main class="account-page"> spans the window. The "dark theme" rules restyle the
+   shared reader styles from app/reader-progress.css inside it only, so the light reading surfaces
+   that also use some of those styles (guides, articles) are unchanged. */
+body.site-editorial:has(.account-page){background:#071521}
+.account-page{background:#071521;color:#eef7fc;color-scheme:dark}
+.account-page .reader-page{color:#eef7fc}
+.account-page .reader-page a:where(:not([class])){color:#9fe3f1}
+.account-page .reader-page a:where(:not([class])):hover{color:#c8f3fa}
+body.site-editorial .account-page :is(a,button,input,summary):focus-visible{outline:3px solid #8be3f0;outline-offset:3px}
+
+/* Heading and section links */
+.account-page .reader-heading{max-width:780px}
+.account-page .reader-heading .eyebrow{margin:0 0 14px;color:#8bdbeb;font:700 .75rem/1.5 var(--font-geist-sans),Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase}
+.account-page .reader-heading h1{margin:0 0 16px;color:#f1f8ff;font-size:clamp(2.4rem,5vw,3.75rem);font-weight:600;line-height:1.05;letter-spacing:-.05em}
+.account-page .reader-heading>p:last-child{margin:0;color:#adc3d2;font-size:1.0625rem;line-height:1.75}
+.reader-section-links{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 8px}
+.account-page .reader-section-links a{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:1px solid #35556b;border-radius:999px;background:#112b3e;color:#d2e7f2;font-size:.875rem;font-weight:600;text-decoration:none}
+.account-page .reader-section-links a:hover{border-color:#8bdbeb;background:#163650;color:#fff;text-decoration:none}
+
+/* Panels: sign-in, privacy, ways to sign in */
+.account-page :is(.reader-welcome,.reader-privacy,.sign-in-methods){border:1px solid #2d4b61;border-radius:18px;background:#0b2131;color:#eef7fc}
+.account-page .reader-welcome{border-color:#2f5470;background:linear-gradient(150deg,#123049,#0b2131 65%);box-shadow:0 24px 70px #0005}
+.account-page :is(.reader-welcome,.reader-privacy)>p:not([class]){color:#c4d7e4}
+.account-page .reader-privacy>p{margin:0 0 14px;line-height:1.65}
+.account-page .reader-page .reader-note{color:#a3bbcb}
+.account-page .reader-page .reader-app-note{border-left:3px solid #5fc8e0;border-radius:0 10px 10px 0;background:#0e2a3c;color:#cfe3ef}
+.account-page .reader-progress-section>.reader-app-note{margin:28px 0 0}
+.account-page .reader-page .reader-error{border-color:#c8664a;background:#2a1613;color:#ffd6c9}
+.account-page .reader-loading{color:#a9bfce}
+
+/* Buttons. Membership and sign-in provider buttons keep their own styles. */
+.account-page .reader-page button:where(:not(.membership-button,.sso-button,[data-slot])){min-height:40px;padding:9px 15px;border:1px solid #3d6079;border-radius:10px;background:#112b3e;color:#e2f3fb;font-size:.875rem;font-weight:600;transition:background-color .15s,border-color .15s}
+.account-page .reader-page button:where(:not(.membership-button,.sso-button,[data-slot])):hover:not(:disabled){border-color:#8bdbeb;background:#173a52;color:#fff}
+.account-page .reader-page button:disabled{opacity:.55}
+.account-page .reader-page .reader-auth-modes button{min-height:44px;padding:10px 16px;border-color:#35556b;border-radius:999px;background:#112b3e;color:#d2e7f2}
+.account-page .reader-page .reader-auth-modes button[aria-pressed=true]{border-color:#a7edf3;background:#a7edf3;color:#0c344b;font-weight:700}
+.account-page .reader-page .reader-primary{min-height:46px;padding:12px 22px;border:1px solid #a4eaf3;border-radius:10px;background:#91dfeb;color:#06283c!important;font-size:.95rem;font-weight:700;text-decoration:none}
+.account-page .reader-page .reader-primary:hover:not(:disabled){border-color:#c3f4f8;background:#b8f0f6}
+
+/* Sign in with Apple, Google, Microsoft, or a passkey. Apple's white style is the one for dark
+   backgrounds; Google and Microsoft use their light buttons. */
+.account-page .reader-page .sso-button{border-color:#fff;background:#fff;color:#1f1f1f!important}
+.account-page .reader-page .sso-button:hover{border-color:#a7edf3;background:#eef8fb}
+.account-page .reader-page .sso-apple{border-color:#fff;background:#fff;color:#000!important}
+.account-page .reader-page .sso-apple:hover{border-color:#a7edf3;background:#eef8fb}
+.account-page .reader-page .sso-passkey{border-color:#4d708c;background:#112b3e;color:#eaf7ff!important}
+.account-page .reader-page .sso-passkey:hover:not(:disabled){border-color:#8bdbeb;background:#173a52}
+.account-page .sso-divider{color:#a3bbcb}
+.account-page .sso-divider::before,.account-page .sso-divider::after{border-top-color:#2d4b61}
+
+/* Account form */
+.account-page .reader-account-form>label:not(.reader-consent),.account-page .reader-delete label{color:#e6f3fb;font-weight:600}
+.account-page .reader-page :is(.reader-account-form,.reader-delete) input:not([type=checkbox]){border:1px solid #36576c;background:#081c2b;color:#edf8ff;caret-color:#8bdbeb}
+.account-page .reader-page :is(.reader-account-form,.reader-delete) input:not([type=checkbox]):hover{border-color:#4f7a92}
+.account-page input:-webkit-autofill{-webkit-text-fill-color:#edf8ff;box-shadow:0 0 0 1000px #0e2a3c inset}
+.account-page .reader-consent{color:#c4d7e4;font-weight:400}
+.account-page .reader-consent input{accent-color:#8bdbeb}
+
+/* Dashboard */
+.account-page .reader-app-note+.reader-resume{margin-top:20px}
+.reader-resume{margin:24px 0 18px;padding:clamp(24px,4vw,36px);border:1px solid #36607d;border-radius:20px;background:radial-gradient(ellipse at 92% 115%,#1f6d8c55,transparent 60%),linear-gradient(120deg,#123a55,#0d2638);color:#f1f8ff;box-shadow:0 24px 70px #0005}
+.reader-resume>span{color:#8bdbeb;font-size:.75rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase}
+.reader-resume h2{font-size:clamp(1.5rem,4vw,2rem);line-height:1.3;margin:12px 0 20px;letter-spacing:-.03em}
+.account-page .reader-page .reader-resume a{display:inline-flex;align-items:center;min-height:46px;padding:12px 20px;border:1px solid #a4eaf3;border-radius:10px;background:#91dfeb;color:#06283c;font-weight:700;text-decoration:none}
+.account-page .reader-page .reader-resume a:hover{border-color:#c3f4f8;background:#b8f0f6;color:#06283c}
+.account-page .reader-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+.account-page .reader-summary section:last-child{grid-column:auto}
+.account-page .reader-summary section{border:1px solid #365469;border-radius:16px;background:#102737}
+.account-page .reader-summary span{color:#8bdbeb;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.account-page .reader-summary strong{margin:8px 0 2px;color:#f1f8ff;font-weight:600;letter-spacing:-.04em}
+.account-page .reader-summary p{margin:0;color:#a9bfce}
+.account-page .reader-collection h2{letter-spacing:-.03em}
+.account-page .reader-collection-heading span{color:#a9bfce}
+.account-page .reader-collection>p{color:#c4d7e4}
+.account-page .reader-collection>a{font-weight:600}
+.account-page .reader-collection ul+a{display:inline-block;margin-top:14px}
+.account-page .reader-collection progress,.account-page .reader-collection progress::-webkit-progress-bar{background:#17334a}
+.account-page .reader-collection progress::-webkit-progress-value{background:linear-gradient(90deg,#5fc8e0,#a7edf3)}
+.account-page .reader-collection progress::-moz-progress-bar{background:linear-gradient(90deg,#5fc8e0,#a7edf3)}
+.account-page .reader-collection ul{border-color:#2d4b61;border-radius:14px;background:#0b2131}
+.account-page .reader-collection li{border-bottom-color:#1f3a4f}
+.account-page .reader-collection li a{color:#e6f6ff}
+.account-page .reader-collection li span{color:#a9bfce}
+
+/* Account settings */
+.reader-account-settings{margin-top:40px;padding-top:28px;border-top:1px solid #29405a}
+.reader-account-settings>h2{font-size:1.5rem;letter-spacing:-.03em}
+.account-page .reader-account-settings .reader-privacy{margin-top:18px}
+.account-page .reader-account{align-items:center;color:#c4d7e4}
+.account-page .sign-in-method-list li{border-color:#274456;background:#0e2638}
+.account-page .sign-in-method-list li span:not(.method-icon){color:#a9bfce}
+.account-page .method-icon{background:#163650;color:#e6f6ff}
+.account-page .sign-in-methods .reader-note{margin:14px 0 0}
+.account-page .reader-privacy.reader-delete{border-color:#6a3a35;background:linear-gradient(150deg,#24171c,#0b2131 70%)}
+.account-page .reader-page .reader-delete>button,.account-page .reader-page .reader-delete form button:not([type=button]){border-color:#b8644f;background:#2a1613;color:#ffd6c9}
+.account-page .reader-page .reader-delete>button:hover:not(:disabled),.account-page .reader-page .reader-delete form button:not([type=button]):hover:not(:disabled){border-color:#e0866d;background:#3a1d18;color:#fff}
+.reader-page :is(#saved-materials,#account-settings){scroll-margin-top:24px}
+@media(max-width:400px){.account-page .reader-summary section{padding:18px}}
+
+/* Membership */
+.reader-membership-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin:2.5rem 0 2rem;padding:1.4rem 1.6rem;border:1px solid #2f5470;border-radius:20px;background:linear-gradient(120deg,#10304a,#0b2131)}
 .reader-membership-summary>div{flex:1 1 320px;min-width:0}
-.reader-membership-summary h2{font-size:1.15rem;margin:0 0 .5rem}
-.reader-membership-summary p{margin:0;max-width:680px;font-size:1rem;line-height:1.6;color:#3f6079}
+.reader-membership-summary h2{font-size:1.15rem;margin:0 0 .5rem;color:#f1f8ff;letter-spacing:-.02em}
+.reader-membership-summary p{margin:0;max-width:680px;font-size:1rem;line-height:1.6;color:#bfd0e1}
 .reader-membership-summary>a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;text-decoration:underline;text-underline-offset:4px}
 .reader-progress-section,.reader-memberships{scroll-margin-top:24px}
-.reader-memberships.membership-page{margin-top:3rem;padding:clamp(1.25rem,3vw,2rem);border:1px solid #35536c;border-radius:24px}
+.reader-memberships.membership-page{margin-top:3rem;padding:clamp(1.25rem,3vw,2rem);border:1px solid #35536c;border-radius:24px;background:linear-gradient(180deg,#0b1d2e,#081523 320px)}
 .reader-memberships .membership-heading>h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;letter-spacing:-.03em;margin:1rem 0;color:#eaf6ff}
 .reader-memberships .membership-card h3{font-size:1.6rem;margin:0 0 .6rem;line-height:1.2;color:#f3f8ff}
 .reader-memberships .membership-details h3{font-size:1.25rem;color:#edf7ff;margin:0 0 .75rem;line-height:1.4}
@@ -18,11 +118,14 @@
 .reader-memberships button[data-slot=radio-group-item]{padding:0;border-radius:50%;background:transparent;color:#9fe7ff;border-color:#9fe7ff}
 .reader-memberships :is(a,button,label):focus-visible{outline-color:#a2e7ff}
 
-.reader-resume{padding:clamp(24px,4vw,36px);border-radius:20px;background:linear-gradient(120deg,#0d2c44,#134a69);color:#f1f9ff;margin:24px 0 18px}.reader-resume>span{color:#9ee1f2;font-weight:600}.reader-resume h2{font-size:clamp(1.5rem,4vw,2rem);line-height:1.3;margin:12px 0 20px}.reader-page .reader-resume a{display:inline-flex;align-items:center;min-height:46px;padding:12px 20px;border-radius:12px;background:#b2edff;color:#102a3c;font-weight:700}.reader-page .reader-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.reader-page .reader-summary section:last-child{grid-column:auto}.reader-account-settings{margin-top:40px;padding-top:28px;border-top:1px solid #b9d2e1}.reader-account-settings>h2{font-size:1.5rem}.reader-account-settings .reader-privacy{margin-top:18px}.reader-page :is(#saved-materials,#account-settings){scroll-margin-top:24px}@media(max-width:400px){.reader-page .reader-summary section{padding:18px}}
-/* While progress loads, hold about the height of the signed-out sign-in form (825px on desktop)
-   so the sections below don't jump when the form or dashboard appears. */
-.reader-loading{min-height:820px}
-@media(max-width:799px){.reader-loading{min-height:835px}}
-@media(max-width:640px){.reader-loading{min-height:885px}}
-@media(max-width:540px){.reader-loading{min-height:935px}}
-@media(max-width:480px){.reader-loading{min-height:min(1340px,calc(2080px - 241vw))}}
+/* Printed pages use dark text on white. */
+@media print{body.site-editorial:has(.account-page),.account-page,.account-page .reader-page{background:#fff;color:#111}.account-page :is(h1,h2,h3,p,span,strong,label,li,a){color:#111!important}}
+
+/* While progress loads, hold about the space the signed-out sign-in form takes (848px on desktop,
+   with the passkey button as the only provider button) so the sections below don't jump when the
+   form or dashboard appears. Each Apple, Google, or Microsoft button adds 56px. */
+.reader-loading{min-height:848px}
+@media(max-width:799px){.reader-loading{min-height:870px}}
+@media(max-width:640px){.reader-loading{min-height:920px}}
+@media(max-width:540px){.reader-loading{min-height:961px}}
+@media(max-width:480px){.reader-loading{min-height:min(1370px,calc(2077px - 229vw))}}

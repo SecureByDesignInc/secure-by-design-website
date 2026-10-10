@@ -371,3 +371,11 @@ The owner renamed course 1.1, removed release numbers, asked for a segmented net
 - **Every tile shows its workbook:** each compact tile's art carries its workbook cover (`training.cover`, the RMF parts their catalog) at the identity build's size and place; course labels sit left of it at 10.5px (10px in the narrow five-column range) and may wrap.
 - **No share controls in training:** the TrainingShare component, the guides' "Pass it on" closing note and `guide-share.js` are gone. The site footer's homepage share button is not training material and stays.
 - **Editions:** 1.1 is 0.6 (13-page workbook); 1.2 1.4, 1.3 1.3, 1.4 2.1, 1.5 1.4, 1.6 1.4, 1.7 1.4, 1.8 1.4, 1.9 1.3; 1.10 stays 1.3; the RMF catalog is 1.4.
+
+## My Account uses the site's dark design — October 9, 2026
+
+The owner asked that My Account stop using a white background and match the rest of the site. For the account pages this supersedes the light form surfaces of the shared template; reading pages keep their light article bodies.
+
+- **Pages:** `/my-progress` and `/app-sign-in` render a full-width `<main class="account-page">` (#071521, the Training Library background) around `div.container.reader-page`. `app/my-progress/my-progress.css` restyles the shared reader styles from `app/reader-progress.css` inside `.account-page` only, so the guides and articles that use `.reader-save` keep their light surfaces.
+- **Design:** Training Library kicker, heading and chips; panels #0b2131 and #102737 with #2d4b61 and #365469 borders; cyan primary buttons (#91dfeb, dark text) and dark secondary buttons; dark inputs (#081c2b); a red-tinted delete panel. Apple, Google and Microsoft buttons are white (Apple's white style is its one for dark backgrounds); the passkey button is a dark outlined button. Membership options keep their existing dark styles. Keep new account UI inside `.account-page` with these colors; don't bring back light panels there.
+- **Loading:** the placeholder reserves the signed-out form's height at each width, measured with the passkey button as the only provider button (production has Apple, Google and Microsoft off); each provider button adds 56px.

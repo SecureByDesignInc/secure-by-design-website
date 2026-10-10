@@ -1,4 +1,5 @@
-/* Shared blue/cyan template shell; article and form surfaces stay light for reading. */
+/* Shared blue/cyan template shell; article surfaces stay light for reading. My Account and the app
+   sign-in page are dark throughout (app/my-progress/my-progress.css). */
 body.site-editorial .footer-actions{display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px 20px;max-width:100%}
 body.site-editorial .footer-actions>a{display:inline-flex;align-items:center;gap:12px;min-height:44px;color:#dcecff}
 .footer-share-host{max-width:100%}
