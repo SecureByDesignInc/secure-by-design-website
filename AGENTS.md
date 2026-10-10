@@ -379,3 +379,10 @@ The owner asked that My Account stop using a white background and match the rest
 - **Pages:** `/my-progress` and `/app-sign-in` render a full-width `<main class="account-page">` (#071521, the Training Library background) around `div.container.reader-page`. `app/my-progress/my-progress.css` restyles the shared reader styles from `app/reader-progress.css` inside `.account-page` only, so the guides and articles that use `.reader-save` keep their light surfaces.
 - **Design:** Training Library kicker, heading and chips; panels #0b2131 and #102737 with #2d4b61 and #365469 borders; cyan primary buttons (#91dfeb, dark text) and dark secondary buttons; dark inputs (#081c2b); a red-tinted delete panel. Apple, Google and Microsoft buttons are white (Apple's white style is its one for dark backgrounds); the passkey button is a dark outlined button. Membership options keep their existing dark styles. Keep new account UI inside `.account-page` with these colors; don't bring back light panels there.
 - **Loading:** the placeholder reserves the signed-out form's height at each width, measured with the passkey button as the only provider button (production has Apple, Google and Microsoft off); each provider button adds 56px.
+
+## Guided portfolio track and add-ons hidden — October 9, 2026
+
+The owner asked to remove the portfolio and add-on sections from the membership options for now: they are not ready to be public. This supersedes the membership notes above (Membership plans, Scenario A) where they list those sections.
+
+- The "Guided portfolio track" section (Build, Harden, Authorize, Capstone phases) and the "Add-ons for any member" section ($49 resume and portfolio review, $79 1:1 session) are gone from My Account's membership options. Their copy is out of `content/membership-plans.json` and the app's identical copy, so neither the site nor the app ships it; the drafts are kept unpublished in `archive/membership-drafts-2026-10-09.json`. Don't show them again until the owner asks. `tests/membership-plans.test.mjs` checks this.
+- The Community, Builder and Guided cards and their details are unchanged.

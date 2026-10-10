@@ -22,7 +22,6 @@ export default function MembershipPlans() {
   const amount = yearly ? plan.annualPrice : plan.monthlyPrice;
   const detail = plan.detail ?? (yearly ? plan.detailAnnual : plan.detailMonthly);
   const renewal = yearly ? plan.renewAnnual : plan.renewMonthly;
-  const { portfolioTrack: track, addOns } = catalog;
   return <>
     <header className="membership-heading">
       <p className="membership-kicker"><ShieldCheck size={20} aria-hidden="true" /> Learn it. Build it. Put it to work.</p>
@@ -60,18 +59,6 @@ export default function MembershipPlans() {
       {!plan.available && renewal && <p>{renewal}</p>}
       <p className="membership-availability">{catalog.availabilityNote}</p>
       <a href="/training">Keep learning with Community</a>
-    </section>
-    <section className="membership-extra" aria-labelledby="membership-track-title">
-      <p className="membership-extra-kicker">{track.kicker} · coming soon</p>
-      <h3 id="membership-track-title">{track.title}</h3>
-      <p>{track.intro}</p>
-      <ol className="membership-phases">{track.phases.map(phase => <li key={phase.name}><span>{phase.label}</span><strong>{phase.name}</strong><p>{phase.text}</p></li>)}</ol>
-      <p>{track.outcome}</p>
-    </section>
-    <section className="membership-extra" aria-labelledby="membership-addons-title">
-      <p className="membership-extra-kicker">{addOns.kicker}</p>
-      <h3 id="membership-addons-title">{addOns.title}</h3>
-      <ul className="membership-addons">{addOns.items.map(item => <li key={item.id}><div><strong>{item.name}</strong><span>${item.price}</span></div><p>{item.text}</p></li>)}</ul>
     </section>
     <aside className="membership-creator" aria-label="A note from Secure By Design">
       <div className="membership-initials" aria-hidden="true">SBD</div>
