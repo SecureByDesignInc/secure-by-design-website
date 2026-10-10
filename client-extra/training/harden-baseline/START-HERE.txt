@@ -1,0 +1,24 @@
+SECURE BY DESIGN
+HARDEN THE BASELINE
+Windows Server - OU design, DISA GPOs & STIG/SCAP verification
+Course 1.3 | Materials edition 1.3 | Updated 9 October 2026
+© 2026 Secure By Design Team LLC.
+
+IN THIS DOWNLOAD
+SecureByDesign-harden-baseline-Workbook.pdf    Companion workbook, 16 pages
+SecureByDesign-harden-baseline-Workbook.docx   Editable copy of the workbook
+configuration-checklist.md                     Configuration and evidence checklist
+Verification-Commands.txt                      Each lesson's commands, ready to copy
+
+HOW TO USE IT
+1. Open the interactive guide at https://securebydesigninc.com/training/harden-baseline
+   for the lessons, knowledge checks, and saved progress.
+2. Keep the workbook beside you as you build. Record results, dates, and
+   evidence in the checklist or in the editable workbook.
+3. Run commands only in your own practice environment, after reading them.
+
+The names and addresses continue the training example; match them to your own
+plan. The steps follow vendor documentation and have not been run on your
+systems, so confirm each result in your own environment.
+
+Secure By Design | https://securebydesigninc.com/

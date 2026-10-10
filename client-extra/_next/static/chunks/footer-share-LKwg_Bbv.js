@@ -1,0 +1,12 @@
+import{r as e}from"./rolldown-runtime-QTnfLwEv.js";import{i as t,r as n}from"./framework-JGc2HF7T.js";var r=e(t(),1),i=`https://securebydesigninc.com/`,a={opened:`Share options opened.`,copied:`Link copied. Ready to pass it on.`,cancelled:`You can copy the link instead.`,manual:`Select and copy the link below.`};async function o(e){try{return e.clipboard?.writeText?(await e.clipboard.writeText(i),`copied`):`manual`}catch{return`manual`}}async function s(e){if(typeof e.share==`function`)try{return await e.share({title:`Secure By Design`,url:i}),`opened`}catch(e){if(e?.name===`AbortError`)return`cancelled`}return o(e)}function c(){return`<div class="footer-share" data-footer-share>
+    <button type="button" class="footer-share-button" data-share-action title="Share Secure By Design">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+      Pass it on
+    </button>
+    <output class="footer-share-status" aria-live="polite" aria-atomic="true"></output>
+    <div class="footer-share-manual" hidden>
+      <label for="footer-share-link">Secure By Design homepage</label>
+      <input id="footer-share-link" type="text" readonly>
+      <button type="button" class="footer-share-button" data-copy-action>Copy link</button>
+    </div>
+  </div>`}function l(e,t){let n=e.querySelector(`[data-share-action]`),r=e.querySelector(`[data-copy-action]`),c=e.querySelector(`output`),l=e.querySelector(`.footer-share-manual`),u=e.querySelector(`input`),d=!1,f=!1;c.textContent=``,u.value=i,l.hidden=!0,n.disabled=r.disabled=!1;async function p(e){if(!d){d=!0,n.disabled=r.disabled=!0,c.textContent=`Please wait…`;try{let n=await(e?o(t):s(t));if(f)return;c.textContent=a[n],(n===`cancelled`||n===`manual`)&&(l.hidden=!1)}finally{d=!1,f||(n.disabled=r.disabled=!1)}}}let m=()=>{p(!1)},h=()=>{p(!0)},g=()=>u.select();return n.addEventListener(`click`,m),r.addEventListener(`click`,h),u.addEventListener(`focus`,g),()=>{f=!0,n.removeEventListener(`click`,m),r.removeEventListener(`click`,h),u.removeEventListener(`focus`,g)}}var u=n(),d=c();function f(){let e=(0,r.useRef)(null);return(0,r.useEffect)(()=>{if(e.current)return l(e.current,navigator)},[]),(0,u.jsx)(`div`,{className:`footer-share-host`,ref:e,dangerouslySetInnerHTML:{__html:d}})}export{f as default};

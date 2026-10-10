@@ -1,0 +1,784 @@
+
+ ⛅️ wrangler 4.92.0 (update available 4.149.0)
+──────────────────────────────────────────────
+Your Worker has access to the following bindings:
+Binding                       Resource         Mode
+env.DB (site-creator-d1)      D1 Database      local
+
+Attaching additional modules:
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬──────┬─────────────┐
+│ Name                                                                                                                          │ Type │ Size        │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ __vite_rsc_assets_manifest.js                                                                                                 │ esm  │ 16.16 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-page-cache-De1_W88x.js                                                                                       │ esm  │ 5.07 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-page-cache-finalizer-CG_FAg8N.js                                                                             │ esm  │ 3.40 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-page-cache-render-CqWZVbPZ.js                                                                                │ esm  │ 1.87 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-page-stream-9RSgZUWN.js                                                                                      │ esm  │ 9.70 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-prerender-endpoints-Dptx3Rw-.js                                                                              │ esm  │ 1.96 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-prerender-static-params-DZn_80Q2.js                                                                          │ esm  │ 1.09 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-route-handler-dispatch-BJyYJnC6.js                                                                           │ esm  │ 25.54 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-segment-config-b_WT8IJJ.js                                                                                   │ esm  │ 13.31 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/app-static-generation-BX8cz43B.js                                                                                │ esm  │ 0.89 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/cache-headers-Bv_jmpli.js                                                                                        │ esm  │ 47.18 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/configuration-courses-DXtIM46O.js                                                                                │ esm  │ 253.53 KiB  │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/framework~index-B9PeWFDJ.js                                                                                      │ esm  │ 0.22 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/framework~index~page~page~layout~page~not-found~page~page~page~page~page~app-page-cache-ren~obmrkd0m-BMToxvTM.js │ esm  │ 0.80 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/framework~index~page~page~layout~page~page~page~page~page~app-route-handler-dispatch-CUlWnkTT.js                 │ esm  │ 55.42 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/framework~index~page~page~page~page~page~page~page~page~page~page~page~page~layout~page~pag~ln3plaix-D2DrRkkV.js │ esm  │ 5.37 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/implicit-tags-GQSTsplb.js                                                                                        │ esm  │ 1.31 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/isr-cache-uSLzIE1A.js                                                                                            │ esm  │ 4.81 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/navigation-errors-BH_H44hq.js                                                                                    │ esm  │ 1.61 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/navigation-runtime-5239Du3_.js                                                                                   │ esm  │ 0.78 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/navigation.react-server-5fUaUI3c.js                                                                              │ esm  │ 0.26 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-0-HqPaor.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-4nNVZZTl.js                                                                                                 │ esm  │ 0.14 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-7oRCvJOD.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-B0UjaP84.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-BIw367sc.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-BIw367sc2.js                                                                                                │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-BOS9RqyD.js                                                                                                 │ esm  │ 13.17 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-Be3R0mHR.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-BijXkWzH.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-BvvIh5mP.js                                                                                                 │ esm  │ 0.31 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-ByAse6Up.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-C0s8yUJy.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-CLzs7_zJ.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-CMO6evEc.js                                                                                                 │ esm  │ 41.35 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-CTvz9KEp.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-CTvz9KEp2.js                                                                                                │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-D3g-agSH.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-D3m_Gc_d.js                                                                                                 │ esm  │ 1.67 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-DD1_0_UH.js                                                                                                 │ esm  │ 0.20 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-DKj1THCA.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-DMrNZ6av.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-DYjYAT712.js                                                                                                │ esm  │ 5.05 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-Deu7lv_V.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-DjWV3bWH.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-Dn_z9BLU.js                                                                                                 │ esm  │ 2.25 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-LKNtiQrT.js                                                                                                 │ esm  │ 1.46 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-_eS6fnN72.js                                                                                                │ esm  │ 2.01 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-ej9PYSbC.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-ej9PYSbC2.js                                                                                                │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-pc9FS5Z12.js                                                                                                │ esm  │ 1.51 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-qEKdKagY.js                                                                                                 │ esm  │ 0.14 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-qEKdKagY2.js                                                                                                │ esm  │ 0.14 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/page-wETqRg7n.js                                                                                                 │ esm  │ 0.13 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/record-BAthWM8-.js                                                                                               │ esm  │ 4.85 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/redirect-digest-8IAkcvyn.js                                                                                      │ esm  │ 0.37 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/rolldown-runtime-QTnfLwEv.js                                                                                     │ esm  │ 0.68 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/root-params-C9VzYOFV.js                                                                                          │ esm  │ 1.21 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/rsc-CZC7NPrV.js                                                                                                  │ esm  │ 0.74 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/share-preview-CxPvbG4u.js                                                                                        │ esm  │ 0.57 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/text-stream-CTxskgcY.js                                                                                          │ esm  │ 18.96 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ _next/static/videos-DZWNx9O8.js                                                                                               │ esm  │ 43.89 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/__vite_rsc_assets_manifest.js                                                                                             │ esm  │ 16.16 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/HeroShaderGradient-BrmjHRro.js                                                                               │ esm  │ 4.26 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/Icon-WqbLRpQR.js                                                                                             │ esm  │ 1.01 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/app-nav-failure-handler-BW2-CIfV.js                                                                          │ esm  │ 0.07 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/app-prefetch-fetch-queue-_BJykTbp.js                                                                         │ esm  │ 0.47 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/app-router-scroll-BYZnMDPJ.js                                                                                │ esm  │ 2.11 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/app-router-scroll-state-DUBEP4Pc.js                                                                          │ esm  │ 1.06 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/app-sign-in-D-Veagx6.js                                                                                      │ esm  │ 2.79 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/book-open-DRixo7QE.js                                                                                        │ esm  │ 0.39 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/catalog-scene-gqddsUsn.js                                                                                    │ esm  │ 26.55 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/check-kGGKgciz.js                                                                                            │ esm  │ 5.89 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/configuration-guide-DtyDSliD.js                                                                              │ esm  │ 7.02 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/createLucideIcon-DYYxuNHK.js                                                                                 │ esm  │ 0.49 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/error-boundary-Bs53nyLy.js                                                                                   │ esm  │ 5.38 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/footer-share-DUhfoi_O.js                                                                                     │ esm  │ 2.44 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/hybrid-client-route-owner-qkLAiEZG.js                                                                        │ esm  │ 0.16 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/layout-segment-context-DIcMiUBr.js                                                                           │ esm  │ 0.44 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/membership-plans-DBpm4Q5R.js                                                                                 │ esm  │ 31.65 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/navigation-B_O10bOO.js                                                                                       │ esm  │ 45.81 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/navigation-CdMCoESe.js                                                                                       │ esm  │ 0.85 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/navigation-errors-7QYsJlQ0.js                                                                                │ esm  │ 3.66 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/network-DrnGBSWg.js                                                                                          │ esm  │ 0.49 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/network-explorer-rrZD3Wa9.js                                                                                 │ esm  │ 1.61 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/print-button-DF5W_owk.js                                                                                     │ esm  │ 0.49 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/progress-dashboard-cvaAHF7a.js                                                                               │ esm  │ 80.92 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/query-BjYJsa_t.js                                                                                            │ esm  │ 0.53 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/react-6w5pZfgw.js                                                                                            │ esm  │ 7.71 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/reader-progress-BEXhyI7h.js                                                                                  │ esm  │ 2.68 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/route-matching-BXMFwbaa.js                                                                                   │ esm  │ 3.18 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/sign-in-DWGpMnL_.js                                                                                          │ esm  │ 12.47 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/static.edge-Cc3aXrCj.js                                                                                      │ esm  │ 0.20 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/streamed-icons-jlmSeaC7.js                                                                                   │ esm  │ 0.67 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/template-home-DxkJg55R.js                                                                                    │ esm  │ 11.94 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/three.module-33299Vwe.js                                                                                     │ esm  │ 529.89 KiB  │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/video-COECAxJn.js                                                                                            │ esm  │ 0.42 KiB    │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/_next/static/video-hub-Dy7Yz2pD.js                                                                                        │ esm  │ 327.45 KiB  │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/index.js                                                                                                                  │ esm  │ 267.50 KiB  │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ ssr/vinext-client-assets.js                                                                                                   │ esm  │ 11.23 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ vinext-client-assets.js                                                                                                       │ esm  │ 11.23 KiB   │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼──────┼─────────────┤
+│ Total (101 modules)                                                                                                           │      │ 2022.90 KiB │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────┴─────────────┘
+⎔ Starting local server...
+[wrangler:info] ✨ Parsed 4 valid header rules.
+[wrangler:info] Ready on http://127.0.0.1:8787
+[wrangler:info] GET / 200 OK (64ms)
+[wrangler:info] GET / 200 OK (27ms)
+[wrangler:info] GET /inside-the-network 200 OK (36ms)
+[wrangler:info] GET /training 200 OK (56ms)
+[wrangler:info] GET /privacy 200 OK (29ms)
+[wrangler:info] GET /training/dns-configuration 200 OK (18ms)
+[wrangler:info] GET /training/two-tier-pki 200 OK (14ms)
+[wrangler:info] GET /training/harden-baseline 200 OK (12ms)
+[wrangler:info] GET /training/tiered-admin 200 OK (14ms)
+[wrangler:info] GET /training/logging-pipeline 200 OK (12ms)
+[wrangler:info] GET /training/workstation-fleet 200 OK (9ms)
+[wrangler:info] GET /training/patch-protect 200 OK (12ms)
+[wrangler:info] GET /training/business-services 200 OK (12ms)
+[wrangler:info] GET /training/prove-recovery 200 OK (10ms)
+[wrangler:info] GET /training/dns-configuration/checklist 200 OK (14ms)
+[wrangler:info] GET /training/two-tier-pki/checklist 200 OK (12ms)
+[wrangler:info] GET /training/harden-baseline/checklist 200 OK (10ms)
+[wrangler:info] GET /training/tiered-admin/checklist 200 OK (12ms)
+[wrangler:info] GET /training/logging-pipeline/checklist 200 OK (12ms)
+[wrangler:info] GET /training/workstation-fleet/checklist 200 OK (11ms)
+[wrangler:info] GET /training/patch-protect/checklist 200 OK (10ms)
+[wrangler:info] GET /training/business-services/checklist 200 OK (12ms)
+[wrangler:info] GET /training/prove-recovery/checklist 200 OK (9ms)
+[wrangler:info] GET /my-progress 200 OK (12ms)
+[wrangler:info] GET /app-sign-in 200 OK (7ms)
+[wrangler:info] GET /does-not-exist 404 Not Found (11ms)
+[wrangler:info] GET / 200 OK (10ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (20ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (26ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (13ms)
+[wrangler:info] GET /_next/static/css/page.BLjPnQJS.css 200 OK (11ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (26ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (34ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (27ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (37ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (28ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (44ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (45ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (45ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (45ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (49ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (43ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (54ms)
+[wrangler:info] GET /_next/static/chunks/template-home-BgsXC1nC.js 200 OK (53ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (53ms)
+[wrangler:info] GET /_next/static/chunks/book-open-FcOBV2-M.js 200 OK (36ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (51ms)
+[wrangler:info] GET /_next/static/chunks/network-JbXHFDE2.js 200 OK (9ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (35ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (37ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (39ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (39ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (41ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (39ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (13ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (9ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (9ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/HeroShaderGradient-DXOqhilM.js 200 OK (5ms)
+[wrangler:info] GET /_next/static/chunks/three.module-BKRIy6WH.js 200 OK (7ms)
+[wrangler:info] GET /training 200 OK (55ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (28ms)
+[wrangler:info] GET /_next/static/css/videos.Bpns4Aon.css 200 OK (33ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (36ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (14ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (15ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (24ms)
+[wrangler:info] GET /_next/static/chunks/video-hub-3hcPiVL9.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (29ms)
+[wrangler:info] GET /_next/static/chunks/video-DzEPr_2c.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (11ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (6ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (10ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 304 Not Modified (16ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (27ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (27ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (32ms)
+[wrangler:info] GET /_next/static/chunks/book-open-FcOBV2-M.js 304 Not Modified (8ms)
+[wrangler:info] GET /_next/static/chunks/network-JbXHFDE2.js 304 Not Modified (9ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (12ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (17ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (12ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (19ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (19ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (13ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (9ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (14ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (15ms)
+[wrangler:info] GET /training/dc01-dc02/workbook-cover.webp 200 OK (13ms)
+[wrangler:info] GET /training/two-tier-pki/workbook-cover.webp 200 OK (29ms)
+[wrangler:info] GET /training/tiered-admin/workbook-cover.webp 200 OK (32ms)
+[wrangler:info] GET /training/dns-configuration/workbook-cover.webp 200 OK (33ms)
+[wrangler:info] GET /training/harden-baseline/workbook-cover.webp 200 OK (35ms)
+[wrangler:info] GET /training/logging-pipeline/workbook-cover.webp 200 OK (45ms)
+[wrangler:info] GET /training/workstation-fleet/workbook-cover.webp 200 OK (35ms)
+[wrangler:info] GET /my-progress 200 OK (14ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (15ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (23ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (42ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (41ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (34ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (29ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (28ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (10ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (45ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (44ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (40ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (51ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (14ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (35ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (39ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (27ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 304 Not Modified (31ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 304 Not Modified (29ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 304 Not Modified (35ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 304 Not Modified (26ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (14ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (16ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (16ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (29ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (28ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (17ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (29ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (18ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (18ms)
+[wrangler:info] GET /api/reader-progress 200 OK (8ms)
+[wrangler:info] GET /api/sign-in/providers 200 OK (8ms)
+[wrangler:info] GET /my-progress 200 OK (12ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (14ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (28ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (34ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (52ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (53ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (55ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (66ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (41ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (45ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (32ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (55ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (43ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (62ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (43ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (43ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (47ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (32ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (33ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (24ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (27ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (29ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (21ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (21ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (22ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (19ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (24ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (38ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (42ms)
+[wrangler:info] GET /api/reader-progress 200 OK (4ms)
+[wrangler:info] GET /my-progress 200 OK (20ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (19ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (27ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (14ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (44ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (44ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (15ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (15ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (46ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (54ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (49ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (49ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (42ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (31ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (31ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (31ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (32ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (20ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (21ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (21ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (37ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (21ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (40ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (29ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (30ms)
+[wrangler:info] GET /app-sign-in 200 OK (20ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (15ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (8ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/app-sign-in-BPSK9NHI.js 200 OK (12ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (12ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (15ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (11ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (21ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 304 Not Modified (27ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 304 Not Modified (31ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (25ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (29ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (21ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (21ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (31ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (16ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (16ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (18ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (13ms)
+[wrangler:info] GET /api/reader-progress 200 OK (4ms)
+[wrangler:info] GET /api/sign-in/providers 200 OK (5ms)
+[wrangler:info] GET /app-sign-in 200 OK (7ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (10ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (7ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (11ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (28ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (41ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (35ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (34ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (7ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (10ms)
+[wrangler:info] GET /_next/static/chunks/app-sign-in-BPSK9NHI.js 200 OK (12ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (24ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (11ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (11ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (27ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (18ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (20ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (21ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (20ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (17ms)
+[wrangler:info] GET / 200 OK (11ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (15ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (15ms)
+[wrangler:info] GET /_next/static/css/page.BLjPnQJS.css 200 OK (11ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (24ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (24ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (8ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (8ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/template-home-BgsXC1nC.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/book-open-FcOBV2-M.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (19ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (15ms)
+[wrangler:info] GET /_next/static/chunks/network-JbXHFDE2.js 200 OK (14ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (12ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (18ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (19ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (19ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (20ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (12ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (13ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (34ms)
+[wrangler:info] GET /_next/static/chunks/HeroShaderGradient-DXOqhilM.js 200 OK (8ms)
+[wrangler:info] GET /_next/static/chunks/three.module-BKRIy6WH.js 200 OK (7ms)
+[wrangler:info] GET /training 200 OK (19ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/css/videos.Bpns4Aon.css 200 OK (17ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (33ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (32ms)
+[wrangler:info] GET /_next/static/chunks/video-hub-3hcPiVL9.js 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (35ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (50ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (49ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (28ms)
+[wrangler:info] GET /_next/static/chunks/video-DzEPr_2c.js 200 OK (12ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (15ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (12ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 304 Not Modified (24ms)
+[wrangler:info] GET /_next/static/chunks/network-JbXHFDE2.js 304 Not Modified (22ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (23ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 304 Not Modified (27ms)
+[wrangler:info] GET /_next/static/chunks/book-open-FcOBV2-M.js 304 Not Modified (27ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (15ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (10ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (13ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (9ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (9ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (14ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (16ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (20ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (20ms)
+[wrangler:info] GET /training/dc01-dc02/workbook-cover.webp 200 OK (21ms)
+[wrangler:info] GET /training/tiered-admin/workbook-cover.webp 200 OK (27ms)
+[wrangler:info] GET /training/logging-pipeline/workbook-cover.webp 200 OK (26ms)
+[wrangler:info] GET /training/dns-configuration/workbook-cover.webp 200 OK (28ms)
+[wrangler:info] GET /training/harden-baseline/workbook-cover.webp 200 OK (27ms)
+[wrangler:info] GET /training/two-tier-pki/workbook-cover.webp 200 OK (28ms)
+[wrangler:info] GET /training/workstation-fleet/workbook-cover.webp 200 OK (17ms)
+[wrangler:info] GET /training/patch-protect/workbook-cover.webp 200 OK (10ms)
+[wrangler:info] GET /training/prove-recovery/workbook-cover.webp 200 OK (14ms)
+[wrangler:info] GET /training/rmf/catalog-cover.webp 200 OK (16ms)
+[wrangler:info] GET /training/business-services/workbook-cover.webp 200 OK (19ms)
+[wrangler:info] GET /my-progress 200 OK (12ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (11ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (27ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (28ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (22ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (17ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (21ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (19ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (31ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (21ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (20ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 304 Not Modified (31ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 304 Not Modified (29ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 304 Not Modified (18ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (19ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (13ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (13ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (14ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (13ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (19ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (18ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (13ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (12ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (15ms)
+[wrangler:info] GET /api/reader-progress 200 OK (4ms)
+[wrangler:info] GET /api/sign-in/providers 200 OK (4ms)
+[wrangler:info] GET /my-progress 200 OK (10ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (20ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (21ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (22ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (28ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (44ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (30ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (10ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (9ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (12ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (15ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (13ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (18ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (26ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (10ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (13ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (13ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (30ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (20ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (15ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (22ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (21ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (14ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (22ms)
+[wrangler:info] GET /api/reader-progress 200 OK (3ms)
+[wrangler:info] GET /my-progress 200 OK (16ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (9ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (8ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (8ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (13ms)
+[wrangler:info] GET /_next/static/css/page.DK9r56jz.css 200 OK (21ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (36ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (33ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (51ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (36ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (5ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (6ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (21ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (24ms)
+[wrangler:info] GET /_next/static/chunks/progress-dashboard-DVeEXC-c.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (14ms)
+[wrangler:info] GET /_next/static/chunks/membership-plans-DBpm4Q5R.js 200 OK (17ms)
+[wrangler:info] GET /_next/static/chunks/app-route-prefetch-policy-Dv8f103O.js 200 OK (27ms)
+[wrangler:info] GET /_next/static/chunks/query-DugiHe4Q.js 200 OK (26ms)
+[wrangler:info] GET /_next/static/chunks/createLucideIcon-CAkK5FPT.js 200 OK (41ms)
+[wrangler:info] GET /_next/static/chunks/Icon-p31uH7n4.js 200 OK (44ms)
+[wrangler:info] GET /_next/static/chunks/check-BXL5RKRb.js 200 OK (37ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (38ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (14ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (19ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (23ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (24ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (22ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (25ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (22ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (11ms)
+[wrangler:info] GET /app-sign-in 200 OK (12ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 304 Not Modified (13ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 304 Not Modified (30ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 304 Not Modified (32ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 304 Not Modified (33ms)
+[wrangler:info] GET /_next/static/chunks/app-sign-in-BPSK9NHI.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 304 Not Modified (38ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 304 Not Modified (32ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 304 Not Modified (25ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 304 Not Modified (26ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 304 Not Modified (4ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 304 Not Modified (21ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 304 Not Modified (22ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 304 Not Modified (35ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 304 Not Modified (43ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 304 Not Modified (43ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 304 Not Modified (18ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 304 Not Modified (11ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 304 Not Modified (17ms)
+[wrangler:info] GET /app-stores/app-store.svg 304 Not Modified (17ms)
+[wrangler:info] GET /partners/red-hat-light.svg 304 Not Modified (32ms)
+[wrangler:info] GET /brand-lock.svg 304 Not Modified (34ms)
+[wrangler:info] GET /app-stores/google-play.png 304 Not Modified (38ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 304 Not Modified (35ms)
+[wrangler:info] GET /social/discord-sbd.svg 304 Not Modified (11ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 304 Not Modified (37ms)
+[wrangler:info] GET /social/youtube-sbd.svg 304 Not Modified (35ms)
+[wrangler:info] GET /social/instagram-sbd.svg 304 Not Modified (5ms)
+[wrangler:info] GET /partners/tenable-light.svg 304 Not Modified (4ms)
+[wrangler:info] GET /api/reader-progress 200 OK (3ms)
+[wrangler:info] GET /api/sign-in/providers 200 OK (3ms)
+[wrangler:info] GET /app-sign-in 200 OK (10ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2 200 OK (11ms)
+[wrangler:info] GET /_next/static/chunks/index-BlcK2Ktu.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2 200 OK (20ms)
+[wrangler:info] GET /_next/static/css/index.C-WfvJ9v.css 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/rolldown-runtime-QTnfLwEv.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/css/my-progress.Db-Q10zV.css 200 OK (23ms)
+[wrangler:info] GET /_next/static/chunks/record-BGze3w87.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/framework-JGc2HF7T.js 200 OK (47ms)
+[wrangler:info] GET /_next/static/chunks/hash-B9TVtkv9.js 200 OK (29ms)
+[wrangler:info] GET /_next/static/chunks/app-elements-MmRVnLC5.js 200 OK (36ms)
+[wrangler:info] GET /_next/static/chunks/protocol-headers-De2985Ry.js 200 OK (16ms)
+[wrangler:info] GET /_next/static/chunks/deployment-id-wrGRten7.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-cache-busting-BdN9pYMv.js 200 OK (54ms)
+[wrangler:info] GET /_next/static/chunks/app-rsc-render-mode-BLLBFAJ3.js 200 OK (48ms)
+[wrangler:info] GET /_next/static/chunks/headers-qGdipI-Q.js 200 OK (25ms)
+[wrangler:info] GET /_next/static/chunks/navigation-errors-CYpSzq4O.js 200 OK (19ms)
+[wrangler:info] GET /_next/static/chunks/navigation-uW_HPSjO.js 200 OK (10ms)
+[wrangler:info] GET /_next/static/chunks/layout-segment-context-CJWUeHul.js 200 OK (15ms)
+[wrangler:info] GET /_next/static/chunks/footer-share-LKwg_Bbv.js 200 OK (13ms)
+[wrangler:info] GET /_next/static/chunks/sign-in-DSW-NEog.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/reader-progress-C1_ticBh.js 200 OK (20ms)
+[wrangler:info] GET /_next/static/chunks/app-sign-in-BPSK9NHI.js 200 OK (22ms)
+[wrangler:info] GET /app-stores/app-store.svg 200 OK (9ms)
+[wrangler:info] GET /app-stores/google-play.png 200 OK (6ms)
+[wrangler:info] GET /partners/red-hat-light.svg 200 OK (9ms)
+[wrangler:info] GET /brand-lock.svg 200 OK (7ms)
+[wrangler:info] GET /social/instagram-sbd.svg 200 OK (14ms)
+[wrangler:info] GET /social/discord-sbd.svg 200 OK (10ms)
+[wrangler:info] GET /social/youtube-sbd.svg 200 OK (17ms)
+[wrangler:info] GET /social/tiktok-sbd.svg 200 OK (18ms)
+[wrangler:info] GET /partners/tenable-light.svg 200 OK (14ms)
