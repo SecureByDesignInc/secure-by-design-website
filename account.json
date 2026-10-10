@@ -1,0 +1,152 @@
+[
+ {
+  "width": 1280,
+  "authHeight": 828,
+  "progressTop": 514,
+  "asideTop": 1382,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 1280
+ },
+ {
+  "width": 800,
+  "authHeight": 828,
+  "progressTop": 628,
+  "asideTop": 1496,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 800
+ },
+ {
+  "width": 799,
+  "authHeight": 828,
+  "progressTop": 628,
+  "asideTop": 1496,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 799
+ },
+ {
+  "width": 640,
+  "authHeight": 890,
+  "progressTop": 610,
+  "asideTop": 1541,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 640
+ },
+ {
+  "width": 540,
+  "authHeight": 941,
+  "progressTop": 539,
+  "asideTop": 1520,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 540
+ },
+ {
+  "width": 480,
+  "authHeight": 1017,
+  "progressTop": 568,
+  "asideTop": 1626,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 480
+ },
+ {
+  "width": 430,
+  "authHeight": 1103,
+  "progressTop": 568,
+  "asideTop": 1711,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 430
+ },
+ {
+  "width": 390,
+  "authHeight": 1150,
+  "progressTop": 568,
+  "asideTop": 1759,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 390
+ },
+ {
+  "width": 360,
+  "authHeight": 1251,
+  "progressTop": 630,
+  "asideTop": 1921,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 360
+ },
+ {
+  "width": 320,
+  "authHeight": 1349,
+  "progressTop": 672,
+  "asideTop": 2060,
+  "main": "account-page",
+  "mainBg": "rgb(7, 21, 33)",
+  "bodyBg": "rgb(7, 21, 33)",
+  "ssoButtons": 1,
+  "membership": true,
+  "hidden": [
+   "portfolio track"
+  ],
+  "scrollWidth": 320
+ }
+]
