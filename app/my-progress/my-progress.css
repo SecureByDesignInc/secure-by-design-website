@@ -128,4 +128,4 @@ body.site-editorial .account-page :is(a,button,input,summary):focus-visible{outl
 @media(max-width:799px){.reader-loading{min-height:870px}}
 @media(max-width:640px){.reader-loading{min-height:920px}}
 @media(max-width:540px){.reader-loading{min-height:961px}}
-@media(max-width:480px){.reader-loading{min-height:min(1370px,calc(2043px - 217vw))}}
+@media(max-width:480px){.reader-loading{min-height:min(1370px,calc(2077px - 229vw))}}
