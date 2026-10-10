@@ -2027,6 +2027,11 @@
 /* RMF materials follow the Windows Server tile in the shared catalog. */
 .vc-course-art{position:absolute;inset:30px 11px 26px;display:grid;grid-template-columns:minmax(0,1fr);align-content:center;gap:4px;color:#bceef5;z-index:1}
 .vc-course-art span{font-size:12px;line-height:1.25;letter-spacing:-.025em}
+/* Every tile shows its workbook in the art, placed and sized as the identity build's (owner request,
+   9 October 2026). The course labels move left of it, at the 11px of the identity build's server names. */
+.vc-course-art.vc-course-art-book{top:28px;right:74px;bottom:24px;gap:2px}
+.vc-course-art.vc-course-art-book span{font-size:10.5px;line-height:1.15;text-wrap:balance}
+@media (min-width:1101px) and (max-width:1220px){.vc-course-art.vc-course-art-book span{font-size:10px}}
 
 /* Categories organize the catalog without changing the shared tile dimensions. */
 .vc-category-filters{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 18px}

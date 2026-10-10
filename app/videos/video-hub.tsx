@@ -59,7 +59,21 @@ function EpisodeTile({
             <span>{episode.categoryId === 'network-authorization' ? 'FROM BUILD TO AUTHORIZATION' : 'THE NETWORK BUILD SERIES'}</span>
             <b>{episode.number}</b>
           </div>
-          {course ? <div className={`vc-course-art vc-art-${episode.id}`}>{(episode.artLabels ?? ['Risk Management Framework', 'Body of Evidence', 'Authorization to Operate']).map(label => <span key={label}>{label}</span>)}</div> : <div className="vc-tile-topology">
+          {course ? <>
+            <div className={`vc-course-art vc-art-${episode.id}${episode.training.cover ? ' vc-course-art-book' : ''}`}>{(episode.artLabels ?? ['Risk Management Framework', 'Body of Evidence', 'Authorization to Operate']).map(label => <span key={label}>{label.replace(/ ([+→]) /g, '\u00a0$1 ')}</span>)}</div>
+            {/* Every tile shows its workbook, as the identity build's does: the same placement and size. */}
+            {episode.training.cover && <div className="vc-tile-topology">
+              <Image
+                className="vc-tile-book"
+                src={episode.training.cover}
+                width={110}
+                height={142}
+                alt=""
+                loading="lazy"
+                unoptimized
+              />
+            </div>}
+          </> : <div className="vc-tile-topology">
             <div className="vc-tile-servers">
               {episode.systems.slice(0, 2).map((system) => (
                 <div className="vc-tile-system" key={system}>

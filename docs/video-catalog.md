@@ -14,7 +14,7 @@ Training assets live in `public/training/dc01-dc02/`: the interactive HTML guide
 
 ## Interactions
 
-Collapsed tiles use five desktop columns, then four, three, two, and one as the viewport narrows. Their artwork is 124px tall, mobile tile width is capped at 240px, and the opening control remains at least 44px tall. The latest desktop check measured a tile at approximately 222 by 335px, 21% narrower and 23% shorter than the preceding revision. Tags and the full description remain in the expanded view.
+Collapsed tiles use five desktop columns, then four, three, two, and one as the viewport narrows. Every tile's artwork shows its workbook cover in the same place and size as the first episode's; course tiles set their three labels to its left. Their artwork is 124px tall, mobile tile width is capped at 240px, and the opening control remains at least 44px tall. The latest desktop check measured a tile at approximately 222 by 335px, 21% narrower and 23% shorter than the preceding revision. Tags and the full description remain in the expanded view.
 
 `video-hub.tsx` owns the catalog, search, topic selection, and expanded episode. Search is case-insensitive and matches every whitespace-separated query token across title, subtitle, description, tags, and system names. Topic choices are sorted unique tags from the real catalog; the selected topic uses an exact tag match. Search and topic filters combine. The first 12 matching episodes are shown in editorial order, and Show more episodes adds another 12. A result count and clear-filter empty state help readers recover from searches with no matches.
 
