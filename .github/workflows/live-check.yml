@@ -1,7 +1,7 @@
 name: Live check
 
-# Audit helper (not for main): read-only checks of the live site. This run: every Training Library
-# tile shows its workbook (PR #38). Screenshots go to the live-results branch.
+# Audit helper (not for main): read-only checks of the live site. This run: the My Account page
+# (sign-in providers, form height at each width, colors). Screenshots go to the live-results branch.
 on:
   push:
     branches: ['audit/live']
@@ -21,15 +21,15 @@ jobs:
         run: |
           npm i --prefix "$RUNNER_TEMP/pw" playwright@1.56.0 > /dev/null 2>&1
           "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium > /dev/null 2>&1
-      - name: Tiles
+      - name: My Account
         env:
           PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
-        run: node .github/live/tiles.mjs "$RUNNER_TEMP/out"
+        run: node .github/live/account.mjs "$RUNNER_TEMP/out"
       - name: Publish screenshots to live-results
         run: |
           cd "$RUNNER_TEMP/out"
           git init -q -b live-results
           git config user.name "Secure By Design"; git config user.email "w6wvbp4yjn@privaterelay.appleid.com"
           printf '%s\n' "$GITHUB_SHA" > SOURCE.txt
-          git add -A; git commit -qm "Live tile screenshots ($GITHUB_SHA)"
+          git add -A; git commit -qm "Live My Account screenshots ($GITHUB_SHA)"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:live-results
