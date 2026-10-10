@@ -141,13 +141,27 @@ try {
     await page.locator('#overview').click();
     await page.waitForTimeout(2600);
     await page.evaluate(() => scrollTo(0, 0));
-    const pcs = await page.evaluate(() => window.insideNetworkQA.project('workstations'));
+    // Point at the PCs' own label when it shows; otherwise at the PCs, clear of any label that sits over the office.
+    const pcs = await page.evaluate(() => {
+      const qa = window.insideNetworkQA, shown = qa.labels().filter(l => l.show && l.rect), c = document.querySelector('#viewport canvas').getBoundingClientRect();
+      const own = shown.find(l => l.id === 'workstations');
+      if (own) return { x: c.left + (own.rect[0] + own.rect[2]) / 2, y: c.top + (own.rect[1] + own.rect[3]) / 2 };
+      const p = qa.project('workstations'), clear = q => !shown.some(l => q.x - c.left >= l.rect[0] - 4 && q.x - c.left <= l.rect[2] + 4 && q.y - c.top >= l.rect[1] - 4 && q.y - c.top <= l.rect[3] + 4);
+      return [[0, 0], [0, 24], [0, 44], [-30, 24], [30, 24], [0, -24]].map(([dx, dy]) => ({ x: p.x + dx, y: p.y + dy })).find(clear) || p;
+    });
     await page.mouse.move(pcs.x, pcs.y);
     assert.match(await page.locator('#hoverTip').textContent(), /50 Windows PCs/, 'Hover tooltip');
     await page.mouse.move(2, 2);
-    // The overview names every VLAN on the floating topology layer.
+    // The overview shows the building alone; the topology layer waits until something is chosen.
     const islandLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).length);
-    assert(islandLabels >= 6, `Most VLAN names show on the topology layer (${islandLabels} of 8)`);
+    assert.equal(islandLabels, 0, 'The overview hides the topology layer');
+    // Opening a VLAN raises only that segment (and the core) above the building.
+    await page.evaluate(() => { location.hash = 'vlan=30'; });
+    await page.waitForFunction(() => window.insideNetworkQA.labels().some(l => l.kind === 'island' && l.show), null, { timeout: 8000 }).catch(() => {});
+    const shownIslands = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).map(l => l.zone));
+    assert.deepEqual(shownIslands, ['v30'], `Only the chosen VLAN shows on the layer (${shownIslands.join(', ')})`);
+    await page.locator('#overview').click();
+    await page.waitForTimeout(1200);
     // Connection map for one system.
     await page.selectOption('#systemSelect', 'dc1');
     await page.locator('#connectionsToggle').click();
@@ -156,7 +170,7 @@ try {
     await page.locator('#connectionsToggle').click();
     await page.selectOption('#systemSelect', 'sql');
     assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F22[\s\S]*Denied[\s\S]*F14/, 'SBD-SQL01 lists its one registered consumer and the web-to-SQL deny');
-    // The topology layer is on by default; hiding it travels with the link. Then the cinematic look.
+    // The topology layer is on (shown when relevant) by default; turning it off travels with the link. Then the cinematic look.
     assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Topology shows by default');
     await page.locator('#viewToggle').click();
     assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'false');
@@ -230,7 +244,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, readable VLAN names on the topology layer, connection map, topology toggle, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, only the chosen VLAN on the topology layer, connection map, topology toggle, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();
