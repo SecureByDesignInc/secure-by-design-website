@@ -1,6 +1,7 @@
 name: Live check
 
-# Audit helper (not for main): read-only checks of the live site after the course 1.1 / 1.2 DNS move.
+# Audit helper (not for main): read-only checks of the live site after the course 1.1 rename,
+# VLAN 10 segmentation, one download per tile, and removal of training share controls (PR #37).
 on:
   push:
     branches: ['audit/live']
@@ -9,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  dns-move:
+  course-1-1:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Course pages and files
         run: |
@@ -20,11 +21,22 @@ jobs:
           has() { if get "$1" | grep -q -- "$2"; then echo "yes"; else echo "NO"; fi; }
           hasnt() { if get "$1" | grep -q -- "$2"; then echo "STILL"; else echo "gone"; fi; }
           sum() { curl -s -m 60 "$S$1" | sha256sum | cut -c1-16; }
+          code() { curl -s -o /dev/null -m 30 -w '%{http_code}' "$S$1"; }
+          echo "::notice title=Build::$(curl -s -m 20 $S/build-info.json)"
           L=$(get /training/dc01-dc02/lesson.json)
-          echo "::notice title=1.1 lesson.json::$(echo "$L" | jq -r '"subtitle=\(.subtitle) | verify=\(.chapters[3].short) / \(.chapters[3].title) | foundations=\([.foundations[].id]|join(",")) | sources=\(.sources|length) | wire=\(.chapters[3].wire != null)"')"
-          echo "::notice title=1.1 guide page::health control $(has /training/dc01-dc02/index.html 'Health check on') · edition 0.5 $(has /training/dc01-dc02/index.html 'Materials edition 0.5') · DNS query control $(hasnt /training/dc01-dc02/index.html 'DNS query to')"
-          echo "::notice title=1.1 files::zip $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip) · pdf $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf) · cover $(sum /training/dc01-dc02/workbook-cover.webp) · commands showrepl* $(has /training/dc01-dc02/Verification-Commands.txt 'repadmin /showrepl \*')"
-          echo "::notice title=1.2 files::pdf $(sum /training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf) · checklist loopback $(has /training/dns-configuration/configuration-checklist.md '127.0.0.1') · checklist pktmon $(has /training/dns-configuration/configuration-checklist.md 'pktmon')"
-          echo "::notice title=1.2 guide page::plan text $(has /training/dns-configuration 'turns names into addresses') · edition 1.3 $(has /training/dns-configuration 'Edition 1.3')"
-          echo "::notice title=Guide redirect::$(curl -s -o /dev/null -m 20 -w '%{http_code} -> %{redirect_url}' $S/training/dc01-dc02/index.html)"
-          echo "::notice title=Catalog and home::library subtitle $(has /training 'DC01 + DC02 / Active Directory') · old subtitle $(hasnt /training 'Active Directory &amp; DNS') · home text $(has / 'Build two Active Directory domain controllers') · model detail $(has /inside-network-model/courses.js 'Two Active Directory domain controllers')"
+          echo "::notice title=1.1 lesson.json::$(echo "$L" | jq -r '"title=\(.title) | subtitle=\(.subtitle) | foundations=\([.foundations[].id]|join(",")) | verify steps=\(.chapters[3].steps|length) | activestore=\(.chapters[3].command|test("ActiveStore"))"')"
+          G=/training/dc01-dc02/index.html
+          echo "::notice title=1.1 guide::title $(has $G 'Promote Primary &amp; Secondary Domain Controller | Secure By Design') · edition 0.6 $(has $G 'Materials edition 0.6') · VLAN 10 tag $(has $G 'DOMAIN CONTROLLERS · VLAN 10') · package link $(has $G 'href=\"SecureByDesign-DC01-DC02-Learning-Package.zip\" download') · share note $(hasnt $G 'data-learning-share') · share script $(hasnt $G 'guide-share') · 2025 $(hasnt $G 'Windows Server 2025')"
+          echo "::notice title=1.1 files::zip $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip) · pdf $(sum /training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf) · cover $(sum /training/dc01-dc02/workbook-cover.webp) · commands ActiveStore $(has /training/dc01-dc02/Verification-Commands.txt 'PolicyStore ActiveStore') · notices title $(has /training/dc01-dc02/notices.html 'Promote Primary &amp; Secondary') · share script $(code /training/guide-share.js)"
+          Z=""
+          for c in dns-configuration two-tier-pki harden-baseline tiered-admin logging-pipeline workstation-fleet patch-protect business-services prove-recovery; do
+            Z="$Z $c=$(sum /training/$c/SecureByDesign-$c-Learning-Package.zip)/$(code /training/$c/SecureByDesign-$c-Learning-Package.zip)"
+          done
+          echo "::notice title=Course ZIPs::$Z"
+          echo "::notice title=Training Library::1.1 title $(has /training 'Promote Primary &amp; Secondary Domain Controller') · one download label $(has /training 'One download') · pay it forward $(hasnt /training 'Pay it forward') · learn-share $(hasnt /training 'Learn it. Share it.') · pass it on $(hasnt /training 'Pass it on') · 2025 $(hasnt /training 'Server 2025') · Windows 11 $(hasnt /training 'Windows 11')"
+          D=/training/dns-configuration
+          echo "::notice title=Course guide page::zip link $(has $D 'Download the training materials (ZIP)') · word link $(hasnt $D 'Workbook (Word, editable)') · markdown link $(hasnt $D 'Checklist (Markdown)') · printable $(has $D 'Printable checklist') · edition 1.4 $(has $D 'Edition 1.4') · pass it on $(hasnt $D 'Pass it on') · 2025 $(hasnt $D 'Server 2025')"
+          echo "::notice title=Checklist page::zip $(has $D/checklist 'Download the training materials (ZIP)') · markdown $(hasnt $D/checklist 'Markdown version')"
+          echo "::notice title=RMF guide::share $(hasnt /training/rmf/ 'guide-share') · edition 1.4 $(has /training/rmf/ 'Edition 1.4') · catalog $(sum /training/rmf/Secure_By_Design_RMF_Training_Catalog.docx) · Windows 11 $(hasnt /training/rmf/learning-data.js 'Windows 11')"
+          echo "::notice title=Inside the Network::course title $(has /inside-network-model/courses.js 'Promote Primary & Secondary Domain Controller') · A01 ADWS $(has /inside-network-model/security.js 'AD Web Services 9389 to the DCs') · office label $(hasnt /inside-network-model/scene.js 'WINDOWS 11') · text page $(hasnt /inside-the-network 'Windows 11')"
+          echo "::notice title=Home::$(has / 'Promote two servers to Active Directory domain controllers') · 2025 $(hasnt / 'Server 2025')"
