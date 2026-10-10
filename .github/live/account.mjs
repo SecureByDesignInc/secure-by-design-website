@@ -31,6 +31,8 @@ for (const width of [1280, 800, 799, 640, 540, 480, 430, 390, 360, 320]) {
       mainBg: getComputedStyle(document.querySelector('main')).backgroundColor,
       bodyBg: getComputedStyle(document.body).backgroundColor,
       ssoButtons: document.querySelectorAll('.sso-button').length,
+      membership: !!document.querySelector('#memberships .membership-grid'),
+      hidden: ['portfolio track', 'Add-ons for any member', 'Resume and portfolio review', '1:1 session'].filter(text => document.querySelector('#memberships')?.textContent.includes(text)),
       scrollWidth: document.documentElement.scrollWidth,
     };
   });
@@ -46,4 +48,4 @@ for (const width of [1280, 800, 799, 640, 540, 480, 430, 390, 360, 320]) {
 }
 await browser.close();
 writeFileSync(`${out}/account.json`, JSON.stringify(results, null, 1));
-for (const r of results) console.log(`::notice title=My Account at ${r.width}px::form ${r.authHeight}px, #progress ${r.progressTop} to membership ${r.asideTop} (${r.asideTop - r.progressTop}px), sso ${r.ssoButtons}, main "${r.main}" ${r.mainBg}, body ${r.bodyBg}, scroll ${r.scrollWidth}`);
+for (const r of results) console.log(`::notice title=My Account at ${r.width}px::form ${r.authHeight}px, #progress ${r.progressTop} to membership ${r.asideTop} (${r.asideTop - r.progressTop}px), sso ${r.ssoButtons}, membership plans ${r.membership}, hidden sections showing: ${r.hidden.join(' / ') || 'none'}, main "${r.main}" ${r.mainBg}, body ${r.bodyBg}, scroll ${r.scrollWidth}`);

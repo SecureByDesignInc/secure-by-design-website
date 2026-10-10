@@ -1,7 +1,7 @@
 name: Live check
 
-# Audit helper (not for main): read-only checks of the live site. This run: the dark My Account page
-# after PR #39 (sign-in providers, form height at each width, colors). Screenshots go to the live-results branch.
+# Audit helper (not for main): read-only checks of the live site. This run: My Account after PR #41
+# (portfolio track and add-ons hidden; providers, form height, colors). Screenshots go to the live-results branch.
 on:
   push:
     branches: ['audit/live']
