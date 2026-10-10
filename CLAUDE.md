@@ -20,4 +20,6 @@ The live website is https://securebydesigninc.com. It runs on the owner's own Cl
 
 The original ChatGPT Sites projects were retired on 8 October 2026 after the move; their data was copied into the Cloudflare D1 database. `.openai/hosting.json` and the Sites Vite plugin remain only because the build reads binding names from them. Runtime secrets (`RESEND_API_KEY`, `OWNER_EMAIL`, sign-in provider keys) live in the Worker's settings in Cloudflare, never in the repository.
 
+The native app reads its courses and the Inside the Network reference from `/app/content/v1.json`, which the build generates from this repository; installed apps pick up each deploy without an App Store release. Keep lesson and material IDs stable and see `docs/native-app-content.md` before changing the feed.
+
 This repository is now the website's source of truth; it began as a source snapshot of the Sites project with a fresh GitHub history.

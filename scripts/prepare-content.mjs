@@ -3,6 +3,7 @@ import './prepare-career-explorer.mjs';
 import './prepare-network-text.mjs';
 import './prepare-checklists.mjs';
 import './prepare-sitemap.mjs';
+import './prepare-app-content.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../content/', import.meta.url);
 const series = JSON.parse(readFileSync(new URL('series.json', root), 'utf8'));

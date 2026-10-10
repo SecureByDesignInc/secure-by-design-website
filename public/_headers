@@ -16,3 +16,9 @@
 
 /inside-network-model/*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+
+# The native app's content feed (scripts/prepare-app-content.mjs). Apps check it on launch and resume;
+# a short cache lets a deploy reach them within minutes, and ETags keep unchanged checks cheap.
+/app/content/*
+  Cache-Control: public, max-age=300, must-revalidate
+  Access-Control-Allow-Origin: *
