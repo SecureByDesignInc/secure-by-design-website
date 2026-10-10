@@ -5,7 +5,7 @@ import { sharePreview } from '../share-preview';
 
 export const metadata = {
   title: 'Inside the Network',
-  description: 'Explore a 3D model of an air-gapped building, its server room and offices, with the network topology floating above and animated traffic. Explore protocols, services, dependencies, and security practices with NIST SP 800-53 control mappings.',
+  description: 'Explore a 3D model of an air-gapped building, its server room and offices, with each network segment rising above it as you explore, and animated traffic. Explore protocols, services, dependencies, and security practices with NIST SP 800-53 control mappings.',
   ...sharePreview('Inside the Network | Secure By Design', 'Explore a 3D data center with server racks, network equipment, and animated traffic, mapped to NIST SP 800-53 security controls.', '/inside-the-network'),
 };
 

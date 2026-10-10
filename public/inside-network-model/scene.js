@@ -113,6 +113,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   if(labelMode==='off')return -1;
   const onLayer=!physicalKinds.has(e.kind);
   if(onLayer&&layerAmount*layerNear<.5)return -1;
+  // Layer labels follow their segment: hidden segments carry no names, and the layer has no title of its own.
+  if(onLayer){const z=e.kind==='island'?e.zone:e.id==='offline'?'offline':e.id&&e.id!=='topology'?layerZoneOf(e.id):null;if(!z||!relevant.has(z)||zv(z)<.5)return -1;}
   // During a traffic step, only the step's own systems, their segments, and the core keep labels
   // (others appear on hover), so the two or three things that matter stand out. "All labels" turns this off.
   // Phones also quiet the room around a selected system, since rack names would cover most of a small stage.
@@ -323,23 +325,24 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  const toWorld=v=>logical.localToWorld(v.clone());
  const islandOrder=['v10','v20','v30','v40','v60','v80','v70','v50'],islandAngles=[202.5,247.5,292.5,337.5,22.5,67.5,112.5,157.5];
  const islands=new Map(),hubLogical=new THREE.Vector3(0,1.9,0),logicalFade=[];
- const fadeMaterial=(material,base)=>{material.userData.base=base??material.opacity;material.userData.depthWrite=material.depthWrite;material.transparent=true;logicalFade.push(material);return material;};
+ // Only the segments that matter to the current view show: each layer material belongs to a segment (a VLAN, the core, or the offline area).
+ const zoneState=new Map([...['core','offline'],...islandOrder].map(z=>[z,{value:0,target:0}])),zv=z=>z?zoneState.get(z)?.value??1:1;let relevant=new Set();
+ const fadeMaterial=(material,base,zone)=>{material.userData.base=base??material.opacity;material.userData.zone=zone;material.userData.depthWrite=material.depthWrite;material.transparent=true;logicalFade.push(material);return material;};
  const plateShape=new THREE.Shape();{const w=39,d=34,r=4,cz=3.8;plateShape.moveTo(-w+r,cz-d);plateShape.lineTo(w-r,cz-d);plateShape.quadraticCurveTo(w,cz-d,w,cz-d+r);plateShape.lineTo(w,cz+d-r);plateShape.quadraticCurveTo(w,cz+d,w-r,cz+d);plateShape.lineTo(-w+r,cz+d);plateShape.quadraticCurveTo(-w,cz+d,-w,cz+d-r);plateShape.lineTo(-w,cz-d+r);plateShape.quadraticCurveTo(-w,cz-d,-w+r,cz-d);}
  const gridCanvas=document.createElement('canvas');gridCanvas.width=gridCanvas.height=128;{const ctx=gridCanvas.getContext('2d');ctx.fillStyle='#0b2234';ctx.fillRect(0,0,128,128);ctx.fillStyle='#16384f';ctx.fillRect(0,0,128,2);ctx.fillRect(0,0,2,128);}
  const gridTexture=new THREE.CanvasTexture(gridCanvas);gridTexture.wrapS=gridTexture.wrapT=THREE.RepeatWrapping;gridTexture.repeat.set(1/6,1/6);gridTexture.colorSpace=THREE.SRGBColorSpace;
- const ground=new THREE.Mesh(new THREE.ShapeGeometry(plateShape).rotateX(Math.PI/2),fadeMaterial(new THREE.MeshBasicMaterial({map:gridTexture,color:'#ffffff',transparent:true,opacity:.62,depthWrite:false,side:THREE.DoubleSide}),.62));ground.position.y=-.05;ground.renderOrder=2;logical.add(ground);
- const plateEdge=new THREE.Line(new THREE.BufferGeometry().setFromPoints(plateShape.getPoints(12).map(p=>new THREE.Vector3(p.x,0,-p.y))),fadeMaterial(new THREE.LineBasicMaterial({color:'#6fd4ea',transparent:true,opacity:.55}),.55));logical.add(plateEdge);
- const coreHex=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.4,1.5,6),fadeMaterial(new THREE.MeshStandardMaterial({color:'#18485a',emissive:'#1d6578',emissiveIntensity:.6,metalness:.4,roughness:.45}),1));coreHex.position.set(0,.75,0);logical.add(coreHex);
- const coreHit=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,2,6),hitMaterial);coreHit.position.copy(coreHex.position);coreHit.userData.id='core';logical.add(coreHit);pickables.logical.push(coreHit);
- const coreRim=new THREE.Mesh(new THREE.TorusGeometry(3.45,.09,8,6),fadeMaterial(basic(colors.core,.9),.9));coreRim.rotation.x=Math.PI/2;coreRim.rotation.z=Math.PI/6;coreRim.position.y=1.52;logical.add(coreRim);
+ const ground=new THREE.Mesh(new THREE.ShapeGeometry(plateShape).rotateX(Math.PI/2),fadeMaterial(new THREE.MeshBasicMaterial({map:gridTexture,color:'#ffffff',transparent:true,opacity:.3,depthWrite:false,side:THREE.DoubleSide}),.3));ground.position.y=-.05;ground.renderOrder=2;logical.add(ground);
+ const coreHex=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.4,1.5,6),fadeMaterial(new THREE.MeshStandardMaterial({color:'#18485a',emissive:'#1d6578',emissiveIntensity:.6,metalness:.4,roughness:.45}),1,'core'));coreHex.position.set(0,.75,0);logical.add(coreHex);
+ const coreHit=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,2,6),hitMaterial);coreHit.position.copy(coreHex.position);coreHit.userData.id='core';coreHit.userData.layerZone='core';logical.add(coreHit);pickables.logical.push(coreHit);
+ const coreRim=new THREE.Mesh(new THREE.TorusGeometry(3.45,.09,8,6),fadeMaterial(basic(colors.core,.9),.9,'core'));coreRim.rotation.x=Math.PI/2;coreRim.rotation.z=Math.PI/6;coreRim.position.y=1.52;logical.add(coreRim);
  islandOrder.forEach((zid,i)=>{
   const zone=vlans.find(v=>v.id===zid),a=THREE.MathUtils.degToRad(islandAngles[i]),center=new THREE.Vector3(31*Math.cos(a),0,21*Math.sin(a)),n=zone.ids.length,radius=n===1?3.6:3.2+n;
-  const disc=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.3,64),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.14,depthWrite:false}),.14));disc.position.copy(center).setY(.12);logical.add(disc);
-  const ring=new THREE.Mesh(new THREE.RingGeometry(radius-.14,radius,72),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.7,depthWrite:false,side:THREE.DoubleSide}),.7));ring.rotation.x=-Math.PI/2;ring.position.copy(center).setY(.3);logical.add(ring);
-  const islandHit=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1.6,24),hitMaterial);islandHit.position.copy(center).setY(.6);islandHit.userData.id='vlan:'+zid;logical.add(islandHit);pickables.logical.push(islandHit);
+  const disc=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.3,64),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.14,depthWrite:false}),.14,zid));disc.position.copy(center).setY(.12);logical.add(disc);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(radius-.14,radius,72),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.7,depthWrite:false,side:THREE.DoubleSide}),.7,zid));ring.rotation.x=-Math.PI/2;ring.position.copy(center).setY(.3);logical.add(ring);
+  const islandHit=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1.6,24),hitMaterial);islandHit.position.copy(center).setY(.6);islandHit.userData.id='vlan:'+zid;islandHit.userData.layerZone=zid;logical.add(islandHit);pickables.logical.push(islandHit);
   // The VLAN's uplink to the core: the only way traffic leaves the segment.
   const from=center.clone().add(center.clone().negate().setLength(radius)).setY(.3),to=center.clone().setLength(3.5).setY(.3);
-  const spoke=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(from,to),8,.11,6,false),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.5,depthWrite:false}),.5));logical.add(spoke);
+  const spoke=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(from,to),8,.11,6,false),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.5,depthWrite:false}),.5,zid));logical.add(spoke);
   islands.set(zid,{zone,center,radius,ring,disc,spoke});
   screenLabel(labelTexture(`VLAN ${zone.number} · ${zone.name}`,zone.subnet,zone.color,420),{kind:'island',zone:zid,px:150,color:zone.color,position:toWorld(center.clone().add(new THREE.Vector3(0,.4,radius+.6)))});
   zone.ids.forEach((id,j)=>{const angle=-Math.PI/2+j*Math.PI*2/n+(n===2?Math.PI/2:0),r=n===1?0:n===2?2.3:2.9;objects.get(id).logical={position:center.clone().add(new THREE.Vector3(Math.cos(angle)*r,1.5,Math.sin(angle)*r))};});
@@ -350,20 +353,21 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  objects.get('core').logical={position:hubLogical.clone()};
  let offlineBoundary;
  {
-  const pts=[[-11,27.5],[11,27.5],[11,35.5],[-11,35.5],[-11,27.5]].map(([x,z])=>new THREE.Vector3(x,.06,z));offlineBoundary=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),fadeMaterial(new THREE.LineDashedMaterial({color:colors.offline,dashSize:.8,gapSize:.6,transparent:true,opacity:.85}),.85));
+  const pts=[[-11,27.5],[11,27.5],[11,35.5],[-11,35.5],[-11,27.5]].map(([x,z])=>new THREE.Vector3(x,.06,z));offlineBoundary=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),fadeMaterial(new THREE.LineDashedMaterial({color:colors.offline,dashSize:.8,gapSize:.6,transparent:true,opacity:.85}),.85,'offline'));
   offlineBoundary.computeLineDistances();logical.add(offlineBoundary);
   screenLabel(labelTexture('OFFLINE AREA','No network link · media by hand',colors.offline),{kind:'lfacility',id:'offline',px:160,color:colors.offline,position:toWorld(new THREE.Vector3(0,.4,36.4))});
   screenLabel(labelTexture('CORE SWITCH STACK','Every VLAN uplinks here',colors.core),{kind:'lfacility',id:'core',zone:'core',px:150,color:colors.core,position:toWorld(new THREE.Vector3(0,2.4,0))});
   screenLabel(labelTexture('NETWORK TOPOLOGY','8 VLANs · default deny between them','#7fd8ec'),{kind:'lfacility',id:'topology',px:160,color:'#7fd8ec',position:toWorld(new THREE.Vector3(-30,.4,-30.2))});
  }
+ function layerZoneOf(id){return id==='core'?'core':offlinePlaces[id]?'offline':objects.get(id)?.vlan;}
  // One glyph per system, carrying the same role icon as its faceplate, and a tether down to its place in the building.
  const tetherGroup=new THREE.Group();scene.add(tetherGroup);
  for(const [id,o] of objects){
   if(!o.logical||id==='core')continue;
   const color=o.color,sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:equipment.iconTexture(equipment.roleOf(id)||'gear',color),transparent:true,opacity:0,depthWrite:false}));
   sprite.scale.setScalar(id==='workstations'?3.1:2.5);sprite.renderOrder=12;sprite.position.copy(o.logical.position);logical.add(sprite);
-  const pad=new THREE.Mesh(new THREE.CylinderGeometry(1.25,1.4,.22,24),fadeMaterial(new THREE.MeshBasicMaterial({color,transparent:true,opacity:.5}),.5));pad.position.copy(o.logical.position).setY(.32);logical.add(pad);
-  const hit=new THREE.Mesh(new THREE.BoxGeometry(3,3.2,3),hitMaterial);hit.position.copy(o.logical.position);hit.userData.id=id;logical.add(hit);pickables.logical.push(hit);
+  const pad=new THREE.Mesh(new THREE.CylinderGeometry(1.25,1.4,.22,24),fadeMaterial(new THREE.MeshBasicMaterial({color,transparent:true,opacity:.5}),.5,layerZoneOf(id)));pad.position.copy(o.logical.position).setY(.32);logical.add(pad);
+  const hit=new THREE.Mesh(new THREE.BoxGeometry(3,3.2,3),hitMaterial);hit.position.copy(o.logical.position);hit.userData.id=id;hit.userData.layerZone=layerZoneOf(id);logical.add(hit);pickables.logical.push(hit);
   o.logical.glyph=sprite;o.logical.world=toWorld(o.logical.position);
   const top=o.logical.world.clone().add(new THREE.Vector3(0,-1.2,0)),bottom=o.group.position.clone().add(o.anchor);
   const tether=new THREE.Line(new THREE.BufferGeometry().setFromPoints([top,bottom]),new THREE.LineDashedMaterial({color,dashSize:.7,gapSize:.5,transparent:true,opacity:0,depthWrite:false,depthTest:false}));
@@ -371,19 +375,44 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   o.logical.label=screenLabel(o.text,{kind:o.facility?'lfacility':'lnode',id,zone:o.vlan,px:150,position:o.logical.world.clone().add(new THREE.Vector3(0,1.6,0))});
  }
  // The layer fades in and out as one piece; it never hides the room.
- let layerOn=true,layerAmount=1,layerTarget=1,logicalAmount=0,hoverVlan='';
+ let layerOn=true,layerAmount=0,layerTarget=0,logicalAmount=0,hoverVlan='';
  // Up close the layer steps back, so its glyphs never fill the screen while the camera works in a room.
  let layerNear=1;const layerBox=new THREE.Box3();for(const x of [-39,39])for(const z of [-30.2,37.8])for(const y of [-1,4])layerBox.expandByPoint(toWorld(new THREE.Vector3(x,y,z)));
  function applyLayer(amount){
   layerAmount=amount;const shown=amount*layerNear;logical.visible=shown>.01;
-  for(const m of logicalFade){m.opacity=m.userData.base*shown;m.depthWrite=false;}
-  for(const o of objects.values())if(o.logical?.glyph)o.logical.glyph.material.opacity=shown*(o.logical.dim??1);
+  for(const m of logicalFade){m.opacity=m.userData.base*shown*zv(m.userData.zone);m.depthWrite=false;}
+  for(const [id,o] of objects)if(o.logical?.glyph)o.logical.glyph.material.opacity=shown*(o.logical.dim??1)*zv(layerZoneOf(id));
   updateTethers();
  }
  function updateTethers(){
   const shown=new Set([...activeIds,selection,hoverId].filter(Boolean));
-  for(const [id,o] of objects){const t=o.logical?.tether;if(!t)continue;const on=layerAmount>.05&&(shown.has(id)||!!hoverVlan&&o.vlan===hoverVlan);t.visible=on;t.material.opacity=on?.75*layerAmount:0;}
+  for(const [id,o] of objects){const t=o.logical?.tether;if(!t)continue;const on=layerAmount*layerNear>.05&&zv(layerZoneOf(id))>.5&&(shown.has(id)||!!hoverVlan&&o.vlan===hoverVlan);t.visible=on;t.material.opacity=on?.75*layerAmount*layerNear:0;}
  }
+ // The layer appears only when something is chosen (a system, a VLAN, a group, or a walkthrough step), and then only with
+ // the segments involved and the core they meet at. The overview shows the building alone. The core switch brings every segment.
+ function refreshRelevance(){
+  const zones=new Set();
+  for(const id of [...activeIds,selection].filter(Boolean)){
+   if(id==='core'){zones.add('core');for(const z of islandOrder)zones.add(z);continue;}
+   const z=layerZoneOf(id);if(z){zones.add(z);if(z!=='offline')zones.add('core');}
+  }
+  relevant=zones;layerTarget=layerOn&&zones.size?1:0;
+  for(const [z,state] of zoneState)if(zones.size)state.target=zones.has(z)?1:0;
+  for(const hit of pickables.logical)hit.visible=layerOn&&zones.has(hit.userData.layerZone);
+  if(!moving){for(const state of zoneState.values())state.value=state.target;layerAmount=layerTarget;}
+ }
+ // The chosen segments' footprint on the layer, so a framing can include them.
+ function layerPoints(){
+  const points=[];
+  for(const z of relevant){
+   if(z==='core'){points.push(toWorld(hubLogical));continue;}
+   if(z==='offline'){for(const x of [-11,11])points.push(toWorld(new THREE.Vector3(x,1.5,31.5)));continue;}
+   const island=islands.get(z);if(!island)continue;
+   for(const [dx,dz] of [[-1,0],[1,0],[0,-1],[0,1]])points.push(toWorld(island.center.clone().add(new THREE.Vector3(dx*island.radius,1.5,dz*(island.radius+1.2)))));
+  }
+  return points;
+ }
+ const zonesSettling=()=>[...zoneState.values()].some(state=>state.value!==state.target);
  // Kept for the morphing code paths, which the floating layer no longer uses.
  function applyLogical(amount){logicalAmount=amount;applyLayer(layerAmount);}
  // ---- Camera framing ----
@@ -400,7 +429,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const bounds=new THREE.Box3(),logicalView=view==='logical';
   if(!ids){
    if(logicalView){bounds.expandByPoint(new THREE.Vector3(-38,0,-27));bounds.expandByPoint(new THREE.Vector3(38,3,37));}
-   else{bounds.expandByPoint(new THREE.Vector3(...roomBounds.min));bounds.expandByPoint(new THREE.Vector3(...roomBounds.max));if(layerOn)for(const x of [-39,39])for(const z of [-30.2,37.8])bounds.expandByPoint(toWorld(new THREE.Vector3(x,2,z)));}
+   else{bounds.expandByPoint(new THREE.Vector3(...roomBounds.min));bounds.expandByPoint(new THREE.Vector3(...roomBounds.max));if(layerTarget>0)for(const x of [-39,39])for(const z of [-30.2,37.8])bounds.expandByPoint(toWorld(new THREE.Vector3(x,2,z)));}
   }
   else for(const id of ids){const o=objects.get(id);if(!o)continue;
    if(logicalView){const p=o.logical?.position;if(!p)continue;const pad=id==='workstations'?6.5:5.5;bounds.expandByPoint(p.clone().add(new THREE.Vector3(-pad,-1.5,-pad)));bounds.expandByPoint(p.clone().add(new THREE.Vector3(pad,4,pad)));}
@@ -409,7 +438,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   if(bounds.isEmpty())return;const target=bounds.getCenter(new THREE.Vector3());
   // Portrait screens look down more steeply, so the room fills the narrow frame. Landscape clips use a lower, cinematic angle.
   // The logical view looks down on the islands like a diagram.
-  const stacked=!ids&&!logicalView&&layerOn,portrait=camera.aspect<.8,direction=(stacked?(portrait?new THREE.Vector3(.16,.95,1):new THREE.Vector3(.48,.58,1)):logicalView?(portrait?new THREE.Vector3(.08,1.9,1):new THREE.Vector3(.16,1.25,1)):portrait?new THREE.Vector3(.2,1.2,1):output&&camera.aspect>1.5?new THREE.Vector3(.5,.42,1):new THREE.Vector3(.46,.66,1)).normalize(),right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize(),tan=Math.tan(THREE.MathUtils.degToRad(19.5)),tanV=tan*Math.max(.35,1-insets.top-insets.bottom);let distance=24;
+  const stacked=!ids&&!logicalView&&layerTarget>0,portrait=camera.aspect<.8,direction=(stacked?(portrait?new THREE.Vector3(.16,.95,1):new THREE.Vector3(.48,.58,1)):logicalView?(portrait?new THREE.Vector3(.08,1.9,1):new THREE.Vector3(.16,1.25,1)):portrait?new THREE.Vector3(.2,1.2,1):output&&camera.aspect>1.5?new THREE.Vector3(.5,.42,1):new THREE.Vector3(.46,.66,1)).normalize(),right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize(),tan=Math.tan(THREE.MathUtils.degToRad(19.5)),tanV=tan*Math.max(.35,1-insets.top-insets.bottom);let distance=24;
   for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){const p=new THREE.Vector3(x,y,z).sub(target);distance=Math.max(distance,Math.abs(p.dot(right))/(tan*camera.aspect)+p.dot(direction),Math.abs(p.dot(up))/tanV+p.dot(direction));}
   const padding=output?1:portrait?1.08:camera.aspect<1?1.18:1.10,position=target.clone().addScaledVector(direction,Math.min(distance*padding,480));move(position,target,animate);
   return {position:position.clone(),target:target.clone()};
@@ -696,7 +725,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   for(const island of islands.values()){const active=island.zone.ids.some(on);island.ring.material.userData.base=!any?.7:active?1:.25;island.disc.material.userData.base=!any?.14:active?.3:.05;island.spoke.material.userData.base=!any?.5:active?.95:.15;}
   for(const o of objects.values())if(o.logical?.glyph)o.logical.dim=!any||on(o.node?.id)||o.facility&&on(o.node.id)?1:.35;
   offlineBoundary.material.userData.base=['root','media','backup'].some(on)?1:any?.4:.85;
-  applyLayer(layerAmount);
+  refreshRelevance();applyLayer(layerAmount);
  }
  const followTarget=new THREE.Vector3();let followSnap=true;
  function showStep(step,color,allIds,policy={kind:step.manual?'manual':'traffic',rule:null},gate=null){
@@ -759,8 +788,8 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   lastCall={fn:'highlight',args:[ids]};
   clearFlow();clearConnections();connectionState=null;releasePacket();stepMode=false;
   activeIds=ids.filter(id=>objects.has(id));selection='';selectionRing.visible=false;routedActive=false;updateOutlines();
-  // A highlighted group also frames its segments on the topology layer.
-  fit(activeIds.length?activeIds:null,true,null);
+  // A highlighted group (a VLAN, a room, a control family) also frames its segments on the topology layer.
+  fit(activeIds.length?activeIds:null,true,activeIds.length&&layerTarget>0?layerPoints():null);
  }
  // ---- Connection map: every rule that names the selected system ----
  function clearConnections(){for(const e of labels.filter(e=>e.kind==='connection'))removeLabel(e);while(connectionGroup.children.length){const c=connectionGroup.children[0];connectionGroup.remove(c);c.traverse(disposeObject);}}
@@ -824,7 +853,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  // The topology layer turns on and off; the room always stays. ('logical' means the layer is shown.)
  function setView(next){
   const on=next==='logical';if(on===layerOn)return;
-  layerOn=on;layerTarget=on?1:0;if(!moving)applyLayer(layerTarget);
+  layerOn=on;refreshRelevance();applyLayer(layerAmount);
   hooks.onView?.(on?'logical':'physical',true);
   if(lastCall.fn==='highlight'&&!lastCall.args[0]?.length)fit(null,true);else if(lastCall.fn==='showStep')replay(connectionState);
  }
@@ -930,7 +959,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  function loop(now){
   const elapsed=Math.min((now-last)/1000,.25),dt=Math.min(elapsed,.06);last=now;
   // Render on demand: when nothing moves and nothing changed, skip the frame to save battery.
-  const animating=forceActive||!!output||!!morph||!!frameHook||layerAmount!==layerTarget||(moving&&(!!flow||!!walker||!!transition||!!drift||transient.length>0||theme==='cinematic'));
+  const animating=forceActive||!!output||!!morph||!!frameHook||layerAmount!==layerTarget||zonesSettling()||(moving&&(!!flow||!!walker||!!transition||!!drift||transient.length>0||theme==='cinematic'));
   if(!animating&&!dirty&&!fading&&!labelsSettling){if(!orbit.update(dt))return;dirty=true;}
   if(moving){
    time+=dt;
@@ -942,6 +971,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
    updateFlow(Math.min(elapsed,.1));
   }
   {const near=output&&!stepMode?1:THREE.MathUtils.clamp((layerBox.distanceToPoint(camera.position)-(camera.aspect<.8?18:10))/(camera.aspect<.8?34:26),0,1);if(Math.abs(near-layerNear)>.01){layerNear=near;applyLayer(layerAmount);}}
+  if(zonesSettling()){const step=moving?elapsed/.5:1;for(const state of zoneState.values())state.value=state.target>state.value?Math.min(state.target,state.value+step):Math.max(state.target,state.value-step);applyLayer(layerAmount);}
   if(layerAmount!==layerTarget){const step=moving?elapsed/.6:1;applyLayer(layerTarget>layerAmount?Math.min(layerTarget,layerAmount+step):Math.max(layerTarget,layerAmount-step));}
   if(morph){morph.t=Math.min(1,morph.t+elapsed/morph.duration);const target=morph.to==='logical'?1:0;applyLogical(morph.from+(target-morph.from)*smooth(morph.t));if(morph.t>=1)finishMorph();}
   updateFollow(elapsed);updateGuided(elapsed);updateScreenLines();
@@ -971,7 +1001,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   if(size){if(!output)output={ratio:renderer.getPixelRatio(),insets};output.w=size.w;output.h=size.h;insets=size.insets||{top:0,bottom:0};renderer.setPixelRatio(1);renderer.setSize(size.w,size.h,false);if(composer){composer.setPixelRatio(1);composer.setSize(size.w,size.h);}camera.aspect=size.w/size.h;applyInsets();fit(framedIds,false);followSnap=true;}
   else if(output){const saved=output;output=null;insets=saved.insets;renderer.setPixelRatio(saved.ratio);resize();fit(framedIds,false);}
  }
- function setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;finishMorph();applyLayer(layerTarget);for(const l of lights)l.material.emissiveIntensity=.6*look.led;}dirty=true;}
+ function setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;finishMorph();for(const state of zoneState.values())state.value=state.target;applyLayer(layerTarget);for(const l of lights)l.material.emissiveIntensity=.6*look.led;}dirty=true;}
  function dispose(){
   observer.disconnect();visibility.disconnect();document.removeEventListener('visibilitychange',updateLoop);orbit.dispose();renderer.setAnimationLoop(null);composer?.dispose?.();
   const geometries=new Set(),materials=new Set(),textures=new Set();
