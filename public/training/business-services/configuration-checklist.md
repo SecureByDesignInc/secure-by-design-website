@@ -1,6 +1,6 @@
 # Stand up the business services — configuration checklist
 
-Secure By Design · Edition 1.2 · 8 October 2026
+Secure By Design · Edition 1.3 · 9 October 2026
 
 The users finally get what the network exists for: files, licensing, and an internal web application with its application tier and database. The model's rule governs the whole course — permit only documented business service paths — so every service arrives with its register rows, its service identity, and its certificate, and nothing reaches it any other way.
 
@@ -14,7 +14,7 @@ The users finally get what the network exists for: files, licensing, and an inte
 
 - [ ] Write the service-path rows: fleet to FS01 (SMB 445); fleet to APPS01 on its licensing port, recorded per application; fleet to WEB01 (HTTPS 443); WEB01 to APPS01 for the application API (HTTPS 443); and APPS01 — and only APPS01 — to SQL01 (TCP 1433 with TLS). Add an explicit deny from WEB01 to SQL01: the web tier has no database dependency. All four servers share VLAN 40, so the router never sees their traffic to each other — each server's host firewall enforces those rows. Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.
 - [ ] Register WEB01's Linux maintenance rows as well: packages from SBD-REPO01 only (HTTP with GPG-signed packages) and syslog over TLS to the collector, SBD-SYSLOG01 (TCP 6514) — the same paths the other domain-joined Linux servers, SBD-SPLUNK01 and SBD-NESSUS01, use. Course 1.8's repository row named only those two because WEB01 did not exist yet.
-- [ ] Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note Windows Server 2025's delegated managed service accounts as the migration path for any legacy service account this lab later inherits.
+- [ ] Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note delegated managed service accounts, introduced in the newest Windows Server release, as the migration path for any legacy service account this lab later inherits.
 - [ ] Create the access groups under the course 1.3 Groups OU — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.
 - [ ] Request the server certificates through the course 1.4 process: one SBD Server Authentication certificate each for SQL01, APPS01 (for its application API), and WEB01, enrolled from the template, with the publication site serving their revocation story.
 
@@ -36,7 +36,7 @@ Notes / result / date: __________________________
 
 - [ ] Build SBD-FS01 in the Servers OU and create the planned shares, granting NTFS permissions to the lesson-1 role groups only — share permissions stay simple, the filesystem carries the detail, and no named human appears in an access control list (ACL).
 - [ ] Enable access-based enumeration so users see only what their roles permit — the quiet UX of least privilege.
-- [ ] Confirm the SMB posture. Windows 11 version 24H2 Pro, Enterprise, and Education require SMB signing for both inbound and outbound connections, but Windows Server 2025 requires it only for its own outbound connections — so require signing on SBD-FS01 as well (RequireSecuritySignature in its SMB server configuration), and opt the sensitive share into SMB encryption. Verify both on a live connection from a fleet machine rather than assuming the defaults.
+- [ ] Confirm the SMB posture. The newest Windows client release (Pro, Enterprise, and Education) requires SMB signing for both inbound and outbound connections, but the newest Windows Server release requires it only for its own outbound connections — so require signing on SBD-FS01 as well (RequireSecuritySignature in its SMB server configuration), and opt the sensitive share into SMB encryption. Verify both on a live connection from a fleet machine rather than assuming the defaults.
 - [ ] Test as members of two different roles from fleet machines: each sees and opens exactly its shares, the other's are invisible and denied, and the denial lands in the pipeline like every other refusal on this network.
 
 **Commands:**

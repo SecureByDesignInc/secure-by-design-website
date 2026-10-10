@@ -17,7 +17,7 @@ export default function InsideTheNetworkPage() {
     <section className="network-text" aria-labelledby="network-text-heading">
       <div className="network-text-inner">
         <h2 id="network-text-heading">Read the network as text</h2>
-        <p>The same air-gapped design as the 3D model: {network.segments.length} VLANs, {network.systems.length} systems (one is a pool of 50 Windows 11 PCs; {network.offline.join(', ')} stays offline), {network.processes.length} traffic processes, and {network.controlCount} NIST SP 800-53 Revision 5 controls.</p>
+        <p>The same air-gapped design as the 3D model: {network.segments.length} VLANs, {network.systems.length} systems (one is a pool of 50 Windows PCs; {network.offline.join(', ')} stays offline), {network.processes.length} traffic processes, and {network.controlCount} NIST SP 800-53 Revision 5 controls.</p>
 
         <details>
           <summary>Systems <span>{network.systems.length}</span></summary>

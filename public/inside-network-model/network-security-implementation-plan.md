@@ -221,7 +221,7 @@ Assessment result: ____________________
 
 - Tier 0 · identity, PKI, and what controls them: AdminJumpBox01; targets: SBD-DC01, SBD-DC02, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-WSUS01, SBD-EPO01, SBD-NESSUS01, SBD-SPLUNK01. Identity: Tier 0 operators with separate task permissions. Includes the DC-facing administration of WSUS (DC update ring), ePO (DC agent policy), Nessus (DC scan credentials), and Splunk (DC monitoring), plus the core switch and the hypervisor hosts and their console. Prohibited: Member-server and endpoint administration; remote access to offline root.
 - Member servers: SBD-ADMIN-SRV01; targets: SBD-DHCP01, SBD-SYSLOG01, SBD-WSUS01, SBD-FS01, SBD-SQL01, SBD-APPS01, SBD-WEB01, SBD-SPLUNK01, SBD-NESSUS01, SBD-EPO01, SBD-MGMT01, SBD-REPO01. Identity: Named role limited to assigned servers; separate security-tool operators with member-server and endpoint scope only. Prohibited: DC/CA/template administration, DC-facing scopes in WSUS, ePO, Nessus, and Splunk, client administration, and audit-retention changes.
-- User endpoints: SBD-ADMIN-PC01; targets: 50 Windows 11 PCs. Identity: Endpoint-only operator; scoped local credentials. Prohibited: Identity, PKI, member-server, and security-tool management.
+- User endpoints: SBD-ADMIN-PC01; targets: 50 Windows PCs. Identity: Endpoint-only operator; scoped local credentials. Prohibited: Identity, PKI, member-server, and security-tool management.
 - Audit custody: SBD-ADMIN-SRV01; targets: SBD-AUDIT01. Identity: Separate audit custodian accounts and a separate session on SBD-ADMIN-SRV01; protected retention changes require independent approval. Prohibited: Ordinary server operators cannot use this role or delete retained records.
 
 ## Control verification record

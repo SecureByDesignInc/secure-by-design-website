@@ -75,7 +75,7 @@ export const trafficRules=[
  // application tier queries the database. All four VLAN 40 servers share a segment, so host firewalls enforce these rows.
  rule('F21',['web'],['apps'],'Application API','HTTPS TCP 443 with trusted internal certificate','SBD-WEB01 calls the application API on SBD-APPS01; same VLAN, so host firewalls enforce it','Application owner'),
  rule('F22',['apps'],['sql'],'SQL','TCP 1433 with TLS','SBD-APPS01 is the only registered SQL consumer; same VLAN, so SBD-SQL01’s host firewall enforces it','Database owner'),
- ...adminMatrix.map((r,i)=>rule('A0'+(i+1),[r.host],r.targets,'Management','RDP 3389 · WinRM 5985–5986 · SSH 22 to Linux · product consoles over HTTPS; MFA, named accounts, and target binding',r.tier+' administration: '+r.identity,'Privileged-access owner')),
+ ...adminMatrix.map((r,i)=>rule('A0'+(i+1),[r.host],r.targets,'Management',`RDP 3389 · WinRM 5985–5986${r.id==='identity'?' · AD Web Services 9389 to the DCs':''} · SSH 22 to Linux · product consoles over HTTPS; MFA, named accounts, and target binding`,r.tier+' administration: '+r.identity,'Privileged-access owner')),
  rule('D01',['workstations'],['workstations'],'SMB','TCP 445','Block peer file and administrative shares; same VLAN, so each PC’s host firewall enforces it','Endpoint owner','deny'),
  rule('D02',['workstations'],['workstations'],'RDP','TCP/UDP 3389','Block peer remote desktop; same VLAN, so each PC’s host firewall enforces it','Endpoint owner','deny')
 ];

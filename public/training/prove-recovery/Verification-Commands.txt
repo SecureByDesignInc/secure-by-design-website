@@ -1,0 +1,57 @@
+SECURE BY DESIGN - PROVE YOU CAN RECOVER
+Course 1.10 | Materials edition 1.3 | Updated 8 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Decide what recovery must prove
+# Capture the current protection state before this course changes it.
+wbadmin get versions
+Get-ChildItem E:\Backups -ErrorAction SilentlyContinue | Measure-Object   # this server's protected backup volume
+
+What success looks like: The recovery set is ordered by dependency with point and time objectives per item, the backup placement and access rules are written, and the DSRM and root-key custody records check out.
+
+2. Back up the directory, on schedule
+wbadmin get versions
+Get-ADOptionalFeature -Filter {Name -like 'Recycle Bin*'} | Select-Object Name, EnabledScopes
+Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\backup-catalog.txt
+
+What success looks like: Both DCs show scheduled, completed system state versions on the protected target, the Recycle Bin reports an enabled scope, and the decision tree names the tool for each failure class.
+
+3. Back up the CA, policy, boundary, and records
+# On SBD-SUBCA01: back up to the protected backup volume, never to the evidence folder.
+certutil -backup E:\Backups\SBD-SUBCA01\ca-backup   # prompts for the password that protects the exported key
+# Only the hashes and the custody record go into evidence.
+Get-ChildItem E:\Backups\SBD-SUBCA01\ca-backup -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\recovery\ca-backup-hashes.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\gpo-backup\* | Select-Object -First 6
+
+What success looks like: The CA backup sits on SBD-SUBCA01's protected backup volume with key custody recorded and only its hashes in evidence, the policy and router exports are current and hashed, and the catalog covers logs and living records alongside the systems.
+
+4. Carry the copies to the offline cabinet
+# Hash on the protected volume, then on the media.
+Get-FileHash -Algorithm SHA256 E:\Backups\SBD-DC02\*.vhdx
+Get-FileHash -Algorithm SHA256 F:\Media-0012\SBD-DC02\*.vhdx
+
+What success looks like: Every item in the recovery set has an offline copy with matching hashes on the volume and the media, a custody entry with a named custodian of the right tier, and one copy has been retrieved and verified.
+
+5. Rehearse a real restore, in isolation
+# On the isolated copy of SBD-DC02: start in DSRM, then sign in with the DSRM password.
+bcdedit /set safeboot dsrepair
+shutdown -t 0 -r
+wbadmin get versions -backupTarget:<media-volume> -machine:SBD-DC02
+wbadmin start systemstaterecovery -version:<version-id> -backupTarget:<media-volume> -machine:SBD-DC02
+bcdedit /deletevalue safeboot   # then restart normally
+Get-Service NTDS,DNS,Netlogon   # after restart, on the restored controller
+Restore-ADObject -Identity <deleted-object-guid>   # production Recycle Bin rehearsal
+
+What success looks like: The isolated restore ran in DSRM and reached a healthy directory within (or honestly against) the time objective, the DSRM boot setting is removed, the teardown is confirmed, and the production object restore returned the test object intact.
+
+6. File the recovery record and close the path
+Get-ChildItem C:\Evidence -Directory | Select-Object Name
+Get-ChildItem C:\Evidence\recovery -Recurse | Measure-Object
+Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\recovery-record.pdf -ErrorAction SilentlyContinue
+
+What success looks like: The recovery record is complete with an owner and next-rehearsal date, the closing snapshot is filed with triage, and all three living records reconcile cleanly into the handoff note.
+
+© 2026 Secure By Design Team LLC

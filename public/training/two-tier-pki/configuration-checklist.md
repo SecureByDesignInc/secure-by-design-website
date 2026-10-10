@@ -1,20 +1,20 @@
 # Configure the two-tier PKI — configuration checklist
 
-Secure By Design · Edition 2.0 · 8 October 2026
+Secure By Design · Edition 2.1 · 9 October 2026
 
 This course builds the whole PKI: a standalone offline Root CA, an enterprise subordinate/issuing CA, the pki.sbd.test publication site on SBD-PKI-MGMT01, and template administration on its own seat. The root stays disconnected; approved removable media carries requests and public artifacts. Publication stays plain HTTP by design — clients must be able to fetch revocation data before they can validate any certificate.
 
 ## Before you start
 
 - [ ] Complete courses 1.1–1.3 (identity, DNS and time, and the hardened baseline); verify domain health and internal name resolution.
-- [ ] Prepare separate Windows Server 2025 hosts: SBD-ROOTCA01 in a disconnected workgroup, SBD-SUBCA01 joined to sbd.test, and SBD-PKI-MGMT01 as a hardened member server at 10.0.30.30 in the Servers OU (course 1.5 moves it, with the issuing CA, to a Tier 0 Servers OU).
+- [ ] Prepare separate Windows Server hosts: SBD-ROOTCA01 in a disconnected workgroup, SBD-SUBCA01 joined to sbd.test, and SBD-PKI-MGMT01 as a hardened member server at 10.0.30.30 in the Servers OU (course 1.5 moves it, with the issuing CA, to a Tier 0 Servers OU).
 - [ ] Approve the CA names, cryptography, validity periods, publication URLs, administration, backups, and removable-media procedure before installation; confirm the network's service-path register permits HTTP to pki.sbd.test.
 
 ## Design the two-tier trust hierarchy
 
 - [ ] Draw the hierarchy: offline standalone root → enterprise issuing CA → approved server/client certificates. There is no network connection to the root.
 - [ ] Record final host and CA names, key provider, algorithm, key sizes, hashes, validity periods, renewal owners, and recovery arrangements. Start from this lab's example values in the next step and change any that your own policy requires: they are examples, not universal requirements.
-- [ ] Example values for this lab: the root CA uses an RSA 4096 key with SHA-256 and a 20-year certificate, and publishes a base CRL every 26 weeks with an overlap period and no delta CRL, refreshed at each offline ceremony. The issuing CA uses RSA 4096 (3072 at minimum) with SHA-256 and a 10-year certificate, a weekly base CRL, and a daily delta CRL. End-entity certificates last one to two years. NIST SP 800-57 Part 1 rates RSA 2048 at 112 bits of security, which it accepts for new signatures only through 2030, so a CA that will still be signing after 2030 uses at least 3072 bits (128 bits of security); Windows Server 2025 requires at least 2,048-bit RSA for TLS server authentication.
+- [ ] Example values for this lab: the root CA uses an RSA 4096 key with SHA-256 and a 20-year certificate, and publishes a base CRL every 26 weeks with an overlap period and no delta CRL, refreshed at each offline ceremony. The issuing CA uses RSA 4096 (3072 at minimum) with SHA-256 and a 10-year certificate, a weekly base CRL, and a daily delta CRL. End-entity certificates last one to two years. NIST SP 800-57 Part 1 rates RSA 2048 at 112 bits of security, which it accepts for new signatures only through 2030, so a CA that will still be signing after 2030 uses at least 3072 bits (128 bits of security); the newest Windows Server release requires at least 2,048-bit RSA for TLS server authentication.
 - [ ] Know where each value is set. You choose the key, the hash, and the root's 20-year validity in the AD CS Configuration wizard. Each CA's CAPolicy.inf sets its CRL periods (CRLPeriod, CRLPeriodUnits, CRLDeltaPeriod, CRLDeltaPeriodUnits), which certutil -setreg can change later. The issuing CA's 10-year lifetime is set on the root (CA\ValidityPeriod and CA\ValidityPeriodUnits) before the signing ceremony, because a subordinate CA's lifetime comes from the CA that signs it.
 - [ ] Plan a stable internal publication name such as pki.sbd.test. The Authority Information Access (AIA) location supplies issuer certificates; the CRL Distribution Point (CDP) supplies certificate revocation lists.
 - [ ] Choose the publication host, paths, access rules, and refresh schedule before issuing certificates. Clients inside this air-gapped network must reach those locations without relying on the public internet.

@@ -1,5 +1,4 @@
 export const homepageShareUrl = 'https://securebydesigninc.com/';
-export const learningShareNote = 'If this helped you, help someone else find it.';
 const feedback = {
   opened: 'Share options opened.',
   copied: 'Link copied. Ready to pass it on.',

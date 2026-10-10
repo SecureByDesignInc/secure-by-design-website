@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import EpisodeExperience from './episode-experience';
 import CourseExperience from './course-experience';
-import TrainingShare from './training-share';
 import type { CatalogEntry, Library } from './catalog-types';
 import {
   filterEpisodes,
@@ -139,7 +138,7 @@ function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {course && episode.kind === 'configuration' ? 'Guide + workbook + checklist' : 'Guide + workbooks'}<span>·</span>Pay it forward
+              Interactive guide<span>·</span>One download
             </p>
           </div>
         </div>
@@ -208,7 +207,6 @@ export default function VideoHub({ library }: { library: Library }) {
             that help you build your skills. Choose a topic and follow
             your own learning path.
           </p>
-          <TrainingShare compact label="Learn it. Share it. Pay it forward." />
           <a href="#episode-library">
             Explore the catalog <ArrowDown size={16} />
           </a>

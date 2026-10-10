@@ -141,7 +141,6 @@
 
   function render(shouldFocus = false) {
     const r = route();
-    document.getElementById('learning-share-note').hidden = !(r.view === 'capstone' || (r.view === 'catalog' && ['04', '09', '12'].includes(r.id)));
     document.querySelectorAll('[data-view]').forEach(a => {
       if (a.dataset.view === r.view) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });

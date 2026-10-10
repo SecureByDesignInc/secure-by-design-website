@@ -4,8 +4,7 @@
 // course-experience.tsx), so all expanded tiles look and behave alike.
 import type { ReactNode } from 'react';
 import Image from 'next/image';
-import { BookOpen, Check, Network, Share2, Video } from 'lucide-react';
-import TrainingShare from './training-share';
+import { BookOpen, Check, Network, Video } from 'lucide-react';
 
 export function CompanionHeading({ id, intro, action }: {
   id: string;
@@ -54,10 +53,6 @@ export function CompanionMaterials({ id, cover, coverAlt, heading, summary, guid
           <BookOpen size={15} />
           YOUR TRAINING MATERIALS
         </span>
-        <span className="vc-included-badge">
-          <Share2 size={14} aria-hidden="true" />
-          Learn it. Share it.
-        </span>
       </div>
       <div className="vc-workbook-intro">
         {cover && <Image src={cover} width={154} height={199} alt={coverAlt} loading="lazy" unoptimized />}
@@ -98,7 +93,6 @@ export function CompanionMaterials({ id, cover, coverAlt, heading, summary, guid
           </a>
         ))}
       </div>
-      <TrainingShare />
       {edition && <div className="vc-training-edition" aria-label="Edition and notices">{edition}</div>}
     </aside>
   );

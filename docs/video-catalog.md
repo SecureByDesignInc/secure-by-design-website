@@ -1,6 +1,6 @@
 # Training Library and companion materials
 
-The Training Library at `/videos` presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package covers DC01 and DC02 on Windows Server 2025. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
+The Training Library at `/videos` presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package, course 1.1 (Promote Primary & Secondary Domain Controller), covers DC01 and DC02 on Windows Server. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
 
 ## Content
 
@@ -10,7 +10,7 @@ The supported `scene` value is `identity-dc`, which uses the DC01/DC02 topology 
 
 Leave `youtubeId` null until the recording is published. Then add the verified 11-character YouTube ID, and set chapter timestamps to verified nonnegative offsets in seconds. The page embeds the video using YouTube's privacy-enhanced iframe and chapter start parameters. No autoplay is requested. Unknown or invalid IDs display the coming-soon panel. No fake durations or timestamps are shown. Embedded-video reference: https://developers.google.com/youtube/player_parameters
 
-Training assets live in `public/training/dc01-dc02/`: the interactive HTML guide, the PDF and Word workbooks, verification commands, lesson data, license, and complete ZIP. The cover image is rendered from the real workbook. Replace the files together when revising an episode, and regenerate the download package and its manifest. The workbook omits the reading recommendations and closing note removed by the user.
+Training assets live in `public/training/dc01-dc02/`: the interactive HTML guide, the PDF and Word workbooks, verification commands, lesson data, license, and complete ZIP. Each tile offers one download, that ZIP (configuration courses have their own `SecureByDesign-<id>-Learning-Package.zip`). The cover image is rendered from the real workbook. Replace the files together when revising an episode, then run `python3 scripts/prepare-training-packages.py` to regenerate the download packages and the 1.1 manifest. The workbook omits the reading recommendations and closing note removed by the user.
 
 ## Interactions
 

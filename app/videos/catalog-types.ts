@@ -48,7 +48,7 @@ export type TrainingCourse = {
   subtitle: string;
   description: string;
   tags: string[];
-  /** Platforms the course configures, shown in the course-page kicker (for example "Windows Server 2025 · Linux"). */
+  /** Platforms the course configures, shown in the course-page kicker (for example "Windows Server · Linux"). */
   platform?: string;
   systems: string[];
   moduleCount: number;
@@ -70,6 +70,8 @@ export type TrainingCourse = {
     word?: string;
     checklist?: string;
     checklistPage?: string;
+    /** The tile's one download: the workbook (PDF and Word), checklist, and verification commands in a ZIP. */
+    package?: string;
     pages?: number;
     /** Workbook cover image (the first page of the workbook or catalog). */
     cover?: string;

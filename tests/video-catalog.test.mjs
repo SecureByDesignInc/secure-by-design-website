@@ -174,7 +174,7 @@ const searchEpisodes = [
     title: 'Build the identity foundation',
     subtitle: 'Directory services',
     description: 'Configure redundant authentication.',
-    tags: ['Windows Server 2025', 'DNS'],
+    tags: ['Windows Server', 'DNS'],
     systems: ['DC01', 'DC02'],
   },
   {
@@ -182,7 +182,7 @@ const searchEpisodes = [
     title: 'Observe the network',
     subtitle: 'Telemetry and events',
     description: 'Investigate a failed service.',
-    tags: ['Monitoring', 'Windows Server 2025'],
+    tags: ['Monitoring', 'Windows Server'],
     systems: ['LOG01'],
   },
   {
@@ -200,7 +200,7 @@ test('search covers every catalog field without case or surrounding whitespace s
     '  IDENTITY  ',
     'directory',
     'authentication',
-    'server 2025',
+    'windows server',
     'dc02',
   ]) {
     const results = filterEpisodes(searchEpisodes, query, '');
@@ -237,7 +237,7 @@ test('topics are unique, sorted, and derived only from available episodes', () =
     'DNS',
     'Monitoring',
     'Security',
-    'Windows Server 2025',
+    'Windows Server',
   ]);
   assert.deepEqual(getCatalogTopics([]), []);
 });

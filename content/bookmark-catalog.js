@@ -1,5 +1,7 @@
 import training from './training-resources.json' with {type:'json'};
-export const bookmarkCatalog= [...training.map(item=>({id:item.id,title:item.title,href:item.url})),
+// Retired training items (single files replaced by each course's one download) stay valid IDs for
+// records saved before 9 October 2026, but My Account no longer lists them.
+export const bookmarkCatalog= [...training.map(item=>({id:item.id,title:item.title,href:item.url,...(item.retired?{retired:true}:{})})),
  {id:'ms-ad',title:'Active Directory fundamentals',href:'https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview'},
  {id:'nist-rmf',title:'The Risk Management Framework',href:'https://csrc.nist.gov/projects/risk-management/about-rmf'},
  {id:'splunk',title:'Security monitoring with Splunk',href:'https://help.splunk.com/en/splunk-enterprise/get-started/overview/9.1/about-splunk-enterprise/about-splunk-enterprise'},

@@ -25,11 +25,11 @@
     {
       "id": "dc01-dc02",
       "number": "1.1",
-      "title": "Build the identity foundation",
+      "title": "Promote Primary & Secondary Domain Controller",
       "subtitle": "DC01 + DC02 / Active Directory",
-      "description": "Build Active Directory on two Windows Server 2025 domain controllers, understand why two controllers matter, verify the domain's health, and keep a record of the build.",
+      "description": "Promote the primary and secondary domain controllers on Windows Server, place them on their own network segment, verify the domain's health, and keep a record of the build.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "Active Directory"
       ],
       "youtubeId": null,
@@ -43,8 +43,8 @@
         "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
         "package": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
         "cover": "/training/dc01-dc02/workbook-cover.webp",
-        "pages": 12,
-        "materialsEdition": "0.5",
+        "pages": 13,
+        "materialsEdition": "0.6",
         "updated": "9 October 2026",
         "copyrightOwner": "Secure By Design Team LLC",
         "copyrightYear": 2026,
@@ -55,8 +55,8 @@
           "id": "prepare",
           "label": "Plan the build",
           "title": "Give every system a purpose",
-          "description": "Understand Active Directory before choosing names, addresses, and the starting configuration.",
-          "network": "DC01 and DC02 are planned. The connections show where identity services will take shape.",
+          "description": "Understand Active Directory and where the controllers live before choosing names, addresses, and the starting configuration.",
+          "network": "DC01 and DC02 are planned on VLAN 10, their own segment. The connections show where identity services will take shape.",
           "timestamp": null
         },
         {
@@ -79,7 +79,7 @@
           "id": "verify",
           "label": "Verify the domain",
           "title": "Check the domain's health",
-          "description": "Run DCDiag against each controller, confirm replication in both directions, and record the roles each one holds.",
+          "description": "Run DCDiag against each controller, confirm replication in both directions, and check each controller's roles and host firewall.",
           "network": "Select either controller below to follow a health check from the administration viewpoint.",
           "timestamp": null
         },
@@ -94,10 +94,10 @@
       ],
       "scene": "identity-dc",
       "networkLabel": "VLAN 10 / IDENTITY",
-      "outcomeSummary": "One domain. Two writable controllers. Replication and health checks you can explain and verify.",
+      "outcomeSummary": "One domain. Two writable controllers on their own segment. Replication and health checks you can explain and verify.",
       "outcomes": [
         "Understand Active Directory",
-        "Configure both controllers",
+        "Promote both controllers",
         "Verify and keep evidence"
       ],
       "categoryId": "network-build",
@@ -181,8 +181,8 @@
         "guide": "/training/rmf/index.html#catalog/01",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 10,
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "relatedResources": [],
         "cover": "/training/rmf/catalog-cover.webp"
       },
@@ -292,8 +292,8 @@
         "guide": "/training/rmf/index.html#catalog/05",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 10,
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "relatedResources": [
           {
             "title": "Open the Body of Evidence workspace",
@@ -386,8 +386,8 @@
         "guide": "/training/rmf/index.html#catalog/10",
         "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
         "pages": 10,
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "relatedResources": [
           {
             "title": "Open the authorization package capstone",
@@ -458,11 +458,12 @@
       "training": {
         "guide": "/training/dns-configuration",
         "checklist": "/training/dns-configuration/configuration-checklist.md",
-        "materialsEdition": "1.3",
+        "materialsEdition": "1.4",
         "updated": "9 October 2026",
         "checklistPage": "/training/dns-configuration/checklist",
         "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
+        "package": "/training/dns-configuration/SecureByDesign-dns-configuration-Learning-Package.zip",
         "pages": 16,
         "cover": "/training/dns-configuration/workbook-cover.webp"
       },
@@ -471,12 +472,12 @@
       "subtitle": "Service discovery, zones, records, domain time & troubleshooting",
       "description": "Learn how DNS lets every domain member find its domain controllers, then build dependable internal name resolution and time on DC01 and DC02: set each controller's DNS order, configure forward and reverse zones, manage service records, make the PDC emulator the domain's time source, and prove both in the air-gapped training network.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "DNS",
         "Name resolution",
         "Time service"
       ],
-      "platform": "Windows Server 2025",
+      "platform": "Windows Server",
       "systems": [
         "SBD-DC01",
         "SBD-DC02"
@@ -549,11 +550,12 @@
       "training": {
         "guide": "/training/two-tier-pki",
         "checklist": "/training/two-tier-pki/configuration-checklist.md",
-        "materialsEdition": "2.0",
-        "updated": "8 October 2026",
+        "materialsEdition": "2.1",
+        "updated": "9 October 2026",
         "checklistPage": "/training/two-tier-pki/checklist",
         "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
+        "package": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Learning-Package.zip",
         "pages": 24,
         "cover": "/training/two-tier-pki/workbook-cover.webp"
       },
@@ -562,7 +564,7 @@
       "subtitle": "Offline root, issuing CA, pki.sbd.test publication & templates",
       "description": "Build a complete two-tier public key infrastructure: an offline standalone Root CA and an enterprise issuing CA, signed through a controlled ceremony, with trust data served from pki.sbd.test at the exact embedded URLs, template administration on its own seat, and enrollment and revocation proven end to end.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "PKI",
         "Root CA",
         "Subordinate CA",
@@ -570,7 +572,7 @@
         "Certificate templates",
         "AIA and CDP"
       ],
-      "platform": "Windows Server 2025",
+      "platform": "Windows Server",
       "systems": [
         "SBD-ROOTCA01",
         "SBD-SUBCA01",
@@ -628,11 +630,12 @@
       "training": {
         "guide": "/training/harden-baseline",
         "checklist": "/training/harden-baseline/configuration-checklist.md",
-        "materialsEdition": "1.2",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.3",
+        "updated": "9 October 2026",
         "checklistPage": "/training/harden-baseline/checklist",
         "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
         "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
+        "package": "/training/harden-baseline/SecureByDesign-harden-baseline-Learning-Package.zip",
         "pages": 16,
         "cover": "/training/harden-baseline/workbook-cover.webp"
       },
@@ -641,13 +644,13 @@
       "subtitle": "OU design, DISA GPOs & STIG/SCAP verification",
       "description": "Design the organizational unit structure, apply the DISA STIG Group Policy package to the verified network core, and prove the result with before-and-after SCAP scans, reconciled checklists, and a documented exception record.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "DISA STIG",
         "Group Policy",
         "SCAP",
         "Organizational units"
       ],
-      "platform": "Windows Server 2025",
+      "platform": "Windows Server",
       "systems": [
         "SBD-DC01",
         "SBD-DC02"
@@ -673,13 +676,13 @@
       "subtitle": "DHCP, admin seats & where privilege may sign in",
       "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "DHCP",
         "Tiered administration",
         "Privileged access",
         "Group Policy"
       ],
-      "platform": "Windows Server 2025 · Windows 11",
+      "platform": "Windows Server · Windows client",
       "systems": [
         "SBD-DHCP01",
         "AdminJumpBox01",
@@ -731,11 +734,12 @@
       "training": {
         "guide": "/training/tiered-admin",
         "checklist": "/training/tiered-admin/configuration-checklist.md",
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "checklistPage": "/training/tiered-admin/checklist",
         "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
+        "package": "/training/tiered-admin/SecureByDesign-tiered-admin-Learning-Package.zip",
         "pages": 17,
         "cover": "/training/tiered-admin/workbook-cover.webp"
       },
@@ -750,13 +754,13 @@
       "subtitle": "Collect, protect & analyze before the fleet arrives",
       "description": "Build the model's collect → protect → analyze chain: Windows Event Forwarding and router syslog into SBD-SYSLOG01, hashed archives under a no-delete rule on SBD-AUDIT01, and working searches with one owned alert on SBD-SPLUNK01 — proven by a single event traced end to end.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "Logging",
         "Windows Event Forwarding",
         "SIEM",
         "Audit policy"
       ],
-      "platform": "Windows Server 2025 · Linux",
+      "platform": "Windows Server · Linux",
       "systems": [
         "SBD-SYSLOG01",
         "SBD-AUDIT01",
@@ -807,11 +811,12 @@
       "training": {
         "guide": "/training/logging-pipeline",
         "checklist": "/training/logging-pipeline/configuration-checklist.md",
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "checklistPage": "/training/logging-pipeline/checklist",
         "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
+        "package": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Learning-Package.zip",
         "pages": 16,
         "cover": "/training/logging-pipeline/workbook-cover.webp"
       },
@@ -823,18 +828,18 @@
       "number": "1.7",
       "estimatedHours": 3.2,
       "title": "Bring in the fleet",
-      "subtitle": "50 Windows 11 endpoints, managed from first boot",
+      "subtitle": "50 Windows endpoints, managed from first boot",
       "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
       "tags": [
-        "Windows 11",
+        "Windows client",
         "Domain join",
         "Windows LAPS",
         "Autoenrollment",
         "DISA STIG"
       ],
-      "platform": "Windows 11 · Windows Server 2025",
+      "platform": "Windows client · Windows Server",
       "systems": [
-        "50 Windows 11 PCs",
+        "50 Windows PCs",
         "SBD-DHCP01",
         "SBD-SUBCA01"
       ],
@@ -881,17 +886,18 @@
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows 11 benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over."
+          "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows client benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over."
         }
       ],
       "training": {
         "guide": "/training/workstation-fleet",
         "checklist": "/training/workstation-fleet/configuration-checklist.md",
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
+        "package": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Learning-Package.zip",
         "pages": 18,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       },
@@ -906,13 +912,13 @@
       "subtitle": "WSUS rings, approved sources, ePO & credentialed scanning",
       "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type with SBD-REPO01 for packages, a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "WSUS",
         "Endpoint protection",
         "Vulnerability scanning",
         "Configuration management"
       ],
-      "platform": "Windows Server 2025 · Linux",
+      "platform": "Windows Server · Linux",
       "systems": [
         "SBD-WSUS01",
         "SBD-REPO01",
@@ -965,11 +971,12 @@
       "training": {
         "guide": "/training/patch-protect",
         "checklist": "/training/patch-protect/configuration-checklist.md",
-        "materialsEdition": "1.3",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.4",
+        "updated": "9 October 2026",
         "checklistPage": "/training/patch-protect/checklist",
         "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
+        "package": "/training/patch-protect/SecureByDesign-patch-protect-Learning-Package.zip",
         "pages": 16,
         "cover": "/training/patch-protect/workbook-cover.webp"
       },
@@ -984,13 +991,13 @@
       "subtitle": "Files, database, licensing & web — by documented paths",
       "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-WEB01 serving internal HTTPS from a hardened, domain-joined Linux Apache, SBD-APPS01's licensing service and application API, and SBD-SQL01 running as a managed identity behind exactly one caller — every hop a documented, proven register row.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "File services",
         "SQL Server",
         "Apache",
         "Service accounts"
       ],
-      "platform": "Windows Server 2025 · Linux",
+      "platform": "Windows Server · Linux",
       "systems": [
         "SBD-FS01",
         "SBD-SQL01",
@@ -1038,11 +1045,12 @@
       "training": {
         "guide": "/training/business-services",
         "checklist": "/training/business-services/configuration-checklist.md",
-        "materialsEdition": "1.2",
-        "updated": "8 October 2026",
+        "materialsEdition": "1.3",
+        "updated": "9 October 2026",
         "checklistPage": "/training/business-services/checklist",
         "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
+        "package": "/training/business-services/SecureByDesign-business-services-Learning-Package.zip",
         "pages": 14,
         "cover": "/training/business-services/workbook-cover.webp"
       },
@@ -1057,13 +1065,13 @@
       "subtitle": "Backups with custody, one rehearsed restore & the closing record",
       "description": "Close the Build path by proving the network can come back: scheduled directory and CA backups under ceremony-grade custody, policy, boundary, logs, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
       "tags": [
-        "Windows Server 2025",
+        "Windows Server",
         "Backup and recovery",
         "System state",
         "AD Recycle Bin",
         "Contingency planning"
       ],
-      "platform": "Windows Server 2025",
+      "platform": "Windows Server",
       "systems": [
         "SBD-DC01",
         "SBD-DC02",
@@ -1120,6 +1128,7 @@
         "checklistPage": "/training/prove-recovery/checklist",
         "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
+        "package": "/training/prove-recovery/SecureByDesign-prove-recovery-Learning-Package.zip",
         "pages": 16,
         "cover": "/training/prove-recovery/workbook-cover.webp"
       },

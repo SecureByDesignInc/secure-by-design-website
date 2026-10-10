@@ -1,0 +1,88 @@
+SECURE BY DESIGN - CONFIGURE THE TWO-TIER PKI
+Course 1.4 | Materials edition 2.1 | Updated 9 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Design the two-tier trust hierarchy
+# Run on the future issuing CA, not the offline root.
+Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain
+Resolve-DnsName SBD-DC01.sbd.test
+Resolve-DnsName SBD-DC02.sbd.test
+
+What success looks like: The written plan separates trust, issuance, publication, and administration. It identifies who renews CRLs before they expire, and every key size, hash, lifetime, and CRL period has a recorded value and the setting that applies it.
+
+2. Configure the offline Root CA
+# Inspect locally on SBD-ROOTCA01 during the approved root session.
+Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain
+Get-Service CertSvc
+certutil -getreg CA\CRLPublicationURLs
+certutil -getreg CA\CACertPublicationURLs
+certutil -getreg CA\ValidityPeriodUnits
+certutil -getreg CA\CRLPeriodUnits
+
+What success looks like: The host remains disconnected, the CA is standalone/root, requests require approval, and the planned subordinate URLs and 10-year subordinate validity are configured before signing.
+
+3. Create the issuing CA request
+# Use the actual request path chosen in the wizard.
+certutil -dump C:\CAConfig\IssuingCA.req
+Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.req
+
+What success looks like: The request matches the approved issuing identity and key profile. The CA is waiting for its signed certificate; do not troubleshoot that expected state by installing another CA.
+
+4. Sign through the offline ceremony
+# Inspect public artifacts; use your actual approved paths.
+certutil -dump C:\CAConfig\IssuingCA.cer
+certutil -dump C:\CAConfig\RootCA.crl
+Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.cer, C:\CAConfig\RootCA.cer, C:\CAConfig\RootCA.crl
+
+What success looks like: Artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.
+
+5. Activate the issuing CA and distribute trust
+# Inspect the issuing CA after installation and publication.
+Get-Service CertSvc
+certutil -getreg CA\CRLPublicationURLs
+certutil -getreg CA\CACertPublicationURLs
+certutil -store Root
+certutil -store CA
+
+What success looks like: Certificate Services is running, the AIA and CDP settings carry the planned pki.sbd.test URLs, and the approved root reaches domain clients through policy.
+
+6. Build the pki.sbd.test publication site
+Resolve-DnsName pki.sbd.test
+Test-NetConnection pki.sbd.test -Port 80
+Get-Website | Select-Object Name, State, PhysicalPath
+
+What success looks like: pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80, and the publication folder's permissions separate writers from readers.
+
+7. Publish the trust data at its advertised URLs
+certutil -verify -urlfetch C:\Evidence\pki\test.cer
+certutil -URL http://pki.sbd.test/RootCA.crl
+Get-ChildItem C:\inetpub\pkiroot | Select-Object Name, LastWriteTime
+
+What success looks like: Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.
+
+8. Separate template administration
+Get-ADGroup 'SBD PKI Admins' -Properties Members | Select-Object Name, Members
+certutil -template | Select-String 'TemplatePropCommonName' | Select-Object -First 10
+
+What success looks like: The templates console works from SBD-PKI-MGMT01, the PKI administrators group holds the delegated permissions, and the written change process names requester, reviewer, and versioning action.
+
+9. Publish the first working templates
+certutil -CATemplates -config 'SBD-SUBCA01\SBD Issuing CA'
+certutil -template 'SBDComputerAuthentication' | Select-String 'msPKI-Certificate-Name-Flag','msPKI-Minimal-Key-Size'
+
+What success looks like: The CA publishes exactly the two planned templates, each shows the approved key size and permissions, and both carry a completed change record.
+
+10. Validate enrollment, revocation, and recovery
+gpupdate /force
+certutil -pulse
+Get-ChildItem Cert:\LocalMachine\My | Select-Object Subject, NotAfter, Thumbprint
+certutil -verify -urlfetch C:\Evidence\pki\pilot.cer
+# After revoking the disposable test certificate and publishing the new CRL:
+certutil -urlfetch -verify test.cer
+
+What success looks like: The pilot enrolls hands-free and verifies with live retrieval from pki.sbd.test; after revocation and publication the test certificate is rejected for the expected reason; both VLAN 30 hosts have current, attributed scan results.
+
+© 2026 Secure By Design Team LLC

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, ClipboardList, Download, ListChecks, Video } from 'lucide-react';
 import type { TrainingCourse } from './catalog-types';
 import { ReadingProgress, ReadingProgressGroup } from '../reader-progress';
-import TrainingShare from './training-share';
 import type configurationCourses from '../../content/configuration-courses.json';
 
 type Configuration = (typeof configurationCourses)[number];
@@ -37,13 +36,11 @@ export default function ConfigurationGuide({ course, configuration, standalone =
   });
   return <ReadingProgressGroup><section className="vc-configuration" aria-label={`${course.title} training materials`}>
     <div className="vc-config-intro">
-      <div><p className="vc-kicker">COURSE {course.number} · BUILD THE NETWORK · {(course.platform ?? 'Windows Server 2025').toUpperCase()}</p><h2>{course.title}</h2><p>{course.description}</p><p className="vc-config-meta">{configuration.lessons.length} lessons · ~{course.estimatedHours}h · Self-paced · Written edition</p></div>
+      <div><p className="vc-kicker">COURSE {course.number} · BUILD THE NETWORK · {(course.platform ?? 'Windows Server').toUpperCase()}</p><h2>{course.title}</h2><p>{course.description}</p><p className="vc-config-meta">{configuration.lessons.length} lessons · ~{course.estimatedHours}h · Self-paced · Written edition</p></div>
       <div className="vc-config-links">
         {!standalone && <a href={course.training.guide}><BookOpen size={18} />Open full guide</a>}
-        {course.training.pdf && <a href={course.training.pdf} download><Download size={18} />Workbook (PDF{course.training.pages ? ` · ${course.training.pages} pages` : ''})</a>}
-        {course.training.word && <a href={course.training.word} download><Download size={18} />Workbook (Word, editable)</a>}
-        {course.training.checklistPage && <a href={course.training.checklistPage}><ClipboardList size={18} />Open the checklist</a>}
-        {course.training.checklist && <a href={course.training.checklist} download><Download size={18} />Checklist (Markdown)</a>}
+        {course.training.package && <a href={course.training.package} download><Download size={18} />Download the training materials (ZIP)</a>}
+        {course.training.checklistPage && <a href={course.training.checklistPage}><ClipboardList size={18} />Printable checklist</a>}
         <a href="/inside-the-network">See the complete network <ArrowRight size={16} /></a>
       </div>
     </div>
@@ -72,7 +69,6 @@ export default function ConfigurationGuide({ course, configuration, standalone =
         <details className="vc-config-sources"><summary>Source documentation for this lesson</summary><ul>{configuration.sources.filter(source => lesson.sources.includes(source.id)).map(source => <li key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a></li>)}</ul></details>
       </article>
     </div>
-    {active === configuration.lessons.length - 1 && <TrainingShare closing />}
     <p className="vc-config-edition">Secure By Design · Edition {course.training.materialsEdition} · Updated {course.training.updated}</p>
     <p className="vc-config-edition">© 2026 Secure By Design Team LLC</p>
   </section></ReadingProgressGroup>;

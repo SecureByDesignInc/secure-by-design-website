@@ -130,7 +130,7 @@ function showHoverTip(info){
  tipKey=key;
  if(info.packet)tip.innerHTML=`<strong>${info.packet==='reply'?'Reply packet':'Request packet'}</strong><span>Select to freeze it and see what it carries</span>`;
  else{const n=getNode(info.id),f=facilities.find(f=>f.id===info.id);if(!n&&!f){tip.hidden=true;return;}
-  tip.innerHTML=n?`<strong>${esc(n.id==='workstations'?'50 Windows 11 PCs':n.name)}</strong><code>${esc(n.address||'No network address · offline')}</code><span>${esc(n.role)}</span>`:`<strong>${esc(f.name)}</strong><span>${info.id==='core'?'Routing between VLANs · default deny':'Offline process · no network link'}</span>`;}
+  tip.innerHTML=n?`<strong>${esc(n.id==='workstations'?'50 Windows PCs':n.name)}</strong><code>${esc(n.address||'No network address · offline')}</code><span>${esc(n.role)}</span>`:`<strong>${esc(f.name)}</strong><span>${info.id==='core'?'Routing between VLANs · default deny':'Offline process · no network link'}</span>`;}
  tip.hidden=false;tip.dataset.w=tip.offsetWidth;tip.dataset.h=tip.offsetHeight;placeTip(tip,info);
 }
 function placeTip(tip,info){

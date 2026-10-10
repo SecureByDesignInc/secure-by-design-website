@@ -1,7 +1,7 @@
 SECURE BY DESIGN
-BUILD THE IDENTITY FOUNDATION
-Windows Server 2025 - DC01 and DC02
-Course 1.1 | Materials edition 0.5 | Updated 9 October 2026
+PROMOTE PRIMARY & SECONDARY DOMAIN CONTROLLER
+Windows Server - DC01 and DC02
+Course 1.1 | Materials edition 0.6 | Updated 9 October 2026
 © 2026 Secure By Design Team LLC.
 
 1. Extract this entire folder from the ZIP.
@@ -15,12 +15,13 @@ Course 1.1 | Materials edition 0.5 | Updated 9 October 2026
    as text.
 
 WORKBOOK AND NOTICES
-The 12-page workbook includes foundations (including the ports a domain
-member needs), configuration steps, domain health checks, evidence
-questions, and Notices and permissions on page 12. QR codes open the
-matching steps in Inside the Network. DNS is taught in course 1.2.
-The table of contents links directly to each section. The guide footer links
-to notices.html, which includes the rights notice and software license link.
+The 13-page workbook includes foundations (including where the controllers
+live and the ports a domain member needs), configuration steps, domain
+health checks, evidence questions, and Notices and permissions on page 13.
+QR codes open the matching views in Inside the Network. DNS is taught in
+course 1.2. The table of contents links directly to each section. The guide
+footer links to notices.html, which includes the rights notice and software
+license link.
 
 INCLUDED
 index.html                            Interactive lesson and 3D network
@@ -30,7 +31,8 @@ Verification-Commands.txt              Read-only configuration checks
 lesson.json                           Shared chapter content
 notices.html                          Copyright and third-party notices
 THREE-LICENSE.txt                      License for the bundled 3D library
-guide-share.js / guide-share.css       Optional end-of-guide sharing controls
+account-progress.js                   Account progress on the website (online only)
+package-manifest.json                 File list with sizes and checksums
 
 The lesson code and 3D assets are bundled without external dependencies. The workbook links
 need the files to stay beside index.html. Source links and links to the
@@ -38,10 +40,11 @@ website need an internet connection. Some mobile file viewers restrict local HTM
 open it in a full browser or use the published guide on securebydesigninc.com.
 
 The lesson uses sample names and addresses (sbd.test, 10.0.10.10 and
-10.0.10.11) and steps based on Microsoft documentation. It has not been
-tested on your Windows Server environment, so check each result yourself.
-The recorded walkthrough is coming soon; the video panel says so until then.
-Progress in this downloaded copy stays in your browser. Nothing is uploaded.
+10.0.10.11 on VLAN 10, gateway 10.0.10.1) and steps based on Microsoft
+documentation. It has not been tested on your Windows Server environment,
+so check each result yourself. The recorded walkthrough is coming soon; the
+video panel says so until then. Progress in this downloaded copy stays in
+your browser. Nothing is uploaded.
 
 The scene illustrates chapter states. It does not connect to your VMs, run
 commands, or validate your server configuration. Completion records your

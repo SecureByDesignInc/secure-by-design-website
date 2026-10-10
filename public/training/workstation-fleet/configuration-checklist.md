@@ -1,22 +1,22 @@
 # Bring in the fleet — configuration checklist
 
-Secure By Design · Edition 1.3 · 8 October 2026
+Secure By Design · Edition 1.4 · 9 October 2026
 
 Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.
 
 ## Before you start
 
 - [ ] Complete courses 1.4–1.6: working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline, on the network's routed, segmented VLANs.
-- [ ] Prepare a patched Windows 11 reference image (or template) for the fifty endpoints, obtained through the approved offline media process.
-- [ ] Confirm the Workstations OU, the container redirects from course 1.3, and the Defense Information Systems Agency (DISA) Windows 11 Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) from the course 1.3 package are ready to link.
+- [ ] Prepare a patched Windows reference image (or template) for the fifty endpoints, obtained through the approved offline media process.
+- [ ] Confirm the Workstations OU, the container redirects from course 1.3, and the Defense Information Systems Agency (DISA) Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) for your Windows client release, from the course 1.3 package, are ready to link.
 - [ ] Confirm the VLAN 80 access switch supports 802.1X port authentication, including a monitor (audit) mode that logs each result without blocking traffic. No new server is needed: the Network Policy Server (NPS) role goes on SBD-DHCP01.
 
 ## Prepare the fleet rollout
 
-- [ ] Finalize the Windows 11 reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.
+- [ ] Finalize the Windows reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.
 - [ ] Write the naming and rollout plan: SBD-PC01–SBD-PC50, addressed by the course 1.5 DHCP scope, joined in waves (pilot of three, then batches) rather than all fifty at once.
 - [ ] Create a dedicated domain-join account delegated only the create-computer-objects right on the Workstations OU — no broader privilege rides along with fifty join operations. The course 1.3 redirect already guarantees machines land in that OU.
-- [ ] Link the DISA Windows 11 STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that Windows 11's own secure defaults will already satisfy some checks, just as Server 2025 did.
+- [ ] Link the DISA Windows client STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that the Windows client's own secure defaults will already satisfy some checks, just as Windows Server's did.
 - [ ] Create the workstation firewall GPO (SBD Workstation Firewall in this sample) on the Workstations OU: Windows Defender Firewall on for every profile with inbound traffic blocked by default, and inbound rules that allow SMB (TCP 445), Remote Desktop (TCP 3389), and remote management (TCP 5985–5986) only from SBD-ADMIN-PC01 at 10.0.60.30 — course 1.8 adds SBD-NESSUS01 for credentialed scans. No rule allows SMB or Remote Desktop between workstations: traffic inside VLAN 80 never reaches the router, so this policy, not the core router's rules, enforces the register's peer denies.
 
 **Commands:**
@@ -147,7 +147,7 @@ Notes / result / date: __________________________
 
 ## Delta scan the fleet and hand off
 
-- [ ] Run the SCAP Compliance Checker (SCC) with the Windows 11 STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.
+- [ ] Run the SCAP Compliance Checker (SCC) with the Windows client STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.
 - [ ] Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (the new NPS role and a scope in daily use); attribute each delta to its lesson.
 - [ ] Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.8's management tooling will take ownership of keeping it current.
 - [ ] Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what course 1.8 builds next.
@@ -159,7 +159,7 @@ Get-ChildItem C:\Evidence\workstation-fleet -Recurse | Select-Object Name, LastW
 Get-FileHash -Algorithm SHA256 C:\Evidence\workstation-fleet\*
 ```
 
-**Verify:** Sampled endpoints hold dated Windows 11 baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.
+**Verify:** Sampled endpoints hold dated Windows client baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.
 
 **Evidence:** Finish the checklist: endpoint baselines, infrastructure rescans, the fleet inventory, and the handoff note to course 1.8.
 

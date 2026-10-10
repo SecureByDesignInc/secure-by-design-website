@@ -2008,20 +2008,6 @@
 .vc-training-top .vc-training-label {
   font-size: 10px;
 }
-.vc-training-top .vc-included-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid #a8dce0;
-  border-radius: 999px;
-  padding: 7px 10px;
-  color: #135567;
-  background: #e3f5f5;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0;
-}
 .vc-experience .vc-workbook-intro p {
   font-size: 12px;
   max-width: 350px;
@@ -2036,99 +2022,6 @@
 }
 .vc-tile-included {
   color: #b3e6eb;
-}
-
-.vc-training-share {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px 16px;
-  margin-top: 18px;
-  padding: 18px;
-  border: 1px solid #b8dfe4;
-  border-radius: 14px;
-  background: linear-gradient(120deg, #ecf8fa, #f8fbfd);
-  color: #163b52;
-}
-.vc-share-message {
-  flex: 1 1 230px;
-  min-width: 0;
-}
-.vc-training-share h5 {
-  margin: 0 0 6px;
-  color: #143d56;
-  font-size: 17px;
-  line-height: 1.4;
-  letter-spacing: -0.3px;
-}
-.vc-training-share p,
-.vc-training-share output {
-  margin: 0;
-  color: #406477;
-  font-size: 12px;
-  line-height: 1.65;
-}
-.vc-training-share .vc-share-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-shrink: 0;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid #145c76;
-  border-radius: 9px;
-  background: #155b76;
-  color: #fff;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.vc-training-share .vc-share-button:hover {
-  background: #10465c;
-}
-.vc-training-share .vc-share-button:disabled {
-  opacity: 0.65;
-  cursor: wait;
-}
-.vc-training-share :is(button, input):focus-visible {
-  outline: 3px solid #248bad;
-  outline-offset: 3px;
-}
-.vc-share-feedback,
-.vc-share-manual {
-  flex-basis: 100%;
-  min-width: 0;
-}
-.vc-share-feedback:empty {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-.vc-share-manual label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.vc-share-manual input {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  min-height: 44px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #86b9c7;
-  border-radius: 7px;
-  background: #fff;
-  color: #163b52;
-  font: inherit;
-  font-size: 12px;
 }
 
 /* RMF materials follow the Windows Server tile in the shared catalog. */
@@ -2200,20 +2093,6 @@
 
 /* Two clear format labels in every compact tile, without clipping long copy. */
 .vc-catalog-tile:not(.vc-tile-expanded) .vc-tile-status{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:36px}.vc-catalog-tile .vc-tile-status>span:last-child{order:-1}
-
-/* The introduction uses the same sharing behavior in a quiet text button. */
-.vc-training-share.vc-training-share-compact{display:block;margin:10px 0 0;padding:0;border:0;border-radius:0;background:none;color:#b7eef0}
-.vc-training-share-compact>.vc-share-button{justify-content:flex-start;max-width:100%;padding:7px 0;border:0;border-radius:4px;background:transparent;color:#b7eef0;font-size:13px;line-height:1.6;text-align:left;white-space:normal}
-.vc-training-share-compact>.vc-share-button:hover{background:transparent;color:#e4ffff;text-decoration:underline;text-underline-offset:4px}
-.vc-training-share-compact .vc-share-button svg{flex-shrink:0}
-.vc-training-share-compact .vc-share-feedback{display:block;color:#b7d4e3}
-.vc-training-share-compact .vc-share-manual{margin-top:8px;max-width:400px}
-.vc-training-share-compact :is(button,input):focus-visible{outline-color:#a7edf3}
-
-/* Closing invitations stay small and appear at the end of a guide. */
-.vc-training-share.vc-training-share-closing{padding:16px 20px;border-radius:10px;background:#edf7f9;gap:10px 18px}
-.vc-training-share-closing .vc-share-message{flex-basis:300px}
-.vc-training-share-closing .vc-share-message p{font-size:14px;line-height:1.7;color:#274d62}
 
 /* Course sequencing and lesson scaffolding (October 2026 structure update) */
 .vc-start-here{display:inline-block;margin-right:6px;padding:0 7px;border-radius:99px;background:#0d3a52;color:#9fe8f5;font-size:11px;font-weight:700;letter-spacing:.04em}
