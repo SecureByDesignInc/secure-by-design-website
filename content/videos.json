@@ -682,7 +682,7 @@
         "Privileged access",
         "Group Policy"
       ],
-      "platform": "Windows Server · Windows",
+      "platform": "Windows Server · Windows client",
       "systems": [
         "SBD-DHCP01",
         "AdminJumpBox01",
@@ -831,13 +831,13 @@
       "subtitle": "50 Windows endpoints, managed from first boot",
       "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
       "tags": [
-        "Windows",
+        "Windows client",
         "Domain join",
         "Windows LAPS",
         "Autoenrollment",
         "DISA STIG"
       ],
-      "platform": "Windows · Windows Server",
+      "platform": "Windows client · Windows Server",
       "systems": [
         "50 Windows PCs",
         "SBD-DHCP01",

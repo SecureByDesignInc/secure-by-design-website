@@ -116,7 +116,7 @@
       "evidencePrompt": "Record your VM names, OS builds, addresses, segment and gateway, time source, and any differences from the sample.",
       "checklist": [
         "I recorded the two distinct hostnames and static addresses.",
-        "I placed both servers on VLAN 10 and pointed SBD-DC02 at SBD-DC01.",
+        "I pointed SBD-DC02 at SBD-DC01 and confirmed the isolated network.",
         "I documented the time source and remaining prerequisites."
       ],
       "quiz": {
@@ -282,12 +282,12 @@
         ],
         [
           "Confirm the second layer",
-          "On each controller, confirm the network profile is DomainAuthenticated and Windows Defender Firewall is on for the Domain, Private, and Public profiles. A controller that reports the Public or Private profile is applying a different firewall rule set than the domain expects; find out why before you rely on it."
+          "On each controller, confirm the network profile is DomainAuthenticated and that the effective firewall policy is on for the Domain, Private, and Public profiles and blocks unsolicited inbound connections. A controller that reports the Public or Private profile is applying a different rule set than the domain expects; find out why before you rely on it."
         ]
       ],
       "commandLabel": "Read-only domain health checks",
-      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog\nnetdom query fsmo\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02\n# On each controller: network profile and host firewall\nGet-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory\nGet-NetFirewallProfile | Select-Object Name, Enabled",
-      "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with its firewall on. Save output with host, time, and interpretation; a command that ran is not a pass.",
+      "command": "dcdiag /s:SBD-DC01\ndcdiag /s:SBD-DC02\nrepadmin /replsummary\nrepadmin /showrepl *\nGet-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog\nnetdom query fsmo\nGet-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02\nGet-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory\nGet-NetFirewallProfile -PolicyStore ActiveStore |\n  Select-Object Name, Enabled, DefaultInboundAction",
+      "expected": "Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with every firewall profile on and inbound blocked by default. Save output with host, time, and interpretation; a command that ran is not a pass.",
       "mistake": "A successful ping proves only that an address answers. It doesn't show that the directory replicates, that SYSVOL is shared, or that a controller can authenticate anyone.",
       "network": "Follow a health check from the administration viewpoint to either controller, and switch the target to check the other. The arc between the controllers is the replication you confirm in both directions.",
       "control": {
@@ -302,7 +302,7 @@
       "checklist": [
         "I ran DCDiag against SBD-DC01 and SBD-DC02 separately.",
         "I confirmed replication succeeds in both directions.",
-        "I recorded each controller's roles, network profile, and firewall state, and the limits of these checks."
+        "I recorded each controller's roles and the limits of these checks."
       ],
       "quiz": {
         "prompt": "repadmin /replsummary reports no failures. What does that establish?",
@@ -355,7 +355,7 @@
       "command": "Get-ADDomain |\n  Select-Object DNSRoot, PDCEmulator, RIDMaster, InfrastructureMaster\nGet-ADForest |\n  Select-Object RootDomain, SchemaMaster, DomainNamingMaster",
       "expected": "The record identifies the actual role holders and links configuration decisions to dated test results. Open issues remain visible. Lesson completion records learning activity; it is not a system authorization decision.",
       "mistake": "A diagram becoming complete does not establish that your VM passed a check. The model tells the lesson story; your observations establish what happened in your environment.",
-      "network": "The identity foundation is complete for this course. Continue into the full network to see the services that later lessons can add.",
+      "network": "Both controllers are built and verified for this course. Continue into the full network to see the services that later lessons can add.",
       "control": {
         "id": "CM-2 / CM-6",
         "name": "Maintain the configuration and its evidence",
@@ -436,18 +436,18 @@
         ],
         [
           "Deny by default, allow by exception",
-          "The core denies every session between segments unless a documented rule permits it, and it logs what it denies. Domain members reach the controllers only for the services in \"What crosses the network?\" Replication between SBD-DC01 and SBD-DC02 stays inside VLAN 10, so the core never routes it."
+          "The core denies every session between segments unless a documented rule permits it, and logs what it denies. Members reach the controllers only for name resolution (course 1.2), the services in \"What crosses the network?\", and course 1.8's credentialed scans. Traffic between the two controllers stays inside VLAN 10, so the core never routes it."
         ],
         [
           "Only Tier 0 manages a controller",
-          "Remote Desktop and PowerShell remoting to a controller are allowed only from the Tier 0 administration host, AdminJumpBox01 on VLAN 60, which course 1.5 builds. Until it exists, manage both controllers from the virtual machine console. Workstations and member servers can't open a management session to a controller, even with valid credentials."
+          "From other segments, Remote Desktop, PowerShell remoting, and AD Web Services reach a controller only from AdminJumpBox01, the Tier 0 host on VLAN 60 that course 1.5 builds; until then, use the VM console. Members still reach SMB and RPC, which can carry administration too, so Tier 0 accounts never sign in to them."
         ],
         [
           "Two layers, and no internet",
-          "Windows Defender Firewall stays on in every profile, so traffic a mistaken core rule lets through still meets a filter on the controller. Leave Remote Desktop off until the Tier 0 host exists, then accept it only from that host. No segment has a route to the internet: controllers never browse, download, or update from outside, and approved media is the only way in."
+          "Windows Defender Firewall stays on in every profile and blocks what no rule allows, so an unopened port stays closed even if a core rule is wrong. Keep Remote Desktop off. The directory, remoting, and AD Web Services rules accept any address until course 1.5 limits the management rules to the Tier 0 host, so until then the core decides who reaches them. No segment routes to the internet; approved media is the only way in."
         ]
       ],
-      "takeaway": "A controller's segment is part of its security: VLAN 10 for controllers only, default deny at the core, management only from Tier 0, and a host firewall behind it all.",
+      "takeaway": "A controller's segment is part of its security: VLAN 10 for controllers only, default deny at the core, management only from Tier 0, and the host firewall on in every profile.",
       "prompt": "A workstation on VLAN 80 can open Remote Desktop to SBD-DC01. Which two layers failed, and where would you look first?",
       "sources": [
         "dc-security",
@@ -457,7 +457,7 @@
       "model": {
         "href": "https://securebydesigninc.com/inside-the-network#vlan=10",
         "label": "VLAN 10",
-        "text": "The domain controllers' segment, its two controllers, and every rule that reaches them through the core."
+        "text": "The domain controllers' segment, with its boundary, both controllers and their addresses, and the controls that apply."
       }
     },
     {
@@ -558,7 +558,7 @@
           ]
         ]
       },
-      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rules F02, F03, and F09 permit this profile for domain members, with LDAP signing and channel binding required, and rule A01 limits administration to the Tier 0 host. Everything else is denied.",
+      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rules F02, F03, and F09 permit this profile for domain members, with LDAP signing and channel binding required, and rule A01 limits administration to the Tier 0 host. Name resolution (F01) and credentialed scanning (F15) have their own rules; everything else is denied.",
       "prompt": "A workstation gets Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
       "sources": [
         "ports",

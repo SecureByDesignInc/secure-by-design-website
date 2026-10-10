@@ -99,7 +99,7 @@ test('the training has no share controls, and the 1.1 guide offers the same sing
 });
 
 test('training content names Windows releases without version numbers', () => {
-  const release = /Windows Server 20\d\d|Server 20\d\d|Windows 1[01]\b|\b2[0-9]H[12]\b/;
+  const release = /Windows Server 20\d\d|Server 20\d\d|Windows 1[01]\b|\b2[0-9]H[12]\b/i;
   // Microsoft's own page titles and addresses keep their wording.
   const strings = (value, key = '') => {
     if (key === 'url' || (key === 'title' && typeof value === 'string' && value.startsWith('Microsoft · '))) return [];

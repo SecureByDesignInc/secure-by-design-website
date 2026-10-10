@@ -132,7 +132,7 @@
         {
           "name": "AD Web Services",
           "port": "TCP 9389",
-          "note": "Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations."
+          "note": "Used by Active Directory PowerShell and Administrative Center from the Tier 0 administration host (rule A01), not user workstations."
         }
       ],
       "controls": [
@@ -205,7 +205,7 @@
         {
           "name": "AD Web Services",
           "port": "TCP 9389",
-          "note": "Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations."
+          "note": "Used by Active Directory PowerShell and Administrative Center from the Tier 0 administration host (rule A01), not user workstations."
         }
       ],
       "controls": [
@@ -1609,7 +1609,7 @@
     {
       "service": "AD Web Services",
       "transport": "TCP 9389",
-      "meaning": "Active Directory PowerShell and Administrative Center. Needed from administration hosts, not user workstations."
+      "meaning": "Active Directory PowerShell and Administrative Center. Needed from the Tier 0 administration host, not user workstations."
     },
     {
       "service": "SMB",

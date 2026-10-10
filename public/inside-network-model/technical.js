@@ -94,7 +94,7 @@ const domainControllerServices=[
  service('Group Policy and SYSVOL','SMB · TCP 445'),
  service('RPC services','TCP 135 · dynamic TCP 49152–65535','NetLogon, LSA, and SAM use the dynamic range after the endpoint mapper.'),
  service('Domain time','W32Time · UDP 123','Members follow the domain time hierarchy.'),
- service('AD Web Services','TCP 9389','Used by Active Directory PowerShell and Administrative Center from administration hosts, not user workstations.')
+ service('AD Web Services','TCP 9389','Used by Active Directory PowerShell and Administrative Center from the Tier 0 administration host (rule A01), not user workstations.')
 ];
 export const technical={
  dc1:{purpose:'Find services, authenticate identities, and answer directory requests.',services:domainControllerServices,depends:['dc2'],dependencyText:'Check DNS, time, replication, and recovery design together. SBD-DC01 holds the PDC emulator role in this design: it is the domain\'s authoritative time source, serving time from its own clock, and every other domain member syncs from the domain controllers (F09).',verify:['DNS and directory discovery from a client.','Replication health and protected restore procedures.'],source:'ad'},
@@ -126,7 +126,7 @@ export const protocols=[
  ['Group Policy and SYSVOL','TCP 445','Domain members read policies and scripts from domain controller shares over SMB; Group Policy also uses LDAP and RPC.','services'],
  ['RPC services','TCP 135 · TCP 49152–65535','Endpoint mapper, then the dynamic range for NetLogon, LSA, and SAM.','ad'],
  ['Domain time','UDP 123','W32Time. Domain members follow the domain time hierarchy.','ad'],
- ['AD Web Services','TCP 9389','Active Directory PowerShell and Administrative Center. Needed from administration hosts, not user workstations.','services'],
+ ['AD Web Services','TCP 9389','Active Directory PowerShell and Administrative Center. Needed from the Tier 0 administration host, not user workstations.','services'],
  ['SMB','TCP 445','Client request to the file service.','ad'],
  ['WSUS metadata','HTTPS 8531','TLS metadata connection.','wsus'],
  ['WSUS content','HTTP 8530','Signed payloads use the separate content connection.','wsus'],

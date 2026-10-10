@@ -226,7 +226,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
    officeDesks3D.push({desk,person,screen,x,z});equipment.contact(x,z+1.2,7.4,6.4);});
   const [ax,az]=officeDesks[activeDesk];
   addObject('workstations',{group:g,dimensions:[37,6,25],center:new THREE.Vector3(0,3,0),anchor:new THREE.Vector3(ax-officeCenter.x,4.55,az-officeCenter.z-.7),fadeKey:'office',zone:'office',color:officeColor,
-   fitBox:new THREE.Box3(new THREE.Vector3(-27,0,16),new THREE.Vector3(13,7,44)),labelOffset:new THREE.Vector3(ax-officeCenter.x,6.8,az-officeCenter.z),title:'50 WINDOWS 11 PCs'});
+   fitBox:new THREE.Box3(new THREE.Vector3(-27,0,16),new THREE.Vector3(13,7,44)),labelOffset:new THREE.Vector3(ax-officeCenter.x,6.8,az-officeCenter.z),title:'50 WINDOWS PCs'});
  }
  {const g=new THREE.Group();g.position.set(idfPosition[0],0,idfPosition[1]);g.userData.fadeKey='idf';physical.add(g);equipment.idf(g);equipment.contact(idfPosition[0],idfPosition[1],5.6,5);
   equipment.cable(physical,[[idfPosition[0],9.05,idfPosition[1]],[idfPosition[0],11,idfPosition[1]],[idfPosition[0],H-.1,idfPosition[1]]],'#3f5c70',.07);}

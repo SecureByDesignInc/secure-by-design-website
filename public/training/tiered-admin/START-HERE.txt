@@ -1,6 +1,6 @@
 SECURE BY DESIGN
 ADDRESSING AND TIERED ADMINISTRATION
-Windows Server · Windows - DHCP, admin seats & where privilege may sign in
+Windows Server · Windows client - DHCP, admin seats & where privilege may sign in
 Course 1.5 | Materials edition 1.4 | Updated 9 October 2026
 © 2026 Secure By Design Team LLC.
 

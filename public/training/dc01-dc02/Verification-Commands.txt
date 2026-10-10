@@ -35,11 +35,11 @@ repadmin /showrepl *
 Get-ADDomainController -Filter * | Select-Object HostName, IsGlobalCatalog
 netdom query fsmo
 Get-SmbShare -Name SYSVOL,NETLOGON -CimSession SBD-DC02
-# On each controller: network profile and host firewall
 Get-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory
-Get-NetFirewallProfile | Select-Object Name, Enabled
+Get-NetFirewallProfile -PolicyStore ActiveStore |
+  Select-Object Name, Enabled, DefaultInboundAction
 
-Expected observations: Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with its firewall on. Save output with host, time, and interpretation; a command that ran is not a pass.
+Expected observations: Each controller passes its DCDiag tests, or every failure has a recorded cause. Replication shows recent successful attempts in both directions and no failures. Both controllers are global catalogs, SBD-DC01 holds the five operations master roles, SYSVOL and NETLOGON are shared on both, and each controller reports the DomainAuthenticated profile with every firewall profile on and inbound blocked by default. Save output with host, time, and interpretation; a command that ran is not a pass.
 
 Leave a build someone else can understand
 Get-ADDomain |

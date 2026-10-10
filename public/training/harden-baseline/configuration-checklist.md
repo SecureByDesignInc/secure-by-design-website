@@ -54,7 +54,7 @@ Notes / result / date: __________________________
 ## Capture the pre-hardening baseline
 
 - [ ] On each domain controller, run SCC with the Windows Server STIG benchmark for your release and the directory-related content staged for this course. Save each session's results with the host name and date.
-- [ ] Open the results and read, don't just count. Note which checks already pass: current Windows Server releases ship with defaults such as required signing on outbound SMB connections and LDAP sealing on new deployments, so part of the STIG is green before you touch anything.
+- [ ] Open the results and read, don't just count. Note which checks already pass: the newest Windows Server release ships with defaults such as required signing on outbound SMB connections and LDAP sealing on new deployments, so part of the STIG is green before you touch anything.
 - [ ] Separate the automated results from the manual checks. SCAP answers what a scanner can read; items marked for manual review go to STIG Viewer for a human answer in lesson 5.
 - [ ] Store the raw result files unmodified, with recorded hashes. The baseline is evidence; a cleaned-up copy is a summary, not the record.
 
