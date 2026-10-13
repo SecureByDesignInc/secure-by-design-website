@@ -30,7 +30,8 @@
       "description": "Promote the primary and secondary domain controllers on Windows Server, place them on their own network segment, verify the domain's health, and keep a record of the build.",
       "tags": [
         "Windows Server",
-        "Active Directory"
+        "Active Directory",
+        "DNS"
       ],
       "youtubeId": null,
       "systems": [

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import EpisodeExperience from './episode-experience';
 import CourseExperience from './course-experience';
+import CatalogSequenceGrid from './catalog-sequence';
 import type { CatalogEntry, Library } from './catalog-types';
 import {
   filterEpisodes,
@@ -315,9 +316,13 @@ export default function VideoHub({ library }: { library: Library }) {
             </button>
           )}
         </div>
-        {groups.map(group => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
-          <div className="vc-category-heading"><div><h3 id={`category-${group.id}`}>{group.title}</h3><p>{group.description}</p></div><span>{group.entries.length} course{group.entries.length === 1 ? '' : 's'}</span></div>
-          <div className="vc-catalog-grid">
+        {groups.map((group, groupIndex) => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
+          {groupIndex > 0 && <p className="vc-path-next">
+            <ArrowDown size={15} aria-hidden="true" />
+            <span>Then continue to {group.title}</span>
+          </p>}
+          <div className="vc-category-heading"><div><h3 id={`category-${group.id}`}>{group.title}</h3><p>{group.description}{group.entries.length > 1 && <span className="vc-sr-only"> Take these courses in order.</span>}</p></div><span>{group.entries.length} course{group.entries.length === 1 ? '' : 's'}</span></div>
+          <CatalogSequenceGrid>
           {group.entries.map((episode) => (
             <EpisodeTile
               key={episode.id}
@@ -330,7 +335,7 @@ export default function VideoHub({ library }: { library: Library }) {
               }
             />
           ))}
-          </div>
+          </CatalogSequenceGrid>
         </section>)}
         {matches.length === 0 && (
           <div className="vc-catalog-empty">

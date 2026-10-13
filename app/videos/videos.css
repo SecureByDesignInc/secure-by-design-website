@@ -2145,3 +2145,64 @@
   .vc-checklist-sources a{color:inherit;text-decoration:none}
   .vc-checklist-sources a::after{content:" (" attr(href) ")";font-size:11px;overflow-wrap:anywhere}
 }
+
+/* Sequence arrows between catalog tiles (catalog-sequence.tsx) — October 13, 2026 */
+.vc-sequence-grid {
+  position: relative;
+}
+.vc-sequence-arrows {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+}
+.vc-sequence-badge {
+  fill: #0b2131;
+  stroke: #6594a9;
+  stroke-width: 1.5;
+  paint-order: stroke;
+}
+.vc-sequence-chevron path {
+  fill: none;
+  stroke: #91dfeb;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vc-sequence-path {
+  fill: none;
+  stroke: #4f7f96;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+}
+.vc-path-next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: -14px 0 6px;
+  color: #a8cfde;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.vc-path-next svg {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 5px;
+  border: 1.5px solid #6594a9;
+  border-radius: 50%;
+  background: #0b2131;
+  color: #91dfeb;
+}
+@media print {
+  .vc-sequence-arrows {
+    display: none;
+  }
+}
