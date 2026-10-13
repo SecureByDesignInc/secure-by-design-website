@@ -405,3 +405,12 @@ The owner asked for an indicator between every catalog tile so learners can see 
 - **Arrows.** Each learning path's grid is `CatalogSequenceGrid` (`app/videos/catalog-sequence.tsx`). It measures the tiles and draws, in an `aria-hidden` SVG layer, a circular chevron badge between each consecutive pair: across the column gap when the next tile is beside, down the row gap when it is below (phones, or after an expanded tile), and a dashed return path ending in a down badge when a row wraps. It re-measures on resize, tile changes and expansion, so it follows every column count, search results and the expanded tile. Tile sizes and the grid gap are unchanged. Screen readers get "Take these courses in order." in each path heading.
 - **Between paths.** When both paths are shown, a "Then continue to <path>" line with a down arrow sits above the second path's heading.
 - **Course 1.1 tags:** Windows Server, Active Directory, DNS.
+
+## Membership options are "Coming soon" only — October 13, 2026
+
+The owner asked that no membership specifics be public: every membership detail falls under one "Coming soon" statement. This supersedes the membership notes above (Membership plans, Scenario A, Guided portfolio track and add-ons hidden) and, for display, the October 5 note to show the authenticated Community status in My Account.
+
+- **My Account → Membership options** (`app/memberships/plans.tsx`) shows only the heading, a "Coming soon" badge, "Membership details will be shared here when they're ready.", a link to the Training Library, and the note from Secure By Design. No plan names, prices, features, billing toggle, statuses or details panel.
+- **No membership summary card** above it (the Community status card is gone from `progress-dashboard.tsx`). The homepage's next-step section says only "Memberships are coming soon."
+- `content/membership-plans.json` now holds just `creatorNote` (also used by the homepage), `comingSoon` and `comingSoonDetail`. The previous plan copy (Community, Builder, Guided with prices, features and billing) is kept unpublished in `archive/membership-drafts-2026-10-13.json`; the October 9 drafts stay in `archive/membership-drafts-2026-10-09.json`. Don't publish either until the owner asks. `tests/membership-plans.test.mjs` checks this.
+- Unchanged: automatic Community enrollment in the database, the sign-in and email-verification disclosures that record it, account deletion, and the privacy policy, which describe what the site actually stores.

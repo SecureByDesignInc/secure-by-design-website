@@ -1,17 +1,24 @@
-// Owner request, 9 October 2026: the Guided portfolio track and the add-ons are not ready to be public.
+// Owner requests: 9 October 2026, the Guided portfolio track and the add-ons are not ready to be public;
+// 13 October 2026, no membership specifics are public at all — everything sits under one "Coming soon".
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 
-test('the membership options leave out the portfolio track and add-ons until the owner publishes them', () => {
+test('membership options show one "Coming soon" statement and no plan specifics', () => {
   const catalog = JSON.parse(read('content/membership-plans.json'));
-  assert.equal(catalog.portfolioTrack, undefined, 'portfolio track copy is not published');
-  assert.equal(catalog.addOns, undefined, 'add-on copy is not published');
-  assert.deepEqual(catalog.plans.map(plan => plan.id), ['community', 'builder', 'guided']);
-  assert.doesNotMatch(read('app/memberships/plans.tsx'), /portfolioTrack|addOns|membership-extra/);
-  const drafts = JSON.parse(read('archive/membership-drafts-2026-10-09.json'));
-  assert.equal(drafts.portfolioTrack.phases.length, 4, 'the portfolio track draft is kept, unpublished');
-  assert.equal(drafts.addOns.items.length, 2, 'the add-on drafts are kept, unpublished');
+  assert.deepEqual(Object.keys(catalog).sort(), ['comingSoon', 'comingSoonDetail', 'creatorNote']);
+  assert.equal(catalog.comingSoon, 'Coming soon');
+  const published = [read('content/membership-plans.json'), read('app/memberships/plans.tsx'), read('app/template-home.tsx'), read('app/my-progress/progress-dashboard.tsx')].join('\n');
+  assert.doesNotMatch(published, /\$\d|Builder|Guided|founding|per month|\/month|annual|quarter/i, 'no plan names, prices or billing are published');
+  assert.doesNotMatch(read('app/my-progress/progress-dashboard.tsx'), /reader-membership-summary/, 'no membership summary card');
+});
+
+test('the earlier plan copy stays archived, unpublished', () => {
+  const drafts = JSON.parse(read('archive/membership-drafts-2026-10-13.json'));
+  assert.deepEqual(drafts.plans.map(plan => plan.id), ['community', 'builder', 'guided']);
+  const earlier = JSON.parse(read('archive/membership-drafts-2026-10-09.json'));
+  assert.equal(earlier.portfolioTrack.phases.length, 4, 'the portfolio track draft is kept, unpublished');
+  assert.equal(earlier.addOns.items.length, 2, 'the add-on drafts are kept, unpublished');
 });
