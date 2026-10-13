@@ -1,0 +1,279 @@
+{
+  "id": "harden-baseline",
+  "hero": {
+    "title": "Harden the",
+    "accent": "baseline.",
+    "text": "Design the organizational unit structure, apply the DISA STIG Group Policy package to SBD-DC01 and SBD-DC02 on Windows Server, and prove the result with before-and-after SCAP scans. Follow the build, measure the change, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "STIG + SCAP"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-DC01",
+      "10.0.10.10 / 24"
+    ],
+    [
+      "SBD-DC02",
+      "10.0.10.11 / 24"
+    ],
+    [
+      "VLAN 10",
+      "Domain controllers · 10.0.10.0/24"
+    ],
+    [
+      "Top-level OU",
+      "OU=SBD,DC=sbd,DC=test"
+    ],
+    [
+      "OUs inside SBD",
+      "Servers · Workstations · Users · Groups · Admin"
+    ],
+    [
+      "Domain controllers",
+      "Built-in Domain Controllers OU, unchanged"
+    ]
+  ],
+  "scene": {
+    "tag": "DOMAIN CONTROLLERS · VLAN 10",
+    "label": "Interactive 3D lesson network showing SBD-DC01 and SBD-DC02 on VLAN 10 receiving the DISA STIG policies, with SCAP scans before and after hardening from an administration viewpoint.",
+    "completeStatus": "HARDENED BASELINE",
+    "completeCaption": "Both controllers apply the imported DISA policies through the Domain Controllers OU. Matched before-and-after scans, an owned exception record and a quarterly and change-driven rescan cadence keep the hardening measurable.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Built in course 1.1 and left in the built-in Domain Controllers OU. It receives the DISA domain-controller policies linked there and is scanned before and after hardening; the new OUs, central store and GPOs replicate with SBD-DC02."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second controller, also in the built-in Domain Controllers OU. It applies the same linked policies and gets its own baseline scan and rescan, so each host’s results are compared separately."
+      },
+      {
+        "id": "scans",
+        "name": "SCAP SCANS",
+        "sub": "Administration viewpoint",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 1,
+        "button": "SCAP scans",
+        "title": "SCAP scans · Administration viewpoint",
+        "description": "The administrative host where lesson 2 installs SCC and STIG Viewer from verified media. The scan results, checklists, before-and-after comparison, GPO reports and backups are kept from here as evidence."
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          0,
+          3,
+          4,
+          5
+        ],
+        "label": "OU and GPO replication",
+        "twoWay": true
+      },
+      {
+        "from": "scans",
+        "to": "dc1",
+        "lessons": [
+          2,
+          4
+        ],
+        "label": "SCAP scan · SBD-DC01"
+      },
+      {
+        "from": "scans",
+        "to": "dc2",
+        "lessons": [
+          2,
+          4
+        ],
+        "label": "SCAP scan · SBD-DC02"
+      },
+      {
+        "from": "scans",
+        "to": "dc1",
+        "lessons": [
+          5
+        ],
+        "label": "GPO reports and backup"
+      }
+    ]
+  },
+  "lessons": {
+    "ou-design": {
+      "short": "Design the OUs",
+      "tag": "01 / DESIGN",
+      "status": "OU STRUCTURE",
+      "stepTitles": [
+        "Design the OUs around administration",
+        "Create protected OUs with a recorded purpose",
+        "Redirect the default Computers and Users containers",
+        "Keep privileged accounts and systems separate"
+      ],
+      "mistake": "Shaping the OUs like the org chart produces a tree that no policy or delegation follows. Leaving the default Computers container in place is the quieter mistake: a newly joined machine gets only domain-level policy and never sees the OU-linked hardening.",
+      "network": "Both controllers are live on VLAN 10. The new OUs are directory objects, so they replicate between SBD-DC01 and SBD-DC02; the controllers themselves stay in the built-in Domain Controllers OU.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Prepare → Implement",
+        "body": "OUs are the boundaries delegation is granted on. Designing them around who administers what lets later courses give each administrator only the OUs they need, and keeps the Admin OU’s privileged identities apart from everything else.",
+        "question": "For each OU, who administers its contents, and what could they change if the delegation were drawn one level higher?"
+      },
+      "checklist": [
+        "I created the planned OUs with accidental-deletion protection and recorded each one’s purpose and administrator.",
+        "I redirected the default Computers and Users containers and confirmed the new locations with Get-ADDomain.",
+        "I confirmed both domain controllers are still in the built-in Domain Controllers OU."
+      ]
+    },
+    "staging": {
+      "short": "Stage the tooling",
+      "tag": "02 / STAGE",
+      "status": "TOOLING STAGED",
+      "stepTitles": [
+        "Download the DISA package and tools",
+        "Hash every file, then carry it on approved media",
+        "Compare every hash inside the lab",
+        "Install the tools and record versions"
+      ],
+      "mistake": "Hashing only on the lab side proves nothing: without the value recorded on the connected side, there is nothing to compare against. A mismatch or a missing hash means the file stays unopened and the transfer is repeated.",
+      "network": "Nothing crosses the network in this lesson: the content arrives on approved removable media, never over a live link. The administration viewpoint lights up with SCC and STIG Viewer installed; the controllers are unchanged.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement",
+        "body": "Hashes recorded on both sides of the boundary are the integrity check for software and content entering the lab. Verifying before anything is opened means the tools that will judge the controllers are the ones that were reviewed.",
+        "question": "If a hash did not match, what would your record need to show about the media, the file and the repeated transfer?"
+      },
+      "checklist": [
+        "I recorded SHA-256 hashes on the connected side and compared every one in the lab before opening anything.",
+        "I recorded the GPO package’s quarterly release and the SCC and STIG Viewer versions.",
+        "I kept the transfer record with file names, both hash sets, media custody and the date."
+      ]
+    },
+    "baseline": {
+      "short": "Capture the baseline",
+      "tag": "03 / MEASURE",
+      "status": "BASELINE SCAN",
+      "stepTitles": [
+        "Scan each controller with the STIG benchmark",
+        "Read the results and note the OS defaults",
+        "Separate automated results from manual checks",
+        "Store the raw results with hashes"
+      ],
+      "mistake": "Skipping the baseline, or keeping only a tidied summary of it, leaves the rescan with nothing honest to compare against. Counting the operating system’s default passes as your own hardening has the same effect: the record no longer shows what you changed.",
+      "network": "A SCAP scan runs against each controller on VLAN 10 and its results are saved by host name and date. No DISA policy has been imported yet, so these results are the before picture.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess",
+        "body": "The baseline uses SCAP tooling to measure each controller against a published benchmark. Keeping the raw, hashed results with the benchmark and tool versions makes the scan repeatable and its results comparable later.",
+        "question": "Which passing checks come from the operating system’s defaults, and how will your record keep them apart from what your policies change?"
+      },
+      "checklist": [
+        "I saved a dated baseline result set for each controller, labelled with its host name.",
+        "I noted which checks already passed because of operating system defaults.",
+        "I listed the manual-review items and stored the raw results unmodified with recorded hashes."
+      ]
+    },
+    "apply": {
+      "short": "Import the DISA GPOs",
+      "tag": "04 / APPLY",
+      "status": "STIG POLICIES LINKED",
+      "stepTitles": [
+        "Stage the templates in the central store",
+        "Import DISA’s settings into named GPOs",
+        "Link the policies by OU and review precedence",
+        "Record deviations and confirm application"
+      ],
+      "mistake": "Setting a link to Enforced to make a policy win hides a precedence problem instead of solving it. Deleting a setting that does not fit the lab is the same kind of shortcut: the decision disappears where an assessor can’t see it.",
+      "network": "The central store and the imported GPOs live in SYSVOL and replicate between SBD-DC01 and SBD-DC02. The domain-controller policies link to the Domain Controllers OU, so both controllers apply them.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "The DISA package supplies the common secure configuration, and Group Policy applies it to the systems in each OU. Recording every deviation with its rationale documents the exception instead of hiding it in a silent edit.",
+        "question": "For each deviation, which setting does it depart from, why, and who owns that decision?"
+      },
+      "checklist": [
+        "I confirmed the central store serves the package’s ADMX and ADML templates.",
+        "I linked the imported GPOs to the intended OUs and saw them applying in gpresult.",
+        "I recorded every deviation with its rationale and owner instead of deleting the setting."
+      ]
+    },
+    "rescan": {
+      "short": "Rescan and reconcile",
+      "tag": "05 / VERIFY",
+      "status": "RESCAN · RECONCILE",
+      "stepTitles": [
+        "Rescan with the same benchmark and tool versions",
+        "Compare each host with its baseline",
+        "Populate the checklists and answer manual checks",
+        "Classify every remaining open item"
+      ],
+      "mistake": "Upgrading SCC or the benchmark between scans makes the comparison meaningless, because the checks themselves changed. Leaving an open item unexplained is the other common gap: each one ends the lesson as a finding, a deviation or a POA&M candidate.",
+      "network": "The scans return to both controllers on VLAN 10, now with the DISA policies applied. Each host’s rescan is compared with its own baseline.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The matched rescan, the populated checklists and the manual answers with observed evidence are assessment results. Classifying every open item shows the authorization path what is satisfied, what is a documented deviation and what needs a plan.",
+        "question": "Could an assessor reproduce each manual-check answer from the evidence you recorded with it?"
+      },
+      "checklist": [
+        "I rescanned both controllers with the same benchmark and SCC versions as the baseline.",
+        "I attributed each change from the baseline to the policy that caused it and checked for regressions.",
+        "I classified every remaining open item as a finding, a deviation or a POA&M candidate."
+      ]
+    },
+    "maintain": {
+      "short": "Set the rescan cadence",
+      "tag": "06 / MAINTAIN",
+      "status": "STANDING CADENCE",
+      "stepTitles": [
+        "Consolidate deviations into one exception list",
+        "Set the quarterly and change-driven rescan cadence",
+        "Export the reports and back up the GPO set",
+        "Write the handoff note"
+      ],
+      "mistake": "Treating the rescan as the finish line lets drift and new DISA releases go unnoticed. An exception list without owners and review dates becomes permanent by default.",
+      "network": "The hardened controllers stay on VLAN 10. The GPO reports and a backup of the GPO set are exported as evidence, and the next scan waits for the DISA quarter or the next significant change.",
+      "control": {
+        "id": "CA-7",
+        "name": "Continuous Monitoring",
+        "phase": "Monitor",
+        "body": "A set rescan frequency, event-driven triggers and named owners turn a one-time hardening into ongoing monitoring. The exported reports and GPO backup preserve the applied state for each review.",
+        "question": "Which change in the next course should trigger the first delta scan, and who owns it?"
+      },
+      "checklist": [
+        "I consolidated the deviations into one exception list with owners, risk notes and review dates.",
+        "I exported the GPO reports, backed up the GPO set and recorded the report hash.",
+        "I wrote down the quarterly and change-driven rescan triggers and the owner of the next review."
+      ]
+    }
+  }
+}

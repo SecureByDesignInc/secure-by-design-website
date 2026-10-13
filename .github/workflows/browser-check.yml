@@ -59,3 +59,11 @@ jobs:
         env:
           PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright
         run: node scripts/browser-check.mjs http://127.0.0.1:8787
+      - name: Keep the course guide screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guide-screens
+          path: guide-screens/
+          if-no-files-found: ignore
+          retention-days: 7

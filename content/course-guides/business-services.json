@@ -1,0 +1,228 @@
+{
+  "id": "business-services",
+  "hero": {
+    "title": "Stand up the",
+    "accent": "business services.",
+    "text": "Build the file, database, licensing, and internal web services on SBD-FS01, SBD-SQL01, SBD-APPS01, and SBD-WEB01 in VLAN 40, each reachable only by its documented service path. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": ["BUSINESS", "SERVICES", "", "VLAN 40"],
+  "sample": [
+    ["Domain", "sbd.test"],
+    ["VLAN 40 · Servers & data", "10.0.40.0 / 24"],
+    ["SBD-FS01", "10.0.40.10 / 24"],
+    ["SBD-SQL01", "10.0.40.20 / 24"],
+    ["SBD-APPS01", "10.0.40.30 / 24"],
+    ["SBD-WEB01 · Linux, Apache", "10.0.40.40 / 24"],
+    ["Access groups", "OU=Groups,OU=SBD,DC=sbd,DC=test"]
+  ],
+  "scene": {
+    "tag": "SERVERS & DATA · VLAN 40",
+    "label": "Interactive 3D lesson network showing SBD-FS01, SBD-SQL01, SBD-APPS01, and SBD-WEB01 on VLAN 40 with the fleet, SBD-NESSUS01, and the registered service paths between them.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "Four business services run on VLAN 40, each reachable only by its registered path: files from SBD-FS01, licensing and the application API on SBD-APPS01, HTTPS from SBD-WEB01, and a database that answers SBD-APPS01 alone.",
+    "nodes": [
+      {
+        "id": "fs",
+        "name": "SBD-FS01",
+        "sub": "10.0.40.10",
+        "kind": "server",
+        "row": "back",
+        "from": 1,
+        "button": "SBD-FS01",
+        "title": "SBD-FS01 · 10.0.40.10",
+        "description": "Serves the role-based shares to the fleet over SMB 445, with signing required on the server and encryption on the sensitive share. Access-based enumeration shows each user only what their roles permit."
+      },
+      {
+        "id": "sql",
+        "name": "SBD-SQL01",
+        "sub": "10.0.40.20",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-SQL01",
+        "title": "SBD-SQL01 · 10.0.40.20",
+        "description": "Runs the database engine as a group managed service account, with connections encrypted under its SBD Server Authentication certificate. SBD-APPS01 is its only caller; its host firewall refuses SBD-WEB01."
+      },
+      {
+        "id": "apps",
+        "name": "SBD-APPS01",
+        "sub": "10.0.40.30",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-APPS01",
+        "title": "SBD-APPS01 · 10.0.40.30",
+        "description": "The network’s one SQL consumer. Lesson 3 grants its application identity database access and proves its encrypted connection; lesson 4 builds its licensing service and the application API that SBD-WEB01 calls."
+      },
+      {
+        "id": "web",
+        "name": "SBD-WEB01",
+        "sub": "10.0.40.40",
+        "kind": "server",
+        "row": "back",
+        "from": 3,
+        "button": "SBD-WEB01",
+        "title": "SBD-WEB01 · 10.0.40.40",
+        "description": "Domain-joined Linux running Apache, hardened against DISA’s guidance and serving internal HTTPS with an SBD Server Authentication certificate. Its only back-end dependency is the application API on SBD-APPS01."
+      },
+      {
+        "id": "nessus",
+        "name": "SBD-NESSUS01",
+        "sub": "10.0.50.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-NESSUS01",
+        "title": "SBD-NESSUS01 · 10.0.50.20",
+        "description": "Built in course 1.8 on domain-joined Linux in VLAN 50. In lesson 5 it runs a credentialed scan of VLAN 40, so the four new hosts join the standing scan cadence."
+      },
+      {
+        "id": "fleet",
+        "name": "50 Windows PCs",
+        "sub": "10.0.80.100–199",
+        "kind": "fleet",
+        "row": "front",
+        "existing": true,
+        "button": "50 Windows PCs",
+        "title": "50 Windows PCs · 10.0.80.100–199",
+        "description": "Built in course 1.7. Users reach SBD-FS01’s shares, SBD-APPS01’s licensing port, and SBD-WEB01’s HTTPS page on their registered rows. SBD-SQL01 stays out of reach: the router denies the fleet on 1433."
+      }
+    ],
+    "flows": [
+      { "from": "fleet", "to": "fs", "lessons": [1, 4], "label": "SMB 445 · signed or encrypted", "twoWay": true },
+      { "from": "apps", "to": "sql", "lessons": [2, 3, 4], "label": "TCP 1433 with TLS · the only SQL caller", "twoWay": true },
+      { "from": "fleet", "to": "web", "lessons": [3, 4], "label": "HTTPS 443", "twoWay": true },
+      { "from": "web", "to": "apps", "lessons": [3, 4], "label": "Application API · HTTPS 443", "twoWay": true },
+      { "from": "fleet", "to": "apps", "lessons": [3, 4], "label": "Licensing · registered vendor port", "twoWay": true },
+      { "from": "nessus", "to": "fs", "lessons": [4], "label": "Credentialed scan of VLAN 40" }
+    ]
+  },
+  "lessons": {
+    "design": {
+      "short": "Design paths & identities",
+      "tag": "01 / DESIGN",
+      "status": "PATHS REGISTERED",
+      "stepTitles": [
+        "Write the business service-path rows",
+        "Register WEB01’s Linux maintenance rows",
+        "Choose managed service identities",
+        "Create the role-based access groups",
+        "Request the three server certificates"
+      ],
+      "mistake": "Writing only the permits. Without the explicit WEB01-to-SQL01 deny, nothing in the register records that the web tier has no database dependency — and because all four servers share VLAN 40, the router never sees that traffic, so SQL01’s host firewall rule has no row to point to.",
+      "network": "All four VLAN 40 servers are planned on the Servers & data segment, beside the existing fleet on VLAN 80 and SBD-NESSUS01 on VLAN 50. No service paths are live yet: this lesson writes the register rows they will follow.",
+      "control": {
+        "id": "AC-4",
+        "name": "Information Flow Enforcement",
+        "phase": "Prepare → Implement",
+        "body": "The register states which flows are approved before any service exists: fleet to web, web to the application API, and only the application tier to the database. Every host firewall rule and router permit built later enforces a row written here.",
+        "question": "Which row would you struggle to justify if a reviewer asked why that flow needs to exist?"
+      },
+      "checklist": [
+        "I wrote the service-path rows and WEB01’s repository and syslog rows, with SQL01 reachable only from APPS01 and an explicit WEB01-to-SQL01 deny.",
+        "I created the gMSAs and the per-share and per-application role groups under the Groups OU.",
+        "I recorded the certificate enrollments for SQL01, APPS01, and WEB01 from the SBD Server Authentication template."
+      ]
+    },
+    "fileserver": {
+      "short": "Build FS01 shares",
+      "tag": "02 / FILES",
+      "status": "FS01 SERVING FILES",
+      "stepTitles": [
+        "Create shares with role-group NTFS permissions",
+        "Enable access-based enumeration",
+        "Require SMB signing and encrypt the sensitive share",
+        "Test access and denial for two roles"
+      ],
+      "mistake": "Trusting the defaults. The newest Windows Server release requires SMB signing only for its own outbound connections, so SBD-FS01 does not require it from clients until you set RequireSecuritySignature in its SMB server configuration. Confirm it on a live connection, not just in the setting.",
+      "network": "SBD-FS01 is live on VLAN 40, and the fleet reaches it over SMB 445 on its registered row, signed or encrypted. The other three servers are still planned.",
+      "control": {
+        "id": "AC-3",
+        "name": "Access Enforcement",
+        "phase": "Implement → Assess",
+        "body": "NTFS permissions granted to role groups decide who can open each share, and access-based enumeration hides what a role cannot open. The two-role test shows enforcement in both directions: access granted, and access refused with a record in the pipeline.",
+        "question": "If a user changes jobs tomorrow, what single change moves their file access, and where is it recorded?"
+      },
+      "checklist": [
+        "I granted share and NTFS permissions to role groups only, with no named user in any ACL.",
+        "I confirmed RequireSecuritySignature is True on SBD-FS01 and checked Signed or Encrypted on a live connection from a fleet machine.",
+        "I tested two roles from fleet machines, saw each other’s shares stay invisible and denied, and found the denial in the pipeline."
+      ]
+    },
+    "database": {
+      "short": "Build SQL01",
+      "tag": "03 / DATABASE",
+      "status": "ONE CALLER · APPS01",
+      "stepTitles": [
+        "Install the engine under its gMSA",
+        "Bind the certificate and require encryption",
+        "Grant database roles to APPS01’s identity only",
+        "Prove one caller in and both refusals"
+      ],
+      "mistake": "Testing only the permitted connection. APPS01 connecting proves the permit; without the refused attempts from SBD-WEB01 and a fleet machine, and dropped-packet logging turned on in SQL01’s host firewall, nothing shows the one-caller rule is enforced.",
+      "network": "SBD-SQL01 is live, and SBD-APPS01’s application identity connects to it on TCP 1433 with TLS, the only registered SQL path. The refused attempts from SBD-WEB01, at SQL01’s host firewall, and from the fleet, at the router, are not permitted paths, so no flow is shown for them.",
+      "control": {
+        "id": "SC-8(1)",
+        "name": "Transmission Confidentiality and Integrity | Cryptographic Protection",
+        "phase": "Implement → Assess",
+        "body": "The SBD Server Authentication certificate bound to the instance, with encrypted connections required, protects every query between SBD-APPS01 and SBD-SQL01. The urlfetch check shows the chain validating against pki.sbd.test like every other certificate on this network.",
+        "question": "What evidence shows the connection is encrypted in practice, not only configured to be?"
+      },
+      "checklist": [
+        "I confirmed the database service runs as the gMSA.",
+        "I bound the server certificate, required encrypted connections, and recorded the certutil urlfetch output.",
+        "I recorded APPS01’s successful encrypted connection with the refused attempts from SBD-WEB01 and a fleet machine and their log entries."
+      ]
+    },
+    "apps-web": {
+      "short": "Build APPS01 and WEB01",
+      "tag": "04 / APPLICATIONS",
+      "status": "FULL CHAIN LIVE",
+      "stepTitles": [
+        "Build APPS01’s licensing service and application API",
+        "Join WEB01 to the domain and harden Apache",
+        "Serve HTTPS with the internal certificate",
+        "Prove the chain and the closed shortcuts"
+      ],
+      "mistake": "Pointing the web application straight at the database “just for now.” A connection string from WEB01 to SQL01 breaks the three-tier design, and SQL01’s host firewall refuses it anyway: the web tier reaches data only through the application API on SBD-APPS01.",
+      "network": "Every VLAN 40 service is live. The fleet reaches SBD-WEB01 on HTTPS 443 and SBD-APPS01 on its licensing port, SBD-WEB01 calls the application API on SBD-APPS01, and SBD-APPS01 alone queries SBD-SQL01.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement → Assess",
+        "body": "SBD-WEB01’s Apache configuration is hardened against DISA’s guidance, exported, and hashed, with the checklist items answered in STIG Viewer. The export records what the settings are, and the hash shows later whether they changed.",
+        "question": "Which hardening items did you mark not applicable or leave open, and is the reason for each written down?"
+      },
+      "checklist": [
+        "I verified APPS01’s licensing path from the fleet and its application API answering SBD-WEB01 over HTTPS.",
+        "I joined SBD-WEB01 to sbd.test with SSSD, pointed its packages at SBD-REPO01, and exported and hashed its hardened Apache configuration.",
+        "I loaded the HTTPS page from a fleet machine with a validating chain and recorded the refused WEB01-to-SQL01 attempt."
+      ]
+    },
+    "prove-scan": {
+      "short": "Reconcile and hand off",
+      "tag": "05 / VERIFY",
+      "status": "SERVICES COMPLETE",
+      "stepTitles": [
+        "Reconcile the full register against live behavior",
+        "Baseline the hosts and scan VLAN 40",
+        "Update inventory, register, and exceptions",
+        "Write the handoff to course 1.10"
+      ],
+      "mistake": "Stopping at the scan export. A credentialed scan of VLAN 40 only closes the course once each finding is triaged into one of the three classifications, and any service-hardening deviation you keep belongs in the exception record.",
+      "network": "All four VLAN 40 servers are live with every registered path shown, and SBD-NESSUS01 on VLAN 50 runs a credentialed scan of the segment. The adjacent denies, including WEB01 to SQL01, are probed and logged rather than drawn.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess → Monitor",
+        "body": "The credentialed scan from SBD-NESSUS01 covers every new VLAN 40 host, and triage turns its findings into decisions. With the SCAP baselines and WEB01’s config record, each service host enters the standing cadence with a current, assessable state.",
+        "question": "Which finding would you remediate before course 1.10 begins, and which can wait for the next scan cycle?"
+      },
+      "checklist": [
+        "I reconciled every VLAN 40 row with paired permit and deny proof, including WEB01 to SQL01.",
+        "I ran the SCAP baselines and WEB01’s config export, and triaged the VLAN 40 scan findings.",
+        "I updated the SBD-MGMT01 inventory, the register owners, and the exception record, and wrote the handoff note."
+      ]
+    }
+  }
+}

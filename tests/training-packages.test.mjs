@@ -85,7 +85,7 @@ test('the course 1.1 learning package matches its manifest and edition', () => {
 
 test('the training has no share controls, and the 1.1 guide offers the same single download', () => {
   assert.equal(existsSync(new URL('../app/videos/training-share.tsx', import.meta.url)), false);
-  for (const file of ['companion.tsx', 'video-hub.tsx', 'configuration-guide.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
+  for (const file of ['companion.tsx', 'video-hub.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
     assert.doesNotMatch(read(`app/videos/${file}`).toString(), /TrainingShare|training-share|Share2/, file);
   }
   for (const path of ['/training/dc01-dc02/index.html', '/training/rmf/index.html']) {

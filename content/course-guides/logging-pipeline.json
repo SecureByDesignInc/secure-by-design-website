@@ -1,0 +1,329 @@
+{
+  "id": "logging-pipeline",
+  "hero": {
+    "title": "See everything:",
+    "accent": "the logging pipeline.",
+    "text": "Build the collect → protect → analyze chain on SBD-SYSLOG01, SBD-AUDIT01, and SBD-SPLUNK01 before the fleet arrives, then trace one event from source to analyst. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "+ LINUX",
+    "",
+    "LOG PIPELINE"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-SYSLOG01",
+      "10.0.20.20 · VLAN 20 · collector"
+    ],
+    [
+      "SBD-AUDIT01",
+      "10.0.50.40 · VLAN 50 · repository"
+    ],
+    [
+      "SBD-SPLUNK01",
+      "10.0.50.10 · VLAN 50 · analysis"
+    ],
+    [
+      "Domain controllers",
+      "SBD-DC01 10.0.10.10 · SBD-DC02 10.0.10.11"
+    ],
+    [
+      "Admin hosts",
+      "VLAN 60 · 10.0.60.0/24 · the only management path"
+    ],
+    [
+      "Pipeline paths",
+      "WinRM 5985 · syslog UDP 514 · forwarder TCP 9997"
+    ]
+  ],
+  "scene": {
+    "tag": "LOGGING PIPELINE · VLAN 20 + 50",
+    "label": "Interactive 3D lesson network showing the domain controllers, administration hosts, and core router sending their records to SBD-SYSLOG01, which archives them to SBD-AUDIT01 and forwards them to SBD-SPLUNK01.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "Every existing source pushes its record to SBD-SYSLOG01; SBD-AUDIT01 keeps the hashed, protected copy, and SBD-SPLUNK01 answers three searches and one owned alert. Course 1.7’s fleet arrives to a pipeline already watching.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Built in course 1.1. Its Security log is at the heart of the first collection scope: lesson 2 reconciles its audit policy with the course 1.3 STIG values, and lesson 3 enrolls it as a source that pushes to the collector."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "Built in course 1.1 and audited by the same GPO as SBD-DC01. Its forwarded events keep the MachineName SBD-DC02, which is how the central copy shows where each record came from."
+      },
+      {
+        "id": "syslog",
+        "name": "SBD-SYSLOG01",
+        "sub": "10.0.20.20",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-SYSLOG01",
+        "title": "SBD-SYSLOG01 · 10.0.20.20",
+        "description": "The collector. Source-initiated Windows Event Forwarding brings the domain controller and admin-host events into Forwarded Events, and the core router’s denies arrive on its UDP 514 syslog intake. It reaches into no source."
+      },
+      {
+        "id": "audit",
+        "name": "SBD-AUDIT01",
+        "sub": "10.0.50.40",
+        "kind": "server",
+        "row": "back",
+        "from": 3,
+        "button": "SBD-AUDIT01",
+        "title": "SBD-AUDIT01 · 10.0.50.40",
+        "description": "The repository, on domain-joined Windows. Scheduled archives from the collector are hashed and cataloged on arrival, read only by a named auditors group, and deleted only by the documented retention process."
+      },
+      {
+        "id": "splunk",
+        "name": "SBD-SPLUNK01",
+        "sub": "10.0.50.10",
+        "kind": "server",
+        "row": "back",
+        "from": 4,
+        "button": "SBD-SPLUNK01",
+        "title": "SBD-SPLUNK01 · 10.0.50.10",
+        "description": "The analysis system, on domain-joined Linux. It indexes the collector’s two streams over the forwarder path for three searches and one alert with a named responder; the repository stays out of this flow."
+      },
+      {
+        "id": "admin",
+        "name": "ADMIN HOSTS",
+        "sub": "VLAN 60 · 10.0.60.0/24",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 1,
+        "button": "Admin hosts",
+        "title": "Admin hosts · 10.0.60.0/24",
+        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.5. Their sign-in events join the first collection scope, and they are the only place the pipeline’s three systems are managed from."
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc1",
+        "to": "syslog",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Event forwarding · WinRM 5985"
+      },
+      {
+        "from": "dc2",
+        "to": "syslog",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Event forwarding · WinRM 5985"
+      },
+      {
+        "from": "admin",
+        "to": "syslog",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Admin sign-in events · WinRM 5985"
+      },
+      {
+        "from": "core",
+        "to": "syslog",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Router deny log · syslog UDP 514"
+      },
+      {
+        "from": "syslog",
+        "to": "audit",
+        "lessons": [
+          3,
+          5
+        ],
+        "label": "Scheduled archive · SMB 445"
+      },
+      {
+        "from": "syslog",
+        "to": "splunk",
+        "lessons": [
+          4,
+          5
+        ],
+        "label": "Forwarder · TCP 9997"
+      }
+    ]
+  },
+  "lessons": {
+    "design": {
+      "short": "Design the pipeline",
+      "tag": "01 / DESIGN",
+      "status": "PIPELINE PLANNED",
+      "stepTitles": [
+        "Write each host’s role sentence",
+        "Scope the first collection",
+        "Decide retention, readers, and the no-delete rule",
+        "Add the pipeline’s register rows"
+      ],
+      "mistake": "Letting the analysis system double as the archive. If SBD-SPLUNK01 holds the only copy, anyone who can change its indexes or searches can change the evidence, and the AU-9 protection story has nothing to stand on. Keep one copy to keep and one copy to question.",
+      "network": "All three pipeline systems are planned: SBD-SYSLOG01 on VLAN 20, SBD-SPLUNK01 and SBD-AUDIT01 on VLAN 50. The domain controllers, admin hosts, and core router already exist, but no events flow yet.",
+      "control": {
+        "id": "AU-11",
+        "name": "Audit Record Retention",
+        "phase": "Prepare → Implement",
+        "body": "Decide retention per stage before any record exists. The working copy in analysis and the protected copy in the repository can have different clocks; write each one down with the people who may read that stage.",
+        "question": "How long must the protected copy outlive the working copy, and who made that decision?"
+      },
+      "checklist": [
+        "I wrote the role sentence for the collector, the repository, and the analysis system.",
+        "I recorded the retention, readers, and no-delete rule for each stage.",
+        "I added the three pipeline paths to the register with their owners."
+      ]
+    },
+    "auditing": {
+      "short": "Turn on the right auditing",
+      "tag": "02 / AUDIT",
+      "status": "EVENTS WRITTEN",
+      "stepTitles": [
+        "Review what the course 1.3 STIG GPOs already audit",
+        "Confirm the design’s categories on the DCs",
+        "Extend the policy to the admin hosts’ OU",
+        "Make every addition a documented GPO change"
+      ],
+      "mistake": "Filling a gap with auditpol /set on one server. The local change can be overwritten the next time Group Policy applies, it disappears when the server is rebuilt, and nobody reading the GPO report knows it was there. Make additions in the GPO structure and record them.",
+      "network": "The domain controllers on VLAN 10 and the admin hosts on VLAN 60 now write the designed event families to their own Security logs. Nothing is forwarded yet; the collector is still planned.",
+      "control": {
+        "id": "AU-12",
+        "name": "Audit Record Generation",
+        "phase": "Implement",
+        "body": "Records are generated on the source. Applying the designed categories through GPO, at or above the STIG values, makes the domain controllers and admin hosts write the records the design scoped, and keeps that setting visible in every GPO report.",
+        "question": "If an event family were missing from a host’s effective policy, how would you find out before you needed that record?"
+      },
+      "checklist": [
+        "I captured the auditpol output for the domain controllers and the admin hosts.",
+        "I confirmed the designed categories are at or above the course 1.3 STIG values and applied through GPO.",
+        "I recorded every audit addition in the GPO structure and the exception/addition record."
+      ]
+    },
+    "collector": {
+      "short": "Build the collector",
+      "tag": "03 / COLLECT",
+      "status": "COLLECTOR ONLINE",
+      "stepTitles": [
+        "Enable the collector and create the subscription",
+        "Enroll the sources by GPO",
+        "Add the syslog intake for the router’s denies",
+        "Confirm only registered paths are in use"
+      ],
+      "mistake": "Forgetting to give the Network Service read access to the Security log. The subscription still lists its sources, but no Security events reach Forwarded Events, so the pipeline looks configured while carrying nothing.",
+      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers and the admin hosts push events to it over WinRM 5985, and the core router sends its deny log as syslog on UDP 514.",
+      "control": {
+        "id": "AU-3",
+        "name": "Content of Audit Records",
+        "phase": "Implement",
+        "body": "A central copy is useful only if each record still says what happened, when, and where. Forwarded events keep their source machine name and time, so every record on the collector traces back to the host that wrote it.",
+        "question": "Which fields on a forwarded event would you rely on to show an assessor where and when it happened?"
+      },
+      "checklist": [
+        "I confirmed the subscription is active and the source hosts are enrolled by GPO.",
+        "I found forwarded events from both domain controllers and the admin hosts, each with its own MachineName.",
+        "I received a router deny entry on the collector’s syslog intake."
+      ]
+    },
+    "protect": {
+      "short": "Protect the record",
+      "tag": "04 / PROTECT",
+      "status": "RECORD PROTECTED",
+      "stepTitles": [
+        "Create the scheduled archival job",
+        "Hash and catalog every archive on arrival",
+        "Set permissions to match the access model",
+        "Fill in the AU table"
+      ],
+      "mistake": "Leaving an inherited administrators entry with Full Control on the archive share. That one line gives every administrator delete rights and quietly undoes the no-delete rule. Read the icacls output against the access model line by line.",
+      "network": "SBD-AUDIT01 on VLAN 50 is online. On schedule, the collector writes dated archives to its repository share, the only inbound write path the repository allows.",
+      "control": {
+        "id": "AU-9",
+        "name": "Protection of Audit Information",
+        "phase": "Implement",
+        "body": "The repository protects the record from change and deletion, including by its administrators: the archival process writes, a named auditors group reads, and deletion runs only as the documented retention process. The hash catalog makes any change detectable.",
+        "question": "If an archive’s hash no longer matched the catalog, who would be told, and what would they do first?"
+      },
+      "checklist": [
+        "I confirmed dated archives arrive on schedule and their catalog hashes verify.",
+        "I compared the icacls output with the access model and found no interactive account with delete rights.",
+        "I completed the AU table: where each stage’s data lives, its retention, and who can touch it."
+      ]
+    },
+    "analyze": {
+      "short": "Analyze in SBD-SPLUNK01",
+      "tag": "05 / ANALYZE",
+      "status": "SEARCHES LIVE",
+      "stepTitles": [
+        "Install the platform and index both streams",
+        "Search one: failed privileged sign-ins",
+        "Searches two and three: denies and time health",
+        "Turn search one into an owned alert"
+      ],
+      "mistake": "Checking that data arrives but not when it says it happened. If the router syslog or the forwarded events index with the wrong time zone or the receive time, the searches and lesson 6’s trace disagree with the source. Compare an indexed event’s time with the original.",
+      "network": "SBD-SPLUNK01 on VLAN 50 is online. The collector sends the Windows events and router syslog over the registered forwarder path; SBD-AUDIT01 stays out of this flow by design.",
+      "control": {
+        "id": "AU-6",
+        "name": "Audit Record Review, Analysis, and Reporting",
+        "phase": "Implement → Assess",
+        "body": "Review and analysis make collected records useful. Three searches against real events, and one alert with a named responder and a written first step, show the records are read rather than only stored.",
+        "question": "Who responds when the failed privileged sign-in alert fires, and what is their written first step?"
+      },
+      "checklist": [
+        "I confirmed both streams index with correct timestamps.",
+        "I saved the three searches, and each returns today’s events.",
+        "I tested the alert and documented its threshold, responder, and first-response step."
+      ]
+    },
+    "prove": {
+      "short": "Prove the chain",
+      "tag": "06 / VERIFY",
+      "status": "CHAIN PROVEN",
+      "stepTitles": [
+        "Trace one failed privileged sign-in end to end",
+        "Trace a boundary deny the same way",
+        "Baseline the new hosts and rescan the DCs",
+        "File the trace and write the handoff"
+      ],
+      "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain’s account lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
+      "network": "Every flow is shown: the domain controllers, admin hosts, and core router feed SBD-SYSLOG01, which archives to SBD-AUDIT01 and forwards to SBD-SPLUNK01. One test event and one boundary deny travel the whole chain.",
+      "control": {
+        "id": "SI-4",
+        "name": "System Monitoring",
+        "phase": "Assess",
+        "body": "Monitoring is proven when a known event is detected end to end: the failed sign-in raises the alert, and the probe’s deny appears in the syslog stream and in search two. One traced event shows the stages working as a system, not only passing one by one.",
+        "question": "If the test event reached the collector but never raised the alert, which stage would you check first, and why?"
+      },
+      "checklist": [
+        "I traced the test event from the DC’s Security log to Forwarded Events, the next archive, and the alert, with consistent timestamps.",
+        "I traced one probe’s deny through the syslog stream and search two.",
+        "I filed the new hosts’ baselines, the DC rescan deltas, and the handoff note to course 1.7."
+      ]
+    }
+  }
+}

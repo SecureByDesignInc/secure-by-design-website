@@ -1,0 +1,299 @@
+{
+  "id": "dns-configuration",
+  "hero": {
+    "title": "Configure",
+    "accent": "DNS and time.",
+    "text": "Build internal name resolution and domain time on SBD-DC01 and SBD-DC02, so every domain member can find a domain controller and trust its clock on an air-gapped network. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "DNS + TIME"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-DC01",
+      "10.0.10.10 / 24"
+    ],
+    [
+      "SBD-DC02",
+      "10.0.10.11 / 24"
+    ],
+    [
+      "Segment",
+      "VLAN 10 · 10.0.10.0/24"
+    ],
+    [
+      "Loopback address",
+      "127.0.0.1"
+    ],
+    [
+      "Locator record",
+      "_ldap._tcp.dc._msdcs.sbd.test"
+    ],
+    [
+      "DNS rule",
+      "F01 · TCP/UDP 53 to both controllers"
+    ]
+  ],
+  "scene": {
+    "tag": "DOMAIN CONTROLLERS · VLAN 10",
+    "label": "Interactive 3D lesson network showing SBD-DC01 and SBD-DC02 on VLAN 10 answering DNS lookups, replicating zone data, and serving domain time to a domain member.",
+    "completeStatus": "NAMES + TIME",
+    "completeCaption": "Both controllers answer for sbd.test and its reverse zone, with zone data replicated between them, and SBD-DC01 keeps the domain's time. Both were proven, not assumed.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Domain controller and DNS server built in course 1.1. In this course it hosts the AD-integrated zones and, as the PDC emulator, becomes the domain's reliable time source in lesson 5."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second domain controller and DNS server. It holds the same zones through directory replication, answers when SBD-DC01 can't, and takes its time from the PDC emulator."
+      },
+      {
+        "id": "member",
+        "name": "TEST CLIENT",
+        "sub": "Domain member viewpoint",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 0,
+        "button": "Test client",
+        "title": "Test client · domain member viewpoint",
+        "description": "Where lookups and time checks are run from: a domain member that lists both controllers for DNS and follows the domain time hierarchy. It stands for any member, not a system this course builds."
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          1,
+          2,
+          3,
+          5
+        ],
+        "label": "Zone replication",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc1",
+        "lessons": [
+          0,
+          3,
+          5
+        ],
+        "label": "DNS · TCP/UDP 53",
+        "twoWay": true
+      },
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          4,
+          5
+        ],
+        "label": "Time from the PDC emulator · UDP 123",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc2",
+        "lessons": [
+          0,
+          3,
+          5
+        ],
+        "label": "DNS · TCP/UDP 53",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc2",
+        "lessons": [
+          4,
+          5
+        ],
+        "label": "Domain time · UDP 123",
+        "twoWay": true
+      }
+    ]
+  },
+  "lessons": {
+    "plan": {
+      "short": "Map names to the network",
+      "tag": "01 / PLAN",
+      "status": "DNS MAPPED",
+      "stepTitles": [
+        "Learn what DNS answers and what it doesn't",
+        "Record names, subnets, and service owners",
+        "Confirm the DNS service and review the zones",
+        "Set each controller's DNS client order",
+        "Confirm the register permits DNS",
+        "Decide forwarding and recursion"
+      ],
+      "mistake": "Listing a public resolver as an alternate DNS server. It has no sbd.test zone and no locator records, so a member that falls back to it can't find a domain controller, and on an air-gapped network the query goes nowhere.",
+      "network": "Both controllers run DNS on VLAN 10. The paths from the domain member to each controller are rule F01, TCP and UDP 53: a member has to find a controller before any Kerberos, LDAP, or Group Policy traffic can start.",
+      "control": {
+        "id": "CM-2",
+        "name": "Baseline Configuration",
+        "phase": "Prepare → Implement",
+        "body": "The address worksheet, each controller's DNS client order, and the initial zone inventory are the starting record for name resolution. Capture them before changing anything else, so later lessons can show what changed.",
+        "question": "Which of these values did you choose, and which did promotion set for you?"
+      },
+      "checklist": [
+        "I confirmed the DNS Server service runs on both controllers and recorded the zones promotion created.",
+        "I set each controller's DNS client order after replication succeeded both ways: partner first, loopback second.",
+        "I recorded the no-recursion decision and the register rows that permit DNS on TCP and UDP 53."
+      ]
+    },
+    "zones": {
+      "short": "Forward and reverse zones",
+      "tag": "02 / CONFIGURE",
+      "status": "ZONES REPLICATING",
+      "stepTitles": [
+        "Check the forward zone's integration and scope",
+        "Require secure dynamic updates",
+        "Create the reverse lookup zone",
+        "Restrict zone transfers"
+      ],
+      "mistake": "Allowing zone transfers to any server to help the second controller. AD-integrated zones already reach it through directory replication; open transfers only hand a copy of every record to whoever asks.",
+      "network": "The arc between the controllers is Active Directory replication carrying the sbd.test and 10.0.10.in-addr.arpa zone data, not a zone transfer. No member traffic is shown while the zones are configured.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Zone type, update policy, replication scope, and transfer policy are configuration settings. Record each value with the reason for it, so a later reviewer can tell a decision from a default.",
+        "question": "Which zone settings, if left open, would let an unauthenticated system change or copy your records?"
+      },
+      "checklist": [
+        "I confirmed sbd.test is AD-integrated with secure dynamic updates and recorded its replication scope.",
+        "I created or confirmed the 10.0.10.in-addr.arpa reverse zone and saw it on both controllers.",
+        "I recorded each zone's transfer policy and why transfers stay restricted."
+      ]
+    },
+    "records": {
+      "short": "Service records",
+      "tag": "03 / MAINTAIN",
+      "status": "RECORDS IN PLACE",
+      "stepTitles": [
+        "Review the controllers' A and PTR records",
+        "Create a host record with its PTR",
+        "Add a service alias for the intended host",
+        "Set lifetimes and record ownership"
+      ],
+      "mistake": "Adding a second A record with the same name to fix a wrong answer. DNS then hands out both addresses, so clients reach the wrong host some of the time and troubleshooting gets harder. Correct the record through its owning host and the DNS administration process.",
+      "network": "Records created on one controller reach the other through directory replication. The animation represents that relationship, not a measured packet capture.",
+      "control": {
+        "id": "CM-3",
+        "name": "Configuration Change Control",
+        "phase": "Implement",
+        "body": "Each record added, corrected, or removed is a change. A record table with owner and reason, and removing only records confirmed obsolete, keeps those changes reviewable instead of letting unexplained entries pile up.",
+        "question": "Who owns each record you created, and what would have to happen before it could be removed?"
+      },
+      "checklist": [
+        "I checked that both controllers' A and PTR records agree with the address plan.",
+        "I created a host record with its PTR, and pointed any service alias at the intended host.",
+        "I kept a record table with owner, type, target, time to live, and reason for each change."
+      ]
+    },
+    "verify": {
+      "short": "Prove resolution",
+      "tag": "04 / VERIFY",
+      "status": "RESOLUTION PROVEN",
+      "stepTitles": [
+        "Query each server for both host records",
+        "Query the locator records on both servers",
+        "Run DNS diagnostics and the replication summary",
+        "Test failover in each direction",
+        "Optional: capture a locator query on the wire"
+      ],
+      "mistake": "Testing only through the client's normal resolver. A cached answer or a single working server can pass every lookup while the other server holds stale or missing records, so name the server in each query.",
+      "network": "Follow lookups from the domain member to each controller, and to the remaining one during the failover test. Replication between the controllers stays in view because DCDiag and the replication summary check it.",
+      "control": {
+        "id": "SC-22",
+        "name": "Architecture and Provisioning for Name/Address Resolution Service",
+        "phase": "Assess",
+        "body": "SC-22 asks that the systems providing name resolution be fault tolerant and keep internal and external roles separate. Paired queries, a failover test in each direction, and the documented no-recursion design are evidence for that; they show nothing about authentication.",
+        "question": "What would your results look like if only one of the two DNS servers held the locator records?"
+      },
+      "checklist": [
+        "I queried each DNS server by address for both host records and the locator records.",
+        "I ran dcdiag /test:DNS /e /v and explained the root-hint, forwarder, and delegation findings.",
+        "I tested failover in each direction and recorded start, restore, and final verification times."
+      ]
+    },
+    "time": {
+      "short": "Make DC01 the time source",
+      "tag": "05 / CONFIGURE",
+      "status": "TIME FROM SBD-DC01",
+      "stepTitles": [
+        "Confirm SBD-DC01 holds the PDC emulator role",
+        "Make SBD-DC01 the reliable time source",
+        "Turn off hypervisor time sync for both DCs",
+        "Confirm the register and record the time design",
+        "Verify the time chain end to end"
+      ],
+      "mistake": "Leaving hypervisor time synchronization on for the domain controller VMs. The host clock then silently overrides the PDC emulator, and the domain's time can change with nothing changed on SBD-DC01.",
+      "network": "SBD-DC02 takes time from SBD-DC01, the PDC emulator, and the domain member takes it from a domain controller (shown here as SBD-DC02), all on UDP 123. SBD-DC01 serves time from its own clock.",
+      "control": {
+        "id": "SC-45",
+        "name": "System Time Synchronization",
+        "phase": "Implement → Assess",
+        "body": "SC-45 asks that clocks be synchronized within and between systems and system components. SBD-DC01 is the reference by declaration, so the evidence needs how its clock is checked and the drift threshold, not only the w32tm output. The AU-8 time stamps on every audit record are only as good as this clock.",
+        "question": "How would you know if SBD-DC01's clock had drifted past your threshold, and who corrects it?"
+      },
+      "checklist": [
+        "I confirmed SBD-DC01 holds the PDC emulator role and reports Local CMOS Clock as its source.",
+        "I turned off hypervisor time synchronization for both domain controller VMs.",
+        "I recorded how DC01's clock is checked, the drift threshold, and offsets measured inside it."
+      ]
+    },
+    "troubleshoot": {
+      "short": "Find and record the fix",
+      "tag": "06 / TROUBLESHOOT",
+      "status": "FAULT RECORDED",
+      "stepTitles": [
+        "Record the exact failure",
+        "Query both servers directly",
+        "Tell a missing name from a failure",
+        "Retest and record the change"
+      ],
+      "mistake": "Clearing the client cache first. If the authoritative data is still wrong, the fault returns on the next lookup and the evidence of what you saw is gone. Fix the owning configuration, then clear what is stale.",
+      "network": "Every path the course built is shown: lookups to both controllers, replication between them, and the time hierarchy. Work through them one layer at a time when a name, or a sign-in, fails.",
+      "control": {
+        "id": "CM-4",
+        "name": "Impact Analyses",
+        "phase": "Assess → Monitor",
+        "body": "Before a fix goes in, think through what else it touches and how to undo it. Recording the rollback, and reviewing aging and scavenging against DHCP, static records, and backups before enabling automatic deletion, is impact analysis in practice.",
+        "question": "Which records could automatic scavenging remove that a service still depends on?"
+      },
+      "checklist": [
+        "I recorded the failing name, record type, client, resolver, timestamp, and error.",
+        "I queried both servers directly and identified which layer held the fault.",
+        "I recorded the cause, the fix, the rollback method, and the repeated test."
+      ]
+    }
+  }
+}

@@ -11,7 +11,8 @@ const paths = ['/', '/inside-the-network', '/training', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
   // List the address a guide is served at: /training/rmf/index.html redirects to /training/rmf/.
-  if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, '').replace(/\/index\.html$/, '/'));
+  // Configuration course guides are served at /training/<id>/ (the old /training/<id> redirects there).
+  if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, '').replace(/\/index\.html$/, '/').replace(/^(\/training\/[a-z0-9-]+)$/, '$1/'));
 }
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 const unique = [...new Set(paths)];
