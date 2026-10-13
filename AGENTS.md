@@ -397,3 +397,11 @@ The owner found the always-on 3D topology layer overwhelming (on phones and desk
 - **Quieter layer.** No plate outline and a fainter ground grid; no "Network topology" title label; hidden segments carry no labels, glyphs, tethers, or click targets.
 - **Topology button.** On (default) means "show when relevant"; off hides the layer entirely, and `topology=off` links still work.
 - **Checks.** `check-network-browser.mjs` asserts the overview shows no VLAN labels and that `#vlan=30` shows only VLAN 30 on the layer.
+
+## Training Library: sequence arrows and course 1.1 DNS tag — October 13, 2026
+
+The owner asked for an indicator between every catalog tile so learners can see the courses are sequential, and for a DNS topic beside Active Directory on course 1.1.
+
+- **Arrows.** Each learning path's grid is `CatalogSequenceGrid` (`app/videos/catalog-sequence.tsx`). It measures the tiles and draws, in an `aria-hidden` SVG layer, a circular chevron badge between each consecutive pair: across the column gap when the next tile is beside, down the row gap when it is below (phones, or after an expanded tile), and a dashed return path ending in a down badge when a row wraps. It re-measures on resize, tile changes and expansion, so it follows every column count, search results and the expanded tile. Tile sizes and the grid gap are unchanged. Screen readers get "Take these courses in order." in each path heading.
+- **Between paths.** When both paths are shown, a "Then continue to <path>" line with a down arrow sits above the second path's heading.
+- **Course 1.1 tags:** Windows Server, Active Directory, DNS.
