@@ -1,8 +1,8 @@
 {
   "id": "logging-pipeline",
   "prerequisites": [
-    "Complete course 1.8: the tiered admin plane exists, so the collector is administered only from VLAN 60 (SBD-ADMIN-SRV01, Tier 1), and complete course 1.9: SBD-REPO01 (10.0.70.20) is running and becomes this course's first Linux source.",
-    "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server joined to sbd.test in the Servers OU, so course 1.5's member-server STIG policies apply from first boot, with a separate data volume (D: in this sample) for the logs.",
+    "Complete courses 1.1–1.9: every Windows system they built — both DCs, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and the three admin seats — becomes a source; the tiered admin plane (course 1.8) means the collector is administered only from VLAN 60 (SBD-ADMIN-SRV01, Tier 1); and SBD-REPO01 (10.0.70.20, course 1.9) is running and becomes this course's first Linux source.",
+    "Provision SBD-SYSLOG01 (10.0.20.20) as Windows Server joined to sbd.test in the Servers OU, so course 1.5's member-server STIG policies apply from first boot, with a separate data volume (D: in this sample) for the logs. Turn off the hypervisor's time synchronization and check that w32tm /query /source names a domain controller (course 1.3).",
     "Have the network's service-path register, the course 1.6 SBD Server Authentication template, and an approved syslog receiver for Windows (staged across the air gap and hashed, as in course 1.4) ready: Windows has no built-in syslog listener."
   ],
   "labNote": "This is the first of three logging courses. Course 1.10 designs the whole collect → protect → analyze pipeline and builds the collect stage on SBD-SYSLOG01; course 1.11 protects the record on SBD-AUDIT01, and course 1.12 analyzes it in SBD-SPLUNK01. Collection is configuration you can show: a subscription, a listener, and events with the right source names and times.",
@@ -38,6 +38,11 @@
       "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/advanced-security-auditing-faq"
     },
     {
+      "id": "audit-policy",
+      "title": "Microsoft · Advanced audit policy configuration",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration"
+    },
+    {
       "id": "rfc5425",
       "title": "RFC 5425 · Transport Layer Security (TLS) Transport Mapping for Syslog",
       "url": "https://www.rfc-editor.org/rfc/rfc5425"
@@ -66,12 +71,12 @@
       ],
       "steps": [
         "Write the role sentence for each host and the course that builds it: SBD-SYSLOG01 (course 1.10) receives Windows events and syslog; SBD-AUDIT01 (course 1.11) holds the protected, long-retention copy; SBD-SPLUNK01 (course 1.12) indexes a working copy for search and alerting. One copy to keep, one copy to question.",
-        "Scope the first collection to what already produces evidence: both DCs' Security logs, the admin hosts' sign-in events, the core router's deny log, and SBD-REPO01's syslog. The fleet joins in course 1.13, the other Linux servers as their courses build them.",
-        "Decide the AU answers per stage (sample values; your records requirement decides): the collector keeps at least 14 days locally as a buffer, administered by Tier 1 from SBD-ADMIN-SRV01; the repository keeps one year, written only by a write-only archival account, read by a named auditors group, and deleted by nobody outside the custodian's logged retention process; analysis keeps 90 days searchable, read by analysts.",
+        "Scope the first collection to what already produces evidence: the Security log and the Windows Time events course 1.3 keeps from every Windows system that exists — both DCs, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and the three admin seats — plus the core router's deny log and SBD-REPO01's syslog. The fleet joins in course 1.13, and every later server in the course that builds it.",
+        "Decide the AU answers per stage (sample values; your records requirement decides): the collector keeps at least 14 days locally as a buffer, administered by Tier 1 from SBD-ADMIN-SRV01; the repository keeps one year, written only by a write-only archival account, read by a named auditors group, and deleted by nobody outside the custodian's logged retention process, with independent approval (rule A04); analysis keeps 90 days searchable, read by analysts.",
         "Name the two streams and where they are picked up: Windows events land in the ForwardedEvents log (file on D:\\Logs\\ForwardedEvents) and syslog in daily files per sender under D:\\Logs\\Syslog. Course 1.11's archival job and course 1.12's forwarder both read from these two places; nothing else writes there.",
-        "Add the register rows with owners: Windows sources to the collector (F17, WinRM 5985, source-initiated), Linux syslog over TLS (F07, TCP 6514), the core router's deny log (UDP 514), the archive path (F11, SMB 3 with encryption) and the forwarder path (F10, TCP 9997 with TLS). The last two stay unused until courses 1.11 and 1.11."
+        "Add the register rows with owners: Windows sources to the collector (F17, WinRM 5985, source-initiated), Linux syslog over TLS (F07, TCP 6514), the core router's deny log (UDP 514, which the router already sends to the collector's address as part of the network's configuration — this course only receives it), the archive path (F11, SMB 3 with encryption) and the forwarder path (F10, TCP 9997 with TLS). The last two stay unused until courses 1.11 and 1.12."
       ],
-      "command": "# Capture the before state: what the DCs audit today, and that no collector runs yet.\nauditpol /get /category:* /r | Out-File C:\\Evidence\\logging-pipeline\\SBD-DC01-auditpol-before.csv\nGet-Service Wecsvc -ComputerName SBD-SYSLOG01 | Select-Object Status, StartType",
+      "command": "# From AdminJumpBox01 (Tier 0): what the DCs audit today.\nInvoke-Command SBD-DC01, SBD-DC02 { auditpol /get /category:* /r } | Out-File C:\\Evidence\\logging-pipeline\\DCs-auditpol-before.csv\n# From SBD-ADMIN-SRV01 (Tier 1): no collector runs yet.\nInvoke-Command SBD-SYSLOG01 { Get-Service Wecsvc | Select-Object Status, StartType }",
       "check": "The design names each stage's job, building course, scope, retention, and readers; the no-delete rule is written; the two streams and their pickup folders are named; and the register carries the five pipeline paths with owners.",
       "evidence": "Keep the pipeline design sheet, the retention and access table, the stream and pickup definitions, and the new register rows.",
       "model": {
@@ -94,7 +99,7 @@
           "question": "What is in the first collection scope?",
           "answers": [
             "Every system, including the fleet that does not exist yet",
-            "The sources that already produce evidence: DC Security logs, admin-host sign-ins, the router's deny log, and SBD-REPO01",
+            "The sources that already produce evidence: every existing Windows system's Security log and time events, the router's deny log, and SBD-REPO01",
             "Only the collector's own log"
           ],
           "correct": 1,
@@ -112,7 +117,7 @@
         }
       ],
       "recap": [
-        "Collector gathers (1.9), repository preserves (1.10), analysis answers (1.11).",
+        "Collector gathers (1.10), repository preserves (1.11), analysis answers (1.12).",
         "Retention, readers, and the no-delete rule are written for every stage.",
         "Two named streams, their pickup folders, and five registered paths."
       ],
@@ -134,11 +139,11 @@
       ],
       "steps": [
         "Review what the Defense Information Systems Agency (DISA) Group Policy objects (GPOs) linked in course 1.5 already audit — most of the advanced audit policy arrived with the STIGs, including the setting that makes subcategories override the old category policy. This lesson reconciles and fills gaps rather than starting over.",
-        "Confirm the subcategories the design depends on are at least at the STIG values on the DCs: Credential Validation, Logon, Special Logon, User Account Management, Security Group Management, Directory Service Changes, and Audit Policy Change — success and failure where the design says so. Directory Service Changes writes event 5136 only for objects whose auditing entries ask for it, so check the domain's auditing entries too.",
-        "Extend the same policy to the Admin OU's computer sub-OUs from course 1.8, so privileged sessions on the admin hosts write their sign-in trail.",
-        "Make every addition a separate, documented GPO linked above the STIG GPO, never an auditpol /set on one server. Advanced audit settings merge across GPOs per subcategory, and only a conflicting subcategory is decided by precedence — record each addition in the course 1.5 exception record."
+        "Confirm the subcategories the design depends on are at least at the STIG values on the DCs: Credential Validation, Logon, Special Logon, User Account Management, Security Group Management, Directory Service Changes, Audit Policy Change, and Security State Change, which writes event 4616 for every clock change course 1.3 records — success and failure where the design says so. Directory Service Changes writes event 5136 only for objects whose auditing entries ask for it, so check the domain's auditing entries too.",
+        "Extend the same policy to the Admin OU's computer sub-OUs from course 1.8, so privileged sessions on the admin hosts write their sign-in trail, and confirm that SBD-SUBCA01, SBD-PKI-MGMT01, and SBD-DHCP01 already carry the member-server STIG values.",
+        "Make every addition a separate, documented GPO linked above the STIG GPO, never an auditpol /set on one server. Advanced audit settings merge across GPOs per subcategory, and only a conflicting subcategory is decided by precedence — record each addition in the course 1.5 exception record, kept on AdminJumpBox01."
       ],
-      "command": "auditpol /get /category:* /r | Out-File C:\\Evidence\\logging-pipeline\\SBD-DC01-auditpol.csv\nauditpol /get /subcategory:\"Directory Service Changes\"\ngpresult /h C:\\Evidence\\logging-pipeline\\SBD-DC01-gpresult.html",
+      "command": "# From AdminJumpBox01 (Tier 0): effective audit policy and the policy result on a DC.\nInvoke-Command SBD-DC01 { auditpol /get /category:* /r } | Out-File C:\\Evidence\\logging-pipeline\\SBD-DC01-auditpol.csv\nInvoke-Command SBD-DC01 { auditpol /get /subcategory:\"Directory Service Changes,Security State Change\" }\ngpresult /s SBD-DC01 /scope computer /h C:\\Evidence\\logging-pipeline\\SBD-DC01-gpresult.html",
       "check": "Effective audit policy on the DCs and admin hosts covers the designed subcategories at or above the STIG values, applied through GPO, with every addition documented.",
       "evidence": "Keep the auditpol output per host class, the GPO report, and the documented additions.",
       "quizzes": [
@@ -182,6 +187,7 @@
       "sources": [
         "auditpol",
         "audit-faq",
+        "audit-policy",
         "wef"
       ]
     },
@@ -189,21 +195,21 @@
       "id": "collector",
       "title": "Build the collector",
       "minutes": 35,
-      "summary": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings the DC and admin-host events in by source-initiated subscription, and a syslog receiver takes the core router's denies and, from the next lessons, the Linux servers over TLS — one host where the network's record first lands.",
+      "summary": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings in the events of every Windows system that exists by source-initiated subscription, and a syslog receiver takes the core router's denies and, from lesson 5, the Linux servers over TLS — one host where the network's record first lands.",
       "objectives": [
         "Configure the Windows Event Collector service and a source-initiated subscription.",
         "Enroll the sources by GPO with read access to their Security logs.",
         "Stand up the syslog intake for UDP 514 and TLS on TCP 6514."
       ],
       "steps": [
-        "On SBD-SYSLOG01, run wecutil qc /q, move the ForwardedEvents log file to D:\\Logs\\ForwardedEvents, and create the subscription SBD-ForwardedSecurity from an XML file: SourceInitiated, MinLatency delivery (push, 30-second batches), the designed Security event IDs, into ForwardedEvents. Allow a computer group (SBD Event Sources, holding both DCs and the three admin hosts) — the default allows Domain Computers, which does not include domain controllers.",
-        "Enroll the sources by GPO on the Domain Controllers OU and the Admin sub-OUs: the subscription manager Server=http://SBD-SYSLOG01.sbd.test:5985/wsman/SubscriptionManager/WEC,Refresh=60, the WinRM service set to automatic, and NETWORK SERVICE in Event Log Readers — on the DCs through the domain's built-in group, on the admin hosts as a local group preference. Restart each source so the group changes apply; the sources push, the collector reads nothing.",
-        "Allow WinRM 5985 inbound on the collector only from VLANs 10 and 60. Rule F17 covers every Windows member; each later course widens this scope when it enrolls new sources. Kerberos authenticates both ends and encrypts the forwarded events, even over HTTP.",
-        "Install the approved syslog receiver as a service: UDP 514 for the core router, which logs its denies there, and TCP 6514 with TLS using an SBD Server Authentication certificate for SBD-SYSLOG01.sbd.test from the course 1.6 issuing CA. Write daily files per sender under D:\\Logs\\Syslog, and allow each port only from its registered senders.",
+        "On SBD-SYSLOG01, run wecutil qc /q, move the ForwardedEvents log file to D:\\Logs\\ForwardedEvents, and create the subscription SBD-ForwardedSecurity from an XML file: SourceInitiated, MinLatency delivery (push, 30-second batches), into ForwardedEvents, with two queries — the whole Security log (event 4616 included), and the Microsoft-Windows-Time-Service events 12, 35, 36, 37, 129, and 142 from the System log that course 1.3 keeps. Allow one computer group, SBD Event Sources, created from AdminJumpBox01 and holding every Windows system that exists now: both DCs, SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and the three admin seats. The default allows Domain Computers, which does not include domain controllers.",
+        "From AdminJumpBox01, enroll the sources with one GPO linked to the Domain Controllers, Tier 0 Servers, Servers, and Admin sub-OUs and security-filtered to SBD Event Sources (Authenticated Users keep read), so the collector and later servers stay out until a course adds them: the subscription manager Server=http://SBD-SYSLOG01.sbd.test:5985/wsman/SubscriptionManager/WEC,Refresh=60, the WinRM service set to automatic, and NETWORK SERVICE in Event Log Readers — on the DCs through the domain's built-in group, on the other sources as a local group preference. Restart each source so the group changes apply; the sources push, the collector reads nothing.",
+        "Allow WinRM 5985 inbound on the collector only from the enrolled sources: VLANs 10 and 60, SBD-SUBCA01 and SBD-PKI-MGMT01 (10.0.30.20 and 10.0.30.30), and SBD-DHCP01 (10.0.20.10), which shares VLAN 20, so only this host firewall scopes it. Rule F17 covers every Windows member; each later course widens this scope when it enrolls new sources. Kerberos authenticates both ends and encrypts the forwarded events, even over HTTP.",
+        "Install the approved syslog receiver as a service: UDP 514 for the core router, which already sends its deny log to this address, and TCP 6514 with TLS using an SBD Server Authentication certificate for SBD-SYSLOG01.sbd.test requested from the course 1.6 issuing CA through its process. Write daily files per sender under D:\\Logs\\Syslog, and allow each port only from its registered senders.",
         "Confirm the register rows are the only paths in use: WinRM from the enrolled sources, syslog from the core, and nothing listening that the design didn't ask for."
       ],
-      "command": "wecutil es\nwecutil gs SBD-ForwardedSecurity\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, Id, MachineName\nGet-NetUDPEndpoint -LocalPort 514\nGet-NetTCPConnection -LocalPort 6514,5985 -State Listen\n# On each source: Network Service is in Event Log Readers, and the forwarder connected (events 104 and 100).\nnet localgroup \"Event Log Readers\"\nGet-WinEvent -LogName 'Microsoft-Windows-Forwarding/Operational' -MaxEvents 5 | Select-Object TimeCreated, Id, Message",
-      "check": "The subscription is enabled, events from both DCs and the three admin hosts appear in ForwardedEvents with correct source machine names, router deny entries arrive in the syslog files, and only the registered ports listen.",
+      "command": "# On SBD-SYSLOG01 (Tier 1 session from SBD-ADMIN-SRV01): the subscription, the first events, and the listeners.\nwecutil es\nwecutil gs SBD-ForwardedSecurity\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 20 | Select-Object TimeCreated, Id, MachineName\nGet-NetUDPEndpoint -LocalPort 514\nGet-NetTCPConnection -LocalPort 6514,5985 -State Listen\n# On each source, from its tier's seat: Network Service is in Event Log Readers, and the forwarder connected (events 104 and 100).\nnet localgroup \"Event Log Readers\"\nGet-WinEvent -LogName 'Microsoft-Windows-Forwarding/Operational' -MaxEvents 5 | Select-Object TimeCreated, Id, Message",
+      "check": "The subscription is enabled, events from every member of SBD Event Sources — Security and Time-Service — appear in ForwardedEvents with correct source machine names, router deny entries arrive in the syslog files, and only the registered ports listen.",
       "evidence": "Record the subscription XML and wecutil gs output, the enrolling GPO report, the first forwarded event per source, a received router deny line, and the listener list.",
       "model": {
         "href": "/inside-the-network#process=logs&step=1",
@@ -222,7 +228,7 @@
           "explanation": "Collector-initiated collection needs a credential that can read every source's logs — exactly the kind of credential tiering just eliminated."
         },
         {
-          "question": "Both admin hosts forward, but neither DC appears in the subscription. What is the likely cause?",
+          "question": "The admin seats forward, but neither DC appears in the subscription. What is the likely cause?",
           "answers": [
             "The subscription still allows only Domain Computers, which does not include domain controllers",
             "Domain controllers cannot forward events",
@@ -244,7 +250,7 @@
       ],
       "recap": [
         "Sources push by subscription; the collector reaches into nothing.",
-        "DC, admin-host, and router records land in two named streams.",
+        "Windows sources and router records land in two named streams.",
         "Only registered paths carry the pipeline."
       ],
       "next": "Lesson 4 keeps the collector trustworthy once it is running.",
@@ -337,13 +343,13 @@
       "steps": [
         "Generate one failed sign-in on SBD-DC01 with a wrong password for a tier admin account. Find event 4625 in the DC's Security log, then in ForwardedEvents with MachineName SBD-DC01 and the same time; compare the delay with the 30-second delivery setting.",
         "Probe one unregistered port across the core — from SBD-ADMIN-SRV01, TCP 23 on SBD-DHCP01 — and find the router's deny line in the syslog files with the right source, destination, port, and time. Attempt and deny now form an evidence pair.",
-        "Enroll SBD-REPO01 (rule F07): from its own approved package set, install rsyslog's TLS module (rsyslog-gnutls, or your distribution's equivalent), trust the course 1.6 chain, and forward to SBD-SYSLOG01.sbd.test on TCP 6514, checking the collector's certificate name. Add REPO01 to the 6514 sender list, send a test message with logger, and find it in REPO01's daily file.",
-        "Run the cadence: SBD-SYSLOG01's first SCAP baseline with the course 1.4 benchmark and tool versions, run in a Tier 1 session from SBD-ADMIN-SRV01, and a rescan of both DCs from AdminJumpBox01, attributing the deltas to lesson 2's audit policy.",
-        "Write the handoff to course 1.11: the two streams, their pickup folders, the 14-day buffer the archive job must stay inside, and the F11 row waiting for SBD-AUDIT01."
+        "Enroll SBD-REPO01 (rule F07): from its own approved package set, install rsyslog's TLS module (rsyslog-gnutls, or your distribution's equivalent), point its TLS settings at the system trust store, which holds the course 1.6 root that course 1.9 placed there, and forward to SBD-SYSLOG01.sbd.test on TCP 6514, checking the collector's certificate name. Add REPO01 to the 6514 sender list, send a test message with logger, and find it in REPO01's daily file.",
+        "Run the cadence: SBD-SYSLOG01's first SCAP baseline with the course 1.4 benchmark and tool versions, run locally in a Tier 1 session from SBD-ADMIN-SRV01 with SCC copied from that seat's course 1.8 copy over PowerShell remoting and its hash checked, and a rescan of both DCs from AdminJumpBox01, attributing the deltas to lesson 2's audit policy.",
+        "Write the handoff to course 1.11: the two streams, their pickup folders, the 14-day buffer the archive job must stay inside, the gap windows the daily check records (those days need re-exporting once a source replays its backlog), and the F11 row waiting for SBD-AUDIT01."
       ],
-      "command": "Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName\nSelect-String -Path D:\\Logs\\Syslog\\*\\*.log -Pattern 'sbd-collector-proof' | Select-Object -First 3\n# On SBD-REPO01: check the configuration, then send the test message.\nrsyslogd -N1\nlogger -t sbd-collector-proof 'SBD-REPO01 syslog over TLS test'\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\logging-pipeline\\*",
+      "command": "# On SBD-SYSLOG01 (Tier 1 session): the failed sign-in, and the router's deny of the probe to SBD-DHCP01.\nGet-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName\nSelect-String -Path D:\\Logs\\Syslog\\*\\*.log -Pattern '10\\.0\\.20\\.10' | Select-Object -Last 3\n# On SBD-REPO01: check the configuration and the TLS session, then send the test message.\nrsyslogd -N1\nss -tn 'dport = :6514'\nlogger -t sbd-collector-proof 'SBD-REPO01 syslog over TLS test'\n# Back on SBD-SYSLOG01: the test message in REPO01's daily file.\nSelect-String -Path D:\\Logs\\Syslog\\*\\*.log -Pattern 'sbd-collector-proof' | Select-Object -First 3\n# On SBD-ADMIN-SRV01: this course's evidence, hashed.\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\logging-pipeline\\*",
       "check": "The failed sign-in, the router deny, and REPO01's test message each appear on the collector with the right source and a time that matches the source; SBD-SYSLOG01 has its first baseline; and the DC rescan deltas are attributed to the audit policy.",
-      "evidence": "Keep the three traces with their timestamps, REPO01's forwarding configuration, the scan set with hashes, and the handoff note to course 1.10.",
+      "evidence": "Keep the three traces with their timestamps, REPO01's forwarding configuration, the scan set with hashes, and the handoff note to course 1.11.",
       "model": {
         "href": "/inside-the-network#process=logs&step=2",
         "label": "Follow a log, step 2",
@@ -386,7 +392,7 @@
         "SBD-REPO01 is the first syslog-over-TLS source.",
         "Baselines, rescans, and the handoff to course 1.11 close the course."
       ],
-      "next": "That completes course 1.9. Course 1.11 gives the record its protected home on SBD-AUDIT01, picking up the two streams this course collects.",
+      "next": "That completes course 1.10. Course 1.11 gives the record its protected home on SBD-AUDIT01, picking up the two streams this course collects.",
       "sources": [
         "wecutil",
         "rfc5425",

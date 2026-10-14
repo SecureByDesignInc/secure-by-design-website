@@ -104,7 +104,7 @@
         "from": 0,
         "button": "AdminJumpBox01",
         "title": "AdminJumpBox01 · 10.0.60.10",
-        "description": "The Tier 0 seat (rule A01). The directory work happens here: the KDS root key, the gMSAs, the custodian and auditor groups, and the Audit Servers OU with its policy links."
+        "description": "The Tier 0 seat (rule A01). The directory work happens here: the KDS root key, the gMSAs, the SBD Auditors group and its seat sign-in right, and the Audit Servers OU with its policy links."
       }
     ],
     "flows": [
@@ -161,7 +161,7 @@
         "Write the repository’s rules from the pipeline design",
         "Size the volume from a real day of both streams",
         "Fix the one way in: rule F11",
-        "Name every identity and create the KDS root key",
+        "Name every identity, add SBD Auditors, and check the KDS key",
         "Build SBD-AUDIT01 in its own OU"
       ],
       "mistake": "Joining SBD-AUDIT01 into the Servers OU like any other member server. Every right granted to ordinary server administrators there — local administrator rights, Remote Desktop — then reaches the repository, and the custodian is no longer the only one who runs it. Give it its own OU, with the STIG and tier policies linked first.",

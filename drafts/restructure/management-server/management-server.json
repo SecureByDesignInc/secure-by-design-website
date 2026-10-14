@@ -232,7 +232,7 @@
         "question": "If SBD-MGMT01 were compromised tomorrow, what could an attacker reach from it — and what does that tell you about the design?"
       },
       "checklist": [
-        "I joined SBD-MGMT01 into the Servers OU and confirmed its time source, its Ring 3 update policy and its forwarded events.",
+        "I joined SBD-MGMT01 into the Servers OU turned off the hypervisor’s time synchronization, and confirmed its time source, its Ring 3 update policy and its forwarded events.",
         "I scoped the Remote Desktop and remote management rules to 10.0.60.20 and saw SBD-ADMIN-PC01’s attempt refused.",
         "I created D:\\Inventory with inheritance removed, for SYSTEM and Administrators only, with current, history, sources and findings folders."
       ]

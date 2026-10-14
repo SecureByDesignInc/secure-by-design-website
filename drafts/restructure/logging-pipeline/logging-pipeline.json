@@ -30,7 +30,7 @@
     ],
     [
       "Sources",
-      "SBD-DC01 10.0.10.10 · SBD-DC02 10.0.10.11 · admin hosts VLAN 60 · SBD-REPO01 10.0.70.20"
+      "SBD-DC01 · SBD-DC02 · SBD-SUBCA01 · SBD-PKI-MGMT01 · SBD-DHCP01 · admin seats VLAN 60 · SBD-REPO01 10.0.70.20"
     ],
     [
       "Pipeline paths",
@@ -43,7 +43,7 @@
   ],
   "scene": {
     "tag": "COLLECTION · VLAN 20",
-    "label": "Interactive 3D lesson network showing the domain controllers, administration hosts, core router, and SBD-REPO01 sending their records to the collector SBD-SYSLOG01.",
+    "label": "Interactive 3D lesson network showing the domain controllers, the PKI and DHCP servers, the administration hosts, the core router, and SBD-REPO01 sending their records to the collector SBD-SYSLOG01.",
     "completeStatus": "COURSE TARGET",
     "completeCaption": "Every existing source pushes its record to SBD-SYSLOG01: Windows events by subscription, the router's denies and SBD-REPO01's messages as syslog. Courses 1.11 and 1.12 pick up the two streams from here.",
     "nodes": [
@@ -92,7 +92,19 @@
         "from": 4,
         "button": "SBD-REPO01",
         "title": "SBD-REPO01 · 10.0.70.20",
-        "description": "Built in course 1.8. In lesson 5 it becomes the first Linux source, forwarding its syslog over TLS to the collector on TCP 6514 (rule F07)."
+        "description": "Built in course 1.9. In lesson 5 it becomes the first Linux source, forwarding its syslog over TLS to the collector on TCP 6514 (rule F07)."
+      },
+      {
+        "id": "members",
+        "name": "PKI + DHCP",
+        "sub": "VLANs 30 and 20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 2,
+        "button": "PKI + DHCP",
+        "title": "SBD-SUBCA01 · SBD-PKI-MGMT01 · SBD-DHCP01",
+        "description": "SBD-SUBCA01 and SBD-PKI-MGMT01 from course 1.6 and SBD-DHCP01 from course 1.7. Lesson 3 adds them to SBD Event Sources, so their Security logs and time events reach the collector like the controllers'."
       },
       {
         "id": "admin",
@@ -104,7 +116,7 @@
         "from": 1,
         "button": "Admin hosts",
         "title": "Admin hosts · 10.0.60.0/24",
-        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.7. Their sign-in events join the first collection scope, and SBD-ADMIN-SRV01 is where the collector is administered from."
+        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.8. Their sign-in events join the first collection scope, and SBD-ADMIN-SRV01 is where the collector is administered from."
       }
     ],
     "flows": [
@@ -120,6 +132,16 @@
       },
       {
         "from": "dc2",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Event forwarding · F17 · WinRM 5985"
+      },
+      {
+        "from": "members",
         "to": "syslog",
         "lessons": [
           2,
@@ -171,7 +193,7 @@
         "Add the pipeline's register rows"
       ],
       "mistake": "Letting the analysis system double as the archive. If SBD-SPLUNK01 held the only copy, anyone who can change its indexes or searches could change the evidence, and the AU-9 protection story would have nothing to stand on. Keep one copy to keep and one copy to question.",
-      "network": "Only the design exists: SBD-SYSLOG01 is planned on VLAN 20. The domain controllers, admin hosts, core router, and SBD-REPO01 already run, but no events flow yet. SBD-AUDIT01 and SBD-SPLUNK01 arrive in courses 1.11 and 1.11.",
+      "network": "Only the design exists: SBD-SYSLOG01 is planned on VLAN 20. The domain controllers, PKI and DHCP servers, admin hosts, core router, and SBD-REPO01 already run, but no events flow yet. SBD-AUDIT01 and SBD-SPLUNK01 arrive in courses 1.11 and 1.12.",
       "control": {
         "id": "AU-11",
         "name": "Audit Record Retention",
@@ -216,13 +238,13 @@
       "status": "COLLECTOR ONLINE",
       "stepTitles": [
         "Enable the collector and create the subscription",
-        "Enroll the sources by GPO",
+        "Enroll the sources by one filtered GPO",
         "Scope WinRM to the enrolled sources",
         "Stand up the syslog intake",
         "Confirm only registered paths are in use"
       ],
       "mistake": "Forgetting NETWORK SERVICE in Event Log Readers, or not restarting the source after adding it. The subscription still shows the source as active, but no Security events reach ForwardedEvents, so the pipeline looks configured while carrying nothing.",
-      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers and the admin hosts push events to it over WinRM 5985 (F17), and the core router sends its deny log as syslog on UDP 514.",
+      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers, the PKI and DHCP servers, and the admin hosts push events to it over WinRM 5985 (F17), and the core router's deny log arrives as syslog on UDP 514.",
       "control": {
         "id": "AU-3",
         "name": "Content of Audit Records",
@@ -232,7 +254,7 @@
       },
       "checklist": [
         "I confirmed the subscription is enabled and the sources are enrolled by GPO.",
-        "I found forwarded events from both domain controllers and the admin hosts, each with its own MachineName.",
+        "I found forwarded Security and Time-Service events from every member of SBD Event Sources, each with its own MachineName.",
         "I received a router deny entry in the syslog files and saw only the registered ports listening."
       ]
     },
@@ -273,7 +295,7 @@
         "Write the handoff to course 1.11"
       ],
       "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain's lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
-      "network": "Every source is live: the domain controllers and admin hosts forward over WinRM, the core router sends its denies on UDP 514, and SBD-REPO01 joins over syslog TLS on TCP 6514. One sign-in, one deny, and one test message reach SBD-SYSLOG01.",
+      "network": "Every source is live: the Windows sources forward over WinRM, the core router sends its denies on UDP 514, and SBD-REPO01 joins over syslog TLS on TCP 6514. One sign-in, one deny, and one test message reach SBD-SYSLOG01.",
       "control": {
         "id": "AU-8",
         "name": "Time Stamps",
@@ -284,7 +306,7 @@
       "checklist": [
         "I traced one failed sign-in and one router deny to the collector with matching source names and times.",
         "I enrolled SBD-REPO01 over syslog TLS and found its test message on the collector.",
-        "I filed SBD-SYSLOG01's baseline, the DC rescan deltas, and the handoff to course 1.10."
+        "I filed SBD-SYSLOG01's baseline, the DC rescan deltas, and the handoff to course 1.11."
       ]
     }
   }

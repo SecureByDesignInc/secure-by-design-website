@@ -1,15 +1,16 @@
 {
-  "categoryOrder": 7,
-  "number": "1.7",
-  "estimatedHours": 3.2,
+  "categoryOrder": 13,
+  "number": "1.13",
+  "estimatedHours": 3.3,
   "title": "Bring in the fleet",
   "subtitle": "50 Windows endpoints, managed from first boot",
-  "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+  "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, 802.1X port admission through NPS on SBD-DHCP01, and a sampled proof with the whole rollout observed by the logging pipeline.",
   "tags": [
     "Windows client",
     "Domain join",
     "Windows LAPS",
     "Autoenrollment",
+    "802.1X",
     "DISA STIG"
   ],
   "platform": "Windows client · Windows Server",
@@ -26,6 +27,7 @@
   "outcomes": [
     "Roll fifty endpoints in waves that land hardened, addressed, and registered untouched.",
     "Manage every local administrator with Windows LAPS under the tier model.",
+    "Admit only enrolled machines to VLAN 80 ports with 802.1X, proven in monitor mode before enforcement.",
     "Prove the fleet with a defined sample, a failure rule, and pipeline-observed joins."
   ],
   "id": "workstation-fleet",
@@ -44,7 +46,7 @@
     },
     {
       "title": "Autoenroll the fleet's certificates",
-      "detail": "Course 1.4 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+      "detail": "Course 1.6 proved autoenrollment on both domain controllers and its pilot, SBD-PKI-MGMT01; this lesson turns it loose. Widen the template permission to a fleet computer group, let the autoenrollment GPO already linked at the domain root do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
     },
     {
       "title": "Admit only enrolled devices with 802.1X",
@@ -56,7 +58,7 @@
     },
     {
       "title": "Delta scan the fleet and hand off",
-      "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows client benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over."
+      "detail": "The cadence meets its first population: SBD-ADMIN-PC01 gets its own SCAP Compliance Checker (SCC) copy and its first baseline, the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.15."
     }
   ],
   "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",

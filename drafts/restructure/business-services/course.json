@@ -1,9 +1,9 @@
 {
   "id": "business-services",
   "prerequisites": [
-    "Complete courses 1.4–1.8: working PKI services and the watched, managed network with the ring/source rules in force, on the routed, segmented VLANs.",
-    "Provision the VLAN 40 hosts: SBD-FS01 (10.0.40.10), SBD-SQL01 (10.0.40.20), SBD-APPS01 (10.0.40.30), and SBD-WEB01 (10.0.40.40, Linux with Apache, joined to the sbd.test domain with SSSD like SBD-SPLUNK01 and SBD-NESSUS01).",
-    "Have the network's service-path register and the course 1.4 SBD Server Authentication template ready — every service here gets a documented path and a real certificate."
+    "Complete courses 1.1–1.15: the domain with its DNS, time and hardened OUs, the course 1.6 PKI and its autoenrollment GPO, DHCP and the admin seats, SBD-REPO01 and its Linux client package, the logging pipeline with course 1.11's KDS root key, SBD-SPLUNK01 as the Linux server pattern, the fleet, the update rings, and the SBD-MGMT01 inventory.",
+    "Provision the VLAN 40 hosts as virtual machines on SBD-HV05: SBD-FS01 (10.0.40.10), SBD-SQL01 (10.0.40.20) and SBD-APPS01 (10.0.40.30) on Windows Server, and SBD-WEB01 (10.0.40.40) on the Linux distribution course 1.9 chose, with Apache, to be joined to sbd.test with SSSD as SBD-SPLUNK01 was in course 1.12.",
+    "Have the service-path register, the course 1.6 SBD Server Authentication template, course 1.9's client package and Linux assessment set, and course 1.4's SCC media within reach — every service here gets a documented path, a real certificate and a first baseline."
   ],
   "labNote": "The users finally get what the network exists for: files, licensing, and an internal web application with its application tier and database. The model's rule governs the whole course — permit only documented business service paths — so every service arrives with its register rows, its service identity, and its certificate, and nothing reaches it any other way.",
   "sources": [
@@ -43,14 +43,79 @@
       "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
     },
     {
-      "id": "disa-gpo",
-      "title": "DISA · STIGs and GPO package (incl. Apache guidance)",
-      "url": "https://www.cyber.mil/stigs/gpo"
-    },
-    {
       "id": "controls",
       "title": "NIST · SP 800-53 Rev. 5 security controls",
       "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    },
+    {
+      "id": "dmsa",
+      "title": "Microsoft · Delegated Managed Service Accounts overview",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/delegated-managed-service-accounts/delegated-managed-service-accounts-overview"
+    },
+    {
+      "id": "kds",
+      "title": "Microsoft · Create a Key Distribution Service (KDS) root key",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-managed-service-accounts/group-managed-service-accounts/create-the-key-distribution-services-kds-root-key"
+    },
+    {
+      "id": "sql-encrypt",
+      "title": "Microsoft · Encrypt connections to SQL Server by importing a certificate",
+      "url": "https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-sql-server-encryption"
+    },
+    {
+      "id": "audit-policy",
+      "title": "Microsoft · Advanced audit policy configuration (File System, Detailed File Share)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration"
+    },
+    {
+      "id": "firewall",
+      "title": "Microsoft · Configure Windows Firewall rules with Group Policy",
+      "url": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/configure"
+    },
+    {
+      "id": "redhat-ad",
+      "title": "Red Hat · Integrating RHEL systems directly with Windows Active Directory",
+      "url": "https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/integrating_rhel_systems_directly_with_windows_active_directory/index"
+    },
+    {
+      "id": "chrony",
+      "title": "chrony · chrony.conf(5)",
+      "url": "https://chrony-project.org/doc/latest/chrony.conf.html"
+    },
+    {
+      "id": "redhat-trust",
+      "title": "Red Hat · Using shared system certificates",
+      "url": "https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/securing_networks/using-shared-system-certificates_securing-networks"
+    },
+    {
+      "id": "ca-certificates",
+      "title": "Debian · update-ca-certificates(8)",
+      "url": "https://manpages.debian.org/stable/ca-certificates/update-ca-certificates.8.en.html"
+    },
+    {
+      "id": "firewalld",
+      "title": "firewalld · documentation",
+      "url": "https://firewalld.org/documentation/"
+    },
+    {
+      "id": "apache",
+      "title": "Apache HTTP Server 2.4 · Security tips",
+      "url": "https://httpd.apache.org/docs/2.4/misc/security_tips.html"
+    },
+    {
+      "id": "disa-scap",
+      "title": "DISA · Security Content Automation Protocol (SCC and SCAP benchmarks)",
+      "url": "https://www.cyber.mil/stigs/SCAP/"
+    },
+    {
+      "id": "disa-tools",
+      "title": "DISA · SRG/STIG tools (SCC and STIG Viewer)",
+      "url": "https://www.cyber.mil/stigs/srg-stig-tools"
+    },
+    {
+      "id": "filehash",
+      "title": "Microsoft · Get-FileHash",
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash"
     }
   ],
   "lessons": [
@@ -65,15 +130,15 @@
         "Define the access groups that will own each service's data."
       ],
       "steps": [
-        "Write the service-path rows: fleet to FS01 (SMB 445); fleet to APPS01 on its licensing port, recorded per application; fleet to WEB01 (HTTPS 443); WEB01 to APPS01 for the application API (HTTPS 443); and APPS01 — and only APPS01 — to SQL01 (TCP 1433 with TLS). Add an explicit deny from WEB01 to SQL01: the web tier has no database dependency. All four servers share VLAN 40, so the router never sees their traffic to each other — each server's host firewall enforces those rows. Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.",
-        "Register WEB01's Linux maintenance rows as well: packages from SBD-REPO01 only (HTTP with GPG-signed packages) and syslog over TLS to the collector, SBD-SYSLOG01 (TCP 6514) — the same paths the other domain-joined Linux servers, SBD-SPLUNK01 and SBD-NESSUS01, use. Course 1.8's repository row named only those two because WEB01 did not exist yet.",
-        "Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves — and note delegated managed service accounts, introduced in the newest Windows Server release, as the migration path for any legacy service account this lab later inherits.",
-        "Create the access groups under the course 1.3 Groups OU — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.",
-        "Request the server certificates through the course 1.4 process: one SBD Server Authentication certificate each for SQL01, APPS01 (for its application API), and WEB01, enrolled from the template, with the publication site serving their revocation story."
+        "Write the service-path rows into the register, with the IDs Inside the Network gives them and an owner each: the fleet to SBD-FS01 on SMB 445 (F05), to SBD-APPS01 on its licensing port, recorded per application (F12), and to SBD-WEB01 on HTTPS 443 (F13); SBD-WEB01 to SBD-APPS01 for the application API on HTTPS 443 (F21); and SBD-APPS01 — and only SBD-APPS01 — to SBD-SQL01 on TCP 1433 with TLS (F22). Add the explicit deny from SBD-WEB01 to SBD-SQL01 (F14): the web tier has no database dependency. All four servers share VLAN 40, so the router never sees their traffic to each other — each server's host firewall enforces those rows. Everything else toward VLAN 40 stays denied, including endpoint-to-SQL directly.",
+        "Add the rows every new server needs: administration from SBD-ADMIN-SRV01 (A02), and for the three Windows servers the domain rows (F01–F03, F09), Ring 3 updates (F06), event forwarding (F17), certificate publication (F18) and enrollment to SBD-SUBCA01 on the row course 1.6 confirmed. SBD-WEB01's Linux rows already name it: packages from SBD-REPO01 only (F19, HTTP with GPG-signed packages, course 1.9), syslog over TLS to the collector, SBD-SYSLOG01 (F07, TCP 6514), and time from both domain controllers (F09) — the same paths SBD-SPLUNK01 has used since course 1.12.",
+        "Choose the service identities: group managed service accounts (gMSAs) for the SQL and application services, so passwords rotate themselves. They rely on the forest's one KDS root key, which course 1.11 created: confirm it with Get-KdsRootKey and never create another. Each account is created from AdminJumpBox01 once its host has joined, allowed to that one computer, as course 1.11 did (lesson 3). Note delegated managed service accounts, introduced in the newest Windows Server release, as the migration path for any legacy service account this lab later inherits.",
+        "Create the access groups under the course 1.5 Groups OU from AdminJumpBox01 — per-share and per-application role groups — because permissions will be granted to roles, never to named humans.",
+        "Plan the server certificates: one SBD Server Authentication certificate (course 1.6) each for SQL01, APPS01 (for its application API), and WEB01, with the host's DNS name in the subject alternative name. Each host requests its own in its build lesson through the course 1.6 process, so the private key never leaves it — the template allows exportable keys only where the recovery plan says so. Course 1.6's autoenrollment GPO, linked at the domain root, already reaches every new member, so no other enrollment policy is created."
       ],
-      "command": "Get-ADServiceAccount -Filter * | Select-Object Name, Enabled\nGet-ADGroup -SearchBase 'OU=Groups,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name\nTest-NetConnection 10.0.40.20 -Port 1433   # expected before build: TcpTestSucceeded False",
-      "check": "The register carries every service row — the SQL path restricted to APPS01 alone, the WEB01-to-SQL01 deny, and WEB01's repository and syslog rows — the gMSAs and role groups exist, and the three server certificates are issued and recorded.",
-      "evidence": "Keep the service-path rows, the identity and group design, and the certificate enrollment records.",
+      "command": "# From AdminJumpBox01 (Tier 0): the course 1.11 KDS root key, the existing gMSAs, and the role groups\nInvoke-Command SBD-DC01 { Get-KdsRootKey | Select-Object KeyId, EffectiveTime }   # one key, from course 1.11\nGet-ADServiceAccount -Filter * | Select-Object Name, Enabled   # course 1.11's three; this course's arrive with their hosts\nGet-ADGroup -SearchBase 'OU=Groups,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name",
+      "check": "The register carries every VLAN 40 service row with its ID and owner — the SQL path restricted to APPS01 alone (F22), the WEB01-to-SQL01 deny (F14), and WEB01's repository, syslog and time rows — the course 1.11 KDS root key is the forest's only one, the role groups exist, and each server certificate is planned for the host that will request it.",
+      "evidence": "Keep the service-path rows, the identity and group design, the KDS root key check, and the certificate plan.",
       "quizzes": [
         {
           "question": "Who may reach SQL01 on 1433?",
@@ -109,13 +174,14 @@
       "recap": [
         "Every path is a row; the database hears only SBD-APPS01.",
         "Service identities are managed accounts, not passwords.",
-        "Access belongs to roles; certificates are already in hand."
+        "Access belongs to roles; each certificate is planned for its own host."
       ],
       "next": "Lesson 2 builds the file service the fleet will actually use.",
       "sources": [
         "gmsa",
-        "controls",
-        "whatsnew"
+        "kds",
+        "dmsa",
+        "controls"
       ]
     },
     {
@@ -124,19 +190,20 @@
       "minutes": 30,
       "summary": "The file server is where access control meets daily life. Build the shares against the role groups, require SMB signing on the server instead of trusting client defaults, and make 'who can read this' a one-lookup question.",
       "objectives": [
-        "Create the shares with role-group permissions and no individual grants.",
+        "Build SBD-FS01 in its place and create the shares with role-group permissions and no individual grants.",
         "Confirm the SMB signing and encryption posture end to end.",
         "Verify access and denial per role from the fleet."
       ],
       "steps": [
-        "Build SBD-FS01 in the Servers OU and create the planned shares, granting NTFS permissions to the lesson-1 role groups only — share permissions stay simple, the filesystem carries the detail, and no named human appears in an access control list (ACL).",
+        "Build SBD-FS01 as a Windows Server virtual machine at 10.0.40.10/24, with the core's VLAN 40 interface as gateway (10.0.40.1 in this sample), both domain controllers for DNS, a separate data volume for the shares, and the hypervisor's time synchronization turned off. Join it straight into the Servers OU, so course 1.5's STIG policies, course 1.8's tier policies, course 1.10's event-forwarding GPO and course 1.14's Ring 3 update policy apply from its first boot, and check that it takes its time from a domain controller. Lessons 3 and 4 build SBD-SQL01 and SBD-APPS01 the same way.",
+        "Create the planned shares, granting NTFS permissions to the lesson-1 role groups only — share permissions stay simple, the filesystem carries the detail, and no named human appears in an access control list (ACL).",
         "Enable access-based enumeration so users see only what their roles permit — the quiet UX of least privilege.",
         "Confirm the SMB posture. The newest Windows client release (Pro, Enterprise, and Education) requires SMB signing for both inbound and outbound connections, but the newest Windows Server release requires it only for its own outbound connections — so require signing on SBD-FS01 as well (RequireSecuritySignature in its SMB server configuration), and opt the sensitive share into SMB encryption. Verify both on a live connection from a fleet machine rather than assuming the defaults.",
-        "Test as members of two different roles from fleet machines: each sees and opens exactly its shares, the other's are invisible and denied, and the denial lands in the pipeline like every other refusal on this network."
+        "Test as members of two different roles from fleet machines: each sees and opens exactly its shares, and the other's are invisible and, opened by path, denied. Turn on Audit Detailed File Share (failure) for SBD-FS01 in a GPO security-filtered to it, recorded as a documented addition as course 1.11 did for SBD-AUDIT01, so each refusal is event 5145 in its Security log; lesson 5 sends that event to the collector."
       ],
-      "command": "Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData   # on FS01\nGet-SmbServerConfiguration | Select-Object RequireSecuritySignature   # on FS01: expected True\nGet-SmbConnection -ServerName SBD-FS01 | Select-Object ShareName, Dialect, Signed, Encrypted   # on the fleet machine, during the test session\nicacls D:\\Shares\\Projects | Select-String 'SBD'",
-      "check": "Shares grant to role groups only, FS01 requires signing, a live connection from the fleet shows Signed True — or, on the encrypted share, Encrypted True, where Signed reads False even though an encrypted connection is also signed — and the two-role test proves both the access and the invisible-denied behavior.",
-      "evidence": "Keep the share and NTFS permission reports, FS01's signing setting and the live connection's signing/encryption output, and the two-role test record with its pipeline entry.",
+      "command": "# In a Tier 1 session on SBD-FS01 from SBD-ADMIN-SRV01\n([adsisearcher]\"(&(objectCategory=computer)(name=$env:COMPUTERNAME))\").FindOne().Path   # ...OU=Servers,OU=SBD,DC=sbd,DC=test\nw32tm /query /source   # a domain controller, never the local clock\nGet-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData\nGet-SmbServerConfiguration | Select-Object RequireSecuritySignature   # expected True\nicacls D:\\Shares\\Projects | Select-String 'SBD'\nauditpol /get /subcategory:\"Detailed File Share\"   # Failure\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=5145} -MaxEvents 5 | Select-Object TimeCreated, Message\n# On the fleet machine, during the test session\nGet-SmbConnection | Where-Object ServerName -like 'SBD-FS01*' | Select-Object ShareName, Dialect, Signed, Encrypted",
+      "check": "SBD-FS01 sits in the Servers OU with time from a domain controller, shares grant to role groups only, FS01 requires signing, a live connection from the fleet shows Signed True — or, on the encrypted share, Encrypted True, where Signed reads False because encryption, which also protects integrity, takes the place of signing — and the two-role test proves both the access and the invisible-denied behavior, with each refusal recorded as event 5145.",
+      "evidence": "Keep the OU placement and time source, the share and NTFS permission reports, FS01's signing setting and the live connection's signing/encryption output, and the two-role test record with its 5145 events.",
       "model": {
         "href": "/inside-the-network#process=files&step=3",
         "label": "Open a file, step 3",
@@ -185,7 +252,8 @@
         "smb-signing",
         "smbconnection",
         "smbconnection-class",
-        "whatsnew"
+        "whatsnew",
+        "audit-policy"
       ]
     },
     {
@@ -194,19 +262,19 @@
       "minutes": 30,
       "summary": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly one caller, SBD-APPS01 — the narrowest audience on the network, by design.",
       "objectives": [
-        "Install the database service under its gMSA.",
-        "Bind the SBD Server Authentication certificate for encrypted connections.",
-        "Prove the one-caller rule: SBD-APPS01 connects; SBD-WEB01 and the fleet are refused."
+        "Build SBD-SQL01 and run the database service under its gMSA.",
+        "Bind the SBD Server Authentication certificate and force encrypted connections.",
+        "Prove the one-caller rule: SBD-APPS01 connects; a VLAN 40 neighbour and the fleet are refused."
       ],
       "steps": [
-        "Install the database engine on SBD-SQL01 with the lesson-1 gMSA as its service identity — the install itself demonstrates the managed account working where a password account used to live.",
-        "Bind the issued certificate to the instance and require encrypted connections; the chain validates against pki.sbd.test like every other certificate on this network.",
-        "Create the application databases with role-based database access for the APPS01 application identity only — least privilege continues inside the engine, not just at its port.",
-        "Prove the audience: a connection from APPS01 succeeds encrypted. The same attempt from SBD-WEB01 is refused by SBD-SQL01's host firewall — the two share VLAN 40, so the router never sees it — and one from a fleet machine dies at the router with a deny-log entry. Turn on the host firewall's dropped-packet logging if it is off, so both refusals leave a record."
+        "Build SBD-SQL01 (10.0.40.20) and the host of its one caller, SBD-APPS01 (10.0.40.30), as SBD-FS01 was built in lesson 2. Then, from AdminJumpBox01, create one gMSA per service, each allowed to one computer as course 1.11 did: SBD-SQL$ for SBD-SQL01$ and SBD-Apps$ for SBD-APPS01$ (sample names). Install the database engine with SBD\\SBD-SQL$ as its service account and no password — the install itself demonstrates the managed account working where a password account used to live.",
+        "On SBD-SQL01, request its SBD Server Authentication certificate through the course 1.6 process, with SBD-SQL01.sbd.test in the subject alternative name. Give the gMSA read on the certificate's private key — without it the service won't start with the certificate — select the certificate in SQL Server Configuration Manager, set Force Encryption to Yes, and restart the service; the chain validates against pki.sbd.test like every other certificate on this network.",
+        "Create the application databases with role-based database access for one login only, SBD\\SBD-Apps$, the identity SBD-APPS01's services run as in lesson 4 — least privilege continues inside the engine, not just at its port.",
+        "Prove the audience: allow TCP 1433 in SBD-SQL01's host firewall from 10.0.40.30 alone (F22), and turn on its dropped-packet logging if it is off. A connection from APPS01 succeeds. The same attempt from SBD-FS01 is refused by SBD-SQL01's host firewall — the two share VLAN 40, so the router never sees it, which is exactly how SBD-WEB01 will be refused in lesson 4 — and one from a fleet machine dies at the router with a deny-log entry."
       ],
-      "command": "Get-Service MSSQLSERVER -ComputerName SBD-SQL01 | Select-Object Status\n# From SBD-APPS01, the registered caller: expected TcpTestSucceeded True.\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433\n# From a fleet machine: expected TcpTestSucceeded False.\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433\n# From SBD-WEB01 (Linux): expected to be refused or time out.\nnc -zv SBD-SQL01.sbd.test 1433\ncertutil -verify -urlfetch C:\\Evidence\\services\\sql01.cer",
-      "check": "The service runs as the gMSA, connections are certificate-encrypted with a validating chain, APPS01's access works by database role, and both direct attempts fail with a record: SBD-WEB01's at SQL01's host firewall, the fleet's at the router.",
-      "evidence": "Keep the service identity proof, the certificate binding and urlfetch output, the database role grants, and APPS01's successful connection paired with both refusals and their log entries.",
+      "command": "# From AdminJumpBox01 (Tier 0): one gMSA per service, each allowed to one computer\nNew-ADServiceAccount SBD-SQL -DNSHostName SBD-SQL.sbd.test -PrincipalsAllowedToRetrieveManagedPassword 'SBD-SQL01$'\nNew-ADServiceAccount SBD-Apps -DNSHostName SBD-Apps.sbd.test -PrincipalsAllowedToRetrieveManagedPassword 'SBD-APPS01$'\n# In a Tier 1 session on SBD-SQL01 from SBD-ADMIN-SRV01: identity, encryption, certificate, firewall scope\nGet-CimInstance Win32_Service -Filter \"Name='MSSQLSERVER'\" | Select-Object Name, StartName, State   # StartName SBD\\SBD-SQL$\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Microsoft SQL Server\\*\\MSSQLServer\\SuperSocketNetLib' | Select-Object ForceEncryption, Certificate   # 1 and the thumbprint\n$cer = Get-ChildItem Cert:\\LocalMachine\\My | Where-Object Subject -like '*SBD-SQL01*' | Export-Certificate -FilePath \"$env:TEMP\\sql01.cer\"\ncertutil -verify -urlfetch $cer.FullName   # chain and revocation from pki.sbd.test\nGet-NetFirewallPortFilter | Where-Object LocalPort -eq 1433 | Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' -and $_.Direction -eq 'Inbound' } | Get-NetFirewallAddressFilter | Select-Object RemoteAddress   # 10.0.40.30 only\n# From SBD-APPS01: expected TcpTestSucceeded True. From SBD-FS01 and from a fleet machine: expected False.\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433",
+      "check": "The service runs as the gMSA, Force Encryption is on with the issued certificate bound and its chain validating, the database role admits SBD\\SBD-Apps$ alone, TCP 1433 is open to 10.0.40.30 only, APPS01 reaches it, and both other attempts fail with a record: SBD-FS01's at SQL01's host firewall, the fleet's at the router.",
+      "evidence": "Keep the service identity proof, the encryption setting, certificate binding and urlfetch output, the database role grants, the firewall scope, and APPS01's successful connection paired with both refusals and their log entries.",
       "model": {
         "href": "/inside-the-network#process=drill&step=5",
         "label": "Attack drill, step 5",
@@ -231,14 +299,14 @@
             "SQL refuses to install without one"
           ],
           "correct": 1,
-          "explanation": "This is the payoff moment for course 1.4: a business service encrypting with a certificate the lab issued, published, and can revoke."
+          "explanation": "This is the payoff moment for course 1.6: a business service encrypting with a certificate the lab issued, published, and can revoke."
         },
         {
           "question": "What is the complete evidence for the one-caller rule?",
           "answers": [
             "The register row alone",
             "A diagram of VLAN 40",
-            "APPS01's successful encrypted connection plus the refused attempts from SBD-WEB01 and a fleet machine, each with its log entry"
+            "APPS01's successful connection plus the refused attempts from a VLAN 40 neighbour and a fleet machine, each with its log entry"
           ],
           "correct": 2,
           "explanation": "Same standard as every boundary check: the permit shown working and the deny shown refusing, each with its record."
@@ -257,12 +325,14 @@
       "recap": [
         "A managed identity runs the engine; no password exists to leak.",
         "Connections encrypt under the lab's own validated chain.",
-        "One caller in: SBD-APPS01. SBD-WEB01 is refused at SQL01's host firewall and the fleet at the router."
+        "One caller in: SBD-APPS01. Its VLAN 40 neighbours are refused at SQL01's host firewall and the fleet at the router."
       ],
       "next": "Lesson 4 stands up the services users actually touch.",
       "sources": [
         "sql",
-        "gmsa"
+        "sql-encrypt",
+        "gmsa",
+        "firewall"
       ]
     },
     {
@@ -272,18 +342,19 @@
       "summary": "The application server and the internal web server complete the dependency chain: fleet to web, web to application, application to database — each hop a register row, the web tier hardened against its Defense Information Systems Agency (DISA) guidance, and HTTPS served from the lab's own trust.",
       "objectives": [
         "Stand up SBD-APPS01's licensing service and application API on their registered paths.",
-        "Build the domain-joined Linux Apache server hardened per its DISA Security Technical Implementation Guide (STIG), serving HTTPS with the internal certificate.",
+        "Build the domain-joined Linux Apache server the way courses 1.9 and 1.12 built theirs, hardened per its DISA Security Technical Implementation Guide (STIG) and serving HTTPS with the internal certificate.",
         "Prove the full chain: fleet → web → application → database, with the web-to-database shortcut refused."
       ],
       "steps": [
-        "Build SBD-APPS01 in the Servers OU and run both of its services under managed identities: the licensing service, verified from the fleet on its registered vendor port, and the application API on HTTPS 443 with its SBD Server Authentication certificate, answering SBD-WEB01 only. APPS01 is the network's one SQL consumer — and the template for any future service: identity, row, evidence.",
-        "Build SBD-WEB01 on Linux and join it to the sbd.test domain with SSSD, as SBD-SPLUNK01 and SBD-NESSUS01 are joined. Point its packages at SBD-REPO01 only, its syslog over TLS at the collector, and its time service at both domain controllers, and harden the web tier against DISA's Apache guidance — the server's assessable record follows the Linux pattern: hardened configuration exported and hashed, checklist items answered in STIG Viewer.",
-        "Install the SBD Server Authentication certificate with its chain and serve the internal application over HTTPS — the 2,048-bit key floor from course 1.4's templates applies here as everywhere.",
-        "Prove the chain from a fleet machine: the HTTPS page loads with a validating certificate, and its data travels fleet → WEB01 → APPS01 → SQL01, every hop a register row. Then prove the shortcuts stay shut: a direct attempt from SBD-WEB01 to SQL01 on 1433 is refused by SQL01's host firewall, and the fleet still cannot touch 1433 at all — three courses of design visible in one browser request."
+        "On SBD-APPS01, built in lesson 3, request its SBD Server Authentication certificate through the course 1.6 process and run both of its services as SBD\\SBD-Apps$, or record an exception where the product can't use a gMSA: the licensing service, verified from the fleet on its registered vendor port (F12), and the application API on HTTPS 443 (F21), with its host firewall admitting the API from SBD-WEB01 (10.0.40.40) alone. APPS01 is the network's one SQL consumer — and the template for any future service: identity, row, evidence.",
+        "Build SBD-WEB01 at 10.0.40.40/24 from hashed install media of the distribution course 1.9 chose, with both domain controllers for DNS and the hypervisor's time synchronization turned off. Before anything else, install course 1.3's chrony file (both domain controllers, maxdistance 16) and confirm a controller is selected inside that course's threshold; then apply course 1.9's client package, checked against its hashes, so SBD-REPO01 is its only package source (F19), and update from the current snapshot. Place the course 1.6 root in its system trust store by hand, its SHA-256 checked against course 1.6's record, as course 1.9 did for SBD-REPO01.",
+        "Join sbd.test with realm join into the Servers OU, as SBD-SPLUNK01 was joined in course 1.12, permit sign-in only to SBD Tier 1 Admins with realm permit -g, and give that group sudo through a drop-in file. Make the host firewall the register's copy: HTTPS 443 from the fleet (F13) and SSH from 10.0.60.20 alone. Then send its syslog over TLS to SBD-SYSLOG01 (F07) as course 1.10 enrolled SBD-REPO01: rsyslog-gnutls from the snapshot, the collector's certificate name checked, and SBD-WEB01 added to the collector's TCP 6514 sender list.",
+        "Request SBD-WEB01's SBD Server Authentication certificate through the course 1.6 process, with the key and request made on the host with openssl and SBD-WEB01.sbd.test in both subject and subject alternative name, and the key readable by root alone. Serve the internal application over HTTPS with its chain, and harden Apache against the DISA Apache Server 2.4 UNIX STIGs that course 1.9 staged — the 2,048-bit key floor from course 1.6's templates applies here as everywhere. Export the hardened configuration and hash it; lesson 5 measures the host.",
+        "Prove the chain from a fleet machine: the HTTPS page loads with a validating certificate, and its data travels fleet → WEB01 → APPS01 → SQL01, every hop a register row — on SBD-SQL01, sys.dm_exec_connections shows APPS01's session (10.0.40.30) with encrypt_option TRUE. Then prove the shortcuts stay shut: a direct attempt from SBD-WEB01 to SQL01 on 1433 is refused by SQL01's host firewall, and the fleet still cannot touch 1433 at all — three courses of design visible in one browser request."
       ],
-      "command": "Test-NetConnection SBD-WEB01.sbd.test -Port 443   # from a fleet machine\ncertutil -verify -urlfetch C:\\Evidence\\services\\web01.cer\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # from the fleet: expected False\n# On SBD-WEB01 (Linux): domain membership, the API answers, the database does not.\nrealm list\ncurl -sS -o /dev/null -w '%{http_code}\\n' https://SBD-APPS01.sbd.test/   # use your application's health path\nnc -zv SBD-SQL01.sbd.test 1433   # expected: refused or timed out",
-      "check": "The licensing path works as registered, SBD-WEB01 is domain-joined with SSSD and patches only from SBD-REPO01, the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration, and the end-to-end request proves fleet → web → application → database with both shortcuts denied.",
-      "evidence": "Keep APPS01's identity and path proof, WEB01's domain-join and repository settings, its hardened config export with hashes and checklist, the certificate validation output, the end-to-end chain test, and the refused WEB01-to-SQL01 attempt.",
+      "command": "# On SBD-WEB01 (Tier 1 SSH session from SBD-ADMIN-SRV01): time, packages, domain, firewall, logging, web\nchronyc sources -v; chronyc tracking   # ^* one controller, ^+ or ^- the other\ndnf repolist --all   # RHEL family: only the sbd-repo01 repositories enabled (Ubuntu: apt-cache policy | grep http)\nrealm list   # sbd.test, kerberos-member, permitted group SBD Tier 1 Admins\nsudo firewall-cmd --get-active-zones\nopenssl s_client -connect SBD-SYSLOG01.sbd.test:6514 -verify_hostname SBD-SYSLOG01.sbd.test </dev/null 2>/dev/null | grep 'Verify return code'   # 0 (ok): the SBD root is trusted\nlogger -t sbd-web-proof 'SBD-WEB01 syslog over TLS test'\nsudo apachectl -S   # one HTTPS site on 10.0.40.40:443\ncurl -sS -o /dev/null -w '%{http_code}\\n' https://SBD-APPS01.sbd.test/   # use your application's health path\ntimeout 5 bash -c '</dev/tcp/SBD-SQL01.sbd.test/1433' && echo open || echo 'refused or timed out'   # expected: refused or timed out\n# On SBD-ADMIN-SRV01: the issued certificate's chain and revocation\ncertutil -verify -urlfetch C:\\Evidence\\business-services\\web01.cer\n# From a fleet machine: the page answers, the database does not\nTest-NetConnection SBD-WEB01.sbd.test -Port 443\nTest-NetConnection SBD-SQL01.sbd.test -Port 1433   # expected: False\n# On SBD-SQL01, in a query: APPS01's live session is encrypted\n# SELECT client_net_address, encrypt_option, auth_scheme FROM sys.dm_exec_connections WHERE client_net_address = '10.0.40.30'",
+      "check": "The licensing path and the application API work as registered under the managed identity; SBD-WEB01 takes its time from the controllers and its packages only from SBD-REPO01, trusts the SBD root, is domain-joined with SSSD in the Servers OU, and sends its syslog to the collector over TLS; the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration; and the end-to-end request proves fleet → web → application → database, encrypted to the database, with both shortcuts denied.",
+      "evidence": "Keep APPS01's identity and path proof, WEB01's time, repository, trust, domain-join and syslog checks, its hardened config export with hashes, the certificate validation output, the end-to-end chain test with SQL01's connection record, and the refused WEB01-to-SQL01 attempt.",
       "model": {
         "href": "/inside-the-network#process=web",
         "label": "Use a web app",
@@ -295,7 +366,7 @@
           "answers": [
             "Any public mirror that responds",
             "A USB stick from home",
-            "SBD-REPO01 — the one approved source the 1.8 rule named for Linux software"
+            "SBD-REPO01 — the one approved source course 1.9 built for Linux software (F19)"
           ],
           "correct": 2,
           "explanation": "The one-source rule follows software wherever it runs; the web tier installs only what crossed the boundary through the repository, on the row lesson 1 registered for it."
@@ -304,11 +375,11 @@
           "question": "What is the Apache host's assessable record?",
           "answers": [
             "A screenshot of the home page",
-            "Its hardened configuration export with hashes plus the answered STIG checklist — the established Linux pattern",
+            "An SCC for Linux baseline with the distribution's STIG benchmark, plus the Apache STIG items answered in a STIG Viewer checklist and the hashed configuration",
             "Its uptime counter"
           ],
           "correct": 1,
-          "explanation": "The router, the repository, and now the web tier: no Security Content Automation Protocol (SCAP) automation does not mean no evidence standard."
+          "explanation": "Linux servers get SCAP automation too: course 1.9 staged SCC for Linux and the distribution's benchmark once, so every Linux server is scanned the same way. What a scanner can't read, such as most of the Apache STIG, a person answers with evidence, and the configuration's hash shows later whether it changed."
         },
         {
           "question": "What does one successful page load from the fleet actually demonstrate?",
@@ -333,13 +404,19 @@
       ],
       "recap": [
         "APPS01 serves licensing and the application API; WEB01 joins the domain like the other Linux servers.",
-        "The web tier is hardened to its guidance and serves the lab's own trust.",
+        "The web tier is built the Linux way — chrony, SBD-REPO01, the SBD root by hand — hardened to its guidance and serving the lab's own trust.",
         "One page load proves fleet → web → application → database; the shortcuts stay shut."
       ],
-      "next": "The final lesson scans the new servers and reconciles the register against reality one last time.",
+      "next": "The final lesson enrols the new servers, baselines them, and reconciles the register against reality one last time.",
       "sources": [
-        "disa-gpo",
         "sql",
+        "gmsa",
+        "redhat-ad",
+        "chrony",
+        "redhat-trust",
+        "ca-certificates",
+        "firewalld",
+        "apache",
         "controls"
       ]
     },
@@ -349,19 +426,20 @@
       "minutes": 30,
       "summary": "The business services close the way every build course has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete.",
       "objectives": [
-        "Reconcile the full register against observed permits and denies.",
-        "Baseline the four service hosts and rescan what changed.",
+        "Enrol the new servers and reconcile the full register against observed permits and denies.",
+        "Baseline the four service hosts with the tool each platform takes.",
         "Update the living records and write the course's handoff."
       ],
       "steps": [
-        "Run the full-register reconciliation one more time: every business-service row proven from its real source, every adjacent deny probed and logged, including WEB01 to SQL01 — the VLAN 40 section of the matrix joins the evidence beside course 1.5's.",
-        "Run the cadence: SCAP baselines for FS01, SQL01, and APPS01; the config-export record for WEB01; a credentialed scan of VLAN 40 from SBD-NESSUS01 with its findings triaged into the three classifications.",
-        "Update the living records: the four hosts, their identities, certificates, and rings into the SBD-MGMT01 inventory; the new rows' owners into the register; any service-hardening deviations into the exception record.",
-        "Write the handoff: every modeled system except the recovery design is now built, watched, patched, and evidenced — course 1.10 proves the network can come back from the dead, and then path 2 takes the whole record to authorization."
+        "Enrol the three Windows servers in the record: from AdminJumpBox01, add SBD-FS01, SBD-SQL01 and SBD-APPS01 to SBD Event Sources (course 1.10). On the collector, in a Tier 1 session, widen the WinRM 5985 scope to 10.0.40.10, 10.0.40.20 and 10.0.40.30 (F17) and add a query to SBD-ForwardedSecurity for SBD-FS01's event 5145, filtered to that computer as course 1.11 did for SBD-AUDIT01. Restart the three servers and confirm their events reach ForwardedEvents; SBD-WEB01 already sends its syslog over TLS (lesson 4).",
+        "Run the full-register reconciliation one more time: every business-service row proven from its real source, every adjacent deny probed and logged, including WEB01 to SQL01 — the VLAN 40 rows join the register's evidence beside the earlier courses' proofs.",
+        "Take the first baselines. SBD-FS01, SBD-SQL01 and SBD-APPS01 get course 1.4's SCC and Windows Server benchmark versions, run locally in Tier 1 sessions from SBD-ADMIN-SRV01 as course 1.14 did for SBD-WSUS01, plus DISA's SQL Server STIGs for the instance, staged across the air gap as course 1.4 taught and answered in a STIG Viewer checklist. SBD-WEB01 gets SCC for Linux and the distribution benchmark from course 1.9's set in C:\\Staging\\DISA\\linux, scanned the course 1.9 way, with the Apache STIG items in its checklist. Classify every open item as course 1.4 taught — fix by GPO, deviation candidate or POA&M candidate, with fix now (no GPO applies to Linux) for SBD-WEB01. Credentialed vulnerability scanning arrives with course 1.17, coming soon.",
+        "Update the living records: the four hosts' planned rows in the SBD-MGMT01 inventory turn active through its change log (course 1.15), with their identities, certificates, rings and baselines; the new rows' owners go into the register; and any service-hardening deviations go to the owner of the exception record, C:\\Evidence\\exception-record.csv on AdminJumpBox01.",
+        "Write the handoff: every modeled system that isn't marked coming soon is now built, watched, patched, and evidenced — course 1.19 proves the network can come back from the dead, and then path 2 takes the whole record to authorization."
       ],
-      "command": "Get-ChildItem C:\\Evidence\\business-services -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\business-services\\*",
-      "check": "The matrix covers every VLAN 40 row with paired permit/deny proof, the four hosts carry baselines or config records with triaged scan findings, and inventory, register, and exception record all reflect the finished services.",
-      "evidence": "Finish the checklist: the reconciliation matrix, the scan and triage set, the updated living records, and the handoff note to course 1.10.",
+      "command": "# On SBD-SYSLOG01 (Tier 1 session): the new sources report\nwecutil gr SBD-ForwardedSecurity   # SBD-FS01, SBD-SQL01 and SBD-APPS01: Active\nGet-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; StartTime=(Get-Date).AddHours(-1)} | Group-Object MachineName | Select-Object Name, Count\nSelect-String -Path D:\\Logs\\Syslog\\*\\*.log -Pattern 'sbd-web-proof' | Select-Object -First 1\n# On SBD-ADMIN-SRV01: collect the course's records and hash them\nGet-ChildItem C:\\Evidence\\business-services -Recurse -File | Select-Object FullName, LastWriteTime\nGet-ChildItem C:\\Evidence\\business-services -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\\Evidence\\business-services-hashes.csv -NoTypeInformation",
+      "check": "The three Windows servers forward their events and SBD-WEB01 its syslog, the register covers every VLAN 40 row with paired permit/deny proof, all four hosts carry first baselines with classified findings, and inventory, register, and exception record all reflect the finished services.",
+      "evidence": "Finish the checklist: the enrolment proof, the reconciliation record, the baselines and checklists with classified findings, the updated living records, and the handoff note to course 1.19.",
       "quizzes": [
         {
           "question": "Why re-run the whole register reconciliation now?",
@@ -378,15 +456,15 @@
           "answers": [
             "WEB01 has none",
             "FS01 is exempt from scans",
-            "FS01 gets a SCAP baseline; WEB01 gets the hashed config export and answered checklist — same standard, platform-appropriate instrument"
+            "Only the instrument: FS01 is scanned with SCC and the Windows Server benchmark, WEB01 with SCC for Linux and its distribution's benchmark plus the Apache checklist — same standard"
           ],
           "correct": 2,
-          "explanation": "The evidence standard is constant; the tool varies by platform, exactly as the course has practiced since the router."
+          "explanation": "The evidence standard is constant; the tool varies by platform. Course 1.9 staged the Linux set once, so every Linux server is measured the same way."
         },
         {
           "question": "What remains before the authorization path begins?",
           "answers": [
-            "Proving recovery — course 1.10 — so the Body of Evidence includes the network coming back, not just running",
+            "Proving recovery — course 1.19 — so the Body of Evidence includes the network coming back, not just running",
             "Nothing at all",
             "Rebuilding the domain controllers"
           ],
@@ -399,10 +477,12 @@
         "Every service host carries its platform-appropriate evidence.",
         "One course remains: proving the network can be brought back."
       ],
-      "next": "That completes course 1.9. Course 1.10 closes the Build path by proving recovery — directory, CA, policy, and logs — before authorization begins.",
+      "next": "That completes course 1.18. Course 1.19 closes the Build path by proving recovery — directory, CA, policy, and logs — before authorization begins.",
       "sources": [
         "controls",
-        "disa-gpo"
+        "disa-scap",
+        "disa-tools",
+        "filehash"
       ]
     }
   ]

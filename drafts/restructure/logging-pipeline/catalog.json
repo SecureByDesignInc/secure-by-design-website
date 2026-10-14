@@ -4,7 +4,7 @@
   "estimatedHours": 2.3,
   "title": "Collect the record on SBD-SYSLOG01",
   "subtitle": "Design the logging pipeline and build its collector",
-  "description": "The first of three logging courses: design the whole collect → protect → analyze pipeline, then build its first stage — advanced audit policy on the DCs and admin hosts, source-initiated Windows Event Forwarding and a syslog intake on SBD-SYSLOG01, health checks with a named owner, and proof that real events arrive with the right names and times.",
+  "description": "The first of three logging courses: design the whole collect → protect → analyze pipeline, then build its first stage — advanced audit policy on the DCs and admin hosts, source-initiated Windows Event Forwarding from every existing Windows system and a syslog intake on SBD-SYSLOG01, health checks with a named owner, and proof that real events arrive with the right names and times.",
   "tags": [
     "Windows Server",
     "Logging",
@@ -17,6 +17,9 @@
     "SBD-SYSLOG01",
     "SBD-DC01",
     "SBD-DC02",
+    "SBD-SUBCA01",
+    "SBD-PKI-MGMT01",
+    "SBD-DHCP01",
     "SBD-REPO01"
   ],
   "artLabels": [
@@ -27,7 +30,7 @@
   "outcomes": [
     "Design all three logging stages: retention, readers, streams, and register rows.",
     "Write the designed audit events on the DCs and admin hosts through GPO.",
-    "Forward Windows events by source-initiated subscription and take syslog from the router and SBD-REPO01.",
+    "Forward every existing Windows system's events by source-initiated subscription and take syslog from the router and SBD-REPO01.",
     "Keep the collector healthy and prove collection with events you cause."
   ],
   "stages": [
@@ -41,7 +44,7 @@
     },
     {
       "title": "Build the collector",
-      "detail": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings the DC and admin-host events in by source-initiated subscription, and a syslog receiver takes the core router's denies and, from the next lessons, the Linux servers over TLS — one host where the network's record first lands."
+      "detail": "SBD-SYSLOG01 becomes the funnel: Windows Event Forwarding brings in the events of every Windows system that exists by source-initiated subscription, and a syslog receiver takes the core router's denies and, from lesson 5, the Linux servers over TLS — one host where the network's record first lands."
     },
     {
       "title": "Keep the collector trustworthy",

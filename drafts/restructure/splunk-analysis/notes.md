@@ -36,6 +36,6 @@ Moved quizzes: `analyze` keeps "Why does the repository stay out of the analysis
 - The add-on's page says only "use the host field" for forwarded events. It doesn't say whether the forwarder or the indexer applies it, so the course installs the add-on on both.
 - From experience, not re-verified: `connectionType=cookedSSL` (metrics.log tcpin_connections), the forwarder's "Connected to idx" splunkd.log line, `[httpServer] disableDefaultPort`, `useACK`, SSSD's default DNS update, and `realm permit -g` switching SSSD to the simple access provider.
 - A community thread reports confusion over `useSSL = true` without a client certificate. The spec supports it, but test the F10 handshake in a lab.
-- `/opt/scc/cscc` is copied from course 1.9, which was also unsure of it.
+- The SCC command is written `<SCC install directory>/cscc`, as course 1.9 writes it (audit, October 14).
 - AU-6(3)'s title ("Audit Record Review, Analysis, and Reporting | Correlate Audit Record Repositories") is from my knowledge of Rev. 5, not re-fetched.
 - Alert thresholds, the 7-day expiration and the review cadence are sample values.
