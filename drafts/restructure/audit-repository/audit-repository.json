@@ -1,0 +1,288 @@
+{
+  "id": "audit-repository",
+  "hero": {
+    "title": "Protect the record",
+    "accent": "on SBD-AUDIT01.",
+    "text": "Give the collector’s record a protected home on SBD-AUDIT01: one encrypted write path from SBD-SYSLOG01, a hash for every archive, access auditing that leaves the box, and retention that runs only as an approved process. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "AUDIT RECORD"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-AUDIT01",
+      "10.0.50.40 / 24 · VLAN 50 · repository"
+    ],
+    [
+      "SBD-SYSLOG01",
+      "10.0.20.20 / 24 · VLAN 20 · collector"
+    ],
+    [
+      "Retention (sample values)",
+      "Collector ≥ 14 days · repository 1 year · analysis 90 days"
+    ],
+    [
+      "Archive path",
+      "F11 · SMB 3 with encryption · TCP 445 · \\\\SBD-AUDIT01\\LogArchive"
+    ],
+    [
+      "Identities",
+      "SBD-Archive$ writes · SBD Auditors read · SBD-Retention$ deletes"
+    ],
+    [
+      "Administration",
+      "Audit custodian accounts from SBD-ADMIN-SRV01 (rule A04)"
+    ]
+  ],
+  "scene": {
+    "tag": "AUDIT REPOSITORY · VLAN 50",
+    "label": "Interactive 3D lesson network showing the collector SBD-SYSLOG01 writing daily archives to the audit repository SBD-AUDIT01 over encrypted SMB, the repository’s access events returning to the collector, and the audit custodian administering it from SBD-ADMIN-SRV01.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "SBD-AUDIT01 holds a year of the collector’s record: archives arrive by one encrypted path, their hashes are verified every day, access is audited off the box, and nothing leaves except by the custodian’s approved retention process.",
+    "nodes": [
+      {
+        "id": "audit",
+        "name": "SBD-AUDIT01",
+        "sub": "10.0.50.40",
+        "kind": "server",
+        "row": "back",
+        "from": 0,
+        "button": "SBD-AUDIT01",
+        "title": "SBD-AUDIT01 · 10.0.50.40",
+        "description": "The repository this course builds, on domain-joined Windows in its own Audit Servers OU. Its LogArchive share requires encryption and accepts one writer; archives are hashed on arrival and verified daily, and only SBD-Retention$ can delete."
+      },
+      {
+        "id": "syslog",
+        "name": "SBD-SYSLOG01",
+        "sub": "10.0.20.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-SYSLOG01",
+        "title": "SBD-SYSLOG01 · 10.0.20.20",
+        "description": "The collector from course 1.10. Its daily archive task runs as SBD-Archive$, exports ForwardedEvents and zips the syslog files, hashes each archive, and writes it to SBD-AUDIT01. From lesson 3 it also receives the repository’s own access events."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Holds the forest’s one KDS root key, created in lesson 1 from a Tier 0 session, which lets the domain controllers manage the three group managed service accounts’ passwords. Its own events already reach the collector."
+      },
+      {
+        "id": "jump1",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The audit custodian’s seat (rule A04). The custodian’s separate accounts open the only management sessions SBD-AUDIT01 accepts, from here; the same seat’s Tier 1 accounts manage the collector."
+      },
+      {
+        "id": "jump",
+        "name": "AdminJumpBox01",
+        "sub": "10.0.60.10",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 0,
+        "button": "AdminJumpBox01",
+        "title": "AdminJumpBox01 · 10.0.60.10",
+        "description": "The Tier 0 seat (rule A01). The directory work happens here: the KDS root key, the gMSAs, the custodian and auditor groups, and the Audit Servers OU with its policy links."
+      }
+    ],
+    "flows": [
+      {
+        "from": "jump",
+        "to": "dc1",
+        "lessons": [
+          0,
+          1
+        ],
+        "label": "Tier 0 session · KDS key, gMSAs, OU"
+      },
+      {
+        "from": "jump1",
+        "to": "audit",
+        "lessons": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Custodian session · rule A04"
+      },
+      {
+        "from": "syslog",
+        "to": "audit",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Daily archive · F11 · SMB 3 encrypted"
+      },
+      {
+        "from": "audit",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Repository events · F17 · WinRM 5985"
+      }
+    ]
+  },
+  "lessons": {
+    "repository-design": {
+      "short": "Design and build",
+      "tag": "01 / DESIGN",
+      "status": "REPOSITORY PLANNED",
+      "stepTitles": [
+        "Write the repository’s rules from the pipeline design",
+        "Size the volume from a real day of both streams",
+        "Fix the one way in: rule F11",
+        "Name every identity and create the KDS root key",
+        "Build SBD-AUDIT01 in its own OU"
+      ],
+      "mistake": "Joining SBD-AUDIT01 into the Servers OU like any other member server. Every right granted to ordinary server administrators there — local administrator rights, Remote Desktop — then reaches the repository, and the custodian is no longer the only one who runs it. Give it its own OU, with the STIG and tier policies linked first.",
+      "network": "SBD-AUDIT01 is planned on VLAN 50 at 10.0.50.40. Directory work runs from AdminJumpBox01 to SBD-DC01, and the custodian’s first session comes from SBD-ADMIN-SRV01; no archive flows yet.",
+      "control": {
+        "id": "AU-4",
+        "name": "Audit Log Storage Capacity",
+        "phase": "Prepare → Implement",
+        "body": "Capacity comes from measurement, not a guess: a real day of both streams times the retention period, plus headroom and a warning threshold. A full repository refuses the next archive, and once the collector’s 14-day buffer rolls over, that record is gone.",
+        "question": "When the fifty workstations join in course 1.13, how will you know the volume still holds a full year?"
+      },
+      "checklist": [
+        "I wrote the repository’s retention, single write path, and identity table, using course 1.10’s sample values.",
+        "I sized the D: volume from one measured day of ForwardedEvents and syslog, with headroom and an 80 percent warning.",
+        "I built SBD-AUDIT01 in the Audit Servers OU with the custodians as its only administrators, and recorded the KDS root key’s effective time."
+      ]
+    },
+    "protect": {
+      "short": "Archive and protect",
+      "tag": "02 / PROTECT",
+      "status": "RECORD PROTECTED",
+      "stepTitles": [
+        "Create the three managed service accounts",
+        "Set create-without-delete NTFS permissions",
+        "Share it with encryption and one writer",
+        "Run the archive task as SBD-Archive$",
+        "Export each day, hash it, then copy",
+        "Catalog every arrival and fill in the AU table"
+      ],
+      "mistake": "Granting the archive account Modify because the copy failed with access denied. Modify includes delete and overwrite, so the one identity that touches the record from the network could now destroy it. Grant create files on the folder only; a creator still writes the file it is creating.",
+      "network": "SBD-AUDIT01 on VLAN 50 is online. Once a day SBD-SYSLOG01 writes archives over SMB 3 with encryption (rule F11) as SBD-Archive$; nothing else reaches the share, and the custodian works from SBD-ADMIN-SRV01.",
+      "control": {
+        "id": "AU-9",
+        "name": "Protection of Audit Information",
+        "phase": "Implement",
+        "body": "The repository protects the record from change and deletion, including by its administrators: the archive account can only create, the auditors and custodians only read, and deletion belongs to one process identity. The hash catalog makes any change detectable.",
+        "question": "If an archive’s hash no longer matched the catalog, who would be told, and what would they do first?"
+      },
+      "checklist": [
+        "I confirmed the LogArchive share requires encryption and Get-SmbShareAccess lists SBD-Archive$ alone.",
+        "I read the icacls output and found delete rights for SYSTEM and SBD-Retention$ only.",
+        "I saw the first daily archives arrive owned by SBD-Archive$, with matching hashes in the catalog, and completed the AU table."
+      ]
+    },
+    "integrity": {
+      "short": "Verify and watch",
+      "tag": "03 / VERIFY",
+      "status": "INTEGRITY WATCHED",
+      "stepTitles": [
+        "Re-hash every archive daily and report the result",
+        "Handle a mismatch as a finding",
+        "Audit access to the repository",
+        "Forward the repository’s events to the collector",
+        "Review readers and the writer’s allowed computers"
+      ],
+      "mistake": "Turning on Audit File System and stopping there. The policy alone writes nothing: events appear only for files whose auditing entries match the access. Without entries on D:\\LogArchive, the delete test in lesson 5 would leave no trace.",
+      "network": "The archive path still runs from SBD-SYSLOG01 to SBD-AUDIT01, and the repository now sends its own access events and verification results back to the collector over event forwarding (F17), so the trail leaves the box.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement → Assess",
+        "body": "Integrity checking means comparing what is stored with what was recorded and acting on a difference. The daily re-hash against the catalog, an event for every result, and a mismatch handled as a finding put that into practice for the audit record.",
+        "question": "If event 1101 fired at 02:00 on a Sunday, who would see it, and what is their first step?"
+      },
+      "checklist": [
+        "I ran the daily verification and found its report and its 1100 or 1101 event.",
+        "I set the auditing entries on D:\\LogArchive and found a repository access event in ForwardedEvents with MachineName SBD-AUDIT01.",
+        "I recorded the readers review, including which computer may retrieve SBD-Archive$’s password."
+      ]
+    },
+    "retention": {
+      "short": "Retention and retrieval",
+      "tag": "04 / RETAIN",
+      "status": "RETENTION AS PROCESS",
+      "stepTitles": [
+        "Build a retention task that refuses young archives",
+        "Run it with two people and a hashed approval",
+        "Prove the guard with an approved test list",
+        "Retrieve, verify, and read an old archive",
+        "Record the retrieval and repeat it quarterly"
+      ],
+      "mistake": "Giving the retention task a monthly trigger so nobody has to remember. A timer deletes whether or not anyone looked, and one wrong date in the script removes records early with no approval behind it. Keep the task triggerless and start each run from an approved list.",
+      "network": "Archives keep arriving from SBD-SYSLOG01. This lesson runs on SBD-AUDIT01 itself, in the custodian’s session from SBD-ADMIN-SRV01, and the retention task’s deletions reach the collector as events.",
+      "control": {
+        "id": "AU-11",
+        "name": "Audit Record Retention",
+        "phase": "Implement → Assess",
+        "body": "Retention is a period with two edges: records stay for the whole year and go only when it ends. A task that refuses anything younger, a two-person approval tied to the list’s hash, and a quarterly retrieval show both edges hold.",
+        "question": "What would an assessor need to see to believe a record from eleven months ago is still usable?"
+      },
+      "checklist": [
+        "I confirmed the retention task has no trigger and runs as SBD-Retention$.",
+        "I ran an approved test list and saw the task refuse a young archive and log the refusal with the list’s hash.",
+        "I retrieved the oldest archive, matched its hash to the catalog, and read its events."
+      ]
+    },
+    "repository-prove": {
+      "short": "Prove and hand off",
+      "tag": "05 / PROVE",
+      "status": "RECORD PROVEN",
+      "stepTitles": [
+        "Try to delete an archive as an administrator",
+        "Find the refusal on both systems",
+        "Tamper with a copy and catch it",
+        "Take SBD-AUDIT01’s first baseline",
+        "Write the handoff to course 1.12"
+      ],
+      "mistake": "Running the tamper test on the real archive to make it convincing. You would destroy the record you are proving you protect, and the finding would be your own. Copy it first; the catalog catches a changed copy exactly as it would a changed record.",
+      "network": "Every flow is shown: archives arrive from SBD-SYSLOG01 over F11, and the refused delete travels back to the collector as event 4656 over F17. The custodian runs the tests and the baseline from SBD-ADMIN-SRV01.",
+      "control": {
+        "id": "AU-9",
+        "name": "Protection of Audit Information",
+        "phase": "Assess",
+        "body": "Protection is proven by trying to defeat it: an administrator’s delete is refused and recorded on two systems, and a changed copy fails against the catalog. Each test leaves evidence an assessor can repeat.",
+        "question": "Which administrator could still destroy the record, how would you know, and what limits who that is?"
+      },
+      "checklist": [
+        "I tried to delete an archive from a custodian session, saw it refused, and found event 4656 on SBD-AUDIT01 and on the collector.",
+        "I tampered with a copy and saw it fail against the catalog while the record still matched.",
+        "I filed SBD-AUDIT01’s first baseline with hashes and the handoff note to course 1.12."
+      ]
+    }
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "id": "stig-scap",
+  "hero": {
+    "title": "Measure against",
+    "accent": "the STIG.",
+    "text": "Stage DISA’s SCAP tools and content across the air gap, scan SBD-DC01 and SBD-DC02 on Windows Server against the STIG, and answer what the scanner cannot in STIG Viewer checklists. Follow the build, measure honestly, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "STIG + SCAP"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-DC01",
+      "10.0.10.10 / 24 · SCC + STIG Viewer"
+    ],
+    [
+      "SBD-DC02",
+      "10.0.10.11 / 24 · SCC"
+    ],
+    [
+      "Staged content",
+      "C:\\Staging\\DISA (both controllers)"
+    ],
+    [
+      "Evidence folder",
+      "C:\\Evidence\\baseline on SBD-DC01"
+    ],
+    [
+      "STIGs measured",
+      "Windows Server · AD Domain · AD Forest"
+    ],
+    [
+      "Checklists",
+      "SBD-DC01 · SBD-DC02 · sbd.test (.cklb)"
+    ]
+  ],
+  "scene": {
+    "tag": "DOMAIN CONTROLLERS · VLAN 10",
+    "label": "Interactive 3D lesson network showing SBD-DC01 and SBD-DC02 on VLAN 10, each scanned locally with SCC from its console, with results collected on SBD-DC01 for STIG Viewer checklists and the findings record.",
+    "completeStatus": "BASELINE MEASURED",
+    "completeCaption": "Both controllers carry a dated, hashed SCAP baseline, three STIG Viewer checklists answer every rule, and one classified findings record, with the versions to reuse, waits for course 1.5’s Group Policy hardening and matched rescan.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Built in course 1.1 and holding the PDC emulator role. Lesson 2 installs SCC and STIG Viewer at its console; it is scanned locally, holds the evidence folder C:\\Evidence\\baseline, and is where the three checklists and the findings record are built."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second controller. It gets SCC from the same verified media and is scanned locally with the same benchmark and profile; its hashed results are copied to SBD-DC01 for its checklist."
+      },
+      {
+        "id": "console",
+        "name": "DC CONSOLES",
+        "sub": "Administration viewpoint",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 0,
+        "button": "DC consoles",
+        "title": "DC consoles · Administration viewpoint",
+        "description": "Until course 1.8 builds AdminJumpBox01, this course runs at each controller’s VM console with an authorized Domain Admin account: SCC on both controllers, STIG Viewer on SBD-DC01. Course 1.8 moves both tools to AdminJumpBox01 and removes them from the controllers."
+      }
+    ],
+    "flows": [
+      {
+        "from": "console",
+        "to": "dc1",
+        "lessons": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Console administration · SBD-DC01"
+      },
+      {
+        "from": "console",
+        "to": "dc2",
+        "lessons": [
+          0,
+          1,
+          2
+        ],
+        "label": "Console administration · SBD-DC02"
+      },
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          2
+        ],
+        "label": "Hashed results to the evidence folder · SMB 445"
+      }
+    ]
+  },
+  "lessons": {
+    "stig-basics": {
+      "short": "STIGs, SCAP and CCIs",
+      "tag": "01 / UNDERSTAND",
+      "status": "APPLICABLE STIGS RECORDED",
+      "stepTitles": [
+        "Tell an SRG from a STIG",
+        "Read a rule’s identifiers and severity",
+        "Separate scanner checks from manual checks",
+        "Trace rules to controls and know a scan’s limits",
+        "Record which STIGs apply to each controller"
+      ],
+      "mistake": "Treating a high SCAP score as compliance. The benchmark covers only the rules a scanner can read: the manual rules and the Active Directory STIGs are still unanswered, and a scan never proves procedures or authorization.",
+      "network": "Both controllers are live on VLAN 10 and unchanged. From each VM console you read the operating system, roles and forest to record which STIGs apply; nothing is installed yet.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Prepare",
+        "body": "CM-6 asks for configuration settings drawn from common secure configurations, documented and monitored. The STIGs are those settings for these controllers, and the applicability record states which ones you are held to before anything is measured.",
+        "question": "Which STIGs apply to these controllers, and which did you defer — with what owner and review date?"
+      },
+      "checklist": [
+        "I recorded each controller’s operating system, domain role and installed roles.",
+        "I listed the STIGs that apply — Windows Server, Active Directory Domain and Forest — with the release I will measure.",
+        "I recorded the later-scope STIGs, such as DNS and the firewall, with an owner and a review date."
+      ]
+    },
+    "staging": {
+      "short": "Stage the DISA content",
+      "tag": "02 / STAGE",
+      "status": "CONTENT STAGED",
+      "stepTitles": [
+        "Download the tools, content and GPO package",
+        "Check published checksums and hash every file",
+        "Compare every hash on both controllers",
+        "Install the tools and record every version"
+      ],
+      "mistake": "Hashing only on the lab side proves nothing: without the list recorded on the connected side there is nothing to compare against. Staging a GPO package from a different quarter than the STIGs is quieter: course 1.5 would then apply policies written for one release and measure them against another.",
+      "network": "Nothing crosses the network in this lesson: the content arrives on approved removable media at each controller’s console. SCC is installed on both controllers and STIG Viewer on SBD-DC01; the GPO package waits, hashed, in C:\\Staging\\DISA.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement",
+        "body": "Hashes recorded on both sides of the boundary, checked against DISA’s published checksums, are the integrity check for the software and content entering the lab. Verifying before anything is opened means the tools that will judge the controllers are the ones that were reviewed.",
+        "question": "If a hash did not match, what would your record need to show about the media, the file and the repeated transfer?"
+      },
+      "checklist": [
+        "I compared the connected-side SHA-256 hashes with the lab copies on both controllers before opening anything.",
+        "I recorded the SCC, STIG Viewer, benchmark, STIG and GPO package versions and releases.",
+        "I installed SCC on both controllers and STIG Viewer on SBD-DC01, and left the GPO package hashed for course 1.5."
+      ]
+    },
+    "baseline": {
+      "short": "Capture the baseline",
+      "tag": "03 / MEASURE",
+      "status": "BASELINE SCAN",
+      "stepTitles": [
+        "Scan each controller locally with the same profile",
+        "Read the results and note the OS defaults",
+        "Separate automated results from manual checks",
+        "Store the raw results with hashes"
+      ],
+      "mistake": "Skipping the baseline, or keeping only a tidied summary of it, leaves course 1.5’s rescan with nothing honest to compare against. Scanning the two controllers with different profiles or benchmark releases has the same effect: the before picture no longer agrees with itself.",
+      "network": "SCC scans each controller locally from its console. SBD-DC02’s hashed results are copied to the evidence folder on SBD-DC01 over SMB inside VLAN 10, and no DISA policy has been imported yet: this is the before picture.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess",
+        "body": "The baseline uses SCAP tooling to measure each controller against a published benchmark. Keeping the raw, hashed results with the tool, benchmark and profile versions makes the scan repeatable and its results comparable when course 1.5 rescans.",
+        "question": "Which passing checks come from the operating system’s defaults, and how will your record keep them apart from what your policies change?"
+      },
+      "checklist": [
+        "I saved a dated baseline session for each controller with the same SCC version, benchmark release and profile.",
+        "I noted which checks already passed because of operating system defaults.",
+        "I stored both raw result sets in C:\\Evidence\\baseline with hashes and confirmed SBD-DC02’s still matched after the copy."
+      ]
+    },
+    "checklists": {
+      "short": "Build the checklists",
+      "tag": "04 / REVIEW",
+      "status": "CHECKLISTS ANSWERED",
+      "stepTitles": [
+        "Create checklists for both controllers and the domain",
+        "Import the SCC results by exact revision",
+        "Answer every rule still Not Reviewed",
+        "Keep overrides honest and save the CKLB files"
+      ],
+      "mistake": "Marking a manual rule Not A Finding with nothing in Finding Details. The status looks finished, but no one can repeat the check, and an assessor will treat it as unanswered. Including loosely matched results to clear a revision mismatch is the same shortcut in bulk.",
+      "network": "STIG Viewer runs at SBD-DC01’s console, with both controllers’ results already in its evidence folder. The manual checks are answered by examining each controller and the sbd.test directory they share.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The checklists are assessment results: each rule’s status rests on the scan or on a recorded observation. Finding details that say what was examined and what it showed let another reviewer reach the same answer.",
+        "question": "Could someone else reproduce each manual answer from what you wrote in Finding Details?"
+      },
+      "checklist": [
+        "I created checklists for SBD-DC01, SBD-DC02 and sbd.test and imported each controller’s results by exact revision.",
+        "I answered every remaining rule and recorded what I observed in Finding Details.",
+        "I saved the three .cklb files in C:\\Evidence\\baseline\\checklists and recorded their hashes."
+      ]
+    },
+    "findings": {
+      "short": "Write the findings record",
+      "tag": "05 / HAND OFF",
+      "status": "FINDINGS TO COURSE 1.5",
+      "stepTitles": [
+        "Export the open rules and count them by severity",
+        "Classify every open item",
+        "Trace each finding to its controls through its CCIs",
+        "Write the handoff and seal the baseline"
+      ],
+      "mistake": "Leaving an open item unclassified, or calling everything fix by GPO without checking the package. Course 1.5’s rescan then shows items that were never going to close, and the record cannot say which are decisions and which are plans.",
+      "network": "The findings record and the handoff are written at SBD-DC01’s console into C:\\Evidence\\baseline. Both controllers wait unchanged for course 1.5, which imports the staged GPOs and rescans with the same versions.",
+      "control": {
+        "id": "CA-5",
+        "name": "Plan of Action and Milestones",
+        "phase": "Assess → Authorize",
+        "body": "CA-5 asks for a plan that documents the planned remediation of weaknesses found during assessment, updated as the work proceeds. The POA&M candidates, each with an owner and a planned date, start that plan; course 1.5 closes what policy can fix and records the rest.",
+        "question": "For each POA&M candidate, who owns it, by when, and what evidence will show it closed?"
+      },
+      "checklist": [
+        "I counted the open findings per checklist by CAT I, II and III.",
+        "I classified every open item as fix by GPO, deviation candidate or POA&M candidate, with an owner.",
+        "I wrote handoff.txt with every version and path, and hashed the baseline into C:\\Evidence\\baseline-manifest.csv."
+      ]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "stig-scap",
+  "categoryOrder": 4,
+  "number": "1.4",
+  "estimatedHours": 2.3,
+  "title": "Measure against the STIG",
+  "subtitle": "DISA STIGs, SCAP scans & STIG Viewer checklists",
+  "description": "Stage the DISA SCAP tools and content across the air gap, scan SBD-DC01 and SBD-DC02 against the Windows Server STIG with SCC, answer the manual checks in STIG Viewer checklists, and hand course 1.5 a classified findings record traced to NIST SP 800-53 controls.",
+  "tags": [
+    "Windows Server",
+    "DISA STIG",
+    "SCAP",
+    "STIG Viewer",
+    "Active Directory"
+  ],
+  "platform": "Windows Server",
+  "systems": [
+    "SBD-DC01",
+    "SBD-DC02"
+  ],
+  "artLabels": [
+    "Hashed DISA staging",
+    "SCC baseline scans",
+    "Checklists → findings"
+  ],
+  "outcomes": [
+    "Explain STIGs, SRGs, SCAP benchmarks, severity categories and CCIs, and what a scan can and cannot prove.",
+    "Stage SCC, STIG Viewer, the STIGs and the DISA GPO package across the air gap with hashes verified on both sides.",
+    "Capture a hashed SCAP baseline of both controllers and complete STIG Viewer checklists with observed evidence.",
+    "Classify every open finding and hand course 1.5 a versioned findings record traced to NIST controls."
+  ],
+  "stages": [
+    {
+      "title": "Understand STIGs, SCAP and checklists",
+      "detail": "A Security Technical Implementation Guide (STIG) is DISA's configuration standard for one product, and every scan and checklist in this course measures against one. Learn how a rule is identified, rated and traced to NIST SP 800-53, which rules a scanner can read and which a person must answer, then record which STIGs apply to each controller."
+    },
+    {
+      "title": "Stage the DISA content across the air gap",
+      "detail": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmark, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
+    },
+    {
+      "title": "Capture the pre-hardening baseline",
+      "detail": "Measure before you change. A scan of the freshly built controllers shows the honest starting point, teaches what the operating system already secures by default, and becomes the before picture every later scan is compared against."
+    },
+    {
+      "title": "Build the checklists and answer the manual checks",
+      "detail": "A scan answers only what it can read. In STIG Viewer on SBD-DC01, build a checklist for each controller and one for the directory, let the SCC results fill the automated rules, and answer every remaining rule with what you observed."
+    },
+    {
+      "title": "Write the findings record for hardening",
+      "detail": "A checklist full of statuses is not yet a decision. Turn the open items from all three checklists into one findings record — counted by severity, classified, owned, and traced from rule to CCI to NIST control — that course 1.5 can harden against and prove."
+    }
+  ],
+  "outcomeSummary": "Both controllers measured against the STIG. Every open item counted, classified, and handed to course 1.5.",
+  "networkLabel": "VLAN 10 / DOMAIN CONTROLLERS"
+}

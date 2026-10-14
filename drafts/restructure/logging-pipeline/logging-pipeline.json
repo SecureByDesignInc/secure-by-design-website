@@ -1,0 +1,291 @@
+{
+  "id": "logging-pipeline",
+  "hero": {
+    "title": "Collect the record",
+    "accent": "on SBD-SYSLOG01.",
+    "text": "Design the collect → protect → analyze pipeline, then build its first stage: audit policy on the DCs and admin hosts, and SBD-SYSLOG01 receiving Windows events by subscription and syslog from the router and SBD-REPO01. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "COLLECTOR"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-SYSLOG01",
+      "10.0.20.20 · VLAN 20 · collector (this course)"
+    ],
+    [
+      "SBD-AUDIT01",
+      "10.0.50.40 · VLAN 50 · repository (course 1.11)"
+    ],
+    [
+      "SBD-SPLUNK01",
+      "10.0.50.10 · VLAN 50 · analysis (course 1.12)"
+    ],
+    [
+      "Sources",
+      "SBD-DC01 10.0.10.10 · SBD-DC02 10.0.10.11 · admin hosts VLAN 60 · SBD-REPO01 10.0.70.20"
+    ],
+    [
+      "Pipeline paths",
+      "F17 WinRM 5985 · F07 syslog TLS 6514 · router syslog UDP 514 · F11 SMB 445 · F10 TCP 9997"
+    ],
+    [
+      "Streams",
+      "ForwardedEvents (D:\\Logs\\ForwardedEvents) · syslog files (D:\\Logs\\Syslog)"
+    ]
+  ],
+  "scene": {
+    "tag": "COLLECTION · VLAN 20",
+    "label": "Interactive 3D lesson network showing the domain controllers, administration hosts, core router, and SBD-REPO01 sending their records to the collector SBD-SYSLOG01.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "Every existing source pushes its record to SBD-SYSLOG01: Windows events by subscription, the router's denies and SBD-REPO01's messages as syslog. Courses 1.11 and 1.12 pick up the two streams from here.",
+    "nodes": [
+      {
+        "id": "syslog",
+        "name": "SBD-SYSLOG01",
+        "sub": "10.0.20.20",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-SYSLOG01",
+        "title": "SBD-SYSLOG01 · 10.0.20.20",
+        "description": "The collector this course builds. A source-initiated subscription fills ForwardedEvents, and its syslog receiver takes the router's denies on UDP 514 and Linux senders over TLS on TCP 6514. It reaches into no source."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Built in course 1.1. Lesson 2 reconciles its audit policy with the course 1.5 STIG GPOs, lesson 3 enrolls it as a source, and lesson 5 traces a failed sign-in from it."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "Built in course 1.1 and audited by the same GPOs as SBD-DC01. Its forwarded events keep the MachineName SBD-DC02, which is how the central copy shows where each record came from."
+      },
+      {
+        "id": "repo",
+        "name": "SBD-REPO01",
+        "sub": "10.0.70.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 4,
+        "button": "SBD-REPO01",
+        "title": "SBD-REPO01 · 10.0.70.20",
+        "description": "Built in course 1.8. In lesson 5 it becomes the first Linux source, forwarding its syslog over TLS to the collector on TCP 6514 (rule F07)."
+      },
+      {
+        "id": "admin",
+        "name": "ADMIN HOSTS",
+        "sub": "VLAN 60 · 10.0.60.0/24",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 1,
+        "button": "Admin hosts",
+        "title": "Admin hosts · 10.0.60.0/24",
+        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.7. Their sign-in events join the first collection scope, and SBD-ADMIN-SRV01 is where the collector is administered from."
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc1",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Event forwarding · F17 · WinRM 5985"
+      },
+      {
+        "from": "dc2",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Event forwarding · F17 · WinRM 5985"
+      },
+      {
+        "from": "admin",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Admin sign-in events · F17 · WinRM 5985"
+      },
+      {
+        "from": "core",
+        "to": "syslog",
+        "lessons": [
+          2,
+          3,
+          4
+        ],
+        "label": "Router deny log · syslog UDP 514"
+      },
+      {
+        "from": "repo",
+        "to": "syslog",
+        "lessons": [
+          4
+        ],
+        "label": "Syslog over TLS · F07 · TCP 6514"
+      }
+    ]
+  },
+  "lessons": {
+    "design": {
+      "short": "Design the pipeline",
+      "tag": "01 / DESIGN",
+      "status": "PIPELINE PLANNED",
+      "stepTitles": [
+        "Write each host's role and building course",
+        "Scope the first collection",
+        "Decide retention, readers, and the no-delete rule",
+        "Name the streams and their pickup folders",
+        "Add the pipeline's register rows"
+      ],
+      "mistake": "Letting the analysis system double as the archive. If SBD-SPLUNK01 held the only copy, anyone who can change its indexes or searches could change the evidence, and the AU-9 protection story would have nothing to stand on. Keep one copy to keep and one copy to question.",
+      "network": "Only the design exists: SBD-SYSLOG01 is planned on VLAN 20. The domain controllers, admin hosts, core router, and SBD-REPO01 already run, but no events flow yet. SBD-AUDIT01 and SBD-SPLUNK01 arrive in courses 1.11 and 1.11.",
+      "control": {
+        "id": "AU-11",
+        "name": "Audit Record Retention",
+        "phase": "Prepare → Implement",
+        "body": "Decide retention per stage before any record exists. The collector's buffer, the repository's protected copy, and the analysis copy have different clocks; write each one down with the people who may read that stage.",
+        "question": "How long must the protected copy outlive the working copy, and who made that decision?"
+      },
+      "checklist": [
+        "I wrote the role sentence and building course for the collector, the repository, and the analysis system.",
+        "I recorded retention, readers, and the no-delete rule for each stage, and named the two streams and their pickup folders.",
+        "I added the five pipeline paths to the register with their owners."
+      ]
+    },
+    "auditing": {
+      "short": "Turn on the right auditing",
+      "tag": "02 / AUDIT",
+      "status": "EVENTS WRITTEN",
+      "stepTitles": [
+        "Review what the course 1.5 STIG GPOs already audit",
+        "Confirm the design's subcategories on the DCs",
+        "Extend the policy to the Admin sub-OUs",
+        "Make every addition a documented GPO change"
+      ],
+      "mistake": "Filling a gap with auditpol /set on one server. Group Policy can overwrite the local change, it disappears when the server is rebuilt, and nobody reading the GPO report knows it was there. Make additions in the GPO structure and record them.",
+      "network": "The domain controllers on VLAN 10 and the admin hosts on VLAN 60 now write the designed event families to their own Security logs. Nothing is forwarded yet; the collector is still planned.",
+      "control": {
+        "id": "AU-12",
+        "name": "Audit Record Generation",
+        "phase": "Implement",
+        "body": "Records are generated on the source. Applying the designed subcategories through GPO, at or above the STIG values, makes the domain controllers and admin hosts write the records the design scoped, and keeps that setting visible in every GPO report.",
+        "question": "If an event family were missing from a host's effective policy, how would you find out before you needed that record?"
+      },
+      "checklist": [
+        "I captured the auditpol output for the domain controllers and the admin hosts.",
+        "I confirmed the designed subcategories are at or above the STIG values and applied through GPO.",
+        "I recorded every audit addition in its own GPO and in the exception record."
+      ]
+    },
+    "collector": {
+      "short": "Build the collector",
+      "tag": "03 / COLLECT",
+      "status": "COLLECTOR ONLINE",
+      "stepTitles": [
+        "Enable the collector and create the subscription",
+        "Enroll the sources by GPO",
+        "Scope WinRM to the enrolled sources",
+        "Stand up the syslog intake",
+        "Confirm only registered paths are in use"
+      ],
+      "mistake": "Forgetting NETWORK SERVICE in Event Log Readers, or not restarting the source after adding it. The subscription still shows the source as active, but no Security events reach ForwardedEvents, so the pipeline looks configured while carrying nothing.",
+      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers and the admin hosts push events to it over WinRM 5985 (F17), and the core router sends its deny log as syslog on UDP 514.",
+      "control": {
+        "id": "AU-3",
+        "name": "Content of Audit Records",
+        "phase": "Implement",
+        "body": "A central copy is useful only if each record still says what happened, when, where, and to whom. Forwarded events keep their source machine name and time, so every record on the collector traces back to the host that wrote it.",
+        "question": "Which fields on a forwarded event would you rely on to show an assessor where and when it happened?"
+      },
+      "checklist": [
+        "I confirmed the subscription is enabled and the sources are enrolled by GPO.",
+        "I found forwarded events from both domain controllers and the admin hosts, each with its own MachineName.",
+        "I received a router deny entry in the syslog files and saw only the registered ports listening."
+      ]
+    },
+    "collector-health": {
+      "short": "Keep it trustworthy",
+      "tag": "04 / HEALTH",
+      "status": "HEALTH WATCHED",
+      "stepTitles": [
+        "Read runtime status and find silent sources",
+        "Size the log and set its overwrite behavior",
+        "Check the disk and the syslog intake",
+        "Write the collection failure response"
+      ],
+      "mistake": "Setting ForwardedEvents to retain events when full because keeping everything sounds safer. When the log fills, new events are refused, so the newest record is the one lost. Size the buffer past the pickup window and let it overwrite the oldest.",
+      "network": "The same flows run into SBD-SYSLOG01. This lesson watches them from the collector's side: each source's heartbeat, the log's oldest event, the data volume, and each syslog sender's daily file.",
+      "control": {
+        "id": "AU-5",
+        "name": "Response to Audit Logging Process Failures",
+        "phase": "Implement → Assess",
+        "body": "A logging failure must reach a named person who acts. The written failure conditions, the logging owner who is told the same day, and the recorded gap window turn a silent stop into an event with a response.",
+        "question": "If SBD-DC02 went silent on Friday evening, when would someone know, and what would they write down?"
+      },
+      "checklist": [
+        "I confirmed every enrolled source is active with a recent heartbeat.",
+        "I set ForwardedEvents to overwrite oldest-first and confirmed it holds more than the 14-day buffer.",
+        "I wrote the failure conditions and the owner who is told, and kept the first daily check."
+      ]
+    },
+    "collector-prove": {
+      "short": "Prove collection",
+      "tag": "05 / VERIFY",
+      "status": "COLLECTION PROVEN",
+      "stepTitles": [
+        "Trace one failed sign-in to the collector",
+        "Trace a router deny the same way",
+        "Enroll SBD-REPO01 over syslog TLS",
+        "Baseline the collector and rescan the DCs",
+        "Write the handoff to course 1.11"
+      ],
+      "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain's lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
+      "network": "Every source is live: the domain controllers and admin hosts forward over WinRM, the core router sends its denies on UDP 514, and SBD-REPO01 joins over syslog TLS on TCP 6514. One sign-in, one deny, and one test message reach SBD-SYSLOG01.",
+      "control": {
+        "id": "AU-8",
+        "name": "Time Stamps",
+        "phase": "Assess",
+        "body": "A traced event is evidence only if its time agrees at every stop. Comparing the source's time with the collector's for a sign-in, a deny, and a Linux message shows the course 1.3 time design holding across Windows, the router, and Linux.",
+        "question": "If the router's deny line were an hour off from the forwarded events, which system would you check first, and why?"
+      },
+      "checklist": [
+        "I traced one failed sign-in and one router deny to the collector with matching source names and times.",
+        "I enrolled SBD-REPO01 over syslog TLS and found its test message on the collector.",
+        "I filed SBD-SYSLOG01's baseline, the DC rescan deltas, and the handoff to course 1.10."
+      ]
+    }
+  }
+}

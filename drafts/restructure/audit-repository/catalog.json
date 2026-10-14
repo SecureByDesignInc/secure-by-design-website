@@ -1,0 +1,56 @@
+{
+  "categoryOrder": 11,
+  "number": "1.11",
+  "estimatedHours": 2.7,
+  "title": "Protect the record on SBD-AUDIT01",
+  "subtitle": "Keep the audit record intact, even from its administrators",
+  "description": "The second of three logging courses: build SBD-AUDIT01 as the protected home for the collector's record — daily archives over encrypted SMB from a write-only managed account, SHA-256 hashes cataloged on arrival and verified every day, access auditing that leaves the box, retention that runs only as an approved and logged process, and proof that an administrator's delete is refused and a tampered copy is caught.",
+  "tags": [
+    "Windows Server",
+    "Logging",
+    "SMB encryption",
+    "NTFS permissions",
+    "Service accounts"
+  ],
+  "platform": "Windows Server",
+  "systems": [
+    "SBD-AUDIT01",
+    "SBD-SYSLOG01"
+  ],
+  "artLabels": [
+    "One write path",
+    "Hash every archive",
+    "Delete by process only"
+  ],
+  "outcomes": [
+    "Design and build the repository: retention, capacity, one write path, and the custodian's separate administration.",
+    "Archive the collector's streams daily over encrypted SMB from a write-only gMSA, with every archive hashed and cataloged.",
+    "Verify the catalog daily, audit access to the repository, and run retention as an approved, logged process.",
+    "Prove an administrator's delete is refused and logged, a tampered copy is caught, and an old archive can still be read."
+  ],
+  "stages": [
+    {
+      "title": "Design the repository and build SBD-AUDIT01",
+      "detail": "The repository has one job: keep the collector's record intact for its whole retention period, even from its own administrators. Size it, fix the one way in, name every identity and what it may do, and build SBD-AUDIT01 where the model puts it — before a single archive arrives."
+    },
+    {
+      "title": "Archive, hash, and protect the record",
+      "detail": "The repository is where the record outlives mistakes and attackers alike: daily archives from the collector over an encrypted share, hashed before they leave and again on arrival, readable by few, and deletable by process only."
+    },
+    {
+      "title": "Verify the catalog and watch the repository",
+      "detail": "A catalog nobody checks is a list of hopes. Re-hash every archive on a schedule, treat a mismatch as a finding, audit who reads or tries to change the repository, and keep the readers as few as the day they were approved."
+    },
+    {
+      "title": "Run retention and prove retrieval",
+      "detail": "Retention cuts both ways: records must last the full period, and they must go when it ends — by a process with a log, never by a person's right-click. Run retention the way the design says, then prove the other half: an archive from the past can be found, verified, and read."
+    },
+    {
+      "title": "Prove the record survives and hand off",
+      "detail": "Test the protection the way an attacker or a careless administrator would: try to delete an archive and tamper with a copy, and check that each attempt is refused or caught, and recorded. Then take SBD-AUDIT01's first baseline and hand the record to analysis."
+    }
+  ],
+  "outcomeSummary": "A record that arrives by one encrypted path, proves its own integrity every day, and outlives even its administrators.",
+  "networkLabel": "VLAN 50 / AUDIT REPOSITORY",
+  "id": "audit-repository"
+}

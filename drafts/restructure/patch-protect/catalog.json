@@ -1,0 +1,57 @@
+{
+  "id": "patch-protect",
+  "categoryOrder": 13,
+  "number": "1.13",
+  "estimatedHours": 2.2,
+  "title": "Patch, protect, and watch for weakness",
+  "subtitle": "WSUS rings, a living inventory, ePO & credentialed scanning",
+  "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type (with SBD-REPO01 from course 1.8 for Linux packages), a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+  "tags": [
+    "Windows Server",
+    "WSUS",
+    "Endpoint protection",
+    "Vulnerability scanning",
+    "Configuration management"
+  ],
+  "platform": "Windows Server · Linux",
+  "systems": [
+    "SBD-WSUS01",
+    "SBD-MGMT01",
+    "SBD-EPO01",
+    "SBD-NESSUS01"
+  ],
+  "artLabels": [
+    "Rings + one source",
+    "Inventory + protection",
+    "Credentialed cadence"
+  ],
+  "outcomes": [
+    "Deliver Windows updates through ring-gated, air-gap-fed channels, with one approved source per software type.",
+    "Prove protection coverage against a living component inventory.",
+    "Run credentialed vulnerability scanning on the standing cadence with classified findings."
+  ],
+  "stages": [
+    {
+      "title": "Design the rings and the software rules",
+      "detail": "Decide how change reaches the network before any of it does: update rings that try things on the expendable before the essential, one approved source per software type (with SBD-REPO01 from course 1.8 already serving Linux), and register rows for every new path."
+    },
+    {
+      "title": "Build SBD-WSUS01 and the ring policies",
+      "detail": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and Group Policy objects (GPOs) that point every OU at the server — with a pilot ring that proves each approval first."
+    },
+    {
+      "title": "SBD-MGMT01 and the living inventory",
+      "detail": "The course 1.12 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70."
+    },
+    {
+      "title": "Endpoint protection through SBD-EPO01",
+      "detail": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show."
+    },
+    {
+      "title": "SBD-NESSUS01 and the standing cadence",
+      "detail": "The course 1.5 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's four new systems getting their own baselines on the way out."
+    }
+  ],
+  "outcomeSummary": "Updates by ring, software from approved sources, managed protection, and a scanner that keeps everyone honest.",
+  "networkLabel": "VLAN 20 + 50 + 70 / MANAGEMENT"
+}

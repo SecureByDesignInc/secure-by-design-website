@@ -1,0 +1,359 @@
+{
+  "id": "patch-protect",
+  "prerequisites": [
+    "Complete course 1.12: the fleet exists, inventoried and reporting into the logging pipeline. Complete course 1.8: SBD-REPO01 (10.0.70.20) serves the approved Linux snapshot, and its client configuration is filed.",
+    "Provision SBD-WSUS01 (10.0.20.30), SBD-MGMT01 (10.0.70.10), SBD-EPO01 (10.0.50.30), and SBD-NESSUS01 (10.0.50.20) per the model's placements.",
+    "Keep the approved-media process ready: update content, protection definitions, and scanner plugins all cross the air gap the same reviewed, hashed way, beside the Linux snapshots course 1.8 already carries."
+  ],
+  "labNote": "This course keeps the proven state from drifting: updates and software arrive only through controlled channels, every endpoint runs managed protection, and a credentialed scanner turns the course 1.5 cadence into routine. In an air-gapped lab, every one of these systems feeds on content carried across the boundary — which is the recurring lesson. The Linux package source, SBD-REPO01, was built in course 1.8; this course adopts it into the software rule.",
+  "sources": [
+    {
+      "id": "wsus",
+      "title": "Microsoft · Windows Server Update Services (WSUS)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-server-update-services/get-started/windows-server-update-services-wsus"
+    },
+    {
+      "id": "deprecated",
+      "title": "Microsoft · Features removed or no longer developed in Windows Server",
+      "url": "https://learn.microsoft.com/en-us/windows-server/get-started/removed-deprecated-features-windows-server"
+    },
+    {
+      "id": "trellix",
+      "title": "Trellix · product documentation",
+      "url": "https://docs.trellix.com/"
+    },
+    {
+      "id": "tenable",
+      "title": "Tenable · Nessus documentation",
+      "url": "https://docs.tenable.com/nessus/"
+    },
+    {
+      "id": "disa-tools",
+      "title": "DISA · SRG/STIG tools (SCC and STIG Viewer)",
+      "url": "https://www.cyber.mil/stigs/srg-stig-tools"
+    },
+    {
+      "id": "controls",
+      "title": "NIST · SP 800-53 Rev. 5 security controls",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "design",
+      "title": "Design the rings and the software rules",
+      "minutes": 20,
+      "summary": "Decide how change reaches the network before any of it does: update rings that try things on the expendable before the essential, one approved source per software type (with SBD-REPO01 from course 1.8 already serving Linux), and register rows for every new path.",
+      "objectives": [
+        "Define the update rings and their order.",
+        "Set the one-approved-source rule per software type.",
+        "Register the course's service paths."
+      ],
+      "steps": [
+        "Define three rings and their order: a pilot ring (the course 1.12 sample machines plus one member server), the broad ring (fleet and member servers), and the critical ring last (domain controllers and both VLAN 30 hosts) — updates earn their way up, never down.",
+        "Write the software rule: Windows updates come only from SBD-WSUS01, Linux packages only from SBD-REPO01 (built in course 1.8), protection definitions only through SBD-EPO01, and anything else arrives as a documented exception — one source per type is what makes 'unauthorized software' a checkable claim.",
+        "Decide the air-gap feeding cadence: what content crosses on media, how often, hashed by whom — the course 1.4 transfer procedure, now on a schedule. Linux snapshots already cross on the cadence course 1.8 wrote; align the two calendars so one media run can carry both.",
+        "Add the register rows: every Windows system to WSUS (8530/8531), domain controllers included; confirm that F19 (SBD-SPLUNK01, SBD-NESSUS01 and SBD-WEB01 to SBD-REPO01 on HTTP 80, from course 1.8) already covers the new Linux server, SBD-NESSUS01; every Windows system's agent to Trellix ePolicy Orchestrator (ePO) on SBD-EPO01 on its agent-server secure port, TCP 443, with the agent starting each connection; and the scanner's credentialed reach into each VLAN (SMB 445 and WMI to Windows, SSH 22 to Linux) — the one deliberate wide permit, owned and logged."
+      ],
+      "command": "# Capture the before state: where machines currently look for updates (nowhere internal yet).\nGet-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate' -ErrorAction SilentlyContinue\nGet-ADComputer -Filter * -SearchBase 'OU=SBD,DC=sbd,DC=test' | Measure-Object",
+      "check": "The ring table names every system's ring, the one-source rule and feeding cadence are written, and the register carries the course's rows with owners.",
+      "evidence": "Keep the ring assignments, the software source rules, the feeding cadence, and the new register rows.",
+      "quizzes": [
+        {
+          "question": "Why do domain controllers sit in the last ring?",
+          "answers": [
+            "They update fastest",
+            "A bad update should burn a pilot machine, not the identity fabric — criticality decides order",
+            "DCs cannot be updated"
+          ],
+          "correct": 1,
+          "explanation": "Rings are a blast-radius design: change proves itself on what the network can lose before touching what it cannot."
+        },
+        {
+          "question": "What does one-approved-source-per-type actually buy?",
+          "answers": [
+            "Cheaper licensing",
+            "Faster downloads",
+            "'Unauthorized software' becomes checkable — anything not from the named source is a finding by definition"
+          ],
+          "correct": 2,
+          "explanation": "A rule you can test is a control; a preference you cannot is a hope. One source per type draws the testable line."
+        },
+        {
+          "question": "Which register row in this course is deliberately wide, and what disciplines it?",
+          "answers": [
+            "The scanner's credentialed reach — owned, logged, and justified as the cadence's instrument",
+            "The fleet's path to WSUS",
+            "There are no wide rows"
+          ],
+          "correct": 0,
+          "explanation": "A vulnerability scanner must reach broadly to be worth having. The register makes that breadth a documented decision, not an accident."
+        }
+      ],
+      "recap": [
+        "Pilot → broad → critical: updates earn their way up.",
+        "One named source per software type, exceptions documented.",
+        "Every path — including the scanner's wide one — is a register row."
+      ],
+      "next": "Lesson 2 builds the Windows update channel.",
+      "sources": [
+        "wsus",
+        "controls"
+      ]
+    },
+    {
+      "id": "wsus",
+      "title": "Build SBD-WSUS01 and the ring policies",
+      "minutes": 30,
+      "summary": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and Group Policy objects (GPOs) that point every OU at the server — with a pilot ring that proves each approval first.",
+      "objectives": [
+        "Install WSUS and import content through the offline process.",
+        "Map rings to WSUS groups and OU-linked policies.",
+        "Approve and verify a first update cycle through the pilot ring."
+      ],
+      "steps": [
+        "Install the WSUS role on SBD-WSUS01, scope its products and classifications to what the network actually runs — the Windows Server and Windows client releases in use, and Defender definitions — and nothing speculative. Microsoft announced in September 2024 that WSUS is deprecated and no longer actively developed, but it is still included in Windows Server and supported for production deployments, with security and quality updates under the product lifecycle.",
+        "Feed it offline: export the needed content on the connected side, hash it, carry it across, and import — the WSUS offline servicing path is the course 1.4 media procedure wearing an update hat.",
+        "Create WSUS computer groups matching the rings, and link ring GPOs at the OUs: update source SBD-WSUS01, the ring's group assignment, and install/restart windows that respect what each ring does for a living. The critical ring's GPO links to the Domain Controllers and Tier 0 Servers OUs.",
+        "Approve one update cycle for the pilot ring only, watch it install and report, then promote the approval ring by ring — the critical ring installs only what two rings already survived. Pilot and broad-ring approvals are Tier 1 work from SBD-ADMIN-SRV01; critical-ring approvals for the domain controllers and the two Tier 0 servers are Tier 0 work from AdminJumpBox01. Add SBD-WSUS01 to the SBD Tier 0 Console Hosts group and restart it so the new membership applies: the console reaches the server as a Kerberos network logon, the one Tier 0 logon type course 1.7's deny policy leaves open there, as its exception record states."
+      ],
+      "command": "Get-WsusServer | Get-WsusComputer -ComputerTargetGroups 'Ring 1 - Pilot' | Select-Object FullDomainName, LastReportedStatusTime\ngpresult /r /scope:computer\nGet-WindowsUpdateLog -ErrorAction SilentlyContinue",
+      "check": "Every system reports to its ring's group, the pilot ring installed and reported the first approved cycle, and the promotion to later rings followed the written order.",
+      "evidence": "Record the product scope, the offline import with hashes, the ring GPO reports, and the first cycle's per-ring approval and install timeline.",
+      "model": {
+        "href": "/inside-the-network#process=updates",
+        "label": "Bring updates inside",
+        "text": "Approved updates cross the air gap by hand, then members check metadata and pull signed content from SBD-WSUS01."
+      },
+      "quizzes": [
+        {
+          "question": "How does update content reach this WSUS server?",
+          "answers": [
+            "Direct from Microsoft Update over the internet",
+            "By the approved offline export-import process — hashed media across the air gap",
+            "It generates updates locally"
+          ],
+          "correct": 1,
+          "explanation": "The air gap holds for updates too. WSUS's offline servicing path exists for exactly this network shape."
+        },
+        {
+          "question": "What gates an update's arrival at the domain controllers?",
+          "answers": [
+            "The calendar date alone",
+            "The DC's own download speed",
+            "Survival in the pilot and broad rings first — approval promotes ring by ring"
+          ],
+          "correct": 2,
+          "explanation": "The ring design from lesson 1 becomes mechanics here: the critical ring installs only proven approvals."
+        },
+        {
+          "question": "Why scope products and classifications tightly?",
+          "answers": [
+            "Unused content is imported, stored, and reviewed for nothing — and every artifact crossing the boundary should earn its trip",
+            "WSUS breaks above ten products",
+            "Licensing forbids more"
+          ],
+          "correct": 0,
+          "explanation": "In an air-gapped lab, every megabyte is carried by hand. Scope is both hygiene and respect for the boundary process."
+        }
+      ],
+      "recap": [
+        "Updates travel one road: offline import, ring approvals, OU policies.",
+        "The pilot ring absorbs the risk; the critical ring inherits the proof.",
+        "The first full cycle is on record, ring by ring."
+      ],
+      "next": "Lesson 3 gives the inventory a keeper.",
+      "sources": [
+        "wsus",
+        "deprecated",
+        "disa-tools"
+      ]
+    },
+    {
+      "id": "mgmt",
+      "title": "SBD-MGMT01 and the living inventory",
+      "minutes": 25,
+      "summary": "The course 1.12 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70.",
+      "objectives": [
+        "Stand up the management tooling host under the tier model.",
+        "Build the component inventory covering all modeled systems.",
+        "Define how the inventory stays current and who owns it."
+      ],
+      "steps": [
+        "Build SBD-MGMT01 in the Servers OU, administered from VLAN 60 per the tier rules, with your chosen configuration and inventory tooling — the record matters more than the brand.",
+        "Load the inventory with every system the network now has — the 1.12 fleet list, the servers (SBD-REPO01 included, with its current snapshot as its software source), the admin plane, the router — each with its OU, VLAN, address, ring, software sources, and scan status: the CM-8 component inventory, in one place.",
+        "Define currency: joins and retirements update the inventory as part of their process, and a monthly reconciliation compares the inventory against the directory and the DHCP leases — drift between them is a finding.",
+        "Name the owner and file the inventory's first reconciliation as evidence; course 2.2 shows how a record like this one joins the Body of Evidence for the configuration-management controls."
+      ],
+      "command": "Get-ADComputer -Filter * -SearchBase 'OU=SBD,DC=sbd,DC=test' | Measure-Object\nGet-DhcpServerv4Lease -ScopeId 10.0.80.0 | Measure-Object\n# Compare both counts against the inventory's totals and record the reconciliation",
+      "check": "The inventory lists every modeled system with its attributes, the first directory-and-DHCP reconciliation matches (or its mismatches are findings), and ownership and cadence are written.",
+      "evidence": "Keep the populated inventory export, the reconciliation record, and the ownership and cadence note.",
+      "quizzes": [
+        {
+          "question": "What makes an inventory 'living' rather than a stale spreadsheet?",
+          "answers": [
+            "Pretty formatting",
+            "Update-on-change plus a scheduled reconciliation against sources that cannot lie — the directory and the leases",
+            "Monthly printing"
+          ],
+          "correct": 1,
+          "explanation": "Processes keep it current; reconciliation proves it stayed current. Both are written down, so both are checkable."
+        },
+        {
+          "question": "A machine appears in DHCP leases but not the inventory. What is that?",
+          "answers": [
+            "Normal churn to ignore",
+            "A reason to restart DHCP",
+            "A finding — either an undocumented system or a broken process, and both matter"
+          ],
+          "correct": 2,
+          "explanation": "The reconciliation exists to surface exactly this. Unknown hardware on the network is the classic first question of any assessment."
+        },
+        {
+          "question": "Which control family consumes this record most directly?",
+          "answers": [
+            "Configuration management — CM-8's component inventory is literally this artifact",
+            "Physical security",
+            "Awareness training"
+          ],
+          "correct": 0,
+          "explanation": "The authorization path's CM controls ask 'what do you have and how do you know' — this lesson is the answer being built."
+        }
+      ],
+      "recap": [
+        "One record of everything, with ring, sources, and scan status.",
+        "Reconciliation against directory and leases keeps it honest.",
+        "Owned, scheduled, and ready to join the Body of Evidence."
+      ],
+      "next": "Lesson 4 puts managed protection on every endpoint.",
+      "sources": [
+        "controls"
+      ]
+    },
+    {
+      "id": "epo",
+      "title": "Endpoint protection through SBD-EPO01",
+      "minutes": 30,
+      "summary": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show.",
+      "objectives": [
+        "Stand up the ePO server and its agent deployment.",
+        "Apply the protection and DLP policy baseline by ring.",
+        "Verify coverage and wire detections into the pipeline."
+      ],
+      "steps": [
+        "Build SBD-EPO01 in VLAN 50, fed its definitions through the offline process on the lesson-1 cadence, with its console reachable only from the admin plane — the register row from lesson 1 carries the agents' check-ins, and with the agent's peer-to-peer and RelayServer features turned off, endpoints open no listener for the server (TCP 8081, UDP 8082).",
+        "Deploy agents to the pilot ring first, confirm check-ins, then follow the ring order through the fleet, the member servers, and the critical ring — the same earn-your-way-up discipline as updates. Agent policy for the domain controllers is a Tier 0 scope in ePO, changed only from AdminJumpBox01 with a Tier 0 account. Add SBD-EPO01 to the SBD Tier 0 Console Hosts group and restart it, so course 1.7's recorded network-logon exception covers that console.",
+        "Apply the policy baseline: on-access protection, the scan schedule, and the data-loss-prevention policy scoped to what the model's DLP role calls for — each setting a decision in the record, not a default accepted silently.",
+        "Verify coverage against the living inventory — every endpoint present and checking in — and forward the server's threat events into the logging pipeline of courses 1.9–1.11 so detections land beside everything else; a standard test file makes the whole path fire once, on record."
+      ],
+      "command": "Test-NetConnection SBD-EPO01.sbd.test -Port 443\nGet-Service -ComputerName SBD-PC01 -Name 'masvc' -ErrorAction SilentlyContinue | Select-Object Status\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, MachineName",
+      "check": "Every inventoried endpoint shows a checking-in agent, the policy baseline is applied and recorded, and a test detection traveled from endpoint to console to the analyst's search.",
+      "evidence": "Keep the coverage-vs-inventory comparison, the policy baseline record, and the traced test detection.",
+      "quizzes": [
+        {
+          "question": "What answers 'is every endpoint protected'?",
+          "answers": [
+            "Asking the help desk",
+            "The console's coverage reconciled against the living inventory — agents checking in, compared to machines that exist",
+            "The install media's label"
+          ],
+          "correct": 1,
+          "explanation": "Coverage is a comparison, not a feeling. Lesson 4's inventory is the denominator that makes the claim checkable."
+        },
+        {
+          "question": "Why do protection detections flow into the logging pipeline?",
+          "answers": [
+            "One place to look: detections correlate with sign-ins and boundary denies on the same analyst screen",
+            "The console cannot store events",
+            "Syslog is faster than consoles"
+          ],
+          "correct": 0,
+          "explanation": "A detection next to the surrounding sign-ins and denies tells a story; a detection alone tells a fact."
+        },
+        {
+          "question": "How do definition updates reach this server?",
+          "answers": [
+            "Live from the vendor cloud",
+            "They never update in a lab",
+            "On the written offline cadence — the same hashed-media ceremony as everything else"
+          ],
+          "correct": 2,
+          "explanation": "Protection content ages fast, which is why the feeding cadence was a lesson-1 decision with a schedule, not an afterthought."
+        }
+      ],
+      "recap": [
+        "Agents by ring, policy from one console, console from the admin plane.",
+        "Coverage is proven against the inventory, not assumed.",
+        "Detections join the pipeline — one screen tells the whole story."
+      ],
+      "next": "The final lesson adds the scanner and makes the cadence routine.",
+      "sources": [
+        "trellix",
+        "controls"
+      ]
+    },
+    {
+      "id": "nessus",
+      "title": "SBD-NESSUS01 and the standing cadence",
+      "minutes": 25,
+      "summary": "The course 1.5 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's four new systems getting their own baselines on the way out.",
+      "objectives": [
+        "Stand up the scanner with least-privilege credentialed access.",
+        "Run the first full-network credentialed scan and triage it.",
+        "Fold scanning into the standing cadence and close the course's scans."
+      ],
+      "steps": [
+        "Build SBD-NESSUS01 on Linux in VLAN 50, joined to the sbd.test domain with its time taken from both domain controllers and its operating-system packages only from SBD-REPO01 — apply the course 1.8 client configuration before the first update. Plugins are fed on the offline cadence, with dedicated scan accounts — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1. The account that scans the domain controllers is a Tier 0 credential, kept apart from the member-server scan account and used only for DC scan jobs. Allow the scanner through the host firewalls it must reach — on the fleet, add SBD-NESSUS01 to the course 1.12 workstation firewall policy for SMB 445 and WMI, and on the Linux servers, SBD-REPO01 included, allow SSH 22 from 10.0.50.20 (F15).",
+        "Run the first credentialed scan VLAN by VLAN against the inventory, and triage like the course 1.5 rescan taught: every finding becomes fix-now, documented deviation, or POA&M candidate — never unexplained.",
+        "Wire results outward: findings into the analysis pipeline for trending, the triage into the living exception record, and the scan schedule into the cadence — quarterly with the Defense Information Systems Agency (DISA) release cycle, plus change-triggered, now automated enough to keep.",
+        "Close this course's own books: baselines for WSUS01, MGMT01, EPO01, and NESSUS01 (Linux: the DISA STIG benchmark for its distribution), SBD-REPO01's scheduled rescan on the course 1.8 cadence, rescans where agents and policies changed existing systems, and the handoff — the network now sustains itself; course 1.14 finally gives it something to serve."
+      ],
+      "command": "Test-NetConnection SBD-NESSUS01.sbd.test -Port 8834\nGet-ChildItem C:\\Evidence\\patch-protect -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\patch-protect\\*",
+      "check": "The credentialed scan covered the inventory with the scan account's use logged, every finding is classified, results and schedule are wired into pipeline and cadence, and the course's baselines and rescans are filed.",
+      "evidence": "Keep the scan summary with its triage, the scan-account and register records, the cadence entry, and the course's scan set.",
+      "quizzes": [
+        {
+          "question": "Why credentialed scans rather than unauthenticated ones?",
+          "answers": [
+            "They run quieter on the network",
+            "Logged-in checks see the real configuration state — patch levels and settings — instead of guessing from the outside",
+            "Credentials are required by law"
+          ],
+          "correct": 1,
+          "explanation": "The cadence wants configuration truth, which only an authenticated look provides; the scan account's scoping and logging keep that power honest."
+        },
+        {
+          "question": "Where does a scanner finding end up?",
+          "answers": [
+            "In one of three classified places: fixed, documented as a deviation, or on the POA&M path",
+            "Deleted if inconvenient",
+            "In the scanner only"
+          ],
+          "correct": 0,
+          "explanation": "The triage rule from courses 1.4 and 1.5 scales up unchanged: open items end classified, and the classifications feed the kind of records course 2.2 teaches you to assemble."
+        },
+        {
+          "question": "What did this course change about the cadence itself?",
+          "answers": [
+            "It ended the cadence",
+            "It moved scans to the fleet's discretion",
+            "It gave it an instrument — scheduled credentialed scanning makes the quarterly-plus-change rhythm sustainable"
+          ],
+          "correct": 2,
+          "explanation": "Course 1.5 set the rhythm by hand; the scanner is what lets a real operation keep the beat."
+        }
+      ],
+      "recap": [
+        "Credentialed, least-privilege, logged — the scanner earns its wide row.",
+        "Findings end classified and flow into pipeline and records.",
+        "This course's systems are baselined; the network now maintains itself."
+      ],
+      "next": "That completes course 1.13. Course 1.14 stands up the business services the users actually came for — file, database, licensing, and web.",
+      "sources": [
+        "tenable",
+        "disa-tools",
+        "controls"
+      ]
+    }
+  ]
+}

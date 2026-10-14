@@ -1,0 +1,56 @@
+{
+  "id": "harden-baseline",
+  "categoryOrder": 5,
+  "number": "1.5",
+  "estimatedHours": 2.5,
+  "title": "Harden with Group Policy",
+  "subtitle": "OU design, Group Policy processing & DISA GPOs proven by rescan",
+  "description": "Build the organizational units the hardening hangs on, learn exactly how Group Policy decides what applies, import the DISA STIG Group Policy objects course 1.4 staged and link them to SBD-DC01 and SBD-DC02 by OU, and prove the change with a rescan matched to course 1.4's baseline, updated checklists and an owned exception record.",
+  "tags": [
+    "Windows Server",
+    "Group Policy",
+    "DISA STIG",
+    "Organizational units",
+    "Active Directory"
+  ],
+  "platform": "Windows Server",
+  "systems": [
+    "SBD-DC01",
+    "SBD-DC02"
+  ],
+  "artLabels": [
+    "OUs + redirects",
+    "DISA GPOs by OU",
+    "Rescan → exceptions"
+  ],
+  "outcomes": [
+    "Design OUs for delegation and policy targeting, and redirect the default containers.",
+    "Predict which GPO wins from processing order, link order, inheritance, filtering and loopback, and confirm it with gpresult.",
+    "Import the DISA GPO package through the central store and link it by OU, with account policies at the domain root.",
+    "Prove the hardening with a rescan matched to course 1.4's baseline, updated checklists and an owned exception record."
+  ],
+  "stages": [
+    {
+      "title": "Design and build the OU structure",
+      "detail": "Organizational units exist for delegation and Group Policy targeting, not to mirror an org chart. Build the structure the hardening policies will hang on before importing any of them."
+    },
+    {
+      "title": "Learn how Group Policy applies",
+      "detail": "Before the DISA settings arrive, learn how a computer decides which Group Policy objects (GPOs) apply and which setting wins. Map the order, build the central store the import will use, and record what both controllers apply today."
+    },
+    {
+      "title": "Import and link the DISA GPOs",
+      "detail": "Group Policy is how the STIG becomes configuration. Import the package course 1.4 staged, link each policy where its systems live so the findings marked fix by GPO can close, and keep the lab's deliberate deviations written down rather than silently skipped."
+    },
+    {
+      "title": "Rescan, reconcile, and record",
+      "detail": "The second scan is the verdict. Rescan with exactly the versions course 1.4 used, compare each controller with its own baseline, update copies of the course 1.4 checklists, and give every remaining open item an answer."
+    },
+    {
+      "title": "Set the rescan cadence and exception record",
+      "detail": "Hardening is a state you maintain, not a step you finish. Close the course with an owned exception record and a backed-up policy state, and decide who rescans, when, and which event forces an early look."
+    }
+  ],
+  "outcomeSummary": "OUs built for delegation, DISA policies applied where they belong, and a rescan that proves what changed.",
+  "networkLabel": "VLAN 10 / DOMAIN CONTROLLERS"
+}
