@@ -31,11 +31,11 @@
   "stages": [
     {
       "title": "Map names to the network",
-      "detail": "DNS tells every domain member where its domain controllers are. Learn what it answers, set each controller's DNS client order, and record which server owns each name and how a client finds it."
+      "detail": "Domain Name System (DNS) turns names into addresses, and for Active Directory it does one more job: it tells every domain member where its domain controllers are. Start from the working directory build, learn what DNS answers and what it doesn't, set each controller's DNS client order, and record which server owns each name and how a client finds it."
     },
     {
       "title": "Configure forward and reverse zones",
-      "detail": "Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers."
+      "detail": "A zone holds the records for one part of the namespace. Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers."
     },
     {
       "title": "Create and maintain service records",
@@ -43,7 +43,7 @@
     },
     {
       "title": "Prove resolution and directory discovery",
-      "detail": "Test each server explicitly before testing client fallback, then optionally watch a locator query on the wire. A correct DNS answer proves neither a sign-in nor access to a resource."
+      "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records, and a correct DNS answer proves neither a successful sign-in nor access to a protected resource."
     },
     {
       "title": "Find the fault and record the fix",

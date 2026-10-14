@@ -41,7 +41,7 @@
     "tag": "LINUX PACKAGES · VLAN 70",
     "label": "Interactive 3D lesson network showing SBD-REPO01 behind the core, the domain controllers it takes DNS and time from, and SBD-ADMIN-SRV01 administering it over SSH from VLAN 60.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "SBD-REPO01 serves a verified, dated snapshot on TCP 80, takes DNS and time from both domain controllers, and is administered only from SBD-ADMIN-SRV01. The Linux servers in courses 1.12, 1.14 and 1.18 patch from it from their first day.",
+    "completeCaption": "SBD-REPO01 serves a verified, dated snapshot on TCP 80, takes DNS and time from both domain controllers, and is administered only from SBD-ADMIN-SRV01. The Linux servers in courses 1.12 and 1.18 patch from it from their first day.",
     "nodes": [
       {
         "id": "repo",
@@ -156,8 +156,8 @@
       "status": "REPO01 ONLINE",
       "stepTitles": [
         "Install the server, its address, and its DNS record",
-        "Take time from both domain controllers",
-        "Lock administration to named keys from one seat",
+        "Apply course 1.3's chrony file, time sync off",
+        "Lock administration to one seat; trust the SBD root",
         "Serve only the repository directory",
         "Make the host firewall match the register"
       ],
@@ -171,8 +171,8 @@
         "question": "Which captured output proves the setting is in effect, not merely written in a file?"
       },
       "checklist": [
-        "I confirmed SBD-REPO01 resolves to 10.0.70.20 and chrony syncs from a domain controller within the course 1.3 threshold.",
-        "I captured sshd -T showing root login and passwords refused and only the admin group allowed.",
+        "I applied course 1.3's chrony file with the hypervisor's time sync off, and chrony syncs from a domain controller within the course 1.3 threshold.",
+        "I captured sshd -T showing root login and passwords refused and only the admin group allowed, and added the course 1.6 root, its hash checked, to the trust store.",
         "I confirmed only TCP 22 and 80 listen, the firewall matches the register, and the web root returns 403."
       ]
     },
@@ -213,7 +213,7 @@
         "Prove it on SBD-REPO01",
         "Package it for the later Linux servers"
       ],
-      "mistake": "Adding the internal repository but leaving the external source definitions enabled. Nothing reaches them across the air gap, so it looks harmless, but the one-source rule is then a convention rather than configuration, and a review of the consumer’s sources finds it.",
+      "mistake": "Adding the internal repository but leaving the external source definitions enabled. Nothing reaches them across the air gap, so it looks harmless, but the one-source rule is then a convention rather than configuration, and a review of the consumer's sources finds it.",
       "network": "SBD-REPO01 tests the client configuration against itself. The Linux servers that will use it, SBD-SPLUNK01, SBD-NESSUS01 and SBD-WEB01, are built in later courses and are not shown.",
       "control": {
         "id": "CM-11",
@@ -235,11 +235,12 @@
       "stepTitles": [
         "Write the snapshot cadence",
         "Promote a snapshot and roll it back",
+        "Stage SCC for Linux and the STIG benchmark",
         "Take SBD-REPO01's first SCAP baseline",
         "File the record and hand off to course 1.10"
       ],
       "mistake": "Assuming a rollback undoes updates already installed. Switching current back only changes what can be installed next; a server that already updated keeps the newer packages until you undo or downgrade them there, as a recorded change.",
-      "network": "The next snapshot crosses by hand on approved media and is promoted, then rolled back. SBD-REPO01 is scanned in place, and its record is collected on SBD-ADMIN-SRV01.",
+      "network": "The next snapshot crosses by hand on approved media and is promoted, then rolled back. SCC for Linux is staged on SBD-ADMIN-SRV01, SBD-REPO01 is scanned in place over SSH, and its record is collected there.",
       "control": {
         "id": "SI-2",
         "name": "Flaw Remediation",
@@ -250,7 +251,7 @@
       "checklist": [
         "I wrote the cadence, the expedited path and the approver for each crossing.",
         "I promoted a new snapshot and rolled back, and both switches show in the catalog and in the client's view.",
-        "I filed SBD-REPO01's first baseline with every open item classified, the hashed record, and the handoff to course 1.9."
+        "I staged the Linux assessment set on SBD-ADMIN-SRV01, filed SBD-REPO01's first baseline with every open item classified, and filed the hashed record and the handoff to course 1.10."
       ]
     }
   }

@@ -5,7 +5,7 @@
   "estimatedHours": 2.8,
   "title": "Build the Linux repository on SBD-REPO01",
   "subtitle": "Mirrored, signature-verified package snapshots for the Linux servers",
-  "description": "Build the one approved source of operating-system packages before any Linux server exists: verify the vendor's signing keys, build and harden SBD-REPO01 on VLAN 70 as a minimal web server, mirror and publish dated snapshots carried across the air gap and checked by hash and signature, write the client configuration every Linux server will use, and prove promotion, rollback and the first STIG baseline.",
+  "description": "Build the one approved source of operating-system packages before any Linux server exists: verify the vendor's signing keys, build and harden SBD-REPO01 on VLAN 70 as a minimal web server, mirror and publish dated snapshots carried across the air gap and checked by hash and signature, write the client configuration every Linux server will use, and prove promotion, rollback and the first STIG baseline with the SCC for Linux set every Linux server is scanned with.",
   "tags": [
     "Linux",
     "Package repository",
@@ -43,11 +43,11 @@
     },
     {
       "title": "Configure the Linux clients",
-      "detail": "Write the one client configuration every Linux server will use: a single source definition pointing at SBD-REPO01, the verified signing keys, and no other source. No consumer exists yet, so prove it on SBD-REPO01's own package manager and hand the files to courses 1.12, 1.14 and 1.14."
+      "detail": "Write the one client configuration every Linux server will use: a single source definition pointing at SBD-REPO01, the verified signing keys, and no other source. No consumer exists yet, so prove it on SBD-REPO01's own package manager and hand the files to courses 1.12 and 1.18."
     },
     {
       "title": "Keep it current and prove it",
-      "detail": "A repository is only as good as its last snapshot. Set the cadence that keeps it current, rehearse promoting a new snapshot and rolling back, take SBD-REPO01's first SCAP baseline, and close the course with a record an assessor can check."
+      "detail": "A repository is only as good as its last snapshot. Set the cadence that keeps it current, rehearse promoting a new snapshot and rolling back, stage SCC for Linux for every Linux server and take SBD-REPO01's first SCAP baseline with it, and close the course with a record an assessor can check."
     }
   ],
   "outcomeSummary": "One verified source of Linux packages, ready before the first Linux server arrives.",

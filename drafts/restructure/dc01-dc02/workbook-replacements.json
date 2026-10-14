@@ -1,0 +1,22 @@
+[
+  {
+    "old": "Members reach the controllers only for name resolution (course 1.2), the services in \"What crosses the network?\", and course 1.8's credentialed scans.",
+    "new": "Members reach the controllers only for name resolution (course 1.2) and the services in \"What crosses the network?\"."
+  },
+  {
+    "old": "the Tier 0 host on VLAN 60 that course 1.5 builds",
+    "new": "the Tier 0 host on VLAN 60 that course 1.8 builds"
+  },
+  {
+    "old": "until course 1.5 limits them to the Tier 0 host",
+    "new": "until course 1.8 limits them to the Tier 0 host"
+  },
+  {
+    "old": "Name resolution (F01) and credentialed scanning (F15) have their own rules; everything else is denied.",
+    "new": "Name resolution has its own rule (F01), and so does credentialed scanning (F15), which arrives with course 1.17, coming soon; everything else is denied."
+  },
+  {
+    "old": "Next in the path: course 1.2, Configure DNS and time.",
+    "new": "Next in the path: course 1.2, Configure DNS."
+  }
+]

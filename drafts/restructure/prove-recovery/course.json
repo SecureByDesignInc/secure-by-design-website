@@ -1,0 +1,454 @@
+{
+  "id": "prove-recovery",
+  "prerequisites": [
+    "Complete courses 1.1–1.9: the full network, its records, and the protected log archive all exist.",
+    "Provision a protected backup volume on each server, written only by its backup job, an offline backup cabinet with removable media and a custody register, and an isolated recovery network segment (or host) for the restore rehearsal.",
+    "Have the custody records handy: the Directory Services Restore Mode (DSRM) passwords from course 1.1 and the CA key protection decisions from course 1.4 — recovery is where those promises come due."
+  ],
+  "labNote": "The model's final chapter: a network that cannot come back was never really built. This course backs up what matters — directory, certificate authority, policy, boundary, and the log record — proves one real restore in isolation, and files the tested-recovery evidence the authorization path expects.",
+  "sources": [
+    {
+      "id": "forest",
+      "title": "Microsoft · Active Directory forest recovery guide",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/forest-recovery-guide/ad-forest-recovery-guide"
+    },
+    {
+      "id": "wbadmin",
+      "title": "Microsoft · Wbadmin (Windows Server Backup)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin"
+    },
+    {
+      "id": "systemstaterecovery",
+      "title": "Microsoft · wbadmin start systemstaterecovery",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin-start-systemstaterecovery"
+    },
+    {
+      "id": "nonauth",
+      "title": "Microsoft · Restore AD DS from backup (nonauthoritative restore)",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/cc794755(v=ws.10)"
+    },
+    {
+      "id": "dsrm",
+      "title": "Microsoft · Restart the domain controller in Directory Services Restore Mode locally",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/cc816897(v=ws.10)"
+    },
+    {
+      "id": "full-server",
+      "title": "Microsoft · AD forest recovery: perform a full server recovery",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/forest-recovery-guide/ad-forest-recovery-perform-full-server-recovery"
+    },
+    {
+      "id": "certutil",
+      "title": "Microsoft · Certutil reference (CA backup and restore)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certutil"
+    },
+    {
+      "id": "controls",
+      "title": "NIST · SP 800-53 Rev. 5 security controls (CP family)",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "requirements",
+      "title": "Decide what recovery must prove",
+      "minutes": 20,
+      "summary": "Recovery starts as a list of promises: which systems and records must be restorable, how old a restored copy may be, how long restoration may take — written as commitments the rest of the course exists to keep.",
+      "objectives": [
+        "Name the recovery set: what must come back, in what order.",
+        "Set the recovery point and time objectives per item.",
+        "Decide where backups live and who can touch them."
+      ],
+      "steps": [
+        "Write the recovery set in dependency order — the same order the path built it: the directory first (everything trusts it), then the CA's database and keys, Group Policy, the router configuration, the log archive, and the living records themselves (register, inventory, exception record).",
+        "Set the two numbers per item: how much history may be lost (recovery point) and how long restoration may take (recovery time) — lab-honest values you will actually measure against in lesson 5, not aspirations.",
+        "Decide backup placement: each server's protected backup volume is written only by the backup process and readable by the recovery role, and a custodian carries copies to the offline backup cabinet on media — the air-gapped network's version of an off-site copy. There is no network path to the cabinet.",
+        "Confirm the standing custody items: the DSRM passwords are sealed and findable, and the root CA's protected backup from the course 1.4 ceremony is accounted for — recovery depends on secrets that must exist before the bad day."
+      ],
+      "command": "# Capture the current protection state before this course changes it.\nwbadmin get versions\nGet-ChildItem E:\\Backups -ErrorAction SilentlyContinue | Measure-Object   # this server's protected backup volume",
+      "check": "The recovery set is ordered by dependency with point and time objectives per item, the backup placement and access rules are written, and the DSRM and root-key custody records check out.",
+      "evidence": "Keep the recovery requirements sheet, the objectives table, the placement and access decisions, and the custody verification notes.",
+      "quizzes": [
+        {
+          "question": "Why does the directory lead the recovery order?",
+          "answers": [
+            "It has the most data",
+            "Everything else authenticates against it — services restored before identity have nothing to trust",
+            "Alphabetical order"
+          ],
+          "correct": 1,
+          "explanation": "Recovery order mirrors build order for the same reason: the dependency chain starts at identity."
+        },
+        {
+          "question": "What makes a recovery time objective honest?",
+          "answers": [
+            "Making it very small",
+            "Leaving it unstated",
+            "Setting a value you will actually measure a rehearsal against"
+          ],
+          "correct": 2,
+          "explanation": "Lesson 5 times a real restore. An objective nobody measures is marketing, not a commitment."
+        },
+        {
+          "question": "What is the offline media copy for?",
+          "answers": [
+            "Surviving a failure that takes the online backup with it — the air-gapped answer to off-site",
+            "Faster restores",
+            "Decoration for the evidence binder"
+          ],
+          "correct": 0,
+          "explanation": "Replication and online backups share failure modes with what they protect. One custody-tracked copy stands apart."
+        }
+      ],
+      "recap": [
+        "The recovery set is ordered by dependency, directory first.",
+        "Point and time objectives exist to be measured, not admired.",
+        "Backups get a protected home plus one offline, custody-tracked copy."
+      ],
+      "next": "Lesson 2 makes the directory's safety net real.",
+      "sources": [
+        "controls",
+        "forest"
+      ]
+    },
+    {
+      "id": "directory",
+      "title": "Back up the directory, on schedule",
+      "minutes": 25,
+      "summary": "System state from both controllers, on a schedule, to the protected target — plus the quiet feature that handles the most common 'disaster' of all: the Recycle Bin for deleted directory objects.",
+      "objectives": [
+        "Schedule system state backups on both domain controllers.",
+        "Verify and catalog each backup with hashes.",
+        "Enable the Active Directory Recycle Bin for object-level recovery."
+      ],
+      "steps": [
+        "Schedule Windows Server Backup jobs on SBD-DC01 and SBD-DC02 to each server's protected backup volume, including the system state and all critical volumes (wbadmin's -allCritical) so the same backup also supports a full server (bare-metal) recovery to different hardware — two controllers, two independent backups, because replication is availability and was never recovery (course 1.1's point, now kept).",
+        "After the first run, verify each backup's completion, record its version identifier, and hash the catalog entry into the evidence set — an unverified backup is a hope with a timestamp.",
+        "Enable the Active Directory Recycle Bin (a one-way, forest-level action from the Tier 0 seat, recorded as the change it is) so a deleted user or OU comes back intact without touching system state at all.",
+        "Write the restore decision tree: deleted object → Recycle Bin; corrupted DC on its own hardware → system state restore in DSRM (lesson 5's rehearsal); DC whose hardware is gone → full server (bare-metal) recovery from the critical-volumes backup; whole-forest loss → the Microsoft forest recovery guide, referenced and staged with the evidence rather than improvised on the day."
+      ],
+      "command": "wbadmin get versions\nGet-ADOptionalFeature -Filter {Name -like 'Recycle Bin*'} | Select-Object Name, EnabledScopes\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\backup-catalog.txt",
+      "check": "Both DCs show scheduled, completed system state versions on the protected target, the Recycle Bin reports an enabled scope, and the decision tree names the tool for each failure class.",
+      "evidence": "Keep the backup schedules and version listings, the hashed catalog, the Recycle Bin enablement record, and the restore decision tree.",
+      "quizzes": [
+        {
+          "question": "Both DCs replicate — why back up both?",
+          "answers": [
+            "Replication copies mistakes as faithfully as data; independent backups are the history replication doesn't keep",
+            "Backups run faster in pairs",
+            "Only one actually holds the directory"
+          ],
+          "correct": 0,
+          "explanation": "The course 1.1 teaching point, finally implemented: availability and recoverability are different capabilities with different tools."
+        },
+        {
+          "question": "An administrator deletes an OU by mistake. First tool?",
+          "answers": [
+            "Rebuild the forest",
+            "The Recycle Bin — object-level restore with attributes intact, no system state needed",
+            "Ask users to recreate their accounts"
+          ],
+          "correct": 1,
+          "explanation": "The decision tree's first branch: match the restore to the loss. Most disasters are small, and the small tool is already enabled."
+        },
+        {
+          "question": "What makes a backup more than a hope?",
+          "answers": [
+            "A long retention setting",
+            "Its file size",
+            "Verified completion, a recorded version, and a hashed catalog entry — and eventually a rehearsed restore"
+          ],
+          "correct": 2,
+          "explanation": "The evidence standard applies to safety nets too: recorded, verifiable, and — in lesson 5 — actually exercised."
+        }
+      ],
+      "recap": [
+        "Two independent system state schedules, verified and cataloged.",
+        "The Recycle Bin handles the everyday disaster in seconds.",
+        "A decision tree matches each failure class to its tool."
+      ],
+      "next": "Lesson 3 protects the trust fabric and the supporting state.",
+      "sources": [
+        "wbadmin",
+        "full-server",
+        "forest"
+      ]
+    },
+    {
+      "id": "trust-state",
+      "title": "Back up the CA, policy, boundary, and records",
+      "minutes": 30,
+      "summary": "The directory is not the only thing the network cannot re-derive: the issuing CA's database and key, the Group Policy set, the router's configuration, the log archive, and the living records each get their protected, cataloged copy.",
+      "objectives": [
+        "Back up the issuing CA's database and key to its protected backup volume under ceremony-grade protection.",
+        "Refresh the Group Policy object (GPO) and router configuration backups into the protected set.",
+        "Fold the log archive and living records into the same catalog."
+      ],
+      "steps": [
+        "Back up the issuing CA — database and private key — with certutil to SBD-SUBCA01's protected backup volume (E:\\Backups in this sample), never to C:\\Evidence: the private key is a secret, and secrets never go into evidence. Protect the key material to the same standard as the course 1.4 ceremony artifacts and record custody; only the backup's hashes and the custody record go into the evidence folder. The root's protected backup already exists from that ceremony and is verified, not duplicated, here.",
+        "Refresh the Group Policy backup (the course 1.3 Backup-GPO set, now the whole policy estate) and the router configuration export into the protected target, each hashed into the catalog.",
+        "Confirm the log archive's protection already satisfies this course — SBD-AUDIT01's hashed archives are themselves the record — and add the archive catalog to the recovery set so the evidence survives the systems it describes.",
+        "Export the living records — register, inventory, exception record, and this course's own sheets — into the set: a recovered network without its records would pass no assessment and teach the wrong lesson."
+      ],
+      "command": "# On SBD-SUBCA01: back up to the protected backup volume, never to the evidence folder.\ncertutil -backup E:\\Backups\\SBD-SUBCA01\\ca-backup   # prompts for the password that protects the exported key\n# Only the hashes and the custody record go into evidence.\nGet-ChildItem E:\\Backups\\SBD-SUBCA01\\ca-backup -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\\Evidence\\recovery\\ca-backup-hashes.csv -NoTypeInformation\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\gpo-backup\\* | Select-Object -First 6",
+      "check": "The CA backup sits on SBD-SUBCA01's protected backup volume with key custody recorded and only its hashes in evidence, the policy and router exports are current and hashed, and the catalog covers logs and living records alongside the systems.",
+      "evidence": "Keep the CA backup's hash list and custody record (never the backup itself), the refreshed policy and router exports with hashes, and the complete recovery catalog.",
+      "quizzes": [
+        {
+          "question": "Why does the CA key backup get ceremony-grade handling?",
+          "answers": [
+            "A copied issuing key is the power to mint trusted certificates — the backup is as sensitive as the CA itself",
+            "Keys are large files",
+            "certutil requires it"
+          ],
+          "correct": 0,
+          "explanation": "Backups inherit the sensitivity of what they contain. The course 1.4 custody discipline applies to every copy of key material, forever."
+        },
+        {
+          "question": "Why do the register, inventory, and exception record join the backup set?",
+          "answers": [
+            "They are the largest files",
+            "A restored network without its records has lost its assessable story — the evidence must survive what it evidences",
+            "Backups require ten items minimum"
+          ],
+          "correct": 1,
+          "explanation": "This path's real product is a defensible record. Recovery that saves the machines and loses the story saves the wrong half."
+        },
+        {
+          "question": "What does this lesson do about the offline root's backup?",
+          "answers": [
+            "Copies it onto the network for convenience",
+            "Ignores it",
+            "Verifies the ceremony-era backup's custody — it already exists, offline, and stays that way"
+          ],
+          "correct": 2,
+          "explanation": "The root's protection is its isolation. This course checks the promise rather than breaking it with a networked copy."
+        },
+        {
+          "question": "Where does the issuing CA's backup go?",
+          "answers": [
+            "Into C:\\Evidence, so assessors can inspect it",
+            "Onto SBD-SUBCA01's protected backup volume, with only its hashes and the custody record in evidence",
+            "Onto pki.sbd.test, beside the CRLs"
+          ],
+          "correct": 1,
+          "explanation": "The backup holds the CA's private key, and secrets never go into evidence — the DNS course's rule. Evidence records that the backup exists and is intact: its hashes and its custody, not its contents."
+        }
+      ],
+      "recap": [
+        "CA database and key: backed up to the protected volume, custody recorded, only hashes in evidence.",
+        "Policy, boundary, logs, and records all live in one hashed catalog.",
+        "The evidence now survives the systems it describes."
+      ],
+      "next": "Lesson 4 moves the copies to the offline cabinet, by hand and on record.",
+      "sources": [
+        "certutil",
+        "wbadmin"
+      ]
+    },
+    {
+      "id": "offline-copies",
+      "title": "Carry the copies to the offline cabinet",
+      "minutes": 20,
+      "summary": "A backup that sits on the server it protects fails with it. Move a copy of each backup to the offline cabinet by hand, under the same custody rules as any media crossing a boundary, and keep the custody record that proves it.",
+      "objectives": [
+        "Define which custodian carries which backup, by tier.",
+        "Transfer the copies to offline media with hashes and custody records.",
+        "Prove a copy can be found, verified, and returned for a restore."
+      ],
+      "steps": [
+        "Assign custodians by tier: a Tier 0 custodian handles DC system state and the issuing CA's database and key backup; the audit custodian handles the log archive from SBD-AUDIT01; a server custodian handles member-server backups. No one carries a tier they do not hold.",
+        "For each copy, write the media ID, hash the backup on its protected volume, copy it to encrypted removable media, and verify the hash on the media before it leaves the room.",
+        "Carry the media to the offline backup cabinet and record the handoff in the custody register: who, what, when, the hashes, and the storage slot. This is the course 1.3 media procedure used for backups.",
+        "Pull one copy back as a test: find it from the register, verify its hash, and confirm it is readable. Lesson 5's rehearsal restores from a copy that has made this round trip."
+      ],
+      "command": "# Hash on the protected volume, then on the media.\nGet-FileHash -Algorithm SHA256 E:\\Backups\\SBD-DC02\\*.vhdx\nGet-FileHash -Algorithm SHA256 F:\\Media-0012\\SBD-DC02\\*.vhdx",
+      "check": "Every item in the recovery set has an offline copy with matching hashes on the volume and the media, a custody entry with a named custodian of the right tier, and one copy has been retrieved and verified.",
+      "evidence": "Keep the custodian assignments, the hash pairs, the custody register entries, and the retrieval test record.",
+      "model": {
+        "href": "/inside-the-network#facility=backup",
+        "label": "Offline backup & recovery",
+        "text": "The offline cabinet has no network path. Copies arrive only by custodian under the media procedure."
+      },
+      "quizzes": [
+        {
+          "question": "Who carries the domain controllers' system-state backup to the cabinet?",
+          "answers": [
+            "Any server operator who is free",
+            "A Tier 0 custodian",
+            "The help desk"
+          ],
+          "correct": 1,
+          "explanation": "A DC backup holds the directory's secrets. Whoever can handle it can rebuild or read the domain, so it stays with Tier 0."
+        },
+        {
+          "question": "Why is there no network path to the offline backup cabinet?",
+          "answers": [
+            "So ransomware or an intruder on the network cannot reach or encrypt the copies",
+            "Because backups are too large to send",
+            "Because NIST forbids network backups"
+          ],
+          "correct": 0,
+          "explanation": "An offline copy survives an attack that takes the whole network. The custody record replaces the network path as the proof of what happened."
+        },
+        {
+          "question": "The hash on the media does not match the hash on the volume. What do you do?",
+          "answers": [
+            "Store it anyway and note it",
+            "Delete the original",
+            "Do not store it; recopy and investigate, because the copy is not trustworthy"
+          ],
+          "correct": 2,
+          "explanation": "A mismatch means the copy is not the backup you verified. Storing it would put an untrusted copy where you will look on the worst day."
+        }
+      ],
+      "recap": [
+        "Custodians carry only the backups their tier allows.",
+        "Every copy has matching hashes and a custody entry.",
+        "A copy has been retrieved and verified before anyone needs it."
+      ],
+      "next": "Lesson 5 stops trusting the backups and tests one.",
+      "sources": [
+        "controls",
+        "wbadmin"
+      ]
+    },
+    {
+      "id": "rehearse",
+      "title": "Rehearse a real restore, in isolation",
+      "minutes": 35,
+      "summary": "One restore, actually performed: a domain controller's system state brought back on the isolated segment, timed against the objective, verified against the directory — plus the small restore everyone will someday need, from the Recycle Bin.",
+      "objectives": [
+        "Restore a DC's system state in Directory Services Restore Mode on the isolated recovery segment.",
+        "Measure the restore against the time objective and verify directory health.",
+        "Perform and record an object-level Recycle Bin restore."
+      ],
+      "steps": [
+        "Stage the rehearsal: the isolated recovery segment has no path to the production VLANs — a restored controller believing it is authoritative must never meet the live directory; that isolation rule is written before the restore starts.",
+        "Restore SBD-DC02 from the offline copy retrieved in lesson 4, timing the work from decision to directory-services-running against the lesson-1 objective. A system state restore needs the same server instance — use a copy of SBD-DC02's virtual machine attached only to the isolated segment — started in DSRM: bcdedit /set safeboot dsrepair, restart, and sign in with the DSRM password. Restoring to different hardware needs a full server (bare-metal) recovery from the critical-volumes backup instead.",
+        "Remove the DSRM boot setting (bcdedit /deletevalue safeboot) and restart normally, then verify the restored directory the course 1.1 way — services, shares, a directory query. Record what the rehearsal taught: steps that surprised you, the measured time, and the decision-tree updates; then tear the rehearsal down completely.",
+        "Back in production, run the everyday restore: delete a disposable test object, bring it back from the Recycle Bin with attributes intact, and file both rehearsals — the big one and the small one — as the tested-recovery evidence."
+      ],
+      "command": "# On the isolated copy of SBD-DC02: start in DSRM, then sign in with the DSRM password.\nbcdedit /set safeboot dsrepair\nshutdown -t 0 -r\nwbadmin get versions -backupTarget:<media-volume> -machine:SBD-DC02\nwbadmin start systemstaterecovery -version:<version-id> -backupTarget:<media-volume> -machine:SBD-DC02\nbcdedit /deletevalue safeboot   # then restart normally\nGet-Service NTDS,DNS,Netlogon   # after restart, on the restored controller\nRestore-ADObject -Identity <deleted-object-guid>   # production Recycle Bin rehearsal",
+      "check": "The isolated restore ran in DSRM and reached a healthy directory within (or honestly against) the time objective, the DSRM boot setting is removed, the teardown is confirmed, and the production object restore returned the test object intact.",
+      "evidence": "Keep the timed rehearsal log with its verification output, the lessons-learned and decision-tree updates, the teardown confirmation, and the object-restore record.",
+      "quizzes": [
+        {
+          "question": "Why must the rehearsal segment be isolated from production?",
+          "answers": [
+            "To make the restore faster",
+            "A restored controller carries old directory state — meeting the live forest would inject the past into the present",
+            "Isolation is optional for labs"
+          ],
+          "correct": 1,
+          "explanation": "The rehearsal's first rule protects production from the rehearsal. Old authoritative state on a live network is its own disaster."
+        },
+        {
+          "question": "The restore took longer than the objective. What now?",
+          "answers": [
+            "Hide the timing",
+            "Declare the objective met anyway",
+            "Record the honest number and either fix the process or revise the objective — both are legitimate; silence is not"
+          ],
+          "correct": 2,
+          "explanation": "The rehearsal exists to replace belief with measurement. Either outcome — better process or truer objective — improves the real bad day."
+        },
+        {
+          "question": "Why rehearse the Recycle Bin restore too?",
+          "answers": [
+            "The most likely recovery event deserves the same tested-and-recorded treatment as the rare one",
+            "It is required before system state restores",
+            "Deleted objects expire daily"
+          ],
+          "correct": 0,
+          "explanation": "Recovery evidence should match recovery reality: object-level loss is the common case, so its tool gets proven, not presumed."
+        },
+        {
+          "question": "Your recovery host is new hardware. Which restore applies?",
+          "answers": [
+            "A system state restore, exactly as on the original server",
+            "A full server (bare-metal) recovery from the critical-volumes backup — system state restores are for the same server instance",
+            "Copying NTDS.dit across by hand"
+          ],
+          "correct": 1,
+          "explanation": "Microsoft's forest recovery guidance calls for a full server recovery when you restore to different hardware or a different operating system instance. A system state restore runs on the original instance, in DSRM."
+        }
+      ],
+      "recap": [
+        "One real restore, isolated, timed, verified, and torn down.",
+        "The measured number replaced the hoped-for one.",
+        "The everyday restore is proven alongside the dramatic one."
+      ],
+      "next": "The final lesson files the recovery record and closes the Build path.",
+      "sources": [
+        "systemstaterecovery",
+        "nonauth",
+        "dsrm",
+        "full-server",
+        "forest"
+      ]
+    },
+    {
+      "id": "record",
+      "title": "File the recovery record and close the path",
+      "minutes": 20,
+      "summary": "The Build path ends the way it worked: owners, schedules, and evidence. The recovery record joins the living documents, the final scans snapshot the finished network, and the Body of Evidence is ready for the authorization courses to assemble.",
+      "objectives": [
+        "Assemble the tested-recovery record with owners and review dates.",
+        "Run the closing scan snapshot across the finished network.",
+        "Hand the complete evidence set to the authorization path."
+      ],
+      "steps": [
+        "Assemble the recovery record: the requirements and objectives, the backup catalog, both rehearsal results with the measured times, the decision tree, and a named owner with a scheduled next rehearsal — recovery is a practice with a calendar, not a binder.",
+        "Run the closing snapshot: the standing credentialed scan across every VLAN plus current Security Content Automation Protocol (SCAP) results per the cadence, triaged as always — the dated 'as-authorized' picture path 2 will reference.",
+        "Reconcile the three living records one final time — inventory against directory and leases, register against behavior, exception record against open findings — so the authorization path inherits agreement, not archaeology.",
+        "Write the Build path's closing note: what exists, where every record lives, and what is intentionally open — then start course 2.1, where this network stops being a project and becomes a system seeking authorization."
+      ],
+      "command": "Get-ChildItem C:\\Evidence -Directory | Select-Object Name\nGet-ChildItem C:\\Evidence\\recovery -Recurse | Measure-Object\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\recovery\\recovery-record.pdf -ErrorAction SilentlyContinue",
+      "check": "The recovery record is complete with an owner and next-rehearsal date, the closing snapshot is filed with triage, and all three living records reconcile cleanly into the handoff note.",
+      "evidence": "Finish the checklist: the recovery record, the closing scan snapshot, the three reconciliations, and the Build path's closing note.",
+      "quizzes": [
+        {
+          "question": "What makes recovery 'a practice with a calendar'?",
+          "answers": [
+            "A named owner and a scheduled next rehearsal — the test repeats as the network changes",
+            "Laminating the decision tree",
+            "Buying more storage"
+          ],
+          "correct": 0,
+          "explanation": "One rehearsal proves today's backups. The schedule is what keeps tomorrow's honest."
+        },
+        {
+          "question": "Why take a full scan snapshot at path's end?",
+          "answers": [
+            "Scanners need exercise",
+            "It is the dated security picture the authorization decision will actually be about",
+            "To fill the evidence folder"
+          ],
+          "correct": 1,
+          "explanation": "Path 2's assessors and the authorizing official evaluate a system at a moment. The snapshot is that moment, captured."
+        },
+        {
+          "question": "What does path 2 inherit from ten build courses?",
+          "answers": [
+            "Just the virtual machines",
+            "A to-do list",
+            "A reconciled, evidenced system: inventory, register, exceptions, scans, and tested recovery — the Body of Evidence, already real"
+          ],
+          "correct": 2,
+          "explanation": "The authorization path was never going to invent evidence; it organizes what the Build path produced on purpose, course by course."
+        }
+      ],
+      "recap": [
+        "Recovery has an owner, a date, and a measured track record.",
+        "The closing snapshot freezes the as-authorized picture.",
+        "The Body of Evidence exists — path 2 assembles, it doesn't excavate."
+      ],
+      "next": "That completes the Build the Network path. Continue with course 2.1 to carry this network — and its evidence — through the Risk Management Framework to an authorization decision.",
+      "sources": [
+        "controls",
+        "forest"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,548 @@
+{
+  "id": "workstation-fleet",
+  "prerequisites": [
+    "Complete courses 1.4–1.6: working PKI services, DHCP with its relay, the tiered admin plane, and the logging pipeline, on the network's routed, segmented VLANs.",
+    "Prepare a patched Windows reference image (or template) for the fifty endpoints, obtained through the approved offline media process.",
+    "Confirm the Workstations OU, the container redirects from course 1.3, and the Defense Information Systems Agency (DISA) Security Technical Implementation Guide (STIG) Group Policy objects (GPOs) for your Windows client release, from the course 1.3 package, are ready to link.",
+    "Confirm the VLAN 80 access switch supports 802.1X port authentication, including a monitor (audit) mode that logs each result without blocking traffic. No new server is needed: the Network Policy Server (NPS) role goes on SBD-DHCP01."
+  ],
+  "labNote": "Fifty endpoints join a network that is finally ready for them: addressed by DHCP, landed by OU redirect, hardened by policy at first boot, certified by autoenrollment, and watched by the pipeline from their first sign-in. The sample names run SBD-PC01 through SBD-PC50; match them to your own plan.",
+  "sources": [
+    {
+      "id": "laps",
+      "title": "Microsoft · Windows LAPS overview",
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview"
+    },
+    {
+      "id": "autoenroll",
+      "title": "Microsoft · Configure certificate autoenrollment",
+      "url": "https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment"
+    },
+    {
+      "id": "disa-gpo",
+      "title": "DISA · STIG Group Policy Objects package",
+      "url": "https://www.cyber.mil/stigs/gpo"
+    },
+    {
+      "id": "wef",
+      "title": "Microsoft · Use Windows Event Forwarding to help with intrusion detection",
+      "url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/use-windows-event-forwarding-to-assist-in-intrusion-detection"
+    },
+    {
+      "id": "whatsnew",
+      "title": "Microsoft · What's new in Windows Server 2025",
+      "url": "https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025"
+    },
+    {
+      "id": "firewall",
+      "title": "Microsoft · Configure Windows Firewall rules with Group Policy",
+      "url": "https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/configure"
+    },
+    {
+      "id": "controls",
+      "title": "NIST · SP 800-53 Rev. 5 security controls",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    },
+    {
+      "id": "nps",
+      "title": "Microsoft · Network Policy Server overview",
+      "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-top"
+    },
+    {
+      "id": "nps-clients",
+      "title": "Microsoft · Configure RADIUS clients",
+      "url": "https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-radius-clients-configure"
+    },
+    {
+      "id": "eap-tls",
+      "title": "Microsoft · Certificate requirements for EAP-TLS",
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/certificate-requirements-eap-tls-peap"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "prepare",
+      "title": "Prepare the fleet rollout",
+      "minutes": 30,
+      "summary": "Fifty of anything needs a factory, not fifty craft projects. Settle the image, the names, the join account, and the policy links so every endpoint is born identical — then prove it on paper before proving it on metal.",
+      "objectives": [
+        "Finalize the reference image and naming plan for fifty endpoints.",
+        "Create a least-privilege join account scoped to the Workstations OU.",
+        "Link the Windows client STIG policies and the workstation firewall policy to the Workstations OU before any join."
+      ],
+      "steps": [
+        "Finalize the Windows reference image: current patches via the approved media process, no preinstalled extras, and a generalized state so each clone takes its own identity. Record the image version and hash — it is the fleet's common ancestor and belongs in evidence.",
+        "Write the naming and rollout plan: SBD-PC01–SBD-PC50, addressed by the course 1.5 DHCP scope, joined in waves (pilot of three, then batches) rather than all fifty at once.",
+        "Create a dedicated domain-join account delegated only the create-computer-objects right on the Workstations OU — no broader privilege rides along with fifty join operations. The course 1.3 redirect already guarantees machines land in that OU.",
+        "Link the DISA Windows client STIG policies from the course 1.3 package to the Workstations OU now, so the very first pilot boots into the hardened state — and note that the Windows client's own secure defaults will already satisfy some checks, just as Windows Server's did.",
+        "Create the workstation firewall GPO (SBD Workstation Firewall in this sample) on the Workstations OU: Windows Defender Firewall on for every profile with inbound traffic blocked by default, and inbound rules that allow SMB (TCP 445), Remote Desktop (TCP 3389), and remote management (TCP 5985–5986) only from SBD-ADMIN-PC01 at 10.0.60.30 — course 1.8 adds SBD-NESSUS01 for credentialed scans. No rule allows SMB or Remote Desktop between workstations: traffic inside VLAN 80 never reaches the router, so this policy, not the core router's rules, enforces the register's peer denies."
+      ],
+      "command": "Get-FileHash -Algorithm SHA256 C:\\Staging\\Win11-Reference.vhdx\nGet-ADOrganizationalUnit -Identity 'OU=Workstations,OU=SBD,DC=sbd,DC=test'\nGet-GPInheritance -Target 'OU=Workstations,OU=SBD,DC=sbd,DC=test'\nGet-GPOReport -Name 'SBD Workstation Firewall' -ReportType Html -Path C:\\Evidence\\workstation-fleet\\workstation-firewall.html",
+      "check": "The image is hashed and recorded, the join account holds only the delegated right on the Workstations OU, and the STIG and firewall GPO links show on that OU before any machine exists in it.",
+      "evidence": "Keep the image record with its hash, the naming and wave plan, the delegation report for the join account, the OU's GPO inheritance output, and the firewall GPO report.",
+      "quizzes": [
+        {
+          "question": "Why does the join account get only create-computer rights on one OU?",
+          "answers": [
+            "Join operations fail with more rights",
+            "Fifty joins should carry the least privilege possible — a stolen join credential then creates computer objects, nothing more",
+            "Delegation is faster than Domain Admin"
+          ],
+          "correct": 1,
+          "explanation": "Scale multiplies exposure. Scoping the account bounds what the rollout's most-used credential is worth to an attacker."
+        },
+        {
+          "question": "Why link the STIG policies before the first machine joins?",
+          "answers": [
+            "So every endpoint's first boot is already the hardened state — no window where an unmanaged machine exists",
+            "GPO links expire if unused",
+            "The OU cannot be created otherwise"
+          ],
+          "correct": 0,
+          "explanation": "The redirect lands them in the OU, and the pre-linked policy means compliance from minute one — the course 1.3 design, now paying off at scale."
+        },
+        {
+          "question": "What makes the reference image part of the evidence?",
+          "answers": [
+            "Images are always evidence",
+            "It contains the domain password",
+            "Its recorded version and hash are what make fifty 'identical' endpoints a claim you can verify"
+          ],
+          "correct": 2,
+          "explanation": "A configuration record for the fleet starts with the common ancestor. The hash is how an assessor — or future you — confirms descent."
+        },
+        {
+          "question": "What stops one workstation from opening SMB or Remote Desktop to another?",
+          "answers": [
+            "The router's access control lists",
+            "Each PC's own firewall, set by the workstation firewall GPO — traffic inside VLAN 80 never reaches the router",
+            "Nothing until course 1.8"
+          ],
+          "correct": 1,
+          "explanation": "Two PCs in VLAN 80 talk through the access switch, so the router never sees their traffic. Each PC's Windows Defender Firewall enforces the register's peer denies, which Inside the Network shows as rules D01 and D02."
+        }
+      ],
+      "recap": [
+        "One hashed image, one naming plan, waves instead of a big bang.",
+        "The join credential can create computer objects and nothing else.",
+        "The Workstations OU is armed with policy before it holds a machine.",
+        "Peer SMB and Remote Desktop are blocked by each PC's own firewall, set by policy before the first join."
+      ],
+      "next": "Lesson 2 joins the pilot and inspects everything a first boot should bring.",
+      "sources": [
+        "disa-gpo",
+        "firewall",
+        "controls"
+      ]
+    },
+    {
+      "id": "pilot",
+      "title": "Join the pilot and inspect first boot",
+      "minutes": 30,
+      "summary": "Three machines go first, and everything the path has built shows up at once: a DHCP lease through the relay, an OU landing, STIG policy, a DNS record — and the join itself appearing on the analyst's screen.",
+      "objectives": [
+        "Join a three-machine pilot with the scoped account.",
+        "Verify lease, OU placement, policy, and DNS registration per machine.",
+        "Confirm the joins appear in the logging pipeline."
+      ],
+      "steps": [
+        "Deploy SBD-PC01 through SBD-PC03 from the image into VLAN 80, let each take its DHCP lease, and join sbd.test with the delegated account — nothing about the join should require a privileged credential.",
+        "Per machine, verify the inheritance chain: the computer object sits in the Workstations OU (the redirect working), gpresult shows the STIG policies applied, and the secure dynamic DNS record exists on both DCs.",
+        "Confirm the deny side holds: a pilot machine cannot reach another pilot machine's SMB or RDP — the lesson 1 firewall policy refuses it on the destination PC, because traffic inside VLAN 80 never reaches the router — and cannot open anything toward VLAN 60, which the core router's rules deny at the boundary.",
+        "Find the three joins in the logging pipeline: the domain controller events for the computer-account creations should already be on the collector and searchable in analysis — the first machines this network has watched arrive."
+      ],
+      "command": "Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName\ngpresult /r /scope:computer\nResolve-DnsName SBD-PC01.sbd.test\nTest-NetConnection SBD-PC02.sbd.test -Port 445   # expected: TcpTestSucceeded False",
+      "check": "All three pilots sit in the Workstations OU with STIG policy applied and DNS registered, peer SMB/RDP fails as designed, and the join events are visible in analysis.",
+      "evidence": "Keep each pilot's placement, gpresult, and DNS proof; the peer-deny output; and the analysis search showing the three computer-account creations.",
+      "model": {
+        "href": "/inside-the-network#process=signin",
+        "label": "Sign in",
+        "text": "A workstation gets its address, finds a domain controller, authenticates, and reads its policy."
+      },
+      "quizzes": [
+        {
+          "question": "How does a brand-new machine end up hardened without anyone touching it?",
+          "answers": [
+            "Windows hardens itself completely",
+            "Redirect lands it in the Workstations OU, where the pre-linked STIG policies apply at first boot",
+            "The DHCP server pushes the STIG"
+          ],
+          "correct": 1,
+          "explanation": "Three courses cooperate in that one moment: the 1.3 redirect, the 1.3 GPO package, and this lesson's pre-linked OU."
+        },
+        {
+          "question": "Why test pilot-to-pilot SMB and expect failure?",
+          "answers": [
+            "SMB is removed from Windows",
+            "The pilots are in different domains",
+            "Each PC's firewall policy denies peer SMB and Remote Desktop — lateral movement inside VLAN 80 is cut at the destination host"
+          ],
+          "correct": 2,
+          "explanation": "Peer traffic is switched inside VLAN 80 and never reaches the router, so the register's peer denies (D01 and D02) are enforced by each PC's own firewall — the policy lesson 1 linked before any join."
+        },
+        {
+          "question": "What does seeing the joins in analysis demonstrate?",
+          "answers": [
+            "The ordering worked — the pipeline built in 1.6 observed the fleet's very first machines arriving",
+            "That Splunk licenses cover 50 hosts",
+            "Nothing; joins are not logged"
+          ],
+          "correct": 0,
+          "explanation": "Build the watcher, then the watched. The pilot's appearance on the analyst's screen is the sequencing argument made visible."
+        }
+      ],
+      "recap": [
+        "Three pilots: leased, landed, hardened, registered — untouched by hand.",
+        "Peer traffic fails by design; the denies are the fleet's first evidence.",
+        "The pipeline watched the fleet being born."
+      ],
+      "next": "Lesson 3 gives every endpoint a managed local administrator.",
+      "sources": [
+        "autoenroll",
+        "wef",
+        "disa-gpo",
+        "firewall"
+      ]
+    },
+    {
+      "id": "laps",
+      "title": "Manage local administrators with Windows LAPS",
+      "minutes": 25,
+      "summary": "Fifty identical machines must not share one local administrator password. Windows Local Administrator Password Solution (Windows LAPS) gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it.",
+      "objectives": [
+        "Prepare the directory schema and permissions for Windows LAPS.",
+        "Apply the LAPS policy to the Workstations OU.",
+        "Retrieve and rotate a managed password under the tier rules."
+      ],
+      "steps": [
+        "Extend the directory schema for Windows LAPS (Update-LapsADSchema) and grant the Workstations OU's computers the right to update their own password attributes — a one-time Tier 0 action, performed from the jump host and recorded like any schema change.",
+        "Grant read access on the managed passwords to the Tier 2 admin group only — exactly the people SBD-ADMIN-PC01 exists for — and nobody else; the tier model decides who may know an endpoint's local secret.",
+        "Create the LAPS GPO on the Workstations OU: managed built-in administrator, the password complexity and age the plan sets, and post-authentication reset so a used password does not live on.",
+        "On a pilot, confirm the policy applied, retrieve the password from the admin seat, use it once, and watch rotation — one cycle, fully observed, is the proof the other forty-nine inherit."
+      ],
+      "command": "Get-LapsADPassword -Identity SBD-PC01 -AsPlainText   # from SBD-ADMIN-PC01, Tier 2 admin\nGet-ADComputer SBD-PC01 -Properties msLAPS-PasswordExpirationTime | Select-Object Name, msLAPS-PasswordExpirationTime\ngpresult /r /scope:computer",
+      "check": "The schema holds the LAPS attributes, only the Tier 2 group can read passwords, the policy shows on the pilots, and one retrieve-use-rotate cycle is recorded.",
+      "evidence": "Keep the schema-change record, the permission delegation, the LAPS policy report, and the observed rotation cycle.",
+      "quizzes": [
+        {
+          "question": "What problem does LAPS remove from a fifty-machine fleet?",
+          "answers": [
+            "Slow sign-ins",
+            "One shared local administrator password — where a single capture would open every endpoint",
+            "Password complexity rules"
+          ],
+          "correct": 1,
+          "explanation": "Identical images tempt identical secrets. Per-machine rotating passwords make one compromised endpoint worth exactly one endpoint."
+        },
+        {
+          "question": "Who may read a managed endpoint password?",
+          "answers": [
+            "Any authenticated user",
+            "The machine's primary user",
+            "The Tier 2 admin group, from its admin seat — the tier model decides"
+          ],
+          "correct": 2,
+          "explanation": "LAPS storage is directory data; the reading right is a tiering decision, which course 1.5 already made."
+        },
+        {
+          "question": "Why does post-authentication reset matter?",
+          "answers": [
+            "A password that was just used stops being valid — whoever saw it holds an expired secret",
+            "It makes passwords longer",
+            "It disables the account"
+          ],
+          "correct": 0,
+          "explanation": "The rotation on use closes the window between 'retrieved for support' and 'floating around in a notes file.'"
+        }
+      ],
+      "recap": [
+        "Every endpoint owns its own rotating local secret.",
+        "Reading rights follow the tier model, from the Tier 2 seat.",
+        "One full cycle is observed and on record."
+      ],
+      "next": "Lesson 4 hands the fleet its certificates.",
+      "sources": [
+        "laps",
+        "whatsnew"
+      ]
+    },
+    {
+      "id": "certificates",
+      "title": "Autoenroll the fleet's certificates",
+      "minutes": 25,
+      "summary": "Course 1.4 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary.",
+      "objectives": [
+        "Widen the computer template's autoenrollment to the fleet.",
+        "Confirm hands-free enrollment at Group Policy refresh.",
+        "Verify chain and live revocation from an endpoint."
+      ],
+      "steps": [
+        "Through the course 1.4 change process, update the SBD Computer Authentication template's autoenrollment permission from the pilot group to the Workstations OU's computers — the change record names the widening and its approver.",
+        "Confirm the autoenrollment policy already applies through the Workstations OU, refresh policy on the pilots, and watch certificates arrive with no human in the loop.",
+        "On an enrolled endpoint, run the full verification: the chain must reach the approved root, and the AIA and CDP fetches must answer live from pki.sbd.test through the register's HTTP row.",
+        "Record the issuing CA's view: the issued-certificate log now shows the fleet enrolling — volume the CA was designed for, finally arriving, and itself a record worth sampling into evidence."
+      ],
+      "command": "gpupdate /force\nGet-ChildItem Cert:\\LocalMachine\\My | Select-Object Subject, NotAfter\ncertutil -verify -urlfetch C:\\Evidence\\fleet\\SBD-PC01.cer",
+      "check": "Pilot endpoints enroll hands-free at policy refresh, verification passes with live publication retrieval, and the CA's issued log reflects the fleet with the widened template version.",
+      "evidence": "Keep the template change record, an endpoint's certificate details, the urlfetch output, and a sample of the CA's issued log.",
+      "quizzes": [
+        {
+          "question": "What governs widening the template from pilot to fleet?",
+          "answers": [
+            "The course 1.4 change process — requester, reviewer, versioning, record",
+            "A quick edit on the CA console",
+            "Nothing; templates are self-service"
+          ],
+          "correct": 0,
+          "explanation": "The pilot-then-widen plan was written into the template's own record. Scaling it is a change like any other — documented, not improvised."
+        },
+        {
+          "question": "What does the endpoint's urlfetch verification exercise, end to end?",
+          "answers": [
+            "Only the local certificate store",
+            "Template, CA, DNS alias, publication site, and the registered HTTP path — five courses in one command",
+            "The DHCP relay"
+          ],
+          "correct": 1,
+          "explanation": "One passing verification on a fleet machine is the integration test for everything the PKI path built."
+        },
+        {
+          "question": "Why sample the CA's issued-certificate log into evidence?",
+          "answers": [
+            "Logs expire otherwise",
+            "The CA deletes it weekly",
+            "What the CA actually signed — and under which template version — is the PKI's ground-truth record"
+          ],
+          "correct": 2,
+          "explanation": "Enrollment at scale is where template mistakes would surface. The issued log is where you would see it, so it joins the record."
+        }
+      ],
+      "recap": [
+        "The widening went through the change process, not around it.",
+        "Enrollment is hands-free and verified live across the boundary.",
+        "The CA's issued log joins the evidence."
+      ],
+      "next": "Lesson 5 puts those certificates to work at the switch port, starting in monitor mode.",
+      "sources": [
+        "autoenroll",
+        "controls"
+      ]
+    },
+    {
+      "id": "nac",
+      "title": "Admit only enrolled devices with 802.1X",
+      "minutes": 30,
+      "summary": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch asks each machine to prove who it is with the certificate it enrolled. This lesson turns that check on in monitor mode — every result is logged, nothing is blocked yet — because 47 PCs have no certificate until they join the domain; lesson 6 enforces it once the whole fleet has enrolled. No new server: the NPS role joins DHCP on SBD-DHCP01.",
+      "objectives": [
+        "Add the Network Policy Server (NPS) role to SBD-DHCP01 for port authentication.",
+        "Configure Extensible Authentication Protocol–Transport Layer Security (EAP-TLS) with machine certificates on the VLAN 80 access ports, in monitor mode.",
+        "Prove the pilots authenticate and that NPS logs every result."
+      ],
+      "steps": [
+        "Add the Network Policy Server role to SBD-DHCP01 and register it in Active Directory. Give it a server certificate with the Server Authentication purpose from the issuing CA. It handles port admission only; router logins stay named local accounts, so the server stays in the member-server tier.",
+        "Add the VLAN 80 access switch as a RADIUS client with a long, unique shared secret, then create the network policy: wired 802.1X, EAP-TLS only, machine certificates that chain to the approved root and carry the Client Authentication purpose, from the Domain Computers group.",
+        "Create quarantine VLAN 90 with no gateway and no routes and set it as the ports' failure and guest VLAN, but enable 802.1X on the VLAN 80 access ports in monitor (audit) mode: the switch runs every authentication and reports the result, yet keeps forwarding on VLAN 80 whatever the outcome (vendors name this mode differently). The other 47 PCs have no machine certificate until they join the domain in lesson 6, so enforcing now would strand them in VLAN 90, with no route to a domain controller. Push the wired 802.1X client settings to the Workstations OU by Group Policy (Wired AutoConfig, EAP-TLS, the approved root as the trusted CA).",
+        "Prove monitor mode with the pilots: each authenticates with EAP-TLS and NPS logs a grant (event 6272), while a failed attempt is logged — as event 6273 when the request reaches NPS — but still forwards on VLAN 80. Add register row F20 with its owner, and confirm the NPS events reach the course 1.6 collector through the existing event forwarding subscription."
+      ],
+      "command": "# On an enrolled pilot: the wired interface authenticated with EAP-TLS.\nnetsh lan show interfaces\n# On SBD-DHCP01: recent NPS grants (6272) and denials (6273).\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273} -MaxEvents 5 | Select-Object TimeCreated, Id",
+      "check": "Every pilot authenticates with EAP-TLS and NPS logs the grant (6272); a failed authentication is logged but, in monitor mode, the port still forwards on VLAN 80; the ports name VLAN 90 as their failure VLAN; and the NPS events appear in the collector.",
+      "evidence": "Keep the network policy export, the RADIUS client list (without the secret), the monitor-mode port configuration, the pilots' grant events and the failed test, and the F20 register row.",
+      "model": {
+        "href": "/inside-the-network#system=dhcp",
+        "label": "SBD-DHCP01",
+        "text": "The NPS role for 802.1X runs here, on the existing DHCP server."
+      },
+      "quizzes": [
+        {
+          "question": "Once 802.1X is enforced, what lets a workstation onto a VLAN 80 port?",
+          "answers": [
+            "Knowing a shared password",
+            "Its machine certificate, checked by NPS through EAP-TLS",
+            "Being plugged in before the switch boots"
+          ],
+          "correct": 1,
+          "explanation": "EAP-TLS proves the device holds the private key for a certificate the approved CA issued. No certificate, no access."
+        },
+        {
+          "question": "Once enforcement is on in lesson 6, where does an unknown device end up?",
+          "answers": [
+            "Quarantine VLAN 90, which has no routes",
+            "VLAN 80, with a warning",
+            "The domain controller VLAN, so it can enroll"
+          ],
+          "correct": 0,
+          "explanation": "The failure VLAN gives an unknown device a place to be that leads nowhere: VLAN 90 has no gateway, so nothing it sends is routed."
+        },
+        {
+          "question": "Why does NPS on SBD-DHCP01 handle port admission only, not router logins?",
+          "answers": [
+            "NPS cannot authenticate people",
+            "Router logins need a separate license",
+            "If it authenticated the router's administrators, it could control Tier 0 and would have to be managed as Tier 0"
+          ],
+          "correct": 2,
+          "explanation": "Anything that can control a Tier 0 system is Tier 0. Keeping NPS to port admission keeps SBD-DHCP01 in the member-server tier."
+        },
+        {
+          "question": "Why does this lesson start 802.1X in monitor mode instead of enforcing it?",
+          "answers": [
+            "Monitor mode is faster",
+            "The other 47 PCs have no machine certificate until they join the domain; enforcing now would strand them in VLAN 90, where they could never reach a domain controller",
+            "NPS cannot enforce on wired ports"
+          ],
+          "correct": 1,
+          "explanation": "A PC enrolls its certificate only after it joins, and it can join only if the port lets it reach a domain controller. Monitor mode proves the configuration with the pilots without locking the rest of the fleet out."
+        }
+      ],
+      "recap": [
+        "802.1X runs on every VLAN 80 port in monitor mode: every result is logged, nothing is blocked yet.",
+        "The pilots authenticate with machine certificates; enforcement waits until the whole fleet has enrolled.",
+        "No new server: NPS runs on SBD-DHCP01, and its decisions are logged with everything else."
+      ],
+      "next": "Lesson 6 scales from three machines to fifty, then switches the ports to enforcement.",
+      "sources": [
+        "nps",
+        "nps-clients",
+        "eap-tls"
+      ]
+    },
+    {
+      "id": "scale",
+      "title": "Scale to fifty, enforce 802.1X, and prove by sample",
+      "minutes": 30,
+      "summary": "Roll the remaining waves while the ports are still in monitor mode, confirm every PC enrolled its machine certificate and authenticates, then switch the ports to enforcement — and prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means.",
+      "objectives": [
+        "Roll out the remaining endpoints in planned waves.",
+        "Confirm fleet-wide enrollment, then enforce 802.1X and prove an unenrolled device is quarantined.",
+        "Verify a defined sample against the pilot's full check set and widen event forwarding to the fleet."
+      ],
+      "steps": [
+        "Deploy the remaining machines in the planned waves while the VLAN 80 ports are still in monitor mode, watching the DHCP scope's utilization and the join events arriving in analysis as each wave lands — the pipeline is now the rollout's progress bar.",
+        "Confirm every PC enrolled its machine certificate and authenticates: compare the issuing CA's issued certificates and the NPS grant events (6272) against the fifty computer objects, and fix any machine that is missing before going further.",
+        "Switch the VLAN 80 access ports from monitor mode to enforcement, and prove it both ways: an enrolled PC still authenticates and gets its normal lease, and an unenrolled test laptop lands in quarantine VLAN 90 and reaches nothing. Record the switch's port status and the NPS events for both.",
+        "Define the sample before checking it: for example one machine per wave plus any machine that logged an error — then run the pilot's full set on each sampled host (OU, policy, DNS, LAPS, certificate, 802.1X admission, peer-deny).",
+        "Write the sample rule down: one failed check in the sample widens the sample; a repeated failure stops the rollout and becomes a finding. A sample without a failure rule is a formality.",
+        "Extend the course 1.6 forwarding subscription to the Workstations OU so all fifty endpoints report their security events — and confirm fleet sign-ins now appear in the analyst's searches."
+      ],
+      "command": "(Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter *).Count\n# On SBD-DHCP01: authentication results in the last hour (6272 granted, 6273 denied).\nGet-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273; StartTime=(Get-Date).AddHours(-1)} | Group-Object Id | Select-Object Name, Count\nGet-DhcpServerv4ScopeStatistics -ScopeId 10.0.80.0 | Select-Object PercentageInUse, AddressesInUse\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object MachineName, Id",
+      "check": "Fifty computer objects sit in the Workstations OU, every PC enrolled and authenticates, the ports enforce 802.1X with the unenrolled laptop quarantined in VLAN 90, scope utilization matches the rollout, every sampled host passes the full check set, and fleet events flow through the pipeline.",
+      "evidence": "Keep the wave log, the enrollment reconciliation, the enforcement change with both admission results and their records, the sample definition with its failure rule, the per-sample check results, and the widened subscription proof.",
+      "quizzes": [
+        {
+          "question": "Why prove the fleet by sample instead of checking all fifty by hand?",
+          "answers": [
+            "A defined sample with a failure rule is verifiable and honest at scale — and identical provenance is what the image hash bought you",
+            "Checking is impossible on Windows",
+            "Only pilots can be checked"
+          ],
+          "correct": 0,
+          "explanation": "The factory model earns the sampling model. The written failure rule is what keeps the sample from being theater."
+        },
+        {
+          "question": "What turns a sampled failure into more than a shrug?",
+          "answers": [
+            "Deleting the failed machine",
+            "The written rule: failures widen the sample, repeats stop the rollout and become findings",
+            "Rebooting twice"
+          ],
+          "correct": 1,
+          "explanation": "The rule was written before the checks ran — which is exactly what makes acting on it defensible."
+        },
+        {
+          "question": "What is the pipeline's role during the rollout itself?",
+          "answers": [
+            "It pauses to save disk",
+            "It only matters after completion",
+            "Live progress and anomaly surface — each wave's joins and errors appear as they happen"
+          ],
+          "correct": 2,
+          "explanation": "Course 1.6's investment turns deployment into something observed, not something reconstructed afterward."
+        },
+        {
+          "question": "When is it safe to switch the VLAN 80 ports from monitor mode to enforcement?",
+          "answers": [
+            "As soon as the first pilot authenticates",
+            "Once every PC has enrolled its machine certificate and authenticates in monitor mode",
+            "Never; monitor mode is enough"
+          ],
+          "correct": 1,
+          "explanation": "Enforce only after the whole fleet has proven it authenticates. Then a missing certificate cannot strand a machine in VLAN 90, and every unknown device that appears later is quarantined."
+        }
+      ],
+      "recap": [
+        "Fifty machines, rolled in waves, watched as they landed.",
+        "Every PC enrolled before enforcement; an unenrolled device now lands in VLAN 90.",
+        "A defined sample with a failure rule carried the proof, and the fleet reports into the pipeline."
+      ],
+      "next": "The final lesson runs the fleet's scans and hands off to course 1.8.",
+      "sources": [
+        "wef",
+        "autoenroll",
+        "nps",
+        "controls"
+      ]
+    },
+    {
+      "id": "scan",
+      "title": "Delta scan the fleet and hand off",
+      "minutes": 20,
+      "summary": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows client benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over.",
+      "objectives": [
+        "Baseline sampled endpoints with the Windows client STIG benchmark.",
+        "Rescan the infrastructure this course touched.",
+        "Hand the fleet inventory to course 1.8's management tooling."
+      ],
+      "steps": [
+        "Run the SCAP Compliance Checker (SCC) with the Windows client STIG benchmark against the sampled endpoints — the same sample set as lesson 6 — and note how much the pre-linked policies and the OS defaults already satisfy, exactly as the server baselines taught.",
+        "Rescan what changed: the DCs (schema and LAPS attributes), the issuing CA (fleet enrollment volume), and SBD-DHCP01 (the new NPS role and a scope in daily use); attribute each delta to its lesson.",
+        "Assemble the fleet inventory — names, image ancestry, certificate thumbprints, sample status — as the course's closing artifact; course 1.8's management tooling will take ownership of keeping it current.",
+        "Write the handoff: the fleet exists, watched and hardened, but updates itself not at all — patching, endpoint protection, and vulnerability coverage are precisely what course 1.8 builds next."
+      ],
+      "command": "Get-ChildItem C:\\Evidence\\workstation-fleet -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\workstation-fleet\\*",
+      "check": "Sampled endpoints hold dated Windows client baselines, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.",
+      "evidence": "Finish the checklist: endpoint baselines, infrastructure rescans, the fleet inventory, and the handoff note to course 1.8.",
+      "quizzes": [
+        {
+          "question": "Which benchmark do the endpoints get?",
+          "answers": [
+            "The Windows Server benchmark, close enough",
+            "The router's config export",
+            "The Windows client STIG benchmark — the fleet's own standard from the same DISA package"
+          ],
+          "correct": 2,
+          "explanation": "The GPO package staged in course 1.3 carried the endpoint STIGs too; the fleet is scanned against its own content."
+        },
+        {
+          "question": "Why does the issuing CA get a rescan now?",
+          "answers": [
+            "Fifty enrollments changed its operational posture — change-triggered means this too",
+            "CAs are rescanned weekly by rule",
+            "It was missed earlier"
+          ],
+          "correct": 0,
+          "explanation": "The cadence follows change wherever it lands. Enrollment at fleet scale is a change worth measuring."
+        },
+        {
+          "question": "What does the fleet still lack as this course closes?",
+          "answers": [
+            "Certificates and policy",
+            "Updates, endpoint protection, and vulnerability coverage — course 1.8's entire agenda",
+            "Network addresses"
+          ],
+          "correct": 1,
+          "explanation": "Honest handoffs name the gap. Fifty hardened machines that never patch would drift out of the state just proven — which is why 1.8 is next."
+        }
+      ],
+      "recap": [
+        "Endpoint baselines by sample; infrastructure deltas attributed.",
+        "The fleet inventory is the closing artifact.",
+        "The gap — patching and protection — is named for course 1.8."
+      ],
+      "next": "That completes course 1.7. Course 1.8 keeps the fleet alive: updates, approved software, endpoint protection, and the scanner that watches for weakness.",
+      "sources": [
+        "disa-gpo",
+        "controls"
+      ]
+    }
+  ]
+}

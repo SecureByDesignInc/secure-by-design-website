@@ -1,0 +1,270 @@
+{
+  "id": "prove-recovery",
+  "hero": {
+    "title": "Prove you can",
+    "accent": "recover.",
+    "text": "Back up the directory, the issuing CA, policy, the router configuration, the log archive, and the living records, carry copies to the offline cabinet, and rehearse one real restore of SBD-DC02 in isolation. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": ["WINDOWS", "SERVER", "", "RECOVERY"],
+  "sample": [
+    ["Domain", "sbd.test"],
+    ["SBD-DC01", "10.0.10.10 / 24 · VLAN 10"],
+    ["SBD-DC02", "10.0.10.11 / 24 · VLAN 10"],
+    ["SBD-SUBCA01", "10.0.30.20 / 24 · VLAN 30"],
+    ["SBD-AUDIT01", "10.0.50.40 / 24 · VLAN 50"],
+    ["SBD-ROOTCA01", "Offline · no network address"],
+    ["Protected backup volume", "E:\\Backups on each server (sample)"]
+  ],
+  "scene": {
+    "tag": "RECOVERY · VLAN 10 · 30 · 50 · 60",
+    "label": "Interactive 3D lesson network showing the domain controllers, issuing CA, audit repository, scanner, Tier 0 administration host, and offline root CA that this course backs up, rehearses, and records.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "Every item in the recovery set has a verified backup, an offline copy under custody, and a rehearsed restore behind it. The recovery record has an owner and a next rehearsal date, and the evidence is ready for course 2.1.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "The directory leads the recovery order. Its scheduled system state and critical-volume backup goes to its own protected volume, and the production Recycle Bin restore in lesson 5 runs against it."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "Keeps its own independent backup, because replication is availability, not recovery. A copy of its virtual machine is the one restored in DSRM on the isolated recovery segment in lesson 5."
+      },
+      {
+        "id": "subca",
+        "name": "SBD-SUBCA01",
+        "sub": "10.0.30.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 2,
+        "button": "SBD-SUBCA01",
+        "title": "SBD-SUBCA01 · 10.0.30.20",
+        "description": "The issuing CA backs up its database and private key with certutil to its protected backup volume. Only the backup’s hashes and custody record go into evidence, and a Tier 0 custodian carries the copy offline."
+      },
+      {
+        "id": "audit",
+        "name": "SBD-AUDIT01",
+        "sub": "10.0.50.40",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 2,
+        "button": "SBD-AUDIT01",
+        "title": "SBD-AUDIT01 · 10.0.50.40",
+        "description": "Its hashed log archives are already the protected record. This course adds the archive catalog to the recovery set, and the audit custodian carries a copy to the offline cabinet."
+      },
+      {
+        "id": "nessus",
+        "name": "SBD-NESSUS01",
+        "sub": "10.0.50.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 5,
+        "button": "SBD-NESSUS01",
+        "title": "SBD-NESSUS01 · 10.0.50.20",
+        "description": "Runs the standing credentialed scan across every VLAN for the closing snapshot in lesson 6: the dated security picture the authorization path will reference."
+      },
+      {
+        "id": "jump",
+        "name": "AdminJumpBox01",
+        "sub": "10.0.60.10",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 1,
+        "button": "AdminJumpBox01",
+        "title": "AdminJumpBox01 · 10.0.60.10",
+        "description": "The Tier 0 seat (rule A01). Enabling the Recycle Bin, the issuing CA backup session, and the production object restore are all Tier 0 work, run from here."
+      },
+      {
+        "id": "root",
+        "name": "SBD-ROOTCA01",
+        "sub": "Offline · no network",
+        "kind": "offline",
+        "row": "front",
+        "existing": true,
+        "from": 0,
+        "button": "SBD-ROOTCA01",
+        "title": "SBD-ROOTCA01 · Offline, no network address",
+        "description": "Stays offline in the vault. Its protected backup from the course 1.4 ceremony is verified and its custody confirmed, never duplicated or copied onto the network."
+      }
+    ],
+    "flows": [
+      { "from": "jump", "to": "dc1", "lessons": [1, 4], "label": "Tier 0 session · Recycle Bin" },
+      { "from": "jump", "to": "subca", "lessons": [2], "label": "Tier 0 session · CA backup" },
+      { "from": "nessus", "to": "dc1", "lessons": [5], "label": "Closing credentialed scan" },
+      { "from": "nessus", "to": "dc2", "lessons": [5], "label": "Closing credentialed scan" },
+      { "from": "nessus", "to": "subca", "lessons": [5], "label": "Closing credentialed scan" },
+      { "from": "nessus", "to": "audit", "lessons": [5], "label": "Closing credentialed scan" }
+    ]
+  },
+  "lessons": {
+    "requirements": {
+      "short": "Set recovery objectives",
+      "tag": "01 / PLAN",
+      "status": "OBJECTIVES SET",
+      "stepTitles": [
+        "Order the recovery set by dependency",
+        "Set recovery point and time objectives",
+        "Decide backup placement and access",
+        "Confirm the DSRM and root CA custody records"
+      ],
+      "mistake": "Writing objectives nobody intends to measure, such as a recovery time of minutes for a directory that has never been restored. Lesson 5 times a real restore against these numbers, so an aspirational value only guarantees a missed objective.",
+      "network": "Everything in the recovery set already runs: both controllers on VLAN 10, the issuing CA on VLAN 30, and the audit repository on VLAN 50, with SBD-ROOTCA01 offline in the vault. No flows are shown: this lesson writes decisions, and no backup will ever cross the network to reach the offline cabinet.",
+      "control": {
+        "id": "CP-2",
+        "name": "Contingency Plan",
+        "phase": "Prepare → Implement",
+        "body": "A contingency plan names what must be recovered, in what priority, against which recovery objectives, and who is responsible. The ordered recovery set, its point and time objectives, and the placement and access decisions are the core of that plan for this network.",
+        "question": "If the directory survived but the issuing CA did not, which items in your recovery set could you still trust, and which would wait?"
+      },
+      "checklist": [
+        "I listed the recovery set in dependency order, directory first, and gave each item a recovery point and time objective I can measure.",
+        "I wrote who can write and read each protected backup volume, and recorded that no network path reaches the offline cabinet.",
+        "I confirmed the sealed DSRM passwords and the root CA’s ceremony backup are findable, without recording either secret."
+      ]
+    },
+    "directory": {
+      "short": "Back up the directory",
+      "tag": "02 / BACK UP",
+      "status": "DIRECTORY BACKED UP",
+      "stepTitles": [
+        "Schedule system state backups on both controllers",
+        "Verify, record, and hash each backup",
+        "Enable the Active Directory Recycle Bin",
+        "Write the restore decision tree"
+      ],
+      "mistake": "Leaving out the critical volumes (wbadmin’s -allCritical) produces a backup that can restore system state on the same server but cannot rebuild a controller whose hardware is gone. Check that each scheduled job includes them before you record it as the full server recovery source.",
+      "network": "SBD-DC01 and SBD-DC02 now each write a scheduled system state backup to their own protected volume, so no backup traffic crosses the network. The only flow shown is the Tier 0 session from AdminJumpBox01 on VLAN 60 that enables the Recycle Bin.",
+      "control": {
+        "id": "CP-9",
+        "name": "System Backup",
+        "phase": "Implement",
+        "body": "System backup means copies at a defined frequency, with the confidentiality, integrity, and availability of the backup information protected. Two independent schedules on protected volumes, each verified and hashed, are that backup for the directory; the Recycle Bin adds object-level recovery that never needs system state.",
+        "question": "A deletion replicated to both controllers an hour ago. Which branch of your decision tree applies, and what would each other branch cost you?"
+      },
+      "checklist": [
+        "I scheduled system state and critical-volume backups on SBD-DC01 and SBD-DC02, each to its own protected backup volume.",
+        "I verified each first backup, recorded its version identifier, and hashed the catalog entry into evidence.",
+        "I enabled the Recycle Bin from the Tier 0 seat, recorded it as a change, and wrote the restore decision tree."
+      ]
+    },
+    "trust-state": {
+      "short": "Back up CA and records",
+      "tag": "03 / CATALOG",
+      "status": "ONE HASHED CATALOG",
+      "stepTitles": [
+        "Back up the issuing CA to its protected volume",
+        "Refresh the GPO and router configuration backups",
+        "Add the log archive catalog to the recovery set",
+        "Export the living records into the set"
+      ],
+      "mistake": "Saving the certutil backup into C:\\Evidence so assessors can see it. That backup holds the issuing CA’s private key: it belongs on SBD-SUBCA01’s protected backup volume under recorded custody, and only its hashes and the custody record go into evidence.",
+      "network": "SBD-SUBCA01 on VLAN 30 backs up its database and key to its own protected volume, run over the Tier 0 session from AdminJumpBox01. SBD-AUDIT01 on VLAN 50 joins the catalog with its hashed archives, and SBD-ROOTCA01’s ceremony backup is verified offline, never copied onto the network.",
+      "control": {
+        "id": "SC-12",
+        "name": "Cryptographic Key Establishment and Management",
+        "phase": "Implement",
+        "body": "Key management covers every copy of a key, not only the one in use. A password-protected CA backup on a protected volume, with custody recorded and only hashes in evidence, holds the issuing key’s backup to the same standard as the course 1.4 ceremony artifacts.",
+        "question": "Who in your lab could read the CA backup today, and does that list match the people allowed to hold the issuing key?"
+      },
+      "checklist": [
+        "I backed up SBD-SUBCA01’s database and key to its protected backup volume and recorded custody, with only the hashes in evidence.",
+        "I refreshed the Group Policy and router configuration backups and hashed each into the catalog.",
+        "I added the log archive catalog and the exported register, inventory, and exception record to the recovery set."
+      ]
+    },
+    "offline-copies": {
+      "short": "Carry copies offline",
+      "tag": "04 / CUSTODY",
+      "status": "OFFLINE COPIES",
+      "stepTitles": [
+        "Assign custodians by tier",
+        "Hash, copy, and verify each backup on media",
+        "Record each handoff in the custody register",
+        "Retrieve and verify one copy as a test"
+      ],
+      "mistake": "Checking the hash on the protected volume but not on the media. A copy that was never verified after copying can be incomplete or unreadable, and you find out during lesson 5 or on the bad day; verify the hash on the media before it leaves the room.",
+      "network": "No network flows are shown: the offline backup cabinet has no network path, so copies reach it only by hand. Tier 0 custodians carry the controller and CA backups, the audit custodian carries SBD-AUDIT01’s archive, and a server custodian carries member-server backups.",
+      "control": {
+        "id": "MP-4",
+        "name": "Media Storage",
+        "phase": "Implement",
+        "body": "Media storage means physically controlling and securely storing media until it is sanitized or destroyed. The offline cabinet, encrypted media, matching hash pairs, and a register naming who stored what, when, and in which slot put that control into practice.",
+        "question": "If a custodian left tomorrow, could someone else find, verify, and return every copy using the custody register alone?"
+      },
+      "checklist": [
+        "I assigned custodians by tier, so no one carries a backup from a tier they do not hold.",
+        "I recorded matching hashes on the volume and on the media for every copy, and logged each handoff in the custody register.",
+        "I retrieved one copy using only the register, verified its hash, and confirmed it is readable."
+      ]
+    },
+    "rehearse": {
+      "short": "Rehearse a restore",
+      "tag": "05 / REHEARSE",
+      "status": "RESTORE REHEARSED",
+      "stepTitles": [
+        "Isolate the recovery segment first",
+        "Restore SBD-DC02’s system state in DSRM",
+        "Return to normal boot, verify, and tear down",
+        "Restore a test object from the Recycle Bin"
+      ],
+      "mistake": "Attaching the restored copy of SBD-DC02 to a network that can reach the production VLANs. A controller carrying old directory state can push the past into the live forest, so write the isolation rule and confirm it before the restore starts.",
+      "network": "The rehearsal runs on the isolated recovery segment, which has no path to the production VLANs and is not drawn here. Back in production, the flow from AdminJumpBox01 to SBD-DC01 shows the Tier 0 session that brings a deleted test object back from the Recycle Bin.",
+      "control": {
+        "id": "CP-10",
+        "name": "System Recovery and Reconstitution",
+        "phase": "Implement → Assess",
+        "body": "Recovery and reconstitution means returning the system to a known state within a defined time after a disruption. A timed restore that reaches a verified, healthy directory, measured against the lesson 1 objective, shows the capability exists instead of assuming it.",
+        "question": "What did the measured time include that your lesson 1 objective did not account for?"
+      },
+      "checklist": [
+        "I confirmed the recovery segment had no path to production before restoring the copy of SBD-DC02 in DSRM.",
+        "I timed the restore from decision to directory services running and recorded the honest number against the objective.",
+        "I removed the DSRM boot setting, verified the directory, tore the rehearsal down, and restored a test object from the Recycle Bin."
+      ]
+    },
+    "record": {
+      "short": "File the recovery record",
+      "tag": "06 / RECORD",
+      "status": "BUILD PATH COMPLETE",
+      "stepTitles": [
+        "Assemble the recovery record with an owner",
+        "Run the closing scan and SCAP snapshot",
+        "Reconcile the three living records",
+        "Write the Build path’s closing note"
+      ],
+      "mistake": "Filing the recovery record without a named owner or a next rehearsal date. One rehearsal proves only today’s backups; without a calendar, the record ages into a claim nobody has tested since the network changed.",
+      "network": "SBD-NESSUS01 on VLAN 50 runs the standing credentialed scan across every VLAN; the flows show it reaching both controllers, the issuing CA, and the audit repository. Every system in the recovery set now has a verified backup, an offline copy, and a place in the recovery record.",
+      "control": {
+        "id": "CP-4",
+        "name": "Contingency Plan Testing",
+        "phase": "Assess → Monitor",
+        "body": "Contingency plan testing means testing at a defined frequency, reviewing the results, and taking corrective action. The measured times, lessons learned, named owner, and scheduled next rehearsal in the recovery record turn one test into a repeating practice.",
+        "question": "Which change to the network should trigger a rehearsal before the scheduled date comes round?"
+      },
+      "checklist": [
+        "I assembled the recovery record with both rehearsal results, the decision tree, a named owner, and a next rehearsal date.",
+        "I filed the closing credentialed scan and current SCAP results with their triage.",
+        "I reconciled the inventory, register, and exception record, and wrote the Build path’s closing note."
+      ]
+    }
+  }
+}

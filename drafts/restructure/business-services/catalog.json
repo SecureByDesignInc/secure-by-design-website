@@ -1,0 +1,57 @@
+{
+  "categoryOrder": 9,
+  "number": "1.9",
+  "estimatedHours": 2.7,
+  "title": "Stand up the business services",
+  "subtitle": "Files, database, licensing & web — by documented paths",
+  "description": "Give the users what the network exists for: SBD-FS01's role-based shares over verified SMB security, SBD-WEB01 serving internal HTTPS from a hardened, domain-joined Linux Apache, SBD-APPS01's licensing service and application API, and SBD-SQL01 running as a managed identity behind exactly one caller — every hop a documented, proven register row.",
+  "tags": [
+    "Windows Server",
+    "File services",
+    "SQL Server",
+    "Apache",
+    "Service accounts"
+  ],
+  "platform": "Windows Server · Linux",
+  "systems": [
+    "SBD-FS01",
+    "SBD-SQL01",
+    "SBD-APPS01",
+    "SBD-WEB01"
+  ],
+  "artLabels": [
+    "Role-based shares",
+    "gMSA + encrypted SQL",
+    "HTTPS on own trust"
+  ],
+  "outcomes": [
+    "Serve files through role-group permissions with verified SMB signing and encryption.",
+    "Run the database as a managed identity, certificate-encrypted, with SBD-APPS01 as its only caller.",
+    "Prove the fleet → web → application → database chain with every hop registered and every shortcut denied."
+  ],
+  "id": "business-services",
+  "stages": [
+    {
+      "title": "Design the service paths and identities",
+      "detail": "Four services, and before any of them exist: who talks to what over which port, which identity each service runs as, and which groups own access — the register and the directory answer all three before a role installs."
+    },
+    {
+      "title": "Build SBD-FS01 with least-privilege shares",
+      "detail": "The file server is where access control meets daily life. Build the shares against the role groups, require SMB signing on the server instead of trusting client defaults, and make 'who can read this' a one-lookup question."
+    },
+    {
+      "title": "Build SBD-SQL01 behind its applications",
+      "detail": "The database runs as a managed identity, encrypts its connections with a real certificate, and answers exactly one caller, SBD-APPS01 — the narrowest audience on the network, by design."
+    },
+    {
+      "title": "Build SBD-APPS01 and SBD-WEB01",
+      "detail": "The application server and the internal web server complete the dependency chain: fleet to web, web to application, application to database — each hop a register row, the web tier hardened against its Defense Information Systems Agency (DISA) guidance, and HTTPS served from the lab's own trust."
+    },
+    {
+      "title": "Reconcile, scan, and hand off",
+      "detail": "The business services close the way every build course has: the register reconciled against live behavior, the new systems baselined, the inventory updated — and for the first time, the network is functionally complete."
+    }
+  ],
+  "outcomeSummary": "Files, licensing, and a three-tier web application, each reachable only by its documented path.",
+  "networkLabel": "VLAN 40 / SERVICES"
+}

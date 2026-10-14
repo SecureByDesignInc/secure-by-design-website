@@ -205,7 +205,7 @@
       },
       "checklist": [
         "I confirmed the package matched its connected-side hash and that the central store serves its ADMX and ADML templates.",
-        "I linked the imported GPOs by OU with the domain controller policy at link order 1, and gpresult on both controllers shows them applied.",
+        "I linked the imported GPOs by OU with the domain controller policy at link order 1; gpresult on both controllers shows them applied, and no time setting comes from policy.",
         "I recorded every deviation with its rationale and owner instead of deleting the setting."
       ]
     },

@@ -154,7 +154,7 @@
         "Install the tools and record every version"
       ],
       "mistake": "Hashing only on the lab side proves nothing: without the list recorded on the connected side there is nothing to compare against. Staging a GPO package from a different quarter than the STIGs is quieter: course 1.5 would then apply policies written for one release and measure them against another.",
-      "network": "Nothing crosses the network in this lesson: the content arrives on approved removable media at each controller’s console. SCC is installed on both controllers and STIG Viewer on SBD-DC01; the GPO package waits, hashed, in C:\\Staging\\DISA.",
+      "network": "Nothing crosses the network in this lesson: the content arrives on approved removable media at each controller’s console. SCC is installed on both controllers and STIG Viewer on SBD-DC01; the GPO package and the Windows client content wait, hashed, in C:\\Staging\\DISA.",
       "control": {
         "id": "SI-7",
         "name": "Software, Firmware, and Information Integrity",
@@ -164,8 +164,8 @@
       },
       "checklist": [
         "I compared the connected-side SHA-256 hashes with the lab copies on both controllers before opening anything.",
-        "I recorded the SCC, STIG Viewer, benchmark, STIG and GPO package versions and releases.",
-        "I installed SCC on both controllers and STIG Viewer on SBD-DC01, and left the GPO package hashed for course 1.5."
+        "I recorded the SCC, STIG Viewer, benchmark, STIG and GPO package versions and releases, the Windows client content included.",
+        "I installed SCC on both controllers and STIG Viewer on SBD-DC01, and left the GPO package and the Windows client content hashed in C:\\Staging\\DISA."
       ]
     },
     "baseline": {

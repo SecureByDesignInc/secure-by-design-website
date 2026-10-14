@@ -1,5 +1,7 @@
 # Course 1.9 linux-repository and trimmed 1.13 patch-protect: notes
 
+> Course numbers below come from an earlier plan (REPO01 was 1.8, logging 1.9–1.11, patching 1.13, business services 1.14). audit.md (14 October) is current where they differ.
+
 ## linux-repository (1.8): five lessons, 165 minutes (2.8 h)
 
 | Lesson | Id | Minutes |

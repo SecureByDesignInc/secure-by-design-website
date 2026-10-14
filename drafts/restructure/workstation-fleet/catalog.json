@@ -1,0 +1,64 @@
+{
+  "categoryOrder": 7,
+  "number": "1.7",
+  "estimatedHours": 3.2,
+  "title": "Bring in the fleet",
+  "subtitle": "50 Windows endpoints, managed from first boot",
+  "description": "Join the fifty-workstation fleet to a network that is ready for it: DHCP addressing, OU landing with STIG policy at first boot, Windows LAPS for every local administrator, certificate autoenrollment at scale, and a sampled proof with the whole rollout observed by the logging pipeline.",
+  "tags": [
+    "Windows client",
+    "Domain join",
+    "Windows LAPS",
+    "Autoenrollment",
+    "DISA STIG"
+  ],
+  "platform": "Windows client · Windows Server",
+  "systems": [
+    "50 Windows PCs",
+    "SBD-DHCP01",
+    "SBD-SUBCA01"
+  ],
+  "artLabels": [
+    "Waves, not a big bang",
+    "LAPS + certificates",
+    "Proven by sample"
+  ],
+  "outcomes": [
+    "Roll fifty endpoints in waves that land hardened, addressed, and registered untouched.",
+    "Manage every local administrator with Windows LAPS under the tier model.",
+    "Prove the fleet with a defined sample, a failure rule, and pipeline-observed joins."
+  ],
+  "id": "workstation-fleet",
+  "stages": [
+    {
+      "title": "Prepare the fleet rollout",
+      "detail": "Fifty of anything needs a factory, not fifty craft projects. Settle the image, the names, the join account, and the policy links so every endpoint is born identical — then prove it on paper before proving it on metal."
+    },
+    {
+      "title": "Join the pilot and inspect first boot",
+      "detail": "Three machines go first, and everything the path has built shows up at once: a DHCP lease through the relay, an OU landing, STIG policy, a DNS record — and the join itself appearing on the analyst's screen."
+    },
+    {
+      "title": "Manage local administrators with Windows LAPS",
+      "detail": "Fifty identical machines must not share one local administrator password. Windows Local Administrator Password Solution (Windows LAPS) gives each endpoint its own rotating secret, stored in the directory, readable by the people the tier model says may have it."
+    },
+    {
+      "title": "Autoenroll the fleet's certificates",
+      "detail": "Course 1.4 proved autoenrollment on a pilot group; this lesson turns it loose. Widen the template permission to the fleet, let policy do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+    },
+    {
+      "title": "Admit only enrolled devices with 802.1X",
+      "detail": "Until now, anything plugged into a VLAN 80 port got an address. With 802.1X, the switch asks each machine to prove who it is with the certificate it enrolled. This lesson turns that check on in monitor mode — every result is logged, nothing is blocked yet — because 47 PCs have no certificate until they join the domain; lesson 6 enforces it once the whole fleet has enrolled. No new server: the NPS role joins DHCP on SBD-DHCP01."
+    },
+    {
+      "title": "Scale to fifty, enforce 802.1X, and prove by sample",
+      "detail": "Roll the remaining waves while the ports are still in monitor mode, confirm every PC enrolled its machine certificate and authenticates, then switch the ports to enforcement — and prove the fleet the only honest way at scale: a defined sample, the same checks as the pilot, and a written rule for what a sample failure means."
+    },
+    {
+      "title": "Delta scan the fleet and hand off",
+      "detail": "The cadence meets its first population: Security Content Automation Protocol (SCAP) baselines on the sampled endpoints with the Windows client benchmark, rescans where the course changed infrastructure, and a fleet inventory that course 1.8's tooling will take over."
+    }
+  ],
+  "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",
+  "networkLabel": "VLAN 20 + 30 + 80 / WORKSTATIONS"
+}

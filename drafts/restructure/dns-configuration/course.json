@@ -2,7 +2,7 @@
   "id": "dns-configuration",
   "prerequisites": [
     "Complete course 1.1, the DC01 + DC02 identity build, with both domain controllers healthy. Both were promoted with the DNS server option selected, and SBD-DC02 still uses SBD-DC01 for DNS.",
-    "Use an isolated Windows Server practice environment and an account delegated to manage DNS.",
+    "Use an isolated Windows Server practice environment, and work at a domain controller's VM console with an authorized Domain Admin account: until course 1.8 builds AdminJumpBox01, that is where administration happens.",
     "Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.",
     "The network's routing and VLAN segmentation are already in place, with a documented service-path register."
   ],
@@ -41,7 +41,7 @@
     {
       "id": "locator",
       "title": "Microsoft · Locating domain controllers",
-      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/dc-locator-changes"
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/dc-locator"
     },
     {
       "id": "resolve",
@@ -177,7 +177,7 @@
         "Under Reverse Lookup Zones, create an IPv4 primary AD-integrated zone for network ID 10.0.10 if an equivalent zone does not already exist. Select the approved replication scope and secure updates.",
         "Review zone-transfer settings. AD replication between these DCs does not require enabling transfers to arbitrary DNS servers; restrict any separately required secondary-server transfers explicitly."
       ],
-      "command": "Get-DnsServerZone -ComputerName SBD-DC01 |\n  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope\nGet-DnsServerZone -ComputerName SBD-DC02",
+      "command": "Get-DnsServerZone -ComputerName SBD-DC01 |\n  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope, SecureSecondaries\nGet-DnsServerZone -ComputerName SBD-DC02",
       "check": "The intended forward and reverse zones appear on both DNS hosts after replication. The reverse zone for this /24 is 10.0.10.in-addr.arpa.",
       "evidence": "Capture the zone type, update policy, replication scope, and transfer policy for each zone.",
       "sources": [
@@ -236,11 +236,11 @@
       "steps": [
         "Review the DC A and PTR records first. Correct mismatches through the owning host and DNS administration process rather than blindly adding another record with the same name.",
         "Choose one approved service host from your address plan. In sbd.test, use New Host (A or AAAA), enter its actual name and address, and select the associated PTR option when the reverse zone is ready.",
-        "For a service alias, use New Alias (CNAME) and select the intended fully qualified host. For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.",
+        "For a service alias, use New Alias (CNAME) and enter the intended fully qualified host. For the course 1.6 PKI, create pki.sbd.test as an alias for SBD-PKI-MGMT01.sbd.test, the internal publication host that course builds at 10.0.30.30; the alias answers with an address once that host exists, and it never points at the offline root.",
         "Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete. An alias cannot coexist with other record types at the same name."
       ],
-      "command": "Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test\nResolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10\nResolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10",
-      "check": "Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.",
+      "command": "Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test\nResolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10\nResolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10\n# The alias course 1.6 relies on; its target is built in course 1.6\nAdd-DnsServerResourceRecordCName -ComputerName SBD-DC01 -ZoneName sbd.test -Name pki -HostNameAlias SBD-PKI-MGMT01.sbd.test\nResolve-DnsName pki.sbd.test -Type CNAME -Server 10.0.10.11   # after replication: SBD-PKI-MGMT01.sbd.test",
+      "check": "Forward and reverse responses agree with the address plan. Each alias names the intended host (pki.sbd.test returns an address only once course 1.6 builds SBD-PKI-MGMT01), and creating a DNS name alone does not configure its service.",
       "evidence": "Keep a record table with owner, type, target, time to live, and reason for the change.",
       "model": {
         "href": "/inside-the-network#process=files&step=1",

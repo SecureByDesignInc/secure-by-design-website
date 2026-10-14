@@ -112,18 +112,18 @@
         "Every rule has its identifiers, a CAT severity, and CCIs that reach a NIST control.",
         "SCC measures the benchmark, STIG Viewer holds the human answers, and neither is an authorization."
       ],
-      "next": "Lesson 2 carries the DISA content across the air gap: the tools, the benchmark, the STIGs and the GPO package course 1.5 will import."
+      "next": "Lesson 2 carries the DISA content across the air gap: the tools, the benchmarks, the STIGs and the GPO package course 1.5 will import."
     },
     {
       "id": "staging",
       "title": "Stage the DISA content across the air gap",
       "minutes": 20,
-      "summary": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmark, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media.",
+      "summary": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmarks, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media.",
       "steps": [
-        "On an approved connected system, download from DISA's Cyber Exchange: SCC for Windows and STIG Viewer 3 with their published checksums, the Windows Server STIG SCAP benchmark, the Windows Server, Active Directory Domain and Active Directory Forest STIGs and the CCI list from the document library, and the current GPO package. The GPO package travels now so course 1.5 imports the policies that match the STIGs you measure (DISA keeps the two within a few weeks of each other); note each file's version and quarterly release.",
+        "On an approved connected system, download from DISA's Cyber Exchange: SCC for Windows and STIG Viewer 3 with their published checksums; the SCAP benchmarks for Windows Server and for the Windows client; the Windows Server, Windows client, Active Directory Domain and Active Directory Forest STIGs and the CCI list from the document library; and the current GPO package. The Windows client content waits for the Tier 2 seat in course 1.8 and the fleet in course 1.13, and the GPO package travels now so course 1.5 imports policies from the same quarterly release as the STIGs you measure; note each file's version and release.",
         "Check SCC and STIG Viewer against DISA's published checksums, then hash every file with Get-FileHash into connected-side-hashes.csv, which travels with the media, and transfer the set with the approved removable-media procedure. No live link to the lab is created for convenience.",
-        "In the lab, at SBD-DC01's console, copy the files into C:\\Staging\\DISA and the hash list into C:\\Evidence\\baseline\\transfer, and compare every hash before opening anything; repeat on SBD-DC02, which needs SCC and the benchmark too. A mismatch stops the work, exactly as it will in the course 1.6 signing ceremony.",
-        "Install SCC on both controllers and STIG Viewer on SBD-DC01, then install the staged benchmark into SCC on each controller. Until course 1.8 builds AdminJumpBox01, administration happens at the controllers' consoles; course 1.8 then moves both tools there and removes them from the controllers. Record SCC's, STIG Viewer's, the benchmark's and each STIG's version, and leave the GPO package hashed in C:\\Staging\\DISA for course 1.5."
+        "In the lab, at SBD-DC01's console, copy the files into C:\\Staging\\DISA and the hash list into C:\\Evidence\\baseline\\transfer, and compare every hash before opening anything; repeat on SBD-DC02 with the same full set, so its comparison is one-to-one as well, although it needs only SCC and the Windows Server benchmark. A mismatch stops the work, exactly as it will in the course 1.6 signing ceremony.",
+        "Install SCC on both controllers and STIG Viewer on SBD-DC01, then install the Windows Server benchmark into SCC on each controller. Until course 1.8 builds AdminJumpBox01, administration happens at the controllers' consoles; course 1.8 then moves both tools there and removes them from the controllers. Record SCC's, STIG Viewer's, each benchmark's and each STIG's version, and leave the GPO package (for course 1.5) and the Windows client content hashed in C:\\Staging\\DISA."
       ],
       "command": "Get-ChildItem C:\\Staging\\DISA -File | Select-Object Name, Length, LastWriteTime\nNew-Item -ItemType Directory C:\\Evidence\\baseline\\transfer -Force | Out-Null\nGet-ChildItem C:\\Staging\\DISA -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\\Evidence\\baseline\\transfer\\lab-side-hashes.csv -NoTypeInformation\n# connected-side-hashes.csv came with the media; no output means every hash matches\nCompare-Object (Import-Csv C:\\Evidence\\baseline\\transfer\\connected-side-hashes.csv).Hash (Import-Csv C:\\Evidence\\baseline\\transfer\\lab-side-hashes.csv).Hash",
       "check": "Every transferred file's hash matches the value recorded on the connected side on both controllers, SCC and STIG Viewer match DISA's published checksums, SCC runs on both controllers and STIG Viewer on SBD-DC01, and every version is written down.",
@@ -141,7 +141,7 @@
         "filehash"
       ],
       "objectives": [
-        "Identify the DISA artifacts this course and course 1.5 need.",
+        "Identify the DISA artifacts this course and the courses after it need.",
         "Move them across the air gap with hashes compared on both sides.",
         "Record versions so scans stay comparable over time."
       ],
@@ -178,9 +178,9 @@
         }
       ],
       "recap": [
-        "SCC, STIG Viewer, the benchmark, the STIGs and the GPO package come from DISA's Cyber Exchange.",
+        "SCC, STIG Viewer, the benchmarks, the STIGs and the GPO package come from DISA's Cyber Exchange.",
         "Hashes are recorded on both sides of the boundary and compared on both controllers.",
-        "Versions are evidence, and the GPO package waits, verified, for course 1.5."
+        "Versions are evidence, and the GPO package and client content wait, verified, for later courses."
       ],
       "next": "Lesson 3 measures both controllers before anything is hardened."
     },
@@ -322,7 +322,7 @@
       "summary": "A checklist full of statuses is not yet a decision. Turn the open items from all three checklists into one findings record — counted by severity, classified, owned, and traced from rule to CCI to NIST control — that course 1.5 can harden against and prove.",
       "steps": [
         "Export the open rules from all three checklists into one findings record, C:\\Evidence\\baseline\\findings\\findings-record.csv, and count them per checklist by severity. Read the CAT I items first: their exploitation directly and immediately causes loss.",
-        "Classify every open item with one of three values. Fix by GPO: the DISA package sets it, so course 1.5's import should close it. Deviation candidate: the setting conflicts with a design decision — for example a rule expecting the PDC emulator to synchronize with an authorized external time source, where the course 1.3 design declares and checks its own clock — and course 1.5 decides and records it. POA&M candidate: the fix lies outside Group Policy, such as the server certificates the STIG expects on domain controllers, which need the PKI course 1.6 builds, so it needs an owner and a planned date — the start of a Plan of Action and Milestones (POA&M) entry.",
+        "Classify every open item with one of three values. Fix by GPO: the DISA package sets it, so course 1.5's import should close it. Deviation candidate: the setting conflicts with a design decision — for example a rule expecting the PDC emulator to synchronize with an authorized external time source, where the course 1.3 design declares and checks its own clock — and course 1.5 decides and records it. POA&M candidate: the fix lies outside Group Policy, such as the PKI server certificate the STIG expects on every domain controller, which the course 1.6 PKI issues, so it needs an owner and a planned date — the start of a Plan of Action and Milestones (POA&M) entry.",
         "Trace each finding to its controls. A rule's CCIs map to NIST SP 800-53 controls in DISA's CCI list, and STIG Viewer shows them with each rule — CCI-000366, for example, is implementing the security configuration settings under CM-6 — so the record tells an assessor which control each open item weakens.",
         "Write the handoff course 1.5 works from as C:\\Evidence\\baseline\\findings\\handoff.txt: SCC's version, the benchmark release and profile, the STIG releases, the GPO package release waiting hashed in C:\\Staging\\DISA, and where the checklists and this record live. Then hash the whole folder into C:\\Evidence\\baseline-manifest.csv. Course 1.5 checks that manifest, rescans with exactly those versions into C:\\Evidence\\hardened, updates copies of the checklists there, and closes or records every item."
       ],

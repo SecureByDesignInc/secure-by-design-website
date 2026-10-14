@@ -194,7 +194,7 @@
         "Run the first reference check"
       ],
       "mistake": "Leaving hypervisor time synchronization on for the domain controller VMs. The host clock then silently overrides the PDC emulator, and the domain's time can change with nothing changed on SBD-DC01.",
-      "network": "SBD-DC01 serves time from its own clock, with nothing above it, and SBD-DC02 takes its time from it over UDP 123 inside VLAN 10. The configuration and the reference check happen at the controllers' consoles; no member path is shown yet.",
+      "network": "SBD-DC01 serves time from its own clock, with nothing above it, and SBD-DC02 takes its time from it over UDP 123 inside VLAN 10. The configuration and the reference check happen at the controllers' consoles; no member path is shown in this lesson.",
       "control": {
         "id": "SC-45",
         "name": "System Time Synchronization",

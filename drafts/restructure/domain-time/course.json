@@ -55,9 +55,24 @@
       "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/w32time-event-142-time-service-stopped-advertising"
     },
     {
+      "id": "event-12",
+      "title": "Microsoft · Configure the root PDC with an authoritative time source",
+      "url": "https://learn.microsoft.com/en-us/services-hub/microsoft-engage-center/health/remediation-steps-ad/configure-the-root-pdc-with-an-authoritative-time-source-and-avoid-widespread-time-skew"
+    },
+    {
       "id": "chrony",
       "title": "Red Hat · Configuring time synchronization (chrony)",
       "url": "https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/configuring-time-synchronization_configuring-basic-system-settings"
+    },
+    {
+      "id": "chrony-conf",
+      "title": "chrony · chrony.conf(5)",
+      "url": "https://chrony-project.org/doc/latest/chrony.conf.html"
+    },
+    {
+      "id": "ntp",
+      "title": "RFC 5905 · Network Time Protocol Version 4: Protocol and Algorithms Specification",
+      "url": "https://www.rfc-editor.org/rfc/rfc5905"
     },
     {
       "id": "disa-library",
@@ -81,7 +96,7 @@
         "Learn the hierarchy that carries one clock everywhere. The PDC emulator of the forest root domain is at the top; every other domain controller takes its time from the PDC emulator, and every member server and workstation from the domain controller that authenticated it — the NT5DS client type every domain member uses by default. sbd.test is the forest's only domain, so SBD-DC01 is the top and SBD-DC02 follows it, and each Windows member's time arrives signed with its computer's Net Logon session key.",
         "Face the air gap. With no internet or outside NTP server, SBD-DC01 serves time from its own clock and is the reference by declaration, so name an approved reference that never connects to this network, such as a GPS receiver's display, and write down who compares SBD-DC01 with it, how often, and how a correction is made and recorded. Record the fallback too: if SBD-DC01 is lost for long, SBD-DC02 eventually stops advertising as a time source, so the PDC emulator role moves to it and it becomes the source (lesson 5).",
         "Set the thresholds you will hold. Keep every system within one second of SBD-DC01 — the one-second difference DISA's operating-system requirements use for synchronizing with an authoritative source — and SBD-DC01 within two seconds of the reference, checked daily and after every restart, restore or revert, or at an interval its measured drift has shown it stays inside. Five minutes is where Kerberos fails; these thresholds exist to catch drift long before that.",
-        "Confirm the service path. Rule F09 in Inside the Network permits every domain member to both controllers on UDP 123, and each controller's inbound firewall rule for the Windows Time service accepts it; SBD-DC02's own requests to SBD-DC01 stay inside VLAN 10, where only the host firewalls see them. SBD-REPO01 (course 1.9) is not a domain member, so F09 does not list it, and course 1.9 adds its row."
+        "Confirm the service path. Rule F09 in Inside the Network permits every domain member to both controllers on UDP 123, and each controller's inbound firewall rule for the Windows Time service accepts it; SBD-DC02's own requests to SBD-DC01 stay inside VLAN 10, where only the host firewalls see them. SBD-REPO01 (course 1.9) is not a domain member, so F09 does not list it yet; course 1.9 adds it."
       ],
       "command": "Get-ADForest | Select-Object RootDomain, Domains       # sbd.test: the forest root and its only domain\nGet-ADDomain | Select-Object PDCEmulator               # expected: SBD-DC01.sbd.test\n# The domain's Kerberos tolerance, from the Default Domain Policy (expected: MaxClockSkew = 5, in minutes)\nSelect-String -Pattern MaxClockSkew -Path \"\\\\sbd.test\\SYSVOL\\sbd.test\\Policies\\{31B2F340-016D-11D2-945F-00C04FB984F9}\\MACHINE\\Microsoft\\Windows NT\\SecEdit\\GptTmpl.inf\"\n# Each controller's inbound UDP 123 rule, and where each takes its time today\nInvoke-Command SBD-DC01,SBD-DC02 {\n  Get-NetFirewallPortFilter -PolicyStore ActiveStore | Where-Object { $_.Protocol -eq 'UDP' -and $_.LocalPort -contains '123' } |\n    Get-NetFirewallRule | Select-Object DisplayName, Direction, Enabled, Action\n  w32tm /query /source }",
       "check": "The plan names the forest root and its PDC emulator, the hierarchy each system follows, the approved reference with who checks it and how often, both thresholds, the fallback, the Kerberos tolerance read from the Default Domain Policy, and rule F09 with each controller's inbound UDP 123 rule.",
@@ -163,7 +178,8 @@
         "w32tm",
         "authoritative",
         "virtual-dc",
-        "hyperv-integration"
+        "hyperv-integration",
+        "event-12"
       ],
       "objectives": [
         "Configure SBD-DC01, the PDC emulator, as the domain's reliable time source.",
@@ -219,7 +235,7 @@
             "From the core router"
           ],
           "correct": 1,
-          "explanation": "Windows Time follows the domain hierarchy: members sync from a domain controller, the other domain controller from the PDC emulator, and the PDC emulator from its own clock. That is why the register permits UDP 123 from every VLAN to the domain controllers."
+          "explanation": "Windows Time follows the domain hierarchy: members sync from a domain controller, the other domain controller from the PDC emulator, and the PDC emulator from its own clock. That is why rule F09 permits UDP 123 from every domain member to both domain controllers."
         }
       ],
       "recap": [
@@ -242,10 +258,10 @@
       "steps": [
         "Leave SBD-DC02 and every Windows member on the defaults: client type NT5DS, no manual peer list, and on SBD-DC02 the automatic AnnounceFlags 10, so it serves time without claiming to be the reliable source. w32tm /query /configuration shows each value with where it came from, (Local) or (Policy), and a system someone once set by hand returns with w32tm /config /syncfromflags:domhier /update and a restart of the service.",
         "Keep time out of Group Policy. The Windows Time Service policies (Computer Configuration > Administrative Templates > System > Windows Time Service) overwrite the local W32Time settings, so one that names an NTP server or sets the type to NTP pulls its targets off the hierarchy, and one that reaches SBD-DC01 overrides what makes it the source. Leave them Not Configured in every GPO, the STIG GPOs of courses 1.4–1.5 included: the STIGs expect members on the domain hierarchy, and their rule that the PDC emulator take time from an authorized external source becomes a recorded deviation in course 1.5's exception record.",
-        "Keep hypervisors out of every virtual machine's time, as you did for the controllers. When a later course builds a virtual machine, server or client, turn off its hypervisor time synchronization, so the domain stays the only time authority: a Windows guest whose source reads VM IC Time Synchronization Provider, or any other hypervisor provider, is not following the domain.",
+        "Keep hypervisors out of every virtual machine's time, as you did for the controllers. When a later course builds a virtual machine, server or client — SBD-ADMIN-PC01, the Tier 2 seat on SBD-ADMIN-SRV01, included — turn off its hypervisor time synchronization, so the domain stays the only time authority: a Windows guest whose source reads VM IC Time Synchronization Provider, or any other hypervisor provider, is not following the domain.",
         "Write the chrony configuration every Linux server uses. In /etc/chrony.conf (RHEL family) or /etc/chrony/chrony.conf (Ubuntu), remove every pool, server and sourcedir line, add server SBD-DC01.sbd.test iburst, server SBD-DC02.sbd.test iburst and maxdistance 16, and add no allow line, because these servers serve time to no one. Domain-joined Linux servers authenticate with Kerberos through SSSD, so the same five-minute limit applies to them; ntpd, where a distribution still uses it, takes the same two server lines and tos maxdist 16.",
         "Record why maxdistance 16 is this path's choice. Serving its own clock, SBD-DC01 advertises 10 seconds of root dispersion and SBD-DC02 a little more, while chrony refuses any source whose root distance is above 3 seconds by default, so without the line chronyc sources marks both controllers ^? (unusable). Sixteen seconds is the largest dispersion NTP defines, so the setting admits both controllers without admitting an unsynchronized source; the time itself is unsigned, which is why F09 limits it to the two controllers.",
-        "Apply the same file wherever Linux appears: SBD-SPLUNK01 (course 1.12) and SBD-WEB01 (course 1.18) when they are built, SBD-NESSUS01 when course 1.17 arrives, and SBD-REPO01 (course 1.9), which is not domain-joined, so F09's member list leaves it out and course 1.9 adds its time row. The offline root CA (course 1.6) is the one clock no network reaches: set it against the approved reference before each signing ceremony."
+        "Apply the same file to every Linux server before its first domain join or package update: SBD-REPO01 (course 1.9), which is not domain-joined, so F09's member list leaves it out until course 1.9 adds it; SBD-SPLUNK01 (course 1.12) and SBD-WEB01 (course 1.18) when they are built; and SBD-NESSUS01 when course 1.17, coming soon, arrives. The offline root CA (course 1.6) is the one clock no network reaches: set it against the approved reference before each signing ceremony."
       ],
       "command": "# On SBD-DC02, and on a Windows test client or member server if you have one:\nw32tm /query /configuration | Select-String 'AnnounceFlags|Type:'   # SBD-DC02: AnnounceFlags: 10 (Local); Type: NT5DS (Local)\nw32tm /query /configuration | Select-String '\\(Policy\\)'           # expected: no output\nw32tm /query /source                                                # a controller, never a hypervisor provider\n# A system once set by hand returns to the hierarchy:\n#   w32tm /config /syncfromflags:domhier /update; Restart-Service w32time; w32tm /resync /rediscover\n# The Linux chrony file, filed now (/etc/chrony.conf, or /etc/chrony/chrony.conf on Ubuntu):\n#   server SBD-DC01.sbd.test iburst\n#   server SBD-DC02.sbd.test iburst\n#   maxdistance 16\n# ...with no pool, other server, sourcedir or allow lines. Each Linux build later checks:\n#   chronyc sources -v     # ^* one controller, ^+ or ^- the other (^? = unusable)\n#   chronyc ntpdata | grep -E '^(Remote address|Stratum|Root dispersion|Authenticated)'\n#   chronyc tracking       # Reference ID: a controller; System time well inside one second",
       "check": "SBD-DC02 shows AnnounceFlags 10 and NT5DS and takes its time from SBD-DC01, a Windows member names a controller, no W32Time value shows (Policy), and the chrony file — both controllers, maxdistance 16 and the reason for it — is filed for courses 1.9, 1.12 and 1.18 to apply.",
@@ -254,6 +270,8 @@
         "w32tm",
         "how-time",
         "chrony",
+        "chrony-conf",
+        "ntp",
         "virtual-dc",
         "disa-library"
       ],
@@ -284,14 +302,14 @@
           "explanation": "The packets arrive; chrony rejects the sources for the error they advertise. Raising the limit to 16 seconds, the largest dispersion NTP defines, admits both controllers and nothing unsynchronized."
         },
         {
-          "question": "Why does SBD-REPO01 need a time row of its own?",
+          "question": "Why must course 1.9 add SBD-REPO01 to rule F09?",
           "answers": [
             "It uses a different time protocol",
             "Rule F09 covers domain members, and SBD-REPO01 is not joined to the domain",
             "It takes its time from SBD-MGMT01"
           ],
           "correct": 1,
-          "explanation": "F09 was written for domain members. Course 1.9 adds SBD-REPO01's row with an owner and a reason, and gives it the same chrony file as every other Linux server."
+          "explanation": "F09 was written for domain members. Course 1.9 adds SBD-REPO01 to it with an owner and a reason, and gives it the same chrony file as every other Linux server."
         }
       ],
       "recap": [
@@ -326,6 +344,7 @@
         "how-time",
         "resync",
         "event-142",
+        "event-12",
         "controls"
       ],
       "objectives": [
@@ -386,11 +405,11 @@
         "Recognize skew by its symptoms. Kerberos errors that name time — KRB_AP_ERR_SKEW, or 'There is a time and/or date difference between the client and server' at sign-in — access-denied errors in replication between the controllers, and certificates reported as not yet valid all point at a clock; if the controllers audit Kerberos failures, Security event 4771 with failure code 0x25 names the client. Measure before you change anything: w32tm /stripchart from the failing system to SBD-DC01 shows the offset.",
         "Find out why a member left its source. Local CMOS Clock or Free-running System Clock means no usable source, a hypervisor provider means its host's time sync is on, and a peer name means someone set it by hand; a (Policy) value in w32tm /query /configuration points at a GPO, and events 129 and 36 show how long it has been adrift. Practice on the test client or SBD-DC02: set a manual peer with w32tm /config /manualpeerlist:SBD-DC01.sbd.test,0x8 /syncfromflags:manual /update, note that its time is still right but unauthenticated and off the hierarchy, then put it back with /syncfromflags:domhier.",
         "Move the source with the PDC emulator role. When the role moves — a planned transfer, or a seizure after SBD-DC01 is lost — run w32tm /config /reliable:yes /update on the new holder and w32tm /config /syncfromflags:domhier /reliable:no /update on the old one, restart Windows Time on both, move the reference check to the new holder, and confirm that nltest /gtimeserv names it. Otherwise the old holder still advertises itself as the reliable source and the domain's time can keep flowing from a controller that is no longer the PDC emulator; practice only if you can move the role back the same day, because later courses expect SBD-DC01 to hold it.",
-        "Treat a restored or reverted VM as a clock problem as well as a directory one. It returns with the time it had when saved: members correct themselves, a domain controller corrects at most 48 hours each way (MaxPosPhaseCorrection and MaxNegPhaseCorrection) and logs an event instead, and SBD-DC01 has nothing to correct it at all, so every member follows its old time. After any restore or revert of SBD-DC01, compare it with the reference before you trust it.",
+        "Treat a restored or reverted VM as a clock problem as well as a directory one. It can come back with the clock it had when it was saved: members correct themselves, a domain controller corrects at most 48 hours each way (MaxPosPhaseCorrection and MaxNegPhaseCorrection) and logs an event instead, and SBD-DC01 has nothing to correct it at all, so every member follows its old time. After any restore or revert of SBD-DC01, compare it with the reference before you trust it.",
         "Resync safely. On Windows, w32tm /resync /rediscover finds the source again and resynchronizes; on Linux, sudo chronyc makestep steps the clock once a controller is selectable. When an offset is beyond what the service will correct, set the clock close by hand first, correct SBD-DC01 only by the measured difference, and never point a system at an outside or manual source to make an error go away.",
         "Record the fix like any other change: the symptom and when it started, the first offset measured, the cause, what you changed, the evidence that the chain is whole again — source, offset and events — and the rollback. A moved role also updates the time plan: who now runs the reference check, and the reverse procedure for when the role returns."
       ],
-      "command": "# Measure before changing anything (on the failing system)\nw32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly\nw32tm /query /source\nw32tm /query /configuration | Select-String 'Type:|NtpServer:|\\(Policy\\)'\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-Time-Service'; Id=36,129} -MaxEvents 10 |\n  Format-Table TimeCreated, Id -AutoSize\n# Practice fault, then the fix (test client or SBD-DC02)\nw32tm /config /manualpeerlist:SBD-DC01.sbd.test,0x8 /syncfromflags:manual /update\nw32tm /query /source            # SBD-DC01.sbd.test,0x8: a manual peer, off the hierarchy\nw32tm /config /syncfromflags:domhier /update\nRestart-Service w32time\nw32tm /resync /rediscover\nw32tm /query /source            # a controller again\n# If the PDC emulator role moves to SBD-DC02:\n#   SBD-DC02: w32tm /config /reliable:yes /update; Restart-Service w32time\n#   SBD-DC01: w32tm /config /syncfromflags:domhier /reliable:no /update; Restart-Service w32time\nnltest /dsgetdc:sbd.test /gtimeserv   # names the current PDC emulator\n# Linux: sudo chronyc makestep, then chronyc tracking",
+      "command": "# Measure before changing anything (on the failing system)\nw32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly\nw32tm /query /source\nw32tm /query /configuration | Select-String 'Type:|NtpServer:|\\(Policy\\)'\nGet-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-Time-Service'; Id=36,129} -MaxEvents 10 |\n  Format-Table TimeCreated, Id -AutoSize\n# Practice fault, then the fix (test client or SBD-DC02)\nw32tm /config /manualpeerlist:SBD-DC01.sbd.test,0x8 /syncfromflags:manual /update\nw32tm /query /source            # SBD-DC01.sbd.test,0x8: a manual peer, off the hierarchy\nw32tm /config /syncfromflags:domhier /update\nRestart-Service w32time\nw32tm /resync /rediscover\nw32tm /query /source            # a controller again\n# If the PDC emulator role moves to SBD-DC02:\n#   SBD-DC02: w32tm /config /reliable:yes /update; Restart-Service w32time\n#   SBD-DC01: w32tm /config /syncfromflags:domhier /reliable:no /update; Restart-Service w32time\nnltest /dsgetdc:sbd.test /gtimeserv   # must name the current PDC emulator\n# Linux: sudo chronyc makestep, then chronyc tracking",
       "check": "The practice fault was found from the system's configuration before anything changed, the system names a controller again with Type NT5DS and an offset inside one second, nltest names the PDC emulator as the reliable source, and the record explains the cause rather than only showing a passing result.",
       "evidence": "Keep the fault record: the symptom and start time, the first offset, the source and configuration output before and after, the events, the change and its rollback, and the final offsets; after a role move, the updated time plan.",
       "sources": [

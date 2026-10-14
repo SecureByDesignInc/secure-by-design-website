@@ -48,7 +48,7 @@
     },
     {
       "title": "Move the scan tools, rescan, and hand off",
-      "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the newcomers, rescan what changed, and hand the next course a network administered only from somewhere safe."
+      "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the physical seats, rescan what changed, and hand the next course a network administered only from somewhere safe."
     }
   ],
   "outcomeSummary": "Privileged sessions that only ever start from the right seat.",

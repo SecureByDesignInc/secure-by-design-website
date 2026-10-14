@@ -36,7 +36,7 @@
     },
     {
       "title": "Stage the DISA content across the air gap",
-      "detail": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmark, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
+      "detail": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmarks, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
     },
     {
       "title": "Capture the pre-hardening baseline",

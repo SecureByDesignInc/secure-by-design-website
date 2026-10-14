@@ -63,7 +63,7 @@
         "from": 1,
         "button": "SBD-ADMIN-SRV01",
         "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
-        "description": "The Tier 1 seat in the Admin Servers OU, for member-server administration such as SBD-DHCP01 (rule A02). It also hosts the SBD-ADMIN-PC01 virtual machine, so three seats run on two machines, and the audit custodian’s separate accounts and sessions start here too."
+        "description": "The Tier 1 seat in the Admin Servers OU, for member-server administration such as SBD-DHCP01 (rule A02). It also hosts the SBD-ADMIN-PC01 virtual machine, so three seats run on two machines, and the audit custodian’s separate accounts and sessions start here too. From lesson 5 it holds the Tier 1 copy of the assessment tools."
       },
       {
         "id": "pc",
@@ -294,7 +294,7 @@
         "Write the handoff for course 1.9"
       ],
       "mistake": "Treating SBD-SUBCA01 and SBD-PKI-MGMT01 as new hosts. They changed OU, not identity: a rescan compared with their earlier baseline is what shows the move kept their hardening intact.",
-      "network": "The three seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.9.",
+      "network": "The two physical seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.9.",
       "control": {
         "id": "RA-5",
         "name": "Vulnerability Monitoring and Scanning",
@@ -304,7 +304,7 @@
       },
       "checklist": [
         "I moved SCC, STIG Viewer, and the evidence onto the seats, matched every set to its manifest, and removed the tools from the controllers.",
-        "I filed first baselines for the three seats and rescans of the changed systems, with attributed deltas.",
+        "I filed first baselines for the two physical seats and rescans of the changed systems, with attributed deltas.",
         "I added this course’s rows to the records and wrote the handoff telling course 1.9 that its servers are managed only from VLAN 60."
       ]
     }
