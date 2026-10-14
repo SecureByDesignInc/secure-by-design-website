@@ -11,6 +11,7 @@ import {nativeActivityApi} from './native-activity.js';
 import {nativeAuthApi} from './native-auth.js';
 import {nativeOnboardingApi} from './native-onboarding.js';
 import {signInApi} from './sign-in-methods.js';
+import {federalJobsApi} from './federal-jobs.js';
 import {hsts,protect} from './security-headers.js';
 // Only the default export may leave this file: the Workers runtime treats every named export of the
 // entry module as an entrypoint and refuses to start if one isn't a handler.
@@ -63,6 +64,7 @@ async function route(request,env,ctx){
  if(/^\/api\/native-auth(\/|$)/.test(path))return nativeAuthApi(request,env);
  if(path==='/api/native-onboarding')return nativeOnboardingApi(request,env);
  if(/^\/api\/sign-in(\/|$)/.test(path))return signInApi(request,env);
+ if(path==='/api/community/federal-jobs')return federalJobsApi(request,env,ctx);
  if(/^\/api\/reader-auth(\/|$)/.test(path))return readerAuthApi(request,env);
  if(/^\/api\/reader-progress(\/|$)/.test(path))return readerProgressApi(request,env);
  if(/^\/api\/community-contributions(\/|$)/.test(path))return contributionsApi(request,env,ctx);
