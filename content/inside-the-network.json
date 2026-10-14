@@ -687,7 +687,7 @@
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.20",
       "location": "Administration room · dedicated admin seat",
-      "purpose": "Dedicated privileged workstation for approved member-server targets. Separate operator roles further restrict security tools and protected audit storage.",
+      "purpose": "Privileged workstation for approved member-server targets. Separate operator roles further restrict security tools and protected audit storage. It hosts one virtual machine, SBD-ADMIN-PC01, the Tier 2 seat: Tier 1 accounts work only on the host, Tier 2 accounts only in the virtual machine.",
       "services": [
         {
           "name": "Server administration only",
@@ -720,8 +720,8 @@
       "role": "Endpoint administration only",
       "segment": "VLAN 60 · Tiered administration",
       "address": "10.0.60.30",
-      "location": "Administration room · dedicated admin seat",
-      "purpose": "Dedicated privileged workstation for the 50 client endpoints. No AD, CA, or server administrative sessions.",
+      "location": "Administration room · virtual machine on the SBD-ADMIN-SRV01 seat",
+      "purpose": "Privileged workstation for the 50 client endpoints, running as a virtual machine on the SBD-ADMIN-SRV01 seat with its own name and address. No AD, CA, or server administrative sessions, and no higher-tier sign-ins.",
       "services": [
         {
           "name": "Endpoint administration only",
@@ -1075,7 +1075,7 @@
       "number": 60,
       "name": "Tiered administration",
       "subnet": "10.0.60.0/24",
-      "boundary": "Separate identity/PKI, server, and endpoint administrative hosts and accounts. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
+      "boundary": "Separate identity/PKI, server, and endpoint administrative hosts and accounts: two physical seats, with the endpoint seat a virtual machine on the server seat. Host rules deny cross-tier management; sharing this VLAN does not grant access.",
       "systems": [
         "AdminJumpBox01",
         "SBD-ADMIN-SRV01",
@@ -1554,7 +1554,7 @@
           "from": "SBD-ADMIN-PC01",
           "to": "SBD-DC01",
           "protocol": "MANAGEMENT · REMOTE ADMINISTRATION",
-          "description": "With an endpoint administrator’s stolen session on SBD-ADMIN-PC01, the attacker aims at SBD-DC01. That host manages user endpoints only. No rule lets it manage a domain controller, so default deny drops it.",
+          "description": "With an endpoint administrator’s stolen session on SBD-ADMIN-PC01, the attacker aims at SBD-DC01. That seat, a virtual machine on SBD-ADMIN-SRV01, manages user endpoints only. No rule lets it manage a domain controller, so default deny drops it.",
           "test": "An endpoint administrator cannot manage a DC, issuing CA, or member server."
         }
       ]

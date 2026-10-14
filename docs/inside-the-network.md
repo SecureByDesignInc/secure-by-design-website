@@ -79,3 +79,17 @@ Startup calls `architectureOverview()` instead of selecting a system. The scenar
 ## Layout and efficiency passes — October 7, 2026
 
 `model.html` wraps the tools in `.stage-toolbar` (with phone-only `#toolsMenu` and `#stageFullscreen`, and `#legendToggle` for the key). `app.js` adds `ladder()` (an SVG sequence diagram rendered at the top of the Flow details panel; rows jump to their step), `#stepSystems`, and `autoAdvance`/`stepComplete()` (stored under `sbd-inside-network-auto-advance`). `scene.js` renders on demand: a `dirty` flag (set by every API call, hover, and orbit change) plus `fading`/`labelsSettling` decide whether a frame is drawn; `renderer.shadowMap.autoUpdate` is off and `refreshShadows()` runs on fade, view, theme, and resize changes. `inspectPacket` moves the flow timeline to put a packet on the wire when none is visible, and `setDescription` updates the canvas label. `relationship-scene.js` stops its loop when the view has no traffic. `?qa` adds `insideNetworkQA.state()`.
+
+## Tier 2 seat as a virtual machine — October 13, 2026
+
+The owner asked for fewer machines. The three admin seats now run on two machines: SBD-ADMIN-PC01 is a virtual machine on the SBD-ADMIN-SRV01 seat. That is the arrangement V-243445 of the DISA Windows PAW STIG allows where workstations are scarce, with higher-tier accounts on the host and lower-tier accounts in the VM. AdminJumpBox01 stays dedicated and runs no virtual machines, because the PAW that manages the domain controllers is reserved for that work (V-243454).
+
+- **Placement.** `adminDesks` lists the two physical seats. `adminVMs` maps `jump2` to its host `jump1`, and `placements()` gives it `kind:'seatvm'` at the host's desk. `locationText` reads "Administration room · virtual machine on the SBD-ADMIN-SRV01 seat". The zone label reads "VLAN 60 · three seats, two desks".
+- **Drawing and packets.** `equipment.vmScreen` draws a second screen on the host desk with a VIRTUAL MACHINE plate. `scene.js` registers it as the system's object, so selection, outlines, and fading with the desk work as they do for a desk. Its label sits to the right of the screen, so the host's label and its own both show from a distance. In `drop()`, a seat VM's packets cross to the host desk and rise up its cable route (`adminTray`), because the VM's traffic leaves through the host's network adapter.
+- **Rules unchanged.** The VM keeps 10.0.60.30 and rule A03, so the register, the attack drill (step 6 starts at the VM) and the workstation firewall rules still name it alone. It cannot manage its host.
+- **Text.** The VLAN 60 boundary, both seats' descriptions, the reference dialog and the administration practice describe three seats on two machines. The practice has a host and guest boundary action (each seat with its own maintenance group) and a test that each seat refuses the other tiers. The startup panel in `app.js` says the same.
+- **Checks.** `check-network-architecture.mjs` asserts:
+  - exactly two physical seats;
+  - each seat VM runs on a higher-tier physical seat that is not the Tier 0 seat, sits in the administration room, and has a cable route;
+  - SBD-ADMIN-PC01 runs on SBD-ADMIN-SRV01 with its own address;
+  - the VM cannot manage its host.

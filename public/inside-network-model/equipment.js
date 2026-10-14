@@ -281,6 +281,14 @@ export function createEquipment(lights) {
     for(const t of tiles){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1.24,.98),new THREE.MeshBasicMaterial({map:tileTexture(t)}));mesh.position.set(t.x,-.15,2.515);parent.add(mesh);}
     cable(parent,[[2.65,-.3,-2.35],[3,-.5,-2.7],[3,-1.2,-2.7]],'#52788e');
   }
+  // A seat virtual machine: a second screen on its host seat's desk, showing the VM's own tile. World scale;
+  // the parent group sits on the desk and turns toward the chair.
+  function vmScreen(parent,tile){
+    box(parent,1.62,1.24,.1,0,4.3,0,black);
+    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1.5,1.12),new THREE.MeshBasicMaterial({map:tileTexture(tile)}));mesh.position.set(0,4.3,.056);parent.add(mesh);
+    box(parent,.12,.62,.12,0,3.42,-.05,metal);box(parent,.7,.06,.44,0,3.15,-.05,black);
+    plate(parent,'VIRTUAL MACHINE',1.2,0,5.03,.06,{height:.16,color:'#c7d6e2',background:'#131d26'});
+  }
   const tileTextures=new Map();
   function tileTexture({id,name,color,vlan}){
     const key=id+color;if(tileTextures.has(key))return tileTextures.get(key);
@@ -404,5 +412,5 @@ export function createEquipment(lights) {
     for(const [key,material] of Object.entries(themed)){if(!colors[key])continue;material.color.set(colors[key]);fadeClones.get(material)?.color.set(colors[key]);}
     for(const list of Object.values(floorMaterials))for(const material of list)material.color.set(colors.floor);
   }
-  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,building,trayRun,patchPanel,blanking,hypervisor,cabinet,idf,seated,standing,contact,contactShadows,batch,setFade,setDim,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
+  return {box,plate,cable,rack,server,networkSwitch,workstation,mediaCabinet,building,trayRun,patchPanel,blanking,hypervisor,vmScreen,cabinet,idf,seated,standing,contact,contactShadows,batch,setFade,setDim,setTheme,iconTexture,roleOf,materials:{metal,black,silver,rubber}};
 }

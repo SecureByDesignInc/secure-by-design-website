@@ -1,11 +1,11 @@
 SECURE BY DESIGN
 ADDRESSING AND TIERED ADMINISTRATION
 Windows Server · Windows client - DHCP, admin seats & where privilege may sign in
-Course 1.5 | Materials edition 1.4 | Updated 9 October 2026
+Course 1.5 | Materials edition 1.5 | Updated 13 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-tiered-admin-Workbook.pdf    Companion workbook, 17 pages
+SecureByDesign-tiered-admin-Workbook.pdf    Companion workbook, 18 pages
 SecureByDesign-tiered-admin-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                  Configuration and evidence checklist
 Verification-Commands.txt                   Each lesson's commands, ready to copy
