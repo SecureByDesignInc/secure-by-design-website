@@ -71,8 +71,8 @@ Notes / result / date: __________________________
 # On AdminJumpBox01 (Tier 0): who holds the LAPS rights on the Workstations OU
 Find-LapsADExtendedRights -Identity 'OU=Workstations,OU=SBD,DC=sbd,DC=test'
 # Inside SBD-ADMIN-PC01 (Tier 2)
-Get-LapsADPassword -Identity SBD-PC01 -AsPlainText
-Get-ADComputer SBD-PC01 -Properties msLAPS-PasswordExpirationTime | Select-Object Name, msLAPS-PasswordExpirationTime
+# The LAPS cmdlets read the directory over LDAP; the AD module's web service (TCP 9389) is open only to AdminJumpBox01
+Get-LapsADPassword -Identity SBD-PC01 -AsPlainText | Select-Object ComputerName, Account, ExpirationTimestamp
 # On the pilot
 gpresult /r /scope:computer
 ```
@@ -143,6 +143,7 @@ Notes / result / date: __________________________
 **Commands:**
 
 ```
+# On AdminJumpBox01 (Tier 0): the fleet's computer objects and its group
 (Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter *).Count   # 50, once SBD-TEST80 is retired
 (Get-ADGroupMember 'SBD Fleet Computers').Count   # 50
 # On SBD-DHCP01: authentication results in the last hour (6272 granted, 6273 denied).
