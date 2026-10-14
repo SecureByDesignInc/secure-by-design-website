@@ -45,3 +45,6 @@ next-env.d.ts
 .dev.vars
 .dev.vars.*
 public/build-info.json
+
+# Native app content feed, generated at build time by scripts/prepare-app-content.mjs
+/public/app/content/
