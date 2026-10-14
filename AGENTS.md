@@ -405,3 +405,33 @@ The owner asked for an indicator between every catalog tile so learners can see 
 - **Arrows.** Each learning path's grid is `CatalogSequenceGrid` (`app/videos/catalog-sequence.tsx`). It measures the tiles and draws, in an `aria-hidden` SVG layer, a circular chevron badge between each consecutive pair: across the column gap when the next tile is beside, down the row gap when it is below (phones, or after an expanded tile), and a dashed return path ending in a down badge when a row wraps. It re-measures on resize, tile changes and expansion, so it follows every column count, search results and the expanded tile. Tile sizes and the grid gap are unchanged. Screen readers get "Take these courses in order." in each path heading.
 - **Between paths.** When both paths are shown, a "Then continue to <path>" line with a down arrow sits above the second path's heading.
 - **Course 1.1 tags:** Windows Server, Active Directory, DNS.
+
+## Tier 2 admin seat as a virtual machine — October 13, 2026
+
+The owner asked for fewer machines and chose the arrangement the DISA Windows Privileged Access Workstation (PAW) STIG allows where workstations are scarce. This supersedes earlier notes and course text that describe three physical administration seats or hosts.
+
+- **Design: three seats on two machines.** AdminJumpBox01 (Tier 0, .10) and SBD-ADMIN-SRV01 (Tier 1, .20) are the physical seats in VLAN 60. SBD-ADMIN-PC01, the Tier 2 seat, is a Windows client (Enterprise or Education) virtual machine on SBD-ADMIN-SRV01 with its own name, address (10.0.60.30) and rule (A03). Tier 1 accounts sign in only on the host and Tier 2 accounts only inside the VM: that is V-243445's exception. AdminJumpBox01 runs no virtual machines and never gets the Hyper-V role, because the PAW that manages the domain controllers is reserved for that work (V-243454, which has no exception). Don't move the VM to AdminJumpBox01, give it the host's address, or add other VMs to the seat.
+- **Recorded STIG differences.** The design lesson puts these in the exception record:
+  - AdminJumpBox01 manages all of Tier 0, not only the domain controllers.
+  - Both physical seats run Windows Server, where the PAW STIG expects a Windows client (V-243447).
+  - Open PAW rules, such as smart-card sign-in (V-243457) and application allowlisting (V-243450, V-243451).
+  Don't describe the seats as fully STIG-compliant.
+- **Host and guest.** The VM is generation 2, with Secure Boot, a virtual TPM and Credential Guard, and starts with the host.
+  - Enhanced session mode, the Guest Service Interface and Key-Value Pair Exchange are off, and there are no shared folders. The remaining integration services and PowerShell Direct still let Hyper-V administrators manage the guest, so say "share no clipboard, drives, or folders", never "nothing crosses".
+  - Administrators who hold both Tier 1 and Tier 2 accounts open the console with their Tier 1 accounts, which are in the host's local Hyper-V Administrators group (V-243463 allows members there). They don't use Grant-VMConnectAccess, which isn't documented for this use.
+  - One person uses the console at a time and signs out first: a basic session hands an open desktop to the next person who connects.
+  - A Tier 2-only administrator needs a seat of their own.
+- **Seat GPOs.** Every seat has one, linked above the STIG GPO: one on Admin Workstations, and two on Admin Servers, each security-filtered to its seat.
+  - Each seat has its own maintenance group (SBD PAW Maintenance T0, T1, T2), the only domain group in its local Administrators, so no group spans tiers. Tier accounts hold user rights only (V-243456, V-243462).
+  - SBD-ADMIN-SRV01's adds NT VIRTUAL MACHINE\Virtual Machines (*S-1-5-83-0) to Create symbolic links, or the VM won't start.
+  - Lesson 4 replaces Allow log on locally with Administrators plus the seat's own groups (V-243452, V-243455); every Tier 0 account, Domain Admins and Enterprise Admins members included, is in the Tier 0 group. It adds the five denies for the other tiers (V-243453), with each deny list repeating the STIG entries, except that AdminJumpBox01 leaves Domain Admins and Enterprise Admins off Deny log on locally.
+  - The break-glass account is used at a domain controller's console. Every changed STIG value goes in the exception record.
+- **Course 1.5, materials edition 1.5.** Lesson IDs are unchanged, and new quizzes are appended after the existing ones.
+  - The lessons now take 190 minutes, about 3.2 hours.
+  - The workbook is 18 pages, with a page break before prove's "Your record". Lessons 1 and 3 end close to the bottom of their last pages, so recheck for blank pages after editing them.
+  - New sources: the Microsoft tier model, the DISA STIG library, Hyper-V integration services, VMConnect (local resources and the tool itself), Hyper-V security planning, Credential Guard, Hyper-V troubleshooting, and nested virtualization (checklist only). Lesson sources must stay on the origins `tests/video-catalog.test.mjs` allows.
+- **Inside the Network.** `data-center-layout.js` has two admin desks plus `adminVMs`.
+  - The VM is placed as `kind:'seatvm'` and drawn by `equipment.vmScreen` as a second screen, plated VIRTUAL MACHINE, on its host's desk. Its label sits to the right of the screen.
+  - Its packets cross to the host desk and rise up the host's cable route. Its inspector reads "Administration room · virtual machine on the SBD-ADMIN-SRV01 seat".
+  - The zone label reads "three seats, two desks".
+  - `check-network-architecture.mjs` asserts these rules. The text version, plan and traffic matrix are regenerated.

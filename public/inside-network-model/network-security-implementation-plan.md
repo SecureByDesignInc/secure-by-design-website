@@ -37,18 +37,20 @@ Assessment result: ____________________
 Owner role: Identity and platform owners
 Controls: AC-5, AC-6, IA-2(1), AU-12, AC-6(5)
 
-Three dedicated administration hosts use separate identities and target scopes. Tier 0 covers identity, PKI, and every system that can control them. No host has universal administrative reach.
+Three administration seats on two machines use separate identities and target scopes: the endpoint seat runs as a virtual machine on the server seat, the arrangement the Defense Information Systems Agency (DISA) Windows Privileged Access Workstation (PAW) Security Technical Implementation Guide (STIG) allows where workstations are scarce. Tier 0 covers identity, PKI, and every system that can control them, and its seat runs no virtual machines. No host has universal administrative reach.
 
-- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01 handles clients.
+- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01, a virtual machine on the ADMIN-SRV01 seat, handles clients.
 - [ ] Require offline-compatible MFA and separate everyday and privileged accounts. Prohibit ordinary browsing, email, and general file use on administrative hosts.
 - [ ] Deny cross-tier sessions with host and routed controls. Within the server tier, separate scanner, endpoint-policy, SIEM, and audit-custodian permissions.
 - [ ] Manage unique local credentials, service-account scope, emergency access, session logs, and account removal.
+- [ ] Keep the seat virtual machine’s boundary: Tier 1 accounts sign in only on the ADMIN-SRV01 host and Tier 2 accounts only in the ADMIN-PC01 virtual machine, with no shared clipboard, drives, folders, files, or key-value data between them. Each seat has its own maintenance group; tier accounts only use the seats. AdminJumpBox01 never hosts a virtual machine.
 
 ### Acceptance checks
 
 - [ ] An endpoint administrator cannot manage a DC, issuing CA, or member server.
 - [ ] A server operator cannot alter protected audit retention.
 - [ ] MFA failure blocks privileged access; emergency access is recorded and reviewed.
+- [ ] Each seat refuses the other tiers’ accounts: Tier 0 and Tier 2 on the ADMIN-SRV01 host, Tier 1 and Tier 2 on AdminJumpBox01, and Tier 0 and Tier 1 inside the ADMIN-PC01 virtual machine.
 - [ ] A server-tier operator cannot approve DC updates, change DC agent policy, or run credentialed scans against the domain controllers.
 
 Evidence: Privileged-access matrix and account review; MFA, session audit, and negative access tests.

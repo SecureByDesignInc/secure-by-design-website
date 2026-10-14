@@ -81,8 +81,7 @@ CLOSE_BLOCKS = ["Lesson completion", "Open items carried forward", "Next in the 
 # (course id, lesson id, heading) here for such a page, and drop entries a later content
 # edit no longer needs. Headings not listed get no forced break.
 BREAK_BEFORE = {
-    ("tiered-admin", "admin-hosts", "Your record"),
-    ("tiered-admin", "logon-restrictions", "Think it through"),
+    ("tiered-admin", "prove", "Your record"),
 }
 # Paragraph properties that come before w:pageBreakBefore in w:pPr (schema order).
 PPR_BEFORE_PAGE_BREAK = ("pStyle", "keepNext", "keepLines")

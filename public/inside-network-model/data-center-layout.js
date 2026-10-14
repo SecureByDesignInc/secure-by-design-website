@@ -60,7 +60,12 @@ export const deskScale = 2;
 export const officeDesks = [20, 29, 38].flatMap(z => [-22, -12, -2, 8].map(x => [x, z]));
 export const activeDesk = 6, peerDesk = 7;
 export const seatedDesks = [0, 2, 3, 5, 6, 7, 9, 10];
-export const adminDesks = {jump:[27, -18], jump1:[35, -18], jump2:[42, -18]};
+export const adminDesks = {jump:[27, -18], jump1:[35, -18]};
+// Seat virtual machines (owner decision, 13 October 2026). The Tier 2 seat runs as a VM on the Tier 1 seat:
+// DISA's Windows PAW STIG allows lower-tier admin accounts in a VM on a higher-tier workstation where
+// workstations are scarce, and never on the workstation that manages the domain controllers. The VM keeps its
+// own name and address, so the network still tells the tiers apart.
+export const adminVMs = {jump2:{host:'jump1', hostName:'SBD-ADMIN-SRV01'}};
 export const idfPosition = [17, 14.4];
 
 // Offline equipment: the media station in the media room; the root CA and backups in the vault.
@@ -72,18 +77,18 @@ export const trayHeight = 13.2;
 export const trayNodes = {
   cw:[-26, 8], csrv:[12, 8], cidf:[17, 8], cadm:[33, 8], ce:[40, 8],
   feed:[12, -15.5], a1:[-21, -15.5], a2:[-14, -15.5], a3:[0, -15.5], a4:[7, -15.5],
-  adm:[33, -15], adm0:[27, -15], adm1:[35, -15], adm2:[42, -15],
+  adm:[33, -15], adm0:[27, -15], adm1:[35, -15],
   spine:[17, 14.4], o1:[17, 20], o2:[17, 29], o3:[17, 38]
 };
 export const trayEdges = [
   ['cw','csrv'], ['csrv','cidf'], ['cidf','cadm'], ['cadm','ce'],
   ['csrv','feed'], ['feed','a4'], ['a4','a3'], ['a3','a2'], ['a2','a1'],
-  ['cadm','adm'], ['adm','adm0'], ['adm','adm1'], ['adm1','adm2'],
+  ['cadm','adm'], ['adm','adm0'], ['adm','adm1'],
   ['cidf','spine'], ['spine','o1'], ['o1','o2'], ['o2','o3']
 ];
 export const rackTray = {r01:'a1', r02:'a2', r03:'a3', r04:'a4'};
 export const deskRowTray = {20:'o1', 29:'o2', 38:'o3'};
-export const adminTray = {jump:'adm0', jump1:'adm1', jump2:'adm2'};
+export const adminTray = {jump:'adm0', jump1:'adm1', jump2:'adm1'};
 export const hubPoint = [-21, 9.3, -13.1];
 
 // Walking routes for carried media, through the doors. Each room lists the points from inside it to the corridor
@@ -101,13 +106,17 @@ export function placements() {
   for (const host of hosts) host.vms.forEach((id, slot) => out.set(id, {kind:'vm', host, slot, rack:rackOf(host.rack), zone:host.rack, room:'server'}));
   for (const a of appliances) out.set(a.id, {kind:'appliance', rack:rackOf(a.rack), y:a.y, zone:a.rack, room:'server'});
   for (const [id, [x, z]] of Object.entries(adminDesks)) out.set(id, {kind:'desk', x, z, zone:'admin', room:'admin'});
+  for (const [id, vm] of Object.entries(adminVMs)) {
+    const [x, z] = adminDesks[vm.host];
+    out.set(id, {kind:'seatvm', host:vm.host, hostName:vm.hostName, x, z, zone:'admin', room:'admin'});
+  }
   out.set('workstations', {kind:'office', zone:'office', room:'office'});
   out.set('root', {kind:'offline', x:offlinePosition[0], z:offlinePosition[1], zone:'vault', room:'vault'});
   return out;
 }
 export const zoneLabels = [
   ...racks.filter(r => r.label).map(r => ({id:r.id, title:`${r.code} · ${r.label}`, sub:r.sub, position:[r.x, 13.1, r.z]})),
-  {id:'admin', title:'Administration room', sub:'VLAN 60 · three admin seats', position:[34.5, 7.6, -18]},
+  {id:'admin', title:'Administration room', sub:'VLAN 60 · three seats, two desks', position:[34.5, 7.6, -18]},
   {id:'office', title:'Office', sub:'VLAN 80 · 50 workstations', position:[-7, 9.6, 29]}
 ];
 
@@ -118,6 +127,7 @@ export function locationText(id) {
   if (p.kind === 'vm') return `Virtual machine on ${p.host.name} · rack ${p.rack.code} · server room`;
   if (p.kind === 'appliance') return `Rack appliance · ${p.rack.code} · server room`;
   if (p.kind === 'desk') return 'Administration room · dedicated admin seat';
+  if (p.kind === 'seatvm') return `Administration room · virtual machine on the ${p.hostName} seat`;
   if (p.kind === 'office') return 'Office · user desks';
   return 'Offline vault · secure cabinet';
 }

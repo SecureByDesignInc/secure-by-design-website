@@ -672,10 +672,10 @@
     {
       "categoryOrder": 5,
       "number": "1.5",
-      "estimatedHours": 2.8,
+      "estimatedHours": 3.2,
       "title": "Addressing and tiered administration",
       "subtitle": "DHCP, admin seats & where privilege may sign in",
-      "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three dedicated administration systems in VLAN 60, and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
+      "description": "Build the control plane before the fleet: DHCP with its core relay for the workstation VLAN, three administration seats on two machines in VLAN 60 (the endpoint seat runs as a virtual machine on the server seat), and directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials.",
       "tags": [
         "Windows Server",
         "DHCP",
@@ -692,12 +692,12 @@
       ],
       "artLabels": [
         "DHCP + core relay",
-        "Three admin seats",
+        "Three seats, two machines",
         "Tier rules enforced"
       ],
       "outcomes": [
         "Serve the workstation VLAN through an authorized DHCP server and core relay.",
-        "Stand up single-purpose administration hosts for each tier in the Admin OU.",
+        "Stand up single-purpose administration seats for each tier in the Admin OU, with the endpoint seat a virtual machine on the server seat.",
         "Enforce and prove per-tier sign-in restrictions with captured denial evidence."
       ],
       "id": "tiered-admin",
@@ -717,7 +717,7 @@
         },
         {
           "title": "Build the administration systems",
-          "detail": "Privileged work gets dedicated, hardened seats: one jump host for Tier 0, one workstation for server administration, one for endpoint administration — each in the Admin OU, each doing nothing else."
+          "detail": "Privileged work gets dedicated, hardened seats: a Tier 0 jump host that runs no virtual machines, and a server-administration seat that also runs the endpoint seat as a virtual machine. Each seat sits in the Admin OU, does nothing but administer, and is maintained by its own group."
         },
         {
           "title": "Restrict where privilege can sign in",
@@ -735,13 +735,13 @@
       "training": {
         "guide": "/training/tiered-admin",
         "checklist": "/training/tiered-admin/configuration-checklist.md",
-        "materialsEdition": "1.4",
-        "updated": "9 October 2026",
+        "materialsEdition": "1.5",
+        "updated": "13 October 2026",
         "checklistPage": "/training/tiered-admin/checklist",
         "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
         "package": "/training/tiered-admin/SecureByDesign-tiered-admin-Learning-Package.zip",
-        "pages": 17,
+        "pages": 18,
         "cover": "/training/tiered-admin/workbook-cover.webp"
       },
       "outcomeSummary": "Addresses handed out on purpose, and privileged sessions that only ever start from the right seat.",
