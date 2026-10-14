@@ -1,0 +1,77 @@
+SECURE BY DESIGN - KEEP THE LIVING INVENTORY ON SBD-MGMT01
+Course 1.15 | Materials edition 1.0 | Updated 14 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Design the inventory and its keeper
+# On SBD-ADMIN-SRV01: start the course record with the inventory's columns
+New-Item -ItemType Directory -Force C:\Evidence\management-server | Out-Null
+'Name,Type,Role,OS,Domain,Address,VLAN,OU,Tier,Location,UpdateSource,Baseline,BuiltIn,Owner,Status' | Set-Content C:\Evidence\management-server\inventory-columns.csv
+# SBD-MGMT01 isn't registered yet; its neighbour on VLAN 70 is
+Resolve-DnsName SBD-MGMT01.sbd.test -ErrorAction SilentlyContinue   # expected: no answer
+Resolve-DnsName SBD-REPO01.sbd.test | Select-Object Name, IPAddress   # 10.0.70.20
+
+What success looks like: The boundary lists every component once, with the planned systems marked; the columns cover identity, place, tier, update source, baseline and an accountable owner; each discovery source is named with what it proves; and SBD-MGMT01's placement, administration and lack of any collection path are written down.
+
+2. Build and harden SBD-MGMT01
+# In a session on SBD-MGMT01 from SBD-ADMIN-SRV01
+([adsisearcher]"(&(objectCategory=computer)(name=$env:COMPUTERNAME))").FindOne().Path   # ...OU=Servers,OU=SBD,DC=sbd,DC=test
+w32tm /query /source   # a domain controller, never the local clock
+Get-ItemProperty HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate | Select-Object WUServer, TargetGroup   # Ring 3 - Member servers
+Get-NetFirewallRule -DisplayGroup 'Remote Desktop', 'Windows Remote Management' -Enabled True | Get-NetFirewallAddressFilter | Select-Object InstanceID, RemoteAddress   # 10.0.60.20 only
+New-Item -ItemType Directory -Force D:\Inventory | Out-Null
+icacls D:\Inventory /inheritance:r /grant:r 'SYSTEM:(OI)(CI)F' 'Administrators:(OI)(CI)F'
+'current', 'history', 'sources', 'findings' | ForEach-Object { New-Item -ItemType Directory -Force "D:\Inventory\$_" | Out-Null }
+icacls D:\Inventory
+# From SBD-ADMIN-PC01: the same management path must fail
+Test-NetConnection SBD-MGMT01.sbd.test -Port 5985   # expected: TcpTestSucceeded False
+
+What success looks like: SBD-MGMT01 sits in the Servers OU with the hypervisor's time synchronization off and time from a domain controller, reports to Ring 3 on SBD-WSUS01, forwards its security events, accepts management only from 10.0.60.20 and refuses SBD-ADMIN-PC01, runs no extra role or agent, and holds an Inventory folder that only SYSTEM and Administrators can open.
+
+3. Build the living inventory
+# In a session on SBD-MGMT01 from SBD-ADMIN-SRV01, once the record is filled in
+$inv = Import-Csv D:\Inventory\current\inventory.csv
+$inv | Group-Object Status | Select-Object Name, Count
+$inv | Group-Object Name | Where-Object Count -gt 1 | Select-Object Name   # expected: nothing counted twice
+$inv | Where-Object { $_.Status -eq 'active' -and (-not $_.Owner -or -not $_.UpdateSource -or -not $_.Location) } | Select-Object Name   # expected: nothing
+$stamp = Get-Date -Format yyyy-MM-dd
+Copy-Item D:\Inventory\current\inventory.csv "D:\Inventory\history\inventory-$stamp.csv"
+Get-FileHash -Algorithm SHA256 "D:\Inventory\history\inventory-$stamp.csv" | Export-Csv D:\Inventory\history\hashes.csv -Append -NoTypeInformation
+
+What success looks like: The inventory lists every component in the boundary exactly once with every column filled, planned systems are marked planned, the update-on-change rule and the monthly reconciliation are written with an owner and deputy, and the first version is in history with its hash.
+
+4. Feed it from what the network already knows
+# On SBD-ADMIN-SRV01 (Tier 1): one dated folder for this month's sources
+$d = "C:\Evidence\management-server\sources\$(Get-Date -Format yyyy-MM-dd)"; New-Item -ItemType Directory -Force "$d\repo01" | Out-Null
+$s = [adsisearcher]'(objectCategory=computer)'; $s.PageSize = 500
+$s.FindAll() | ForEach-Object { $p = $_.Properties; [pscustomobject]@{ Name = "$($p.name)"; OS = "$($p.operatingsystem)"; DN = "$($p.distinguishedname)"; LastLogon = if ("$($p.lastlogontimestamp)") { [datetime]::FromFileTime([long]"$($p.lastlogontimestamp)") } } } | Export-Csv "$d\directory.csv" -NoTypeInformation
+Invoke-Command SBD-DHCP01 { Get-DhcpServerv4Lease -ScopeId 10.0.80.0 -AllLeases | Select-Object IPAddress, ClientId, HostName, AddressState, LeaseExpiryTime } | Export-Csv "$d\dhcp-leases.csv" -NoTypeInformation
+Invoke-Command SBD-WSUS01 { Get-WsusComputer -All | Select-Object FullDomainName, IPAddress, LastSyncTime, LastReportedStatusTime, RequestedTargetGroupName } | Export-Csv "$d\wsus-computers.csv" -NoTypeInformation
+scp -r <your-account>@SBD-REPO01.sbd.test:/srv/repo-records/* "$d\repo01\"
+# On SBD-REPO01: who fetched packages (RHEL family; /var/log/apache2/access.log on Ubuntu)
+sudo awk '{print $1}' /var/log/httpd/access_log | sort | uniq -c
+# Back on SBD-ADMIN-SRV01: hash the set and file it on SBD-MGMT01
+Get-ChildItem $d -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv "$d-hashes.csv" -NoTypeInformation
+$m = New-PSSession SBD-MGMT01; Copy-Item $d, "$d-hashes.csv" -Destination D:\Inventory\sources\ -ToSession $m -Recurse
+
+What success looks like: Each source export exists for the same date with the columns lesson 5 needs, the hash list matches the files copied to SBD-MGMT01, every name reduces to one key, and a note says what each source can and can't prove.
+
+5. Reconcile the inventory and prove it
+# On SBD-MGMT01 (session from SBD-ADMIN-SRV01): the newest sources against the active record
+$src = (Get-ChildItem D:\Inventory\sources -Directory | Sort-Object Name | Select-Object -Last 1).FullName
+$short = { $args[0] -replace '\..*$' }
+$active = Import-Csv D:\Inventory\current\inventory.csv | Where-Object Status -eq 'active'
+$directory = (Import-Csv "$src\directory.csv").Name
+$leases = Import-Csv "$src\dhcp-leases.csv" | Where-Object HostName | ForEach-Object { & $short $_.HostName }
+$rings = Import-Csv "$src\wsus-computers.csv" | ForEach-Object { '{0}|{1}' -f (& $short $_.FullDomainName), $_.RequestedTargetGroupName }
+Compare-Object ($active | Where-Object Domain -eq 'sbd.test').Name $directory   # <= recorded only, => directory only
+Compare-Object ($active | Where-Object VLAN -eq '80').Name $leases
+Compare-Object ($active | Where-Object UpdateSource -like 'Ring*' | ForEach-Object { '{0}|{1}' -f $_.Name, $_.UpdateSource }) $rings
+# Prove it: with SBD-PC07's row left out of a test copy, SBD-PC07 must show as directory only
+Compare-Object ($active | Where-Object { $_.Domain -eq 'sbd.test' -and $_.Name -ne 'SBD-PC07' }).Name $directory
+
+What success looks like: Every difference between the record and the sources is listed and classified, the deliberate tests were caught, unrecorded components were reported to the system owner, SBD-MGMT01 has its first baseline, and the reconciled version is published with its hash and the next reconciliation date.
+
+© 2026 Secure By Design Team LLC

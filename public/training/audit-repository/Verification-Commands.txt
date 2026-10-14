@@ -1,0 +1,86 @@
+SECURE BY DESIGN - PROTECT THE RECORD ON SBD-AUDIT01
+Course 1.11 | Materials edition 1.0 | Updated 14 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Design the repository and build SBD-AUDIT01
+# On SBD-SYSLOG01 (Tier 1 session): one day of each stream, for sizing.
+wevtutil epl ForwardedEvents $env:TEMP\sizing.evtx "/q:*[System[TimeCreated[timediff(@SystemTime) <= 86400000]]]" /ow:true
+(Get-Item $env:TEMP\sizing.evtx).Length / 1MB
+(Get-ChildItem D:\Logs\Syslog -Recurse -File | Where-Object LastWriteTime -gt (Get-Date).AddDays(-1) | Measure-Object Length -Sum).Sum / 1MB
+# From AdminJumpBox01 (Tier 0): the KDS root key's effective time, and where SBD-AUDIT01 landed.
+Invoke-Command SBD-DC01 { Get-KdsRootKey | Select-Object KeyId, EffectiveTime }
+Get-ADGroup 'SBD Auditors' | Select-Object DistinguishedName
+Get-ADComputer SBD-AUDIT01 | Select-Object DistinguishedName
+# From SBD-ADMIN-SRV01 (custodian account): who administers SBD-AUDIT01.
+Invoke-Command SBD-AUDIT01 { Get-LocalGroupMember Administrators; w32tm /query /source }
+
+What success looks like: The rules, sizing, and identity table are written; the KDS root key exists with its effective time recorded; and SBD-AUDIT01 sits in the Audit Servers OU with SBD Audit Custodians in place of Domain Admins and management allowed from SBD-ADMIN-SRV01 alone, and its time comes from a domain controller.
+
+2. Archive, hash, and protect the record
+# On SBD-AUDIT01 (custodian session): the share, its encryption, its one writer, and a stream folder's permissions.
+Get-SmbShare -Name LogArchive | Select-Object Name, Path, EncryptData
+Get-SmbShareAccess -Name LogArchive
+Get-SmbServerConfiguration | Select-Object RejectUnencryptedAccess, EnableSMB1Protocol
+icacls D:\LogArchive\ForwardedEvents
+# On SBD-SYSLOG01 (Tier 1 session): the task's identity and its last result (0 = success).
+(Get-ScheduledTask -TaskName 'SBD Archive to AUDIT01').Principal | Select-Object UserId, LogonType
+Get-ScheduledTaskInfo -TaskName 'SBD Archive to AUDIT01' | Select-Object LastRunTime, LastTaskResult
+# Back on SBD-AUDIT01: who wrote the newest archives, and their catalog lines.
+Get-ChildItem D:\LogArchive\ForwardedEvents | Sort-Object Name | Select-Object -Last 2 Name, Length, @{n='Owner';e={(Get-Acl $_.FullName).Owner}}
+Import-Csv D:\LogArchive\Catalog\catalog.csv | Select-Object -Last 4
+
+What success looks like: Daily archives and their .sha256 files arrive owned by SBD-Archive$ on a share that requires encryption and refuses unencrypted access, every catalog line shows matching hashes, Get-SmbShareAccess lists the writer alone, and icacls shows delete rights for SYSTEM and SBD-Retention$ only.
+
+3. Verify the catalog and watch the repository
+# On SBD-AUDIT01 (custodian session): the latest verification's exceptions, and the result events.
+$report = Get-ChildItem D:\LogArchive\Catalog\verify-*.csv | Sort-Object Name | Select-Object -Last 1
+Import-Csv $report.FullName | Where-Object Result -ne 'OK'
+Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='SBD-Repository'; Id=1100,1101} -MaxEvents 3 | Select-Object TimeCreated, Id
+# The audit policy and the auditing entries on the repository.
+auditpol /get /subcategory:"File System"
+auditpol /get /subcategory:"Detailed File Share"
+(Get-Acl D:\LogArchive -Audit).Audit | Format-Table IdentityReference, FileSystemRights, AuditFlags
+# On SBD-SYSLOG01 (Tier 1 session): the repository's events arrive with their source name.
+Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4656,4663,1100,1101; StartTime=(Get-Date).AddDays(-1)} -MaxEvents 5 | Select-Object TimeCreated, Id, MachineName
+# From AdminJumpBox01 (Tier 0): the readers, and the computers allowed to act as the writer.
+Get-ADGroupMember 'SBD Auditors' | Select-Object Name, SamAccountName
+(Get-ADServiceAccount SBD-Archive -Properties PrincipalsAllowedToRetrieveManagedPassword).PrincipalsAllowedToRetrieveManagedPassword
+
+What success looks like: Today's report covers every archive and its event is 1100 (or an open 1101 is being handled as a finding), the audit policy and auditing entries are in place, the repository's events reach ForwardedEvents on the collector with MachineName SBD-AUDIT01, and the readers review is recorded.
+
+4. Run retention and prove retrieval
+# On SBD-AUDIT01 (custodian session): no trigger, so only a person starts a run.
+(Get-ScheduledTask -TaskName 'SBD Repository Retention').Triggers.Count   # expected 0
+(Get-ScheduledTask -TaskName 'SBD Repository Retention').Principal.UserId   # expected: the SBD-Retention$ account
+Get-FileHash D:\LogArchive\Retention\approved-test-list.txt   # the hash the approver recorded
+Start-ScheduledTask -TaskName 'SBD Repository Retention'
+Import-Csv D:\LogArchive\Retention\retention-log.csv | Select-Object -Last 5
+# Retrieval: the oldest archive's hash against its catalog line, then the events inside.
+$file = Get-ChildItem D:\LogArchive\ForwardedEvents\*.evtx | Sort-Object Name | Select-Object -First 1
+(Import-Csv D:\LogArchive\Catalog\catalog.csv | Where-Object File -eq $file.Name).SHA256 -eq (Get-FileHash $file.FullName).Hash
+Get-WinEvent -Path $file.FullName -MaxEvents 5 | Select-Object TimeCreated, Id, MachineName
+
+What success looks like: The retention task has no trigger and runs as SBD-Retention$, the approved test run refused the young archive and logged the refusal with the list's hash, and the retrieved archive's hash matches its catalog line and its events read correctly.
+
+5. Prove the record survives and hand off
+# Custodian session on SBD-AUDIT01: try to delete the newest archive (expected: access denied).
+$newest = Get-ChildItem D:\LogArchive\ForwardedEvents\*.evtx | Sort-Object Name | Select-Object -Last 1
+Remove-Item $newest.FullName
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4656; StartTime=(Get-Date).AddMinutes(-15)} | Where-Object KeywordsDisplayNames -contains 'Audit Failure' | Select-Object -First 3 TimeCreated, Id
+# On SBD-SYSLOG01 (Tier 1 session): the same refusal, forwarded.
+Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4656; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName
+# Back on SBD-AUDIT01: a tampered copy fails the catalog check while the record passes.
+New-Item -ItemType Directory D:\Retrieval\tamper-test -Force | Out-Null
+Copy-Item $newest.FullName D:\Retrieval\tamper-test\
+Add-Content "D:\Retrieval\tamper-test\$($newest.Name)" -Value 'x' -NoNewline
+$expected = (Import-Csv D:\LogArchive\Catalog\catalog.csv | Where-Object File -eq $newest.Name).SHA256
+(Get-FileHash "D:\Retrieval\tamper-test\$($newest.Name)").Hash -eq $expected   # expected False
+(Get-FileHash $newest.FullName).Hash -eq $expected   # expected True
+Get-FileHash -Algorithm SHA256 C:\Evidence\audit-repository\*
+
+What success looks like: The delete failed and appears as event 4656 on SBD-AUDIT01 and in ForwardedEvents on the collector, the tampered copy fails verification while the record passes, SBD-AUDIT01 has its first baseline, and the handoff names what course 1.12 inherits.
+
+© 2026 Secure By Design Team LLC

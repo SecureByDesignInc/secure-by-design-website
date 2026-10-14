@@ -82,6 +82,10 @@ CLOSE_BLOCKS = ["Lesson completion", "Open items carried forward", "Next in the 
 # edit no longer needs. Headings not listed get no forced break.
 BREAK_BEFORE = {
     ("tiered-admin", "prove", "Your record"),
+    ("domain-time", "time-plan", "Think it through"),
+    ("patch-protect", "wsus-offline", "Think it through"),
+    ("linux-repository", "repo", "Think it through"),
+    ("prove-recovery", "directory", "Your record"),
 }
 # Paragraph properties that come before w:pageBreakBefore in w:pPr (schema order).
 PPR_BEFORE_PAGE_BREAK = ("pStyle", "keepNext", "keepLines")

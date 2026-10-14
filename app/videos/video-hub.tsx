@@ -9,6 +9,7 @@ import {
   BookOpen,
   Check,
   ChevronUp,
+  Clock,
   Network,
   Search,
   SlidersHorizontal,
@@ -29,7 +30,7 @@ import {
   supportsIdentityScene,
 } from './video-utils';
 
-// Large enough that both paths (1.1–1.10 and 2.1–2.3) show without "Show more".
+// Large enough that both paths (1.1–1.19 and 2.1–2.3) show without "Show more".
 const PAGE_SIZE = 24;
 
 function EpisodeTile({
@@ -43,6 +44,8 @@ function EpisodeTile({
 }) {
   const opener = useRef<HTMLButtonElement>(null);
   const course = isTrainingCourse(episode);
+  // Coming-soon tiles hold their place in the path but have no material yet: no cover, no download, no opening.
+  const comingSoon = course && episode.kind === 'coming-soon';
   const available = !course && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
   const close = () => {
     onToggle();
@@ -102,11 +105,11 @@ function EpisodeTile({
           <div className="vc-tile-art-bottom">
             <span>
               {course ? <BookOpen size={13} /> : <Network size={13} />}
-              {course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
+              {comingSoon ? 'IN PREPARATION' : course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
@@ -126,7 +129,10 @@ function EpisodeTile({
               ))}
             </div>
           </div>
-          <div className="vc-tile-actions">
+          {comingSoon ? <div className="vc-tile-actions vc-tile-soon">
+            <p className="vc-tile-soon-badge"><Clock size={15} aria-hidden="true" />Coming soon</p>
+            <p className="vc-tile-included">Training materials are in preparation.</p>
+          </div> : <div className="vc-tile-actions">
             <div className="vc-tile-status">
               <span>
                 <Check size={13} />
@@ -155,7 +161,7 @@ function EpisodeTile({
               <BookOpen size={12} />
               Interactive guide<span>·</span>One download
             </p>
-          </div>
+          </div>}
         </div>
       </div>
       <div id={`episode-content-${episode.id}`} hidden={!expanded}>

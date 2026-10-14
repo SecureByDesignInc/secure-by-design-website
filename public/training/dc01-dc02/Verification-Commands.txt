@@ -1,5 +1,5 @@
 SECURE BY DESIGN - PROMOTE PRIMARY & SECONDARY DOMAIN CONTROLLER
-Course 1.1 | Materials edition 0.6 | Updated 9 October 2026
+Course 1.1 | Materials edition 0.7 | Updated 14 October 2026
 Sample: sbd.test; SBD-DC01 10.0.10.10 and SBD-DC02 10.0.10.11 on VLAN 10, gateway 10.0.10.1
 Read-only checks. Run them on the controllers (later, from the Tier 0 administration host)
 with the Windows Server tools and access they need. Review every result; nothing in this

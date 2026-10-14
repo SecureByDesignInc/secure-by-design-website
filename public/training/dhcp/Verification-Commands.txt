@@ -1,0 +1,105 @@
+SECURE BY DESIGN - RUN DHCP ON SBD-DHCP01
+Course 1.7 | Materials edition 1.0 | Updated 14 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Design the addressing service
+# At SBD-DC01's console (Tier 0): the values and identities the design names
+Resolve-DnsName SBD-DC01.sbd.test -Server 10.0.10.11; Resolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10
+Get-ADOrganizationalUnit -Identity 'OU=Servers,OU=SBD,DC=sbd,DC=test' | Select-Object Name, DistinguishedName
+Get-ADGroupMember 'Enterprise Admins' | Select-Object Name   # who can authorize a DHCP server
+Get-ADGroupMember DnsUpdateProxy   # expected: no members
+Get-DnsServerZone -ComputerName SBD-DC01 | Select-Object ZoneName, IsDsIntegrated, DynamicUpdate, ReplicationScope
+
+What success looks like: The design records VLAN 80 as the only leased segment, the full-subnet scope with its two exclusion ranges and no reservations, the lease length with its reason, the three options, who holds each of the three identities, and the network's confirmation that the core relays VLAN 80 to 10.0.20.10 under F04.
+
+2. Build SBD-DHCP01 and its scope
+# At SBD-DC01's console (Tier 0): the group and its one delegation; then create each person's named
+# server-administration account in the Admin OU and add it to the group (New-ADUser, Add-ADGroupMember)
+New-ADGroup 'SBD Tier 1 Admins' -GroupScope Global -Path 'OU=Admin,OU=SBD,DC=sbd,DC=test'
+dsacls 'OU=Servers,OU=SBD,DC=sbd,DC=test' /G 'SBD\SBD Tier 1 Admins:CC;computer'
+# On SBD-DHCP01 as its local Administrator: join with a server-administration account, then, after the restart:
+Add-Computer -DomainName sbd.test -OUPath 'OU=Servers,OU=SBD,DC=sbd,DC=test' -Credential (Get-Credential) -Restart
+Add-LocalGroupMember Administrators -Member 'SBD\SBD Tier 1 Admins'; Remove-LocalGroupMember Administrators -Member 'SBD\Domain Admins'
+# As a server-administration account: the role and its local groups
+Install-WindowsFeature DHCP -IncludeManagementTools; Add-DhcpServerSecurityGroup; Restart-Service DHCPServer
+# At SBD-DC01's console, as an Enterprise Admins member: authorize
+Install-WindowsFeature RSAT-DHCP; Add-DhcpServerInDC -DnsName SBD-DHCP01.sbd.test -IPAddress 10.0.20.10
+# Back on SBD-DHCP01: the authorization check, then the scope, inactive until it is complete
+Restart-Service DHCPServer; Get-DhcpServerInDC
+Get-WinEvent -FilterHashtable @{ProviderName='Microsoft-Windows-DHCP-Server'; Id=1044} -MaxEvents 1
+Add-DhcpServerv4Scope -Name 'VLAN 80 workstations' -StartRange 10.0.80.1 -EndRange 10.0.80.254 -SubnetMask 255.255.255.0 -LeaseDuration 8.00:00:00 -State InActive
+Add-DhcpServerv4ExclusionRange -ScopeId 10.0.80.0 -StartRange 10.0.80.1 -EndRange 10.0.80.99
+Add-DhcpServerv4ExclusionRange -ScopeId 10.0.80.0 -StartRange 10.0.80.200 -EndRange 10.0.80.254
+Set-DhcpServerv4OptionValue -ScopeId 10.0.80.0 -Router 10.0.80.1 -DnsServer 10.0.10.10, 10.0.10.11 -DnsDomain sbd.test
+Set-DhcpServerv4DnsSetting -DynamicUpdates Never   # lesson 3 turns registration on
+Set-DhcpServerv4Scope -ScopeId 10.0.80.0 -State Active
+Get-DhcpServerv4Lease -ScopeId 10.0.80.0   # after SBD-TEST80 runs ipconfig /release and ipconfig /renew
+w32tm /query /source   # a domain controller, as course 1.3 designed
+
+What success looks like: Get-DhcpServerInDC lists SBD-DHCP01 at 10.0.20.10 and event 1044 shows it servicing clients; the scope covers 10.0.80.1–254 with exclusions .1–.99 and .200–.254, an 8-day lease, and the three options; DNS updates are off; SBD Tier 1 Admins is the only domain group in its local Administrators; its time comes from a domain controller; and the test client's first lease came from 10.0.20.10 through the relay.
+
+3. Register client names securely
+# At SBD-DC01's console (Tier 0): the reverse zone (course 1.2's replication scope), the update account, an empty proxy group
+Add-DnsServerPrimaryZone -NetworkId '10.0.80.0/24' -ReplicationScope Domain -DynamicUpdate Secure
+New-ADUser svc-dhcp-dns -Path 'OU=Admin,OU=SBD,DC=sbd,DC=test' -AccountPassword (Read-Host -AsSecureString) -PasswordNeverExpires $true -Enabled $true
+Get-ADGroupMember DnsUpdateProxy   # expected: no members
+# On SBD-DHCP01: the credential, then registration for every client, with name protection
+Set-DhcpServerDnsCredential -Credential (Get-Credential 'SBD\svc-dhcp-dns')
+Set-DhcpServerv4DnsSetting -DynamicUpdates Always -UpdateDnsRRForOlderClients $true -DeleteDnsRROnLeaseExpiry $true -NameProtection $true
+Get-DhcpServerDnsCredential; Get-DhcpServerv4DnsSetting
+# On SBD-TEST80: renew, then ask both controllers for the name, the address, and the DHCID record
+ipconfig /renew
+Resolve-DnsName SBD-TEST80.sbd.test -Server 10.0.10.11
+Resolve-DnsName (Resolve-DnsName SBD-TEST80.sbd.test -Type A -Server 10.0.10.10).IPAddress -Type PTR -Server 10.0.10.10
+Resolve-DnsName SBD-TEST80.sbd.test -Type DHCID -Server 10.0.10.10
+# At SBD-DC01's console: the record's owner (sbd.test lives in DomainDnsZones in this sample)
+Import-Module ActiveDirectory
+(Get-Acl 'AD:DC=SBD-TEST80,DC=sbd.test,CN=MicrosoftDNS,DC=DomainDnsZones,DC=sbd,DC=test').Owner   # SBD\svc-dhcp-dns
+
+What success looks like: The 10.0.80 reverse zone exists with secure updates; svc-dhcp-dns is in Domain Users only and DnsUpdateProxy is empty; Get-DhcpServerDnsCredential names svc-dhcp-dns; the server registers A and PTR records for every client with name protection and cleanup on; and the test client's A, PTR, and DHCID records answer from both controllers, owned by SBD\svc-dhcp-dns.
+
+4. Audit leases and back up the server
+Get-DhcpServerAuditLog   # Enable: True; Path: C:\Windows\system32\dhcp
+$dir = Join-Path $env:windir 'System32\dhcp'
+Get-Content (Join-Path $dir ('DhcpSrvLog-{0}.log' -f (Get-Date).ToString('ddd', [cultureinfo]'en-US'))) -Tail 5
+# The daily task's work (SYSTEM, 00:15): yesterday's file kept under its date, with its hash
+New-Item -ItemType Directory D:\DHCP\AuditArchive -Force | Out-Null
+$y = (Get-Date).AddDays(-1); $copy = 'D:\DHCP\AuditArchive\DhcpSrvLog-{0:yyyy-MM-dd}.log' -f $y
+Copy-Item (Join-Path $dir ('DhcpSrvLog-{0}.log' -f $y.ToString('ddd', [cultureinfo]'en-US'))) $copy
+Get-FileHash $copy -Algorithm SHA256 | Export-Csv D:\DHCP\AuditArchive\catalog.csv -Append -NoTypeInformation
+# Weekly review: pool use, who holds leases, who may serve
+Get-DhcpServerv4ScopeStatistics -ScopeId 10.0.80.0 | Select-Object ScopeId, InUse, Free, PercentageInUse
+Get-DhcpServerv4Lease -ScopeId 10.0.80.0 | Select-Object IPAddress, HostName, ClientId, AddressState, LeaseExpiryTime
+Get-DhcpServerInDC   # SBD-DHCP01 alone
+# Backups: the database and a readable export, hashed on the second volume
+$b = 'D:\Backups\DHCP\{0:yyyy-MM-dd}' -f (Get-Date); New-Item -ItemType Directory $b -Force | Out-Null
+Backup-DhcpServer -Path (Join-Path $dir 'backup'); Copy-Item (Join-Path $dir 'backup') (Join-Path $b 'database') -Recurse
+Export-DhcpServer -File (Join-Path $b 'SBD-DHCP01.xml') -Leases
+Get-ChildItem $b -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv ('{0}-hashes.csv' -f $b) -NoTypeInformation
+
+What success looks like: Audit logging is on with free space to spare; yesterday's file sits in the archive under its date, with its hash in the catalog; the lease list holds only known machines; Get-DhcpServerInDC lists SBD-DHCP01 alone; and a dated database backup and XML export sit in D:\Backups\DHCP with their hashes.
+
+5. Prove the service and hand off
+# On SBD-TEST80: release, renew, and read what the client believes
+ipconfig /release; ipconfig /renew; ipconfig /all
+# On SBD-DHCP01: the lease, then, after the MAC change, the refused takeover
+Get-DhcpServerv4Lease -ScopeId 10.0.80.0 | Select-Object IPAddress, HostName, ClientId, LeaseExpiryTime
+Get-WinEvent -FilterHashtable @{ProviderName='Microsoft-Windows-DHCP-Server'; Id=1340} -MaxEvents 1 | Format-List TimeCreated, Message
+Resolve-DnsName SBD-TEST80.sbd.test -Server 10.0.10.10   # still the original address
+Remove-DhcpServerv4Lease -IPAddress '<stray lease address>'   # after the original MAC is back
+# Before installing SCC: no output means every copied file is on the connected-side list
+(Get-ChildItem C:\Staging\DISA\* -File -Exclude *.csv | Get-FileHash -Algorithm SHA256).Hash | Where-Object { $_ -notin (Import-Csv C:\Staging\DISA\connected-side-hashes.csv).Hash }
+# After the SCC scan: keep the session unmodified (adapt the path to SCC's results directory), then seal the folder
+$session = Get-ChildItem (Join-Path $env:USERPROFILE 'SCC\Sessions') -Directory | Sort-Object Name | Select-Object -Last 1
+New-Item -ItemType Directory C:\Evidence\dhcp\baseline -Force | Out-Null
+Copy-Item $session.FullName -Destination C:\Evidence\dhcp\baseline\SBD-DHCP01 -Recurse
+Get-ChildItem C:\Evidence\dhcp -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\dhcp-manifest.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\dhcp-manifest.csv
+# Run the same two lines at SBD-DC01's console for the Tier 0 half, its own C:\Evidence\dhcp
+
+What success looks like: The test client holds a lease from the pool with every planned option; its A, PTR, and DHCID records answer from both controllers and belong to SBD\svc-dhcp-dns; the takeover attempt was refused with event 1340 and left the record unchanged; SBD-DHCP01 has a first baseline with every open item classified; and both manifests and the handoff are filed.
+
+© 2026 Secure By Design Team LLC

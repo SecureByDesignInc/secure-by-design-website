@@ -1,49 +1,62 @@
-SECURE BY DESIGN - SEE EVERYTHING: THE LOGGING PIPELINE
-Course 1.6 | Materials edition 1.4 | Updated 9 October 2026
+SECURE BY DESIGN - COLLECT THE RECORD ON SBD-SYSLOG01
+Course 1.10 | Materials edition 2.0 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
 the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
 
 1. Design collect, protect, analyze
-# Capture the before state: what the DCs currently audit and where nothing is forwarded yet.
-auditpol /get /category:* | Select-String 'Logon|Account Management|Directory Service|Policy Change'
-Get-Service Wecsvc -ComputerName SBD-SYSLOG01
+# From AdminJumpBox01 (Tier 0): what the DCs audit today.
+Invoke-Command SBD-DC01, SBD-DC02 { auditpol /get /category:* /r } | Out-File C:\Evidence\logging-pipeline\DCs-auditpol-before.csv
+# From SBD-ADMIN-SRV01 (Tier 1): no collector runs yet.
+Invoke-Command SBD-SYSLOG01 { Get-Service Wecsvc | Select-Object Status, StartType }
 
-What success looks like: The design names each stage's job, scope, retention, and readers; the repository's no-delete rule is written; and the register carries the three pipeline paths with owners.
+What success looks like: The design names each stage's job, building course, scope, retention, and readers; the no-delete rule is written; the two streams and their pickup folders are named; and the register carries the five pipeline paths with owners.
 
 2. Turn on the right auditing
-auditpol /get /subcategory:'Logon','User Account Management','Directory Service Changes','Audit Policy Change'
-gpresult /r /scope:computer
+# From AdminJumpBox01 (Tier 0): effective audit policy and the policy result on a DC.
+Invoke-Command SBD-DC01 { auditpol /get /category:* /r } | Out-File C:\Evidence\logging-pipeline\SBD-DC01-auditpol.csv
+Invoke-Command SBD-DC01 { auditpol /get /subcategory:"Directory Service Changes,Security State Change" }
+gpresult /s SBD-DC01 /scope computer /h C:\Evidence\logging-pipeline\SBD-DC01-gpresult.html
 
-What success looks like: Effective audit policy on the DCs and admin hosts covers the designed categories at or above the STIG values, applied through GPO, with any additions documented.
+What success looks like: Effective audit policy on the DCs and admin hosts covers the designed subcategories at or above the STIG values, applied through GPO, with every addition documented.
 
 3. Build the collector
+# On SBD-SYSLOG01 (Tier 1 session from SBD-ADMIN-SRV01): the subscription, the first events, and the listeners.
 wecutil es
 wecutil gs SBD-ForwardedSecurity
-Get-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, Id, MachineName
+Get-WinEvent -LogName ForwardedEvents -MaxEvents 20 | Select-Object TimeCreated, Id, MachineName
+Get-NetUDPEndpoint -LocalPort 514
+Get-NetTCPConnection -LocalPort 6514,5985 -State Listen
+# On each source, from its tier's seat: Network Service is in Event Log Readers, and the forwarder connected (events 104 and 100).
+net localgroup "Event Log Readers"
+Get-WinEvent -LogName 'Microsoft-Windows-Forwarding/Operational' -MaxEvents 5 | Select-Object TimeCreated, Id, Message
 
-What success looks like: The subscription is active, events from both DCs and the admin hosts appear in Forwarded Events with correct source machine names, and router deny entries arrive on the syslog intake.
+What success looks like: The subscription is enabled, events from every member of SBD Event Sources — Security and Time-Service — appear in ForwardedEvents with correct source machine names, router deny entries arrive in the syslog files, and only the registered ports listen.
 
-4. Protect the record on SBD-AUDIT01
-Get-ChildItem \\SBD-AUDIT01\LogArchive | Select-Object Name, Length, LastWriteTime -First 5
-Get-FileHash -Algorithm SHA256 \\SBD-AUDIT01\LogArchive\*.evtx | Select-Object -First 3
-icacls \\SBD-AUDIT01\LogArchive
+4. Keep the collector trustworthy
+wecutil gr SBD-ForwardedSecurity
+wevtutil sl ForwardedEvents /ms:4294967296 /rt:false
+wevtutil gl ForwardedEvents
+Get-WinEvent -LogName ForwardedEvents -Oldest -MaxEvents 1 | Select-Object TimeCreated
+Get-Volume -DriveLetter D | Select-Object SizeRemaining, Size
+Get-ChildItem D:\Logs\Syslog -Recurse -File | Sort-Object LastWriteTime -Descending | Select-Object -First 5 FullName, LastWriteTime
 
-What success looks like: Dated archives arrive on schedule with catalog hashes that verify, the permission listing matches the access model exactly, and the AU table reflects reality.
+What success looks like: Every enrolled source is active with a recent heartbeat, ForwardedEvents overwrites oldest-first and holds more than 14 days, the data volume has headroom, every registered syslog sender wrote today, and the failure response names its owner.
 
-5. Analyze in SBD-SPLUNK01
-Test-NetConnection SBD-SPLUNK01.sbd.test -Port 9997
-# In the analysis console, confirm the three saved searches return today's events
-Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625} -MaxEvents 3 | Select-Object TimeCreated, MachineName
-
-What success looks like: Both streams index with correct timestamps, the three searches return real current events, and the alert fires in a test with its responder and first step documented.
-
-6. Prove the chain and delta scan
+5. Prove collection and hand off
+# On SBD-SYSLOG01 (Tier 1 session): the failed sign-in, and the router's deny of the probe to SBD-DHCP01.
 Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName
-Get-ChildItem C:\Evidence\logging-pipeline -Recurse | Select-Object Name, LastWriteTime
+Select-String -Path D:\Logs\Syslog\*\*.log -Pattern '10\.0\.20\.10' | Select-Object -Last 3
+# On SBD-REPO01: check the configuration and the TLS session, then send the test message.
+rsyslogd -N1
+ss -tn 'dport = :6514'
+logger -t sbd-collector-proof 'SBD-REPO01 syslog over TLS test'
+# Back on SBD-SYSLOG01: the test message in REPO01's daily file.
+Select-String -Path D:\Logs\Syslog\*\*.log -Pattern 'sbd-collector-proof' | Select-Object -First 3
+# On SBD-ADMIN-SRV01: this course's evidence, hashed.
 Get-FileHash -Algorithm SHA256 C:\Evidence\logging-pipeline\*
 
-What success looks like: The test event appears at every stage with consistent timestamps, the deny trace matches, the new hosts have baselines, and the DC rescan deltas are attributed to the audit policy.
+What success looks like: The failed sign-in, the router deny, and REPO01's test message each appear on the collector with the right source and a time that matches the source; SBD-SYSLOG01 has its first baseline; and the DC rescan deltas are attributed to the audit policy.
 
 © 2026 Secure By Design Team LLC

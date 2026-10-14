@@ -39,6 +39,7 @@ export type Episode = {
 export type TrainingCourse = {
   categoryId?: string;
   categoryOrder?: number;
+  /** 'configuration', 'authorization', or 'coming-soon' (a placeholder tile with no material yet). */
   kind?: string;
   artLabels?: string[];
   id: string;

@@ -1,11 +1,11 @@
 SECURE BY DESIGN
 CONFIGURE THE TWO-TIER PKI
 Windows Server - Offline root, issuing CA, pki.sbd.test publication & templates
-Course 1.4 | Materials edition 2.1 | Updated 9 October 2026
+Course 1.6 | Materials edition 2.2 | Updated 14 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-two-tier-pki-Workbook.pdf    Companion workbook, 24 pages
+SecureByDesign-two-tier-pki-Workbook.pdf    Companion workbook, 25 pages
 SecureByDesign-two-tier-pki-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                  Configuration and evidence checklist
 Verification-Commands.txt                   Each lesson's commands, ready to copy

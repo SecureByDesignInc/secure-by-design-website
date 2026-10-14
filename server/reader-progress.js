@@ -2,6 +2,7 @@ import {progressCatalog,validProfile} from '../content/progress-catalog.js';
 import {getReader,readAuthBody} from './reader-auth.js';
 import {bookmarkCatalog} from '../content/bookmark-catalog.js';
 import {readerCommunityMembership} from './community-membership.js';
+import moves from '../content/progress-moves.json' with {type:'json'};
 const bookmarkIds=new Set(bookmarkCatalog.map(item=>item.id));
 const ids=new Set(progressCatalog.map(item=>item.id));
 const reply=(data,status=200)=>Response.json(data,{status,headers:{'cache-control':'private, no-store','vary':'Cookie','x-content-type-options':'nosniff'}});
@@ -36,6 +37,7 @@ export async function readerProgressApi(request,env){
    await env.DB.prepare('INSERT INTO reader_profiles (user_id,profile,updated_at) VALUES (?,?,?) ON CONFLICT(user_id) DO UPDATE SET profile=excluded.profile,updated_at=excluded.updated_at').bind(userId,JSON.stringify(data),now).run();
   }else{
    let id;try{id=decodeURIComponent(route.slice('/api/reader-progress/'.length))}catch{return reply({error:'Unknown reading item.'},400)}
+   id=moves.moved[id]??id; // a guide page cached before the October 2026 restructure
    if(!ids.has(id)||!data||Object.keys(data).length!==1||!['in_progress','completed'].includes(data.status))return reply({error:'Choose a valid reading item and status.'},400);
    await env.DB.prepare('INSERT INTO reader_progress (user_id,item_id,status,updated_at) VALUES (?,?,?,?) ON CONFLICT(user_id,item_id) DO UPDATE SET status=excluded.status,updated_at=excluded.updated_at').bind(userId,id,data.status,now).run();
   }

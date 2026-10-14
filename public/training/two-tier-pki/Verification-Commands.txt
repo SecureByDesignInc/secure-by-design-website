@@ -1,5 +1,5 @@
 SECURE BY DESIGN - CONFIGURE THE TWO-TIER PKI
-Course 1.4 | Materials edition 2.1 | Updated 9 October 2026
+Course 1.6 | Materials edition 2.2 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
@@ -16,15 +16,17 @@ What success looks like: The written plan separates trust, issuance, publication
 2. Configure the offline Root CA
 # Inspect locally on SBD-ROOTCA01 during the approved root session.
 Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain
+Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff K'   # read against the approved reference; log both readings
 Get-Service CertSvc
 certutil -getreg CA\CRLPublicationURLs
 certutil -getreg CA\CACertPublicationURLs
 certutil -getreg CA\ValidityPeriodUnits
 certutil -getreg CA\CRLPeriodUnits
 
-What success looks like: The host remains disconnected, the CA is standalone/root, requests require approval, and the planned subordinate URLs and 10-year subordinate validity are configured before signing.
+What success looks like: The host remains disconnected, its clock matches the approved reference, the CA is standalone/root, requests require approval, and the planned subordinate URLs and 10-year subordinate validity are configured before signing.
 
 3. Create the issuing CA request
+w32tm /query /source   # a domain controller, never Local CMOS Clock or a hypervisor provider
 # Use the actual request path chosen in the wizard.
 certutil -dump C:\CAConfig\IssuingCA.req
 Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.req
@@ -32,14 +34,19 @@ Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.req
 What success looks like: The request matches the approved issuing identity and key profile. The CA is waiting for its signed certificate; do not troubleshoot that expected state by installing another CA.
 
 4. Sign through the offline ceremony
+# On SBD-ROOTCA01, first: read this against the approved reference and log both readings
+Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff K'
 # Inspect public artifacts; use your actual approved paths.
 certutil -dump C:\CAConfig\IssuingCA.cer
 certutil -dump C:\CAConfig\RootCA.crl
 Get-FileHash -Algorithm SHA256 C:\CAConfig\IssuingCA.cer, C:\CAConfig\RootCA.cer, C:\CAConfig\RootCA.crl
 
-What success looks like: Artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.
+What success looks like: The root's clock matched the approved reference, and artifact identities, signatures, validity, and custody checks pass. The root remains offline; a field dump alone is not end-to-end trust validation.
 
 5. Activate the issuing CA and distribute trust
+# Before installing the signed certificate: the ceremony's root certificate and CRL, into the local stores
+certutil -addstore -f Root C:\CAConfig\RootCA.cer
+certutil -addstore -f Root C:\CAConfig\RootCA.crl
 # Inspect the issuing CA after installation and publication.
 Get-Service CertSvc
 certutil -getreg CA\CRLPublicationURLs
@@ -50,18 +57,24 @@ certutil -store CA
 What success looks like: Certificate Services is running, the AIA and CDP settings carry the planned pki.sbd.test URLs, and the approved root reaches domain clients through policy.
 
 6. Build the pki.sbd.test publication site
+# On SBD-DC01 (VLAN 10): the name and the path from outside VLAN 30
 Resolve-DnsName pki.sbd.test
 Test-NetConnection pki.sbd.test -Port 80
+# On SBD-PKI-MGMT01: the site, and double escaping allowed there for delta CRL names
 Get-Website | Select-Object Name, State, PhysicalPath
+Get-WebConfigurationProperty -PSPath 'IIS:\Sites\<PKI site>' -Filter system.webServer/security/requestFiltering -Name allowDoubleEscaping
 
-What success looks like: pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80, and the publication folder's permissions separate writers from readers.
+What success looks like: pki.sbd.test resolves to the publication host from outside VLAN 30, the site answers on port 80 with double escaping allowed only there, and the publication folder's permissions separate writers from readers.
 
 7. Publish the trust data at its advertised URLs
-certutil -verify -urlfetch C:\Evidence\pki\test.cer
-certutil -URL http://pki.sbd.test/RootCA.crl
+# On SBD-DC01 (VLAN 10), with nothing cached; IssuingCA.cer is the ceremony's public certificate
+certutil -urlcache * delete
+certutil -verify -urlfetch C:\Evidence\pki\IssuingCA.cer
+'<issuing CA CRL name>.crl', '<issuing CA CRL name>+.crl' | ForEach-Object { (Invoke-WebRequest "http://pki.sbd.test/$_" -UseBasicParsing).StatusCode }   # 200 for the base and the delta CRL
+# On SBD-PKI-MGMT01: what the site serves, with timestamps
 Get-ChildItem C:\inetpub\pkiroot | Select-Object Name, LastWriteTime
 
-What success looks like: Every AIA and CDP URL embedded in issued certificates returns the current file, urlfetch verification passes from a cross-VLAN client, and the CRL refresh lands at the same filename automatically.
+What success looks like: Every AIA and CDP URL the issuing CA's certificate carries returns the current file, urlfetch verification passes from SBD-DC01 outside VLAN 30, the issuing CA's base and delta CRLs answer at their URLs, and the CRL refresh lands at the same filename automatically.
 
 8. Separate template administration
 Get-ADGroup 'SBD PKI Admins' -Properties Members | Select-Object Name, Members
@@ -70,19 +83,38 @@ certutil -template | Select-String 'TemplatePropCommonName' | Select-Object -Fir
 What success looks like: The templates console works from SBD-PKI-MGMT01, the PKI administrators group holds the delegated permissions, and the written change process names requester, reviewer, and versioning action.
 
 9. Publish the first working templates
+# On SBD-PKI-MGMT01: the templates the CA publishes (use your CA's host\name configuration string)
 certutil -CATemplates -config 'SBD-SUBCA01\SBD Issuing CA'
-certutil -template 'SBDComputerAuthentication' | Select-String 'msPKI-Certificate-Name-Flag','msPKI-Minimal-Key-Size'
+# Each SBD template's minimum key size and subject-name flags, read from the directory
+Get-ADObject -SearchBase 'CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration,DC=sbd,DC=test' -Filter "Name -like 'SBD*'" -Properties displayName, msPKI-Minimal-Key-Size, msPKI-Certificate-Name-Flag | Select-Object Name, displayName, msPKI-Minimal-Key-Size, msPKI-Certificate-Name-Flag
 
-What success looks like: The CA publishes exactly the two planned templates, each shows the approved key size and permissions, and both carry a completed change record.
+What success looks like: The CA publishes exactly the three planned templates, each shows the approved key size and permissions, and each carries a completed change record.
 
 10. Validate enrollment, revocation, and recovery
+# On SBD-DC01, SBD-DC02 and the pilot, SBD-PKI-MGMT01, once SBD Certificate Autoenrollment is linked at the domain root
 gpupdate /force
 certutil -pulse
-Get-ChildItem Cert:\LocalMachine\My | Select-Object Subject, NotAfter, Thumbprint
-certutil -verify -urlfetch C:\Evidence\pki\pilot.cer
-# After revoking the disposable test certificate and publishing the new CRL:
-certutil -urlfetch -verify test.cer
+Get-ChildItem Cert:\LocalMachine\My | Select-Object @{n='Template';e={ $x = $_.Extensions | Where-Object { $_.Oid.Value -eq '1.3.6.1.4.1.311.21.7' }; if ($x) { $x.Format($false) } }}, DnsNameList, NotAfter, Thumbprint
+# On SBD-DC01 (outside VLAN 30): export its certificate, then verify it and the pilot's with nothing cached
+New-Item -ItemType Directory C:\Evidence\pki -Force | Out-Null
+$dc = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.EnhancedKeyUsageList.ObjectId -contains '1.3.6.1.5.2.3.5' } | Select-Object -First 1   # KDC Authentication
+Export-Certificate -Cert $dc -FilePath C:\Evidence\pki\SBD-DC01-dc.cer
+certutil -urlcache * delete
+certutil -verify -urlfetch C:\Evidence\pki\SBD-DC01-dc.cer
+certutil -verify -urlfetch C:\Evidence\pki\pilot.cer   # the pilot's certificate, exported on SBD-PKI-MGMT01 with Export-Certificate
+# On SBD-SUBCA01: revoke only the disposable test certificate, then publish a new CRL
+certutil -revoke '<test certificate serial number>' 5   # 5 = cessation of operation
+certutil -crl
+# Back on SBD-DC01: the test certificate must now fail as revoked
+certutil -urlcache * delete
+certutil -verify -urlfetch C:\Evidence\pki\test.cer
+# After the scans (each carried to C:\Evidence\pki\<host name> on SBD-DC01) and the checklist updates: back up the new GPOs, then seal the evidence
+New-Item -ItemType Directory C:\Evidence\pki\gpo-backup -Force | Out-Null
+Backup-GPO -Name 'SBD Certificate Autoenrollment' -Path C:\Evidence\pki\gpo-backup -Comment 'Course 1.6'   # and any root-trust GPO from lesson 5
+(Get-GPInheritance -Target 'DC=sbd,DC=test').GpoLinks | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\pki\gpo-links.csv -NoTypeInformation
+Get-ChildItem C:\Evidence\pki -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\pki-manifest.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\pki-manifest.csv
 
-What success looks like: The pilot enrolls hands-free and verifies with live retrieval from pki.sbd.test; after revocation and publication the test certificate is rejected for the expected reason; both VLAN 30 hosts have current, attributed scan results.
+What success looks like: Both controllers and the pilot enroll hands-free and verify with live retrieval from pki.sbd.test; after revocation and publication the test certificate is rejected for the expected reason; SBD-SUBCA01 and SBD-PKI-MGMT01 have first baselines and both controllers a rescan; and the domain controller certificate rule is answered with its evidence, its DoD companion recorded as an exception.
 
 © 2026 Secure By Design Team LLC

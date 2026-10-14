@@ -1,52 +1,88 @@
-SECURE BY DESIGN - HARDEN THE BASELINE
-Course 1.3 | Materials edition 1.3 | Updated 9 October 2026
+SECURE BY DESIGN - HARDEN WITH GROUP POLICY
+Course 1.5 | Materials edition 2.0 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
 the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
 
 1. Design and build the OU structure
-Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
+New-ADOrganizationalUnit -Name SBD -Path 'DC=sbd,DC=test' -ProtectedFromAccidentalDeletion $true
+'Servers', 'Workstations', 'Users', 'Groups', 'Admin' | ForEach-Object { New-ADOrganizationalUnit -Name $_ -Path 'OU=SBD,DC=sbd,DC=test' -ProtectedFromAccidentalDeletion $true }
+redircmp 'OU=Workstations,OU=SBD,DC=sbd,DC=test'
+redirusr 'OU=Users,OU=SBD,DC=sbd,DC=test'
+New-Item -ItemType Directory C:\Evidence\hardened -Force | Out-Null
+Get-ADOrganizationalUnit -Filter * -Properties ProtectedFromAccidentalDeletion | Select-Object Name, DistinguishedName, ProtectedFromAccidentalDeletion | Export-Csv C:\Evidence\hardened\ou-design.csv -NoTypeInformation
 Get-ADDomain | Select-Object ComputersContainer, UsersContainer
-(Get-ADOrganizationalUnit -Identity 'OU=SBD,DC=sbd,DC=test' -Properties ProtectedFromAccidentalDeletion).ProtectedFromAccidentalDeletion
+Get-ADDomainController -Filter * | Select-Object Name, ComputerObjectDN
 
-What success looks like: The planned OUs exist with deletion protection, the default container redirects point at managed OUs, and each OU has a recorded purpose and administrator.
+What success looks like: The planned OUs exist with deletion protection, the computer and user redirects point at the Workstations and Users OUs, both controllers are still in the Domain Controllers OU, and each OU has a recorded purpose and administrator.
 
-2. Stage the tooling across the air gap
-Get-ChildItem C:\Staging\DISA | Select-Object Name, Length
-Get-FileHash -Algorithm SHA256 C:\Staging\DISA\*
-
-What success looks like: Every transferred file's hash matches the value recorded on the connected side, and tool and package versions are written down.
-
-3. Capture the pre-hardening baseline
-# Adapt paths to your SCC installation and session directory.
-Get-ChildItem C:\Evidence\baseline -Recurse -Include *.xml | Select-Object Name, LastWriteTime
-Get-FileHash -Algorithm SHA256 C:\Evidence\baseline\*
-
-What success looks like: Both controllers have a dated baseline result set, the already-compliant OS defaults are noted, and the raw files are hashed and stored.
-
-4. Import and link the DISA GPOs
-Get-ChildItem \\sbd.test\SYSVOL\sbd.test\Policies\PolicyDefinitions | Measure-Object
-Get-GPO -All | Select-Object DisplayName, GpoStatus, ModificationTime
+2. Learn how Group Policy applies
+# Once, on SBD-DC01: create the central store from the controller's own templates
+Copy-Item C:\Windows\PolicyDefinitions -Destination \\sbd.test\SYSVOL\sbd.test\Policies\PolicyDefinitions -Recurse
+# On SBD-DC01: links in precedence order, and each GPO's AD and SYSVOL versions
+Get-GPInheritance -Target 'DC=sbd,DC=test'
 Get-GPInheritance -Target 'OU=Domain Controllers,DC=sbd,DC=test'
+foreach ($dc in 'SBD-DC01', 'SBD-DC02') { Get-GPO -All -Server $dc | Select-Object @{n='DC';e={$dc}}, DisplayName, GpoStatus, @{n='AD';e={$_.Computer.DSVersion}}, @{n='SYSVOL';e={$_.Computer.SysvolVersion}} }
+# On each controller's console; carry SBD-DC02's report to the same folder on SBD-DC01
+New-Item -ItemType Directory C:\Evidence\hardened\policy-before -Force | Out-Null
+gpresult /r /scope:computer
+gpresult /h "C:\Evidence\hardened\policy-before\$env:COMPUTERNAME-gpresult.html" /f
+
+What success looks like: You can list both controllers' GPOs in precedence order and say why each applies, nothing is Enforced or blocked, every GPO's AD and SYSVOL versions agree, the central store holds SBD-DC01's templates, and each controller's starting gpresult report is saved.
+
+3. Import and link the DISA GPOs
+# On SBD-DC01. True means the package matches the hash recorded on the connected side.
+$package = Get-ChildItem C:\Staging\DISA -Filter '*GPO*.zip' | Select-Object -First 1
+(Get-FileHash $package.FullName -Algorithm SHA256).Hash -in (Import-Csv C:\Evidence\baseline\transfer\connected-side-hashes.csv).Hash
+Expand-Archive $package.FullName -DestinationPath C:\Staging\GPO
+# Per policy; take the exact names and folders from the package:
+Import-GPO -BackupGpoName '<DISA GPO name>' -TargetName 'SBD <DISA GPO name>' -Path '<package GPOs folder>' -MigrationTable '<migration table>' -CreateIfNeeded
+New-GPLink -Name 'SBD <DISA domain controller GPO name>' -Target 'OU=Domain Controllers,DC=sbd,DC=test' -Order 1
+Get-GPInheritance -Target 'OU=Domain Controllers,DC=sbd,DC=test'
+# On each controller's console; carry SBD-DC02's report to SBD-DC01:
 gpupdate /force
 gpresult /r /scope:computer
+New-Item -ItemType Directory C:\Evidence\hardened\import -Force | Out-Null
+gpresult /h "C:\Evidence\hardened\import\$env:COMPUTERNAME-gpresult.html" /f
+w32tm /query /source   # SBD-DC01: Local CMOS Clock; SBD-DC02: a domain controller
+w32tm /query /configuration | Select-String '\(Policy\)'   # expected: no output, so no time setting comes from Group Policy
+repadmin /replsummary
 
-What success looks like: The central store serves the package's templates, the imported GPOs are linked to the intended OUs, gpresult shows them applying, and every deviation has a written reason.
+What success looks like: The package matched its connected-side hash, the central store serves its templates, placeholder groups map to real ones, the links follow the OU design with the domain controller policy at link order 1 and nothing Enforced or blocked, gpresult on both controllers lists the SBD DISA GPOs as applied, time and replication are unchanged with no time setting from Group Policy, and every deviation has a written reason and owner.
 
-5. Rescan, reconcile, and record
-# Compare result sets; adapt paths to your evidence layout.
-Get-ChildItem C:\Evidence\baseline, C:\Evidence\hardened -Recurse -Include *.xml | Select-Object Directory, Name
-Get-FileHash -Algorithm SHA256 C:\Evidence\hardened\*
-gpresult /h C:\Evidence\hardened\SBD-DC01-gpresult.html
+4. Rescan, reconcile, and record
+# On SBD-DC01: the manifest's hash must match course 1.4's record; no Compare-Object output means no baseline file changed
+Get-FileHash -Algorithm SHA256 C:\Evidence\baseline-manifest.csv
+Compare-Object (Import-Csv C:\Evidence\baseline-manifest.csv).Hash (Get-ChildItem C:\Evidence\baseline -Recurse -File | Get-FileHash -Algorithm SHA256).Hash
+Get-Content C:\Evidence\baseline\findings\handoff.txt   # the SCC version, benchmark release and profile to reuse
+# On each controller, after its SCC rescan (adapt the path to SCC's results directory); SBD-DC02 then copies its set to SBD-DC01
+$session = Get-ChildItem "$env:USERPROFILE\SCC\Sessions" -Directory | Sort-Object Name | Select-Object -Last 1
+Copy-Item $session.FullName -Destination "C:\Evidence\hardened\$env:COMPUTERNAME" -Recurse
+Get-ChildItem "C:\Evidence\hardened\$env:COMPUTERNAME" -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv "C:\Evidence\hardened\$env:COMPUTERNAME-hashes.csv" -NoTypeInformation
+Copy-Item C:\Evidence\hardened\SBD-DC02, C:\Evidence\hardened\SBD-DC02-hashes.csv -Destination '\\SBD-DC01\C$\Evidence\hardened\' -Recurse   # on SBD-DC02
+# On SBD-DC01: verify the copy, then list each changed rule twice, <= its baseline result and => its result now
+Compare-Object (Import-Csv C:\Evidence\hardened\SBD-DC02-hashes.csv).Hash (Get-ChildItem C:\Evidence\hardened\SBD-DC02 -Recurse -File | Get-FileHash -Algorithm SHA256).Hash
+function Read-Xccdf($dir) { Get-ChildItem $dir -Recurse -Filter '*XCCDF-Results*.xml' | Select-Xml -XPath "//*[local-name()='rule-result']" | ForEach-Object { [pscustomobject]@{ Rule = $_.Node.idref; Result = $_.Node.result } } }
+foreach ($h in 'SBD-DC01', 'SBD-DC02') { Compare-Object (Read-Xccdf "C:\Evidence\baseline\$h") (Read-Xccdf "C:\Evidence\hardened\$h") -Property Rule, Result | Sort-Object Rule | Export-Csv "C:\Evidence\hardened\$h-changes.csv" -NoTypeInformation }
+New-Item -ItemType Directory C:\Evidence\hardened\checklists, C:\Evidence\hardened\findings -Force | Out-Null
+Copy-Item C:\Evidence\baseline\checklists\*.cklb C:\Evidence\hardened\checklists
+Import-Csv C:\Evidence\baseline\findings\findings-record.csv | Select-Object *, Resolution, Evidence | Export-Csv C:\Evidence\hardened\findings\findings-record.csv -NoTypeInformation
+Get-ChildItem C:\Evidence\hardened\checklists -Filter *.cklb | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\hardened\checklists-hashes.csv -NoTypeInformation   # after the STIG Viewer updates
 
-What success looks like: Both hosts show the expected movement from the baseline, every change is attributable, and every open item is a finding, a deviation, or a POA&M candidate — never unexplained.
+What success looks like: The manifest hash matched and no baseline file changed, both rescans used the SCC version, benchmark release and profile in handoff.txt, each controller's changes are listed and attributed, the checklist copies carry the new results and re-checked answers while the baseline copies keep their hashes, and every findings-record item has a resolution.
 
-6. Set the rescan cadence and exception record
-Get-GPOReport -All -ReportType Html -Path C:\Evidence\gpo-report.html
-Backup-GPO -All -Path C:\Evidence\gpo-backup
-Get-FileHash -Algorithm SHA256 C:\Evidence\gpo-report.html
+5. Set the rescan cadence and exception record
+# Seed the exception record from the findings resolved as deviations; add lesson 3's deviations and fill in every column
+Import-Csv C:\Evidence\hardened\findings\findings-record.csv | Where-Object Resolution -eq 'deviation' | Select-Object Target, GroupId, StigId, Title, Setting, Reason, CompensatingMeasure, RiskNote, Owner, ReviewDate | Export-Csv C:\Evidence\exception-record.csv -NoTypeInformation -NoClobber
+Copy-Item C:\Evidence\exception-record.csv "C:\Evidence\hardened\exception-record-$(Get-Date -Format yyyy-MM-dd).csv"   # once it is complete
+New-Item -ItemType Directory C:\Evidence\hardened\gpo-backup -Force | Out-Null
+Backup-GPO -All -Path C:\Evidence\hardened\gpo-backup -Comment 'Course 1.5 closing state'
+Get-GPOReport -All -ReportType Html -Path C:\Evidence\hardened\gpo-report.html
+'DC=sbd,DC=test', 'OU=Domain Controllers,DC=sbd,DC=test', 'OU=Servers,OU=SBD,DC=sbd,DC=test' | ForEach-Object { (Get-GPInheritance -Target $_).GpoLinks } | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\hardened\gpo-links.csv -NoTypeInformation
+Get-ChildItem C:\Evidence\hardened -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\hardened-manifest.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\hardened-manifest.csv
 
-What success looks like: The exception list has owners and review dates, the GPO set is exported and backed up, and the rescan triggers are written where the next course will meet them.
+What success looks like: The exception record has owners, compensating measures and review dates, with a dated copy filed, the GPO set is backed up with its links and reports beside it, the evidence folder is sealed in the manifest with its own hash recorded, and the rescan triggers are written where course 1.6 will meet them.
 
 © 2026 Secure By Design Team LLC

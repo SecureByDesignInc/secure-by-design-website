@@ -1,7 +1,7 @@
 SECURE BY DESIGN
 BRING IN THE FLEET
 Windows client · Windows Server - 50 Windows endpoints, managed from first boot
-Course 1.7 | Materials edition 1.4 | Updated 9 October 2026
+Course 1.13 | Materials edition 1.5 | Updated 14 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD

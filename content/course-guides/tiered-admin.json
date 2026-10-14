@@ -1,32 +1,20 @@
 {
   "id": "tiered-admin",
   "hero": {
-    "title": "Addressing and",
-    "accent": "tiered administration.",
-    "text": "Build SBD-DHCP01 and its core relay for the workstation VLAN, three single-purpose administration seats in VLAN 60, and directory-enforced limits on where privilege may sign in. Follow the build, explore the dependencies, and keep the evidence."
+    "title": "Tiered",
+    "accent": "administration.",
+    "text": "Build three single-purpose administration seats in VLAN 60 on two machines, make the directory refuse privileged sign-ins outside their tier, and move the console work of earlier courses onto the seats. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
     "WINDOWS",
     "SERVER",
     "",
-    "DHCP + TIERS"
+    "ADMIN TIERS"
   ],
   "sample": [
     [
       "Domain",
       "sbd.test"
-    ],
-    [
-      "SBD-DHCP01",
-      "10.0.20.10 · VLAN 20"
-    ],
-    [
-      "Workstation scope",
-      "10.0.80.100–199 · VLAN 80"
-    ],
-    [
-      "Scope options",
-      "Router 10.0.80.1 · DNS 10.0.10.10 and 10.0.10.11"
     ],
     [
       "AdminJumpBox01",
@@ -38,15 +26,80 @@
     ],
     [
       "SBD-ADMIN-PC01",
-      "10.0.60.30 · Tier 2 seat"
+      "10.0.60.30 · Tier 2 seat, a VM on SBD-ADMIN-SRV01"
+    ],
+    [
+      "Role groups",
+      "SBD Tier 0, Tier 1, Tier 2 Admins · SBD Audit Custodians"
+    ],
+    [
+      "SBD-DHCP01",
+      "10.0.20.10 · Tier 1 · from course 1.7"
     ]
   ],
   "scene": {
-    "tag": "ADMINISTRATION · VLAN 20 + 60",
-    "label": "Interactive 3D lesson network showing SBD-DHCP01 leasing addresses to a VLAN 80 test client through the core relay, and the three VLAN 60 administration seats each managing only its own tier.",
+    "tag": "ADMINISTRATION · VLAN 60",
+    "label": "Interactive 3D lesson network showing the three VLAN 60 administration seats each managing only its own tier: AdminJumpBox01 the domain controllers and the issuing CA, SBD-ADMIN-SRV01 the DHCP server, and the SBD-ADMIN-PC01 virtual machine the VLAN 80 test client.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "SBD-DHCP01 leases VLAN 80 addresses through the core relay, and each tier is administered only from its own VLAN 60 seat. Cross-tier sign-ins are refused and logged, and course 1.6 inherits a safe management plane.",
+    "completeCaption": "Each tier is administered only from its own VLAN 60 seat, and cross-tier sign-ins are refused and logged. The assessment tools now run from the seats, and course 1.9 inherits a safe management plane.",
     "nodes": [
+      {
+        "id": "jump",
+        "name": "AdminJumpBox01",
+        "sub": "10.0.60.10",
+        "kind": "workstation",
+        "row": "front",
+        "from": 1,
+        "button": "AdminJumpBox01",
+        "title": "AdminJumpBox01 · 10.0.60.10",
+        "description": "The Tier 0 seat in the Admin Servers OU. Tier 0 accounts manage the domain controllers, SBD-SUBCA01, and SBD-PKI-MGMT01 from here (rule A01), and it is the only seat allowed to reach the core router’s management on VLAN 100. From lesson 5 it also holds SCC, STIG Viewer, and the Tier 0 evidence."
+      },
+      {
+        "id": "srv",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "from": 1,
+        "button": "SBD-ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The Tier 1 seat in the Admin Servers OU, for member-server administration such as SBD-DHCP01 (rule A02). It also hosts the SBD-ADMIN-PC01 virtual machine, so three seats run on two machines, and the audit custodian’s separate accounts and sessions start here too. From lesson 5 it holds the Tier 1 copy of the assessment tools."
+      },
+      {
+        "id": "pc",
+        "name": "SBD-ADMIN-PC01",
+        "sub": "VM on SBD-ADMIN-SRV01",
+        "kind": "workstation",
+        "row": "front",
+        "from": 1,
+        "button": "SBD-ADMIN-PC01",
+        "title": "SBD-ADMIN-PC01 · 10.0.60.30",
+        "description": "The Tier 2 seat: a Windows client virtual machine on SBD-ADMIN-SRV01, in the Admin Workstations OU, for endpoint administration (rule A03). Tier 2 accounts sign in only inside it, never on its host. In this course it manages the VLAN 80 test client; the fleet arrives in course 1.13."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "One of the two domain controllers from course 1.1 (SBD-DC02 is 10.0.10.11). Both are Tier 0: lesson 2 scopes their Remote Desktop, Windows Remote Management, and AD Web Services rules to AdminJumpBox01 and VLAN 10, and lesson 5 moves the assessment tools off them."
+      },
+      {
+        "id": "subca",
+        "name": "SBD-SUBCA01",
+        "sub": "10.0.30.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 2,
+        "button": "SBD-SUBCA01",
+        "title": "SBD-SUBCA01 · 10.0.30.20",
+        "description": "The issuing CA from course 1.6, and a Tier 0 system. Lesson 3 moves it, with SBD-PKI-MGMT01, into the Tier 0 Servers OU so the Servers OU’s deny policy never locks Tier 0 out; lesson 5 rescans it to show its hardening survived the move."
+      },
       {
         "id": "dhcp",
         "name": "SBD-DHCP01",
@@ -56,104 +109,30 @@
         "from": 1,
         "button": "SBD-DHCP01",
         "title": "SBD-DHCP01 · 10.0.20.10",
-        "description": "Built in lesson 2 in the Servers OU: authorized in the directory, serving the VLAN 80 scope 10.0.80.100–199 through the core relay (F04), and registering client records with a dedicated low-privilege credential. It is Tier 1, managed from SBD-ADMIN-SRV01."
-      },
-      {
-        "id": "dc1",
-        "name": "SBD-DC01",
-        "sub": "10.0.10.10",
-        "kind": "server",
-        "row": "back",
-        "existing": true,
-        "from": 2,
-        "button": "SBD-DC01",
-        "title": "SBD-DC01 · 10.0.10.10",
-        "description": "One of the two domain controllers from course 1.1 (SBD-DC02 is 10.0.10.11). The scope hands out both as DNS servers, both hold the test client’s secure dynamic DNS record. Both are Tier 0: lesson 3 scopes their Remote Desktop, Windows Remote Management, and AD Web Services rules to AdminJumpBox01 and VLAN 10."
-      },
-      {
-        "id": "subca",
-        "name": "SBD-SUBCA01",
-        "sub": "10.0.30.20",
-        "kind": "server",
-        "row": "back",
-        "existing": true,
-        "from": 3,
-        "button": "SBD-SUBCA01",
-        "title": "SBD-SUBCA01 · 10.0.30.20",
-        "description": "The issuing CA from course 1.4, and a Tier 0 system. Lesson 4 moves it, with SBD-PKI-MGMT01, into the Tier 0 Servers OU so the Servers OU’s deny policy never locks Tier 0 out; lesson 6 rescans it to show its hardening survived the move."
+        "description": "Built in course 1.7, and a Tier 1 system. From lesson 2 it is administered from SBD-ADMIN-SRV01 with Tier 1 accounts (rule A02), lesson 3’s Servers OU policies set its administrators and refuse Tier 0 sign-ins, and lesson 4 re-proves its leases and secure registration.",
+        "existing": true
       },
       {
         "id": "test",
-        "name": "TEST CLIENT",
+        "name": "SBD-TEST80",
         "sub": "VLAN 80 · DHCP lease",
         "kind": "workstation",
         "row": "front",
-        "from": 1,
-        "button": "Test client",
-        "title": "Test client · lease from 10.0.80.100–199",
-        "description": "A temporary test VM in VLAN 80. It proves the scope, the relay, and secure dynamic DNS registration, then serves as the Tier 2 machine where a Tier 0 sign-in must be refused and logged."
-      },
-      {
-        "id": "pc",
-        "name": "SBD-ADMIN-PC01",
-        "sub": "VM on SBD-ADMIN-SRV01",
-        "kind": "workstation",
-        "row": "front",
+        "existing": true,
         "from": 2,
-        "button": "SBD-ADMIN-PC01",
-        "title": "SBD-ADMIN-PC01 · 10.0.60.30",
-        "description": "The Tier 2 seat: a Windows client virtual machine on SBD-ADMIN-SRV01, in the Admin Workstations OU, for endpoint administration (rule A03). Tier 2 accounts sign in only inside it, never on its host. In this course it manages the VLAN 80 test client; the fleet arrives in a later course."
-      },
-      {
-        "id": "srv",
-        "name": "SBD-ADMIN-SRV01",
-        "sub": "10.0.60.20",
-        "kind": "workstation",
-        "row": "front",
-        "from": 2,
-        "button": "SBD-ADMIN-SRV01",
-        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
-        "description": "The Tier 1 seat in the Admin Servers OU, for member-server administration such as SBD-DHCP01 (rule A02). It also hosts the SBD-ADMIN-PC01 virtual machine, so three seats run on two machines. The audit custodian’s separate accounts and sessions also start here."
-      },
-      {
-        "id": "jump",
-        "name": "AdminJumpBox01",
-        "sub": "10.0.60.10",
-        "kind": "workstation",
-        "row": "front",
-        "from": 2,
-        "button": "AdminJumpBox01",
-        "title": "AdminJumpBox01 · 10.0.60.10",
-        "description": "The Tier 0 seat in the Admin Servers OU. Tier 0 accounts manage the domain controllers, SBD-SUBCA01, and SBD-PKI-MGMT01 from here (rule A01), and it is the only seat allowed to reach the core router’s management on VLAN 100."
+        "button": "SBD-TEST80",
+        "title": "SBD-TEST80 · lease from 10.0.80.100–199",
+        "description": "Course 1.7’s VLAN 80 test client. Lesson 3 joins it to the domain as the Tier 2 test machine, where a Tier 0 sign-in must be refused and logged, and SBD-ADMIN-PC01 manages it with a Tier 2 account."
       }
     ],
     "flows": [
       {
-        "from": "test",
-        "to": "dhcp",
-        "lessons": [
-          1,
-          4
-        ],
-        "label": "DHCP lease through the core relay (F04)",
-        "twoWay": true
-      },
-      {
-        "from": "dhcp",
-        "to": "dc1",
-        "lessons": [
-          1,
-          4
-        ],
-        "label": "Secure dynamic DNS update"
-      },
-      {
         "from": "jump",
         "to": "dc1",
         "lessons": [
-          2,
-          4,
-          5
+          1,
+          3,
+          4
         ],
         "label": "Tier 0 management (A01)"
       },
@@ -161,9 +140,9 @@
         "from": "jump",
         "to": "subca",
         "lessons": [
+          2,
           3,
-          4,
-          5
+          4
         ],
         "label": "Tier 0 management (A01)"
       },
@@ -171,9 +150,9 @@
         "from": "srv",
         "to": "dhcp",
         "lessons": [
-          2,
-          4,
-          5
+          1,
+          3,
+          4
         ],
         "label": "Tier 1 management (A02)"
       },
@@ -181,27 +160,35 @@
         "from": "pc",
         "to": "test",
         "lessons": [
-          4,
-          5
+          3,
+          4
         ],
         "label": "Tier 2 management (A03)"
+      },
+      {
+        "from": "test",
+        "to": "dhcp",
+        "lessons": [
+          3
+        ],
+        "label": "DHCP lease through the core relay (F04)",
+        "twoWay": true
       }
     ]
   },
   "lessons": {
     "design": {
-      "short": "Design tiers and addresses",
+      "short": "Design tiers and seats",
       "tag": "01 / DESIGN",
       "status": "TIERS PLANNED",
       "stepTitles": [
         "Define three tiers and map them to OUs",
         "Assign the admin seats under the PAW STIG",
-        "Write the credential rule for each tier",
-        "Plan the VLAN 80 DHCP scope and options",
+        "Write the credential rule; create the role groups",
         "Add the permit and deny rows to the register"
       ],
       "mistake": "Placing a system in Tier 1 because it is a member server. SBD-WSUS01 sits in a member-server VLAN, but the part of it that approves the domain controllers’ updates can control Tier 0. Map tiers by what a system controls, not by where it lives.",
-      "network": "Nothing new is built yet. SBD-DC01 and SBD-SUBCA01 run from earlier courses; SBD-DHCP01, the three VLAN 60 seats, and the VLAN 80 test client exist only in the plan.",
+      "network": "Nothing new is built yet. SBD-DC01, SBD-SUBCA01, and course 1.7’s SBD-DHCP01 run from earlier courses; the three VLAN 60 seats exist only in the plan.",
       "control": {
         "id": "AC-6",
         "name": "Least Privilege",
@@ -211,49 +198,21 @@
       },
       "checklist": [
         "I mapped each tier to its systems, OUs, admin seat, and accounts, with Tier 0 defined by what it controls.",
-        "I wrote the credential rule for each tier and planned separate per-tier accounts for each administrator.",
-        "I recorded the VLAN 80 scope plan and the new permit and deny rows, with owners, in the register."
-      ]
-    },
-    "dhcp": {
-      "short": "Build DHCP and the relay",
-      "tag": "02 / ADDRESS",
-      "status": "DHCP SERVING VLAN 80",
-      "stepTitles": [
-        "Install and authorize the DHCP role",
-        "Create the VLAN 80 scope and its options",
-        "Use a dedicated credential for DNS updates",
-        "Enable the core relay and pull a test lease"
-      ],
-      "mistake": "Skipping directory authorization. An unauthorized Windows DHCP server refuses to serve the domain, so no lease arrives and the relay gets blamed. Confirm Get-DhcpServerInDC lists SBD-DHCP01 before you troubleshoot the path.",
-      "network": "SBD-DHCP01 on VLAN 20 now leases an address to the VLAN 80 test client through the core relay (F04) and registers the client’s record with the domain controllers using a dedicated credential.",
-      "control": {
-        "id": "CM-6",
-        "name": "Configuration Settings",
-        "phase": "Implement",
-        "body": "Record the scope, options, directory authorization, relay setting, and update credential as configuration decisions tied to the lesson 1 plan. Authorization and the scoped credential are settings with a security reason; write the reason down beside the value.",
-        "question": "If someone started an unauthorized Windows DHCP server in the domain, what would stop it from serving, and how would your records show that?"
-      },
-      "checklist": [
-        "I confirmed SBD-DHCP01 is authorized in the directory.",
-        "I checked the scope 10.0.80.100–199 and its router, DNS, and domain options against the plan.",
-        "I pulled a test lease through the core relay and found the client’s DNS record on both domain controllers."
+        "I wrote the credential rule for each tier and created the role groups, with separate per-tier accounts for each administrator.",
+        "I recorded the new permit and deny rows, with owners, in the register."
       ]
     },
     "admin-hosts": {
       "short": "Build the admin seats",
-      "tag": "03 / BUILD",
+      "tag": "02 / BUILD",
       "status": "ADMIN SEATS ONLINE",
       "stepTitles": [
         "Create the Admin sub-OUs and link the STIG GPOs",
-        "Build the two server seats; keep the jump box VM-free",
-        "Give every seat its own seat GPO and maintenance group",
-        "Create SBD-ADMIN-PC01 as a shielded VM on SBD-ADMIN-SRV01",
-        "Close the channels between host and guest",
-        "Open the VM console from the host, one person at a time",
-        "Strip each seat to its tier’s tools",
-        "Register each tier’s management paths",
-        "Refuse inbound management and scope the DC rules"
+        "Build the two server seats with their seat GPOs",
+        "Create SBD-ADMIN-PC01 as a Secure Boot, vTPM VM",
+        "Close host–guest channels; one console user at a time",
+        "Strip each seat to its tier; move the console work",
+        "Register and restrict the management paths"
       ],
       "mistake": "Adding a new, narrower allow rule for AdminJumpBox01 on the domain controllers instead of scoping the existing Remote Desktop, Windows Remote Management, and AD Web Services rules. Allow rules add up, so the broad rules keep accepting any address.",
       "network": "The three administration seats are online in VLAN 60. Management reaches out from them, AdminJumpBox01 to the domain controllers (A01) and SBD-ADMIN-SRV01 to SBD-DHCP01 (A02), and nothing initiates toward them.",
@@ -272,18 +231,17 @@
     },
     "logon-restrictions": {
       "short": "Restrict privileged sign-in",
-      "tag": "04 / ENFORCE",
+      "tag": "03 / ENFORCE",
       "status": "TIER RULES ENFORCED",
       "stepTitles": [
         "Move the Tier 0 servers into their own OU",
         "Deny higher-tier logons on the Servers and Workstations OUs",
+        "Give the tier OUs their administrators; join the test client",
         "Deny network logon and record the console exception",
         "Let each seat admit only its own tier",
-        "Add Tier 0 administrators to Protected Users",
-        "Keep one documented break-glass account",
-        "Record the multifactor decision and its date"
+        "Protect Tier 0, keep break-glass, record MFA"
       ],
-      "mistake": "Setting a deny right in the tier logon GPO without repeating the entries course 1.3’s STIG GPO sets for that right. User rights don’t merge across GPOs: the highest-precedence GPO that sets a right wins, so the STIG’s entries for it, such as Domain Admins and Enterprise Admins, quietly drop out.",
+      "mistake": "Setting a deny right in the tier logon GPO without repeating the entries course 1.5’s STIG GPO sets for that right. User rights don’t merge across GPOs: the highest-precedence GPO that sets a right wins, so the STIG’s entries for it, such as Domain Admins and Enterprise Admins, quietly drop out.",
       "network": "The Tier 0 servers have their own OU. AdminJumpBox01 still manages SBD-SUBCA01 after the move, while the Servers and Workstations OUs now refuse Tier 0 sign-ins.",
       "control": {
         "id": "AC-3",
@@ -299,8 +257,8 @@
       ]
     },
     "prove": {
-      "short": "Prove tiers and addressing",
-      "tag": "05 / VERIFY",
+      "short": "Prove the tiers",
+      "tag": "04 / VERIFY",
       "status": "TIER MATRIX PROVEN",
       "stepTitles": [
         "Manage each tier from its own seat",
@@ -310,7 +268,7 @@
         "Reconcile the tier matrix with the register"
       ],
       "mistake": "Keeping only the refusal the user sees. Without event 4625 (status 0xC000015B) on the test client and the router’s deny-log entry for the VLAN 80 session, nothing shows the boundary made the decision.",
-      "network": "Each tier’s path runs from its own seat: A01 to the domain controller and SBD-SUBCA01, A02 to SBD-DHCP01, A03 to the test client. The lease and DNS update run again under the full rule set; the refused attempts show up in logs, not as paths.",
+      "network": "Each tier’s path runs from its own seat: A01 to the domain controller and SBD-SUBCA01, A02 to SBD-DHCP01, A03 to the test client. Course 1.7’s lease runs again under the full rule set; the refused attempts show up in logs, not as paths.",
       "control": {
         "id": "AU-12",
         "name": "Audit Record Generation",
@@ -325,17 +283,18 @@
       ]
     },
     "scan": {
-      "short": "Scan and hand off",
-      "tag": "06 / HAND OFF",
+      "short": "Move tools, scan, hand off",
+      "tag": "05 / HAND OFF",
       "status": "BASELINED · HANDED OFF",
       "stepTitles": [
-        "Baseline the new hosts and rescan the Tier 0 servers",
+        "Move SCC, STIG Viewer, and the evidence to the seats",
+        "Baseline the seats and rescan what changed",
         "Add this course’s rows to the living records",
         "Put the admin seats first in the quarterly cadence",
-        "Write the handoff for course 1.6"
+        "Write the handoff for course 1.9"
       ],
       "mistake": "Treating SBD-SUBCA01 and SBD-PKI-MGMT01 as new hosts. They changed OU, not identity: a rescan compared with their earlier baseline is what shows the move kept their hardening intact.",
-      "network": "The four new hosts are baselined and the two Tier 0 servers rescanned. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.6.",
+      "network": "The two physical seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.9.",
       "control": {
         "id": "RA-5",
         "name": "Vulnerability Monitoring and Scanning",
@@ -344,9 +303,9 @@
         "question": "What change to the administration plane would call for a rescan before the next quarter, and who decides?"
       },
       "checklist": [
-        "I filed first baselines for the four new hosts and rescans of the two Tier 0 servers, with attributed deltas.",
-        "I added this course’s decisions to the exception record and its permit and deny rows to the register, with owners.",
-        "I wrote the handoff telling course 1.6 that SIEM consoles and collectors are managed only from VLAN 60."
+        "I moved SCC, STIG Viewer, and the evidence onto the seats, matched every set to its manifest, and removed the tools from the controllers.",
+        "I filed first baselines for the two physical seats and rescans of the changed systems, with attributed deltas.",
+        "I added this course’s rows to the records and wrote the handoff telling course 1.9 that its servers are managed only from VLAN 60."
       ]
     }
   }

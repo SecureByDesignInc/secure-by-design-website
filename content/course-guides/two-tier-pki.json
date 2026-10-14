@@ -43,9 +43,9 @@
   ],
   "scene": {
     "tag": "OFFLINE ROOT + VLAN 30 · PKI",
-    "label": "Interactive 3D lesson network showing the offline root CA SBD-ROOTCA01 reached only by hand-carried media, the issuing CA SBD-SUBCA01 and publication host SBD-PKI-MGMT01 on VLAN 30, SBD-DC01, and a test client that enrolls and fetches trust data from pki.sbd.test.",
+    "label": "Interactive 3D lesson network showing the offline root CA SBD-ROOTCA01 reached only by hand-carried media, the issuing CA SBD-SUBCA01 and publication host SBD-PKI-MGMT01 on VLAN 30, and SBD-DC01 on VLAN 10, which fetches trust data from pki.sbd.test and autoenrolls its domain controller certificate.",
     "completeStatus": "PKI IN SERVICE",
-    "completeCaption": "The root is back in the vault and offline, the issuing CA publishes only the two planned templates, and pki.sbd.test serves current certificates and CRLs at the exact URLs every certificate carries. Enrollment and revocation were proven from a clean client.",
+    "completeCaption": "The root is back in the vault and offline, the issuing CA publishes only the three planned templates, both domain controllers hold their own certificates, and pki.sbd.test serves current certificates and CRLs at the exact URLs every certificate carries. Enrollment and revocation were proven end to end.",
     "nodes": [
       {
         "id": "root",
@@ -67,7 +67,7 @@
         "from": 2,
         "button": "SBD-SUBCA01",
         "title": "SBD-SUBCA01 · 10.0.30.20",
-        "description": "The enterprise issuing CA, joined to sbd.test on VLAN 30. It creates its request in lesson 3, starts with its signed certificate in lesson 5, writes its CRLs to pki.sbd.test, and publishes only the two templates from lesson 9."
+        "description": "The enterprise issuing CA, joined to sbd.test on VLAN 30. It creates its request in lesson 3, starts with its signed certificate in lesson 5, writes its CRLs to pki.sbd.test, and publishes only the three templates from lesson 9."
       },
       {
         "id": "pkimgmt",
@@ -78,7 +78,7 @@
         "from": 5,
         "button": "SBD-PKI-MGMT01",
         "title": "SBD-PKI-MGMT01 · 10.0.30.30",
-        "description": "A hardened member server on VLAN 30 with two jobs in this course: from lesson 6 it hosts the pki.sbd.test publication site over plain HTTP, and from lesson 8 it is the only seat for certificate template administration."
+        "description": "A hardened member server on VLAN 30 with two jobs in this course: from lesson 6 it hosts the pki.sbd.test publication site over plain HTTP, and from lesson 8 it is the only seat for certificate template administration. In lesson 10 it is also the pilot that autoenrolls a computer certificate."
       },
       {
         "id": "dc1",
@@ -89,18 +89,8 @@
         "existing": true,
         "button": "SBD-DC01",
         "title": "SBD-DC01 · 10.0.10.10",
-        "description": "Domain controller from course 1.1. It holds what the enterprise CA depends on: the pki.sbd.test alias reserved in course 1.2, the Group Policy that distributes the root and turns on autoenrollment, and the certificate templates as directory objects. SBD-DC02 holds the same data through replication."
-      },
-      {
-        "id": "client",
-        "name": "TEST CLIENT",
-        "sub": "Clean domain client",
-        "kind": "viewpoint",
-        "row": "front",
-        "from": 4,
-        "button": "Test client",
-        "title": "Test client · clean domain client in another VLAN",
-        "description": "Where trust is checked the way a relying system sees it: a domain client outside VLAN 30 with nothing cached. It resolves pki.sbd.test, runs the urlfetch checks, and in the final lesson is the pilot machine that autoenrolls. It stands for any domain member, not a system this course builds."
+        "description": "Domain controller from course 1.1, with SBD-DC02 holding the same data by replication: the pki.sbd.test alias from course 1.2, the Group Policy that distributes the root and turns on autoenrollment, and the templates as directory objects. From VLAN 10 it runs the cross-VLAN checks against pki.sbd.test (rule F18), and in lesson 10 both controllers autoenroll their domain controller certificates.",
+        "from": 4
       }
     ],
     "flows": [
@@ -115,14 +105,14 @@
         "offline": true
       },
       {
-        "from": "client",
+        "from": "dc1",
         "to": "pkimgmt",
         "lessons": [
           5,
           6,
           9
         ],
-        "label": "AIA / CDP retrieval · HTTP TCP 80",
+        "label": "AIA / CDP retrieval · HTTP TCP 80 (F18)",
         "twoWay": true
       },
       {
@@ -154,12 +144,12 @@
         "label": "Template administration · directory objects"
       },
       {
-        "from": "client",
+        "from": "dc1",
         "to": "subca",
         "lessons": [
           9
         ],
-        "label": "Pilot autoenrollment",
+        "label": "Domain controller autoenrollment · RPC",
         "twoWay": true
       }
     ]
@@ -212,7 +202,7 @@
         "question": "Where is the root backup kept, who can reach it, and how would you show that it restores?"
       },
       "checklist": [
-        "I confirmed SBD-ROOTCA01 is in a workgroup with no network path.",
+        "I confirmed SBD-ROOTCA01 is in a workgroup with no network path and set its clock from the approved reference.",
         "I checked the publication URLs, 10-year subordinate validity, and 26-week CRL period with certutil -getreg before signing anything.",
         "I captured a protected root backup and recorded where it is stored."
       ]
@@ -247,7 +237,7 @@
       "tag": "04 / CEREMONY",
       "status": "SIGNING CEREMONY",
       "stepTitles": [
-        "Carry the request in and verify its hash",
+        "Check the clock, carry the request in, verify its hash",
         "Check root policy, then submit and approve",
         "Export and verify the public artifacts",
         "Carry public artifacts back and secure the root"
@@ -262,7 +252,7 @@
         "question": "If the custody record had a gap, what would you repeat before trusting the artifacts?"
       },
       "checklist": [
-        "I recalculated the request hash at the root and it matched the recorded value.",
+        "I set the root’s clock against the approved reference, and the recalculated request hash matched the recorded value.",
         "I checked the issued certificate’s identity, validity, and URLs and recorded the request ID and artifact hashes.",
         "I carried back only public artifacts and recorded the root’s shutdown."
       ]
@@ -287,7 +277,7 @@
         "question": "Which systems should trust this root, and how would you remove that trust if you had to?"
       },
       "checklist": [
-        "I confirmed Certificate Services is running with the signed certificate installed.",
+        "I added the root certificate and CRL to the issuing CA’s stores and confirmed Certificate Services is running with the signed certificate installed.",
         "I checked that the AIA and CDP settings carry the planned pki.sbd.test URLs.",
         "I found the approved root in a domain client’s trusted root store, delivered by policy."
       ]
@@ -303,7 +293,7 @@
         "Limit who can write to the folder"
       ],
       "mistake": "Moving the site to HTTPS because it looks more secure. Clients would have to validate the site’s certificate before they could fetch the CRL that validation depends on. The files are public and signed, so integrity comes from the signatures, not the transport.",
-      "network": "SBD-PKI-MGMT01 comes online at 10.0.30.30 and answers for pki.sbd.test on HTTP TCP 80. The test client, outside VLAN 30, resolves the name and reaches the site across the core.",
+      "network": "SBD-PKI-MGMT01 comes online at 10.0.30.30 and answers for pki.sbd.test on HTTP TCP 80. SBD-DC01, outside VLAN 30, resolves the name and reaches the site across the core under rule F18.",
       "control": {
         "id": "AC-6",
         "name": "Least Privilege",
@@ -312,8 +302,8 @@
         "question": "Which accounts can write to the publication folder today, and does each one need to?"
       },
       "checklist": [
-        "I confirmed pki.sbd.test resolves to 10.0.30.30 from a client in another VLAN.",
-        "I confirmed the site answers on port 80 and the folder holds only certificates and CRLs.",
+        "I confirmed pki.sbd.test resolves to 10.0.30.30 from SBD-DC01, outside VLAN 30.",
+        "I confirmed the site answers on port 80, allows double escaping for delta CRL names, and holds only certificates and CRLs.",
         "I recorded the folder permissions that separate writers from readers."
       ]
     },
@@ -325,21 +315,21 @@
         "Map every embedded URL to a file",
         "Copy the current certificates and CRLs into place",
         "Point the issuing CA’s CRL publication at the site",
-        "Verify live retrieval from a clean client"
+        "Verify live retrieval from outside VLAN 30"
       ],
       "mistake": "Renaming published files to something tidier. Certificates already carry the exact URLs, so a renamed file is a missing file, and chain building and revocation checks fail for every certificate issued so far.",
-      "network": "Trust data now reaches pki.sbd.test: the issuing CA writes its CRLs to the site on schedule, and the root’s certificate and CRL arrive by hand-carried media. The test client fetches each AIA and CDP URL over HTTP TCP 80.",
+      "network": "Trust data now reaches pki.sbd.test: the issuing CA writes its CRLs to the site on schedule, and the root’s certificate and CRL arrive by hand-carried media. SBD-DC01 fetches each AIA and CDP URL over HTTP TCP 80.",
       "control": {
         "id": "IA-5(2)",
         "name": "Authenticator Management | Public Key-based Authentication",
         "phase": "Implement → Assess",
-        "body": "When PKI is used, this enhancement expects certificates to be validated by building a path to an accepted trust anchor, including status information. certutil -verify -urlfetch from a clean client is that validation, run against the live site rather than a cache.",
+        "body": "When PKI is used, this enhancement expects certificates to be validated by building a path to an accepted trust anchor, including status information. certutil -verify -urlfetch from a cache-cleared system outside VLAN 30 is that validation, run against the live site rather than a cache.",
         "question": "What happens to every client if the root CRL on the site expires before the next ceremony?"
       },
       "checklist": [
         "I mapped each embedded AIA and CDP URL to a real file on the site.",
         "I confirmed the issuing CA’s next CRL landed on the site at the same filename.",
-        "I ran certutil -verify -urlfetch from a clean client in another VLAN and the chain built."
+        "I ran certutil -verify -urlfetch from SBD-DC01, outside VLAN 30, with its URL cache cleared, and the chain built."
       ]
     },
     "template-admin": {
@@ -358,7 +348,7 @@
         "id": "AC-5",
         "name": "Separation of Duties",
         "phase": "Implement",
-        "body": "Deciding what the PKI may sign is separated from running the CA. A named group on a dedicated seat holds template rights, and no Tier 0 account edits templates as routine work.",
+        "body": "Deciding what the PKI may sign is separated from running the CA. A named group on a dedicated seat holds template rights, and no Domain Admins or Enterprise Admins account edits templates as routine work.",
         "question": "Who could change a template today without going through the change process?"
       },
       "checklist": [
@@ -370,15 +360,16 @@
     "first-templates": {
       "short": "Publish first templates",
       "tag": "09 / TEMPLATES",
-      "status": "TWO TEMPLATES PUBLISHED",
+      "status": "THREE TEMPLATES PUBLISHED",
       "stepTitles": [
+        "Duplicate Kerberos Authentication for the controllers",
         "Duplicate Computer as SBD Computer Authentication",
         "Duplicate Web Server as SBD Server Authentication",
         "Record each template through the change process",
-        "Publish only the two planned templates"
+        "Publish only the three planned templates"
       ],
-      "mistake": "Editing the built-in Computer or Web Server template directly. The original is lost as a baseline, and the change has no name or version of its own to record or roll back.",
-      "network": "Templates are configured from SBD-PKI-MGMT01 and stored in the directory on SBD-DC01, and SBD-SUBCA01 now publishes exactly the two planned templates. No client has enrolled yet.",
+      "mistake": "Editing the built-in Kerberos Authentication, Computer or Web Server template directly. The original is lost as a baseline, and the change has no name or version of its own to record or roll back.",
+      "network": "Templates are configured from SBD-PKI-MGMT01 and stored in the directory on SBD-DC01, and SBD-SUBCA01 now publishes exactly the three planned templates. Nothing has enrolled yet.",
       "control": {
         "id": "CM-7",
         "name": "Least Functionality",
@@ -387,9 +378,9 @@
         "question": "Which default template would you be most tempted to keep, and what would it let someone request?"
       },
       "checklist": [
-        "I duplicated the Computer and Web Server templates with the approved key size and validity.",
-        "I limited autoenrollment for SBD Computer Authentication to the pilot computer group.",
-        "I confirmed the CA publishes exactly the two planned templates, each with a change record."
+        "I duplicated Kerberos Authentication, Computer and Web Server with the approved key size and validity.",
+        "I left autoenrollment to the domain controllers on SBD Domain Controller Authentication and to the pilot group on SBD Computer Authentication.",
+        "I confirmed the CA publishes exactly the three planned templates, each with a change record."
       ]
     },
     "validate": {
@@ -397,26 +388,26 @@
       "tag": "10 / VALIDATE",
       "status": "PKI PROVEN",
       "stepTitles": [
-        "Autoenroll a pilot machine",
+        "Autoenroll the controllers and the pilot",
         "Verify the chain with live retrieval",
         "Revoke a disposable test certificate",
         "Assign renewal, backup, and recovery owners",
-        "Rescan SBD-SUBCA01 and baseline SBD-PKI-MGMT01",
-        "File the course evidence"
+        "Baseline the PKI servers and rescan the controllers",
+        "Close the controller finding and file the evidence"
       ],
       "mistake": "Turning off revocation checking when a CRL cannot be retrieved. The certificate may be valid, but the bypass hides a broken publication path that every relying system depends on. Fix the retrieval or the stale file and retest.",
-      "network": "The pilot client enrolls with SBD-SUBCA01 through autoenrollment and validates against pki.sbd.test over HTTP TCP 80. The issuing CA publishes its updated CRL to the site, and the root’s replacement CRLs keep arriving through scheduled, hand-carried ceremonies.",
+      "network": "Both domain controllers autoenroll from SBD-SUBCA01 across the core, and the pilot, SBD-PKI-MGMT01, inside VLAN 30. SBD-DC01 validates against pki.sbd.test over HTTP TCP 80, the issuing CA publishes its updated CRL to the site, and the root’s replacement CRLs keep arriving through scheduled, hand-carried ceremonies.",
       "control": {
         "id": "CA-2",
         "name": "Control Assessments",
         "phase": "Assess",
-        "body": "The closing tests assess the PKI the way a relying system sees it: hands-free enrollment, live chain and revocation checks, and a revoked certificate rejected for the expected reason. The scans and filed evidence keep those results reviewable later.",
+        "body": "The closing tests assess the PKI the way relying systems see it: hands-free enrollment, live chain and revocation checks, and a revoked certificate rejected for the expected reason. The scans, the answered domain controller rule and the filed evidence keep those results reviewable later.",
         "question": "Which of these results would you rerun after the next root ceremony, and why?"
       },
       "checklist": [
-        "I watched the pilot machine receive an SBD Computer Authentication certificate without touching the request.",
+        "I watched both domain controllers and the pilot receive their certificates without touching a request.",
         "I revoked the test certificate, published a new CRL, and saw a fresh evaluation reject it.",
-        "I recorded CRL, renewal, backup, and recovery owners and filed the SBD-SUBCA01 rescan and SBD-PKI-MGMT01 baseline."
+        "I recorded CRL, renewal, backup and recovery owners, filed the PKI servers’ baselines and the controllers’ rescans, and answered the controller certificate rule."
       ]
     }
   }
