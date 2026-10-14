@@ -13,6 +13,14 @@ The owner of Secure By Design asked to split three consolidated courses in the "
 - Course "Addressing and tiered administration" becomes two courses: DHCP (SBD-DHCP01) first, then tiered administration (the three admin seats and the tier rules).
 - Course "Patch, protect, and watch for weakness" becomes four tiles: SBD-WSUS01, SBD-MGMT01, SBD-EPO01 and SBD-NESSUS01. EPO01 and NESSUS01 are listed as "Coming soon" with no material yet (their current lessons are withdrawn and kept unpublished).
 
+
+## Current state (October 14 — read this)
+
+- The repository working tree is on branch `training-restructure`, rebased onto the latest main. Main now includes the owner's two-machine admin seats change for the current tiered-admin course (materials edition 1.5): SBD-ADMIN-PC01 is a Windows client virtual machine (generation 2, Secure Boot, virtual TPM, Credential Guard) hosted on SBD-ADMIN-SRV01 (Hyper-V); AdminJumpBox01 stays dedicated and runs no VMs; Tier 1 accounts work on the SBD-ADMIN-SRV01 host and Tier 2 accounts only inside the SBD-ADMIN-PC01 VM; the DISA Windows PAW STIG rules (V-2434xx) are cited. content/configuration-courses.json in the repository is that current version — start from it, and keep its PAW decisions.
+- Already drafted with the final numbers (read them for handoffs; don't edit them): newcourses/stig-scap (1.4), newcourses/harden-baseline (1.5), newcourses/linux-repository (1.9), newcourses/logging-pipeline (1.10), newcourses/audit-repository (1.11). Their notes.md files list decisions and cross-course items. newcourses/patch-protect is a partial draft (REPO01 removed) that still needs the four-way split.
+- The interactive-guide spec is at /tmp/claude-0/-home-claude/a8e52fba-0352-51f7-ac48-f5732f822fe0/scratchpad/guide-content-spec.md.
+- Usage limits are tight. Research efficiently: rely on the repository's own content and well-known official documentation; fetch only to verify a new source URL or a fact you're unsure of; keep tool calls lean.
+
 ## The new path (use these numbers everywhere)
 
 | New | Course id (slug) | Title (working; you may refine yours) | Was |

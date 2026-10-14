@@ -1,0 +1,318 @@
+{
+  "id": "management-server",
+  "hero": {
+    "title": "Keep the living inventory",
+    "accent": "on SBD-MGMT01.",
+    "text": "Make the network’s component inventory a living record on SBD-MGMT01 in VLAN 70: every component counted once with an accountable owner, checked every month against the directory, the DHCP leases, the WSUS computer list and SBD-REPO01’s records. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "INVENTORY"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-MGMT01",
+      "10.0.70.10 / 24 · VLAN 70 · Servers OU"
+    ],
+    [
+      "Neighbour",
+      "SBD-REPO01 · 10.0.70.20 · same VLAN and host (SBD-HV07)"
+    ],
+    [
+      "Administration",
+      "Tier 1 from SBD-ADMIN-SRV01 only (rule A02)"
+    ],
+    [
+      "Record",
+      "D:\\Inventory\\current\\inventory.csv · dated, hashed versions"
+    ],
+    [
+      "Sources",
+      "Directory · DHCP leases · WSUS computers · SBD-REPO01 records · baselines"
+    ],
+    [
+      "Reconciliation (sample)",
+      "Monthly, after course 1.14’s update cycle closes"
+    ]
+  ],
+  "scene": {
+    "tag": "COMPONENT INVENTORY · VLAN 70",
+    "label": "Interactive 3D lesson network showing SBD-MGMT01 beside SBD-REPO01 behind the core with SBD-WSUS01, SBD-DHCP01 and SBD-DC01, SBD-ADMIN-SRV01 and the 50 Windows PCs in front, and the administration and source-export paths each lesson adds.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "SBD-MGMT01 holds one reconciled record of every component — servers, seats, PCs, network devices and hypervisor hosts — checked every month against what the network itself reports, with every difference classified.",
+    "nodes": [
+      {
+        "id": "management",
+        "name": "SBD-MGMT01",
+        "sub": "10.0.70.10",
+        "kind": "server",
+        "row": "back",
+        "from": 1,
+        "button": "SBD-MGMT01",
+        "title": "SBD-MGMT01 · 10.0.70.10",
+        "description": "Keeps the component inventory and reaches into nothing: management arrives only from SBD-ADMIN-SRV01, and the source exports it is checked against are filed through that same session."
+      },
+      {
+        "id": "repo",
+        "name": "SBD-REPO01",
+        "sub": "10.0.70.20",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-REPO01",
+        "title": "SBD-REPO01 · 10.0.70.20",
+        "description": "Built in course 1.9. Its snapshot catalog and web access log show which Linux servers actually take packages; they are copied over SSH from the Tier 1 seat, as course 1.9 does."
+      },
+      {
+        "id": "wsus",
+        "name": "SBD-WSUS01",
+        "sub": "10.0.20.30",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-WSUS01",
+        "title": "SBD-WSUS01 · 10.0.20.30",
+        "description": "Built in course 1.14. Its computer list shows which Windows systems report for updates and in which ring; SBD-MGMT01 itself reports there in Ring 3."
+      },
+      {
+        "id": "dhcp",
+        "name": "SBD-DHCP01",
+        "sub": "10.0.20.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DHCP01",
+        "title": "SBD-DHCP01 · 10.0.20.10",
+        "description": "Its VLAN 80 leases show what is plugged in right now, joined or not. They are exported in a Tier 1 session from SBD-ADMIN-SRV01."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "The directory’s computer objects show what has joined the domain. They are read over LDAP (F03), the path every member already has."
+      },
+      {
+        "id": "jump1",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "button": "SBD-ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The only seat that manages SBD-MGMT01 (rule A02). The inventory owner works here, gathers each month’s source exports, and files them on SBD-MGMT01."
+      },
+      {
+        "id": "fleet",
+        "name": "50 Windows PCs",
+        "sub": "10.0.80.100–199",
+        "kind": "fleet",
+        "row": "front",
+        "existing": true,
+        "title": "50 Windows PCs · 10.0.80.100–199",
+        "description": "Fifty of the inventory’s rows. Each appears in the directory, in the leases and in WSUS’s Ring 1 or 2 — three independent views to check the record against."
+      }
+    ],
+    "flows": [
+      {
+        "from": "jump1",
+        "to": "management",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Tier 1 administration · A02"
+      },
+      {
+        "from": "jump1",
+        "to": "dc1",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Directory read · LDAP (F03)"
+      },
+      {
+        "from": "jump1",
+        "to": "dhcp",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Lease export · A02 session"
+      },
+      {
+        "from": "jump1",
+        "to": "wsus",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Computer list export · A02 session"
+      },
+      {
+        "from": "jump1",
+        "to": "repo",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Catalog and access log · SSH 22"
+      },
+      {
+        "from": "management",
+        "to": "wsus",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Ring 3 updates · F06"
+      }
+    ]
+  },
+  "lessons": {
+    "mgmt-design": {
+      "short": "Design the inventory",
+      "tag": "01 / DESIGN",
+      "status": "PLANNED",
+      "stepTitles": [
+        "Draw the boundary and count every component once",
+        "Choose the columns that make each one accountable",
+        "Name the sources that can contradict the record",
+        "Place the keeper and define its paths"
+      ],
+      "mistake": "Leaving the hypervisor hosts and network devices out because they aren’t domain members. The inventory then misses the components with the most reach; CM-8 asks for every component inside the boundary, joined or not.",
+      "network": "SBD-MGMT01 is planned on VLAN 70 beside SBD-REPO01. The sources it will be checked against — the directory, the leases, WSUS and the repository — all run from earlier courses; no new path is drawn, because the design gives SBD-MGMT01 none of its own.",
+      "control": {
+        "id": "CM-8",
+        "name": "System Component Inventory",
+        "phase": "Prepare → Implement",
+        "body": "CM-8 asks for an inventory that reflects the system accurately, includes every component once, and carries enough information for accountability. This lesson decides the boundary, the columns and the owner before a single row is written.",
+        "question": "Which component in your lab would be easiest to forget, and which source would reveal it?"
+      },
+      "checklist": [
+        "I listed every component inside the boundary once, including the hypervisor hosts, the core, the access switch and SBD-ROOTCA01.",
+        "I defined the inventory’s columns, an accountable owner by role, and the planned status for systems not yet built.",
+        "I named each discovery source with what it proves, and wrote down SBD-MGMT01’s management-only paths."
+      ]
+    },
+    "mgmt-build": {
+      "short": "Build SBD-MGMT01",
+      "tag": "02 / BUILD",
+      "status": "MGMT01 ONLINE",
+      "stepTitles": [
+        "Build SBD-MGMT01 in the Servers OU",
+        "Check time, updates and event forwarding",
+        "Scope management to SBD-ADMIN-SRV01",
+        "Prepare the record’s folders and history",
+        "Prove the closure from a refused seat"
+      ],
+      "mistake": "Adding a narrow new firewall rule for SBD-ADMIN-SRV01 and leaving the default Remote Desktop and remote management rules as they are. Allow rules add up, so the broad rules still admit everyone; scope the existing rules, and prove it from a seat that must be refused.",
+      "network": "SBD-MGMT01 is live on VLAN 70, managed only from SBD-ADMIN-SRV01 and taking its updates from SBD-WSUS01 in Ring 3. SBD-ADMIN-PC01’s attempt on the same port is refused at the core.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Implement",
+        "body": "The server that holds the record gets the least it needs: one administration seat, no extra roles or agents, no collection paths, and a record folder only administrators can open.",
+        "question": "If SBD-MGMT01 were compromised tomorrow, what could an attacker reach from it — and what does that tell you about the design?"
+      },
+      "checklist": [
+        "I joined SBD-MGMT01 into the Servers OU and confirmed its time source, its Ring 3 update policy and its forwarded events.",
+        "I scoped the Remote Desktop and remote management rules to 10.0.60.20 and saw SBD-ADMIN-PC01’s attempt refused.",
+        "I created D:\\Inventory with inheritance removed, for SYSTEM and Administrators only, with current, history, sources and findings folders."
+      ]
+    },
+    "mgmt": {
+      "short": "Build the inventory",
+      "tag": "03 / INVENTORY",
+      "status": "INVENTORY LIVE",
+      "stepTitles": [
+        "Start from the records the path already keeps",
+        "Load every component with every column",
+        "Define update-on-change and monthly reconciliation",
+        "Name the owner and publish the first version"
+      ],
+      "mistake": "Building the inventory once and treating it as finished. Without builds and retirements updating it and a monthly comparison against the directory, the leases and WSUS, it drifts back into a snapshot, and every coverage claim later courses make loses its denominator.",
+      "network": "SBD-MGMT01 now holds the inventory, filled in from SBD-ADMIN-SRV01. Every component the boundary lists has a row, including the systems that are planned but not yet built.",
+      "control": {
+        "id": "CM-8(1)",
+        "name": "System Component Inventory | Updates During Installation and Removal",
+        "phase": "Implement",
+        "body": "The inventory stays current because the procedures that change the network change it too: every build adds its rows, every retirement marks its row, and the owner approves each change in the log.",
+        "question": "Which procedure in your lab is most likely to forget its inventory step, and how would the monthly reconciliation catch it?"
+      },
+      "checklist": [
+        "I loaded every component from the earlier courses’ records, with each column filled and the planned systems marked planned.",
+        "I wrote the update-on-change rule, the monthly reconciliation, and the owner and deputy who approve changes.",
+        "I published the first version into history with its SHA-256 and a change-log entry."
+      ]
+    },
+    "inventory-sources": {
+      "short": "Gather the sources",
+      "tag": "04 / SOURCES",
+      "status": "SOURCES FILED",
+      "stepTitles": [
+        "Read the directory over LDAP",
+        "Export the VLAN 80 leases",
+        "Export WSUS’s computer list",
+        "Collect SBD-REPO01’s records and the baselines",
+        "Hash, file and normalize the set"
+      ],
+      "mistake": "Comparing sources taken on different days, or names in different formats. A lease from last week and a directory read today disagree about machines that simply moved, and SBD-PC07.sbd.test never matches SBD-PC07 — take the sources together, and reduce names to one key.",
+      "network": "From SBD-ADMIN-SRV01, the inventory owner reads the directory over LDAP, exports the leases on SBD-DHCP01 and the computer list on SBD-WSUS01 in Tier 1 sessions, and copies SBD-REPO01’s records over SSH; the set is then filed on SBD-MGMT01.",
+      "control": {
+        "id": "CM-8(2)",
+        "name": "System Component Inventory | Automated Maintenance",
+        "phase": "Implement → Assess",
+        "body": "The directory, the DHCP server and WSUS keep their own records automatically. Exporting them on the same day and comparing them by script keeps the inventory’s accuracy checked by machines, not by memory.",
+        "question": "Which of these sources would notice a device that never joins the domain and never asks for a lease?"
+      },
+      "checklist": [
+        "I exported the directory, the VLAN 80 leases and WSUS’s computer list on the same day through existing Tier 1 paths.",
+        "I collected SBD-REPO01’s records and access-log summary, and listed the baseline sessions by host and date.",
+        "I hashed the set, filed it in D:\\Inventory\\sources on SBD-MGMT01, and reduced every name to one key."
+      ]
+    },
+    "mgmt-prove": {
+      "short": "Reconcile and prove",
+      "tag": "05 / PROVE",
+      "status": "INVENTORY RECONCILED",
+      "stepTitles": [
+        "Compare the record with each source",
+        "Prove the check with planted differences",
+        "Classify and close every difference",
+        "Baseline SBD-MGMT01",
+        "Publish and hand off the reconciled record"
+      ],
+      "mistake": "Making the counts agree by adding whatever the sources report to the inventory. An unknown device then becomes ‘recorded’ without anyone asking where it came from — exactly what the reconciliation exists to catch.",
+      "network": "SBD-MGMT01 compares the record with the month’s sources and publishes a reconciled version. Its first SCAP baseline runs in a Tier 1 session from SBD-ADMIN-SRV01.",
+      "control": {
+        "id": "CM-8(3)",
+        "name": "System Component Inventory | Automated Unauthorized Component Detection",
+        "phase": "Assess → Monitor",
+        "body": "802.1X from course 1.13 already keeps unenrolled devices off VLAN 80. The monthly scripted comparison catches what is left — anything a source knows that the record doesn’t — and the system owner is told the day it is found.",
+        "question": "How long could an unrecorded server with a static address run on VLAN 20 before this process noticed it?"
+      },
+      "checklist": [
+        "I compared the record with the directory, the leases and WSUS’s rings, and classified every difference as unrecorded, a gap or drift.",
+        "I proved the comparison catches planted differences in test copies that were never published.",
+        "I baselined SBD-MGMT01 and published the reconciled version with its hash and the next reconciliation date."
+      ]
+    }
+  }
+}

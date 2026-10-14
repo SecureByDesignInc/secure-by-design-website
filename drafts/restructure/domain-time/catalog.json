@@ -1,0 +1,56 @@
+{
+  "id": "domain-time",
+  "categoryOrder": 3,
+  "number": "1.3",
+  "estimatedHours": 2.5,
+  "title": "Configure domain time",
+  "subtitle": "The Windows Time hierarchy, the PDC emulator & chrony",
+  "description": "Give the air-gapped domain one clock it can trust: make SBD-DC01, the PDC emulator, the reliable source serving its own clock and check it against an approved reference, keep SBD-DC02, Windows members and Linux servers on the hierarchy, and prove the chain with measured offsets.",
+  "tags": [
+    "Windows Server",
+    "Time service",
+    "NTP",
+    "chrony",
+    "Active Directory"
+  ],
+  "platform": "Windows Server",
+  "systems": [
+    "SBD-DC01",
+    "SBD-DC02"
+  ],
+  "artLabels": [
+    "Plan + PDC source",
+    "Members + chrony",
+    "Prove + troubleshoot"
+  ],
+  "outcomes": [
+    "Explain why Kerberos, logs and certificates need agreeing clocks, and plan the hierarchy, reference, thresholds and service path.",
+    "Make SBD-DC01, the PDC emulator, the reliable source serving its own clock, with hypervisor time sync off on both controllers.",
+    "Keep every Windows member and Linux server on the hierarchy, with nothing from Group Policy or a hypervisor overriding it.",
+    "Prove the chain with sources, offsets and events, and fix time faults, a moved PDC emulator role included."
+  ],
+  "stages": [
+    {
+      "title": "Plan the domain's time",
+      "detail": "Every sign-in, log entry and certificate in this network depends on clocks that agree, and an air-gapped network has no internet time to lean on. Learn why time matters here and how the Windows Time hierarchy carries one clock from SBD-DC01 to every system, then write down the reference, the thresholds and the service path you will hold the domain to."
+    },
+    {
+      "title": "Make SBD-DC01 the domain's time source",
+      "detail": "With no outside time to lean on, the domain's clock is whatever SBD-DC01 says, so make that a deliberate, checked configuration. Take the hypervisor out of both controllers' time, mark SBD-DC01 — the PDC emulator — as the reliable source serving its own clock with no external peer, and run the first check against the approved reference."
+    },
+    {
+      "title": "Bring every system onto the hierarchy",
+      "detail": "One source is only useful if every other clock follows it and nothing quietly overrides that. Leave SBD-DC02 and the Windows members on the domain hierarchy's defaults, keep Group Policy and hypervisors out of their time, and write the chrony configuration every Linux server in later courses uses to follow both controllers."
+    },
+    {
+      "title": "Prove the time chain",
+      "detail": "A source you configured is a claim until every link answers to it. Read each system's source and status, measure offsets against the thresholds from lesson 1, and keep the events and readings that let an assessor see the time chain for themselves."
+    },
+    {
+      "title": "Find the time fault and record the fix",
+      "detail": "Time faults rarely look like time: a refused sign-in, a replication error, a certificate that is suddenly not yet valid. Measure the offset first, find where the hierarchy broke — a member off its source, a moved PDC emulator role, a restored or reverted VM — then fix the cause, resync safely and record what happened."
+    }
+  ],
+  "outcomeSummary": "One declared, checked clock on SBD-DC01. Every system following it. Offsets measured, not assumed.",
+  "networkLabel": "VLAN 10 / DOMAIN TIME"
+}

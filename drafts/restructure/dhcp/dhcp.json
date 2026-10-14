@@ -1,0 +1,270 @@
+{
+  "id": "dhcp",
+  "hero": {
+    "title": "Run DHCP on",
+    "accent": "SBD-DHCP01.",
+    "text": "Design the workstation VLAN’s addressing, build and authorize SBD-DHCP01 on a member server, register client names securely under one dedicated account, and keep the lease trail and backups. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "SBD-DHCP01"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-DHCP01",
+      "10.0.20.10 · VLAN 20"
+    ],
+    [
+      "Scope",
+      "10.0.80.1–254 / 24 · VLAN 80"
+    ],
+    [
+      "Pool",
+      "10.0.80.100–199 · exclusions .1–.99 and .200–.254"
+    ],
+    [
+      "Options",
+      "Router 10.0.80.1 · DNS 10.0.10.10 and 10.0.10.11 · sbd.test"
+    ],
+    [
+      "Lease",
+      "8 days (sample)"
+    ],
+    [
+      "Update account",
+      "svc-dhcp-dns (sample)"
+    ]
+  ],
+  "scene": {
+    "tag": "ADDRESSING · VLAN 20 + 80",
+    "label": "Interactive 3D lesson network showing SBD-DHCP01 leasing addresses to a VLAN 80 test client through the core relay and registering the client’s name with both domain controllers.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "SBD-DHCP01 leases VLAN 80 addresses through the core’s relay and registers each client’s name with both domain controllers under one dedicated account, with name protection on. Its lease history and backups are kept, and course 1.8 takes over its administration.",
+    "nodes": [
+      {
+        "id": "dhcp",
+        "name": "SBD-DHCP01",
+        "sub": "10.0.20.10",
+        "kind": "server",
+        "row": "back",
+        "from": 1,
+        "button": "SBD-DHCP01",
+        "title": "SBD-DHCP01 · 10.0.20.10",
+        "description": "Built in lesson 2 on VLAN 20 as a member server in the Servers OU, run at its console by SBD Tier 1 Admins. It leases the VLAN 80 pool through the core’s relay (F04), registers client names as svc-dhcp-dns with name protection, and keeps its audit log and backups on its second volume."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "A domain controller from course 1.1 and the console for this course’s Tier 0 steps: authorizing SBD-DHCP01 in lesson 2, creating the 10.0.80 reverse zone and the update account in lesson 3, and reading who owns a client’s record."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second domain controller and DNS server. The scope hands out both controllers, and the records SBD-DHCP01 registers replicate to both, so either can answer for a VLAN 80 name."
+      },
+      {
+        "id": "test",
+        "name": "SBD-TEST80",
+        "sub": "VLAN 80 · leased address",
+        "kind": "workstation",
+        "row": "front",
+        "from": 1,
+        "button": "SBD-TEST80",
+        "title": "SBD-TEST80 · lease from 10.0.80.100–199",
+        "description": "A disposable Windows client VM on VLAN 80, outside the domain. It proves the relay and the options in lesson 2, secure registration in lesson 3, and name protection in lesson 5, then stays for course 1.8’s tier proof."
+      }
+    ],
+    "flows": [
+      {
+        "from": "test",
+        "to": "dhcp",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "DHCP lease through the core relay (F04)",
+        "twoWay": true
+      },
+      {
+        "from": "dhcp",
+        "to": "dc1",
+        "lessons": [
+          1
+        ],
+        "label": "Authorization check in the directory (F03)"
+      },
+      {
+        "from": "dhcp",
+        "to": "dc1",
+        "lessons": [
+          2,
+          4
+        ],
+        "label": "Secure dynamic DNS update as svc-dhcp-dns (F01)"
+      },
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          2,
+          4
+        ],
+        "label": "Zone replication of the client records",
+        "twoWay": true
+      }
+    ]
+  },
+  "lessons": {
+    "dhcp-design": {
+      "short": "Design addressing",
+      "tag": "01 / DESIGN",
+      "status": "SCOPE PLANNED",
+      "stepTitles": [
+        "Decide where DHCP runs and for whom",
+        "Define the scope, its exclusions, and no reservations",
+        "Set the lease length and the three options",
+        "Assign the three identities",
+        "Confirm F04 and the core’s relay"
+      ],
+      "mistake": "Adding options because they might be useful — a boot server, a proxy auto-discovery address, an outside resolver as a spare. Every option is configuration every client trusts, and an outside resolver in option 6 would also break the domain’s own lookups.",
+      "network": "Nothing is built yet. SBD-DC01 and SBD-DC02 run from course 1.1; SBD-DHCP01 and the VLAN 80 test client exist only in the plan, and the core’s relay is already part of the network.",
+      "control": {
+        "id": "CM-7",
+        "name": "Least Functionality",
+        "phase": "Prepare → Implement",
+        "body": "Least functionality starts with the service’s reach: leases on one VLAN only, and three options with nothing added. Each option is configuration every client accepts without question, so the design records why each one exists.",
+        "question": "If someone asked you to add one more option, what would it let a misconfigured or compromised DHCP server tell every client?"
+      },
+      "checklist": [
+        "I recorded VLAN 80 as the only leased segment and its full-subnet scope with two exclusion ranges and no reservations.",
+        "I wrote down the lease length, the three options, and the reason for each.",
+        "I confirmed from the network’s record that the core relays VLAN 80 to 10.0.20.10 under F04, without changing the router."
+      ]
+    },
+    "dhcp": {
+      "short": "Build SBD-DHCP01",
+      "tag": "02 / BUILD",
+      "status": "DHCP SERVING VLAN 80",
+      "stepTitles": [
+        "Create SBD Tier 1 Admins and its one delegation",
+        "Build SBD-DHCP01 and join it into the Servers OU",
+        "Install the role and authorize the server",
+        "Create the scope, with DNS updates off for now",
+        "Pull a first lease through the core relay"
+      ],
+      "mistake": "Skipping directory authorization, or checking only that the cmdlet ran. An unauthorized Windows DHCP server in the domain refuses to lease, so no address arrives and the relay gets blamed. Confirm Get-DhcpServerInDC lists SBD-DHCP01 and event 1044 says it is servicing clients before you troubleshoot the path.",
+      "network": "SBD-DHCP01 on VLAN 20 checks its authorization in the directory and leases an address to the VLAN 80 test client through the core relay (F04). No client name is registered yet.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Record the scope, exclusions, options, lease length, and authorization as configuration decisions tied to the lesson 1 design. Authorization and the delegated join are settings with a security reason; write the reason down beside the value.",
+        "question": "If someone started an unauthorized Windows DHCP server in the domain, what would stop it from serving, and how would your records show that?"
+      },
+      "checklist": [
+        "I confirmed SBD-DHCP01 sits in the Servers OU with SBD Tier 1 Admins as the only domain group in its local Administrators.",
+        "I confirmed Get-DhcpServerInDC lists SBD-DHCP01 and found event 1044 after the restart.",
+        "I pulled a test lease through the core relay and checked its gateway, DNS servers, and suffix against the design."
+      ]
+    },
+    "dhcp-dns": {
+      "short": "Register names securely",
+      "tag": "03 / REGISTER",
+      "status": "NAMES REGISTERED",
+      "stepTitles": [
+        "Create the 10.0.80 reverse zone",
+        "Create the update account; keep DnsUpdateProxy empty",
+        "Give the server its credential and name protection",
+        "Renew and check the records and their owner",
+        "Record the update identity and its rules"
+      ],
+      "mistake": "Adding SBD-DHCP01 or its update account to DnsUpdateProxy to make registration work. Records created by the group’s members are left unsecured, so the next device to update a name takes it over — the very hijack name protection is meant to stop.",
+      "network": "SBD-DHCP01 now registers the test client’s A, PTR, and DHCID records with the domain controllers as svc-dhcp-dns, and the records replicate between SBD-DC01 and SBD-DC02.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Implement",
+        "body": "Client records are written by one dedicated account with no rights beyond Domain Users, never by a computer account or an unsecured proxy group. Its owner, its password handling, and what it may change belong in the record.",
+        "question": "If the update account’s password leaked, what could someone do with it, and how would you notice?"
+      },
+      "checklist": [
+        "I created the 10.0.80 reverse zone with secure updates and the svc-dhcp-dns account, and confirmed DnsUpdateProxy is empty.",
+        "I set the DNS credential and turned on registration for every client, cleanup when leases end, and name protection.",
+        "I found the test client’s A, PTR, and DHCID records on both controllers, owned by SBD\\svc-dhcp-dns."
+      ]
+    },
+    "dhcp-audit": {
+      "short": "Audit and back up",
+      "tag": "04 / AUDIT",
+      "status": "LEASE TRAIL KEPT",
+      "stepTitles": [
+        "Read the audit log and its weekly reuse",
+        "Archive each day’s file with its hash",
+        "Review leases and configuration changes",
+        "Check for unauthorized DHCP servers",
+        "Back up the database and the configuration"
+      ],
+      "mistake": "Relying on the audit log Windows keeps. Each weekday’s file is reused a week later, so an investigation that starts eight days after the fact finds no record of who held the address.",
+      "network": "The lease path from lesson 2 stays live while SBD-DHCP01 keeps its audit trail and backups on its second volume. No new network path is added.",
+      "control": {
+        "id": "AU-11",
+        "name": "Audit Record Retention",
+        "phase": "Implement → Monitor",
+        "body": "Windows keeps about a week of DHCP audit history; your records requirement decides how long lease history must last. Daily copies with hashes turn the weekly files into a retained record.",
+        "question": "How far back would you need lease history to trace an address in a router deny log, and does your archive reach that far?"
+      },
+      "checklist": [
+        "I confirmed audit logging is on and found yesterday’s file in the archive with its hash in the catalog.",
+        "I reviewed the leases and the authorized-server list and recorded anything I didn’t recognize as a finding.",
+        "I filed a dated database backup and XML export with hashes, and wrote down that the DNS credential must be set again after a restore."
+      ]
+    },
+    "dhcp-prove": {
+      "short": "Prove and hand off",
+      "tag": "05 / VERIFY",
+      "status": "SERVICE PROVEN",
+      "stepTitles": [
+        "Check every value the test client received",
+        "Try to take the test client’s name",
+        "Take SBD-DHCP01’s first SCAP baseline",
+        "Seal both halves of the record",
+        "Write the handoff for course 1.8"
+      ],
+      "mistake": "Proving only that a lease arrives. A lease with the wrong DNS servers, a record owned by the wrong account, or a name another device can take over all look like success until something depends on them.",
+      "network": "The test client renews through the core relay and its records answer from both controllers. The refused takeover shows up in SBD-DHCP01’s logs, not as a new path.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The proof tests the design rather than the settings: the values a client actually receives, the owner of the record it gets, and a deliberate takeover that must fail. The first SCAP baseline adds the server’s configuration to the same record.",
+        "question": "Which part of your proof would an assessor still have to take on trust, and what record would remove that?"
+      },
+      "checklist": [
+        "I checked the test client’s address, gateway, DNS servers, suffix, and lease length against the design.",
+        "I tried to take the test client’s name from a new MAC address and found event 1340, with the record unchanged.",
+        "I filed SBD-DHCP01’s first baseline with classified findings, sealed both manifests, and wrote the handoff to course 1.8."
+      ]
+    }
+  }
+}

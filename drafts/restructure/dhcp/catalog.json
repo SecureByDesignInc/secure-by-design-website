@@ -1,0 +1,55 @@
+{
+  "id": "dhcp",
+  "categoryOrder": 7,
+  "number": "1.7",
+  "estimatedHours": 2.4,
+  "title": "Run DHCP on SBD-DHCP01",
+  "subtitle": "Workstation leases, secure name registration & an audited lease trail",
+  "description": "Design and build the workstation VLAN's addressing service on SBD-DHCP01: a full-subnet scope with exclusions and the three options clients trust, directory authorization, the core's relay verified rather than built, client names registered under one dedicated low-privilege account with name protection, a lease history kept beyond Windows' weekly overwrite, backups, and a proof that a name takeover fails.",
+  "tags": [
+    "Windows Server",
+    "DHCP",
+    "DNS",
+    "Name protection",
+    "Audit logging"
+  ],
+  "platform": "Windows Server · Windows client",
+  "systems": [
+    "SBD-DHCP01"
+  ],
+  "artLabels": [
+    "VLAN 80 scope",
+    "Secure name updates",
+    "Audited leases"
+  ],
+  "outcomes": [
+    "Design the VLAN 80 scope, its exclusions, lease length, and options, and confirm the core's relay under F04.",
+    "Build and authorize SBD-DHCP01 on a member server run by its own server-administration accounts.",
+    "Register client names under one dedicated account with name protection, never through DnsUpdateProxy.",
+    "Keep the lease history and backups, and prove the service, including a refused name takeover."
+  ],
+  "stages": [
+    {
+      "title": "Design the addressing service",
+      "detail": "DHCP decides the first things every workstation believes: its address, its gateway, and which servers answer its names. Design that service before building it — one scope for VLAN 80, the options clients will trust, and the identities that authorize, run, and register for it — and confirm the core already relays VLAN 80's requests."
+    },
+    {
+      "title": "Build SBD-DHCP01 and its scope",
+      "detail": "Addressing is the first service fifty machines will ask for. Build the DHCP server on a member server run by its own administration accounts, authorize it in the directory — the check that keeps unauthorized Windows DHCP servers from serving — and create the VLAN 80 scope, then pull a first lease through the core's relay."
+    },
+    {
+      "title": "Register client names securely",
+      "detail": "Course 1.2's zone accepts only secure updates, so the real question is who writes VLAN 80's records. Give that job to one dedicated, unprivileged account, turn on name protection so no device can take over another's name, and keep the DnsUpdateProxy group empty — it strips the protection off every record its members create."
+    },
+    {
+      "title": "Audit leases and back up the server",
+      "detail": "A router's deny log names addresses, not machines; the DHCP audit log is how you turn an address at a moment in time into a workstation. Keep that log longer than the week Windows keeps it, review who holds leases, know what an unauthorized DHCP server can and can't do here, and back the server up so it can be rebuilt."
+    },
+    {
+      "title": "Prove the service and hand off",
+      "detail": "Prove DHCP the way clients will meet it: the test client gets the right lease and its name registers securely, a device that tries to take that name is refused, and the evidence lands in the logs. Then take SBD-DHCP01's first SCAP baseline and hand the server to course 1.8, which moves its administration to the Tier 1 seat."
+    }
+  ],
+  "outcomeSummary": "Addresses handed out on purpose, with names no device can take over.",
+  "networkLabel": "VLAN 20 + 80 / ADDRESSING"
+}

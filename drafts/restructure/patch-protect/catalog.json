@@ -1,57 +1,55 @@
 {
   "id": "patch-protect",
-  "categoryOrder": 13,
-  "number": "1.13",
-  "estimatedHours": 2.2,
-  "title": "Patch, protect, and watch for weakness",
-  "subtitle": "WSUS rings, a living inventory, ePO & credentialed scanning",
-  "description": "Keep the proven state from drifting: Windows updates through WSUS rings fed across the air gap, one approved source per software type (with SBD-REPO01 from course 1.8 for Linux packages), a living inventory on SBD-MGMT01, managed endpoint protection through SBD-EPO01, and SBD-NESSUS01 turning the scan cadence into routine.",
+  "categoryOrder": 14,
+  "number": "1.14",
+  "estimatedHours": 3,
+  "title": "Deliver Windows updates from SBD-WSUS01",
+  "subtitle": "Air-gapped WSUS: offline import, four rings & Group Policy targeting",
+  "description": "Give every Windows system one road for updates: build SBD-WSUS01 as a disconnected WSUS server, feed it each month through the export and import path Microsoft describes for air-gapped networks, target four rings by Group Policy — pilot, workstations, member servers, then the domain controllers and the rest of Tier 0, installed by hand — and prove the cycle with WSUS reports, spot checks and a first STIG baseline.",
   "tags": [
     "Windows Server",
     "WSUS",
-    "Endpoint protection",
-    "Vulnerability scanning",
-    "Configuration management"
+    "Group Policy",
+    "Patch management",
+    "Air gap"
   ],
-  "platform": "Windows Server · Linux",
+  "platform": "Windows Server",
   "systems": [
-    "SBD-WSUS01",
-    "SBD-MGMT01",
-    "SBD-EPO01",
-    "SBD-NESSUS01"
+    "SBD-WSUS01"
   ],
   "artLabels": [
-    "Rings + one source",
-    "Inventory + protection",
-    "Credentialed cadence"
+    "Offline import",
+    "Four update rings",
+    "Proven cycle"
   ],
   "outcomes": [
-    "Deliver Windows updates through ring-gated, air-gap-fed channels, with one approved source per software type.",
-    "Prove protection coverage against a living component inventory.",
-    "Run credentialed vulnerability scanning on the standing cadence with classified findings."
+    "Build SBD-WSUS01 as a disconnected update server with TLS-protected metadata and tier-bound administration.",
+    "Carry each month's updates across the air gap by WSUS export and import, hashed on both sides.",
+    "Target four update rings with computer groups and Group Policy, with the domain controllers installed last and by hand.",
+    "Promote a monthly cycle ring by ring and prove it with compliance reports, spot checks and a first baseline."
   ],
   "stages": [
     {
-      "title": "Design the rings and the software rules",
-      "detail": "Decide how change reaches the network before any of it does: update rings that try things on the expendable before the essential, one approved source per software type (with SBD-REPO01 from course 1.8 already serving Linux), and register rows for every new path."
+      "title": "Design the rings and the Windows update rule",
+      "detail": "Decide how Windows updates reach the network before any arrive: one road through SBD-WSUS01, four rings that try every update on what the network can lose before what it can't, and a monthly crossing on the media procedure. Then confirm the register already carries the road."
     },
     {
-      "title": "Build SBD-WSUS01 and the ring policies",
-      "detail": "WSUS becomes the only road Windows updates travel: content imported across the air gap, approvals per ring, and Group Policy objects (GPOs) that point every OU at the server — with a pilot ring that proves each approval first."
+      "title": "Build SBD-WSUS01 as a disconnected server",
+      "detail": "Build the server the network will take its updates from: a hardened member server on VLAN 20 that never synchronizes, serves metadata over TLS and signed files over HTTP, and is administered only from the two seats the tier model allows. Its scope is decided here, because what crosses each month is whatever that scope holds."
     },
     {
-      "title": "SBD-MGMT01 and the living inventory",
-      "detail": "The course 1.12 fleet inventory was a snapshot; SBD-MGMT01 makes it a living record — every system, its ring, its sources, its last-seen state — maintained from the management seat the model placed in VLAN 70."
+      "title": "Carry updates across the air gap",
+      "detail": "SBD-WSUS01 never talks to Microsoft. Each month a second WSUS server on the connected side synchronizes the recorded scope and downloads its files; its metadata export and content folder cross on approved media, hashed on both sides, and SBD-WSUS01 imports them — the two-server path Microsoft describes for air-gapped networks."
     },
     {
-      "title": "Endpoint protection through SBD-EPO01",
-      "detail": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show."
+      "title": "Target the rings with computer groups and Group Policy",
+      "detail": "Rings become mechanics: four computer groups on SBD-WSUS01, client-side targeting so each computer files itself into its ring, and one Group Policy object per ring that names the server, the ring and its install behaviour. The domain controllers get a ring of their own: they download on their own but install only when Tier 0 starts it."
     },
     {
-      "title": "SBD-NESSUS01 and the standing cadence",
-      "detail": "The course 1.5 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's four new systems getting their own baselines on the way out."
+      "title": "Run the first cycle and prove it",
+      "detail": "The design meets a real month: approve the imported updates for the pilot, promote them ring by ring on the written soak times, and install the domain controllers by hand. Then prove the result with WSUS's own reports, spot checks on the systems themselves, and the first SCAP baseline of SBD-WSUS01."
     }
   ],
-  "outcomeSummary": "Updates by ring, software from approved sources, managed protection, and a scanner that keeps everyone honest.",
-  "networkLabel": "VLAN 20 + 50 + 70 / MANAGEMENT"
+  "outcomeSummary": "One road for Windows updates: imported across the air gap, approved ring by ring, and proven.",
+  "networkLabel": "VLAN 20 / UPDATE SERVICE"
 }

@@ -1,0 +1,292 @@
+{
+  "id": "domain-time",
+  "hero": {
+    "title": "Configure domain",
+    "accent": "time.",
+    "text": "Give the air-gapped domain one clock it can trust: make SBD-DC01, the PDC emulator, the reliable source, keep SBD-DC02, Windows members and Linux servers on the hierarchy, and measure the chain. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "DOMAIN TIME"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test · forest root and only domain"
+    ],
+    [
+      "PDC emulator",
+      "SBD-DC01 · 10.0.10.10"
+    ],
+    [
+      "SBD-DC02",
+      "10.0.10.11 · follows the PDC emulator"
+    ],
+    [
+      "Time rule",
+      "F09 · UDP 123 to both controllers"
+    ],
+    [
+      "Kerberos tolerance",
+      "5 minutes (domain default)"
+    ],
+    [
+      "Thresholds",
+      "Members ≤ 1 s of SBD-DC01 · SBD-DC01 ≤ 2 s of the reference"
+    ],
+    [
+      "Reference check",
+      "Daily, and after any restart, restore or revert"
+    ]
+  ],
+  "scene": {
+    "tag": "DOMAIN CONTROLLERS · VLAN 10",
+    "label": "Interactive 3D lesson network showing SBD-DC01 serving domain time from its own clock on VLAN 10, SBD-DC02 following it, a domain member taking time from either controller, and the controller consoles where time is configured and checked.",
+    "completeStatus": "ONE CLOCK",
+    "completeCaption": "SBD-DC01 is the declared, checked source; SBD-DC02 and every member follow it, the Linux chrony settings are filed, and the chain was measured against its thresholds.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Built in course 1.1 and holding the PDC emulator role of the forest root domain. Lesson 2 makes it the reliable time source serving its own clock, with hypervisor time sync off and its clock checked against the approved reference."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second controller. Its hypervisor time sync goes off in lesson 2, it stays on the domain hierarchy with default settings in lesson 3, and lesson 5 shows how it becomes the source if the PDC emulator role moves."
+      },
+      {
+        "id": "console",
+        "name": "DC CONSOLES",
+        "sub": "Administration viewpoint",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 0,
+        "button": "DC consoles",
+        "title": "DC consoles · Administration viewpoint",
+        "description": "Until course 1.8 builds AdminJumpBox01, time is configured and checked at each controller's VM console. The approved reference is read here too; it never connects to the network."
+      },
+      {
+        "id": "member",
+        "name": "TEST CLIENT",
+        "sub": "Domain member viewpoint",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 0,
+        "button": "Test client",
+        "title": "Test client · domain member viewpoint",
+        "description": "A domain member that follows the hierarchy: a Windows member on NT5DS defaults, or a Linux server with chrony pointed at both controllers. It stands for every member later courses build."
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Time from the PDC emulator · UDP 123",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc1",
+        "lessons": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "label": "Domain time · UDP 123 (F09)",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc2",
+        "lessons": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "label": "Domain time · UDP 123 (F09)",
+        "twoWay": true
+      },
+      {
+        "from": "console",
+        "to": "dc1",
+        "lessons": [
+          1,
+          3,
+          4
+        ],
+        "label": "Console · configuration and reference check"
+      },
+      {
+        "from": "console",
+        "to": "dc2",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Console · configuration and checks"
+      }
+    ]
+  },
+  "lessons": {
+    "time-plan": {
+      "short": "Plan the domain's time",
+      "tag": "01 / PLAN",
+      "status": "TIME PLANNED",
+      "stepTitles": [
+        "Learn why the clocks must agree",
+        "Trace the Windows Time hierarchy",
+        "Name the reference and the fallback",
+        "Set the thresholds you will hold",
+        "Confirm the time row and firewall rules"
+      ],
+      "mistake": "Treating Kerberos's five minutes as the target. By the time clocks are minutes apart, sign-ins are already failing and log timelines no longer line up; a one-second threshold tells you about drift while there is still time to correct it.",
+      "network": "Both controllers are live on VLAN 10. The paths from a domain member to each controller are rule F09, UDP 123, which this plan confirms; SBD-DC02's own time requests to SBD-DC01 stay inside VLAN 10.",
+      "control": {
+        "id": "SC-45(1)",
+        "name": "System Time Synchronization | Synchronization with Authoritative Time Source",
+        "phase": "Prepare → Implement",
+        "body": "SC-45(1) asks you to compare system clocks with an authoritative time source at a set frequency and to synchronize them when the difference passes a set limit. Here the authoritative source is SBD-DC01 by declaration, so this plan fills in both assignments: the reference and how often SBD-DC01 is checked against it, and the thresholds every clock is held to.",
+        "question": "Who checks SBD-DC01 against the reference, how often, and what difference triggers a correction?"
+      },
+      "checklist": [
+        "I recorded the forest root, its PDC emulator and the hierarchy every system follows.",
+        "I named the approved reference, who checks it and how often, and the fallback if SBD-DC01 is lost.",
+        "I recorded both thresholds, the Kerberos tolerance, and rule F09 with each controller's UDP 123 firewall rule."
+      ]
+    },
+    "time": {
+      "short": "Make DC01 the time source",
+      "tag": "02 / CONFIGURE",
+      "status": "TIME FROM SBD-DC01",
+      "stepTitles": [
+        "Confirm SBD-DC01 holds the PDC emulator role",
+        "Turn off hypervisor time sync for both DCs",
+        "Mark SBD-DC01 as the reliable time source",
+        "Read what SBD-DC01 now advertises",
+        "Run the first reference check"
+      ],
+      "mistake": "Leaving hypervisor time synchronization on for the domain controller VMs. The host clock then silently overrides the PDC emulator, and the domain's time can change with nothing changed on SBD-DC01.",
+      "network": "SBD-DC01 serves time from its own clock, with nothing above it, and SBD-DC02 takes its time from it over UDP 123 inside VLAN 10. The configuration and the reference check happen at the controllers' consoles; no member path is shown yet.",
+      "control": {
+        "id": "SC-45",
+        "name": "System Time Synchronization",
+        "phase": "Implement",
+        "body": "SC-45 asks that clocks be synchronized within and between systems and system components. SBD-DC01 is the reference by declaration, so the evidence needs how its clock is checked and corrected, not only the w32tm output. The AU-8 time stamps on every audit record are only as good as this clock.",
+        "question": "How would you know if SBD-DC01's clock had drifted past your threshold, and who corrects it?"
+      },
+      "checklist": [
+        "I confirmed SBD-DC01 holds the PDC emulator role and reports Local CMOS Clock as its source.",
+        "I turned off hypervisor time synchronization for both domain controller VMs.",
+        "I ran and recorded the first reference check, with any correction made by the measured difference."
+      ]
+    },
+    "time-members": {
+      "short": "Every system follows",
+      "tag": "03 / MEMBERS",
+      "status": "EVERY SYSTEM FOLLOWS",
+      "stepTitles": [
+        "Leave SBD-DC02 and Windows members on defaults",
+        "Keep time out of Group Policy",
+        "Keep hypervisors out of every VM's time",
+        "Write the chrony file for Linux servers",
+        "Record why maxdistance is 16",
+        "Cover the systems outside the hierarchy"
+      ],
+      "mistake": "Fixing a member's time with a GPO that names SBD-DC01 as its NTP server. The member leaves the domain hierarchy for an unauthenticated manual peer, the policy overrides any local fix, and if the GPO also reaches SBD-DC01 it overrides the settings that make it the source.",
+      "network": "SBD-DC02 takes time from the PDC emulator, and the domain member from either controller, all on UDP 123 under rule F09. The member stands for every Windows member and for the Linux servers later courses build with this chrony file.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "CM-6 asks for documented configuration settings, with any departures identified and approved. Most of the time settings here are defaults kept on purpose — NT5DS, nothing from policy, no hypervisor source — and one is a recorded departure: chrony's maxdistance 16, with the reason it exists.",
+        "question": "Which time setting on a member would you treat as a finding, and how would you find where it came from?"
+      },
+      "checklist": [
+        "I confirmed SBD-DC02 and a Windows member use NT5DS with no value marked (Policy).",
+        "I recorded that every VM takes its time from the domain, never from its hypervisor host.",
+        "I filed the chrony configuration for the Linux servers, with the reason for maxdistance 16."
+      ]
+    },
+    "time-verify": {
+      "short": "Prove the time chain",
+      "tag": "04 / VERIFY",
+      "status": "CHAIN MEASURED",
+      "stepTitles": [
+        "Read each link's source and status",
+        "Measure the controllers with w32tm /monitor",
+        "Measure a member against SBD-DC01",
+        "Keep the Time-Service events",
+        "Write the dated evidence record"
+      ],
+      "mistake": "Taking a correct source as proof of correct time. A member can name SBD-DC01 and still be seconds off right after a large correction, and SBD-DC01 can agree with itself and be wrong; only measured offsets and the reference log show the chain holds.",
+      "network": "Checks run from the controllers' consoles and from the member: w32tm /monitor queries both controllers, and the member samples its offset from SBD-DC01. The whole hierarchy stays in view because every measurement is taken along it.",
+      "control": {
+        "id": "AU-8",
+        "name": "Time Stamps",
+        "phase": "Assess",
+        "body": "AU-8 asks that audit records carry time stamps from internal system clocks, in Coordinated Universal Time or with a fixed or recorded offset from it. The offsets and time zones you record here are the evidence that a time stamp on one system means the same moment on every other.",
+        "question": "If two systems' records of the same event disagree by three seconds, which of your records shows which clock was wrong?"
+      },
+      "checklist": [
+        "I recorded each link's source and stratum, from Local CMOS Clock on SBD-DC01 down to a member.",
+        "I measured SBD-DC02 and a member against the one-second threshold and kept the dated files.",
+        "I exported the Time-Service and 4616 events and kept them with the reference check log."
+      ]
+    },
+    "time-troubleshoot": {
+      "short": "Find and fix time faults",
+      "tag": "05 / TROUBLESHOOT",
+      "status": "FAULT RECORDED",
+      "stepTitles": [
+        "Recognize skew and measure it first",
+        "Find out why a member left its source",
+        "Move the source with the PDC emulator role",
+        "Check a restored or reverted VM's clock",
+        "Resync safely",
+        "Record the fix and its rollback"
+      ],
+      "mistake": "Pointing a failing system at an outside or manual time source to make the error go away. It now disagrees with the domain in a new way, its time is unauthenticated, and the real cause — a GPO, a hypervisor, a moved role — is still there.",
+      "network": "Every time path the course built is shown: SBD-DC02 from the PDC emulator, the member from either controller, and the checks at the consoles. Work along them from the symptom to the clock that broke.",
+      "control": {
+        "id": "CM-3",
+        "name": "Configuration Change Control",
+        "phase": "Assess → Monitor",
+        "body": "Most time faults are unrecorded changes: a GPO, a hand configuration, a moved role, a restored VM. Fixing each as a recorded change — cause, change, evidence and rollback — and updating the time plan when the role moves is change control in practice.",
+        "question": "Which change in your lab could move the domain's time source without anyone touching Windows Time?"
+      },
+      "checklist": [
+        "I measured the practice fault's offset, source and configuration before changing anything.",
+        "I returned the system to NT5DS and confirmed it names a controller again.",
+        "I wrote down the PDC emulator move procedure and recorded the fix with its cause and rollback."
+      ]
+    }
+  }
+}

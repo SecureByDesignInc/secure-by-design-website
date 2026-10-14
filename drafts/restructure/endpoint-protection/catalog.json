@@ -1,0 +1,25 @@
+{
+  "id": "endpoint-protection",
+  "comingSoon": true,
+  "number": "1.16",
+  "categoryOrder": 16,
+  "title": "Endpoint protection on SBD-EPO01",
+  "subtitle": "Managed agents, protection policy & DLP from one console",
+  "description": "Managed endpoint protection and data-loss prevention for every Windows system, run from the single Trellix ePolicy Orchestrator server, SBD-EPO01.",
+  "systems": [
+    "SBD-EPO01"
+  ],
+  "tags": [
+    "Endpoint protection",
+    "Trellix ePO",
+    "Data-loss prevention",
+    "Windows Server"
+  ],
+  "platform": "Windows Server",
+  "artLabels": [
+    "Managed agents",
+    "One console",
+    "Coverage proof"
+  ],
+  "networkLabel": "VLAN 50 / ENDPOINT PROTECTION"
+}

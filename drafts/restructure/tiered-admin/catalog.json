@@ -1,0 +1,56 @@
+{
+  "id": "tiered-admin",
+  "categoryOrder": 8,
+  "number": "1.8",
+  "estimatedHours": 2.8,
+  "title": "Tiered administration",
+  "subtitle": "Admin seats, the tier rules & where privilege may sign in",
+  "description": "Build the administration plane before the fleet: three administration seats on two machines in VLAN 60 (the endpoint seat runs as a virtual machine on the server seat), directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials, and the move of earlier console work — SBD-DHCP01's administration and the assessment tools — onto the seats.",
+  "tags": [
+    "Windows Server",
+    "Tiered administration",
+    "Privileged access",
+    "Group Policy",
+    "Hyper-V"
+  ],
+  "platform": "Windows Server · Windows client",
+  "systems": [
+    "AdminJumpBox01",
+    "SBD-ADMIN-SRV01",
+    "SBD-ADMIN-PC01"
+  ],
+  "artLabels": [
+    "Three seats, two machines",
+    "Tier rules enforced",
+    "Denials on record"
+  ],
+  "outcomes": [
+    "Stand up single-purpose administration seats for each tier in the Admin OU, with the endpoint seat a virtual machine on the server seat.",
+    "Enforce and prove per-tier sign-in restrictions with captured denial evidence.",
+    "Move SBD-DHCP01's administration and the assessment tools onto the seats, each tier on its own."
+  ],
+  "stages": [
+    {
+      "title": "Design the tiers and the admin seats",
+      "detail": "Tiering is one sentence with teeth: credentials that control a tier never touch a less-trusted one. Write that policy against the OU structure and give each tier its seat and its group — all before any host is built."
+    },
+    {
+      "title": "Build the administration systems",
+      "detail": "Privileged work gets dedicated, hardened seats: a Tier 0 jump host that runs no virtual machines, and a server-administration seat that also runs the endpoint seat as a virtual machine. Each seat sits in the Admin OU, does nothing but administer, and is maintained by its own group."
+    },
+    {
+      "title": "Restrict where privilege can sign in",
+      "detail": "The tier rule becomes real when the directory refuses the wrong sign-in. Give Tier 0 servers their own OU first, deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log."
+    },
+    {
+      "title": "Prove the tiers end to end",
+      "detail": "Run the matrix: every tier's administration works from its seat, every cross-tier attempt fails with an event, and course 1.7's addressing service still behaves exactly as registered."
+    },
+    {
+      "title": "Move the scan tools, rescan, and hand off",
+      "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the newcomers, rescan what changed, and hand the next course a network administered only from somewhere safe."
+    }
+  ],
+  "outcomeSummary": "Privileged sessions that only ever start from the right seat.",
+  "networkLabel": "VLAN 60 / ADMINISTRATION"
+}

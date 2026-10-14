@@ -1,15 +1,15 @@
 {
   "id": "patch-protect",
   "hero": {
-    "title": "Patch, protect, and watch",
-    "accent": "for weakness.",
-    "text": "Keep the proven state from drifting: Windows updates by ring through SBD-WSUS01, a living inventory on SBD-MGMT01, managed protection through SBD-EPO01, and credentialed scans from SBD-NESSUS01, with Linux packages from SBD-REPO01 (course 1.8). Follow the build, explore the dependencies, and keep the evidence."
+    "title": "Deliver Windows updates",
+    "accent": "from SBD-WSUS01.",
+    "text": "Give every Windows system one road for updates: SBD-WSUS01 on VLAN 20, fed across the air gap by WSUS’s export and import, delivering to four rings by Group Policy — with the domain controllers last, and by hand. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
-    "PATCH AND",
-    "PROTECT",
+    "WINDOWS",
+    "SERVER",
     "",
-    "WSUS · NESSUS"
+    "WSUS RINGS"
   ],
   "sample": [
     [
@@ -17,31 +17,35 @@
       "sbd.test"
     ],
     [
-      "Update rings",
-      "Pilot → broad → critical"
-    ],
-    [
       "SBD-WSUS01",
-      "10.0.20.30 / 24 · VLAN 20"
+      "10.0.20.30 / 24 · VLAN 20 · Servers OU"
     ],
     [
-      "SBD-EPO01",
-      "10.0.50.30 / 24 · VLAN 50"
+      "Ports (F06)",
+      "HTTPS 8531 metadata · HTTP 8530 signed update files"
     ],
     [
-      "SBD-NESSUS01",
-      "10.0.50.20 / 24 · VLAN 50"
+      "Rings",
+      "1 Pilot → 2 Workstations → 3 Member servers → 4 Tier 0"
     ],
     [
-      "SBD-MGMT01",
-      "10.0.70.10 / 24 · VLAN 70"
+      "Pilot",
+      "SBD-PC01–SBD-PC03 and SBD-WSUS01"
+    ],
+    [
+      "Crossing (sample)",
+      "Monthly, after Microsoft’s second-Tuesday release, beside SBD-REPO01’s snapshot"
+    ],
+    [
+      "Administration",
+      "Rings 1–3 from SBD-ADMIN-SRV01 (A02) · Ring 4 from AdminJumpBox01 (A01)"
     ]
   ],
   "scene": {
-    "tag": "UPDATES + PROTECTION · VLAN 20 / 50 / 70",
-    "label": "Interactive 3D lesson network showing SBD-WSUS01, SBD-MGMT01, SBD-EPO01 and SBD-NESSUS01 behind the core with SBD-REPO01 from course 1.8, SBD-ADMIN-SRV01 and the 50 Windows PCs in front, and the update, agent, package and scan paths each lesson adds.",
+    "tag": "UPDATE SERVICE · VLAN 20",
+    "label": "Interactive 3D lesson network showing SBD-WSUS01 behind the core with both domain controllers and SBD-DHCP01, the 50 Windows PCs and both administration seats in front, and the update and console paths each lesson adds.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "Windows systems take updates by ring from SBD-WSUS01 and check in with SBD-EPO01, SBD-MGMT01 keeps the living inventory, SBD-NESSUS01 installs only from SBD-REPO01 and scans each VLAN on the standing cadence.",
+    "completeCaption": "Every Windows system takes updates only from SBD-WSUS01: a month’s content imported from hashed media, approved ring by ring, and installed on the domain controllers last, by Tier 0, one at a time.",
     "nodes": [
       {
         "id": "wsus",
@@ -50,58 +54,45 @@
         "kind": "server",
         "row": "back",
         "from": 1,
+        "button": "SBD-WSUS01",
         "title": "SBD-WSUS01 · 10.0.20.30",
-        "description": "The only road Windows updates travel. Content arrives on hashed media across the air gap, and approvals move ring by ring: pilot, broad, then the domain controllers and Tier 0 servers. Members check metadata over HTTPS 8531 and pull signed content over HTTP 8530."
+        "description": "The only road Windows updates travel. It never synchronizes: each month’s metadata and files arrive on hashed media and are imported. Members check metadata over HTTPS 8531 and pull signed files over HTTP 8530 (F06)."
       },
       {
-        "id": "repo",
-        "name": "SBD-REPO01",
-        "sub": "10.0.70.20",
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
         "kind": "server",
         "row": "back",
-        "title": "SBD-REPO01 · 10.0.70.20",
-        "description": "Built in course 1.8: the one approved source for Linux packages. It serves a dated, signature-verified snapshot over HTTP on TCP 80 (F19). In this course SBD-NESSUS01 becomes its second consumer.",
-        "existing": true
-      },
-      {
-        "id": "mgmt",
-        "name": "SBD-MGMT01",
-        "sub": "10.0.70.10",
-        "kind": "server",
-        "row": "back",
-        "from": 2,
-        "title": "SBD-MGMT01 · 10.0.70.10",
-        "description": "Keeps the living component inventory: every system with its OU, VLAN, address, ring, software sources, and scan status. Updates on every join and retirement, and a monthly reconciliation against the directory and the DHCP leases, keep it current."
-      },
-      {
-        "id": "epo",
-        "name": "SBD-EPO01",
-        "sub": "10.0.50.30",
-        "kind": "server",
-        "row": "back",
-        "from": 3,
-        "title": "SBD-EPO01 · 10.0.50.30",
-        "description": "The single Trellix ePO server that manages endpoint protection and DLP policy. Agents, deployed ring by ring, start their check-ins on TCP 443, and its threat events forward into the logging pipeline of courses 1.9–1.11."
-      },
-      {
-        "id": "nessus",
-        "name": "SBD-NESSUS01",
-        "sub": "10.0.50.20",
-        "kind": "server",
-        "row": "back",
-        "from": 4,
-        "title": "SBD-NESSUS01 · 10.0.50.20",
-        "description": "Domain-joined Linux scanner that runs credentialed scans VLAN by VLAN: SMB 445 and WMI to Windows, SSH 22 to Linux. Its reach is the course’s one deliberate wide permit, and the domain controller scan account is a Tier 0 credential."
-      },
-      {
-        "id": "adminsrv",
-        "name": "SBD-ADMIN-SRV01",
-        "sub": "10.0.60.20",
-        "kind": "workstation",
-        "row": "front",
         "existing": true,
-        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
-        "description": "The server administration seat from course 1.7. Pilot and broad-ring approvals are Tier 1 work from here, as is administration of member servers such as SBD-MGMT01. Critical-ring approvals and domain controller agent policy stay on AdminJumpBox01 with Tier 0 accounts."
+        "from": 3,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "Ring 4. It downloads on its own but installs only when a Tier 0 operator starts it — the first of the two controllers, checked with dcdiag and repadmin before SBD-DC01 follows."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 3,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Ring 4, installed only after SBD-DC02 is healthy again. It is the PDC emulator and the domain’s time source, so it never restarts while its partner is down."
+      },
+      {
+        "id": "dhcp",
+        "name": "SBD-DHCP01",
+        "sub": "10.0.20.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 3,
+        "button": "SBD-DHCP01",
+        "title": "SBD-DHCP01 · 10.0.20.10",
+        "description": "Ring 3, with the other member servers: it installs only what the pilot and the workstations have already proven, in its own install window."
       },
       {
         "id": "fleet",
@@ -110,13 +101,38 @@
         "kind": "fleet",
         "row": "front",
         "existing": true,
+        "from": 3,
         "title": "50 Windows PCs · 10.0.80.100–199",
-        "description": "The course 1.12 fleet on VLAN 80: its sample machines sit in the pilot ring and the rest in the broad ring. Each PC takes updates from SBD-WSUS01, runs an agent that checks in with SBD-EPO01, and lets the scanner through its host firewall for SMB 445 and WMI."
+        "description": "SBD-PC01–SBD-PC03 are Ring 1, the pilot; the other 47 are Ring 2. Each files itself into its ring by Group Policy and installs on its schedule, or at the approval’s deadline."
+      },
+      {
+        "id": "jump1",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 1,
+        "button": "SBD-ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The Tier 1 seat (rule A02): the patch operators build and run SBD-WSUS01 from here, run each month’s import on it, and approve Rings 1 to 3. The seat itself sits in Ring 3."
+      },
+      {
+        "id": "jump",
+        "name": "AdminJumpBox01",
+        "sub": "10.0.60.10",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "from": 1,
+        "button": "AdminJumpBox01",
+        "title": "AdminJumpBox01 · 10.0.60.10",
+        "description": "The Tier 0 seat (rule A01): it owns the ring GPOs and the group changes, checks who approved each Ring 4 update, and installs the controllers by hand. It is the last system in Ring 4."
       }
     ],
     "flows": [
       {
-        "from": "fleet",
+        "from": "jump1",
         "to": "wsus",
         "lessons": [
           1,
@@ -124,175 +140,187 @@
           3,
           4
         ],
-        "label": "Update metadata and content · 8531 / 8530"
+        "label": "Tier 1 administration · A02"
       },
       {
-        "from": "adminsrv",
+        "from": "jump",
         "to": "wsus",
-        "lessons": [
-          1
-        ],
-        "label": "Pilot and broad-ring approvals"
-      },
-      {
-        "from": "adminsrv",
-        "to": "mgmt",
-        "lessons": [
-          2
-        ],
-        "label": "Inventory administration from VLAN 60"
-      },
-      {
-        "from": "fleet",
-        "to": "epo",
         "lessons": [
           3,
           4
         ],
-        "label": "Agent check-ins · TCP 443"
+        "label": "Tier 0 console · Ring 4 (A01)"
       },
       {
-        "from": "nessus",
-        "to": "repo",
+        "from": "fleet",
+        "to": "wsus",
         "lessons": [
+          3,
           4
         ],
-        "label": "Signed packages · HTTP 80 (F19)"
+        "label": "Rings 1–2 · 8531 / 8530 (F06)"
       },
       {
-        "from": "nessus",
-        "to": "fleet",
+        "from": "dhcp",
+        "to": "wsus",
         "lessons": [
+          3,
           4
         ],
-        "label": "Credentialed scan · SMB 445 and WMI"
+        "label": "Ring 3 · 8531 / 8530 (F06)"
+      },
+      {
+        "from": "dc2",
+        "to": "wsus",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Ring 4 · first controller"
+      },
+      {
+        "from": "dc1",
+        "to": "wsus",
+        "lessons": [
+          3,
+          4
+        ],
+        "label": "Ring 4 · after SBD-DC02"
       }
     ]
   },
   "lessons": {
     "design": {
-      "short": "Design rings and rules",
+      "short": "Design rings and the rule",
       "tag": "01 / DESIGN",
       "status": "PLANNED",
       "stepTitles": [
-        "Define the three update rings and their order",
-        "Write the one-approved-source rule",
-        "Decide the air-gap feeding cadence",
-        "Add the course’s register rows"
+        "Write the Windows update rule and its exceptions",
+        "Place every Windows system in one of four rings",
+        "Put the domain controllers and Tier 0 last",
+        "Write the soak times and the stop rule",
+        "Set the monthly crossing beside SBD-REPO01’s",
+        "Confirm F06 and the console rows"
       ],
-      "mistake": "Putting the domain controllers in the first ring because they matter most. A bad update would then land on the identity fabric first; the critical ring goes last and installs only what the pilot and broad rings already survived.",
-      "network": "Four systems are planned: SBD-WSUS01 on VLAN 20, SBD-EPO01 and SBD-NESSUS01 on VLAN 50, and SBD-MGMT01 on VLAN 70 beside SBD-REPO01, which already serves Linux packages from course 1.8. The fleet and SBD-ADMIN-SRV01 run from earlier courses; no new paths are shown until each service is built.",
+      "mistake": "Putting the domain controllers in the first ring because they matter most. A bad update would then reach the identity fabric first; Ring 4 goes last and installs only what three rings have already survived.",
+      "network": "SBD-WSUS01 is planned on VLAN 20. The domain controllers, the member servers, the fleet and both administration seats run from earlier courses; no update path is shown until the server exists, and its content will only ever arrive on media.",
       "control": {
         "id": "CM-3",
         "name": "Configuration Change Control",
         "phase": "Prepare → Implement",
-        "body": "Rings make every update a controlled change: it is tested on the pilot ring, approved for the next ring only after it survives, and recorded at each step. Writing the order down before the first update arrives makes the process reviewable.",
+        "body": "Rings make every update a controlled change: tried on the pilot, approved for the next ring only after it survives, and recorded at each step. Writing the order and the stop rule before the first update arrives makes the process reviewable.",
         "question": "Which systems could the network lose for a day without harm, and does your ring table put them first?"
       },
       "checklist": [
-        "I assigned every system to the pilot, broad, or critical ring and wrote down the order.",
-        "I wrote the one-source rule for Windows updates, Linux packages, and protection definitions, and how exceptions are documented.",
-        "I recorded the feeding cadence beside course 1.8's snapshot cadence and added the WSUS, ePO agent, and scanner rows to the register with owners, confirming F19 covers SBD-NESSUS01."
+        "I wrote the Windows update rule with SBD-WSUS01 as its one source and SBD-ROOTCA01’s hand-carried exception.",
+        "I placed every Windows computer object in exactly one of the four rings and wrote down why it sits there.",
+        "I recorded the soak times, the stop rule and the monthly crossing beside SBD-REPO01’s, and confirmed F06, A01 and A02."
       ]
     },
     "wsus": {
-      "short": "Build WSUS01 and rings",
-      "tag": "02 / UPDATE",
+      "short": "Build SBD-WSUS01",
+      "tag": "02 / BUILD",
       "status": "WSUS01 ONLINE",
       "stepTitles": [
-        "Install WSUS and scope its products and classifications",
-        "Import update content through the offline process",
-        "Create ring groups and link the ring GPOs",
-        "Approve the first cycle and promote it ring by ring"
+        "Build SBD-WSUS01 in the Servers OU",
+        "Install WSUS on WID and record its status",
+        "Configure a server that never synchronizes",
+        "Decide and record the update scope",
+        "Put metadata on TLS and keep files signed",
+        "Hold its administration to the tier model"
       ],
-      "mistake": "Approving the first update cycle for every computer group at once. The domain controllers and Tier 0 servers then install something no ring has proven; approve for the pilot ring only, and promote once it has installed and reported.",
-      "network": "SBD-WSUS01 is live on VLAN 20. The fleet checks metadata over HTTPS 8531 and pulls signed content over HTTP 8530, and SBD-ADMIN-SRV01 approves the pilot and broad rings. Update content arrives by hand on approved media, with no network path across the air gap.",
+      "mistake": "Requiring TLS on the whole WSUS Administration site. Microsoft lists the five services that should require it; Content must not, and once it does, clients can no longer fetch update files over HTTP 8530 as rule F06 registers.",
+      "network": "SBD-WSUS01 is live on VLAN 20 and administered from SBD-ADMIN-SRV01. It has no route out and no clients yet; its metadata port, 8531, now answers only over TLS with a certificate from the course 1.6 issuing CA.",
+      "control": {
+        "id": "SC-8",
+        "name": "Transmission Confidentiality and Integrity",
+        "phase": "Implement",
+        "body": "Metadata — what to install, and the hash each file must match — travels over TLS on 8531, while the files stay on HTTP 8530 because each one is signed and checked against that hash. Integrity is protected end to end without encrypting every byte.",
+        "question": "If someone could change the metadata in transit, what could they make a client do, and which setting stops them?"
+      },
+      "checklist": [
+        "I installed WSUS on WID in the Servers OU, with files stored locally and synchronization manual and never run.",
+        "I recorded the scope — products, classifications and languages — and the decision to keep WID, with a review date.",
+        "I bound the SBD Server Authentication certificate to 8531, required TLS on the five services, and recorded the residual risk."
+      ]
+    },
+    "wsus-offline": {
+      "short": "Cross the air gap",
+      "tag": "03 / IMPORT",
+      "status": "CONTENT IMPORTED",
+      "stepTitles": [
+        "Run the export server with the recorded scope",
+        "Download, export and copy the files",
+        "Hash and carry the set under custody",
+        "Compare, copy, then import on SBD-WSUS01",
+        "Check the import and file the crossing"
+      ],
+      "mistake": "Importing first and comparing hashes afterwards — or not at all, because clients check signatures anyway. Microsoft warns never to import an export from a source you don’t trust; the hash comparison is how this network decides the media is still what left the connected side.",
+      "network": "No network path crosses the boundary: the month’s metadata package and update files arrive on approved media, carried by an authorized operator, and are imported on SBD-WSUS01 in a Tier 1 session from SBD-ADMIN-SRV01.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement → Assess",
+        "body": "Every file is hashed on the connected side and again inside, and the import starts only when the two lists match. Microsoft’s signatures protect each update file a second time, when the client checks it.",
+        "question": "Who could change the media between the two hash lists, and what in your custody record would show it?"
+      },
+      "checklist": [
+        "I set the export server to exactly the products, classifications and languages recorded in lesson 2.",
+        "I compared the connected-side and lab-side hash lists with no differences before copying or importing anything.",
+        "I filed the crossing record with the carrier, dates, file count, package hash, both hash lists and the import log."
+      ]
+    },
+    "wsus-targeting": {
+      "short": "Target the rings",
+      "tag": "04 / TARGET",
+      "status": "RINGS REPORTING",
+      "stepTitles": [
+        "Create the ring groups and turn on client-side targeting",
+        "Build one GPO per ring around the same core",
+        "Set install behaviour and deadlines per ring",
+        "Link the GPOs and filter the pilot",
+        "Prove every computer reports to its ring"
+      ],
+      "mistake": "Linking one update GPO at the domain root for convenience. The domain controllers then take the workstations’ schedule and deadlines; each ring needs its own GPO, linked where its computers live, with Ring 4 installing only when Tier 0 starts it.",
+      "network": "Every Windows system now checks SBD-WSUS01 for metadata over HTTPS 8531 and files itself into its ring: the PCs into Rings 1 and 2, the member servers into Ring 3, and the domain controllers into Ring 4. The ring GPOs come from AdminJumpBox01; nothing is approved yet.",
       "control": {
         "id": "SI-2",
         "name": "Flaw Remediation",
         "phase": "Implement",
-        "body": "WSUS is the flaw-remediation channel: updates are tested on the pilot ring before they reach later rings, and the per-ring approval and install timeline records when each system received them.",
-        "question": "How long should an approval stay in the pilot ring before it moves on, and what would make you stop it?"
+        "body": "SI-2 asks that updates are tested before they are installed and installed within a set time. The rings do the first; the per-ring install times and deadlines do the second — except Ring 4, where a person starts each install deliberately.",
+        "question": "What deadline would you set for Ring 2, and what would make you shorten it for an urgent fix?"
       },
       "checklist": [
-        "I recorded the product and classification scope and the hashes of the offline import.",
-        "I confirmed with gpresult that each ring’s GPO applies and that every system reports to its ring’s group.",
-        "I recorded the first cycle’s approval and install times for each ring, in the written order."
+        "I created the four ring groups, switched WSUS to client-side targeting, and found Unassigned Computers empty.",
+        "I linked each ring’s GPO where its computers live and confirmed the pilot filter and link order with gpresult.",
+        "I read SBD-WSUS01 and the ring name in the policy values of one member of each ring, checking Ring 4 from AdminJumpBox01."
       ]
     },
-    "mgmt": {
-      "short": "Keep a living inventory",
-      "tag": "03 / INVENTORY",
-      "status": "INVENTORY LIVE",
+    "wsus-prove": {
+      "short": "Run and prove a cycle",
+      "tag": "05 / PROVE",
+      "status": "FIRST CYCLE PROVEN",
       "stepTitles": [
-        "Build SBD-MGMT01 in the Servers OU",
-        "Load every system into the component inventory",
-        "Define update-on-change and monthly reconciliation",
-        "Name the owner and file the first reconciliation"
+        "Approve the pilot, then promote on the soak times",
+        "Stop and roll back a failing update",
+        "Check Ring 4’s approvals, then install by hand",
+        "Report compliance and spot-check the systems",
+        "Clean up, then baseline SBD-WSUS01",
+        "Hand the records to course 1.15"
       ],
-      "mistake": "Building the inventory once and treating it as finished. Without joins and retirements updating it and a monthly comparison against the directory and DHCP leases, it drifts back into a snapshot, and the coverage claims in lessons 4 and 5 lose their denominator.",
-      "network": "SBD-MGMT01 joins SBD-REPO01 on VLAN 70 and is administered from SBD-ADMIN-SRV01 on VLAN 60. The inventory it holds is the list that lessons 4 and 5 measure protection and scan coverage against.",
+      "mistake": "Approving the month’s updates for every group at once to save a week. The domain controllers then install something no ring has proven; approve for Ring 1 only, and promote once it has installed, reported and still works.",
+      "network": "The month’s approved updates flow ring by ring: the pilot first, then the workstations and member servers on their deadlines, then the controllers by hand from AdminJumpBox01 — SBD-DC02, then SBD-DC01.",
       "control": {
-        "id": "CM-8",
-        "name": "System Component Inventory",
-        "phase": "Implement → Assess",
-        "body": "This lesson builds the component inventory itself: every system with its attributes, a named owner, and a reconciliation that shows the record still matches the directory and the leases.",
-        "question": "If the inventory, the directory, and the DHCP leases disagreed, which would you trust first, and why?"
-      },
-      "checklist": [
-        "I loaded every modeled system with its OU, VLAN, address, ring, software sources, and scan status.",
-        "I compared the directory and DHCP lease counts with the inventory and recorded any mismatches as findings.",
-        "I wrote down the inventory’s owner, its update-on-change rule, and its monthly reconciliation cadence."
-      ]
-    },
-    "epo": {
-      "short": "Protect through EPO01",
-      "tag": "04 / PROTECT",
-      "status": "AGENTS CHECKING IN",
-      "stepTitles": [
-        "Build SBD-EPO01 with no listeners on the endpoints",
-        "Deploy agents ring by ring",
-        "Apply the protection and DLP policy baseline",
-        "Verify coverage and trace a test detection"
-      ],
-      "mistake": "Leaving the agent’s peer-to-peer and RelayServer features on. Every endpoint then opens listeners for the server (TCP 8081, UDP 8082) that no register row allows; with them off, the agent starts each connection on TCP 443 and endpoints open no listener.",
-      "network": "SBD-EPO01 is live on VLAN 50. Agents on the fleet start their check-ins on TCP 443, the fleet keeps its WSUS path, and the console stays reachable only from the administration plane on VLAN 60.",
-      "control": {
-        "id": "SI-3",
-        "name": "Malicious Code Protection",
-        "phase": "Implement → Assess",
-        "body": "Managed agents give every endpoint the same protection policy from one console, with definitions fed on the written offline cadence. Coverage reconciled against the inventory and a traced test detection show the mechanism works, not just that it was installed.",
-        "question": "If an endpoint stopped checking in, how soon would you know, and which record would show it?"
-      },
-      "checklist": [
-        "I compared the agents checking in with the living inventory and recorded every gap.",
-        "I recorded each policy baseline setting, including on-access protection, the scan schedule, and the DLP scope, as a decision.",
-        "I traced a standard test file’s detection from the endpoint to the console and into the analyst’s search."
-      ]
-    },
-    "nessus": {
-      "short": "Scan with NESSUS01",
-      "tag": "05 / SCAN",
-      "status": "STANDING CADENCE",
-      "stepTitles": [
-        "Build SBD-NESSUS01 on REPO01 packages with scoped scan accounts",
-        "Run the first credentialed scan and triage it",
-        "Wire results into the pipeline, records, and cadence",
-        "Baseline this course’s systems and hand off"
-      ],
-      "mistake": "Using one scan account for every target. The domain controller scan credential is Tier 0; reusing it on member servers or the fleet exposes it to lower tiers. Keep it apart from the member-server account and use it only for DC scan jobs.",
-      "network": "SBD-NESSUS01 is live on VLAN 50 and scans across the VLANs, shown here reaching the fleet over SMB 445 and WMI. It installs packages only from SBD-REPO01 with the course 1.8 client configuration, and the fleet keeps its WSUS and ePO paths.",
-      "control": {
-        "id": "RA-5",
-        "name": "Vulnerability Monitoring and Scanning",
+        "id": "SI-2(2)",
+        "name": "Flaw Remediation | Automated Flaw Remediation Status",
         "phase": "Assess → Monitor",
-        "body": "Scheduled credentialed scans, plus scans triggered by change, make vulnerability scanning routine rather than an event. Classifying every finding as fixed, a documented deviation, or a POA&M candidate keeps the results usable.",
-        "question": "What evidence shows a finding was fixed, rather than simply no longer reported?"
+        "body": "WSUS’s per-ring reports show, without visiting a machine, which components still need an approved update — the automated status SI-2(2) asks for. Spot checks on the systems themselves keep that report honest until credentialed scanning arrives with course 1.17.",
+        "question": "How would you know if a computer stopped reporting altogether, rather than reporting itself compliant?"
       },
       "checklist": [
-        "I kept the scan accounts separate, used the domain controller account only for DC scan jobs, and confirmed their use is logged.",
-        "I classified every finding from the first credentialed scan as fix-now, a documented deviation, or a POA&M candidate.",
-        "I filed baselines for this course’s four systems, SBD-REPO01’s scheduled rescan, and rescans of the systems whose agents or policies changed."
+        "I promoted the month’s updates through Rings 1 to 3 on the written soak times and recorded each promotion.",
+        "I confirmed every Ring 4 approval names a Tier 0 account, and checked dcdiag and replication between the two controllers.",
+        "I filed the compliance reports, the spot checks, SBD-WSUS01’s first baseline with classified findings, and the hashed records."
       ]
     }
   }
