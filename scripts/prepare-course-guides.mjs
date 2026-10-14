@@ -3,10 +3,16 @@
 // guide), markup, renderer and 3D lesson network. Lesson content comes from content/configuration-courses.json;
 // guide-only content (step headings, security reasoning, checklists, the network scene) from
 // content/course-guides/<id>.json. Run by prepare-content.mjs; the generated pages are committed too.
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
 const root = new URL('../', import.meta.url);
-const read = path => readFileSync(new URL(path, root), 'utf8');
+// SBD_COURSES, SBD_CATALOG, SBD_GUIDES and SBD_OUT point the script at draft copies (absolute paths), so new
+// course content can be validated without touching the shared files. The default is the repository itself.
+const draft = { 'content/configuration-courses.json': process.env.SBD_COURSES, 'content/videos.json': process.env.SBD_CATALOG };
+const read = path => readFileSync(draft[path] ? pathToFileURL(draft[path]) : new URL(path, root), 'utf8');
+const guidesDir = process.env.SBD_GUIDES ? pathToFileURL(process.env.SBD_GUIDES.replace(/\/?$/, '/')) : new URL('content/course-guides/', root);
+const outDir = process.env.SBD_OUT ? pathToFileURL(process.env.SBD_OUT.replace(/\/?$/, '/')) : new URL('public/training/', root);
 const json = path => JSON.parse(read(path));
 const library = json('content/videos.json');
 const configurations = json('content/configuration-courses.json');
@@ -113,7 +119,7 @@ function page(course, configuration, guide, lesson) {
   const n = configuration.lessons.length;
   const t = course.training;
   const bookmark = resources.find(r => r.url === `https://securebydesigninc.com/training/${id}` && /-guide$/.test(r.id))?.id;
-  if (!bookmark) fail(id, 'no guide entry in content/training-resources.json');
+  if (!bookmark && !process.env.SBD_OUT) fail(id, 'no guide entry in content/training-resources.json');
   const data = JSON.stringify(lesson).replace(/</g, '\\u003c');
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(course.title)} | Secure By Design</title>
@@ -126,7 +132,7 @@ function page(course, configuration, guide, lesson) {
 <a class="skip" href="#lesson">Skip to lesson</a>
 <header class="top"><a class="brand" href="https://securebydesigninc.com/" target="_blank" rel="noopener"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="https://securebydesigninc.com/">Home</a><a class="btn" href="https://securebydesigninc.com/my-progress">My Account</a><a class="btn" href="https://securebydesigninc.com/training" target="_blank" rel="noopener">Training Library ↗</a><a class="btn" href="${esc(t.package)}" download>↓ Training materials</a></nav></header>
 <section class="hero"><div><div class="eyebrow">THE NETWORK BUILD SERIES / COURSE ${esc(course.number)}</div><h1>${esc(guide.hero.title)} <span>${esc(guide.hero.accent)}</span></h1><p>${esc(guide.hero.text)}</p></div><div class="kitcard"><div class="book"><img src="/training/guide/brand.png" alt=""><span>${guide.book.map(esc).join('<br>')}</span></div><div><b>Your course companion</b><p>Interactive lesson · 3D network<br>Workbook · Personal evidence record</p><a href="${esc(t.package)}" download>Download the training materials →</a></div></div></section>
-<section class="sbd-account-progress" aria-label="Account learning progress" data-course="${esc(id)}" data-guide="${esc(bookmark)}" data-unit="${esc(configuration.lessons[0].id)}"><strong>Continue across the website and app</strong><p>Save learning progress and this guide to your account. Lab observations and evidence exports stay in this browser.</p><button type="button" disabled>Load account progress</button></section>
+<section class="sbd-account-progress" aria-label="Account learning progress" data-course="${esc(id)}" data-guide="${esc(bookmark ?? `${id}-guide`)}" data-unit="${esc(configuration.lessons[0].id)}"><strong>Continue across the website and app</strong><p>Save learning progress and this guide to your account. Lab observations and evidence exports stay in this browser.</p><button type="button" disabled>Load account progress</button></section>
 <main class="workspace"><aside class="chapters"><div class="eyebrow">YOUR LEARNING PATH</div><nav id="chapter-list" aria-label="Lesson chapters"></nav><div class="progressbox"><b id="progress-label">0 of ${n} lessons complete</b><progress id="progress" max="${n}" value="0" aria-label="Lesson completion"></progress><div class="local" id="storage-note">Progress stays in this browser. Export your record to take it with you.</div><button class="btn" id="export-side" style="margin-top:13px;font-size:10px;width:100%">↓ Export my record</button></div><div class="chapter-notice">One course. ${Count(n)} lessons.<br><br>Explore freely. Complete a lesson after recording your checks and answering its questions.</div><div class="mobile-tools" id="mobile-progress"></div></aside>
 <article class="lesson" id="lesson"><header class="lesson-head"><div class="eyebrow" id="chapter-tag"></div><h2 id="chapter-title"></h2><p id="chapter-outcome"></p></header><div class="tabs" role="tablist" aria-label="Lesson content"><button role="tab" aria-selected="true" aria-controls="guide-panel" id="guide-tab" tabindex="0" data-tab="guide">Walkthrough</button><button role="tab" aria-selected="false" aria-controls="security-panel" id="security-tab" tabindex="-1" data-tab="security">Security reasoning</button><button role="tab" aria-selected="false" aria-controls="evidence-panel" id="evidence-tab" tabindex="-1" data-tab="evidence">My evidence</button></div><section class="content" role="tabpanel" aria-labelledby="guide-tab" id="guide-panel"></section><section class="content" role="tabpanel" aria-labelledby="security-tab" id="security-panel" hidden></section><section class="content" role="tabpanel" aria-labelledby="evidence-tab" id="evidence-panel" hidden></section><footer class="lesson-foot"><button class="btn" id="prev">← Previous</button><button class="btn primary" id="next">Next lesson →</button></footer></article>
 <aside class="network"><section class="network-panel" aria-label="Interactive lesson network"><header class="network-head"><div><div class="eyebrow">INSIDE THE NETWORK / LESSON VIEW</div><h2>See your network take shape</h2></div><button id="reset-view" class="btn" aria-label="Reset view of the network camera">Reset view</button></header><div class="viewbar"><button aria-pressed="true" id="chapter-view">At this lesson</button><button aria-pressed="false" id="complete-view">Course complete</button></div><div class="stage" id="stage"><div class="stage-top"><span class="stage-tag">${esc(guide.scene.tag)}</span><span id="stage-status" class="stage-tag">${esc(lesson.chapters[0].status)}</span></div><div id="fallback" class="fallback" hidden>Interactive graphics are unavailable.<br>Use the system buttons and lesson descriptions below to explore the same lesson.</div><div class="stage-help">Drag to orbit · scroll to zoom · choose a system</div></div><div class="system-buttons" aria-label="Choose a system">${guide.scene.nodes.map((node, i) => `<button data-node="${esc(node.id)}" aria-pressed="${i === 0}">${esc(node.button ?? node.name)}</button>`).join('')}</div><div class="network-caption"><strong id="network-label"></strong><p id="network-caption"></p></div><div class="flow-controls"><button class="btn" id="motion" aria-pressed="true">Pause motion</button></div><div class="node-details" aria-live="polite"><small id="node-state">PLANNED SYSTEM</small><h3 id="node-title">${esc(guide.scene.nodes[0].title)}</h3><p id="node-description"></p></div></section><div class="media-card"><div class="media-icon" aria-hidden="true">▷</div><div><small>COURSE ${esc(course.number)} / VIDEO COMPANION</small><h3>Video coming soon</h3><p>The written lessons, 3D network, and workbook are ready now. A recorded walkthrough of this build is on its way.</p></div></div><a class="resource-link" href="https://securebydesigninc.com/inside-the-network" target="_blank" rel="noopener">Explore the complete Secure By Design network ↗</a></aside></main>
@@ -146,12 +152,14 @@ let built = 0;
 for (const configuration of configurations.filter(c => !process.env.ONLY || c.id === process.env.ONLY)) {
   const course = library.courses.find(c => c.id === configuration.id);
   if (!course) throw new Error(`No Training Library entry for ${configuration.id}`);
-  const file = new URL(`content/course-guides/${course.id}.json`, root);
+  const file = new URL(`${course.id}.json`, guidesDir);
   if (!existsSync(file)) throw new Error(`Missing content/course-guides/${course.id}.json`);
   const guide = JSON.parse(readFileSync(file, 'utf8'));
   for (const key of ['title', 'accent', 'text']) text(course.id, `hero ${key}`, guide.hero?.[key], 400);
   const lesson = buildLesson(course, configuration, guide);
-  writeFileSync(new URL(`public/training/${course.id}/index.html`, root), page(course, configuration, guide, lesson));
+  const folder = new URL(`${course.id}/`, outDir);
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(new URL('index.html', folder), page(course, configuration, guide, lesson));
   built += 1;
 }
 console.log(`Prepared ${built} course guides.`);
