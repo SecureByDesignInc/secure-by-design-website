@@ -8,6 +8,7 @@ The earlier full-color assets are retained as unused reference files with their 
 - TikTok: https://api.iconify.design/logos/tiktok-icon.svg — cyan and pink accents; the core uses white for the dark header.
 - Instagram: https://api.iconify.design/skill-icons/instagram.svg — gradient app symbol with white camera glyph.
 - Discord: https://api.iconify.design/logos/discord-icon.svg — Blurple mark (#5865F2).
+- LinkedIn (added October 14, 2026): monochrome LinkedIn mark from the CC0 Simple Icons collection, drawn directly in the cyan `linkedin-sbd.svg`; no full-color variant.
 
 The Logos collection is CC0; the Instagram asset is from the MIT-licensed Skill Icons collection. Brand marks remain their owners' trademarks. See public/social/LICENSE.md and public/social/SKILL-ICONS-LICENSE.txt.
 
