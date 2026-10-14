@@ -43,7 +43,7 @@ Three administration seats on two machines use separate identities and target sc
 - [ ] Require offline-compatible MFA and separate everyday and privileged accounts. Prohibit ordinary browsing, email, and general file use on administrative hosts.
 - [ ] Deny cross-tier sessions with host and routed controls. Within the server tier, separate scanner, endpoint-policy, SIEM, and audit-custodian permissions.
 - [ ] Manage unique local credentials, service-account scope, emergency access, session logs, and account removal.
-- [ ] Keep the seat virtual machine’s boundary: Tier 1 accounts sign in only on the ADMIN-SRV01 host and Tier 2 accounts only in the ADMIN-PC01 virtual machine, with no shared clipboard, drives, folders, files, or key-value data between them. Each seat has its own maintenance group; tier accounts only use the seats. AdminJumpBox01 never hosts a virtual machine.
+- [ ] Keep the seat virtual machine’s boundary: Tier 1 accounts sign in only on the ADMIN-SRV01 host and Tier 2 accounts only in the ADMIN-PC01 virtual machine, with no shared clipboard, drives, folders, or key-value data between them. Each seat has its own maintenance group; tier accounts only use the seats. AdminJumpBox01 never hosts a virtual machine.
 
 ### Acceptance checks
 
