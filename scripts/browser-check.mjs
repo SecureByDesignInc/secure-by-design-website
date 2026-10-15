@@ -32,7 +32,7 @@ let blocking = 0;
 
 const browser = await chromium.launch(process.env.CHROME_CHANNEL ? { channel: process.env.CHROME_CHANNEL } : {});
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-// Record every policy violation in every frame, including the Inside the Network model's frame.
+// Record every policy violation in every frame, including the System Hub model's frame.
 await context.addInitScript(() => {
   window.__violations = [];
   document.addEventListener('securitypolicyviolation', event => {
@@ -159,8 +159,8 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
-// The two libraries (15 October 2026): the Build Studio holds the network build; the Authorization
-// Studio holds the RMF to ATO course and its two tools. Screenshots are kept for review.
+// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance
+// Hub holds the RMF to ATO course and its two tools. Screenshots are kept for review.
 for (const [path, name, tiles, tools] of [['/technical-training', 'technical-library', 19, 0], ['/grc-rmf-training', 'grc-rmf-library', 1, 2]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const page = await context.newPage();
@@ -273,11 +273,11 @@ await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAA
 await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
 await check('old course 2.3 package moves to the course 2.1 package', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip'));
 await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
-// The two libraries (15 October 2026): old addresses land in the Build Studio or the Authorization Studio.
-await check('old Training Library address moves to the Build Studio', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
-await check('old Authorization Workspace address (now the ATO Package Builder) moves into the Authorization Studio', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
-await check('old ATO Template Library address moves into the Authorization Studio', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
-await check('old course 2.1 page moves into the Authorization Studio', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
+// The two libraries (15 October 2026): old addresses land in the Configuration Hub or the Compliance Hub.
+await check('old Training Library address moves to the Configuration Hub', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
+await check('old Authorization Workspace address (now the ATO Package Builder) moves into the Compliance Hub', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
+await check('old ATO Template Library address moves into the Compliance Hub', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
+await check('old course 2.1 page moves into the Compliance Hub', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
 await check('old course 2.1 workbook moves with it', { path: '/training/rmf/SecureByDesign-rmf-Workbook.pdf' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.pdf'));
 await check('old control catalog moves with the workspace', { path: '/authorization-workspace/controls-rev5.json' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace/controls-rev5.json'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);

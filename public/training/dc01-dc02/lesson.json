@@ -501,7 +501,7 @@
       "blocks": [
         [
           "Every conversation crosses the core",
-          "Domain members sit on other segments, so each conversation in this table crosses the core, which allows it only because a rule says so. Inside the Network shows each one crossing the core switch."
+          "Domain members sit on other segments, so each conversation in this table crosses the core, which allows it only because a rule says so. System Hub shows each one crossing the core switch."
         ],
         [
           "Sign-in is only the start",
@@ -558,7 +558,7 @@
           ]
         ]
       },
-      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the Inside the Network design, rules F02, F03, and F09 permit this profile for domain members, with LDAP signing and channel binding required, and rule A01 limits administration to the Tier 0 host. Name resolution has its own rule (F01), and so does credentialed scanning (F15), which arrives with course 1.17, coming soon; everything else is denied.",
+      "takeaway": "Allowing Kerberos isn't enough. Applying Group Policy and reading SYSVOL also need LDAP, SMB, and RPC. In the System Hub design, rules F02, F03, and F09 permit this profile for domain members, with LDAP signing and channel binding required, and rule A01 limits administration to the Tier 0 host. Name resolution has its own rule (F01), and so does credentialed scanning (F15), which arrives with course 1.17, coming soon; everything else is denied.",
       "prompt": "A workstation gets Kerberos tickets, but Group Policy never applies. Which ports would you check first?",
       "sources": [
         "ports",

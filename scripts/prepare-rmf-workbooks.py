@@ -5,7 +5,7 @@ Each course in public/grc-rmf-training/rmf/catalog-data.js (window.CATALOG_PARTS
 
   SecureByDesign-<folder>-Workbook.docx          the companion workbook
   SecureByDesign-<folder>-Workbook.pdf           (--all) a tagged PDF export of it
-  workbook-cover.webp                            (--all) page 1, for the Authorization Studio tile
+  workbook-cover.webp                            (--all) page 1, for the Compliance Hub tile
   SecureByDesign-<folder>-Learning-Package.zip   (--all) the PDF, the Word file, START-HERE.txt and the
                                                  course's evidence starters (Markdown, plus CSV for tables)
 
@@ -48,18 +48,18 @@ ZIP_TIME = (2026, 10, 15, 0, 0, 0)
 PREREQUISITES = {
     '2.1': [
         'Basic security and system administration knowledge. No commercial tool access is required.',
-        'Your Inside the Network build from Build the Network (courses 1.1–1.19), or the supplied sample records; the samples are enough to complete the course.',
+        'Your System Hub build from Build the Network (courses 1.1–1.19), or the supplied sample records; the samples are enough to complete the course.',
         'The governing direction for your practice: NIST SP 800-37 Revision 2 and, for a Special Access Program (SAP) system, the JSIG or successor your program directs. This course uses the public April 2016 JSIG.',
     ],
     '2.2': [
         'Course 2.1’s outputs: the scope and registration records, the draft System Security Plan with its categorization, the Security Controls Traceability Matrix, the draft Risk Assessment Report, and the continuous monitoring strategy.',
-        'Your Inside the Network build, or the supplied sample records.',
+        'Your System Hub build, or the supplied sample records.',
         'The control and assessment procedure releases your authority has adopted (NIST SP 800-53 and SP 800-53A).',
     ],
     '2.3': [
         'Course 2.2’s outputs: the as-implemented System Security Plan and traceability matrix, the evidence index, the Security Assessment Plan and Report, the updated Risk Assessment Report, and the Plan of Action and Milestones.',
         'Course 2.1’s continuous monitoring strategy.',
-        'Your Inside the Network build, or the supplied sample records.',
+        'Your System Hub build, or the supplied sample records.',
     ],
 }
 NEXT = {

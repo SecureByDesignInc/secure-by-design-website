@@ -40,7 +40,7 @@ window.CATALOG = [
       "02.2 Assets, boundary, and information",
       "02.3 Risk, requirements, and registration"
     ],
-    "build": "Complete the scope record’s Prepare fields for the practice system: mission and stakeholders, assets and boundary, information types and life cycle, the early risk picture, and requirements and allocation. Check each information flow against the connection map in Inside the Network, which shows every permitted, pending, and denied rule for a system. Then fill in the registration record.",
+    "build": "Complete the scope record’s Prepare fields for the practice system: mission and stakeholders, assets and boundary, information types and life cycle, the early risk picture, and requirements and allocation. Check each information flow against the connection map in the System Hub, which shows every permitted, pending, and denied rule for a system. Then fill in the registration record.",
     "prove": "Explain whether a hypervisor host, the core switch’s management, a shared service, or an offline update transfer is inside the boundary, external, or inherited, with the supporting responsibility evidence. Say what changes in the registration if the boundary moves.",
     "sources": "[1,5,6,8]",
     "rmf": {
@@ -134,7 +134,7 @@ window.CATALOG = [
     },
     "model": {
       "title": "Check the information flows",
-      "text": "Open any system in Inside the Network and choose Show in 3D to draw every rule that names it: solid green for permitted, dashed amber for pending, dashed red for denied. Use it to test your boundary and your information life cycle notes.",
+      "text": "Open any system in the System Hub and choose Show in 3D to draw every rule that names it: solid green for permitted, dashed amber for pending, dashed red for denied. Use it to test your boundary and your information life cycle notes.",
       "href": "/inside-the-network#system=web",
       "label": "Open SBD-WEB01's connection map"
     }
@@ -432,7 +432,7 @@ window.CATALOG = [
       "08.2 The Security Assessment Report",
       "08.3 Initial remediation and reassessment"
     ],
-    "build": "Run the procedures in your approved plan and prepare a SAR excerpt. Include negative tests: run the six attempts in the Inside the Network attack drill, record each expected and observed result in the Operational verification column of the network traffic matrix, and cite the matrix in your SAR. Remediate one finding, reassess it, and update the SSP and the Risk Assessment Report (RAR) that course 2.1 drafted.",
+    "build": "Run the procedures in your approved plan and prepare a SAR excerpt. Include negative tests: run the six attempts in the System Hub attack drill, record each expected and observed result in the Operational verification column of the network traffic matrix, and cite the matrix in your SAR. Remediate one finding, reassess it, and update the SSP and the Risk Assessment Report (RAR) that course 2.1 drafted.",
     "prove": "Link each conclusion to its objective, evidence, observation, and limitation. Record unsupported objectives as other than satisfied rather than treating missing evidence as a pass, and show a remediated finding still in the report beside its reassessment.",
     "sources": "[1,3,8]",
     "rmf": {
@@ -722,7 +722,7 @@ window.CATALOG = [
   }
 ];
 
-// The course as the Authorization Studio presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
+// The course as the Compliance Hub presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
 // 2026: courses 2.1, 2.2 and 2.3, the ATO Template Library and the ATO Package Builder became one learning process,
 // course 2.1 "RMF to ATO" at /grc-rmf-training/rmf/, built by scripts/prepare-rmf-courses.mjs. Module IDs and the
 // training:rmf-boe-ato:NN progress IDs are unchanged.

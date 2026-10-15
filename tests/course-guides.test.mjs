@@ -64,7 +64,7 @@ test('the Network Authorization course has its page in the course guide design',
   for (const part of parts) {
     const course = library.courses.find(item => item.id === part.id);
     const page = read(`public/grc-rmf-training/${part.folder}/index.html`);
-    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Authorization Studio', '/training/account-progress.js',
+    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Compliance Hub', '/training/account-progress.js',
       `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/grc-rmf-training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
       assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
     // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.
@@ -90,7 +90,7 @@ test('the authorization view covers every module with real parts of the network'
     for (const key of ['name', 'sub', 'title', 'description', 'button']) assert.ok(typeof node[key] === 'string' && node[key].trim(), `${node.id} ${key}`);
     assert.ok(node.focus.every(index => Number.isInteger(index) && index >= 0 && index < modules.length), `${node.id} focus`);
     const vlan = /^VLAN (\d+)$/.exec(node.name);
-    if (vlan) assert.equal(network.segments.find(segment => segment.number === Number(vlan[1]))?.name, node.sub, `${node.name} is named as in Inside the Network`);
+    if (vlan) assert.equal(network.segments.find(segment => segment.number === Number(vlan[1]))?.name, node.sub, `${node.name} is named as in the System Hub`);
   }
   for (const flow of view.scene.flows) {
     assert.ok(ids.has(flow.from) && ids.has(flow.to) && flow.from !== flow.to, `${flow.from}→${flow.to}`);
@@ -101,5 +101,5 @@ test('the authorization view covers every module with real parts of the network'
     assert.ok(view.scene.nodes.some(node => node.focus.includes(index)), `module ${module.id} highlights part of the network`);
   });
   const systems = new Set(network.systems.map(system => system.name));
-  for (const name of JSON.stringify(view).match(/SBD-[A-Z0-9-]*\d{2}|AdminJumpBox01/g)) assert.ok(systems.has(name), `${name} is in Inside the Network`);
+  for (const name of JSON.stringify(view).match(/SBD-[A-Z0-9-]*\d{2}|AdminJumpBox01/g)) assert.ok(systems.has(name), `${name} is in the System Hub`);
 });

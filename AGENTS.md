@@ -679,3 +679,12 @@ The owner renamed the two libraries and the practice tool. This supersedes the n
 - **Addresses unchanged:** `/technical-training`, `/grc-rmf-training`, `/grc-rmf-training/workspace` (the ATO Package Builder), `/grc-rmf-training/templates`, `/grc-rmf-training/rmf/`. Code names (`awx-` classes, `auth_*` tables, `/api/authorization`, `workspace` variables) stay as they are; only visible text changed. Applied migrations (`drizzle/`) keep their original comments.
 - **Course 2.1 wording:** each step's section 2 is "Do it in the ATO Package Builder"; statuses read "Package Builder ✓ / to do" on the course, in the learning path and on My Progress.
 - **Membership check:** `tests/membership-plans.test.mjs` still blocks the archived "Builder" plan name but allows "Package Builder".
+
+## System Hub, Configuration Hub and Compliance Hub — October 15, 2026
+
+The owner renamed three menu sections, superseding the names in the section above (the ATO Package Builder keeps its name).
+
+- **Names.** Inside the Network → **System Hub**; Build Studio → **Configuration Hub**; Authorization Studio → **Compliance Hub**. Menu: Home · System Hub · Configuration Hub · Compliance Hub · Community & Careers Hub · My Account. Page kickers keep the kind of training: "Configuration Hub · Technical Training" and "Compliance Hub · GRC & RMF Training".
+- **Addresses and code unchanged:** `/inside-the-network` (and `public/inside-network-model/`), `/technical-training`, `/grc-rmf-training`, file and component names, test IDs.
+- **Wording.** In running text the 3D model is "the System Hub" ("as the System Hub records it", "linking to the System Hub"); as a heading or menu label it is "System Hub". The model's video recorder caption reads "SECURE BY DESIGN · SYSTEM HUB".
+- **Materials updated:** the course text (`content/configuration-courses.json`, `content/videos.json`, articles), the configuration-course workbooks (`python3 scripts/sync-workbooks.py`, PDFs re-exported with LibreOffice, page counts unchanged), the course 1.1 workbook (text and QR alt text edited in place, 13 pages), the course 2.1 workbook, every package, the checklists, the System Hub text version and the Community menus.

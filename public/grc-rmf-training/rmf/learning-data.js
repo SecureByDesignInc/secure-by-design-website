@@ -668,7 +668,7 @@ window.ARTIFACTS = [
       [
         "Mission and stakeholders",
         "Missions and business processes the system supports (P-8); everyone with an interest in it (P-9).",
-        "SBD Learning Enclave, the Inside the Network build (domain sbd.test), supports a fictional internal engineering team: sign-in, shared files, an internal web application and its database, licensing, and certificates. Stakeholders: the engineering users, the system owner, the owners of engineering files and application records, administrators at each tier, the audit custodians, and the exercise authority."
+        "SBD Learning Enclave, the System Hub build (domain sbd.test), supports a fictional internal engineering team: sign-in, shared files, an internal web application and its database, licensing, and certificates. Stakeholders: the engineering users, the system owner, the owners of engineering files and application records, administrators at each tier, the audit custodians, and the exercise authority."
       ],
       [
         "Assets and boundary",
@@ -752,7 +752,7 @@ window.ARTIFACTS = [
       [
         "System description",
         "Name, identifier, mission, boundary, components, environment, and references (NIST C-1; JSIG 1-2).",
-        "SBD Learning Enclave, the Inside the Network build (domain sbd.test): 21 named systems, including the offline root CA, and 50 Windows workstations across eight VLANs. Boundary, inventory, and architecture follow the system scope record. SBD-EPO01 and SBD-NESSUS01 are planned components; their courses are coming soon."
+        "SBD Learning Enclave, the System Hub build (domain sbd.test): 21 named systems, including the offline root CA, and 50 Windows workstations across eight VLANs. Boundary, inventory, and architecture follow the system scope record. SBD-EPO01 and SBD-NESSUS01 are planned components; their courses are coming soon."
       ],
       [
         "Security categorization",

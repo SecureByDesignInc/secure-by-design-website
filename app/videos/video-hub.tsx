@@ -212,11 +212,11 @@ function EpisodeTile({
   );
 }
 
-// The two libraries' headings (owner direction, 15 October 2026): Build Studio (technical training) and Authorization
-// Studio (GRC & RMF training). The kicker names the kind of training so visitors know the studio is training. Both use this page and the same tiles.
+// The two libraries' headings (owner direction, 15 October 2026): Configuration Hub (technical training) and Compliance
+// Hub (GRC & RMF training). The kicker names the kind of training so visitors know the hub is training. Both use this page and the same tiles.
 const EDITIONS: Record<LibraryEdition, { kicker: string; title: string; em: string; copy: string; heading: string; choose: string }> = {
   technical: {
-    kicker: 'BUILD STUDIO · TECHNICAL TRAINING',
+    kicker: 'CONFIGURATION HUB · TECHNICAL TRAINING',
     title: 'Build your skills.',
     em: 'Understand the why.',
     copy: 'Explore practical training, interactive guides, and resources that help you build your skills. Choose a topic and follow your own learning path.',
@@ -224,7 +224,7 @@ const EDITIONS: Record<LibraryEdition, { kicker: string; title: string; em: stri
     choose: 'Choose your next course.',
   },
   grc: {
-    kicker: 'AUTHORIZATION STUDIO · GRC & RMF TRAINING',
+    kicker: 'COMPLIANCE HUB · GRC & RMF TRAINING',
     title: 'Take a system to an ATO.',
     em: 'One RMF step at a time.',
     copy: 'Governance, risk and compliance training built on the Risk Management Framework: the RMF to ATO course, the ATO Package Builder where you do each step, and the ATO Template Library with the documents each step uses.',
@@ -475,7 +475,7 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
               Authorize the network you built.
             </p>
             <Link href="/technical-training">
-              Build it first in the Build Studio <ArrowRight size={17} />
+              Build it first in the Configuration Hub <ArrowRight size={17} />
             </Link>
           </> : <>
             <p>

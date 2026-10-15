@@ -1412,7 +1412,7 @@
       "afterEpisode": "dc01-dc02",
       "title": "RMF to ATO",
       "subtitle": "Every RMF step: the lessons, the workspace and the templates",
-      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in Inside the Network, through all seven steps of the Risk Management Framework (RMF) to an Authorization to Operate, following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Each step pairs its lessons with the same task in the ATO Package Builder and its templates from the ATO Template Library: prepare and categorize the system, select and implement its controls, build the Body of Evidence, assess it and plan the fixes in a POA&M, assemble the package for a decision, and keep the authorization current.",
+      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in the System Hub, through all seven steps of the Risk Management Framework (RMF) to an Authorization to Operate, following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Each step pairs its lessons with the same task in the ATO Package Builder and its templates from the ATO Template Library: prepare and categorize the system, select and implement its controls, build the Body of Evidence, assess it and plan the fixes in a POA&M, assemble the package for a decision, and keep the authorization current.",
       "tags": [
         "Risk Management Framework",
         "RMF",
@@ -1425,7 +1425,7 @@
       "estimatedHours": 24,
       "outcomes": [
         "Explain RMF roles and how NIST SP 800-37 Revision 2 and the 2016 JSIG organize the seven steps and their outputs.",
-        "Prepare, categorize and select controls for the Inside the Network system, then implement them and prove each one with indexed evidence.",
+        "Prepare, categorize and select controls for the System Hub system, then implement them and prove each one with indexed evidence.",
         "Assess the controls, plan every weakness in a POA&M, and take the package through review to an Authorizing Official's decision.",
         "Keep the authorization current with change analysis, ongoing assessment and reporting, using official templates and practice samples at every step."
       ],

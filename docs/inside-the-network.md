@@ -1,4 +1,4 @@
-# Inside the Network
+# System Hub
 
 October 3 presentation update: removed the RMF lifecycle strip, handlers, retired styles, categorization/authorization process material, and repeated educational/illustrative disclaimer labels. NIST security-control mappings, technical sources, protocols, security procedures, and validation requirements remain. The independent RMF section is unchanged. The lifecycle descriptions below record the earlier iteration, not the current interface.
 

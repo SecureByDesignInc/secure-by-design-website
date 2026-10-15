@@ -131,7 +131,7 @@ export function createClipRecorder({getScene,sequences,play,current,toast,onStat
   // Header: brand and process title
   const logoSize=(portrait?64:56)*u;if(logo.complete&&logo.naturalWidth)ctx.drawImage(logo,margin,(portrait?62:48)*u,logoSize,logoSize);
   ctx.fillStyle='#68ddf0';ctx.font=`600 ${(portrait?25:22)*u}px ${font}`;if('letterSpacing' in ctx)ctx.letterSpacing=`${3*u}px`;
-  ctx.fillText('SECURE BY DESIGN · INSIDE THE NETWORK',margin+logoSize+18*u,(portrait?104:86)*u);if('letterSpacing' in ctx)ctx.letterSpacing='0px';
+  ctx.fillText('SECURE BY DESIGN · SYSTEM HUB',margin+logoSize+18*u,(portrait?104:86)*u);if('letterSpacing' in ctx)ctx.letterSpacing='0px';
   ctx.fillStyle='#f3f9ff';ctx.font=`600 ${(portrait?64:50)*u}px ${font}`;
   const titleLines=wrap(ctx,sequence.title,w-margin*2,portrait?3:1),titleTop=(portrait?206:150)*u,titleLead=(portrait?76:58)*u;
   titleLines.forEach((line,i)=>ctx.fillText(line,margin,titleTop+i*titleLead));
@@ -155,7 +155,7 @@ export function createClipRecorder({getScene,sequences,play,current,toast,onStat
   const shade=ctx.createLinearGradient(0,0,w,h);shade.addColorStop(0,'rgba(4,12,22,.95)');shade.addColorStop(1,'rgba(3,8,15,.9)');ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);
   const logoSize=(portrait?76:64)*u,top=(portrait?150:110)*u;if(logo.complete&&logo.naturalWidth)ctx.drawImage(logo,margin,top,logoSize,logoSize);
   ctx.fillStyle='#68ddf0';ctx.font=`600 ${(portrait?27:24)*u}px ${font}`;if('letterSpacing' in ctx)ctx.letterSpacing=`${3*u}px`;
-  ctx.fillText('SECURE BY DESIGN · INSIDE THE NETWORK',margin+logoSize+22*u,top+logoSize*.62);
+  ctx.fillText('SECURE BY DESIGN · SYSTEM HUB',margin+logoSize+22*u,top+logoSize*.62);
   const kicker=kind==='outro'?'KEEP EXPLORING':sequence.drill?'ATTACK DRILL':sequence.whatIf?'WHAT IF…':'FOLLOW THE TRAFFIC';
   const titleTop=(portrait?760:400)*u;ctx.fillStyle=sequence.color;ctx.fillRect(margin,titleTop-(portrait?150:120)*u,(portrait?130:150)*u,6*u);
   ctx.fillText(kicker,margin,titleTop-(portrait?92:72)*u);if('letterSpacing' in ctx)ctx.letterSpacing='0px';

@@ -158,7 +158,7 @@ If Dylan can’t find a controller, Jon investigates discovery and connectivity.
 
 Follow where the request got stuck. You’ll get further with that than by changing three unrelated settings and hoping one of them was the problem.
 
-To watch Dylan’s request travel through a working design, open [Open a file in Inside the Network](/inside-the-network#process=files). Each step shows which system answers and which rule allows it.
+To watch Dylan’s request travel through a working design, open [Open a file in the System Hub](/inside-the-network#process=files). Each step shows which system answers and which rule allows it.
 
 ## Active Directory is more than a login server
 

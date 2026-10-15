@@ -5,9 +5,9 @@ import { sharePreview } from '../share-preview';
 
 const description = 'Explore practical training, interactive guides, and resources from Secure By Design. Choose a topic, build your skills, and follow your own learning path.';
 export const metadata = {
-  title: 'Build Studio: Technical Training',
+  title: 'Configuration Hub: Technical Training',
   description,
-  ...sharePreview('Build Studio: Technical Training | Secure By Design', description, '/technical-training'),
+  ...sharePreview('Configuration Hub: Technical Training | Secure By Design', description, '/technical-training'),
 };
 
 export default function TrainingLibraryPage() {

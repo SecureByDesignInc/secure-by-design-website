@@ -1,4 +1,4 @@
-// Builds the text version of Inside the Network from the same modules the 3D model uses,
+// Builds the text version of the System Hub from the same modules the 3D model uses,
 // so /inside-the-network has readable, indexable content that stays in sync with the model.
 import { writeFileSync } from 'node:fs';
 import { inventory } from '../public/inside-network-model/inventory.js';
@@ -74,4 +74,4 @@ const building = {
 };
 const text = { building, systems, segments, processes, whatIfs: whatIfText, protocols: reference, offline, controlCount: Object.keys(controls).length };
 writeFileSync(new URL('../content/inside-the-network.json', import.meta.url), JSON.stringify(text, null, 2) + '\n');
-console.log(`Prepared Inside the Network text: ${systems.length} systems, ${segments.length} VLANs, ${processes.length} traffic processes.`);
+console.log(`Prepared System Hub text: ${systems.length} systems, ${segments.length} VLANs, ${processes.length} traffic processes.`);

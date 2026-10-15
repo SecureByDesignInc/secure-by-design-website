@@ -1,4 +1,4 @@
-// Browser smoke test for Inside the Network (public/inside-network-model/model.html).
+// Browser smoke test for the System Hub (public/inside-network-model/model.html).
 // Serves public/ locally, drives the model in headless Chromium, and fails on runtime errors
 // or broken interactions. Requires Playwright with Chromium; skips cleanly when unavailable.
 //   node scripts/check-network-browser.mjs

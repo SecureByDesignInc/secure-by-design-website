@@ -46,7 +46,7 @@ test('related build courses stay together before authorization and materials rem
     }
     const page = readFileSync(new URL('../public' + part.training.guide.replace(/#.*$/, ''), import.meta.url), 'utf8');
     assert.doesNotMatch(page, /PRIVATE REVIEW|noindex/);
-    assert.match(page, /Back to the Authorization Studio/);
+    assert.match(page, /Back to the Compliance Hub/);
   }
 });
 
