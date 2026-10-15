@@ -13,6 +13,7 @@ import {bookmarkCatalog} from '../content/bookmark-catalog.js';
 import training from '../content/training-progress.json' with {type:'json'};
 import articleProgress from '../content/article-progress.json' with { type: 'json' };
 import { readerProgressApi } from '../server/reader-progress.js';
+import * as authorizationModel from '../lib/authorization/model.mjs';
 
 const expectedIds = [
   'rmf:prepare', 'rmf:categorize', 'rmf:select', 'rmf:implement', 'rmf:assess', 'rmf:authorize', 'rmf:monitor',
@@ -71,6 +72,7 @@ function renderDashboard(records) {
       if (specifier === '../memberships/plans') return { default: () => null };
       if (specifier === './sign-in-methods') return { default: () => null, DeleteAccount: () => null, ReauthNotice: () => null };
       if (specifier === '../account/safe-return') return { safeReturnPath: () => null };
+      if (specifier === '../../lib/authorization/model.mjs') return authorizationModel;
       if (specifier === 'next/link') return { default: props => React.createElement('a', props) };
       return require(specifier);
     },

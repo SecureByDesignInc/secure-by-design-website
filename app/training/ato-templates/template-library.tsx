@@ -1,8 +1,9 @@
-// The full ATO Template Library page, in the Training Library's design. Owner direction, 15 October 2026: the
+// The full ATO Template Library page, in the Training Library's design. Since 15 October 2026 it is part of course 2.1
+// "RMF to ATO" (/training/rmf/): each step page there lists its own sources and samples and links here by #<step>. Owner direction, 15 October 2026: the
 // library lists only documents verified as publicly released by an official publisher, arranged by RMF step and
 // linked to the publisher's own copy. The expanded catalog tile (app/videos/library-experience.tsx) links here.
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import templates from '../../../content/ato-templates.json';
 import TemplateEntry, { SampleEntry } from '../../videos/template-entry';
 import { sourcesPhrase } from '../../videos/template-labels';
@@ -19,7 +20,7 @@ export default function TemplateLibrary() {
     <main id="main" className="vc-page tl-page">
       <section className="container vc-intro">
         <div>
-          <p className="vc-kicker">TEMPLATES &amp; REFERENCES</p>
+          <p className="vc-kicker">COURSE 2.1 · RMF TO ATO · TEMPLATES</p>
           <h1>
             ATO Template Library.
             <br />
@@ -33,6 +34,7 @@ export default function TemplateLibrary() {
             are {templates.samples.length} Secure By Design training samples for the documents with no public DoD or JSIG
             version.
           </p>
+          <Link href="/training/rmf/index.html#step/prepare">Open course 2.1 by RMF step <ArrowRight size={16} /></Link>
         </div>
       </section>
 
@@ -97,8 +99,8 @@ export default function TemplateLibrary() {
 
         <div className="vc-library-footer">
           <p>Official documents belong to their publishers. Training samples © 2026 Secure By Design Team LLC. Links checked {checked}.</p>
-          <Link href="/training">
-            <ArrowLeft size={17} /> Back to the Training Library
+          <Link href="/training/rmf/index.html#step/prepare">
+            <ArrowLeft size={17} /> Back to course 2.1, RMF to ATO
           </Link>
         </div>
       </section>

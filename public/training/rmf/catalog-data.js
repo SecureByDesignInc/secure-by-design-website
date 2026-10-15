@@ -722,50 +722,53 @@ window.CATALOG = [
   }
 ];
 
-// The three courses as the Training Library presents them (content/videos.json; tests keep them equal). Each has its own page at
-// /training/<folder>/ built by scripts/prepare-rmf-courses.mjs.
+// The course as the Training Library presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
+// 2026: courses 2.1, 2.2 and 2.3, the ATO Template Library and the Authorization Workspace became one learning process,
+// course 2.1 "RMF to ATO" at /training/rmf/, built by scripts/prepare-rmf-courses.mjs. Module IDs and the
+// training:rmf-boe-ato:NN progress IDs are unchanged.
 window.CATALOG_PARTS = [
   {
     "number": "2.1",
-    "workspace": "Start the records every later step builds on: the scope and registration, the draft System Security Plan, the Security Controls Traceability Matrix, the draft Risk Assessment Report, and the continuous monitoring strategy. Compare a completed excerpt with its blank starter.",
+    "workspace": "The practice records every step starts or updates, from the scope and registration to the package manifest and the security impact analysis. Compare a completed excerpt with its blank starter.",
     "id": "rmf-boe-ato",
     "folder": "rmf",
-    "title": "Risk Management Framework",
-    "hero": "Take the system you built in Build the Network through the first steps of the Risk Management Framework: define and register it, describe and categorize it in a draft System Security Plan, then select its controls with a draft risk assessment and a monitoring strategy. Each module follows one NIST step, with the matching JSIG tasks and the outputs they produce.",
-    "modules": [
-      "01",
-      "02",
-      "03",
-      "04"
-    ]
-  },
-  {
-    "number": "2.2",
-    "workspace": "Build the Body of Evidence: follow the same logging example from the as-implemented plan to evidence, assessment, findings, and the plan of action and milestones. Compare a completed excerpt with its blank starter.",
-    "id": "rmf-body-of-evidence",
-    "folder": "rmf-body-of-evidence",
-    "title": "Body of Evidence",
-    "hero": "Develop the Body of Evidence for the same system through the Implement and Assess steps: record each control as implemented, prove it with indexed evidence, plan and perform an independent assessment, and carry the findings into a Security Assessment Report and a Plan of Action and Milestones.",
-    "modules": [
-      "05",
-      "06",
-      "07",
-      "08",
-      "09"
-    ]
-  },
-  {
-    "number": "2.3",
-    "workspace": "Assemble, decide, and maintain: the package manifest, the executive risk summary, the decision record, the monitoring strategy, and the security impact analysis. Compare a completed excerpt with its blank starter.",
-    "id": "rmf-authorization-to-operate",
-    "folder": "rmf-authorization-to-operate",
-    "title": "Authorization to Operate",
-    "hero": "Take the Body of Evidence through the Authorize and Monitor steps: assemble the authorization package, brief the risk for the Authorizing Official, record a fictional decision with its terms and conditions, and keep the authorization current as the system changes. Finish with the package capstone.",
-    "modules": [
-      "10",
-      "11",
-      "12"
-    ],
+    "title": "RMF to ATO",
+    "hero": "Take the system you built in Build the Network all the way to an Authorization to Operate, one RMF step at a time. Each step pairs its lessons with the same task in the Authorization Workspace and the templates that step uses, from preparing the system to keeping its authorization current.",
+    "modules": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
     "capstone": true
   }
+];
+
+// The seven RMF steps of NIST SP 800-37 Rev. 2 that organize the course. Each step groups its modules, names the
+// Authorization Workspace tab and check that match it (lib/authorization/model.mjs phases(), same IDs), and the
+// ATO Template Library section with its sources (content/ato-templates.json groups, same IDs; Authorize has none).
+window.RMF_STEPS = [
+  {"id": "prepare", "number": 1, "title": "Prepare", "modules": ["01", "02"], "tab": "system",
+   "lead": "Learn who is accountable for the authorization, then define the system: its mission, boundary, assets and registration.",
+   "task": "Register the Secure By Design enclave, name the five roles, and write its description and boundary.",
+   "done": "All five roles are named, and the description and boundary are written."},
+  {"id": "categorize", "number": 2, "title": "Categorize", "modules": ["03"], "tab": "system",
+   "lead": "Describe the system and decide the impact of a loss of confidentiality, integrity and availability, with the rationale.",
+   "task": "Add the information types, set confidentiality, integrity and availability, and write the categorization rationale.",
+   "done": "At least one information type is recorded, each impact is at or above its high-water mark, and the rationale is written."},
+  {"id": "select", "number": 3, "title": "Select", "modules": ["04"], "tab": "controls",
+   "lead": "Choose the baseline, apply overlays and tailoring, allocate controls and plan how they will be monitored.",
+   "task": "Choose the controls in scope and write the selection rationale.",
+   "done": "The system has controls in scope and a selection rationale."},
+  {"id": "implement", "number": 4, "title": "Implement", "modules": ["05", "06"], "tab": "controls",
+   "lead": "Implement the controls, record them as implemented, and connect each one to the evidence that proves it.",
+   "task": "Write an implementation statement for every control, submit each one, and get evidence accepted into the Body of Evidence.",
+   "done": "No control is in draft or returned, and at least one piece of evidence is accepted."},
+  {"id": "assess", "number": 5, "title": "Assess", "modules": ["07", "08", "09"], "tab": "assessment",
+   "lead": "Prepare and perform an independent assessment, report it, and turn the findings into a plan of action and milestones.",
+   "task": "Take the assessor's seat: record a result for every SP 800-53A objective, validate each control, and plan each weakness in the POA&M.",
+   "done": "Every control is assessed."},
+  {"id": "authorize", "number": 6, "title": "Authorize", "modules": ["10", "11"], "tab": "package",
+   "lead": "Assemble the authorization package, determine and respond to the risk, and support the Authorizing Official's decision.",
+   "task": "Assemble the package and route it through the ISSM, the assessor and the Authorizing Official to a decision.",
+   "done": "The Authorizing Official grants an ATO, an ATO with conditions, or an IATT."},
+  {"id": "monitor", "number": 7, "title": "Monitor", "modules": ["12"], "tab": "monitor",
+   "lead": "Keep the authorization current: analyze changes, keep assessing, report, and plan for disposal.",
+   "task": "Track the termination date, milestones, changes and the annual review for your authorized system.",
+   "done": "The system's authorization is current."}
 ];

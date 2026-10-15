@@ -1410,23 +1410,24 @@
       "id": "rmf-boe-ato",
       "number": "2.1",
       "afterEpisode": "dc01-dc02",
-      "title": "Risk Management Framework",
-      "subtitle": "Prepare, Categorize, and Select",
-      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in Inside the Network, through the Prepare, Categorize, and Select steps of the Risk Management Framework (RMF), following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Define and register the system, describe and categorize it in a draft System Security Plan, and select its controls with a draft risk assessment and a monitoring strategy, ready for the Body of Evidence in course 2.2.",
+      "title": "RMF to ATO",
+      "subtitle": "Every RMF step: the lessons, the workspace and the templates",
+      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in Inside the Network, through all seven steps of the Risk Management Framework (RMF) to an Authorization to Operate, following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Each step pairs its lessons with the same task in the Authorization Workspace and its templates from the ATO Template Library: prepare and categorize the system, select and implement its controls, build the Body of Evidence, assess it and plan the fixes in a POA&M, assemble the package for a decision, and keep the authorization current.",
       "tags": [
         "Risk Management Framework",
         "RMF",
-        "Categorization",
-        "Control selection"
+        "Body of Evidence",
+        "Authorization to Operate"
       ],
       "systems": [],
-      "moduleCount": 4,
-      "lessonCount": 12,
-      "estimatedHours": 6,
+      "moduleCount": 12,
+      "lessonCount": 36,
+      "estimatedHours": 24,
       "outcomes": [
-        "Explain RMF roles and how NIST SP 800-37 Revision 2 and the 2016 JSIG organize the steps and their outputs.",
-        "Prepare, register, describe, and categorize the Inside the Network practice system.",
-        "Select, tailor, and allocate controls with a draft Risk Assessment Report and a monitoring strategy for plan approval."
+        "Explain RMF roles and how NIST SP 800-37 Revision 2 and the 2016 JSIG organize the seven steps and their outputs.",
+        "Prepare, categorize and select controls for the Inside the Network system, then implement them and prove each one with indexed evidence.",
+        "Assess the controls, plan every weakness in a POA&M, and take the package through review to an Authorizing Official's decision.",
+        "Keep the authorization current with change analysis, ongoing assessment and reporting, using official templates and practice samples at every step."
       ],
       "stages": [
         {
@@ -1476,71 +1477,12 @@
             "04.2 Allocation and the security plan",
             "04.3 Risk, monitoring, and plan approval"
           ]
-        }
-      ],
-      "training": {
-        "guide": "/training/rmf/index.html#catalog/01",
-        "word": "/training/rmf/SecureByDesign-rmf-Workbook.docx",
-        "pdf": "/training/rmf/SecureByDesign-rmf-Workbook.pdf",
-        "package": "/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
-        "pages": 24,
-        "materialsEdition": "2.0",
-        "updated": "15 October 2026",
-        "relatedResources": [
-          {
-            "title": "Open the evidence workspace",
-            "detail": "Six practice artifacts with editable Markdown and CSV starters",
-            "href": "/training/rmf/index.html#evidence"
-          }
-        ],
-        "cover": "/training/rmf/workbook-cover.webp"
-      },
-      "categoryId": "network-authorization",
-      "categoryOrder": 1,
-      "artLabels": [
-        "Prepare + register",
-        "Describe + categorize",
-        "Select + plan monitoring"
-      ],
-      "kind": "authorization",
-      "seriesPart": 1,
-      "moduleIds": [
-        "01",
-        "02",
-        "03",
-        "04"
-      ],
-      "outcomeSummary": "A registered system, a justified categorization, and a control set with an owner, a reason, a risk picture, and a monitoring strategy, ready for plan approval.",
-      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
-    },
-    {
-      "id": "rmf-body-of-evidence",
-      "number": "2.2",
-      "afterEpisode": "dc01-dc02",
-      "title": "Body of Evidence",
-      "subtitle": "Implement and Assess: document, prove, and test the network",
-      "description": "Develop the Body of Evidence for the same Inside the Network build through the Risk Management Framework (RMF) Implement and Assess steps, following NIST SP 800-37 Revision 2 with the 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Record the controls as implemented, prove them with indexed evidence, prepare and perform an independent assessment, and carry its findings into a Security Assessment Report (SAR) and a Plan of Action and Milestones (POA&M).",
-      "tags": [
-        "Body of Evidence",
-        "RMF Implement and Assess",
-        "Security assessment",
-        "POA&M"
-      ],
-      "systems": [],
-      "moduleCount": 5,
-      "lessonCount": 15,
-      "estimatedHours": 9,
-      "outcomes": [
-        "Implement the controls, document them as built, and prove them with indexed evidence.",
-        "Prepare and perform an independent assessment, and report supported findings in a Security Assessment Report.",
-        "Remediate and reassess what can be fixed now, and carry open findings into a risk-ranked POA&M."
-      ],
-      "stages": [
+        },
         {
           "number": "05",
           "title": "Implement and document the controls",
           "detail": "Implement the selected controls and record them as built in the System Security Plan (SSP) and Security Controls Traceability Matrix (SCTM), in statements an assessor can test.",
-          "href": "/training/rmf-body-of-evidence/index.html#catalog/05",
+          "href": "/training/rmf/index.html#catalog/05",
           "hours": "2",
           "lessons": [
             "05.1 Implement the approved controls",
@@ -1552,7 +1494,7 @@
           "number": "06",
           "title": "Connect implementation to proof",
           "detail": "Collect technical and operational evidence of the as-built system, index it, and correct the SSP and SCTM wherever the evidence and the plan disagree.",
-          "href": "/training/rmf-body-of-evidence/index.html#catalog/06",
+          "href": "/training/rmf/index.html#catalog/06",
           "hours": "2",
           "lessons": [
             "06.1 Configuration and hardening evidence",
@@ -1564,7 +1506,7 @@
           "number": "07",
           "title": "Prepare the assessment",
           "detail": "Select an independent assessor, hand over current evidence, and get a Security Assessment Plan approved before any testing starts.",
-          "href": "/training/rmf-body-of-evidence/index.html#catalog/07",
+          "href": "/training/rmf/index.html#catalog/07",
           "hours": "1.5",
           "lessons": [
             "07.1 Assessor selection and independence",
@@ -1576,7 +1518,7 @@
           "number": "08",
           "title": "Perform and report the assessment",
           "detail": "Assess the controls as planned, report supported findings in a Security Assessment Report (SAR), and remediate and reassess what can be fixed now.",
-          "href": "/training/rmf-body-of-evidence/index.html#catalog/08",
+          "href": "/training/rmf/index.html#catalog/08",
           "hours": "2",
           "lessons": [
             "08.1 Examine, interview, and test",
@@ -1588,84 +1530,19 @@
           "number": "09",
           "title": "Build the plan of action and milestones",
           "detail": "Turn the findings still open into a risk-ranked Plan of Action and Milestones (POA&M) with accountable owners, resources, dated milestones, and closure criteria.",
-          "href": "/training/rmf-body-of-evidence/index.html#catalog/09",
+          "href": "/training/rmf/index.html#catalog/09",
           "hours": "1.5",
           "lessons": [
             "09.1 From findings to ranked risk",
             "09.2 Writing an actionable POA&M",
             "09.3 Tracking to verified closure"
           ]
-        }
-      ],
-      "training": {
-        "guide": "/training/rmf-body-of-evidence/index.html#catalog/05",
-        "word": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Workbook.docx",
-        "pdf": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Workbook.pdf",
-        "package": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Learning-Package.zip",
-        "pages": 27,
-        "materialsEdition": "2.0",
-        "updated": "15 October 2026",
-        "relatedResources": [
-          {
-            "title": "Open the Body of Evidence workspace",
-            "detail": "Seven practice artifacts with editable Markdown and CSV starters",
-            "href": "/training/rmf-body-of-evidence/index.html#evidence"
-          },
-          {
-            "title": "Open the Authorization Workspace",
-            "detail": "Record your evidence against your controls and have it reviewed",
-            "href": "/authorization-workspace"
-          }
-        ],
-        "cover": "/training/rmf-body-of-evidence/workbook-cover.webp"
-      },
-      "categoryId": "network-authorization",
-      "categoryOrder": 2,
-      "artLabels": [
-        "Document + prove controls",
-        "Plan + run the assessment",
-        "Report, remediate + POA&M"
-      ],
-      "kind": "authorization",
-      "seriesPart": 2,
-      "moduleIds": [
-        "05",
-        "06",
-        "07",
-        "08",
-        "09"
-      ],
-      "outcomeSummary": "An as-built plan, an approved and independent assessment, and every open finding carried into an accountable action.",
-      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
-    },
-    {
-      "id": "rmf-authorization-to-operate",
-      "number": "2.3",
-      "afterEpisode": "dc01-dc02",
-      "title": "Authorization to Operate",
-      "subtitle": "Authorize and Monitor: the package, the decision, and continuous monitoring",
-      "description": "Take the Body of Evidence for the Inside the Network system through the Authorize and Monitor steps of the Risk Management Framework (RMF) in NIST SP 800-37 Revision 2, with the matching tasks of the Joint Special Access Program (SAP) Implementation Guide (JSIG), 11 April 2016. Assemble the authorization package, brief the risk for the Authorizing Official (AO), record a fictional decision with its terms, conditions, and duration, and keep the authorization current through change, reporting, and disposal before the package capstone.",
-      "tags": [
-        "Authorization to Operate",
-        "ATO",
-        "Authorization package",
-        "Continuous monitoring"
-      ],
-      "systems": [],
-      "moduleCount": 3,
-      "lessonCount": 9,
-      "estimatedHours": 9,
-      "outcomes": [
-        "Assemble and submit an authorization package that meets JSIG Task 5-2 and NIST Task R-1.",
-        "Brief the risk for the AO’s determination and record a fictional authorization decision with its terms, conditions, and duration.",
-        "Keep the authorization current through security impact analysis, ongoing assessment, status reporting, and disposal."
-      ],
-      "stages": [
+        },
         {
           "number": "10",
           "title": "Assemble the authorization package",
           "detail": "Assemble an authorization package whose plans, assessment results, and open risks agree, and submit it for the authorizing official’s decision.",
-          "href": "/training/rmf-authorization-to-operate/index.html#catalog/10",
+          "href": "/training/rmf/index.html#catalog/10",
           "hours": "2",
           "lessons": [
             "10.1 Package contents in the JSIG and NIST",
@@ -1677,7 +1554,7 @@
           "number": "11",
           "title": "Support the authorization decision",
           "detail": "Brief the risk the authorizing official must determine, propose a response to each significant risk, and record what an authorization decision contains.",
-          "href": "/training/rmf-authorization-to-operate/index.html#catalog/11",
+          "href": "/training/rmf/index.html#catalog/11",
           "hours": "1.5",
           "lessons": [
             "11.1 Risk determination",
@@ -1689,7 +1566,7 @@
           "number": "12",
           "title": "Monitor and maintain authorization",
           "detail": "Keep the authorization true as the system changes: analyze each change, assess and report as the strategy requires, support ongoing authorization, and plan disposal.",
-          "href": "/training/rmf-authorization-to-operate/index.html#catalog/12",
+          "href": "/training/rmf/index.html#catalog/12",
           "hours": "1.5",
           "lessons": [
             "12.1 Changes and security impact analysis",
@@ -1699,49 +1576,57 @@
         }
       ],
       "training": {
-        "guide": "/training/rmf-authorization-to-operate/index.html#catalog/10",
-        "word": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Workbook.docx",
-        "pdf": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Workbook.pdf",
-        "package": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip",
-        "pages": 22,
+        "guide": "/training/rmf/index.html#catalog/01",
+        "word": "/training/rmf/SecureByDesign-rmf-Workbook.docx",
+        "pdf": "/training/rmf/SecureByDesign-rmf-Workbook.pdf",
+        "package": "/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
+        "pages": 59,
         "materialsEdition": "2.0",
         "updated": "15 October 2026",
         "relatedResources": [
           {
-            "title": "Open the authorization package capstone",
-            "detail": "Four hour exercise · Assemble, defend, and maintain the practice package",
-            "href": "/training/rmf-authorization-to-operate/index.html#capstone"
-          },
-          {
-            "title": "Open the package manifest",
-            "detail": "Organize the evidence and submission records",
-            "href": "/training/rmf-authorization-to-operate/index.html#evidence/manifest"
-          },
-          {
-            "title": "Run the capstone in the Authorization Workspace",
-            "detail": "Controls, Body of Evidence, POA&M, package review and the AO decision",
+            "title": "Open the Authorization Workspace",
+            "detail": "Do each step on your Secure By Design enclave: register, categorize, implement, assess, authorize and monitor",
             "href": "/authorization-workspace"
+          },
+          {
+            "title": "Open the ATO Template Library",
+            "detail": "Official sources and Secure By Design training samples for every step",
+            "href": "/training/ato-templates"
+          },
+          {
+            "title": "Open the evidence workspace",
+            "detail": "Fourteen practice artifacts with editable Markdown and CSV starters",
+            "href": "/training/rmf/index.html#evidence"
           }
         ],
-        "cover": "/training/rmf-authorization-to-operate/workbook-cover.webp"
+        "cover": "/training/rmf/workbook-cover.webp"
       },
       "categoryId": "network-authorization",
-      "categoryOrder": 3,
+      "categoryOrder": 1,
       "artLabels": [
-        "Authorize: the package",
-        "Authorize: the decision",
-        "Monitor: keep it current"
+        "Prepare → Select",
+        "Implement → Assess",
+        "Authorize → Monitor"
       ],
       "kind": "authorization",
-      "seriesPart": 3,
       "moduleIds": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
         "10",
         "11",
         "12"
       ],
-      "capstoneHours": 4,
-      "outcomeSummary": "A complete package, an honest risk picture, a decision record with clear conditions, and monitoring that keeps the authorization true.",
-      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
+      "outcomeSummary": "One system, taken from registration to a current Authorization to Operate: the lessons for each RMF step, the same work done in the Authorization Workspace, and the templates each step uses.",
+      "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION",
+      "capstoneHours": 4
     }
   ],
   "categories": [
@@ -1753,59 +1638,8 @@
     {
       "id": "network-authorization",
       "title": "Network Authorization",
-      "description": "Take the network through the Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in: prepare, categorize, and select (2.1); implement and assess (2.2); then authorize and monitor (2.3). Start after the network build, with course 2.1."
-    },
-    {
-      "id": "templates-references",
-      "title": "Templates & References",
-      "kind": "reference",
-      "description": "Free, publicly released references to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
+      "description": "Take the network through all seven Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in, to an Authorization to Operate. One course: each step's lessons, the same task in the Authorization Workspace, and the templates it uses. Start after the network build."
     }
   ],
-  "references": [
-    {
-      "kind": "library",
-      "id": "ato-templates",
-      "categoryId": "templates-references",
-      "categoryOrder": 1,
-      "title": "ATO Template Library",
-      "subtitle": "Verified public sources for the Body of Evidence",
-      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253 and the Privacy Overlay; NIST's control baselines, SSP outline and configuration management guide; DCSA's ISSM appointment letter and RAR templates; CDSE's POA&M job aid; and FedRAMP formats for the traceability matrix, POA&M, inventory and continuous monitoring. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
-      "tags": [
-        "Templates",
-        "Body of Evidence",
-        "RMF"
-      ],
-      "systems": [],
-      "artLabels": [
-        "SSP · SCTM · POA&M",
-        "RAR · ConMon · CM plan",
-        "Verified public sources"
-      ],
-      "outcomeSummary": "Open the official, publicly released sources behind each part of the package.",
-      "outcomes": [
-        "Categorize and select controls with CNSSI 1253 and NIST's baselines",
-        "Start an SSP from NIST's outline",
-        "Track findings with POA&M guidance and formats",
-        "Plan ConMon and configuration management from official guides"
-      ],
-      "training": {
-        "guide": "/training/ato-templates",
-        "cover": "/training/library/ato-templates-cover.webp",
-        "updated": "15 October 2026",
-        "relatedResources": [
-          {
-            "title": "Open the Body of Evidence workspace (course 2.2)",
-            "detail": "Practice the SSP, SCTM, SAR and POA&M in the course workspace",
-            "href": "/training/rmf-body-of-evidence/index.html#evidence"
-          },
-          {
-            "title": "Open the Authorization Workspace",
-            "detail": "Record your evidence against your controls and take it to an ATO decision",
-            "href": "/authorization-workspace"
-          }
-        ]
-      }
-    }
-  ]
+  "references": []
 }

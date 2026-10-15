@@ -47,7 +47,7 @@ function Landing(){
    <h2>Sign in to start</h2>
    <p>Your systems are saved privately to your Secure By Design account, so you can pick up the package on any device. Nothing you enter is shared or published. Use practice or fictional details: never enter a real organization’s sensitive, controlled, or classified information.</p>
    <a className="reader-primary" href="/my-progress?returnTo=%2Fauthorization-workspace#account">Create account or sign in</a>
-   <p className="reader-note">New to authorization? Work through <a href="/training/rmf/index.html#catalog/01">Network Authorization 2.1–2.3</a> first; the workspace is where you run its capstone.</p>
+   <p className="reader-note">New to authorization? Start with <a href="/training/rmf/index.html#step/prepare">course 2.1, RMF to ATO</a>: each of its seven steps has the lessons, the same task here, and the templates it uses.</p>
   </div>
  </section>;
 }

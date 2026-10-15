@@ -50,7 +50,7 @@ test('guide content names Windows releases without version numbers', () => {
 // Owner requests, 15 October 2026: the Network Authorization courses (2.1–2.3) follow the same design, and each course
 // has its own page and materials. scripts/prepare-rmf-courses.mjs builds the pages from content/videos.json and
 // window.CATALOG_PARTS; they load the guides' stylesheet and 3D scene from the shared copies the guide generator writes.
-test('each Network Authorization course has its own page in the course guide design', () => {
+test('the Network Authorization course has its page in the course guide design', () => {
   assert.ok(read('public/training/guide/course-guide.css').startsWith(read('scripts/course-guide/style.css')));
   assert.equal(read('public/training/guide/scene.js'), read('scripts/course-guide/scene.js'));
   const context = { window: {} };
@@ -59,7 +59,8 @@ test('each Network Authorization course has its own page in the course guide des
   const resources = JSON.parse(read('content/training-resources.json'));
   const headers = read('public/_headers');
   const parts = context.window.CATALOG_PARTS;
-  assert.deepEqual(Array.from(parts, part => part.folder), ['rmf', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  // Owner direction, 15 October 2026: one Network Authorization course page, organized by the seven RMF steps.
+  assert.deepEqual(Array.from(parts, part => part.folder), ['rmf']);
   for (const part of parts) {
     const course = library.courses.find(item => item.id === part.id);
     const page = read(`public/training/${part.folder}/index.html`);

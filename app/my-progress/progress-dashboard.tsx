@@ -8,6 +8,26 @@ import AccountForm from '../account/sign-in';
 import MembershipPlans from '../memberships/plans';
 import SignInMethods,{DeleteAccount,ReauthNotice} from './sign-in-methods';
 import {safeReturnPath} from '../account/safe-return';
+import {COURSE_STEP_MODULES} from '../../lib/authorization/model.mjs';
+
+// Course 2.1 "RMF to ATO" by RMF step: module completions plus the Authorization Workspace check for the learner's
+// Secure By Design enclave (/api/authorization/progress). Owner direction, 15 October 2026: one progress record.
+type StepProgress={user:unknown;system:{id:string;name:string}|null;steps:{id:string;label:string;done:boolean}[]};
+function AuthorizationSteps({completed}:{completed:{id:string}[]}){
+ const [data,setData]=useState<StepProgress|null>(null);
+ useEffect(()=>{fetch('/api/authorization/progress',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(setData).catch(()=>setData(null));},[]);
+ const labels:Record<string,string>={prepare:'Prepare',categorize:'Categorize',select:'Select',implement:'Implement',assess:'Assess',authorize:'Authorize',monitor:'Monitor'};
+ const rows=Object.entries(COURSE_STEP_MODULES).map(([id,modules],i)=>{
+  const done=modules.filter(m=>completed.some(r=>r.id===`training:rmf-boe-ato:${m}`)).length,workspace=data?.steps.find(s=>s.id===id)?.done===true;
+  return {id,number:i+1,label:labels[id],done,total:modules.length,workspace,complete:done===modules.length&&workspace};
+ });
+ const complete=rows.filter(r=>r.complete).length;
+ return <section className="reader-collection reader-rmf-steps" aria-labelledby="rmf-steps-title"><div className="reader-collection-heading"><h2 id="rmf-steps-title">RMF to ATO by step</h2><span>{complete} of {rows.length} steps complete</span></div>
+  <progress max={rows.length} value={complete} aria-label={`RMF to ATO: ${complete} of ${rows.length} steps complete`}/>
+  <p>A step is complete when its modules are marked complete and the Authorization Workspace check passes on {data?.system?<strong>{data.system.name}</strong>:'your Secure By Design enclave'}.{!data?.system&&<> <Link href="/authorization-workspace">Register it in the workspace →</Link></>}</p>
+  <ol>{rows.map(r=><li key={r.id} className={r.complete?'is-complete':''}><Link href={`/training/rmf/index.html#step/${r.id}`}>{r.complete?'✓ ':''}Step {r.number} · {r.label}</Link><span>Modules {r.done}/{r.total} · Workspace {r.workspace?'✓':'to do'}</span></li>)}</ol>
+ </section>;
+}
 export default function ProgressDashboard(){
  const {data,error,busy,refresh,save,saveBookmark,clear}=useReaderProgress();const [confirm,setConfirm]=useState(false);const [signOutError,setSignOutError]=useState(false);
  const records=filterActiveProgressRecords(data?.records||[]),completed=records.filter(item=>item.status==='completed');
@@ -29,6 +49,7 @@ export default function ProgressDashboard(){
  {data?.user&&!data.user.needsPassword&&<p className="reader-app-note">Pick up where you left off across devices. In the Secure By Design app, sign in with this account and connect progress to sync completed lessons and saved materials.</p>}
  {data?.user&&<><section className="reader-resume" aria-labelledby="resume-title"><span>{next?'Continue learning':'Start learning'}</span><h2 id="resume-title">{next?.title||'Find something to explore.'}</h2><Link href={next?.href||'/training'}>{next?'Continue →':'Explore the Training Library →'}</Link></section><div className="reader-summary"><section><span>Completed</span><strong>{completed.length}</strong><p>learning modules</p></section><section><span>In progress</span><strong>{records.length-completed.length}</strong><p>saved for your next visit</p></section></div>
  <section id="saved-materials" className="reader-collection"><div className="reader-collection-heading"><h2>Saved materials</h2></div>{bookmarkCatalog.filter(item=>!('retired' in item)&&data.bookmarks?.some(saved=>saved.id===item.id&&saved.saved)).length?<ul>{bookmarkCatalog.filter(item=>!('retired' in item)&&data.bookmarks?.some(saved=>saved.id===item.id&&saved.saved)).map(item=><li key={item.id}><Link href={item.href}>{item.title}</Link><button disabled={busy} onClick={()=>void saveBookmark(item.id,false)}>Remove from saved</button></li>)}</ul>:<p>Save course materials in a training guide or in the app to keep them here.</p>}</section>
+ <AuthorizationSteps completed={completed}/>
  {['Network build','Network authorization'].map(group=>{const items=activeProgressCatalog.filter(item=>item.group===group);const count=items.filter(item=>completed.some(record=>record.id===item.id)).length;return <section className="reader-collection" key={group}><div className="reader-collection-heading"><h2>{group}</h2><span>{count} of {items.length} complete</span></div><progress max={items.length} value={count} aria-label={`${group}: ${count} of ${items.length} complete`}/><ul>{items.map(item=>{const record=records.find(row=>row.id===item.id);return <li key={item.id}><div><Link href={item.href}>{item.title}</Link><span>{record?.status==='completed'?'Completed':record?'In progress':'Not started'}</span></div><button disabled={busy} onClick={()=>void save(item.id,record?.status==='completed'?'in_progress':'completed')}>{record?.status==='completed'?'Mark incomplete':'Mark complete'}</button></li>})}</ul><Link href="/training">Open the Training Library →</Link></section>})}
 
  <section className="reader-collection"><div className="reader-collection-heading"><h2>Keep exploring</h2></div><p>Find interactive training and companion materials in the Training Library.</p><Link href="/training">Explore the Training Library →</Link><p>Practicing authorization? Take a system from registration to an Authorization to Operate decision in the Authorization Workspace.</p><Link href="/authorization-workspace">Open the Authorization Workspace →</Link></section>

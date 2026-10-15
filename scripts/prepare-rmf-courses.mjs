@@ -1,31 +1,31 @@
-// Builds the three Network Authorization course pages (courses 2.1–2.3) in the Build the Network guide design:
-//   public/training/rmf/index.html                          2.1 Risk Management Framework
-//   public/training/rmf-body-of-evidence/index.html         2.2 Body of Evidence
-//   public/training/rmf-authorization-to-operate/index.html  2.3 Authorization to Operate
-// Course text comes from content/videos.json; the module groupings and folders from window.CATALOG_PARTS in
-// public/training/rmf/catalog-data.js. All three pages share /training/rmf/app.js, its data files and styles.css,
-// on top of the guides' stylesheet and 3D scene in /training/guide/. Run by prepare-content.mjs; the pages are
-// committed too. Workbooks and downloads come from scripts/prepare-rmf-workbooks.py.
+// Builds the Network Authorization course page, course 2.1 "RMF to ATO", in the Build the Network guide design:
+//   public/training/rmf/index.html
+//   public/training/rmf/templates-data.js   the ATO Template Library's sources and samples, for each RMF step
+// Owner direction, 15 October 2026: the former courses 2.1, 2.2 and 2.3, the ATO Template Library and the
+// Authorization Workspace became one learning process organized by the seven RMF steps (window.RMF_STEPS in
+// public/training/rmf/catalog-data.js). Course text comes from content/videos.json; the module list from
+// window.CATALOG_PARTS; the templates from content/ato-templates.json. The page uses /training/rmf/app.js, its data
+// files and styles.css, on top of the guides' stylesheet and 3D scene in /training/guide/. Run by
+// prepare-content.mjs; the page is committed too. The workbook and download come from scripts/prepare-rmf-workbooks.py.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
 const library = JSON.parse(read('content/videos.json'));
+const templates = JSON.parse(read('content/ato-templates.json'));
 const context = { window: {} };
 runInNewContext(read('public/training/rmf/catalog-data.js'), context);
 const parts = context.window.CATALOG_PARTS;
+const steps = context.window.RMF_STEPS;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
-const Count = n => { const w = words[n] ?? String(n); return w[0].toUpperCase() + w.slice(1); };
-// The bookmark each page saves ("Save this guide"); IDs come from content/training-resources.json.
+// The bookmark the page saves ("Save this guide"); IDs come from content/training-resources.json.
 export const guideBookmark = part => part.id === 'rmf-boe-ato' ? 'rmf-guide' : `${part.id}-guide`;
 
 function page(part, course) {
   const t = course.training, folder = part.folder;
   const titleWords = course.title.split(' '), accent = titleWords.pop();
   const modules = part.modules.length;
-  const notice = `One course. ${Count(modules)} modules${part.capstone ? ' and the capstone' : ''}.`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -38,36 +38,45 @@ function page(part, course) {
   <link rel="stylesheet" href="/training/guide/course-guide.css">
   <link rel="stylesheet" href="/training/rmf/styles.css">
   <script>document.documentElement.classList.add('guide-pending');setTimeout(()=>document.documentElement.classList.remove('guide-pending'),3000)</script>
-  <script defer src="/training/rmf/catalog-data.js"></script><script defer src="/training/rmf/learning-data.js"></script><script defer src="/training/rmf/network-data.js"></script><script defer src="/training/rmf/app.js"></script>
+  <script defer src="/training/rmf/catalog-data.js"></script><script defer src="/training/rmf/learning-data.js"></script><script defer src="/training/rmf/network-data.js"></script><script defer src="/training/rmf/templates-data.js"></script><script defer src="/training/rmf/app.js"></script>
 </head>
 <body data-course="${esc(part.number)}">
 <a class="skip" href="#main">Skip to learning content</a>
-<header class="top"><a class="brand" href="/"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="/">Home</a><a class="btn" href="/my-progress">My Account</a><a class="btn" href="/training" target="_blank" rel="noopener">Training Library ↗</a><a class="btn" href="${esc(t.package)}" download>↓ Training materials</a></nav></header>
-<section class="hero" aria-labelledby="course-title"><div><div class="eyebrow">Network Authorization / Course ${esc(course.number)}</div><h1 id="course-title">${esc(titleWords.join(' '))} <span>${esc(accent)}.</span></h1><p>${esc(part.hero)}</p><ul class="hero-facts" aria-label="Course size"><li><b>${modules}</b> modules</li><li><b>${course.lessonCount}</b> lessons</li>${part.capstone ? '<li><b>1</b> capstone</li>' : ''}<li><b>${esc(course.estimatedHours)} h</b> estimated study</li></ul></div><div class="kitcard"><div class="book"><img src="/training/guide/brand.png" alt=""><span>RMF<br>WORKBOOK<br><br>COURSE&nbsp;${esc(course.number)}</span></div><div><b>Your course companion</b><p>Interactive modules · 3D network<br>Workbook · Evidence starters</p><a href="${esc(t.package)}" download>Download the training materials →</a></div></div></section>
+<header class="top"><a class="brand" href="/"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="/">Home</a><a class="btn" href="/my-progress">My Account</a><a class="btn" href="/authorization-workspace">Authorization Workspace</a><a class="btn" href="/training" target="_blank" rel="noopener">Training Library ↗</a><a class="btn" href="${esc(t.package)}" download>↓ Training materials</a></nav></header>
+<section class="hero" aria-labelledby="course-title"><div><div class="eyebrow">Network Authorization / Course ${esc(course.number)}</div><h1 id="course-title">${esc(titleWords.join(' '))} <span>${esc(accent)}.</span></h1><p>${esc(part.hero)}</p><ul class="hero-facts" aria-label="Course size"><li><b>${steps.length}</b> RMF steps</li><li><b>${modules}</b> modules</li><li><b>${course.lessonCount}</b> lessons</li>${part.capstone ? '<li><b>1</b> capstone</li>' : ''}<li><b>${esc(course.estimatedHours)} h</b> estimated study</li></ul></div><div class="kitcard"><div class="book"><img src="/training/guide/brand.png" alt=""><span>RMF<br>WORKBOOK<br><br>COURSE&nbsp;${esc(course.number)}</span></div><div><b>Your course companion</b><p>Lessons · Workspace tasks · Templates<br>3D network · Workbook · Evidence starters</p><a href="${esc(t.package)}" download>Download the training materials →</a></div></div></section>
 <section class="sbd-account-progress" aria-label="Account learning progress" data-guide="${esc(guideBookmark(part))}"><strong>Continue across the website and app</strong><p>Save learning progress and this guide to your account. Lab observations and evidence exports stay in this browser.</p><button type="button" disabled>Load account progress</button></section>
 <main class="workspace rmf-workspace" id="main" tabindex="-1">
-<aside class="chapters" aria-label="Learning path"><div class="eyebrow">Your learning path</div><nav id="module-list" aria-label="Modules"></nav><details class="mobile-path"><summary id="mobile-summary">Browse the learning path</summary><nav id="module-list-mobile" aria-label="Modules on mobile"></nav></details><div class="chapter-notice">${notice}<br><br>Each module follows one RMF step: its NIST SP 800-37 Rev. 2 tasks, the matching JSIG tasks, and the outputs they produce. Use your Inside the Network build for the practice artifacts.</div></aside>
+<aside class="chapters" aria-label="Learning path"><div class="eyebrow">Your learning path</div><nav id="module-list" aria-label="RMF steps and modules"></nav><details class="mobile-path"><summary id="mobile-summary">Browse the learning path</summary><nav id="module-list-mobile" aria-label="RMF steps and modules on mobile"></nav></details><div class="chapter-notice">${steps.length} RMF steps. ${modules} modules and the capstone.<br><br>Each step has its lessons, the same task in the Authorization Workspace, and the templates it uses. A step is complete when its modules are marked complete and the workspace check passes.</div></aside>
 <article class="lesson" id="lesson" aria-labelledby="view-title"></article>
-<aside class="network" id="network"><section class="network-panel" aria-label="Interactive authorization view"><header class="network-head"><div><div class="eyebrow">Inside the Network / Authorization view</div><h2>See what the package covers</h2></div><button id="reset-view" class="btn" aria-label="Reset view of the network camera">Reset view</button></header><div class="viewbar"><button type="button" aria-pressed="true" id="module-view">This module</button><button type="button" aria-pressed="false" id="boundary-view">Whole boundary</button></div><div class="stage" id="stage"><div class="stage-top"><span class="stage-tag">Authorization boundary</span><span id="stage-status" class="stage-tag"></span></div><div id="fallback" class="fallback" hidden>Interactive graphics are unavailable.<br>Use the buttons and descriptions below to explore the same view.</div><div class="stage-help">Drag to orbit · scroll to zoom · choose a system</div></div><div class="system-buttons" id="system-buttons" aria-label="Choose a part of the network"></div><div class="network-caption"><strong id="network-label"></strong><p id="network-caption"></p></div><div class="flow-controls"><button type="button" class="btn" id="motion" aria-pressed="true">Pause motion</button></div><div class="node-details" aria-live="polite"><small id="node-state"></small><h3 id="node-title"></h3><p id="node-description"></p></div></section><div class="media-card"><div class="media-icon" aria-hidden="true">▷</div><div><small>Course ${esc(course.number)} / Video companion</small><h3>Video coming soon</h3><p>The written modules, 3D network view, evidence workspace, and workbook are ready now. A recorded walkthrough is on its way.</p></div></div><a class="resource-link" href="/inside-the-network" target="_blank" rel="noopener">Explore the complete Secure By Design network ↗</a></aside>
+<aside class="network" id="network"><section class="network-panel" aria-label="Interactive authorization view"><header class="network-head"><div><div class="eyebrow">Inside the Network / Authorization view</div><h2>See what the package covers</h2></div><button id="reset-view" class="btn" aria-label="Reset view of the network camera">Reset view</button></header><div class="viewbar"><button type="button" aria-pressed="true" id="module-view">This module</button><button type="button" aria-pressed="false" id="boundary-view">Whole boundary</button></div><div class="stage" id="stage"><div class="stage-top"><span class="stage-tag">Authorization boundary</span><span id="stage-status" class="stage-tag"></span></div><div id="fallback" class="fallback" hidden>Interactive graphics are unavailable.<br>Use the buttons and descriptions below to explore the same view.</div><div class="stage-help">Drag to orbit · scroll to zoom · choose a system</div></div><div class="system-buttons" id="system-buttons" aria-label="Choose a part of the network"></div><div class="network-caption"><strong id="network-label"></strong><p id="network-caption"></p></div><div class="flow-controls"><button type="button" class="btn" id="motion" aria-pressed="true">Pause motion</button></div><div class="node-details" aria-live="polite"><small id="node-state"></small><h3 id="node-title"></h3><p id="node-description"></p></div></section><div class="media-card"><div class="media-icon" aria-hidden="true">▷</div><div><small>Course ${esc(course.number)} / Video companion</small><h3>Video coming soon</h3><p>The written modules, 3D network view, Authorization Workspace, templates, and workbook are ready now. A recorded walkthrough is on its way.</p></div></div><a class="resource-link" href="/inside-the-network" target="_blank" rel="noopener">Explore the complete Secure By Design network ↗</a></aside>
 </main>
-<footer class="statusbar"><span>© 2026 Secure By Design Team LLC<br>Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)} · Updated ${esc(t.updated)}</span><span>RMF lessons, evidence examples, and authorization package practice. Exercise records are fictional.<br><a class="back-link" href="/training#episode-library">Back to the Training Library</a></span></footer>
+<footer class="statusbar"><span>© 2026 Secure By Design Team LLC<br>Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)} · Updated ${esc(t.updated)}</span><span>RMF lessons, workspace practice, templates, and authorization package practice. Exercise records are fictional.<br><a class="back-link" href="/training#episode-library">Back to the Training Library</a></span></footer>
 <div id="status" role="status" aria-live="polite" class="sr-only"></div>
-<noscript><p class="no-script">Enable JavaScript to explore the modules and evidence examples. You can also <a href="${esc(t.pdf)}">download the course workbook</a>.</p></noscript>
+<noscript><p class="no-script">Enable JavaScript to explore the steps, modules and evidence examples. You can also <a href="${esc(t.pdf)}">download the course workbook</a>.</p></noscript>
 <script type="importmap">{"imports":{"three/core":"/training/guide/three.core.js","three":"/training/guide/three.module.js","three/orbit":"/training/guide/orbit-controls.js"}}</script>
 <script type="module" src="/training/guide/scene.js"></script>
 <script src="/training/account-progress.js" defer></script></body></html>
 `;
 }
 
-let built = 0;
-for (const part of parts) {
-  const course = library.courses.find(c => c.id === part.id);
-  if (!course) throw new Error(`No Training Library entry for ${part.id}`);
-  if (course.number !== part.number || course.title !== part.title) throw new Error(`${part.id}: catalog-data.js and content/videos.json disagree on the number or title`);
-  for (const key of ['package', 'pdf', 'materialsEdition', 'updated']) if (!course.training?.[key]) throw new Error(`${part.id}: training.${key} is missing`);
-  if (!part.hero || part.hero.length > 400) throw new Error(`${part.id}: CATALOG_PARTS needs a hero text of up to 400 characters`);
-  mkdirSync(new URL(`public/training/${part.folder}/`, root), { recursive: true });
-  writeFileSync(new URL(`public/training/${part.folder}/index.html`, root), page(part, course));
-  built += 1;
+// The ATO Template Library's verified public sources and Secure By Design training samples, by RMF step.
+function templatesData() {
+  const groupIds = templates.groups.map(g => g.id);
+  for (const step of steps) if (step.id !== 'authorize' && !groupIds.includes(step.id)) throw new Error(`ato-templates.json has no ${step.id} group`);
+  for (const sample of templates.samples) if (!steps.some(step => step.id === sample.group)) throw new Error(`Sample ${sample.title} has no RMF step`);
+  const data = { checked: templates.checked, groups: templates.groups, templates: templates.templates, samples: templates.samples };
+  return `// Generated by scripts/prepare-rmf-courses.mjs from content/ato-templates.json. Do not edit by hand.\nwindow.RMF_TEMPLATES = ${JSON.stringify(data, null, 1)};\n`;
 }
-console.log(`Prepared ${built} Network Authorization course pages.`);
+
+if (parts.length !== 1) throw new Error('CATALOG_PARTS must hold the one Network Authorization course');
+const [part] = parts;
+const course = library.courses.find(c => c.id === part.id);
+if (!course) throw new Error(`No Training Library entry for ${part.id}`);
+if (course.number !== part.number || course.title !== part.title) throw new Error(`${part.id}: catalog-data.js and content/videos.json disagree on the number or title`);
+for (const key of ['package', 'pdf', 'materialsEdition', 'updated']) if (!course.training?.[key]) throw new Error(`${part.id}: training.${key} is missing`);
+if (!part.hero || part.hero.length > 400) throw new Error(`${part.id}: CATALOG_PARTS needs a hero text of up to 400 characters`);
+if (JSON.stringify(steps.flatMap(step => step.modules)) !== JSON.stringify(part.modules)) throw new Error('RMF_STEPS must cover every module once, in order');
+mkdirSync(new URL(`public/training/${part.folder}/`, root), { recursive: true });
+writeFileSync(new URL(`public/training/${part.folder}/index.html`, root), page(part, course));
+writeFileSync(new URL(`public/training/${part.folder}/templates-data.js`, root), templatesData());
+console.log('Prepared the Network Authorization course page and its templates data.');

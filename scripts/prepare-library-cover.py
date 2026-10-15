@@ -20,7 +20,7 @@ NAVY, TEAL, BODY, MUTED = (26, 46, 66), (21, 94, 117), (70, 82, 96), (110, 120, 
 page = Image.new('RGB', (612, 792), 'white')
 draw = ImageDraw.Draw(page)
 # The logo block from a workbook cover, so the brand mark is identical.
-logo = Image.open(ROOT / 'public/training/rmf-body-of-evidence/workbook-cover.webp').convert('RGB').crop((52, 52, 96, 96))
+logo = Image.open(ROOT / 'public/training/rmf/workbook-cover.webp').convert('RGB').crop((52, 52, 96, 96))
 page.paste(logo, (52, 52))
 draw.text((54, 99), 'Secure By Design', font=bold(17), fill=NAVY)
 draw.text((54, 122), 'EDUCATE. EMPOWER. SECURE THE FUTURE.', font=regular(7), fill=MUTED)

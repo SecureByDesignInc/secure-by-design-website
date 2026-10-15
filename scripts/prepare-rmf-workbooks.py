@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Network Authorization workbooks and training packages (courses 2.1, 2.2 and 2.3).
+"""Build the Network Authorization workbook and training package (course 2.1, RMF to ATO: all seven RMF steps).
 
 Each course in public/training/rmf/catalog-data.js (window.CATALOG_PARTS) gets, in public/training/<folder>/:
 

@@ -18,6 +18,8 @@ for (const entry of [...library.episodes, ...library.courses]) {
 }
 // Reference tiles (the ATO Template Library) are app pages, served without a trailing slash.
 for (const reference of library.references ?? []) paths.push(reference.training.guide);
+// The ATO Template Library page, linked from each step of course 2.1 (its catalog tile was merged into the course).
+if (!paths.includes('/training/ato-templates')) paths.push('/training/ato-templates');
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 for (const state of communityStates) paths.push(`/community/${state.slug}`);
 const unique = [...new Set(paths)];

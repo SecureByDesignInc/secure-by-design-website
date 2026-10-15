@@ -1,4 +1,4 @@
-/* Network Authorization (courses 2.1–2.3): additions to the Build the Network course guide stylesheet,
+/* Network Authorization (course 2.1, RMF to ATO): additions to the Build the Network course guide stylesheet,
    /training/guide/course-guide.css (generated from scripts/course-guide/style.css), which loads first. */
 .sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 main:focus,.lesson:focus{outline:none}
@@ -150,3 +150,44 @@ a.chapter{text-decoration:none}
 @media(max-width:930px){.task-grid{grid-template-columns:1fr}.rmf-workspace{grid-template-columns:190px 1fr}.lesson.wide{grid-column:2}.capstone-intro,.sources-grid,.evidence-layout{grid-template-columns:1fr}.artifact-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.tabs{padding:0 10px}.tabs button{padding:14px 4px;font-size:10.5px}#module-list{display:none}.mobile-path{display:block}.mobile-path .chapter{flex-direction:row;text-align:left;padding:10px 8px;gap:10px;margin:2px 0}.mobile-path .chapter b{font-size:12px}.mobile-path .chapter small{display:block}.mobile-path .path-course{margin-top:14px}.lesson-picks{grid-template-columns:1fr}.review-chain{grid-template-columns:1fr}.artifact-menu{grid-template-columns:1fr}.artifact-sheet-head{display:block}.toggle{margin-top:12px;width:max-content}.hero-facts li{font-size:10px;padding:6px 11px}.lesson-foot{flex-wrap:wrap}}
 @media print{.hero-facts,.sbd-account-progress{display:none}.lesson.wide{grid-column:auto}}
+
+/* The seven RMF steps (owner direction, 15 October 2026: one course, organized by step). Steps lead the learning path
+   with their modules beneath; each step page lists its modules, the workspace task and its templates. */
+.rmf-workspace .step-chapter{margin-top:10px}
+.rmf-workspace .step-chapter b{font-size:12px;color:#e6f6ff}
+.rmf-workspace .step-chapter .num{background:#0c2234;border-color:#5aa6c0;color:var(--cyan);font-weight:bold}
+.rmf-workspace .step-chapter.is-complete .num,.rmf-workspace .module-chapter.is-complete .num{background:#1f6b52;border-color:#3fbf8f;color:#eafff6}
+.rmf-workspace .module-chapter{padding-left:22px}
+.rmf-workspace .module-chapter .num{width:24px;height:24px;font-size:9px}
+.eyebrow-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.step-page{display:grid;gap:18px}
+.step-section{border:1px solid #d6e3ea;border-radius:12px;padding:16px 18px;background:#fbfdfe}
+.step-section>p{font-size:13px;line-height:1.6;margin:8px 0}
+.step-section .panel-title{display:flex;align-items:center;gap:10px;margin-top:0}
+.step-num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#0d5f86;color:white;font-size:12px;font-weight:bold;flex-shrink:0}
+.step-modules{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.step-modules a{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid #d6e3ea;border-radius:10px;background:white;color:inherit;text-decoration:none}
+.step-modules a:hover{border-color:#1e93b7;background:#f2f9fc}
+.step-modules b{display:block;font-size:13px;color:#10324a}
+.step-modules small{display:block;font-size:11px;color:#56707f;margin-top:2px}
+.mod-outcome{display:block;font-size:12px;line-height:1.55;color:#33505f;margin-top:6px}
+.mod-id{display:inline-grid;place-items:center;min-width:30px;height:30px;border-radius:8px;background:#e7f2f7;color:#0d5f86;font-weight:bold;font-size:12px;flex-shrink:0}
+.step-modules .is-done .mod-id{background:#dff5ea;color:#1f6b52}
+.done-when{background:#eef6f9;border-radius:8px;padding:10px 12px}
+.done-when b{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#216080;margin-bottom:4px}
+.workspace-status{font-weight:bold;color:#33505f}
+.workspace-task.is-done{border-color:#9fd9bf;background:#f4fbf7}
+.workspace-task.is-done .workspace-status{color:#1f6b52}
+.step-progress{display:inline-block;margin:10px 0 0;padding:7px 12px;border-radius:99px;background:#eef6f9;color:#216080;font-size:12px;font-weight:bold}
+.step-progress.is-complete{background:#dff5ea;color:#1f6b52}
+.tpl-kicker{font-size:10px!important;letter-spacing:1px;text-transform:uppercase;font-weight:bold;color:#56707f;margin:12px 0 6px!important}
+.tpl-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tpl-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border:1px solid #d6e3ea;border-radius:10px;background:white}
+.tpl-list li.is-sample{border-style:dashed;border-color:#d9c08a;background:#fffaf0}
+.tpl-list b{display:block;font-size:12.5px;color:#10324a}
+.tpl-list li>div small{display:block;font-size:11px;color:#56707f;margin-top:2px}
+.tpl-links{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex-shrink:0}
+.tpl-links a{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:6px 10px;border:1px solid #9cc9da;border-radius:8px;color:#0d5f86;font-size:11.5px;font-weight:bold;text-decoration:none;background:white}
+.tpl-links a:hover{background:#e7f2f7}
+.tpl-links small{font-size:9px;letter-spacing:.5px;color:#56707f}
+@media (max-width:700px){.tpl-list li{flex-direction:column;align-items:flex-start}.tpl-links{justify-content:flex-start}.rmf-workspace .module-chapter{padding-left:8px}}

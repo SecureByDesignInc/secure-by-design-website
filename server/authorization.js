@@ -11,7 +11,7 @@ import {getReader} from './reader-auth.js';
 import {
  isControl,objectivesFor,IMPLEMENTATION,RESULTS,FREQUENCIES,SEVERITY,RISK,POAM_STATUS,POAM_SOURCES,ARTIFACT_KINDS,PACKAGE_ROLES,
  PACKAGE_TYPES,SYSTEM_TYPES,LEVELS,ROLES,TEMPLATES,providerById,submitProblems,validateProblems,runPackage,compliance,
- DECISIONS,TERMS,openPoam,
+ DECISIONS,TERMS,openPoam,phases,
 } from '../lib/authorization/model.mjs';
 
 const LIMITS={systems:5,controls:400,artifacts:300,poam:300,history:300,body:98304};
@@ -310,6 +310,7 @@ export async function authorizationApi(request,env){
  let reader;try{reader=await getReader(request,env)}catch{return reply({error:'The workspace is unavailable. Please try again.'},503)}
  if(!reader){
   if(method==='GET'&&!parts.length)return reply({user:null,systems:[]});
+  if(method==='GET'&&parts.length===1&&parts[0]==='progress')return reply({user:null,system:null,steps:[]});
   return reply({error:'Sign in to use the Authorization Workspace.'},401);
  }
  if(!env.DB)return reply({error:'The workspace is unavailable. Please try again.'},503);
@@ -320,6 +321,15 @@ export async function authorizationApi(request,env){
    if(method!=='GET')throw new Bad('Method not allowed.',405);
    const rows=await env.DB.prepare('SELECT s.*,(SELECT count(*) FROM auth_controls c WHERE c.system_id=s.id) AS controls,(SELECT count(*) FROM auth_poam p WHERE p.system_id=s.id AND p.status IN (\'ongoing\',\'risk_acceptance_requested\')) AS open_poam FROM auth_systems s WHERE s.account_id=? ORDER BY s.created_at').bind(accountId).all();
    return reply({user:{email:reader.email},limit:LIMITS.systems,systems:rows.results.map(r=>({...systemRow(r),controls:r.controls,openPoam:r.open_poam}))});
+  }
+  // Course 2.1 "RMF to ATO" (public/training/rmf/app.js) and My Progress show where the learner's Secure By Design
+  // enclave stands on each RMF step, from the same phases() checks the workspace uses.
+  if(parts[0]==='progress'&&parts.length===1){
+   if(method!=='GET')throw new Bad('Method not allowed.',405);
+   const row=await env.DB.prepare("SELECT * FROM auth_systems WHERE account_id=? AND registration_key='sbd-enclave'").bind(accountId).first();
+   if(!row)return reply({user:{email:reader.email},system:null,steps:[]});
+   const system=systemRow(row),state=await loadState(env,system);
+   return reply({user:{email:reader.email},system:{id:system.id,name:system.profile.name,acronym:system.profile.acronym},steps:phases(state)});
   }
   if(parts[0]!=='systems')throw new Bad('Not found.',404);
   if(parts.length===1){
