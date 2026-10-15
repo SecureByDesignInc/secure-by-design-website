@@ -51,13 +51,13 @@ Set-NetFirewallRule -DisplayGroup 'Windows Remote Management' -RemoteAddress 10.
 # On the Tier 2 test machine: export the effective logon rights and read the deny lines.
 secedit /export /mergedpolicy /cfg C:\Evidence\tiered-admin\user-rights.inf /areas user_rights
 Select-String -Path C:\Evidence\tiered-admin\user-rights.inf -Pattern 'SeDeny'
-(Get-ADGroup 'SBD Tier 0 Admins').SID.Value   # from an admin seat: this SID must appear on those lines
+'SBD Tier 0 Admins', 'SBD Tier 1 Admins', 'SBD Audit Custodians' | ForEach-Object { (Get-ADGroup $_).SID.Value }   # from an admin seat: these SIDs must appear on those lines
 # Repeat on each seat as its maintenance account, and read who may sign in there.
 Select-String -Path C:\Evidence\tiered-admin\user-rights.inf -Pattern 'SeInteractive'
 # After the refused Tier 0 sign-in: event 4625 with status 0xC000015B (logon type not granted).
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Where-Object Message -match '0xC000015B' | Select-Object TimeCreated, Id
 
-What success looks like: SBD-SUBCA01 and SBD-PKI-MGMT01 sit in the Tier 0 Servers OU and still accept Tier 0 sign-ins; the Servers OU's administrators GPO puts SBD Tier 1 Admins, not Domain Admins, in SBD-DHCP01's local Administrators; on the Tier 2 test machine, course 1.7's test client now in the Workstations OU, the deny rights list the Tier 0 group's SID, and a Tier 0 sign-in there is refused with Security event 4625 (status 0xC000015B); each admin seat lets only its own groups sign in and denies the other tiers — Tier 0 and Tier 1 inside SBD-ADMIN-PC01, Tier 0 and Tier 2 on SBD-ADMIN-SRV01, Tier 1 and Tier 2 on AdminJumpBox01; the exception record holds the console network-logon exception and the seat GPOs' STIG differences; Protected Users contains the Tier 0 admins; and the break-glass and MFA decisions are written.
+What success looks like: SBD-SUBCA01 and SBD-PKI-MGMT01 sit in the Tier 0 Servers OU and still accept Tier 0 sign-ins; the Servers OU's administrators GPO puts SBD Tier 1 Admins, not Domain Admins, in SBD-DHCP01's local Administrators; on the Tier 2 test machine, course 1.7's test client now in the Workstations OU, the deny rights list the SIDs of the Tier 0, Tier 1, and audit custodian groups, and a Tier 0 sign-in there is refused with Security event 4625 (status 0xC000015B); each admin seat lets only its own groups sign in and denies the other tiers — Tier 0, Tier 1, and the audit custodians inside SBD-ADMIN-PC01, Tier 0 and Tier 2 on SBD-ADMIN-SRV01, Tier 1 and Tier 2 on AdminJumpBox01; the exception record holds the console network-logon exception and the seat GPOs' STIG differences; Protected Users contains the Tier 0 admins; and the break-glass and MFA decisions are written.
 
 4. Prove the tiers end to end
 Enter-PSSession SBD-DHCP01.sbd.test   # from SBD-ADMIN-SRV01, Tier 1 account
@@ -79,10 +79,18 @@ Invoke-Command SBD-DC01, SBD-DC02 { Test-Path 'C:\Program Files*\SCAP Compliance
 $s = New-PSSession SBD-DHCP01.sbd.test
 Copy-Item C:\Evidence\dhcp, C:\Evidence\dhcp-manifest.csv -FromSession $s -Destination C:\Evidence\ -Recurse
 Compare-Object (Import-Csv C:\Evidence\dhcp-manifest.csv).Hash (Get-ChildItem C:\Evidence\dhcp -Recurse -File | Get-FileHash -Algorithm SHA256).Hash
+# Still on SBD-ADMIN-SRV01, as a Hyper-V administrator: the media set's ISO into the Tier 2 seat, read-only
+Set-VMDvdDrive -VMName SBD-ADMIN-PC01 -Path '<course 1.4 media set ISO>'
+# Inside SBD-ADMIN-PC01 (Tier 2), with the ISO as D: the installer matches the record (expected: True); keep both for course 1.13
+$scc = Get-Item 'D:\<SCC installer>'
+(Get-FileHash $scc.FullName -Algorithm SHA256).Hash -in (Import-Csv D:\connected-side-hashes.csv).Hash
+New-Item -ItemType Directory -Force C:\Staging\DISA | Out-Null
+Copy-Item $scc.FullName, D:\connected-side-hashes.csv -Destination C:\Staging\DISA\
+Set-VMDvdDrive -VMName SBD-ADMIN-PC01 -Path $null   # back on the host, after the install: detach the ISO
 # On each seat, after its scans: this course's evidence, hashed
 Get-ChildItem C:\Evidence\tiered-admin -Recurse | Select-Object Name, LastWriteTime
 Get-FileHash -Algorithm SHA256 C:\Evidence\tiered-admin\*
 
-What success looks like: SCC and STIG Viewer run from AdminJumpBox01 and are gone from the controllers, every moved evidence set matches its manifest, and each seat has its tier's tools; first baselines for the two physical seats and rescans of SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and both domain controllers are filed with attributed deltas; SBD-DHCP01's checklist is complete; the exception record and register carry the new rows; and the handoff names the management constraint for course 1.9 and the logging courses.
+What success looks like: SCC and STIG Viewer run from AdminJumpBox01 and are gone from the controllers, every moved evidence set matches its manifest, and each seat has its tier's tools; first baselines for the three seats, SBD-ADMIN-PC01's from its own SCC copy, and rescans of SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and both domain controllers are filed with attributed deltas; SBD-DHCP01's checklist is complete; the exception record and register carry the new rows; and the handoff names the management constraint for course 1.9 and the logging courses.
 
 © 2026 Secure By Design Team LLC

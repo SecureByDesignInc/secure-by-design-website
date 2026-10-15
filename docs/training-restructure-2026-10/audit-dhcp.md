@@ -55,3 +55,11 @@ Five lessons, 145 minutes (2.4 h). Lesson ids, counts and minutes are unchanged,
 - **Outside course content**:
   - `public/inside-network-model/courses.js` needs a `dhcp` entry ("1.7 · Run DHCP on SBD-DHCP01", `/training/dhcp`), and the mapping `dhcp:['admin','fleet']` becomes `['dhcp','admin','fleet']`.
   - `training:tiered-admin:dhcp` becomes `training:dhcp:dhcp`, plus the four new progress IDs and a saved-progress migration.
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 2: dhcp-audit renamed "Audit leases and write the restore note"; the backup step, command (Backup-DhcpServer/Export-DhcpServer removed; Get-DhcpServerDatabase and Get-DhcpServerDnsCredential shown), objective, check, evidence, quiz 3 explanation and recap now say the automatic same-disk copy isn't a backup, course 1.19 schedules SBD-DHCP01's backup, and this course writes the credential restore note. Prerequisite D: volume is for audit-log copies only; labNote, handoff, manifest list, catalog description/outcome/stage, guide hero, caption, node, short title, step title, network and checklist updated. Source dhcp-export dropped (unused).
+- Decision 9: dhcp-dns step 5 notes that course 1.13 turns off workstation DNS self-registration by GPO on the Workstations OU, so SBD-DHCP01 (svc-dhcp-dns) is the only writer.
+- Decision 14: the audit-archive "a year in this sample" is now "depends on your environment and policy; record the value you chose"; guide control body says the same.
+- Decision 15: DISA content wasn't readable (cyber.mil returned no STIG text). svc-dhcp-dns password now "at least the length the current STIG sets for manually managed application accounts", changed "on the schedule the STIG sets"; Domain Admins replacement now "per the current member-server STIG". No numbers.
+- Decision 8: the course only mentions 802.1X admission in course 1.13; nothing narrows it. No change. Decision 12: no single-instance risk listing found.

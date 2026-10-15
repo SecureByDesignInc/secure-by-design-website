@@ -310,7 +310,7 @@
         "name": "Baseline Configuration",
         "phase": "Assess → Monitor",
         "body": "Each new host’s first SCAP baseline — SCC with the Windows Server benchmark on three of them, SCC for Linux on SBD-WEB01 — records its measured state, and the classified findings say what changes next. Later rescans compare against it, so drift becomes visible.",
-        "question": "Which open item would you fix before course 1.19 begins, and which needs a documented decision instead?"
+        "question": "Which open item would you fix before course 1.19 begins backing up these servers, and which needs a documented decision instead?"
       },
       "checklist": [
         "I enrolled SBD-FS01, SBD-SQL01, and SBD-APPS01 in SBD Event Sources and saw their events, and SBD-WEB01’s syslog, on the collector.",

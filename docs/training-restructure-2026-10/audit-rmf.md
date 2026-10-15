@@ -30,3 +30,12 @@ Checked and left as is: the 800-37 Rev. 2 statements (Prepare is the Rev. 2 addi
 
 - **Repository public/training/rmf/**: copy these catalog-data.js and learning-data.js over the originals. app.js is unchanged. Re-export the Word catalog (judgment call 3).
 - **prove-recovery (1.19)** `record` closes with "Continue with course 2.1": consistent.
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 12: learning-data.js module 05 SSP excerpt, "Recorded risk decisions" example: the Splunk/Nessus/ePO single-server risk decision → "None recorded in this excerpt", with RA-7 / CA-5 / CA-6 roles kept.
+- Decision 12: learning-data.js POA&M "Status and decision" example: single-instance design and its restore-gap POA&M entries removed; "only the AO can accept risk (CA-6)" kept.
+- Decision 12: learning-data.js decision-briefing "Residual risk" example: "Present the single-instance design for Splunk, Nessus, and ePO separately…" removed; the RA-7 / CA-6 sentence now refers to the safeguards already in place and the remaining risk.
+- Decision 12: learning-data.js ConMon "Recovery exercise review": "each single-instance platform" → "each platform in the recovery set".
+- catalog-data.js and catalog.json had no single-instance text; unchanged. Module ids unchanged; node loads both files: CATALOG 12, LEARNING 12, ARTIFACTS 10.
+- Supersedes judgment call 1 above.

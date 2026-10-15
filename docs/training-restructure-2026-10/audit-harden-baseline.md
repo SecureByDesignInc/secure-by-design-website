@@ -35,3 +35,10 @@ The validator passes: 5 lessons, 150 minutes, 2.5 hours. Lesson ids, counts and 
   - Change "This is the course 1.3 media procedure used for backups" to "the course 1.4 media procedure".
 - **workstation-fleet (1.13)**: "the container redirects from course 1.3" and "The course 1.3 redirect" should say course 1.5. The quiz explanation "the course 1.3 design, now paying off at scale" should also say 1.5.
 - **business-services (1.18)**: "Create the access groups under the course 1.3 Groups OU" should say course 1.5.
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 2: maintain no longer backs up GPOs. Step 3, objective 3, summary, command (Backup-GPO removed), check, evidence, recap, model text and quiz 2 now keep only the GPO reports and link export as the change record and say course 1.19 schedules the GPO backup.
+- Sources: backup-gpo dropped (no longer used); maintain cites gpinheritance for the link export.
+- Catalog stage 5 detail matches the new summary. Guide: maintain step title, network caption, control body, checklist.
+- Note: decisions.md's path table still lists "GPO backups" under 1.5; owner decision 2 overrides it.

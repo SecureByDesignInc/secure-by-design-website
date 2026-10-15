@@ -171,7 +171,7 @@
         "question": "Which captured output proves the setting is in effect, not merely written in a file?"
       },
       "checklist": [
-        "I applied course 1.3's chrony file with the hypervisor's time sync off, and chrony syncs from a domain controller within the course 1.3 threshold.",
+        "I applied course 1.3's chrony file with the hypervisor's time sync off, and chrony syncs from a domain controller with a small, stable offset.",
         "I captured sshd -T showing root login and passwords refused and only the admin group allowed, and added the course 1.6 root, its hash checked, to the trust store.",
         "I confirmed only TCP 22 and 80 listen, the firewall matches the register, and the web root returns 403."
       ]

@@ -33,3 +33,8 @@ These are carried forward from notes.md and still open:
 - **two-tier-pki (1.6)** `first-templates.steps[2]`: "enrollment permission for the server administrators". A machine-store request made on the server (as 1.14 does with `Get-Certificate -CertStoreLocation Cert:\LocalMachine\My`) is checked against the computer account. Grant Enroll to the requesting servers too, or say that the request is made in the administrator's context and imported. Please verify before changing.
 - **business-services (1.18)**: the notes.md items still apply (no NESSUS01 scan, prerequisites 1.1–1.15, VLAN 40 servers in Ring 3 via the Servers OU).
 - **Repository integration**: notes.md items 7–8 (courses.js mapping, F06 note, saved-progress migration for `mgmt`, hidden `epo`/`nessus`) still apply.
+
+## Owner decisions applied (14 October 2026)
+- Decision 3: SBD-WSUS01 stays Tier 1; lesson 1 step 3 says so, lesson 2 step 6 writes the Ring 4 procedure and records the residual risk with "move SBD-WSUS01 to Tier 0" as the target; lesson 2 check, evidence, recap and guide checklist updated.
+- Decision 4: SBD-AUDIT01 gets its own WSUS group, Ring 3 - Audit archive (Ring 3 timing, option 7, no deadline, GPO at the Audit Servers OU in place of the Ring 3 link there); its custodian starts the install. Lesson 1 step 2/check, lesson 4 summary/steps 1–4/command/check/evidence/recap, lesson 5 step 1/check/evidence, prerequisite 1, catalog stage 4 and guide (design/wsus/targeting/prove captions and checklists, targeting step title 2) updated.
+- Decisions 2, 12, 13, 14: nothing to change (Invoke-WsusServerCleanup's 30-day obsolete-computer rule is the cmdlet's behaviour, not a retention value).

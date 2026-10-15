@@ -50,7 +50,7 @@ $s.FindAll() | ForEach-Object { $p = $_.Properties; [pscustomobject]@{ Name = "$
 Invoke-Command SBD-DHCP01 { Get-DhcpServerv4Lease -ScopeId 10.0.80.0 -AllLeases | Select-Object IPAddress, ClientId, HostName, AddressState, LeaseExpiryTime } | Export-Csv "$d\dhcp-leases.csv" -NoTypeInformation
 Invoke-Command SBD-WSUS01 { Get-WsusComputer -All | Select-Object FullDomainName, IPAddress, LastSyncTime, LastReportedStatusTime, RequestedTargetGroupName } | Export-Csv "$d\wsus-computers.csv" -NoTypeInformation
 scp -r <your-account>@SBD-REPO01.sbd.test:/srv/repo-records/* "$d\repo01\"
-# On SBD-REPO01: who fetched packages (RHEL family; /var/log/apache2/access.log on Ubuntu)
+# On SBD-REPO01: who fetched packages
 sudo awk '{print $1}' /var/log/httpd/access_log | sort | uniq -c
 # Back on SBD-ADMIN-SRV01: hash the set and file it on SBD-MGMT01
 Get-ChildItem $d -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv "$d-hashes.csv" -NoTypeInformation

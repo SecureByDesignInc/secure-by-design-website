@@ -61,3 +61,8 @@ The main-branch PAW decisions (rule 7) are kept unchanged:
   - AGENTS.md's "The lessons now take 190 minutes" is now 165.
   - The progress ID `training:tiered-admin:dhcp` moves to `training:dhcp:dhcp`.
   - The edition 1.5 workbook needs re-syncing.
+
+## Owner decisions applied (14 October 2026)
+- Decision 6: lesson 5 now installs SBD-ADMIN-PC01's own SCC copy (ISO of the course 1.4 media set attached read-only from the host, hash-checked, Windows client benchmark) and baselines all three seats; the installer and connected-side-hashes.csv are kept in C:\Staging\DISA in the VM for course 1.13. Updated prerequisite 4, labNote, lesson 5 summary/objective/steps 1–2/command/check/evidence, catalog stage 5, guide PC node, scan network caption and checklist. Lesson 5 minutes 25 → 30 (total 170, 2.8 h unchanged).
+- Decision 5: SBD Audit Custodians added to the Workstations OU deny rights (lesson 3 step 2) and to the denies inside SBD-ADMIN-PC01 (lesson 3 step 5); lesson 1 credential rule, lesson 3 command (SIDs of all three groups), check, last quiz explanation, lesson 4 forbidden combinations, guide PC node and lesson 3 checklist updated.
+- Decisions 2, 12, 13, 14: nothing in this course (no backup jobs, risk listings, time thresholds or retention values).

@@ -10,7 +10,7 @@ These settle the questions the course writers raised. Where a course disagrees w
 | 1.2 | dns-configuration | Zones, records, DNS client order, the 10.0.10 reverse zone, the reserved pki.sbd.test alias |
 | 1.3 | domain-time | The time hierarchy (SBD-DC01 = PDC emulator = reliable source), the Linux chrony file |
 | 1.4 | stig-scap | SCC (on both DCs) and STIG Viewer (on SBD-DC01); staged DISA content in C:\Staging\DISA; baseline, checklists and findings record under C:\Evidence\baseline |
-| 1.5 | harden-baseline | The OU structure and redirects; the DISA GPOs imported and linked; rescan under C:\Evidence\hardened; the living exception record C:\Evidence\exception-record.csv; GPO backups |
+| 1.5 | harden-baseline | The OU structure and redirects; the DISA GPOs imported and linked; rescan under C:\Evidence\hardened; the living exception record C:\Evidence\exception-record.csv (GPO backups are in 1.19) |
 | 1.6 | two-tier-pki | SBD-ROOTCA01 (offline), SBD-SUBCA01, SBD-PKI-MGMT01 (pki.sbd.test publication, template seat), the certificate templates |
 | 1.7 | dhcp | SBD-DHCP01 (10.0.20.10), the VLAN 80 scope (pool 10.0.80.100–199), svc-dhcp-dns, the SBD Tier 1 Admins group, the 10.0.80 reverse zone; verifies the core's relay (F04) |
 | 1.8 | tiered-admin | AdminJumpBox01 (Tier 0, no VMs), SBD-ADMIN-SRV01 (Tier 1, Hyper-V host), SBD-ADMIN-PC01 (Tier 2 VM on SBD-ADMIN-SRV01); Admin Servers, Admin Workstations and Tier 0 Servers OUs; tier logon GPOs; Protected Users; break-glass; the SBD Audit Custodians group; moves SCC, STIG Viewer and C:\Evidence to AdminJumpBox01 |
@@ -24,7 +24,7 @@ These settle the questions the course writers raised. Where a course disagrees w
 | 1.16 | endpoint-protection | COMING SOON — SBD-EPO01. No material. |
 | 1.17 | vulnerability-scanning | COMING SOON — SBD-NESSUS01. No material. |
 | 1.18 | business-services | SBD-FS01, SBD-SQL01, SBD-APPS01, SBD-WEB01 (VLAN 40) |
-| 1.19 | prove-recovery | Backups, custody, the rehearsed restore, the closing record |
+| 1.19 | prove-recovery | The backup of every system, VLAN 40 included; custody; the rehearsed restore; the closing record |
 | 2.1–2.3 | rmf-boe-ato, rmf-body-of-evidence, rmf-authorization-to-operate | Network Authorization (unchanged numbering) |
 
 Every "course X.Y" reference must point at the course in this table that actually teaches the thing. Lessons inside a course are referred to by their number in that course.
@@ -52,3 +52,22 @@ Every "course X.Y" reference must point at the course in this table that actuall
 - **Findings classification values** (from 1.4): fix by GPO / deviation candidate / POA&M candidate; 1.5 adds Resolution and Evidence columns. Quote these exactly.
 - **1.13 (fleet)** installs SCC on SBD-ADMIN-PC01 and takes that seat's first baseline before the fleet's; template permissions go to a computer group, never an OU; the Windows client STIG content was staged by 1.4 (not carried in the GPO package).
 - **1.19** adds the DHCP backup (with the step to reset the DNS update credential after a restore) to the recovery set and checks a restored controller's clock.
+
+## Owner decisions, 14 October 2026 (binding; they override anything above that disagrees)
+
+1. **Red Hat family only.** Every Linux server (SBD-REPO01, SBD-SPLUNK01, SBD-WEB01, and SBD-NESSUS01 when it arrives) runs a Red Hat Enterprise Linux–family distribution. Remove every Ubuntu/Debian/apt form, command, source and mention (apt, deb822, debmirror, apt-secure, ufw, update-ca-certificates, Debian keyrings, "or the platform equivalent"). Use dnf, reposync/createrepo_c, rpm GPG keys, firewalld, update-ca-trust, chrony, rsyslog.
+2. **All backups live in course 1.19.** Course 1.19 defines and schedules the backup of every system that needs one, VLAN 40 included (SBD-FS01 share data with its NTFS permissions, SBD-SQL01 databases and the logins they depend on, SBD-APPS01 and SBD-WEB01 configuration and certificates), alongside the directory, CA, GPOs, DHCP, REPO01, Splunk configuration, the audit archive and the inventory. Other courses no longer set up backup jobs: where one did (for example 1.5's GPO backup, 1.7's DHCP backup), it now says course 1.19 backs this up, and keeps only what has to happen at build time (the root CA key backup inside the course 1.6 ceremony stays there; 1.19 accounts for it). Change records and reports that aren't backups (GPO reports, link exports for the change record) can stay.
+3. **SBD-WSUS01 stays Tier 1** with the written procedure for Ring 4 approvals; the residual risk and "move WSUS to Tier 0" are recorded as the target.
+4. **SBD-AUDIT01's updates are installed by its audit custodian** (Ring 4-style: download only, installed when the custodian starts it), not by ordinary Tier 1 operators.
+5. **SBD Audit Custodians are denied sign-in on Tier 2 machines:** added beside SBD Tier 1 Admins to the Workstations OU's deny settings and inside SBD-ADMIN-PC01.
+6. **The Tier 2 seat is baselined in course 1.8** when it's built: 1.8 installs SBD-ADMIN-PC01's own SCC copy (Windows client benchmark staged by 1.4) and takes its first baseline. Course 1.13 reuses that copy and only scans the fleet sample. (This replaces "1.13 installs SCC on SBD-ADMIN-PC01" above.)
+7. **Rule F24** in Inside the Network: the core router → SBD-SYSLOG01, UDP 514, its deny log (existing network configuration; no course configures the router). Cite F24 wherever a course mentions that path.
+8. **802.1X admits any domain-joined computer** (Domain Computers), servers included where they sit on 802.1X ports. Keep that; don't narrow it to SBD Fleet Computers.
+9. **Workstations don't register their own DNS records:** course 1.13 turns off client DNS self-registration by GPO on the Workstations OU, with the reason recorded (SBD-DHCP01 registers them under svc-dhcp-dns); course 1.7 may say so briefly.
+10. **SBD-TEST80** is retired in course 1.13, as written.
+11. **Source title:** Microsoft's "What's new in Windows Server 2025" is cited as "Microsoft · What's new in Windows Server (newest release)", URL unchanged. (Done centrally; don't edit.)
+12. **No single-instance risk listing.** "Single instance" describes how a tool is deployed; don't list it as a risk, residual risk, POA&M item or recorded risk decision anywhere (the RMF material especially).
+13. **No time thresholds.** Remove the numeric drift thresholds (1 s / 2 s), the daily reference-check schedule and any alert or pass/fail tied to them. Keep the design: SBD-DC01 is the reliable source, every system follows the hierarchy, and verification shows each system's source and that offsets are small and stable.
+14. **Retention and alert values are "dependent on your environment".** Don't state specific retention periods (14 days / one year / 90 days) or specific alert thresholds/expirations as values. Say what each stage keeps and why, and that the period or threshold depends on your environment and policy; the learner records the value they chose.
+15. **STIG statements I couldn't verify:** check them against official DISA content if reachable (Firecrawl may reach www.cyber.mil); if you can't confirm a specific value, word it as "per the current STIG" without the number.
+16–18. Unchanged: the archive-account permissions and the ISO path into SBD-ADMIN-PC01 stay as written; the group of design choices in item 18 stays as written.

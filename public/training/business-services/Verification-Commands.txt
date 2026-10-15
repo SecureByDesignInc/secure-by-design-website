@@ -45,7 +45,7 @@ What success looks like: The service runs as the gMSA, Force Encryption is on wi
 4. Build SBD-APPS01 and SBD-WEB01
 # On SBD-WEB01 (Tier 1 SSH session from SBD-ADMIN-SRV01): time, packages, domain, firewall, logging, web
 chronyc sources -v; chronyc tracking   # ^* one controller, ^+ or ^- the other
-dnf repolist --all   # RHEL family: only the sbd-repo01 repositories enabled (Ubuntu: apt-cache policy | grep http)
+dnf repolist --all   # expected: only the sbd-repo01 repositories enabled
 realm list   # sbd.test, kerberos-member, permitted group SBD Tier 1 Admins
 sudo firewall-cmd --get-active-zones
 openssl s_client -connect SBD-SYSLOG01.sbd.test:6514 -verify_hostname SBD-SYSLOG01.sbd.test </dev/null 2>/dev/null | grep 'Verify return code'   # 0 (ok): the SBD root is trusted

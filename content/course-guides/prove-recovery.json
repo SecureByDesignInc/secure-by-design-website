@@ -3,7 +3,7 @@
   "hero": {
     "title": "Prove you can",
     "accent": "recover.",
-    "text": "Back up the directory, the issuing CA, Group Policy, DHCP, the repository and analysis configuration, the log archive, and the living records, carry copies to the offline cabinet, and rehearse one real restore of SBD-DC02 in isolation. Follow the build, explore the dependencies, and keep the evidence."
+    "text": "Define and schedule every backup in the network — the directory, the issuing CA, Group Policy, DHCP, the repository and analysis configuration, the VLAN 40 business services, the log archive, and the living records — carry copies to the offline cabinet, and rehearse one real restore of SBD-DC02 in isolation. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
     "WINDOWS",
@@ -30,20 +30,28 @@
     ],
     [
       "SBD-DHCP01",
-      "10.0.20.10 / 24 · D:\\Backups\\DHCP"
+      "10.0.20.10 / 24 · E:\\Backups\\DHCP"
     ],
     [
       "SBD-AUDIT01",
       "10.0.50.40 / 24 · D:\\LogArchive"
     ],
     [
+      "SBD-FS01",
+      "10.0.40.10 / 24 · D:\\Shares"
+    ],
+    [
+      "SBD-SQL01",
+      "10.0.40.20 / 24 · E:\\Backups\\SQL"
+    ],
+    [
       "Protected backup volume",
-      "E: on both controllers and SBD-SUBCA01 (sample)"
+      "E: on each Windows server in the set; /srv/backup on each Linux server (sample)"
     ]
   ],
   "scene": {
-    "tag": "RECOVERY · VLAN 10 · 30 · 50 · 60",
-    "label": "Interactive 3D lesson network showing the domain controllers, issuing CA, audit repository, the Tier 0 and Tier 1 administration seats, and the offline root CA that this course backs up, rehearses, and records.",
+    "tag": "RECOVERY · VLAN 10 · 30 · 40 · 50 · 60",
+    "label": "Interactive 3D lesson network showing the domain controllers, issuing CA, file and database servers, audit repository, the Tier 0 and Tier 1 administration seats, and the offline root CA that this course backs up, rehearses, and records.",
     "completeStatus": "COURSE TARGET",
     "completeCaption": "Every item in the recovery set has a verified backup, an offline copy under custody, and a rehearsed restore behind it. The recovery record has an owner and a next rehearsal date, and the evidence is ready for course 2.1.",
     "nodes": [
@@ -78,10 +86,10 @@
         "kind": "server",
         "row": "back",
         "existing": true,
-        "from": 2,
+        "from": 1,
         "button": "SBD-SUBCA01",
         "title": "SBD-SUBCA01 · 10.0.30.20",
-        "description": "The issuing CA backs up its database, private key, and configuration with certutil and reg export to its protected backup volume. Only the backup’s hashes and custody record go into evidence, and a Tier 0 custodian carries the copy offline."
+        "description": "Schedules its own system state and critical-volume backup, and backs up its database, private key, and configuration with certutil and reg export to its protected backup volume. Only the backup’s hashes and custody record go into evidence, and a Tier 0 custodian carries the copy offline."
       },
       {
         "id": "audit",
@@ -96,6 +104,30 @@
         "description": "Its hashed log archives are already the protected record. This course adds the archive catalog to the recovery set, and the audit custodian carries a copy to the offline cabinet."
       },
       {
+        "id": "fs",
+        "name": "SBD-FS01",
+        "sub": "10.0.40.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "from": 2,
+        "button": "SBD-FS01",
+        "title": "SBD-FS01 · 10.0.40.10",
+        "description": "Backs up D:\\Shares to its protected volume every night, with each file’s NTFS permissions, and keeps an ACL record and share-definition export so access can be checked or reapplied without restoring data."
+      },
+      {
+        "id": "sql",
+        "name": "SBD-SQL01",
+        "sub": "10.0.40.20",
+        "kind": "server",
+        "row": "front",
+        "existing": true,
+        "from": 2,
+        "button": "SBD-SQL01",
+        "title": "SBD-SQL01 · 10.0.40.20",
+        "description": "A nightly SQL Server Agent job backs up the application databases with master, model and msdb, verified with RESTORE VERIFYONLY. master carries the logins the databases depend on, and the restore note puts it first."
+      },
+      {
         "id": "jump",
         "name": "AdminJumpBox01",
         "sub": "10.0.60.10",
@@ -105,7 +137,7 @@
         "from": 1,
         "button": "AdminJumpBox01",
         "title": "AdminJumpBox01 · 10.0.60.10",
-        "description": "The Tier 0 seat (rule A01). The controllers’ backup schedules, the Recycle Bin, the CA backup session, the Group Policy backup, the Tier 0 closing scans, and the production object restore all run from here."
+        "description": "The Tier 0 seat (rule A01). The controllers’ and CA’s backup schedules, the CA backup session, the Group Policy backup task, the Recycle Bin, the Tier 0 closing scans, and the production object restore all run from here."
       },
       {
         "id": "srv",
@@ -117,7 +149,7 @@
         "from": 2,
         "button": "ADMIN-SRV01",
         "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
-        "description": "The Tier 1 seat. The member-server sets — SBD-DHCP01, SBD-REPO01, SBD-SPLUNK01, and SBD-MGMT01 — are hashed from here, the audit custodian’s separate sessions reach SBD-AUDIT01, and the member servers’ closing SCAP scans run here."
+        "description": "The Tier 1 seat. The member-server schedules — SBD-DHCP01, SBD-MGMT01, SBD-REPO01, SBD-SPLUNK01, and the VLAN 40 servers — are set and hashed from here, the audit custodian’s separate sessions reach SBD-AUDIT01, and the member servers’ closing SCAP scans run here."
       },
       {
         "id": "root",
@@ -141,7 +173,7 @@
           4,
           5
         ],
-        "label": "Tier 0 session · backup, Recycle Bin, closing scan"
+        "label": "Tier 0 session · backup, GPO task, Recycle Bin, closing scan"
       },
       {
         "from": "jump",
@@ -156,10 +188,10 @@
         "from": "jump",
         "to": "subca",
         "lessons": [
-          2,
+          1,
           5
         ],
-        "label": "Tier 0 session · CA backup, closing scan"
+        "label": "Tier 0 session · CA backup schedule, closing scan"
       },
       {
         "from": "srv",
@@ -169,6 +201,24 @@
           5
         ],
         "label": "Custodian and Tier 1 sessions · archive catalog, closing scan"
+      },
+      {
+        "from": "srv",
+        "to": "fs",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Tier 1 session · share backup schedule, closing scan"
+      },
+      {
+        "from": "srv",
+        "to": "sql",
+        "lessons": [
+          2,
+          5
+        ],
+        "label": "Tier 1 session · database backup job, closing scan"
       }
     ]
   },
@@ -180,11 +230,12 @@
       "stepTitles": [
         "Order the recovery set by dependency",
         "Set recovery point and time objectives",
+        "Write the backup schedule in one place",
         "Decide backup placement and access",
         "Confirm the DSRM and root CA custody records"
       ],
       "mistake": "Writing objectives nobody intends to measure, such as a recovery time of minutes for a directory that has never been restored. Lesson 5 times a real restore against these numbers, so an aspirational value only guarantees a missed objective.",
-      "network": "Everything in the recovery set already runs: both controllers on VLAN 10, the issuing CA on VLAN 30, the audit repository on VLAN 50, and the member servers on their own VLANs, with SBD-ROOTCA01 offline in the vault. No flows are shown: this lesson writes decisions, and no backup will ever cross the network to reach the offline cabinet.",
+      "network": "Everything in the recovery set already runs: both controllers on VLAN 10, the issuing CA on VLAN 30, the audit repository on VLAN 50, the member servers on their own VLANs, the business services on VLAN 40, with SBD-ROOTCA01 offline in the vault. No flows are shown: this lesson writes decisions, and no backup will ever cross the network to reach the offline cabinet.",
       "control": {
         "id": "CP-2",
         "name": "Contingency Plan",
@@ -193,61 +244,63 @@
         "question": "If the directory survived but the issuing CA did not, which items in your recovery set could you still trust, and which would wait?"
       },
       "checklist": [
-        "I listed the recovery set in dependency order, directory first, and gave each item a recovery point and time objective I can measure.",
+        "I listed the recovery set in dependency order, directory first and VLAN 40 included, gave each item a measurable recovery point and time objective, and wrote the backup schedule that defines every backup.",
         "I wrote who can write and read each protected backup volume, and recorded that no network path reaches the offline cabinet.",
         "I confirmed the sealed DSRM passwords and the root CA’s ceremony backup are findable, without recording either secret."
       ]
     },
     "directory": {
-      "short": "Back up the directory",
+      "short": "Back up Tier 0",
       "tag": "02 / BACK UP",
-      "status": "DIRECTORY BACKED UP",
+      "status": "TIER 0 BACKED UP",
       "stepTitles": [
         "Schedule system state backups on both controllers",
         "Verify, record, and hash each backup",
+        "Back up the issuing CA under custody",
+        "Schedule the GPO backup with its links",
         "Enable the Active Directory Recycle Bin",
         "Write the restore decision tree"
       ],
       "mistake": "Leaving out the critical volumes (wbadmin’s -allCritical) produces a backup that can restore system state on the same server but cannot rebuild a controller whose hardware is gone. Check that each scheduled job includes them before you record it as the full server recovery source.",
-      "network": "SBD-DC01 and SBD-DC02 now each write a scheduled system state backup to their own protected volume, so no backup traffic crosses the network. The flows are the Tier 0 sessions from AdminJumpBox01 on VLAN 60 that set the schedules and enable the Recycle Bin.",
+      "network": "SBD-DC01, SBD-DC02 and SBD-SUBCA01 now each write a scheduled backup to their own protected volume, and SBD-DC01’s task backs up every GPO, so no backup traffic crosses the network. The flows are the Tier 0 sessions from AdminJumpBox01 on VLAN 60 that set the schedules, take the CA backup, and enable the Recycle Bin.",
       "control": {
         "id": "CP-9",
         "name": "System Backup",
         "phase": "Implement",
-        "body": "System backup means copies at a defined frequency, with the confidentiality, integrity, and availability of the backup information protected. Two independent schedules on protected volumes, each verified and hashed, are that backup for the directory; the Recycle Bin adds object-level recovery that never needs system state.",
+        "body": "System backup means copies at a defined frequency, with the confidentiality, integrity, and availability of the backup information protected. Two independent schedules on protected volumes, each verified and hashed, are that backup for the directory, the issuing CA keeps a password-protected backup under custody, every GPO is saved daily with its links, the Recycle Bin adds object-level recovery that never needs system state.",
         "question": "A deletion replicated to both controllers an hour ago. Which branch of your decision tree applies, and what would each other branch cost you?"
       },
       "checklist": [
-        "I scheduled system state and critical-volume backups on SBD-DC01 and SBD-DC02, each to its own protected backup volume, from the Tier 0 seat.",
-        "I verified each first backup, recorded its version identifier, and hashed the catalog entry into evidence.",
-        "I enabled the Recycle Bin from the Tier 0 seat, recorded it as a change, and wrote the restore decision tree."
+        "I scheduled system state and critical-volume backups on SBD-DC01, SBD-DC02 and SBD-SUBCA01, each to its own protected volume, verified the first runs and hashed the catalog.",
+        "I backed up SBD-SUBCA01’s database, key, and configuration to its protected volume and recorded custody, with only the hashes in evidence.",
+        "I scheduled the GPO backup with its link export, enabled the Recycle Bin as a recorded change, and wrote the restore decision tree."
       ]
     },
     "trust-state": {
-      "short": "Back up CA and services",
-      "tag": "03 / CATALOG",
+      "short": "Back up member servers",
+      "tag": "03 / BACK UP",
       "status": "ONE HASHED CATALOG",
       "stepTitles": [
-        "Back up the issuing CA to its protected volume",
-        "Refresh the Group Policy backup and its links",
-        "Take a fresh DHCP set with its restore note",
-        "Hash the repository, Splunk, and inventory sets",
-        "Add the log archive and its catalog to the set",
+        "Schedule SBD-DHCP01 and the inventory",
+        "Back up SBD-FS01’s shares with their permissions",
+        "Back up SBD-SQL01’s databases and logins",
+        "Back up APPS01, WEB01, the repository and Splunk",
+        "Account for the log archive and its catalog",
         "Export the boundary and living records"
       ],
-      "mistake": "Saving the certutil backup into C:\\Evidence so assessors can see it. That backup holds the issuing CA’s private key: it belongs on SBD-SUBCA01’s protected backup volume under recorded custody, and only its hashes and the custody record go into evidence. The same goes for SBD-SPLUNK01’s configuration, which holds keys too.",
-      "network": "SBD-SUBCA01 on VLAN 30 backs up its database and key to its own protected volume over the Tier 0 session from AdminJumpBox01. The member-server sets are hashed from SBD-ADMIN-SRV01, SBD-AUDIT01’s archive and catalog join the set through the custodian’s sessions, and SBD-ROOTCA01’s ceremony backup is verified offline, never copied onto the network.",
+      "mistake": "Backing up SBD-SQL01’s application databases but not master. The logins live in master, so a rebuilt instance restores data whose users map to nothing; back up master, model and msdb with them, record the logins, and restore the instance’s logins first.",
+      "network": "Each member server writes its scheduled backup to its own protected volume or /srv/backup, set and hashed over Tier 1 sessions from SBD-ADMIN-SRV01 — the business services on VLAN 40 among them. SBD-AUDIT01’s archive and catalog join the set through the custodian’s sessions, and no backup crosses the network.",
       "control": {
-        "id": "SC-12",
-        "name": "Cryptographic Key Establishment and Management",
+        "id": "SC-28",
+        "name": "Protection of Information at Rest",
         "phase": "Implement",
-        "body": "Key management covers every copy of a key, not only the one in use. A password-protected CA backup on a protected volume, with custody recorded and only hashes in evidence, holds the issuing key’s backup to the same standard as the course 1.6 ceremony artifacts.",
-        "question": "Who in your lab could read the CA backup today, and does that list match the people allowed to hold the issuing key?"
+        "body": "Backups carry what they protect: share contents with their permissions, databases with their logins, and the private keys in SBD-WEB01’s and SBD-SPLUNK01’s archives. Volumes written only by the backup jobs, root-only /srv/backup directories, and evidence that holds hashes instead of contents protect that information at rest.",
+        "question": "Which of this lesson’s backups would hand someone a working key or a copy of business data, and who can read each one today?"
       },
       "checklist": [
-        "I backed up SBD-SUBCA01’s database, key, and configuration to its protected backup volume and recorded custody, with only the hashes in evidence.",
-        "I refreshed the Group Policy backup with its link export and took a fresh DHCP set with the note to set the DNS update credential again.",
-        "I added the repository, Splunk configuration, inventory, log archive and catalog, router export, register, and exception record to the hashed catalog."
+        "I scheduled SBD-DHCP01 with its restore note, D:\\Inventory, and the repository and Splunk archives, and recorded each first run’s hashes.",
+        "I scheduled SBD-FS01 with its ACL record and share export, SBD-SQL01’s database job with the login record and restore order, and SBD-APPS01’s and SBD-WEB01’s backups with their certificates.",
+        "I added the log archive and catalog, router export, register, and exception record to the hashed catalog."
       ]
     },
     "offline-copies": {
@@ -261,7 +314,7 @@
         "Retrieve and verify one copy as a test"
       ],
       "mistake": "Checking the hash on the protected volume but not on the media. A copy that was never verified after copying can be incomplete or unreadable, and you find out during lesson 5 or on the bad day; verify the hash on the media before it leaves the room.",
-      "network": "No network flows are shown: the offline backup cabinet has no network path, so copies reach it only by hand. Tier 0 custodians carry the controller, CA, and policy backups, the audit custodian carries SBD-AUDIT01’s archive and catalog, and a Tier 1 custodian carries the member-server sets.",
+      "network": "No network flows are shown: the offline backup cabinet has no network path, so copies reach it only by hand. Tier 0 custodians carry the controller, CA, and policy backups, the audit custodian carries SBD-AUDIT01’s archive and catalog, and a Tier 1 custodian carries the member-server sets, the VLAN 40 servers’ included.",
       "control": {
         "id": "MP-4",
         "name": "Media Storage",
@@ -320,7 +373,7 @@
         "question": "Which change to the network should trigger a rehearsal before the scheduled date comes round?"
       },
       "checklist": [
-        "I assembled the recovery record with both rehearsal results, the decision tree, a named owner, and a next rehearsal date, and sealed both halves.",
+        "I assembled the recovery record with the backup schedule, both rehearsal results, the decision tree, a named owner, and a next rehearsal date, and sealed both halves.",
         "I filed current SCAP results for every system, scanned from each tier’s own seat, with their triage.",
         "I reconciled the inventory, register, and exception record, and wrote the Build path’s closing note."
       ]

@@ -140,7 +140,7 @@ Notes / result / date: __________________________
 
 - [ ] Consolidate the deviations from lesson 3 and the items lesson 4 resolved as deviations into one exception record, C:\Evidence\exception-record.csv — rule, setting, reason, compensating measure, risk note, owner and review date — and file a dated copy in C:\Evidence\hardened. Course 1.4's example belongs here — the rule expecting the PDC emulator to synchronize with an authorized external time source, which the course 1.3 design answers with a declared, checked clock. It stays a living record outside the sealed folder: later courses add their entries to it, and it travels into the authorization path as part of the Body of Evidence.
 - [ ] Set the standing cadence: review each quarterly DISA release for applicable updates, and rescan after any role addition or significant configuration change — course 1.6's closing rescan of both controllers, once its certificates and autoenrollment policy reach them, is the first change-driven run. When you adopt a new release, scan once with the new content before changing any policy, so the record separates what the content changed from what your policies changed.
-- [ ] Back up every GPO, export the Group Policy reports, and export each link beside the backup: restoring a GPO from backup brings back its settings and permissions, not its links. Together they make the applied policy state recoverable and reviewable without a live console.
+- [ ] Export the Group Policy reports and each GPO link into C:\Evidence\hardened: the reports make the applied policy state reviewable without a live console, and the link export records where each policy applies — the part a GPO backup never restores, since it brings back settings and permissions, not links. The backup itself belongs to course 1.19, which defines and schedules the backup of every GPO with the rest of the recovery set, so this course sets up no backup job.
 - [ ] Write the handoff a future administrator or assessor would need — where the evidence lives, which versions produced it, and what is intentionally open — and hash C:\Evidence\hardened into C:\Evidence\hardened-manifest.csv. Course 1.8 later moves SCC and STIG Viewer to AdminJumpBox01 and links these policies to the admin seats' OUs; until then the cadence runs at the controllers' consoles.
 
 **Commands:**
@@ -149,17 +149,16 @@ Notes / result / date: __________________________
 # Seed the exception record from the findings resolved as deviations; add lesson 3's deviations and fill in every column
 Import-Csv C:\Evidence\hardened\findings\findings-record.csv | Where-Object Resolution -eq 'deviation' | Select-Object Target, GroupId, StigId, Title, Setting, Reason, CompensatingMeasure, RiskNote, Owner, ReviewDate | Export-Csv C:\Evidence\exception-record.csv -NoTypeInformation -NoClobber
 Copy-Item C:\Evidence\exception-record.csv "C:\Evidence\hardened\exception-record-$(Get-Date -Format yyyy-MM-dd).csv"   # once it is complete
-New-Item -ItemType Directory C:\Evidence\hardened\gpo-backup -Force | Out-Null
-Backup-GPO -All -Path C:\Evidence\hardened\gpo-backup -Comment 'Course 1.5 closing state'
+# The applied state as records; course 1.19 schedules the GPO backup itself
 Get-GPOReport -All -ReportType Html -Path C:\Evidence\hardened\gpo-report.html
 'DC=sbd,DC=test', 'OU=Domain Controllers,DC=sbd,DC=test', 'OU=Servers,OU=SBD,DC=sbd,DC=test' | ForEach-Object { (Get-GPInheritance -Target $_).GpoLinks } | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\hardened\gpo-links.csv -NoTypeInformation
 Get-ChildItem C:\Evidence\hardened -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\hardened-manifest.csv -NoTypeInformation
 Get-FileHash -Algorithm SHA256 C:\Evidence\hardened-manifest.csv
 ```
 
-**Verify:** The exception record has owners, compensating measures and review dates, with a dated copy filed, the GPO set is backed up with its links and reports beside it, the evidence folder is sealed in the manifest with its own hash recorded, and the rescan triggers are written where course 1.6 will meet them.
+**Verify:** The exception record has owners, compensating measures and review dates, with a dated copy filed, the GPO reports and link export are filed, the evidence folder is sealed in the manifest with its own hash recorded, and the rescan triggers are written where course 1.6 will meet them.
 
-**Evidence:** Finish the hardening checklist: the living exception record in C:\Evidence and its dated copy, the GPO backup with its link export and report, C:\Evidence\hardened-manifest.csv with its own hash, the cadence, and the named owner of the next review.
+**Evidence:** Finish the hardening checklist: the living exception record in C:\Evidence and its dated copy, the GPO report and link export, C:\Evidence\hardened-manifest.csv with its own hash, the cadence, and the named owner of the next review.
 
 Notes / result / date: __________________________
 
@@ -179,7 +178,6 @@ Notes / result / date: __________________________
 - [Microsoft · Back up, restore, migrate, and copy Group Policy Objects](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-backup-restore)
 - [Microsoft · New-GPLink](https://learn.microsoft.com/en-us/powershell/module/grouppolicy/new-gplink)
 - [Microsoft · Group Policy application rules for domain controllers](https://learn.microsoft.com/en-us/troubleshoot/windows-server/active-directory/group-policy-application-rules-for-domain-controller)
-- [Microsoft · Backup-GPO](https://learn.microsoft.com/en-us/powershell/module/grouppolicy/backup-gpo)
 - [DISA · STIG Group Policy Objects package](https://www.cyber.mil/stigs/gpo)
 - [DISA · SCAP content and the SCAP Compliance Checker (SCC)](https://www.cyber.mil/stigs/SCAP/)
 - [DISA · SRG/STIG tools (STIG Viewer)](https://www.cyber.mil/stigs/srg-stig-tools)

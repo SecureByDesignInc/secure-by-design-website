@@ -139,3 +139,11 @@ This course was renumbered from the old 1.9, not rewritten, so it carried stale 
   - the enrollment row (proposed F23, domain members → SBD-SUBCA01) also serves SBD-FS01, SBD-SQL01 and SBD-APPS01
   - SBD-SQL01's note could add "host firewall admits 1433 from 10.0.40.30 only"
 - **splunk-analysis (1.12)** (FYI): this course uses SBD-SPLUNK01's `analysis-plan` build as the Linux member pattern. That lesson still carries the items linux-repository/audit.md lists (`/opt/scc/cscc`, root CA by hand), and 1.18 now follows the corrected 1.9 procedure rather than 1.12's current text.
+
+## Owner decisions applied (14 October 2026)
+
+- D1: prerequisites and lesson 4 build step name the Red Hat Enterprise Linux–family release; the Ubuntu apt-cache alternative removed from lesson 4's command; root CA placement now names /etc/pki/ca-trust/source/anchors and update-ca-trust.
+- D1: Debian update-ca-certificates source dropped from the course and lesson 4.
+- D13: "inside that course's threshold" removed from lesson 4 step 2; verification shows a selected controller with a small, steady offset.
+- D2: the course defines no backups; lesson 3 records the databases and logins for course 1.19; lesson 4's configuration export is a change record and names course 1.19 as backing up APPS01/WEB01 configuration and certificates; lesson 1's exportable-key note points to course 1.19's recovery plan; lesson 5 handoff, quiz 3 answer and "next" say course 1.19 backs up the VLAN 40 servers (FS01 share data with NTFS permissions, SQL01 databases and logins, APPS01/WEB01 configuration and certificates); guide lesson 5 control question updated.
+- D12: no single-instance risk listing present; nothing to change.

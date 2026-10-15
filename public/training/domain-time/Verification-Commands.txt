@@ -16,7 +16,7 @@ Invoke-Command SBD-DC01,SBD-DC02 {
     Get-NetFirewallRule | Select-Object DisplayName, Direction, Enabled, Action
   w32tm /query /source }
 
-What success looks like: The plan names the forest root and its PDC emulator, the hierarchy each system follows, the approved reference with who checks it and how often, both thresholds, the fallback, the Kerberos tolerance read from the Default Domain Policy, and rule F09 with each controller's inbound UDP 123 rule.
+What success looks like: The plan names the forest root and its PDC emulator, the hierarchy each system follows, the approved reference with who checks it and when, the verification each system must show, the fallback, the Kerberos tolerance read from the Default Domain Policy, and rule F09 with each controller's inbound UDP 123 rule.
 
 2. Make SBD-DC01 the domain's time source
 Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
@@ -34,10 +34,10 @@ Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Window
   Format-List TimeCreated, Message
 # Reference check: run this as you read the approved reference, and log both readings
 Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff K'
-# Only past the threshold, by the measured difference (example: SBD-DC01 two seconds slow):
+# A correction is made only by the measured difference (example: SBD-DC01 two seconds slow):
 # Set-Date -Adjust ([TimeSpan]::FromSeconds(2))
 
-What success looks like: Hypervisor time synchronization is off for both controller VMs; SBD-DC01 reports AnnounceFlags 5 and NT5DS, source Local CMOS Clock, stratum 1 and reference LOCL; nltest returns it with the GTIMESERV flag; event 12 is recorded as expected; and the first reference check is logged inside the threshold, or with its correction.
+What success looks like: Hypervisor time synchronization is off for both controller VMs; SBD-DC01 reports AnnounceFlags 5 and NT5DS, source Local CMOS Clock, stratum 1 and reference LOCL; nltest returns it with the GTIMESERV flag; event 12 is recorded as expected; and the first reference check is logged with both readings and any correction.
 
 3. Bring every system onto the hierarchy
 # On SBD-DC02, and on a Windows test client or member server if you have one:
@@ -46,14 +46,16 @@ w32tm /query /configuration | Select-String '\(Policy\)'           # expected: n
 w32tm /query /source                                                # a controller, never a hypervisor provider
 # A system once set by hand returns to the hierarchy:
 #   w32tm /config /syncfromflags:domhier /update; Restart-Service w32time; w32tm /resync /rediscover
-# The Linux chrony file, filed now (/etc/chrony.conf, or /etc/chrony/chrony.conf on Ubuntu):
+# The Linux chrony file, filed now (/etc/chrony.conf on the Red Hat Enterprise Linux family):
 #   server SBD-DC01.sbd.test iburst
 #   server SBD-DC02.sbd.test iburst
 #   maxdistance 16
-# ...with no pool, other server, sourcedir or allow lines. Each Linux build later checks:
+# ...with no pool, other server, sourcedir or allow lines; then:
+#   sudo systemctl enable chronyd; sudo systemctl restart chronyd
+# Each Linux build later checks:
 #   chronyc sources -v     # ^* one controller, ^+ or ^- the other (^? = unusable)
 #   chronyc ntpdata | grep -E '^(Remote address|Stratum|Root dispersion|Authenticated)'
-#   chronyc tracking       # Reference ID: a controller; System time well inside one second
+#   chronyc tracking       # Reference ID: a controller; System time small and stable
 
 What success looks like: SBD-DC02 shows AnnounceFlags 10 and NT5DS and takes its time from SBD-DC01, a Windows member names a controller, no W32Time value shows (Policy), and the chrony file — both controllers, maxdistance 16 and the reason for it — is filed for courses 1.9, 1.12 and 1.18 to apply.
 
@@ -74,7 +76,7 @@ Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Window
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4616} -MaxEvents 20 |
   Select-Object TimeCreated, Message | Export-Csv "$f-4616.csv" -NoTypeInformation
 
-What success looks like: Every link reports the expected source and stratum, w32tm /monitor shows SBD-DC02 well inside one second of the PDC emulator, the member's five samples sit inside one second of SBD-DC01, the event extract holds the designed events with every warning explained, and the reference check log is current.
+What success looks like: Every link reports the expected source and stratum, w32tm /monitor shows a small offset between SBD-DC02 and the PDC emulator, the member's five samples against SBD-DC01 are small and stable, the event extract holds the designed events with every warning explained, and the reference check log is kept with them.
 
 5. Find the time fault and record the fix
 # Measure before changing anything (on the failing system)
@@ -96,6 +98,6 @@ w32tm /query /source            # a controller again
 nltest /dsgetdc:sbd.test /gtimeserv   # must name the current PDC emulator
 # Linux: sudo chronyc makestep, then chronyc tracking
 
-What success looks like: The practice fault was found from the system's configuration before anything changed, the system names a controller again with Type NT5DS and an offset inside one second, nltest names the PDC emulator as the reliable source, and the record explains the cause rather than only showing a passing result.
+What success looks like: The practice fault was found from the system's configuration before anything changed, the system names a controller again with Type NT5DS and a small, stable offset, nltest names the PDC emulator as the reliable source, and the record explains the cause rather than only showing a passing result.
 
 © 2026 Secure By Design Team LLC

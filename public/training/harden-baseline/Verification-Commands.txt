@@ -76,13 +76,12 @@ What success looks like: The manifest hash matched and no baseline file changed,
 # Seed the exception record from the findings resolved as deviations; add lesson 3's deviations and fill in every column
 Import-Csv C:\Evidence\hardened\findings\findings-record.csv | Where-Object Resolution -eq 'deviation' | Select-Object Target, GroupId, StigId, Title, Setting, Reason, CompensatingMeasure, RiskNote, Owner, ReviewDate | Export-Csv C:\Evidence\exception-record.csv -NoTypeInformation -NoClobber
 Copy-Item C:\Evidence\exception-record.csv "C:\Evidence\hardened\exception-record-$(Get-Date -Format yyyy-MM-dd).csv"   # once it is complete
-New-Item -ItemType Directory C:\Evidence\hardened\gpo-backup -Force | Out-Null
-Backup-GPO -All -Path C:\Evidence\hardened\gpo-backup -Comment 'Course 1.5 closing state'
+# The applied state as records; course 1.19 schedules the GPO backup itself
 Get-GPOReport -All -ReportType Html -Path C:\Evidence\hardened\gpo-report.html
 'DC=sbd,DC=test', 'OU=Domain Controllers,DC=sbd,DC=test', 'OU=Servers,OU=SBD,DC=sbd,DC=test' | ForEach-Object { (Get-GPInheritance -Target $_).GpoLinks } | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\hardened\gpo-links.csv -NoTypeInformation
 Get-ChildItem C:\Evidence\hardened -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\hardened-manifest.csv -NoTypeInformation
 Get-FileHash -Algorithm SHA256 C:\Evidence\hardened-manifest.csv
 
-What success looks like: The exception record has owners, compensating measures and review dates, with a dated copy filed, the GPO set is backed up with its links and reports beside it, the evidence folder is sealed in the manifest with its own hash recorded, and the rescan triggers are written where course 1.6 will meet them.
+What success looks like: The exception record has owners, compensating measures and review dates, with a dated copy filed, the GPO reports and link export are filed, the evidence folder is sealed in the manifest with its own hash recorded, and the rescan triggers are written where course 1.6 will meet them.
 
 © 2026 Secure By Design Team LLC

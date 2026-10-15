@@ -58,3 +58,16 @@ Five lessons, now 170 minutes (2.8 h); `repo-prove` went from 35 to 40 minutes b
   - `apps-web` step and quiz: "the Linux pattern: hardened configuration exported and hashed" and "no SCAP automation" should become a SCAP baseline with SCC for Linux and the distribution benchmark from course 1.9's set, scanned the 1.9 way, plus the Apache STIGs as manual items.
   - "as SBD-SPLUNK01 and SBD-NESSUS01 are joined": NESSUS01 is coming soon, so cite SPLUNK01 (course 1.12).
   - WEB01 also needs the 1.3 chrony file before it joins, 1.9's client package before its first update, and the root by hand.
+
+## Owner decisions applied (14 October 2026)
+
+- D1 (Red Hat family only): prerequisites and labNote now name a Red Hat Enterprise Linux–family release (dnf, rpm, firewalld, update-ca-trust); every Ubuntu/apt form removed.
+- D1: lesson 1 mirrors BaseOS and AppStream only; the Ubuntu keyring fingerprint command removed.
+- D1: lesson 2 chrony path is /etc/chrony.conf only; root CA goes to /etc/pki/ca-trust/source/anchors + update-ca-trust (verified with trust list); Apache is httpd; SELinux labelling stated as enforcing; ufw and the update-ca-certificates command removed; the systemd-resolved listener example replaced with "loopback-only listeners, if any".
+- D1: lesson 3 debmirror mirroring, gpgv/InRelease checks and the Ubuntu commands removed; reposync + rpm -K remain complete.
+- D1: lesson 4 deb822 sources file, Signed-By, ubuntu.sources, Check-Valid-Until and the apt command block removed; step 3 now covers install-media .repo entries and subscription-manager; quiz 3 rewritten for gpgcheck=1 only (key unchanged, answer index 2).
+- D1: lesson 5 rollback note now "dnf history undo or dnf downgrade" (apt removed).
+- D1: Debian sources debmirror, apt-secure, sources-list and ca-certificates dropped from the course and every lesson; lesson 1 now cites redhat-dnf, lesson 4 redhat-keys.
+- D1: catalog outcome 1 names one Red Hat Enterprise Linux–family distribution.
+- D13: the "course 1.3 one-second threshold" removed from lesson 2 step, command, check and the guide checklist; verification now shows a small, steady offset.
+- D15: SCC for Linux path kept as `<SCC install directory>/cscc`; not confirmable from official DISA content (search returned nothing).

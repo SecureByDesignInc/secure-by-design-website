@@ -33,19 +33,19 @@
       "5 minutes (domain default)"
     ],
     [
-      "Thresholds",
-      "Members ≤ 1 s of SBD-DC01 · SBD-DC01 ≤ 2 s of the reference"
+      "Verification",
+      "Each system's source · small, stable offsets"
     ],
     [
       "Reference check",
-      "Daily, and after any restart, restore or revert"
+      "SBD-DC01 against the approved reference, logged with any correction"
     ]
   ],
   "scene": {
     "tag": "DOMAIN CONTROLLERS · VLAN 10",
     "label": "Interactive 3D lesson network showing SBD-DC01 serving domain time from its own clock on VLAN 10, SBD-DC02 following it, a domain member taking time from either controller, and the controller consoles where time is configured and checked.",
     "completeStatus": "ONE CLOCK",
-    "completeCaption": "SBD-DC01 is the declared, checked source; SBD-DC02 and every member follow it, the Linux chrony settings are filed, and the chain was measured against its thresholds.",
+    "completeCaption": "SBD-DC01 is the declared, checked source; SBD-DC02 and every member follow it, the Linux chrony settings are filed, and every link was measured: the right source, a small and stable offset.",
     "nodes": [
       {
         "id": "dc1",
@@ -164,22 +164,22 @@
         "Learn why the clocks must agree",
         "Trace the Windows Time hierarchy",
         "Name the reference and the fallback",
-        "Set the thresholds you will hold",
+        "Decide what verification will show",
         "Confirm the time row and firewall rules"
       ],
-      "mistake": "Treating Kerberos's five minutes as the target. By the time clocks are minutes apart, sign-ins are already failing and log timelines no longer line up; a one-second threshold tells you about drift while there is still time to correct it.",
+      "mistake": "Treating Kerberos's five minutes as the target. By the time clocks are minutes apart, sign-ins are already failing and log timelines no longer line up; watching for offsets that stay small and stable tells you about drift while there is still time to correct it.",
       "network": "Both controllers are live on VLAN 10. The paths from a domain member to each controller are rule F09, UDP 123, which this plan confirms; SBD-DC02's own time requests to SBD-DC01 stay inside VLAN 10.",
       "control": {
         "id": "SC-45(1)",
         "name": "System Time Synchronization | Synchronization with Authoritative Time Source",
         "phase": "Prepare → Implement",
-        "body": "SC-45(1) asks you to compare system clocks with an authoritative time source at a set frequency and to synchronize them when the difference passes a set limit. Here the authoritative source is SBD-DC01 by declaration, so this plan fills in both assignments: the reference and how often SBD-DC01 is checked against it, and the thresholds every clock is held to.",
-        "question": "Who checks SBD-DC01 against the reference, how often, and what difference triggers a correction?"
+        "body": "SC-45(1) asks you to compare system clocks with an authoritative time source at a set frequency and to synchronize them when the difference passes a set limit. Here the authoritative source is SBD-DC01 by declaration, so this plan records how SBD-DC01 is compared with the approved reference and how a difference is corrected, while every other clock synchronizes with SBD-DC01 through the hierarchy. The frequency and the limit are assignments your environment and policy set; record the values you chose.",
+        "question": "Who checks SBD-DC01 against the reference, and how is a difference corrected and recorded?"
       },
       "checklist": [
         "I recorded the forest root, its PDC emulator and the hierarchy every system follows.",
-        "I named the approved reference, who checks it and how often, and the fallback if SBD-DC01 is lost.",
-        "I recorded both thresholds, the Kerberos tolerance, and rule F09 with each controller's UDP 123 firewall rule."
+        "I named the approved reference, who checks it and when, and the fallback if SBD-DC01 is lost.",
+        "I recorded the Kerberos tolerance, what verification must show, and rule F09 with each controller's UDP 123 firewall rule."
       ]
     },
     "time": {
@@ -200,7 +200,7 @@
         "name": "System Time Synchronization",
         "phase": "Implement",
         "body": "SC-45 asks that clocks be synchronized within and between systems and system components. SBD-DC01 is the reference by declaration, so the evidence needs how its clock is checked and corrected, not only the w32tm output. The AU-8 time stamps on every audit record are only as good as this clock.",
-        "question": "How would you know if SBD-DC01's clock had drifted past your threshold, and who corrects it?"
+        "question": "How would you know if SBD-DC01's clock had drifted, and who corrects it?"
       },
       "checklist": [
         "I confirmed SBD-DC01 holds the PDC emulator role and reports Local CMOS Clock as its source.",
@@ -257,7 +257,7 @@
       },
       "checklist": [
         "I recorded each link's source and stratum, from Local CMOS Clock on SBD-DC01 down to a member.",
-        "I measured SBD-DC02 and a member against the one-second threshold and kept the dated files.",
+        "I measured SBD-DC02 and a member, confirmed their offsets are small and stable, and kept the dated files.",
         "I exported the Time-Service and 4616 events and kept them with the reference check log."
       ]
     },

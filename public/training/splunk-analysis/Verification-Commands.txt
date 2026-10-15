@@ -8,8 +8,7 @@ the example names, addresses, and paths to your own plan. Nothing in this file r
 1. Plan analysis and build SBD-SPLUNK01
 # On SBD-SPLUNK01 (Tier 1 SSH session from SBD-ADMIN-SRV01)
 cd /srv/media && sha256sum -c --quiet SHA256SUMS-splunk.txt   # expected: no output
-dnf repolist --all              # RHEL family: only the sbd-repo01 repositories enabled
-apt-cache policy | grep http    # Ubuntu: only SBD-REPO01.sbd.test
+dnf repolist --all              # expected: only the sbd-repo01 repositories enabled
 chronyc sources -v; chronyc tracking   # ^* one controller, ^+ or ^- the other
 realm list                      # sbd.test, kerberos-member, one permitted group
 openssl x509 -inform der -in /tmp/sbd-root.cer -noout -fingerprint -sha256   # matches course 1.6's record
@@ -18,7 +17,7 @@ logger -t sbd-splunk-proof 'SBD-SPLUNK01 syslog over TLS test'
 # On SBD-SYSLOG01 (Tier 1 session): the test message in SBD-SPLUNK01's daily file
 Select-String -Path D:\Logs\Syslog\*\*.log -Pattern 'sbd-splunk-proof' | Select-Object -First 1
 
-What success looks like: The design names analysis's job, both indexes with their retention and sizing, the roles and who holds them, and the console paths; the media matches its published and transfer hashes; and SBD-SPLUNK01 resolves to 10.0.50.10, lists SBD-REPO01 as its only package source, has a controller selected inside the course 1.3 threshold, is joined with one permitted group, trusts the course 1.6 root whose hash matches that course's record, admits only the registered paths, and its test message arrives on the collector.
+What success looks like: The design names analysis's job, both indexes with their retention and sizing, the roles and who holds them, and the console paths; the media matches its published and transfer hashes; and SBD-SPLUNK01 resolves to 10.0.50.10, lists SBD-REPO01 as its only package source, has a controller selected with a small, stable offset, is joined with one permitted group, trusts the course 1.6 root whose hash matches that course's record, admits only the registered paths, and its test message arrives on the collector.
 
 2. Install Splunk and bring in the streams
 # On SBD-SPLUNK01 (Tier 1 SSH session): the first-start decisions, an index, and the TLS port
@@ -57,10 +56,10 @@ What success looks like: The analyst role searches both indexes and carries no d
 index=_internal sourcetype=scheduler savedsearch_name="SBD - *" | stats count, sum(result_count) AS results, values(alert_actions) AS actions BY savedsearch_name
 # The silent-source alert's search: each expected source's last event against its limit
 | inputlookup sbd_expected_sources.csv | join type=left host [| tstats max(_time) AS last where index=sbd_* earliest=-7d by host] | where isnull(last) OR last < relative_time(now(), "-" . max_quiet_minutes . "m")
-# The pipeline test, on SBD-SYSLOG01 (Tier 1 session): stop the forwarder for 20 minutes
-Stop-Service SplunkForwarder; Start-Sleep -Seconds 1200; Start-Service SplunkForwarder
+# The pipeline test, on SBD-SYSLOG01 (Tier 1 session): stop the forwarder past the silence threshold
+Stop-Service SplunkForwarder; Start-Sleep -Seconds <silence threshold plus one run interval, in seconds>; Start-Service SplunkForwarder
 
-What success looks like: Every alert in the register has a threshold, schedule, severity, responder with deputy, and written first response; each safe condition fired its alert in a test, with the cause and the alert's time recorded; the 20-minute forwarder stop fired the pipeline alert and its backlog arrived without a gap; and the first daily and weekly reviews are on record.
+What success looks like: Every alert in the register has a recorded threshold, schedule, expiration, severity, responder with deputy, and written first response; each safe condition fired its alert in a test, with the cause and the alert's time recorded; the forwarder stop fired the pipeline alert and its backlog arrived without a gap; and the first daily and weekly reviews are on record.
 
 5. Prove the chain and hand off
 # From AdminJumpBox01 (Tier 0): the test event on its source

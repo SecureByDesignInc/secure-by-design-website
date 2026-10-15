@@ -55,3 +55,9 @@ Five lessons, 160 minutes (2.7 h). Lesson ids, counts, minutes and quiz keys are
 - **business-services (1.18)**: if it creates gMSAs, say "the KDS root key from course 1.11" and run `Get-KdsRootKey`. Never run `Add-KdsRootKey` again (decisions rule 6). The current draft doesn't mention KDS.
 - **harden-baseline (1.5) exception record** (via its owner): the documented additions from this course are batch-logon rights for SBD-Archive$ (SBD-SYSLOG01) and for SBD-Catalog$ and SBD-Retention$ (Audit Servers OU), object-access auditing on SBD-AUDIT01, and the SBD Auditors entry in SBD-ADMIN-SRV01's Allow log on locally.
 - **prove-recovery (1.19)**: the custodians hold read only on `D:\LogArchive`, so they can copy archives to media but never delete them. The catalog (`D:\LogArchive\Catalog\catalog.csv` and the verify reports) travels with the archives.
+
+## Owner decisions applied (14 October 2026)
+- Decision 14: removed the 14-day / one-year / 90-day values and the 80 percent warning; lesson 1 step 1 says what each stage keeps and why and that the learner records the chosen periods; sizing uses the recorded period; "missing after a day" became a recorded wait; prerequisite 1, labNote, objective, check, recaps, lesson 2/3 buffer mentions, lesson 4 steps 1/3/5 and quiz 2 question, guide sample row, completeCaption, AU-4/AU-11 cards and checklists updated.
+- Decision 4: lesson 1 step 5 and recap note SBD-AUDIT01's updates come from SBD-WSUS01 (course 1.14), download only, installed by its custodian.
+- Decision 2: lesson 5 handoff now says course 1.19 sets up the archive's backup.
+- Decisions 12, 13: nothing to change.

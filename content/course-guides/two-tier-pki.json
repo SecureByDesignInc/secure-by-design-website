@@ -391,7 +391,7 @@
         "Autoenroll the controllers and the pilot",
         "Verify the chain with live retrieval",
         "Revoke a disposable test certificate",
-        "Assign renewal, backup, and recovery owners",
+        "Assign renewal owners; list the backups for course 1.19",
         "Baseline the PKI servers and rescan the controllers",
         "Close the controller finding and file the evidence"
       ],
@@ -407,7 +407,7 @@
       "checklist": [
         "I watched both domain controllers and the pilot receive their certificates without touching a request.",
         "I revoked the test certificate, published a new CRL, and saw a fresh evaluation reject it.",
-        "I recorded CRL, renewal, backup and recovery owners, filed the PKI servers’ baselines and the controllers’ rescans, and answered the controller certificate rule."
+        "I recorded CRL and renewal owners, listed the PKI items course 1.19 backs up, filed the PKI servers’ baselines and the controllers’ rescans, and answered the controller certificate rule."
       ]
     }
   }

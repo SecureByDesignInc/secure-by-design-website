@@ -90,7 +90,7 @@ Get-ADObject -SearchBase 'CN=Certificate Templates,CN=Public Key Services,CN=Ser
 
 What success looks like: The CA publishes exactly the three planned templates, each shows the approved key size and permissions, and each carries a completed change record.
 
-10. Validate enrollment, revocation, and recovery
+10. Validate enrollment, revocation, and renewal
 # On SBD-DC01, SBD-DC02 and the pilot, SBD-PKI-MGMT01, once SBD Certificate Autoenrollment is linked at the domain root
 gpupdate /force
 certutil -pulse
@@ -108,9 +108,8 @@ certutil -crl
 # Back on SBD-DC01: the test certificate must now fail as revoked
 certutil -urlcache * delete
 certutil -verify -urlfetch C:\Evidence\pki\test.cer
-# After the scans (each carried to C:\Evidence\pki\<host name> on SBD-DC01) and the checklist updates: back up the new GPOs, then seal the evidence
-New-Item -ItemType Directory C:\Evidence\pki\gpo-backup -Force | Out-Null
-Backup-GPO -Name 'SBD Certificate Autoenrollment' -Path C:\Evidence\pki\gpo-backup -Comment 'Course 1.6'   # and any root-trust GPO from lesson 5
+# After the scans (each carried to C:\Evidence\pki\<host name> on SBD-DC01) and the checklist updates: record the new GPOs (course 1.19 backs them up), then seal the evidence
+Get-GPOReport -Name 'SBD Certificate Autoenrollment' -ReportType Html -Path C:\Evidence\pki\gpo-report-autoenrollment.html   # and any root-trust GPO from lesson 5
 (Get-GPInheritance -Target 'DC=sbd,DC=test').GpoLinks | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\pki\gpo-links.csv -NoTypeInformation
 Get-ChildItem C:\Evidence\pki -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\pki-manifest.csv -NoTypeInformation
 Get-FileHash -Algorithm SHA256 C:\Evidence\pki-manifest.csv

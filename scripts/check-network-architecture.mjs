@@ -81,7 +81,8 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.le
 console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences plus ${whatIfs.length} what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.`);
 const designIds=new Set([...byId.keys(),...facilities.map(f=>f.id)]);
 for(const p of securityPractices){for(const id of p.ids)assert(designIds.has(id));for(const c of p.controls)assert(controls[c],`Unknown security control ${c}`);assert(p.tests.length&&p.evidence.length);}
-for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id),`Unknown policy endpoint ${id}`);
+// The core router is a facility, not a named system; only its deny-log row (F24) names it.
+for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id)||id==='core'&&r.id==='F24',`Unknown policy endpoint ${id}`);
 assert.equal(new Set(trafficRules.map(r=>r.id)).size,trafficRules.length);
 for(const id of singleInstances)assert.equal(nodes.filter(n=>n.id===id).length,1);
 assert.equal(evaluateFlow('workstations','fs','SMB').status,'permit');

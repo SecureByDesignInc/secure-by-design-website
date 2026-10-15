@@ -34,7 +34,7 @@
     ],
     [
       "Pipeline paths",
-      "F17 WinRM 5985 · F07 syslog TLS 6514 · router syslog UDP 514 · F11 SMB 445 · F10 TCP 9997"
+      "F17 WinRM 5985 · F07 syslog TLS 6514 · F24 router deny log UDP 514 · F11 SMB 445 · F10 TCP 9997"
     ],
     [
       "Streams",
@@ -56,7 +56,7 @@
         "from": 2,
         "button": "SBD-SYSLOG01",
         "title": "SBD-SYSLOG01 · 10.0.20.20",
-        "description": "The collector this course builds. A source-initiated subscription fills ForwardedEvents, and its syslog receiver takes the router's denies on UDP 514 and Linux senders over TLS on TCP 6514. It reaches into no source."
+        "description": "The collector this course builds. A source-initiated subscription fills ForwardedEvents, and its syslog receiver takes the router's denies on UDP 514 (F24) and Linux senders over TLS on TCP 6514. It reaches into no source."
       },
       {
         "id": "dc1",
@@ -168,7 +168,7 @@
           3,
           4
         ],
-        "label": "Router deny log · syslog UDP 514"
+        "label": "Router deny log · F24 · UDP 514"
       },
       {
         "from": "repo",
@@ -198,13 +198,13 @@
         "id": "AU-11",
         "name": "Audit Record Retention",
         "phase": "Prepare → Implement",
-        "body": "Decide retention per stage before any record exists. The collector's buffer, the repository's protected copy, and the analysis copy have different clocks; write each one down with the people who may read that stage.",
+        "body": "Decide retention per stage before any record exists. The collector's buffer, the repository's protected copy, and the analysis copy have different clocks. Each period depends on your environment and policy: write down the one you chose and why, with the people who may read that stage.",
         "question": "How long must the protected copy outlive the working copy, and who made that decision?"
       },
       "checklist": [
         "I wrote the role sentence and building course for the collector, the repository, and the analysis system.",
         "I recorded retention, readers, and the no-delete rule for each stage, and named the two streams and their pickup folders.",
-        "I added the five pipeline paths to the register with their owners."
+        "I added the five pipeline paths to the register with their owners, F24 for the router's deny log included."
       ]
     },
     "auditing": {
@@ -244,7 +244,7 @@
         "Confirm only registered paths are in use"
       ],
       "mistake": "Forgetting NETWORK SERVICE in Event Log Readers, or not restarting the source after adding it. The subscription still shows the source as active, but no Security events reach ForwardedEvents, so the pipeline looks configured while carrying nothing.",
-      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers, the PKI and DHCP servers, and the admin hosts push events to it over WinRM 5985 (F17), and the core router's deny log arrives as syslog on UDP 514.",
+      "network": "SBD-SYSLOG01 on VLAN 20 is online. Both domain controllers, the PKI and DHCP servers, and the admin hosts push events to it over WinRM 5985 (F17), and the core router's deny log arrives as syslog on UDP 514 (F24).",
       "control": {
         "id": "AU-3",
         "name": "Content of Audit Records",
@@ -279,7 +279,7 @@
       },
       "checklist": [
         "I confirmed every enrolled source is active with a recent heartbeat.",
-        "I set ForwardedEvents to overwrite oldest-first and confirmed it holds more than the 14-day buffer.",
+        "I set ForwardedEvents to overwrite oldest-first and confirmed it holds more than the buffer period I chose.",
         "I wrote the failure conditions and the owner who is told, and kept the first daily check."
       ]
     },
@@ -295,7 +295,7 @@
         "Write the handoff to course 1.11"
       ],
       "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain's lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
-      "network": "Every source is live: the Windows sources forward over WinRM, the core router sends its denies on UDP 514, and SBD-REPO01 joins over syslog TLS on TCP 6514. One sign-in, one deny, and one test message reach SBD-SYSLOG01.",
+      "network": "Every source is live: the Windows sources forward over WinRM, the core router sends its denies on UDP 514 (F24), and SBD-REPO01 joins over syslog TLS on TCP 6514. One sign-in, one deny, and one test message reach SBD-SYSLOG01.",
       "control": {
         "id": "AU-8",
         "name": "Time Stamps",

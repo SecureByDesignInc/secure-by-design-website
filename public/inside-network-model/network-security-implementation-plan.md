@@ -177,19 +177,19 @@ Assessment result: ____________________
 Owner role: Recovery lead and system owners
 Controls: CP-2, CP-4, CP-9, CP-10, IR-3, IR-4, CP-9(1), CA-5, PL-2, RA-7, CA-6
 
-Splunk, Tenable/Nessus, and Trellix ePO/DLP each have exactly one server instance. Recovery uses protected backups, not clustering or standby servers.
+Splunk, Tenable/Nessus, and Trellix ePO/DLP each run on one server. Recovery uses protected backups, not clustering or standby servers.
 
-- [ ] Define recovery time and recovery point objectives per service; record the accepted outage exposure of each single instance.
+- [ ] Define recovery time and recovery point objectives per service.
 - [ ] Protect offline backups of required data, configurations, licenses, keys, and vendor-supported application/database recovery material. Use separate backup credentials.
 - [ ] Restore identity/DNS/time dependencies, PKI, data services, then security and management functions in a dependency-tested order. Put the two DCs in separate infrastructure failure domains where feasible.
 - [ ] During a Splunk outage retain and monitor local logs; during a Nessus outage track deferred scans; during an ePO/DLP outage verify installed agents retain their last policy and document lost central visibility.
 - [ ] Exercise malicious-media, ransomware, and privileged-account compromise scenarios; retain results and corrective actions.
 - [ ] Backup path: each server writes its backup (DC system state, CA database and keys, configurations, the audit archive) to a protected local backup volume. Tier 0 custodians carry DC and CA backups, and the audit custodian carries the archive, to the offline backup facility under the media custody procedure. No network path to the backup facility exists.
-- [ ] Document the single-instance design for Splunk, Tenable/Nessus, and Trellix ePO/DLP in the system security plan, with offline backups as its mitigation (PL-2): one server each suits the small network and the tools’ modest resource needs. The risk response records the rationale and the remaining risk (RA-7); accepting that risk is the authorizing official’s authorization decision (CA-6). Restore gaps are tracked in the POA&M (CA-5).
+- [ ] Track restore gaps found in recovery exercises in the POA&M (CA-5).
 
 ### Acceptance checks
 
-- [ ] Restore each of the three single-instance security platforms independently.
+- [ ] Restore each of the three security platforms independently.
 - [ ] Verify restored policies, searches, scan configuration, agent reconnection, and required data.
 - [ ] Time a full recovery exercise and compare observed results with approved objectives.
 
@@ -236,4 +236,4 @@ Transfer ID / direction / media ID / custodian / source / destination / classifi
 
 ## Recovery exercise record template
 
-Service / single-instance dependencies / protected backup ID / last successful backup / approved RPO and RTO / outage procedure / restoration steps / actual start and finish / recovered data cutoff / functional checks / issues / owner and due date.
+Service / dependencies / protected backup ID / last successful backup / approved RPO and RTO / outage procedure / restoration steps / actual start and finish / recovered data cutoff / functional checks / issues / owner and due date.

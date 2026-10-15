@@ -74,7 +74,7 @@
         "from": 1,
         "button": "SBD-ADMIN-PC01",
         "title": "SBD-ADMIN-PC01 · 10.0.60.30",
-        "description": "The Tier 2 seat: a Windows client virtual machine on SBD-ADMIN-SRV01, in the Admin Workstations OU, for endpoint administration (rule A03). Tier 2 accounts sign in only inside it, never on its host. In this course it manages the VLAN 80 test client; the fleet arrives in course 1.13."
+        "description": "The Tier 2 seat: a Windows client virtual machine on SBD-ADMIN-SRV01, in the Admin Workstations OU, for endpoint administration (rule A03). Tier 2 accounts sign in only inside it, never on its host, and Tier 0, Tier 1, and audit custodian accounts are refused there. In this course it manages the VLAN 80 test client and, from lesson 5, holds its own SCC copy and first baseline; the fleet arrives in course 1.13."
       },
       {
         "id": "dc1",
@@ -252,7 +252,7 @@
       },
       "checklist": [
         "I moved SBD-SUBCA01 and SBD-PKI-MGMT01 into the Tier 0 Servers OU and confirmed Tier 0 can still sign in to them.",
-        "I found the Tier 0 group’s SID on the deny lines of the test machine’s user-rights export, and a refused Tier 0 sign-in logged as event 4625 with status 0xC000015B.",
+        "I found the Tier 0, Tier 1, and audit custodian groups’ SIDs on the deny lines of the test machine’s user-rights export, and a refused Tier 0 sign-in logged as event 4625 with status 0xC000015B.",
         "I recorded the console network-logon exception, the Protected Users membership, and the break-glass and MFA decisions."
       ]
     },
@@ -294,7 +294,7 @@
         "Write the handoff for course 1.9"
       ],
       "mistake": "Treating SBD-SUBCA01 and SBD-PKI-MGMT01 as new hosts. They changed OU, not identity: a rescan compared with their earlier baseline is what shows the move kept their hardening intact.",
-      "network": "The two physical seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.9.",
+      "network": "All three seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.9.",
       "control": {
         "id": "RA-5",
         "name": "Vulnerability Monitoring and Scanning",
@@ -304,7 +304,7 @@
       },
       "checklist": [
         "I moved SCC, STIG Viewer, and the evidence onto the seats, matched every set to its manifest, and removed the tools from the controllers.",
-        "I filed first baselines for the two physical seats and rescans of the changed systems, with attributed deltas.",
+        "I filed first baselines for the three seats, SBD-ADMIN-PC01’s from its own SCC copy, and rescans of the changed systems, with attributed deltas.",
         "I added this course’s rows to the records and wrote the handoff telling course 1.9 that its servers are managed only from VLAN 60."
       ]
     }

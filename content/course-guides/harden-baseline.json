@@ -241,21 +241,21 @@
       "stepTitles": [
         "Consolidate deviations into one exception record",
         "Set the quarterly and change-driven rescan cadence",
-        "Back up the GPOs, their links and reports",
+        "Export the GPO reports and links; course 1.19 backs up",
         "Write the handoff and seal the evidence"
       ],
       "mistake": "Treating the rescan as the finish line lets drift and new DISA releases go unnoticed. An exception record without owners and review dates becomes permanent by default.",
-      "network": "The hardened controllers stay on VLAN 10. The GPO backup, link export and reports are hashed into the evidence folder on SBD-DC01, and the next scan waits for the DISA quarter or course 1.6’s change.",
+      "network": "The hardened controllers stay on VLAN 10. The GPO reports and link export are hashed into the evidence folder on SBD-DC01, course 1.19 backs the GPOs up, and the next scan waits for the DISA quarter or course 1.6’s change.",
       "control": {
         "id": "CA-7",
         "name": "Continuous Monitoring",
         "phase": "Monitor",
-        "body": "A set rescan frequency, event-driven triggers and named owners turn a one-time hardening into ongoing monitoring. The exported reports and GPO backup preserve the applied state for each review.",
+        "body": "A set rescan frequency, event-driven triggers and named owners turn a one-time hardening into ongoing monitoring. The exported reports and link records preserve the applied state for each review.",
         "question": "Which change in course 1.6 should trigger the first change-driven scan, and who owns it?"
       },
       "checklist": [
         "I consolidated the deviations into one exception record with owners, risk notes and review dates, and filed a dated copy.",
-        "I backed up the GPO set, exported its links and reports, and hashed C:\\Evidence\\hardened into the manifest.",
+        "I exported the GPO reports and links, and hashed C:\\Evidence\\hardened into the manifest.",
         "I wrote down the quarterly and change-driven rescan triggers and the owner of the next review."
       ]
     }

@@ -67,7 +67,7 @@
         "existing": true,
         "button": "SBD-ADMIN-PC01",
         "title": "SBD-ADMIN-PC01 · 10.0.60.30",
-        "description": "The endpoint administration seat on VLAN 60, a virtual machine on SBD-ADMIN-SRV01 built in course 1.8. The workstation firewall policy allows Remote Desktop and remote management only from here, only SBD Tier 2 Admins may read the fleet’s Windows LAPS passwords, and lesson 7 gives it its own SCC copy."
+        "description": "The endpoint administration seat on VLAN 60, a virtual machine on SBD-ADMIN-SRV01 built in course 1.8. The workstation firewall policy allows Remote Desktop and remote management only from here, only SBD Tier 2 Admins may read the fleet’s Windows LAPS passwords, and lesson 7 scans the fleet sample from the SCC copy course 1.8 installed there."
       },
       {
         "id": "dc1",
@@ -79,7 +79,7 @@
         "from": 0,
         "button": "SBD-DC01",
         "title": "SBD-DC01 · 10.0.10.10",
-        "description": "Holds the Workstations OU, the delegated join account, and the STIG, local Administrators, firewall, LAPS and wired 802.1X policies linked there. It authenticates each join and stores each PC’s managed password and the DNS records SBD-DHCP01 registers; SBD-DC02 holds the same directory and records."
+        "description": "Holds the Workstations OU, the delegated join account, and the STIG, local Administrators, firewall, DNS registration, LAPS and wired 802.1X policies linked there. It authenticates each join and stores each PC’s managed password and the DNS records SBD-DHCP01 registers; SBD-DC02 holds the same directory and records."
       },
       {
         "id": "dhcp",
@@ -139,7 +139,7 @@
           5,
           6
         ],
-        "label": "Join, policy and DNS registration",
+        "label": "Join, policy and name resolution",
         "twoWay": true
       },
       {
@@ -192,10 +192,10 @@
         "Write the naming and wave plan",
         "Delegate the join account and name the PCs’ managers",
         "Link the Windows client STIG policies",
-        "Create the workstation firewall GPO"
+        "Create the firewall and DNS registration GPOs"
       ],
       "mistake": "Expecting the core router to block SMB and Remote Desktop between PCs. Traffic inside VLAN 80 never reaches the router, so without the workstation firewall GPO the register’s peer denies are enforced nowhere.",
-      "network": "The fifty PCs are planned on VLAN 80, and nothing has joined yet. The Workstations OU on the domain controller already carries the STIG, local Administrators and firewall policy links, and SBD-ADMIN-PC01 on VLAN 60 is the only management source that policy allows.",
+      "network": "The fifty PCs are planned on VLAN 80, and nothing has joined yet. The Workstations OU on the domain controller already carries the STIG, local Administrators, firewall and DNS registration policy links, below course 1.8’s tier logon GPO, and SBD-ADMIN-PC01 on VLAN 60 is the only management source that policy allows.",
       "control": {
         "id": "CM-2",
         "name": "Baseline Configuration",
@@ -206,7 +206,7 @@
       "checklist": [
         "I recorded the reference image version and its SHA256 hash.",
         "I delegated the join account only Create Computer objects on the Workstations OU and made SBD Tier 2 Admins the PCs’ local administrators by GPO.",
-        "I confirmed the STIG and workstation firewall GPO links on the Workstations OU before any machine joined."
+        "I confirmed the STIG, firewall and DNS registration GPO links on the Workstations OU, below course 1.8’s tier logon GPO, before any machine joined."
       ]
     },
     "pilot": {
@@ -220,7 +220,7 @@
         "Find the joins in the logging pipeline"
       ],
       "mistake": "Moving a pilot’s computer object into the Workstations OU by hand. If a machine did not land there on its own, the course 1.5 redirect is not working, and the next forty-seven would boot without the hardened policy.",
-      "network": "Three pilots on VLAN 80 take leases from SBD-DHCP01 through the core’s relay, join sbd.test, read their policy, and register their DNS records. The domain controller’s join events travel to SBD-SYSLOG01 for analysis.",
+      "network": "Three pilots on VLAN 80 take leases from SBD-DHCP01 through the core’s relay, join sbd.test and read their policy, and SBD-DHCP01 registers their DNS records. The domain controller’s join events travel to SBD-SYSLOG01 for analysis.",
       "control": {
         "id": "CM-6",
         "name": "Configuration Settings",
@@ -304,7 +304,7 @@
         "question": "Which devices would fail authentication today, and what would happen to each one once enforcement is on?"
       },
       "checklist": [
-        "I added the NPS role to SBD-DHCP01 with an SBD Server Authentication certificate from the issuing CA, and turned on NPS auditing.",
+        "I added the NPS role to SBD-DHCP01 with an SBD Server Authentication certificate from the issuing CA, admitted Domain Computers in the network policy, and turned on NPS auditing.",
         "I confirmed each pilot authenticated with EAP-TLS and NPS logged event 6272.",
         "I confirmed a failed attempt was logged but still forwarded on VLAN 80, and I added register row F20."
       ]
@@ -341,8 +341,7 @@
       "tag": "07 / HAND OFF",
       "status": "FLEET BASELINED",
       "stepTitles": [
-        "Install SCC on SBD-ADMIN-PC01 and baseline it",
-        "Baseline the sample with the client STIG benchmark",
+        "Baseline the sample from SBD-ADMIN-PC01’s SCC copy",
         "Rescan the infrastructure this course changed",
         "Assemble the fleet inventory",
         "Write the handoff to courses 1.14 and 1.15"
@@ -357,7 +356,7 @@
         "question": "Which inventory fields would reveal a PC that had been rebuilt from a different image?"
       },
       "checklist": [
-        "I installed SCC on SBD-ADMIN-PC01 from the hashed course 1.4 media and filed that seat’s first baseline.",
+        "I checked the SCC installer course 1.8 kept on SBD-ADMIN-PC01 against its recorded hash before scanning the sample.",
         "I baselined the lesson 6 sample with the Windows client STIG benchmark, removed SCC afterwards, and rescanned the controllers, issuing CA and SBD-DHCP01.",
         "I filed the fleet inventory and a handoff note naming updates for course 1.14 and the inventory for course 1.15."
       ]

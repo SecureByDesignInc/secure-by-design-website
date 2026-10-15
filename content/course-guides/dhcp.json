@@ -3,7 +3,7 @@
   "hero": {
     "title": "Run DHCP on",
     "accent": "SBD-DHCP01.",
-    "text": "Design the workstation VLAN’s addressing, build and authorize SBD-DHCP01 on a member server, register client names securely under one dedicated account, and keep the lease trail and backups. Follow the build, explore the dependencies, and keep the evidence."
+    "text": "Design the workstation VLAN’s addressing, build and authorize SBD-DHCP01 on a member server, register client names securely under one dedicated account, and keep the lease trail and the restore note course 1.19 relies on. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
     "WINDOWS",
@@ -45,7 +45,7 @@
     "tag": "ADDRESSING · VLAN 20 + 80",
     "label": "Interactive 3D lesson network showing SBD-DHCP01 leasing addresses to a VLAN 80 test client through the core relay and registering the client’s name with both domain controllers.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "SBD-DHCP01 leases VLAN 80 addresses through the core’s relay and registers each client’s name with both domain controllers under one dedicated account, with name protection on. Its lease history and backups are kept, and course 1.8 takes over its administration.",
+    "completeCaption": "SBD-DHCP01 leases VLAN 80 addresses through the core’s relay and registers each client’s name with both domain controllers under one dedicated account, with name protection on. Its lease history is kept, course 1.19 backs it up, and course 1.8 takes over its administration.",
     "nodes": [
       {
         "id": "dhcp",
@@ -56,7 +56,7 @@
         "from": 1,
         "button": "SBD-DHCP01",
         "title": "SBD-DHCP01 · 10.0.20.10",
-        "description": "Built in lesson 2 on VLAN 20 as a member server in the Servers OU, run at its console by SBD Tier 1 Admins. It leases the VLAN 80 pool through the core’s relay (F04), registers client names as svc-dhcp-dns with name protection, and keeps its audit log and backups on its second volume."
+        "description": "Built in lesson 2 on VLAN 20 as a member server in the Servers OU, run at its console by SBD Tier 1 Admins. It leases the VLAN 80 pool through the core’s relay (F04), registers client names as svc-dhcp-dns with name protection, and keeps its audit-log copies on its second volume; course 1.19 backs it up."
       },
       {
         "id": "dc1",
@@ -215,7 +215,7 @@
       ]
     },
     "dhcp-audit": {
-      "short": "Audit and back up",
+      "short": "Audit and restore note",
       "tag": "04 / AUDIT",
       "status": "LEASE TRAIL KEPT",
       "stepTitles": [
@@ -223,21 +223,21 @@
         "Archive each day’s file with its hash",
         "Review leases and configuration changes",
         "Check for unauthorized DHCP servers",
-        "Back up the database and the configuration"
+        "Write the restore note for course 1.19's backup"
       ],
       "mistake": "Relying on the audit log Windows keeps. Each weekday’s file is reused a week later, so an investigation that starts eight days after the fact finds no record of who held the address.",
-      "network": "The lease path from lesson 2 stays live while SBD-DHCP01 keeps its audit trail and backups on its second volume. No new network path is added.",
+      "network": "The lease path from lesson 2 stays live while SBD-DHCP01 keeps its audit trail on its second volume. No new network path is added.",
       "control": {
         "id": "AU-11",
         "name": "Audit Record Retention",
         "phase": "Implement → Monitor",
-        "body": "Windows keeps about a week of DHCP audit history; your records requirement decides how long lease history must last. Daily copies with hashes turn the weekly files into a retained record.",
+        "body": "Windows keeps about a week of DHCP audit history; your records requirement decides how long lease history must last, and that period depends on your environment and policy. Daily copies with hashes turn the weekly files into a retained record.",
         "question": "How far back would you need lease history to trace an address in a router deny log, and does your archive reach that far?"
       },
       "checklist": [
         "I confirmed audit logging is on and found yesterday’s file in the archive with its hash in the catalog.",
         "I reviewed the leases and the authorized-server list and recorded anything I didn’t recognize as a finding.",
-        "I filed a dated database backup and XML export with hashes, and wrote down that the DNS credential must be set again after a restore."
+        "I confirmed the automatic database copy sits on the same disk and wrote the restore note course 1.19 uses: the DNS credential must be set again after a restore."
       ]
     },
     "dhcp-prove": {

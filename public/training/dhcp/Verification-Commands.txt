@@ -61,7 +61,7 @@ Import-Module ActiveDirectory
 
 What success looks like: The 10.0.80 reverse zone exists with secure updates; svc-dhcp-dns is in Domain Users only and DnsUpdateProxy is empty; Get-DhcpServerDnsCredential names svc-dhcp-dns; the server registers A and PTR records for every client with name protection and cleanup on; and the test client's A, PTR, and DHCID records answer from both controllers, owned by SBD\svc-dhcp-dns.
 
-4. Audit leases and back up the server
+4. Audit leases and write the restore note
 Get-DhcpServerAuditLog   # Enable: True; Path: C:\Windows\system32\dhcp
 $dir = Join-Path $env:windir 'System32\dhcp'
 Get-Content (Join-Path $dir ('DhcpSrvLog-{0}.log' -f (Get-Date).ToString('ddd', [cultureinfo]'en-US'))) -Tail 5
@@ -74,13 +74,11 @@ Get-FileHash $copy -Algorithm SHA256 | Export-Csv D:\DHCP\AuditArchive\catalog.c
 Get-DhcpServerv4ScopeStatistics -ScopeId 10.0.80.0 | Select-Object ScopeId, InUse, Free, PercentageInUse
 Get-DhcpServerv4Lease -ScopeId 10.0.80.0 | Select-Object IPAddress, HostName, ClientId, AddressState, LeaseExpiryTime
 Get-DhcpServerInDC   # SBD-DHCP01 alone
-# Backups: the database and a readable export, hashed on the second volume
-$b = 'D:\Backups\DHCP\{0:yyyy-MM-dd}' -f (Get-Date); New-Item -ItemType Directory $b -Force | Out-Null
-Backup-DhcpServer -Path (Join-Path $dir 'backup'); Copy-Item (Join-Path $dir 'backup') (Join-Path $b 'database') -Recurse
-Export-DhcpServer -File (Join-Path $b 'SBD-DHCP01.xml') -Leases
-Get-ChildItem $b -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv ('{0}-hashes.csv' -f $b) -NoTypeInformation
+# For the restore note: the automatic copy sits on the same disk (BackupPath), so course 1.19 schedules the real backup
+Get-DhcpServerDatabase
+Get-DhcpServerDnsCredential   # the account the note says to set again after any restore (never the password)
 
-What success looks like: Audit logging is on with free space to spare; yesterday's file sits in the archive under its date, with its hash in the catalog; the lease list holds only known machines; Get-DhcpServerInDC lists SBD-DHCP01 alone; and a dated database backup and XML export sit in D:\Backups\DHCP with their hashes.
+What success looks like: Audit logging is on with free space to spare; yesterday's file sits in the archive under its date, with its hash in the catalog; the lease list holds only known machines; Get-DhcpServerInDC lists SBD-DHCP01 alone; and the restore note names the credential step for course 1.19's backup.
 
 5. Prove the service and hand off
 # On SBD-TEST80: release, renew, and read what the client believes

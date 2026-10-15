@@ -106,3 +106,11 @@ The validator passes: 10 lessons, 280 minutes, 4.7 hours. Lesson ids and counts 
   - "Complete courses 1.4–1.8: working PKI services…" needs the final numbers.
 - **prove-recovery (1.19)**: "the CA key protection decisions from course 1.4", "the root CA's protected backup from the course 1.4 ceremony", "the course 1.4 ceremony artifacts" and "The course 1.4 custody discipline" → course 1.6.
 - **Inside the Network**: SBD-SUBCA01's "Certificate enrollment · Transport to define" (judgment call 1).
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 2: root lesson keeps the ceremony's protected CA backup (build-time) and now says course 1.19 accounts for it without bringing it onto the network.
+- validate: renamed "Validate enrollment, revocation, and renewal"; step 4 records CRL and renewal owners and hands the issuing CA backup, the root ceremony backup's accounting and recovery rehearsal to course 1.19; step 6 and command replace Backup-GPO with Get-GPOReport plus the existing link export (change records); evidence and recap updated. Catalog stage 10 title and guide step title/checklist match.
+- first-templates: "exportable keys only if the course 1.19 recovery plan explicitly says so" (1.19 says it doesn't: certificates return with full-server backups).
+- Decision 13: sign lesson's "if it is past the threshold" → "if it has drifted" (no threshold).
+- Decision 12: no single-instance risk listing found.

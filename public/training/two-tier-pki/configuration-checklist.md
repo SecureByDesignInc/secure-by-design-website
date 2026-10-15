@@ -39,7 +39,7 @@ Notes / result / date: __________________________
 - [ ] Verify SBD-ROOTCA01 is in a workgroup with no active network path. Prepare approved installation media, protected administration, and backup storage, and set its clock from the approved reference that course 1.3 names, recording both readings: no network will ever correct this clock.
 - [ ] Place the reviewed CAPolicy.inf in %SystemRoot% before configuration. Tailor it to the root role: in this lab it sets CRLPeriod=Weeks and CRLPeriodUnits=26, and CRLDeltaPeriodUnits=0 so the root publishes no delta CRL. A self-signed root's own CDP/AIA choices differ from the extensions the root places into issued subordinate certificates.
 - [ ] Install the Certification Authority role with management tools. In the AD CS Configuration wizard choose Standalone CA, Root CA, and a new private key, then apply the approved provider, cryptography (RSA 4096 with SHA-256 in this lab), CA name, validity (20 years), database, and log settings.
-- [ ] Before signing anything, configure the root's issued-certificate AIA/CDP settings, the subordinate validity policy (CA\ValidityPeriod Years and CA\ValidityPeriodUnits 10 in this lab), and the base-CRL schedule (26 weeks with an overlap period, and no delta CRL). Hold requests for explicit approval. Produce and inspect a current root CRL, then capture a protected CA backup.
+- [ ] Before signing anything, configure the root's issued-certificate AIA/CDP settings, the subordinate validity policy (CA\ValidityPeriod Years and CA\ValidityPeriodUnits 10 in this lab), and the base-CRL schedule (26 weeks with an overlap period, and no delta CRL). Hold requests for explicit approval. Produce and inspect a current root CRL, then capture a protected CA backup — a build-time step that stays inside this ceremony, and which course 1.19 accounts for in its recovery set without ever bringing it onto the network.
 
 **Commands:**
 
@@ -84,7 +84,7 @@ Notes / result / date: __________________________
 
 ## Sign through the offline ceremony
 
-- [ ] Use approved removable media and custody procedures to bring the request to the root. Before signing, read the root's clock against the approved reference and correct it by the measured difference if it is past the threshold: the certificate and CRL dates it signs come from that clock. Recalculate the request's hash, compare it with the independently recorded value, and inspect the request before submission.
+- [ ] Use approved removable media and custody procedures to bring the request to the root. Before signing, read the root's clock against the approved reference and correct it by the measured difference if it has drifted: the certificate and CRL dates it signs come from that clock. Recalculate the request's hash, compare it with the independently recorded value, and inspect the request before submission.
 - [ ] Verify the root's issued-certificate validity policy and publication extensions. In Certification Authority, submit the request, review its pending entry, and issue it only after the required approval.
 - [ ] Export the subordinate certificate, root certificate, and current root CRL. Check identities, constraints, validity, signatures, URLs, and revocation data against the approved hierarchy. Record file hashes and the request ID.
 - [ ] Transfer only the approved public artifacts back to the connected environment. Match published filenames to the URLs embedded in certificates, retain the ceremony record and protected backup, then shut down and secure the root.
@@ -205,7 +205,7 @@ Notes / result / date: __________________________
 
 - [ ] From the administration seat, duplicate Kerberos Authentication, the template Microsoft designates for domain controllers, as SBD Domain Controller Authentication: subject name format None with the DNS name in the alternative name, a key storage provider with RSA keys of at least 2,048 bits and SHA-256, a validity within lesson 1's one-to-two-year example, and the Domain Controller, Domain Controller Authentication and Kerberos Authentication templates on its Superseded Templates tab. Confirm Domain Controllers and Enterprise Domain Controllers hold Read, Enroll and Autoenroll: this is the PKI server certificate the STIG expects on every domain controller, course 1.4's POA&M candidate.
 - [ ] Duplicate the Computer template as SBD Computer Authentication. Set the approved key provider, a key size of at least 2,048 bits, a validity period within the same example, subject built from directory information, and autoenrollment permission for a pilot computer group only — SBD-PKI-MGMT01 for now, until the fleet arrives in course 1.13.
-- [ ] Duplicate the Web Server template as SBD Server Authentication for the TLS services later courses build — the collector (course 1.10), SBD-SPLUNK01 (1.12), SBD-WSUS01 (1.14) and the business services (1.18): the subject supplied in the request, Enroll for the server administrators (a Linux host's request is made on the host and submitted from their seat) and for an SBD TLS Servers computer group (a Windows server requesting into its own computer store is checked against its computer account, so each later course adds its server to that group first), no autoenrollment, and exportable keys only if the recovery plan explicitly says so.
+- [ ] Duplicate the Web Server template as SBD Server Authentication for the TLS services later courses build — the collector (course 1.10), SBD-SPLUNK01 (1.12), SBD-WSUS01 (1.14) and the business services (1.18): the subject supplied in the request, Enroll for the server administrators (a Linux host's request is made on the host and submitted from their seat) and for an SBD TLS Servers computer group (a Windows server requesting into its own computer store is checked against its computer account, so each later course adds its server to that group first), no autoenrollment, and exportable keys only if the course 1.19 recovery plan explicitly says so.
 - [ ] Record each template's version, settings, and justification through the lesson 8 change process before publishing.
 - [ ] Publish exactly these three templates on the issuing CA and remove any default template the plan does not call for — an unpublished template cannot be mis-enrolled.
 
@@ -224,14 +224,14 @@ Get-ADObject -SearchBase 'CN=Certificate Templates,CN=Public Key Services,CN=Ser
 
 Notes / result / date: __________________________
 
-## Validate enrollment, revocation, and recovery
+## Validate enrollment, revocation, and renewal
 
 - [ ] Turn on autoenrollment: create SBD Certificate Autoenrollment, a GPO that enables Certificate Services Client - Auto-Enrollment with renewal and template updates, and link it at the domain root, so each member enrolls only for the templates whose permissions name it. The controllers' requests reach SBD-SUBCA01 over RPC across the core from VLAN 10, so confirm the register's enrollment row first. Refresh policy: both controllers receive SBD Domain Controller Authentication certificates and the pilot, SBD-PKI-MGMT01, an SBD Computer Authentication certificate, without a human touching a request.
 - [ ] On SBD-DC01, outside VLAN 30, export its new certificate and the pilot's, clear the URL cache, and run the full verification on each: the chain must reach the approved root and every AIA and CDP URL must answer from pki.sbd.test with current CRL dates — cached success is not evidence of publication.
 - [ ] Enroll a disposable test certificate, revoke only that one, publish an updated issuing CRL, and verify on SBD-DC01, with the cache cleared again, that a fresh evaluation detects the revocation. Diagnose retrieval or stale-publication problems rather than turning off revocation checks.
-- [ ] Record owners and reminders for root and issuing CRL publication, certificate renewal, backup, and an isolated recovery rehearsal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry, and start each one by setting the root's clock against the approved reference.
+- [ ] Record owners and reminders for root and issuing CRL publication and certificate renewal. Schedule offline root ceremonies early enough to transfer and publish replacement CRLs before expiry, and start each one by setting the root's clock against the approved reference. Backups are not set up here: course 1.19 defines and schedules the issuing CA's backup — database, key and configuration — with the rest of the network's, accounts for the root's ceremony backup from lesson 2, and rehearses recovery, so list those items for it in the record.
 - [ ] Take the first SCAP baselines of SBD-SUBCA01 and SBD-PKI-MGMT01 the course 1.4 way: SCC and the Windows Server benchmark from the course 1.4 media set, checked against its hashes, at the same versions and profile, run locally, with each session hashed and carried to C:\Evidence\pki\<host name> on SBD-DC01, where its hashes must match again, as SBD-DC02's did in course 1.4. List the IIS STIGs the publication site now falls under with an owner and a review date, then rescan both controllers the same way, because their certificates, root trust and autoenrollment policy are this course's change.
-- [ ] Close what this course fixed: in copies of the course 1.5 checklists in C:\Evidence\pki\checklists on SBD-DC01, answer the rule that every domain controller has a PKI server certificate Not A Finding, with each controller's certificate as the observation, and record course 1.4's POA&M candidate as closed. The companion rule, that those certificates come from the DoD PKI or an approved External Certificate Authority, stays open: record it in C:\Evidence\exception-record.csv if it is not there yet, because this lab's own hierarchy stands in for DoD's. Back up the new GPOs and export their links, file the enrollment, urlfetch, revocation, template and owner records with the scans, and seal C:\Evidence\pki.
+- [ ] Close what this course fixed: in copies of the course 1.5 checklists in C:\Evidence\pki\checklists on SBD-DC01, answer the rule that every domain controller has a PKI server certificate Not A Finding, with each controller's certificate as the observation, and record course 1.4's POA&M candidate as closed. The companion rule, that those certificates come from the DoD PKI or an approved External Certificate Authority, stays open: record it in C:\Evidence\exception-record.csv if it is not there yet, because this lab's own hierarchy stands in for DoD's. Export the new GPOs' reports and links for the change record (course 1.19 backs the GPOs up), file the enrollment, urlfetch, revocation, template and owner records with the scans, and seal C:\Evidence\pki.
 
 **Commands:**
 
@@ -253,9 +253,8 @@ certutil -crl
 # Back on SBD-DC01: the test certificate must now fail as revoked
 certutil -urlcache * delete
 certutil -verify -urlfetch C:\Evidence\pki\test.cer
-# After the scans (each carried to C:\Evidence\pki\<host name> on SBD-DC01) and the checklist updates: back up the new GPOs, then seal the evidence
-New-Item -ItemType Directory C:\Evidence\pki\gpo-backup -Force | Out-Null
-Backup-GPO -Name 'SBD Certificate Autoenrollment' -Path C:\Evidence\pki\gpo-backup -Comment 'Course 1.6'   # and any root-trust GPO from lesson 5
+# After the scans (each carried to C:\Evidence\pki\<host name> on SBD-DC01) and the checklist updates: record the new GPOs (course 1.19 backs them up), then seal the evidence
+Get-GPOReport -Name 'SBD Certificate Autoenrollment' -ReportType Html -Path C:\Evidence\pki\gpo-report-autoenrollment.html   # and any root-trust GPO from lesson 5
 (Get-GPInheritance -Target 'DC=sbd,DC=test').GpoLinks | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv C:\Evidence\pki\gpo-links.csv -NoTypeInformation
 Get-ChildItem C:\Evidence\pki -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\pki-manifest.csv -NoTypeInformation
 Get-FileHash -Algorithm SHA256 C:\Evidence\pki-manifest.csv
@@ -263,7 +262,7 @@ Get-FileHash -Algorithm SHA256 C:\Evidence\pki-manifest.csv
 
 **Verify:** Both controllers and the pilot enroll hands-free and verify with live retrieval from pki.sbd.test; after revocation and publication the test certificate is rejected for the expected reason; SBD-SUBCA01 and SBD-PKI-MGMT01 have first baselines and both controllers a rescan; and the domain controller certificate rule is answered with its evidence, its DoD companion recorded as an exception.
 
-**Evidence:** Finish the PKI checklist with each controller's and the pilot's certificate details, urlfetch and revocation results, renewal dates and recovery owners, the first baselines of SBD-SUBCA01 and SBD-PKI-MGMT01, the controllers' rescans, the updated checklist copies, the exception-record row, the GPO backup and link export, and C:\Evidence\pki-manifest.csv with its own hash.
+**Evidence:** Finish the PKI checklist with each controller's and the pilot's certificate details, urlfetch and revocation results, renewal dates and owners, the items handed to course 1.19 for backup, the first baselines of SBD-SUBCA01 and SBD-PKI-MGMT01, the controllers' rescans, the updated checklist copies, the exception-record row, the GPO report and link export, and C:\Evidence\pki-manifest.csv with its own hash.
 
 Notes / result / date: __________________________
 
@@ -279,7 +278,7 @@ Notes / result / date: __________________________
 - [NIST · SP 800-57 Part 1 Rev. 5, Recommendation for key management](https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final)
 - [Microsoft · Manage certificate templates](https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/manage-certificate-templates)
 - [Microsoft · Configure certificate autoenrollment](https://learn.microsoft.com/en-us/windows-server/networking/core-network-guide/cncg/server-certs/configure-server-certificate-autoenrollment)
-- [Microsoft · What's new in Windows Server 2025](https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025)
+- [Microsoft · What's new in Windows Server (newest release)](https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025)
 - [Microsoft · On-premises key trust deployment guide (domain controller certificates)](https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/deploy/on-premises-key-trust)
 - [DISA · Security Content Automation Protocol (SCC and SCAP benchmarks)](https://www.cyber.mil/stigs/SCAP/)
 - [DISA · STIGs document library (STIGs, SRGs and the CCI list)](https://www.cyber.mil/stigs/downloads)

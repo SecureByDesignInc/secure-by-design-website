@@ -11,7 +11,7 @@ Invoke-Command SBD-DC01, SBD-DC02 { auditpol /get /category:* /r } | Out-File C:
 # From SBD-ADMIN-SRV01 (Tier 1): no collector runs yet.
 Invoke-Command SBD-SYSLOG01 { Get-Service Wecsvc | Select-Object Status, StartType }
 
-What success looks like: The design names each stage's job, building course, scope, retention, and readers; the no-delete rule is written; the two streams and their pickup folders are named; and the register carries the five pipeline paths with owners.
+What success looks like: The design names each stage's job, building course, scope, chosen retention period with its reason, and readers; the no-delete rule is written; the two streams and their pickup folders are named; and the register carries the five pipeline paths with owners, F24 for the router's deny log included.
 
 2. Turn on the right auditing
 # From AdminJumpBox01 (Tier 0): effective audit policy and the policy result on a DC.
@@ -36,20 +36,27 @@ What success looks like: The subscription is enabled, events from every member o
 
 4. Keep the collector trustworthy
 wecutil gr SBD-ForwardedSecurity
-wevtutil sl ForwardedEvents /ms:4294967296 /rt:false
+wevtutil sl ForwardedEvents /ms:4294967296 /rt:false   # 4 GB in this sample: size it to hold your chosen buffer
 wevtutil gl ForwardedEvents
 Get-WinEvent -LogName ForwardedEvents -Oldest -MaxEvents 1 | Select-Object TimeCreated
 Get-Volume -DriveLetter D | Select-Object SizeRemaining, Size
 Get-ChildItem D:\Logs\Syslog -Recurse -File | Sort-Object LastWriteTime -Descending | Select-Object -First 5 FullName, LastWriteTime
 
-What success looks like: Every enrolled source is active with a recent heartbeat, ForwardedEvents overwrites oldest-first and holds more than 14 days, the data volume has headroom, every registered syslog sender wrote today, and the failure response names its owner.
+What success looks like: Every enrolled source is active with a recent heartbeat, ForwardedEvents overwrites oldest-first and holds more than the chosen buffer period, the data volume has headroom, every registered syslog sender wrote today, and the failure response names its owner.
 
 5. Prove collection and hand off
 # On SBD-SYSLOG01 (Tier 1 session): the failed sign-in, and the router's deny of the probe to SBD-DHCP01.
 Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName
 Select-String -Path D:\Logs\Syslog\*\*.log -Pattern '10\.0\.20\.10' | Select-Object -Last 3
-# On SBD-REPO01: check the configuration and the TLS session, then send the test message.
-rsyslogd -N1
+# On SBD-REPO01: the TLS driver, then /etc/rsyslog.d/sbd-forward.conf:
+sudo dnf install rsyslog-gnutls
+#   global(DefaultNetstreamDriverCAFile="/etc/pki/tls/certs/ca-bundle.crt")
+#   *.* action(type="omfwd" target="SBD-SYSLOG01.sbd.test" port="6514" protocol="tcp"
+#          StreamDriver="gtls" StreamDriverMode="1" StreamDriverAuthMode="x509/name"
+#          StreamDriverPermittedPeers="SBD-SYSLOG01.sbd.test")
+# Check the configuration, restart, confirm the TLS session, then send the test message.
+sudo rsyslogd -N1
+sudo systemctl restart rsyslog
 ss -tn 'dport = :6514'
 logger -t sbd-collector-proof 'SBD-REPO01 syslog over TLS test'
 # Back on SBD-SYSLOG01: the test message in REPO01's daily file.

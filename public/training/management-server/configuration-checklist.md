@@ -37,7 +37,7 @@ Notes / result / date: __________________________
 ## Build and harden SBD-MGMT01
 
 - [ ] Build SBD-MGMT01 as a Windows Server virtual machine — on SBD-HV07 beside SBD-REPO01, where Inside the Network places it — with the hypervisor's time synchronization turned off, so the domain is its only clock, a separate data volume for the record (D: in this sample), the static address 10.0.70.10/24 with the core's VLAN 70 interface as gateway (10.0.70.1 in this sample), and both domain controllers for DNS. Join it straight into the Servers OU, so course 1.5's STIG policies, course 1.8's tier logon policies, course 1.10's event-forwarding GPO (linked to the Servers OU in course 1.10) and course 1.14's Ring 3 update policy apply from its first boot.
-- [ ] Check that it took its place: time from a domain controller within course 1.3's threshold, and an update policy that names SBD-WSUS01 and Ring 3, with SBD-WSUS01 listing it there. Add it to SBD Event Sources from AdminJumpBox01, widen the collector's WinRM scope to 10.0.70.10 (F17) from SBD-ADMIN-SRV01, and restart it so its security events reach SBD-SYSLOG01.
+- [ ] Check that it took its place: time from a domain controller, as course 1.3 set up, and an update policy that names SBD-WSUS01 and Ring 3, with SBD-WSUS01 listing it there. Add it to SBD Event Sources from AdminJumpBox01, widen the collector's WinRM scope to 10.0.70.10 (F17) from SBD-ADMIN-SRV01, and restart it so its security events reach SBD-SYSLOG01.
 - [ ] Close it to everything but its administration: Windows Defender Firewall on in every profile, and the existing Remote Desktop and Windows Remote Management rules scoped to SBD-ADMIN-SRV01 (10.0.60.20), because allow rules add up and a new, narrower rule would not restrict the broad ones. Install no other role and no agent; course 1.8's Servers OU policy already denies Tier 0 accounts here.
 - [ ] Prepare the record on D:: an Inventory folder with inheritance removed and full control for SYSTEM and Administrators only — the volume's inherited defaults let ordinary users read and create files — holding current, history, sources and findings folders. Every published version is copied into history with its SHA-256 in a hash list, and every change gets a line in a change log: who, what, why, and the change record it answers.
 - [ ] Prove the closure: a remote session from SBD-ADMIN-SRV01 opens, the same attempt from SBD-ADMIN-PC01 fails at the core because rule A02 names only the Tier 1 seat, and the firewall's remote-address lists show only 10.0.60.20 for management.
@@ -108,7 +108,7 @@ $s.FindAll() | ForEach-Object { $p = $_.Properties; [pscustomobject]@{ Name = "$
 Invoke-Command SBD-DHCP01 { Get-DhcpServerv4Lease -ScopeId 10.0.80.0 -AllLeases | Select-Object IPAddress, ClientId, HostName, AddressState, LeaseExpiryTime } | Export-Csv "$d\dhcp-leases.csv" -NoTypeInformation
 Invoke-Command SBD-WSUS01 { Get-WsusComputer -All | Select-Object FullDomainName, IPAddress, LastSyncTime, LastReportedStatusTime, RequestedTargetGroupName } | Export-Csv "$d\wsus-computers.csv" -NoTypeInformation
 scp -r <your-account>@SBD-REPO01.sbd.test:/srv/repo-records/* "$d\repo01\"
-# On SBD-REPO01: who fetched packages (RHEL family; /var/log/apache2/access.log on Ubuntu)
+# On SBD-REPO01: who fetched packages
 sudo awk '{print $1}' /var/log/httpd/access_log | sort | uniq -c
 # Back on SBD-ADMIN-SRV01: hash the set and file it on SBD-MGMT01
 Get-ChildItem $d -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv "$d-hashes.csv" -NoTypeInformation

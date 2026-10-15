@@ -85,7 +85,7 @@ families.push(['PL','Planning']);
  core.controls.push('AC-6','AU-12');
  core.items.push('Management plane: switch management only on VLAN 100 from AdminJumpBox01, named administrator accounts, switch syslog (including denies) to SBD-SYSLOG01, and versioned configuration backups.');
  const backup=facilities.find(f=>f.id==='backup');
- backup.items.push('Backup path: each server writes to a protected local backup volume; custodians carry DC, CA, and audit backups here under the media custody procedure. There is no network path to this facility.','Document the single-instance design in the system security plan, with backups as its mitigation (PL-2): one server each suits the small network and modest resource needs. The risk response records the remaining risk (RA-7), and only the authorizing official accepts it (CA-6); track restore gaps in the POA&M (CA-5).');
+ backup.items.push('Backup path: each server writes to a protected local backup volume; custodians carry DC, CA, and audit backups here under the media custody procedure. There is no network path to this facility.','Track restore gaps found in recovery exercises in the POA&M (CA-5).');
  backup.controls.push('CA-5','PL-2','RA-7','CA-6');
 }
 // Roles added to existing systems (no new servers): NPS runs on SBD-DHCP01 for 802.1X port admission, and SBD-APPS01

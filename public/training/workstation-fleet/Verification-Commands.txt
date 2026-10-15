@@ -9,19 +9,21 @@ the example names, addresses, and paths to your own plan. Nothing in this file r
 Get-FileHash -Algorithm SHA256 C:\Staging\Windows-client-reference.vhdx
 # On AdminJumpBox01 (Tier 0): the join account's delegation (svc-fleet-join in this sample) and the OU's links
 (Get-Acl 'AD:\OU=Workstations,OU=SBD,DC=sbd,DC=test').Access | Where-Object IdentityReference -match 'svc-fleet-join|SBD Tier 2 Admins' | Select-Object IdentityReference, ActiveDirectoryRights, ObjectType
-Get-GPInheritance -Target 'OU=Workstations,OU=SBD,DC=sbd,DC=test'
+(Get-GPInheritance -Target 'OU=Workstations,OU=SBD,DC=sbd,DC=test').GpoLinks | Select-Object Order, DisplayName   # course 1.8's tier logon GPO stays at order 1
 Get-GPOReport -Name 'SBD Workstation Firewall' -ReportType Html -Path C:\Evidence\workstation-fleet\workstation-firewall.html
+Get-GPOReport -Name 'SBD Workstation DNS' -ReportType Html -Path C:\Evidence\workstation-fleet\workstation-dns.html
 
-What success looks like: The image is hashed and recorded, the join account holds only Create Computer objects on the Workstations OU, and the client STIG, loopback, local Administrators and firewall GPO links show on that OU, beside course 1.8's tier logon GPO, before any machine exists in it.
+What success looks like: The image is hashed and recorded, the join account holds only Create Computer objects on the Workstations OU, and the client STIG, loopback, local Administrators, firewall and DNS registration GPO links show on that OU below course 1.8's tier logon GPO, still at link order 1, before any machine exists in it.
 
 2. Join the pilot and inspect first boot
 Get-ADComputer -SearchBase 'OU=Workstations,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DNSHostName
 gpresult /r /scope:computer
 w32tm /query /source   # a domain controller, never Local CMOS Clock or the hypervisor
 Resolve-DnsName SBD-PC01.sbd.test -Server SBD-DC02.sbd.test
+Get-ItemProperty 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient' | Select-Object RegistrationEnabled   # 0: the PC leaves registration to SBD-DHCP01
 Test-NetConnection SBD-PC02.sbd.test -Port 445   # expected: TcpTestSucceeded False
 
-What success looks like: All three pilots sit in the Workstations OU with STIG policy applied, time from a domain controller and DNS registered on both DCs, peer SMB/RDP fails as designed, and the join events are visible in analysis.
+What success looks like: All three pilots sit in the Workstations OU with STIG policy applied, time from a domain controller and DNS registered by SBD-DHCP01 on both DCs with the PC's own registration off, peer SMB/RDP fails as designed, and the join events are visible in analysis.
 
 3. Manage local administrators with Windows LAPS
 # On AdminJumpBox01 (Tier 0): who holds the LAPS rights on the Workstations OU
@@ -52,7 +54,7 @@ netsh lan show interfaces
 auditpol /get /subcategory:"Network Policy Server"
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=6272,6273} -MaxEvents 5 | Select-Object TimeCreated, Id
 
-What success looks like: NPS auditing records success and failure; every pilot authenticates with EAP-TLS and NPS logs the grant (6272); a failed authentication is logged but, in monitor mode, the port still forwards on VLAN 80; the ports name VLAN 90 as their failure VLAN; and the NPS events appear in the collector.
+What success looks like: The network policy admits Domain Computers with EAP-TLS; NPS auditing records success and failure; every pilot authenticates with EAP-TLS and NPS logs the grant (6272); a failed authentication is logged but, in monitor mode, the port still forwards on VLAN 80; the ports name VLAN 90 as their failure VLAN; and the NPS events appear in the collector.
 
 6. Scale to fifty, enforce 802.1X, and prove by sample
 # On AdminJumpBox01 (Tier 0): the fleet's computer objects and its group
@@ -67,9 +69,9 @@ Get-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object MachineName, 
 What success looks like: Fifty computer objects sit in the Workstations OU and in SBD Fleet Computers, SBD-TEST80 is retired, every PC enrolled and authenticates, the ports enforce 802.1X with the unenrolled laptop quarantined in VLAN 90, scope utilization matches the rollout, every sampled host passes the full check set, and fleet events flow through the pipeline.
 
 7. Delta scan the fleet and hand off
-# Inside SBD-ADMIN-PC01 (Tier 2), with the media set as D: (expected: True)
-$scc = Get-Item 'D:\<SCC installer>'
-(Get-FileHash $scc.FullName -Algorithm SHA256).Hash -in (Import-Csv D:\connected-side-hashes.csv).Hash
+# Inside SBD-ADMIN-PC01 (Tier 2): the installer course 1.8 kept still matches the record (expected: True)
+$scc = Get-Item 'C:\Staging\DISA\<SCC installer>'
+(Get-FileHash $scc.FullName -Algorithm SHA256).Hash -in (Import-Csv C:\Staging\DISA\connected-side-hashes.csv).Hash
 # Per sampled PC: carry the installer over remote management (A03), install and scan there, bring the results back
 $s = New-PSSession SBD-PC07.sbd.test
 Copy-Item $scc.FullName -ToSession $s -Destination C:\Windows\Temp\
@@ -77,6 +79,6 @@ Copy-Item '<SCC results folder on the PC>' -FromSession $s -Destination C:\Evide
 # After the scans: this seat's record, hashed
 Get-ChildItem C:\Evidence\workstation-fleet -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\workstation-fleet-manifest.csv -NoTypeInformation
 
-What success looks like: SBD-ADMIN-PC01 runs its own SCC copy with a dated first baseline, the sampled endpoints hold dated Windows client baselines with SCC removed afterwards, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.
+What success looks like: The installer course 1.8 kept on SBD-ADMIN-PC01 still matches its recorded hash, the sampled endpoints hold dated Windows client baselines with SCC removed afterwards, the infrastructure rescans carry attributed deltas, and the fleet inventory is complete and filed.
 
 © 2026 Secure By Design Team LLC

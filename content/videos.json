@@ -204,7 +204,7 @@
         "Prove + troubleshoot"
       ],
       "outcomes": [
-        "Explain why Kerberos, logs and certificates need agreeing clocks, and plan the hierarchy, reference, thresholds and service path.",
+        "Explain why Kerberos, logs and certificates need agreeing clocks, and plan the hierarchy, reference, fallback and service path.",
         "Make SBD-DC01, the PDC emulator, the reliable source serving its own clock, with hypervisor time sync off on both controllers.",
         "Keep every Windows member and Linux server on the hierarchy, with nothing from Group Policy or a hypervisor overriding it.",
         "Prove the chain with sources, offsets and events, and fix time faults, a moved PDC emulator role included."
@@ -212,7 +212,7 @@
       "stages": [
         {
           "title": "Plan the domain's time",
-          "detail": "Every sign-in, log entry and certificate in this network depends on clocks that agree, and an air-gapped network has no internet time to lean on. Learn why time matters here and how the Windows Time hierarchy carries one clock from SBD-DC01 to every system, then write down the reference, the thresholds and the service path you will hold the domain to."
+          "detail": "Every sign-in, log entry and certificate in this network depends on clocks that agree, and an air-gapped network has no internet time to lean on. Learn why time matters here and how the Windows Time hierarchy carries one clock from SBD-DC01 to every system, then write down the reference, the fallback and the service path you will hold the domain to."
         },
         {
           "title": "Make SBD-DC01 the domain's time source",
@@ -224,7 +224,7 @@
         },
         {
           "title": "Prove the time chain",
-          "detail": "A source you configured is a claim until every link answers to it. Read each system's source and status, measure offsets against the thresholds from lesson 1, and keep the events and readings that let an assessor see the time chain for themselves."
+          "detail": "A source you configured is a claim until every link answers to it. Read each system's source and status, measure its offsets and confirm they are small and stable, and keep the events and readings that let an assessor see the time chain for themselves."
         },
         {
           "title": "Find the time fault and record the fix",
@@ -374,7 +374,7 @@
         },
         {
           "title": "Set the rescan cadence and exception record",
-          "detail": "Hardening is a state you maintain, not a step you finish. Close the course with an owned exception record and a backed-up policy state, and decide who rescans, when, and which event forces an early look."
+          "detail": "Hardening is a state you maintain, not a step you finish. Close the course with an owned exception record and a recorded policy state — reports and links, while course 1.19 backs the GPOs up — and decide who rescans, when, and which event forces an early look."
         }
       ],
       "outcomeSummary": "OUs built for delegation, DISA policies applied where they belong, and a rescan that proves what changed.",
@@ -439,7 +439,7 @@
           "detail": "The default template set is a menu, not a deployment. Duplicate the three templates this network actually needs — domain controller, computer and server authentication — set their cryptography deliberately, and publish only those."
         },
         {
-          "title": "Validate enrollment, revocation, and recovery",
+          "title": "Validate enrollment, revocation, and renewal",
           "detail": "Finish the way relying systems see it: both domain controllers and a pilot machine enroll on their own, validate against the live publication site, and reject a certificate you revoke — then the closing scans record what this course changed and close course 1.4's domain controller certificate finding."
         }
       ],
@@ -500,7 +500,7 @@
       "estimatedHours": 2.4,
       "title": "Run DHCP on SBD-DHCP01",
       "subtitle": "Workstation leases, secure name registration & an audited lease trail",
-      "description": "Design and build the workstation VLAN's addressing service on SBD-DHCP01: a full-subnet scope with exclusions and the three options clients trust, directory authorization, the core's relay verified rather than built, client names registered under one dedicated low-privilege account with name protection, a lease history kept beyond Windows' weekly overwrite, backups, and a proof that a name takeover fails.",
+      "description": "Design and build the workstation VLAN's addressing service on SBD-DHCP01: a full-subnet scope with exclusions and the three options clients trust, directory authorization, the core's relay verified rather than built, client names registered under one dedicated low-privilege account with name protection, a lease history kept beyond Windows' weekly overwrite, the restore note course 1.19's backup relies on, and a proof that a name takeover fails.",
       "tags": [
         "Windows Server",
         "DHCP",
@@ -521,7 +521,7 @@
         "Design the VLAN 80 scope, its exclusions, lease length, and options, and confirm the core's relay under F04.",
         "Build and authorize SBD-DHCP01 on a member server run by its own server-administration accounts.",
         "Register client names under one dedicated account with name protection, never through DnsUpdateProxy.",
-        "Keep the lease history and backups, and prove the service, including a refused name takeover."
+        "Keep the lease history, write the restore note for course 1.19's backup, and prove the service, including a refused name takeover."
       ],
       "stages": [
         {
@@ -537,8 +537,8 @@
           "detail": "Course 1.2's zone accepts only secure updates, so the real question is who writes VLAN 80's records. Give that job to one dedicated, unprivileged account, turn on name protection so no device can take over another's name, and keep the DnsUpdateProxy group empty — it strips the protection off every record its members create."
         },
         {
-          "title": "Audit leases and back up the server",
-          "detail": "A router's deny log names addresses, not machines; the DHCP audit log is how you turn an address at a moment in time into a workstation. Keep that log longer than the week Windows keeps it, review who holds leases, know what an unauthorized DHCP server can and can't do here, and back the server up so it can be rebuilt."
+          "title": "Audit leases and write the restore note",
+          "detail": "A router's deny log names addresses, not machines; the DHCP audit log is how you turn an address at a moment in time into a workstation. Keep that log longer than the week Windows keeps it, review who holds leases, know what an unauthorized DHCP server can and can't do here, and write the restore note that course 1.19's backup of the server relies on."
         },
         {
           "title": "Prove the service and hand off",
@@ -615,7 +615,7 @@
         },
         {
           "title": "Move the scan tools, rescan, and hand off",
-          "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the physical seats, rescan what changed, and hand the next course a network administered only from somewhere safe."
+          "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the three seats, rescan what changed, and hand the next course a network administered only from somewhere safe."
         }
       ],
       "outcomeSummary": "Privileged sessions that only ever start from the right seat.",
@@ -663,7 +663,7 @@
         "One Linux source"
       ],
       "outcomes": [
-        "Design the Linux package source: one distribution, the repositories mirrored, verified upstream keys, and the register rows.",
+        "Design the Linux package source: one Red Hat Enterprise Linux–family distribution, the repositories mirrored, verified upstream keys, and the register rows.",
         "Build SBD-REPO01 as a hardened, minimal web server administered only from the Tier 1 seat.",
         "Mirror, verify and publish dated snapshots, with promotion and rollback on record.",
         "Hand later courses a tested client configuration that trusts only SBD-REPO01 and the verified keys."
@@ -887,7 +887,7 @@
         "Alerts someone owns"
       ],
       "outcomes": [
-        "Plan analysis — indexes, 90-day retention, roles, and console paths — and build SBD-SPLUNK01 on domain time, patched only from SBD-REPO01.",
+        "Plan analysis — indexes, a retention period set for your environment, roles, and console paths — and build SBD-SPLUNK01 on domain time, patched only from SBD-REPO01.",
         "Install Splunk Enterprise and forward the collector's two streams over TLS, with counts and times that match the collector.",
         "Build the working searches and turn them, and the pipeline's own failures, into tested alerts with named responders.",
         "Trace one event from its source through the collector and the repository to the analyst's screen."
@@ -895,7 +895,7 @@
       "stages": [
         {
           "title": "Plan analysis and build SBD-SPLUNK01",
-          "detail": "Analysis works on a copy, not on the record: SBD-AUDIT01 keeps the evidence, and SBD-SPLUNK01 keeps 90 days of searchable events for the people who question them. Decide the indexes, retention, roles, and console paths first, then build the domain-joined Linux host that runs it — patched only from SBD-REPO01 and on domain time from its first boot."
+          "detail": "Analysis works on a copy, not on the record: SBD-AUDIT01 keeps the evidence, and SBD-SPLUNK01 keeps a searchable working copy, for a period your environment sets, for the people who question them. Decide the indexes, retention, roles, and console paths first, then build the domain-joined Linux host that runs it — patched only from SBD-REPO01 and on domain time from its first boot."
         },
         {
           "title": "Install Splunk and bring in the streams",
@@ -907,7 +907,7 @@
         },
         {
           "title": "Own the alerts",
-          "detail": "An alert nobody owns is a log entry with extra steps. Turn the working searches and the pipeline's own failure conditions into scheduled alerts, each with a threshold, a named responder, and a written first response; test each one by causing it, tune the noise, and set the review cadence AU-6 asks for."
+          "detail": "An alert nobody owns is a log entry with extra steps. Turn the working searches and the pipeline's own failure conditions into scheduled alerts, each with a threshold set for your environment, a named responder, and a written first response; test each one by causing it, tune the noise, and set the review cadence AU-6 asks for."
         },
         {
           "title": "Prove the chain and hand off",
@@ -994,7 +994,7 @@
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: SBD-ADMIN-PC01 gets its own SCAP Compliance Checker (SCC) copy and its first baseline, the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.15."
+          "detail": "The cadence meets its first population: the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark from SBD-ADMIN-PC01's own SCAP Compliance Checker (SCC) copy, installed in course 1.8, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.15."
         }
       ],
       "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",
@@ -1013,7 +1013,7 @@
         "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
         "package": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Learning-Package.zip",
-        "pages": 18,
+        "pages": 20,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       }
     },
@@ -1062,7 +1062,7 @@
         },
         {
           "title": "Target the rings with computer groups and Group Policy",
-          "detail": "Rings become mechanics: four computer groups on SBD-WSUS01, client-side targeting so each computer files itself into its ring, and one Group Policy object per ring that names the server, the ring and its install behaviour. The domain controllers get a ring of their own: they download on their own but install only when Tier 0 starts it."
+          "detail": "Rings become mechanics: a computer group per ring on SBD-WSUS01, plus one for SBD-AUDIT01, client-side targeting so each computer files itself into its ring, and one Group Policy object per ring that names the server, the ring and its install behaviour. The domain controllers get a ring of their own: they download on their own but install only when Tier 0 starts it, and SBD-AUDIT01 waits for its audit custodian the same way."
         },
         {
           "title": "Run the first cycle and prove it",
@@ -1312,10 +1312,10 @@
     {
       "categoryOrder": 19,
       "number": "1.19",
-      "estimatedHours": 2.5,
+      "estimatedHours": 2.9,
       "title": "Prove you can recover",
       "subtitle": "Backups with custody, one rehearsed restore & the closing record",
-      "description": "Close the Build path by proving the network can come back: scheduled directory backups and a CA backup under ceremony-grade custody, Group Policy, DHCP, the repository and analysis configuration, the log archive, and the living records in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
+      "description": "Close the Build path by proving the network can come back: every backup in the network defined and scheduled in one place — the directory, the CA under ceremony-grade custody, Group Policy, DHCP, the repository and analysis configuration, the VLAN 40 business services with their permissions, logins and certificates, the log archive, and the living records — in one hashed catalog, a timed restore rehearsal in isolation, and the recovery record that completes the Body of Evidence.",
       "tags": [
         "Windows Server",
         "Backup and recovery",
@@ -1323,7 +1323,7 @@
         "AD Recycle Bin",
         "Contingency planning"
       ],
-      "platform": "Windows Server",
+      "platform": "Windows Server · Linux",
       "systems": [
         "SBD-DC01",
         "SBD-DC02",
@@ -1332,7 +1332,11 @@
         "SBD-AUDIT01",
         "SBD-REPO01",
         "SBD-SPLUNK01",
-        "SBD-MGMT01"
+        "SBD-MGMT01",
+        "SBD-FS01",
+        "SBD-SQL01",
+        "SBD-APPS01",
+        "SBD-WEB01"
       ],
       "artLabels": [
         "Catalog with custody",
@@ -1340,7 +1344,7 @@
         "The closing record"
       ],
       "outcomes": [
-        "Back up the directory, CA, policy, DHCP, repository, analysis configuration, logs, and records into one verified catalog.",
+        "Define and schedule every backup in the network — directory, CA, policy, DHCP, repository, analysis configuration, business services, logs, and records — in one verified catalog.",
         "Rehearse a real system state restore in isolation, measured against written objectives.",
         "File the tested-recovery record that completes the Body of Evidence for path 2."
       ],
@@ -1348,15 +1352,15 @@
       "stages": [
         {
           "title": "Decide what recovery must prove",
-          "detail": "Recovery starts as a list of promises: which systems and records must be restorable, how old a restored copy may be, how long restoration may take — written as commitments the rest of the course exists to keep."
+          "detail": "Recovery starts as a list of promises: which systems and records must be restorable, how old a restored copy may be, how long restoration may take, and the one schedule that says how each is backed up — written as commitments the rest of the course exists to keep."
         },
         {
-          "title": "Back up the directory, on schedule",
-          "detail": "System state from both controllers, on a schedule, to the protected target — plus the quiet feature that handles the most common 'disaster' of all: the Recycle Bin for deleted directory objects."
+          "title": "Back up Tier 0: directory, CA, and policy",
+          "detail": "The Tier 0 rows of the schedule: system state from both controllers, the issuing CA under ceremony-grade protection, and the whole Group Policy estate with its links — plus the quiet feature that handles the most common 'disaster' of all: the Recycle Bin for deleted directory objects."
         },
         {
-          "title": "Back up the CA, services, policy, and records",
-          "detail": "The directory is not the only thing the network cannot re-derive: the issuing CA's database and key, the Group Policy set, SBD-DHCP01's database, SBD-REPO01's snapshots, SBD-SPLUNK01's configuration, the log archive, the inventory, and the boundary's records each get their protected, cataloged copy."
+          "title": "Back up the member servers and records",
+          "detail": "The rest of the schedule: SBD-DHCP01 and the inventory, SBD-REPO01 and SBD-SPLUNK01, and the business services — SBD-FS01's shares with their permissions, SBD-SQL01's databases with the logins they depend on, SBD-APPS01's and SBD-WEB01's configuration and certificates — then the log archive and the boundary's records, all in one hashed catalog."
         },
         {
           "title": "Carry the copies to the offline cabinet",
@@ -1387,7 +1391,7 @@
         "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
         "package": "/training/prove-recovery/SecureByDesign-prove-recovery-Learning-Package.zip",
-        "pages": 18,
+        "pages": 19,
         "cover": "/training/prove-recovery/workbook-cover.webp"
       }
     },

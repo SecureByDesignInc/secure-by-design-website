@@ -143,7 +143,7 @@ Notes / result / date: __________________________
 - [DISA · STIG Group Policy Objects package](https://www.cyber.mil/stigs/gpo)
 - [NIST · National Checklist Program (SP 800-70)](https://csrc.nist.gov/projects/national-checklist-program)
 - [NIST · SP 800-53 Rev. 5 security controls](https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final)
-- [Microsoft · What's new in Windows Server 2025](https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025)
+- [Microsoft · What's new in Windows Server (newest release)](https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-windows-server-2025)
 - [Microsoft · Get-FileHash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash)
 
 © 2026 Secure By Design Team LLC

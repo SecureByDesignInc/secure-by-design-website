@@ -65,3 +65,15 @@ Validator passes (5 lessons, 150 minutes, 2.5 h). Lesson ids, lesson counts and 
   - In `security.js`, add `repo` to F09's sources, and change the comment "The Linux package repository uses DNS only" to "uses DNS and time".
   - `tests/video-catalog.test.mjs` must allow https://chrony-project.org/ and https://www.rfc-editor.org/ (decisions.md rule 9).
   - The other integration items in notes.md (courses.js, training-progress, the migration for `time`, workbook) still apply.
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 13: labNote drops "Thresholds and intervals below are sample decisions".
+- Decision 13: lesson 1 step 4 "Set the thresholds you will hold" (1 s / 2 s, DISA one-second, checked daily) → "Decide what verification will show": each system names its hierarchy source, offsets small and stable; Kerberos's five minutes is the failure point, not a target.
+- Decision 13: lesson 1 summary, step 3 (reference check "how often" → "when", restart/restore/revert of SBD-DC01 included), check, evidence, objective 3, quiz 1 (question, answers, explanation; key unchanged at 1), recap 1 no longer name thresholds or an interval; disa-library dropped from lesson 1's sources (it supported only the one-second figure; still used by lesson 3).
+- Decision 13: lesson 2 step 5, command comment and check: correction "only past the threshold" → by the measured difference when the readings differ; check logs both readings and any correction.
+- Decision 13: lesson 3 chronyc tracking comment and next; lesson 4 summary, steps 2, 3 and 5, check ("reference check log is current" → kept with them), evidence (threshold statement → per-system source and offsets summary), objective 2, quiz 2 answer, quiz 3 explanation, recap 2; lesson 5 check: "inside one second" → small and stable.
+- Decision 1: lesson 3 step 4 and command: Ubuntu path /etc/chrony/chrony.conf and the ntpd/tos maxdist clause removed; /etc/chrony.conf on the Red Hat Enterprise Linux family, plus `sudo systemctl enable chronyd; sudo systemctl restart chronyd`.
+- Guide: facts rows Thresholds/Reference check → Verification (source · small, stable offsets) / reference check without schedule; completeCaption; lesson 1 step title, mistake, SC-45(1) body (frequency and limit are environment/policy assignments) and question, checklist; lesson 2 control question; lesson 4 checklist.
+- Catalog: outcome 1 (thresholds → fallback); stages re-synced from lesson summaries.
+- Validated: node validate-draft.mjs domain-time passes.

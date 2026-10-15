@@ -25,8 +25,8 @@
       "10.0.20.20 / 24 · VLAN 20 · collector"
     ],
     [
-      "Retention (sample values)",
-      "Collector ≥ 14 days · repository 1 year · analysis 90 days"
+      "Retention",
+      "Collector buffer · repository period · analysis window — dependent on your environment; you record each"
     ],
     [
       "Archive path",
@@ -45,7 +45,7 @@
     "tag": "AUDIT REPOSITORY · VLAN 50",
     "label": "Interactive 3D lesson network showing the collector SBD-SYSLOG01 writing daily archives to the audit repository SBD-AUDIT01 over encrypted SMB, the repository’s access events returning to the collector, and the audit custodian administering it from SBD-ADMIN-SRV01.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "SBD-AUDIT01 holds a year of the collector’s record: archives arrive by one encrypted path, their hashes are verified every day, access is audited off the box, and nothing leaves except by the custodian’s approved retention process.",
+    "completeCaption": "SBD-AUDIT01 holds the collector’s record for its whole retention period: archives arrive by one encrypted path, their hashes are verified every day, access is audited off the box, and nothing leaves except by the custodian’s approved retention process.",
     "nodes": [
       {
         "id": "audit",
@@ -170,12 +170,12 @@
         "id": "AU-4",
         "name": "Audit Log Storage Capacity",
         "phase": "Prepare → Implement",
-        "body": "Capacity comes from measurement, not a guess: a real day of both streams times the retention period, plus headroom and a warning threshold. A full repository refuses the next archive, and once the collector’s 14-day buffer rolls over, that record is gone.",
-        "question": "When the fifty workstations join in course 1.13, how will you know the volume still holds a full year?"
+        "body": "Capacity comes from measurement, not a guess: a real day of both streams times the retention period, plus headroom and a warning threshold. A full repository refuses the next archive, and once the collector’s buffer rolls over, that record is gone.",
+        "question": "When the fifty workstations join in course 1.13, how will you know the volume still holds the whole retention period?"
       },
       "checklist": [
-        "I wrote the repository’s retention, single write path, and identity table, using course 1.10’s sample values.",
-        "I sized the D: volume from one measured day of ForwardedEvents and syslog, with headroom and an 80 percent warning.",
+        "I wrote the repository’s single write path, identity table, and the retention periods I chose for each stage, with who approved them.",
+        "I sized the D: volume from one measured day of ForwardedEvents and syslog times my retention period, with headroom and a recorded warning threshold.",
         "I built SBD-AUDIT01 in the Audit Servers OU with the custodians as its only administrators, and recorded the KDS root key’s effective time."
       ]
     },
@@ -249,8 +249,8 @@
         "id": "AU-11",
         "name": "Audit Record Retention",
         "phase": "Implement → Assess",
-        "body": "Retention is a period with two edges: records stay for the whole year and go only when it ends. A task that refuses anything younger, a two-person approval tied to the list’s hash, and a quarterly retrieval show both edges hold.",
-        "question": "What would an assessor need to see to believe a record from eleven months ago is still usable?"
+        "body": "Retention is a period with two edges: records stay for the whole recorded period and go only when it ends. A task that refuses anything younger, a two-person approval tied to the list’s hash, and a quarterly retrieval show both edges hold.",
+        "question": "What would an assessor need to see to believe a record from near the end of your retention period is still usable?"
       },
       "checklist": [
         "I confirmed the retention task has no trigger and runs as SBD-Retention$.",

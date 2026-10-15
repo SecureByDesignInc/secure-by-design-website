@@ -17,7 +17,7 @@ Get-ADComputer SBD-AUDIT01 | Select-Object DistinguishedName
 # From SBD-ADMIN-SRV01 (custodian account): who administers SBD-AUDIT01.
 Invoke-Command SBD-AUDIT01 { Get-LocalGroupMember Administrators; w32tm /query /source }
 
-What success looks like: The rules, sizing, and identity table are written; the KDS root key exists with its effective time recorded; and SBD-AUDIT01 sits in the Audit Servers OU with SBD Audit Custodians in place of Domain Admins and management allowed from SBD-ADMIN-SRV01 alone, and its time comes from a domain controller.
+What success looks like: The rules with their recorded retention periods, the sizing, and the identity table are written; the KDS root key exists with its effective time recorded; and SBD-AUDIT01 sits in the Audit Servers OU with SBD Audit Custodians in place of Domain Admins and management allowed from SBD-ADMIN-SRV01 alone, and its time comes from a domain controller.
 
 2. Archive, hash, and protect the record
 # On SBD-AUDIT01 (custodian session): the share, its encryption, its one writer, and a stream folder's permissions.

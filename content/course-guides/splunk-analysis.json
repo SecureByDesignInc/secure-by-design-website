@@ -30,7 +30,7 @@
     ],
     [
       "Indexes (sample)",
-      "sbd_wineventlog · sbd_syslog · 90 days searchable"
+      "sbd_wineventlog · sbd_syslog · retention set for your environment"
     ],
     [
       "Console",
@@ -45,7 +45,7 @@
     "tag": "SECURITY & MONITORING · VLAN 50",
     "label": "Interactive 3D lesson network showing SBD-SPLUNK01 patching from SBD-REPO01, receiving the collector’s two streams from SBD-SYSLOG01 over TLS, and serving the administration seats, with one test event traced from SBD-DC01 through the collector to Splunk and SBD-AUDIT01.",
     "completeStatus": "COURSE TARGET",
-    "completeCaption": "SBD-SPLUNK01 holds a 90-day working copy of the collector’s record, answers three searches, and raises alerts with named responders. One failed sign-in on SBD-DC01 has been traced to the collector, the analyst’s screen, and the repository’s archive.",
+    "completeCaption": "SBD-SPLUNK01 holds a working copy of the collector’s record, answers three searches, and raises alerts with named responders. One failed sign-in on SBD-DC01 has been traced to the collector, the analyst’s screen, and the repository’s archive.",
     "nodes": [
       {
         "id": "splunk",
@@ -56,7 +56,7 @@
         "from": 0,
         "button": "SBD-SPLUNK01",
         "title": "SBD-SPLUNK01 · 10.0.50.10",
-        "description": "The analysis server, built in lesson 1 on domain-joined Linux and patched only from SBD-REPO01. It indexes a 90-day working copy of the collector’s streams for searches and alerts; the protected record stays on SBD-AUDIT01."
+        "description": "The analysis server, built in lesson 1 on domain-joined Linux and patched only from SBD-REPO01. It indexes a working copy of the collector’s streams for searches and alerts; the protected record stays on SBD-AUDIT01."
       },
       {
         "id": "syslog",
@@ -206,7 +206,7 @@
         "question": "Which of your named Splunk accounts can change an alert that watches the domain controllers, and is each of those people meant to?"
       },
       "checklist": [
-        "I wrote analysis’s job, the two indexes with their 90-day retention and sizing, and who holds each role from which seat.",
+        "I wrote analysis’s job, the two indexes with the retention period I chose and their sizing, and who holds each role from which seat.",
         "I checked the Splunk media against its published and transfer hashes before opening anything.",
         "I confirmed SBD-SPLUNK01 uses SBD-REPO01 as its only package source, has a domain controller selected for time, and is joined to sbd.test."
       ]
@@ -223,7 +223,7 @@
         "Send both streams over F10 and start the forwarder",
         "Match counts and times with the collector"
       ],
-      "mistake": "Checking that data arrives but not when it says it happened. If the router syslog or the forwarded events index with the wrong time zone or the receive time, the searches and lesson 5’s trace disagree with the source. Compare an indexed event’s time with the original.",
+      "mistake": "Checking that data arrives but not when it says it happened. If the router’s deny log (F24) or the forwarded events index with the wrong time zone or the receive time, the searches and lesson 5’s trace disagree with the source. Compare an indexed event’s time with the original.",
       "network": "The forwarder on SBD-SYSLOG01 now sends the forwarded Windows events and the syslog files to SBD-SPLUNK01 over TLS on TCP 9997 (rule F10). SBD-AUDIT01 stays out of this flow by design.",
       "control": {
         "id": "SC-8(1)",
@@ -250,7 +250,7 @@
         "Save each search with its owner and test event"
       ],
       "mistake": "Matching the tier accounts by a naming pattern, such as a prefix. Any privileged account that doesn’t follow the pattern — an older account, or one added to a tier group later — silently drops out of search one. Take the accounts from the tier groups themselves and refresh the lookup when membership changes.",
-      "network": "Analysts reach Splunk Web over HTTPS from SBD-ADMIN-SRV01 (rule A02) and search the working copy that the forwarder keeps current over rule F10.",
+      "network": "Analysts reach Splunk Web over HTTPS from SBD-ADMIN-SRV01 (rule A02) and search the working copy that the forwarder keeps current over rule F10, including the core router’s deny log, which reaches the collector under rule F24.",
       "control": {
         "id": "AU-6",
         "name": "Audit Record Review, Analysis, and Reporting",
@@ -276,18 +276,18 @@
         "Tune the noise against last week",
         "Set the review cadence"
       ],
-      "mistake": "Leaving triggered alerts at their default 24-hour expiration in a network with no mail server. An alert that fires on Friday evening is gone from the Triggered Alerts list by Monday morning, and nobody responds to it. Set each alert’s expiration to cover the longest gap between reviews.",
+      "mistake": "Leaving triggered alerts at their default 24-hour expiration in a network with no mail server. An alert that fires on Friday evening is gone from the Triggered Alerts list by Monday morning, and nobody responds to it. Set each alert’s expiration to cover the longest gap between reviews in your environment, and record the value.",
       "network": "SBD-SPLUNK01 now watches its stream for privileged failures, boundary denies, time faults, silent sources, and the repository’s findings. The alerts on the domain controllers are changed from AdminJumpBox01 (rule A01).",
       "control": {
         "id": "SI-4",
         "name": "System Monitoring",
         "phase": "Implement → Assess",
-        "body": "Monitoring means detected conditions reach someone who acts. Each alert has a threshold, a named responder, and a written first response, and each was tested by causing it — including the pipeline’s own silence, which AU-5 asks to be reported.",
+        "body": "Monitoring means detected conditions reach someone who acts. Each alert has a threshold set for the environment, a named responder, and a written first response, and each was tested by causing it — including the pipeline’s own silence, which AU-5 asks to be reported.",
         "question": "If the forwarder stopped tonight, which alert would fire, how soon, and who would see it first?"
       },
       "checklist": [
-        "I wrote the alert register with a threshold, responder, deputy, and first response for every alert.",
-        "I caused each safe condition, including a 20-minute forwarder stop, and recorded when each alert fired.",
+        "I wrote the alert register with the threshold I chose, expiration, responder, deputy, and first response for every alert.",
+        "I caused each safe condition, including a forwarder stop past the silence threshold, and recorded when each alert fired.",
         "I recorded the first daily and weekly reviews and scheduled the monthly one."
       ]
     },

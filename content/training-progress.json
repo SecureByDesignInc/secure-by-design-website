@@ -205,7 +205,7 @@
   },
   {
     "id": "training:two-tier-pki:validate",
-    "title": "Validate enrollment, revocation, and recovery",
+    "title": "Validate enrollment, revocation, and renewal",
     "href": "/training/two-tier-pki#validate",
     "group": "Network build"
   },
@@ -229,7 +229,7 @@
   },
   {
     "id": "training:dhcp:dhcp-audit",
-    "title": "Audit leases and back up the server",
+    "title": "Audit leases and write the restore note",
     "href": "/training/dhcp#dhcp-audit",
     "group": "Network build"
   },
@@ -529,13 +529,13 @@
   },
   {
     "id": "training:prove-recovery:directory",
-    "title": "Back up the directory, on schedule",
+    "title": "Back up Tier 0: directory, CA, and policy",
     "href": "/training/prove-recovery#directory",
     "group": "Network build"
   },
   {
     "id": "training:prove-recovery:trust-state",
-    "title": "Back up the CA, services, policy, and records",
+    "title": "Back up the member servers and records",
     "href": "/training/prove-recovery#trust-state",
     "group": "Network build"
   },

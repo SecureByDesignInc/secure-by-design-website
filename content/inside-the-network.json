@@ -282,6 +282,11 @@
           "note": "Configure the collector listener and trusted senders."
         },
         {
+          "name": "Router deny log",
+          "port": "UDP 514 (F24)",
+          "note": "The core router reports the traffic it denies; existing network configuration."
+        },
+        {
           "name": "Splunk forwarder",
           "port": "TCP 9997 with TLS (F10)",
           "note": "Queues events while Splunk is down and replays them afterwards."

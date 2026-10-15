@@ -65,3 +65,13 @@ Five lessons, 140 minutes (2.3 h). Lesson ids, counts, minutes and quiz keys are
   SBD-DHCP01 is already enrolled, so its NPS events need only an extra query for the NPS events 1.13 wants beyond the Security log (NPS writes 6272/6273 to the Security log, which is already collected).
 - **Every later Windows course**: the Servers and Tier 0 Servers OUs already carry the enrolling GPO. A new server there needs only SBD Event Sources membership, a restart and the WinRM scope widened. 1.14 and 1.15 already say this.
 - **Inside the Network**: judgment calls 2 and 3.
+
+## Owner decisions applied (14 October 2026)
+
+- Decision 14: lesson 1 step 3 no longer states 14 days / one year / 90 days; each stage's period is dependent on your environment and records policy, the learner records the period chosen and why. Step 1 "long-retention copy" → "protected copy for the full retention period"; objective 2 and check now ask for the chosen period.
+- Decision 14: lesson 4 step 2, check and wevtutil comment use "the buffer period you chose"; step 4's "volume over 80 percent full" → a fill level you set (dependent on your environment; record it); lesson 5 handoff names the chosen buffer period. Guide: AU-11 body and lesson 4 checklist likewise.
+- Decision 7: rule F24 cited for the router's deny log in lesson 1 step 5 (owned by the network owner, existing configuration, only received here) and check, lesson 3 steps 4–5, lesson 5 step 2, the lesson 5 quiz explanation; guide facts row, scene node text, flow label, lesson 1 checklist, lesson 3 and 5 network captions.
+- Decision 1: lesson 5 step 3 "rsyslog-gnutls, or your distribution's equivalent" → rsyslog-gnutls installed with dnf, a file under /etc/rsyslog.d with gtls, x509/name and the system trust bundle; the command now carries `sudo dnf install rsyslog-gnutls`, the omfwd configuration, `sudo rsyslogd -N1` and `sudo systemctl restart rsyslog`. Source added: Red Hat · Configuring a remote logging solution (lesson 5).
+- Decision 2: checked — the course sets up no backup job; nothing to change.
+- Catalog stages re-synced from lesson summaries.
+- Validated: node validate-draft.mjs logging-pipeline passes.
