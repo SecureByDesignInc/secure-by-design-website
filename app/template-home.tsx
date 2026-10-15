@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { ArrowRight, ArrowUpRight, BookOpen, Users, Network } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
 import membershipCatalog from '../content/membership-plans.json';
+import HomeThreatWindow from './home-threat-window';
 
 // The decorative WebGL layer (three.js) loads only once the page is idle.
 const HeroShaderGradient = lazy(() => import('../components/saleshook/HeroShaderGradient').then(module => ({default: module.HeroShaderGradient})));
@@ -63,6 +64,7 @@ export default function TemplateHome({ buildPath, buildCategory }: { buildPath: 
       </div><a className="sbd-inline-link sbd-start-catalog" href="/training">Explore all training <ArrowRight size={17}/></a>
     </section>
     <aside className="sbd-creator-note container" aria-labelledby="sbd-creator-title"><div className="sbd-creator-card"><span className="sbd-creator-initials" aria-hidden="true">SBD</span><div><h2 id="sbd-creator-title">A note from Secure By Design</h2><p>{membershipCatalog.creatorNote}</p><span className="sbd-creator-signature">Secure By Design</span></div></div></aside>
+    <HomeThreatWindow/>
     <section className="sbd-future container" id="start-reading" aria-labelledby="sbd-future-title"><div><p className="sbd-kicker">Learn your way</p><h2 id="sbd-future-title">More ways<br/>to <span>figure it out.</span></h2><p>Read the training, watch the builds take shape, and keep building your understanding.</p></div><div className="sbd-future-list">
       <a href="/training"><BookOpen size={30} strokeWidth={1.2}/><div><h3>Training Library</h3><p>Interactive guides, workbooks, and templates for building a network and preparing it for authorization.</p></div><ArrowUpRight size={18}/></a>
       <a href="/inside-the-network"><Network size={30} strokeWidth={1.2}/><div><h3>Inside the Network</h3><p>Explore the complete training network in 3D and see how every course connects to the same build.</p></div><ArrowUpRight size={18}/></a>
