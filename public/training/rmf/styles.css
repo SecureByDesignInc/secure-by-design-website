@@ -56,6 +56,31 @@ a.chapter{text-decoration:none}
 .quiz .feedback strong{color:inherit}
 .model-link+.model-link{margin-top:-4px}
 
+/* The RMF step tab */
+.step-card .controlid{display:block;margin:2px 0 4px}
+.step-card h3{margin:10px 0 6px}
+.task-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin:4px 0 22px}
+.task-grid section{background:#fff;border:1px solid #cddde8;border-radius:10px;padding:14px 16px}
+.task-grid .panel-title{font-size:13px;margin:0 0 8px}
+.task-list{list-style:none;margin:0;padding:0}
+.task-list li{display:flex;gap:9px;padding:5px 0;border-top:1px solid #e3ecf2;font-size:12px;line-height:1.45;color:#324f65}
+.task-list li:first-child{border-top:0}
+.task-list b{flex:0 0 34px;color:#176484;font-size:11px}
+.outputs{margin:0 0 14px;padding-left:18px;font-size:12.5px;line-height:1.6;color:#324f65}
+.outputs li+li{margin-top:5px}
+.content .jsig-outputs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11px;margin:0 0 14px}
+.jsig-outputs b{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#216080;margin-right:4px}
+.jsig-outputs span{border:1px solid #9fcfdf;background:#e9f6fa;color:#0f4c68;border-radius:99px;padding:4px 9px;font-weight:bold}
+.artifact-links ul{list-style:none;margin:8px 0 0;padding:0}
+.artifact-links li{padding:7px 0;border-top:1px solid #cfe7ef;font-size:12px;line-height:1.5}
+.artifact-links li:first-child{border-top:0;padding-top:2px}
+.artifact-links .elsewhere{font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#5b788e;margin-left:4px}
+.artifact-links .purpose{display:block;color:#476478;font-size:11.5px}
+.step-map td:nth-child(n+2){font-size:11px}
+.step-map td:first-child{min-width:180px}
+/* Task, control and record IDs (P-11, 1-3, FND-002) stay on one line. */
+.nb{white-space:nowrap}
+
 /* Body of Evidence */
 .evidence-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px}
 .artifact-menu{display:grid;align-content:start;gap:4px}
@@ -122,6 +147,6 @@ a.chapter{text-decoration:none}
 
 @media(min-width:1450px){.rmf-workspace{grid-template-columns:240px minmax(460px,1.1fr) minmax(430px,1fr)}.panel-title{font-size:19px}}
 @media(max-width:1120px){.rmf-workspace{grid-template-columns:185px minmax(320px,1fr) minmax(290px,.9fr)}.evidence-layout{grid-template-columns:190px minmax(0,1fr)}.review-chain{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:930px){.rmf-workspace{grid-template-columns:190px 1fr}.lesson.wide{grid-column:2}.capstone-intro,.sources-grid,.evidence-layout{grid-template-columns:1fr}.artifact-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:620px){#module-list{display:none}.mobile-path{display:block}.mobile-path .chapter{flex-direction:row;text-align:left;padding:10px 8px;gap:10px;margin:2px 0}.mobile-path .chapter b{font-size:12px}.mobile-path .chapter small{display:block}.mobile-path .path-course{margin-top:14px}.lesson-picks{grid-template-columns:1fr}.review-chain{grid-template-columns:1fr}.artifact-menu{grid-template-columns:1fr}.artifact-sheet-head{display:block}.toggle{margin-top:12px;width:max-content}.hero-facts li{font-size:10px;padding:6px 11px}.lesson-foot{flex-wrap:wrap}}
+@media(max-width:930px){.task-grid{grid-template-columns:1fr}.rmf-workspace{grid-template-columns:190px 1fr}.lesson.wide{grid-column:2}.capstone-intro,.sources-grid,.evidence-layout{grid-template-columns:1fr}.artifact-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.tabs{padding:0 10px}.tabs button{padding:14px 4px;font-size:10.5px}#module-list{display:none}.mobile-path{display:block}.mobile-path .chapter{flex-direction:row;text-align:left;padding:10px 8px;gap:10px;margin:2px 0}.mobile-path .chapter b{font-size:12px}.mobile-path .chapter small{display:block}.mobile-path .path-course{margin-top:14px}.lesson-picks{grid-template-columns:1fr}.review-chain{grid-template-columns:1fr}.artifact-menu{grid-template-columns:1fr}.artifact-sheet-head{display:block}.toggle{margin-top:12px;width:max-content}.hero-facts li{font-size:10px;padding:6px 11px}.lesson-foot{flex-wrap:wrap}}
 @media print{.hero-facts,.sbd-account-progress{display:none}.lesson.wide{grid-column:auto}}

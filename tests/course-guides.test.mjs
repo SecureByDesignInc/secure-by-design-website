@@ -47,17 +47,35 @@ test('guide content names Windows releases without version numbers', () => {
   for (const course of configurations) assert.doesNotMatch(read(`content/course-guides/${course.id}.json`), release, course.id);
 });
 
-// Owner request, 15 October 2026: the Network Authorization page (courses 2.1–2.3) follows the same design.
-// It is hand-built, so it loads the guides' stylesheet and 3D scene from the shared copies the generator writes.
-test('the Network Authorization page uses the course guide stylesheet and 3D scene', () => {
+// Owner requests, 15 October 2026: the Network Authorization courses (2.1–2.3) follow the same design, and each course
+// has its own page and materials. scripts/prepare-rmf-courses.mjs builds the pages from content/videos.json and
+// window.CATALOG_PARTS; they load the guides' stylesheet and 3D scene from the shared copies the guide generator writes.
+test('each Network Authorization course has its own page in the course guide design', () => {
   assert.ok(read('public/training/guide/course-guide.css').startsWith(read('scripts/course-guide/style.css')));
   assert.equal(read('public/training/guide/scene.js'), read('scripts/course-guide/scene.js'));
-  const page = read('public/training/rmf/index.html');
-  for (const part of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Training Library'])
-    assert.ok(page.includes(part), `the RMF page has ${part}`);
-  // Its account panel names no course, so account-progress.js keeps reading the module from #catalog/NN.
-  assert.match(page, /<section class="sbd-account-progress" aria-label="Account learning progress">/);
-  assert.match(read('public/_headers'), /^\/training\/rmf\/\*\n  Content-Security-Policy: [^\n]*worker-src 'self' blob:/m);
+  const context = { window: {} };
+  runInNewContext(read('public/training/rmf/catalog-data.js'), context);
+  const library = JSON.parse(read('content/videos.json'));
+  const resources = JSON.parse(read('content/training-resources.json'));
+  const headers = read('public/_headers');
+  const parts = context.window.CATALOG_PARTS;
+  assert.deepEqual(Array.from(parts, part => part.folder), ['rmf', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  for (const part of parts) {
+    const course = library.courses.find(item => item.id === part.id);
+    const page = read(`public/training/${part.folder}/index.html`);
+    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Training Library', '/training/account-progress.js',
+      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
+      assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
+    // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.
+    const guide = /<section class="sbd-account-progress" aria-label="Account learning progress" data-guide="([a-z0-9-]+)">/.exec(page)?.[1];
+    assert.ok(resources.some(item => item.id === guide && !item.retired && item.url === `https://securebydesigninc.com/training/${part.folder}/index.html`), `course ${part.number} saves ${guide}`);
+    assert.match(headers, new RegExp(`^/training/${part.folder}/\\*\\n  Content-Security-Policy: [^\\n]*worker-src 'self' blob:`, 'm'), `course ${part.number} has a content security policy`);
+  }
+  // Saved materials that point at these courses open a page or file that exists.
+  for (const item of resources.filter(item => !item.retired && /^https:\/\/securebydesigninc\.com\/training\/rmf/.test(item.url))) {
+    const path = new URL(item.url).pathname;
+    assert.ok(existsSync(new URL(`../public${path}`, import.meta.url)), `${item.id} → ${path}`);
+  }
 });
 
 test('the authorization view covers every module with real parts of the network', () => {

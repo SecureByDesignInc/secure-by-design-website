@@ -58,29 +58,53 @@ window.RMF_NETWORK = {
   },
   // One entry per module, in catalog order.
   modules: [
-    { status: 'One system · one mission',
-      caption: 'Everything you built in Build the Network is one system with one mission. This course prepares the evidence an Authorizing Official needs to decide whether its remaining risk is acceptable.' },
-    { status: 'The authorization boundary',
-      caption: 'Draw the boundary around the eight VLANs and the offline root CA, then trace each information flow across it. The hypervisor hosts, shared services and offline media transfers each need a recorded decision: inside, external, or inherited.' },
-    { status: 'Information and impact',
-      caption: 'Categorization starts with the information: business files and databases on VLAN 40, the identities in the directory, and the audit record on VLAN 50. Availability follows the mission processes that depend on them.' },
-    { status: 'Where controls land',
-      caption: 'Each practice control lands on real systems: account management (AC-2) on the domain controllers, audit (AU-2, AU-6, AU-12) on the collector and VLAN 50, and flaw remediation (SI-2) through SBD-WSUS01 and SBD-REPO01. The traceability matrix records who implements each one.' },
-    { status: 'The system as built',
-      caption: 'The system security plan describes this network as it is: each VLAN and its systems, the administration tiers, and the permitted paths between them. Every implementation statement names who does what, where, and when.' },
-    { status: 'Evidence from the systems',
-      caption: 'Proof comes from the systems themselves: SCAP Compliance Checker results and STIG checklists from the administration seats, log review records from SBD-SPLUNK01, and the course 1.19 restore record.' },
-    { status: 'Where the evidence lives',
-      caption: 'The Body of Evidence draws on records you already keep: the evidence folders on the administration seats, the protected archive on SBD-AUDIT01, and the living inventory on SBD-MGMT01. The master index ties each record to its control, owner, date, and scope.' },
-    { status: 'Testing what should fail',
-      caption: 'Assessment tests what should fail as well as what should work. The attack drill’s six attempts should all be refused; the three that cross VLANs are drawn here: a PC to SQL, a PC to Splunk, and a stolen session on SBD-ADMIN-PC01 aimed at a domain controller.' },
-    { status: 'A finding close to home',
-      caption: 'The worked finding is in this network: SBD-MGMT01 missing from verified audit collection. The POA&M entry restores collection, retests the selected event, and keeps the original result until the retest verifies the fix.' },
-    { status: 'One consistent package',
-      caption: 'The package has to agree with itself: 21 named systems and 50 workstations in the SSP, and an assessment that explains why the offline root CA is tested only during its key ceremonies.' },
-    { status: 'The decision',
-      caption: 'The Authorizing Official decides for the whole system, not one server at a time. The briefing explains what this network enables, the risk that remains, and the conditions and monitoring that would come with an authorization.' },
-    { status: 'Keeping it current',
-      caption: 'Monitoring keeps the package true: Splunk review and alerts, updates through SBD-WSUS01 and SBD-REPO01, and the inventory on SBD-MGMT01. A new server or a missed update starts a change-impact review.' },
+    {
+      "status": "One system · one mission",
+      "caption": "Everything you built in Build the Network is one system with one mission. Course 2.1 takes it through Prepare, Categorize, and Select, so every later record and the authorizing official’s decision rest on the same defined system."
+    },
+    {
+      "status": "Drawing the boundary",
+      "caption": "Draw the boundary around the eight VLANs and the offline root CA, then trace each information flow across it. The hypervisor hosts, shared services and offline media transfers each need a recorded decision: inside, external, or inherited."
+    },
+    {
+      "status": "Information and impact",
+      "caption": "Categorization starts with the information: business files and databases on VLAN 40, the identities in the directory, and the audit record on VLAN 50. Availability follows the mission processes that depend on them."
+    },
+    {
+      "status": "Where controls land",
+      "caption": "Each practice control lands on real systems: account management (AC-2) on the domain controllers, audit (AU-2, AU-6, AU-12) on the collector and VLAN 50, and flaw remediation (SI-2) through SBD-WSUS01 and SBD-REPO01. The traceability matrix records who implements each one."
+    },
+    {
+      "status": "The system as built",
+      "caption": "The system security plan describes this network as it is: each VLAN and its systems, the administration tiers, and the permitted paths between them. Every implementation statement names who does what, where, and when."
+    },
+    {
+      "status": "Evidence from the systems",
+      "caption": "Proof comes from the systems themselves: SCAP Compliance Checker results and STIG checklists from the administration seats, log review records from SBD-SPLUNK01, and the course 1.19 restore record."
+    },
+    {
+      "status": "What the assessor receives",
+      "caption": "The assessor works from records you already keep: the evidence folders on the administration seats, the protected archive on SBD-AUDIT01, and the living inventory on SBD-MGMT01. The assessment plan names which records and systems each procedure covers."
+    },
+    {
+      "status": "Testing what should fail",
+      "caption": "Assessment tests what should fail as well as what should work. The attack drill’s six attempts should all be refused; the three that cross VLANs are drawn here: a PC to SQL, a PC to Splunk, and a stolen session on SBD-ADMIN-PC01 aimed at a domain controller."
+    },
+    {
+      "status": "A finding close to home",
+      "caption": "The worked finding is in this network: SBD-MGMT01 missing from verified audit collection. The POA&M entry restores collection, retests the selected event, and keeps the original result until the retest verifies the fix."
+    },
+    {
+      "status": "One consistent package",
+      "caption": "The package has to agree with itself: 21 named systems and 50 workstations in the SSP, and an assessment that explains why the offline root CA is tested only during its key ceremonies."
+    },
+    {
+      "status": "The decision",
+      "caption": "The Authorizing Official decides for the whole system, not one server at a time. The briefing explains what this network enables, the risk that remains, and the conditions and monitoring that would come with an authorization."
+    },
+    {
+      "status": "Keeping it current",
+      "caption": "Monitoring keeps the package true: Splunk review and alerts, updates through SBD-WSUS01 and SBD-REPO01, and the inventory on SBD-MGMT01. A missed update goes to remediation and the status report; a new component starts a security impact analysis."
+    }
   ],
 };

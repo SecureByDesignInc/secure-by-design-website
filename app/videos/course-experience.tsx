@@ -12,7 +12,6 @@ import {
   BookOpen,
   Check,
   Download,
-  FileText,
   Maximize2,
   Network,
   Pause,
@@ -91,15 +90,19 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
   const authorization = course.kind === 'authorization';
   const columns = steps.length <= 6 ? steps.length : Math.ceil(steps.length / 2);
 
-  // One download per tile: a configuration course's workbook (PDF and Word), checklist and
-  // verification commands travel together in its ZIP (scripts/prepare-training-packages.py).
+  // One download per tile: a course's workbook (PDF and Word) travels in its ZIP with a configuration course's
+  // checklist and verification commands (scripts/prepare-training-packages.py) or a Network Authorization
+  // course's evidence starters (scripts/prepare-rmf-workbooks.py).
+  const download: CompanionLink[] = training.package
+    ? [{ href: training.package, title: 'Download the training materials', detail: configuration
+        ? `ZIP · ${training.pages}-page workbook (PDF and Word), checklist, and verification commands`
+        : `ZIP · ${training.pages}-page workbook (PDF and Word) and evidence starters`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true }]
+    : [];
   const links: CompanionLink[] = configuration
-    ? training.package
-      ? [{ href: training.package, title: 'Download the training materials', detail: `ZIP · ${training.pages}-page workbook (PDF and Word), checklist, and verification commands`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true }]
-      : []
+    ? download
     : [
         ...(training.relatedResources ?? []).map(resource => ({ href: resource.href, title: resource.title, detail: resource.detail, icon: <BookOpen size={19} />, trailing: <ArrowUpRight size={16} /> })),
-        ...(training.word ? [{ href: training.word, title: 'The full authorization catalog', detail: `All three parts · Word document · ${training.pages} pages`, icon: <FileText size={19} />, trailing: <Download size={16} />, download: true }] : []),
+        ...download,
       ];
 
   return (
@@ -109,24 +112,22 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
           id={`course-resources-${course.id}`}
           intro={configuration
             ? 'Start with the interactive guide, or download every training material in one file.'
-            : 'Start with this part’s interactive training or download the full catalog. Everything you need is included below.'}
+            : 'Start with the interactive course, or download its workbook and evidence starters in one file.'}
           action={{ href: training.guide, label: configuration ? 'Open the full guide' : 'Open the training', icon: <BookOpen size={16} /> }}
         />
         <div className="vc-episode-content">
           <CompanionMaterials
             id={`training-${course.id}`}
             cover={training.cover}
-            coverAlt={configuration
-              ? `Secure By Design companion workbook for ${course.title}`
-              : 'Secure By Design Risk Management Framework training catalog'}
+            coverAlt={`Secure By Design companion workbook for ${course.title}`}
             heading={['Keep the knowledge.', authorization ? 'Authorize with confidence.' : 'Build with confidence.']}
             summary={configuration
               ? `${training.pages} pages of explanations, configuration steps, verification commands, and evidence prompts.`
-              : `All three parts in one ${training.pages}-page editable catalog: modules, study hours, and sources.`}
+              : `${training.pages} pages of RMF steps, tasks, and outputs, with lessons, worked examples, and practice records.`}
             guide={{
               href: training.guide,
               title: configuration ? 'Open the interactive guide' : `Open ${course.title} training`,
-              detail: configuration ? `${steps.length} lessons · knowledge checks · your progress` : 'Lessons, practice tasks, and knowledge checks',
+              detail: configuration ? `${steps.length} lessons · knowledge checks · your progress` : 'RMF steps and outputs · 3D network · knowledge checks',
               icon: <BookOpen size={20} />,
               trailing: <ArrowUpRight size={19} />,
             }}
@@ -137,7 +138,6 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
                 {course.estimatedHours} estimated study hours
                 {course.capstoneHours ? `: ${course.estimatedHours - course.capstoneHours} guided hours plus a ${course.capstoneHours} hour capstone` : ''}.
               </p>
-              {authorization && <p>The three Network Authorization tiles share one course. Your module progress and evidence workspace carry across all three parts.</p>}
               <p>© 2026 Secure By Design Team LLC.</p>
             </>}
           />

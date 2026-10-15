@@ -95,9 +95,54 @@
   },
   {
     "id": "rmf-guide",
-    "title": "Interactive authorization course",
+    "title": "Risk Management Framework · Interactive course",
     "url": "https://securebydesigninc.com/training/rmf/index.html",
-    "description": "Lessons, evidence examples, and the capstone.",
+    "description": "Course 2.1 · Prepare, Categorize, and Select · 12 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-boe-ato-package",
+    "title": "Risk Management Framework · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
+    "description": "Workbook (PDF and Word) and evidence starters.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-body-of-evidence-guide",
+    "title": "Body of Evidence · Interactive course",
+    "url": "https://securebydesigninc.com/training/rmf-body-of-evidence/index.html",
+    "description": "Course 2.2 · Implement and Assess: document, prove, and test the network · 15 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-body-of-evidence-package",
+    "title": "Body of Evidence · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Learning-Package.zip",
+    "description": "Workbook (PDF and Word) and evidence starters.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-authorization-to-operate-guide",
+    "title": "Authorization to Operate · Interactive course",
+    "url": "https://securebydesigninc.com/training/rmf-authorization-to-operate/index.html",
+    "description": "Course 2.3 · Authorize and Monitor: the package, the decision, and continuous monitoring · 9 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "rmf-authorization-to-operate-package",
+    "title": "Authorization to Operate · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip",
+    "description": "Workbook (PDF and Word) and evidence starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -109,13 +154,14 @@
     "description": "Edition 1.4 · 12 modules",
     "category": "Training materials",
     "publisher": "Secure By Design",
-    "icon": "directory"
+    "icon": "directory",
+    "retired": true
   },
   {
     "id": "rmf-evidence",
     "title": "Body of Evidence examples and starters",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence",
-    "description": "Ten examples with editable Markdown and CSV starters.",
+    "url": "https://securebydesigninc.com/training/rmf-body-of-evidence/index.html#evidence",
+    "description": "Course 2.2 · seven examples with editable Markdown and CSV starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -123,7 +169,7 @@
   {
     "id": "rmf-capstone",
     "title": "Authorization package capstone",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#capstone",
+    "url": "https://securebydesigninc.com/training/rmf-authorization-to-operate/index.html#capstone",
     "description": "Assemble, defend, and maintain the practice package.",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -598,7 +644,7 @@
   {
     "id": "rmf-evidence-manifest",
     "title": "Package manifest",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence/manifest",
+    "url": "https://securebydesigninc.com/training/rmf-authorization-to-operate/index.html#evidence/manifest",
     "description": "Organize the evidence and submission records",
     "category": "Training materials",
     "publisher": "Secure By Design",

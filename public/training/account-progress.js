@@ -6,7 +6,10 @@
  // Configuration course guides (1.2–1.10) name their course, guide bookmark and first lesson on the reserved panel.
  const named=document.querySelector('.sbd-account-progress[data-course]')?.dataset;
  const dc=location.pathname.includes('/dc01-dc02/'),lessons=dc||!!named;
- const course=named?.course||(dc?'dc01-dc02':'rmf-boe-ato'),guide=named?.guide||(dc?'dc-guide':'rmf-guide');
+ // The Network Authorization pages (courses 2.1–2.3) name only their guide bookmark: their modules come from #catalog/NN
+ // and keep the training:rmf-boe-ato:NN progress IDs.
+ const reserved=document.querySelector('.sbd-account-progress')?.dataset;
+ const course=named?.course||(dc?'dc01-dc02':'rmf-boe-ato'),guide=named?.guide||reserved?.guide||(dc?'dc-guide':'rmf-guide');
  // Reuse a panel the page reserved in its HTML (so nothing shifts when this deferred script runs).
  const panel=document.querySelector('.sbd-account-progress')||document.createElement('section');panel.className='sbd-account-progress';panel.setAttribute('aria-label','Account learning progress');
  const style=document.createElement('style');style.textContent='.sbd-account-progress{max-width:1440px;margin:20px auto;padding:20px 24px;border:1px solid #284359;border-radius:14px;background:#102437;color:#eff7ff;font:14px/1.6 Arial,sans-serif}.sbd-account-progress p{margin:6px 0 12px}.sbd-account-progress button,.sbd-account-progress a{display:inline-block;min-height:44px;margin:4px 10px 4px 0;padding:10px 14px;border:1px solid #6cc7d8;border-radius:8px;background:transparent;color:#b8f2fb;font:inherit;text-decoration:none;cursor:pointer}.sbd-account-progress button:disabled{opacity:.6}.sbd-account-progress button:focus-visible,.sbd-account-progress a:focus-visible{outline:3px solid #ffbf69;outline-offset:3px}.sbd-account-progress [role=status]{color:#b8f2fb}';document.head.append(style);
