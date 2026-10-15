@@ -1,24 +1,43 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
+import RadwareSalesCover, { RADWARE_H, RADWARE_W } from '../radware-sales-cover';
 
 const threatMapUrl = 'https://livethreatmap.radware.com/';
 
 // Radware's map loads as soon as the page opens. The frame is added once the page is running in the browser
 // (so its load event is never missed during hydration) and fades in over our own placeholder when Radware's
-// page has loaded. The direct link stays visible in case the frame can't load.
+// page has loaded. The direct link stays visible in case the frame can't load. The map is drawn at a fixed
+// 1240 × 800 and scaled to fit, so Radware always shows the same layout and the blur over its "Contact
+// sales" button lands in the right place on any screen (and in full screen).
 export default function ThreatMapFrame() {
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
   const [slow, setSlow] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
+  const [fit, setFit] = useState({ scale: 0, x: 0, y: 0 });
 
   useEffect(() => {
     setMounted(true);
     const sync = () => setFullscreen(document.fullscreenElement === stage.current);
     document.addEventListener('fullscreenchange', sync);
     return () => document.removeEventListener('fullscreenchange', sync);
+  }, []);
+
+  // Scale the 1240 × 800 map to fit the stage, centered.
+  useEffect(() => {
+    const element = stage.current;
+    if (!element) return;
+    const measure = () => {
+      const width = element.clientWidth, height = element.clientHeight;
+      const scale = Math.min(width / RADWARE_W, height / RADWARE_H);
+      setFit({ scale, x: (width - RADWARE_W * scale) / 2, y: (height - RADWARE_H * scale) / 2 });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -60,15 +79,18 @@ export default function ThreatMapFrame() {
           {slow && <p>Taking a while? <a href={threatMapUrl} target="_blank" rel="noopener noreferrer">Open it on Radware</a>.</p>}
         </div>
       </div>
-      {mounted && <iframe
-        className={ready ? 'is-ready' : undefined}
-        src={threatMapUrl}
-        title="Radware live cyber threat map"
-        referrerPolicy="no-referrer"
-        sandbox="allow-scripts allow-same-origin"
-        allow="fullscreen"
-        onLoad={() => setReady(true)}
-      />}
+      <div className="tm-canvas" style={{ transform: `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})` }}>
+        {mounted && <iframe
+          className={ready ? 'is-ready' : undefined}
+          src={threatMapUrl}
+          title="Radware live cyber threat map"
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin"
+          allow="fullscreen"
+          onLoad={() => setReady(true)}
+        />}
+        {mounted && <RadwareSalesCover show={ready} />}
+      </div>
     </div>
   </div>;
 }

@@ -86,3 +86,22 @@ test('the live threat window draws Radware at the Threat Map page’s size, acro
   assert.match(read('app/template-home.css'), /\.sbd-monitor-screen\{position:relative;aspect-ratio:1240\/800;/);
 });
 
+
+test('Radware’s “Contact sales” button is blurred on the homepage window and the Threat Map page', () => {
+  const cover = read('app/radware-sales-cover.tsx');
+  assert.match(cover, /export const RADWARE_W = 1240;/);
+  assert.match(cover, /export const RADWARE_H = 800;/);
+  assert.match(cover, /export const SALES_BOX = \{ left: \d+, top: \d+, width: \d+, height: \d+ \};/);
+  // The cover is measured at the size both pages draw Radware at.
+  assert.match(read('app/home-threat-window.tsx'), /const SCREEN_W = 1240;[\s\S]*const SCREEN_H = 800;/);
+  assert.match(read('app/home-threat-window.tsx'), /<RadwareSalesCover show=\{ready\}\/>/);
+  const frame = read('app/threat-map/threat-map-frame.tsx');
+  assert.match(frame, /<div className="tm-canvas"[\s\S]*<iframe[\s\S]*<RadwareSalesCover show=\{ready\} \/>[\s\S]*<\/div>/, 'the cover sits in the same scaled box as the map');
+  assert.match(frame, /Math\.min\(width \/ RADWARE_W, height \/ RADWARE_H\)/);
+  assert.match(read('app/threat-map/threat-map.css'), /\.tm-canvas \{[\s\S]*width: 1240px;[\s\S]*height: 800px;/);
+  const css = read('app/template-shared.css');
+  assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
+  assert.match(css, /\.sbd-sales-cover\.is-shown\{[^}]*pointer-events:auto/, 'the cover catches clicks meant for the button');
+  // The credit no longer says the map is shown unchanged.
+  assert.doesNotMatch(read('app/threat-map/page.tsx'), /shown here unchanged/);
+});
