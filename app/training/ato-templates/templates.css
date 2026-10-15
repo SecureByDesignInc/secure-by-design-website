@@ -9,4 +9,5 @@
 .tl-edition h2{margin:0 0 10px;color:#effaff;font-size:18px;letter-spacing:-.02em}
 .tl-edition p{margin:0 0 8px;color:#b9d0dd;font-size:13px;line-height:1.65;max-width:900px}
 .tl-edition p:last-child{margin-bottom:0}
+.tl-edition b{color:#e4f4fb}
 @media (max-width:600px){.tl-list{padding:4px 16px}.tl-edition{padding:18px 16px}}

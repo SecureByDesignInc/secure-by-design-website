@@ -38,7 +38,7 @@ test('related build courses stay together before authorization and materials rem
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
   assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
-  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence', 'ato-templates']);
   assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-authorization-to-operate']);
   for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
     for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
@@ -387,25 +387,38 @@ test('the ATO Template Library tile lists only verified public sources, linked t
   assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
   assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
   // The verified set: add an entry only when its publisher posts it publicly (see AGENTS.md).
-  assert.deepEqual(templates.groups.map(group => group.id), ['categorize', 'select', 'implement', 'assess']);
+  assert.deepEqual(templates.groups.map(group => group.id), ['prepare', 'categorize', 'select', 'implement', 'assess', 'monitor']);
   assert.deepEqual(templates.templates.map(item => item.title), [
+    'ISSM appointment letter template',
     'CNSSI 1253, Categorization and Control Selection for National Security Systems',
+    'NIST SP 800-53 Rev. 5 controls and SP 800-53B baselines',
     'CNSS Privacy Overlay',
     'System Security Plan (SSP) outline example',
+    'Integrated Inventory Workbook (format reference)',
+    'NIST SP 800-128, Guide for Security-Focused Configuration Management',
+    'Security Requirements Traceability Matrix (format reference)',
     'Risk Assessment Report (RAR) template',
+    'POA&M job aid',
+    'POA&M template (format reference)',
+    'Continuous Monitoring Playbook',
   ]);
+  // FedRAMP templates are cloud formats, so each is labeled a format reference in its title.
+  for (const item of templates.templates.filter(entry => entry.framework === 'FedRAMP' && !entry.title.includes('Playbook'))) {
+    assert.match(item.title, /\(format reference\)$/, `${item.title} is labeled a format reference`);
+  }
   const groupIds = templates.groups.map(group => group.id);
   for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has entries`);
   for (const item of templates.templates) {
     assert.ok(groupIds.includes(item.group), `${item.title} group`);
-    assert.ok(['DoD', 'CNSS', 'NIST'].includes(item.framework), `${item.title} publisher`);
+    assert.ok(['DoD', 'CNSS', 'NIST', 'FedRAMP'].includes(item.framework), `${item.title} publisher`);
     assert.equal(item.status, 'official', `${item.title} links to its publisher`);
     assert.ok(item.rmf && item.source && item.note, `${item.title} details`);
     assert.ok(item.links.length > 0, `${item.title} has a link`);
     for (const link of item.links) {
       assert.ok(link.label && link.format, `${item.title} link label`);
       assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);
-      assert.match(link.href, /^https:\/\/([a-z0-9-]+\.)+(gov|mil)\//, `${item.title} links to an official government site`);
+      // Official government sites: .gov, .mil, and CDSE (DCSA's training center, cdse.edu).
+      assert.match(link.href, /^https:\/\/(([a-z0-9-]+\.)+(gov|mil)|www\.cdse\.edu)\//, `${item.title} links to an official government site`);
     }
   }
   // Nothing is hosted: the owner's JSIG files, the adaptations, the README and the ZIP stay removed.
