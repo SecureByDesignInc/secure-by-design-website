@@ -43,6 +43,10 @@ export default function TemplateLibrary() {
             ISSM or PSO for the versions your program uses.
           </p>
           <p>
+            Entries marked <b>format reference</b> are FedRAMP&apos;s cloud templates, which FedRAMP has kept for reference
+            only since June 2026. Use them to see how a document is laid out, not as the DoD or JSIG form.
+          </p>
+          <p>
             Use these for instruction and practice with fictional data only. On a real system, your AO&apos;s and
             PSO&apos;s current templates take precedence.
           </p>

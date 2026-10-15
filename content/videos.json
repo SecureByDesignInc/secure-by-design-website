@@ -1770,7 +1770,7 @@
       "categoryOrder": 1,
       "title": "ATO Template Library",
       "subtitle": "Verified public sources for the Body of Evidence",
-      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253, the CNSS Privacy Overlay, NIST's System Security Plan (SSP) outline and DCSA's Risk Assessment Report (RAR) template. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
+      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253 and the Privacy Overlay; NIST's control baselines, SSP outline and configuration management guide; DCSA's ISSM appointment letter and RAR templates; CDSE's POA&M job aid; and FedRAMP formats for the traceability matrix, POA&M, inventory and continuous monitoring. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
       "tags": [
         "Templates",
         "Body of Evidence",
@@ -1778,16 +1778,16 @@
       ],
       "systems": [],
       "artLabels": [
-        "SSP · RAR",
-        "CNSSI 1253 · Privacy Overlay",
+        "SSP · SCTM · POA&M",
+        "RAR · ConMon · CM plan",
         "Verified public sources"
       ],
-      "outcomeSummary": "Open the official, publicly released sources for four parts of the package.",
+      "outcomeSummary": "Open the official, publicly released sources behind each part of the package.",
       "outcomes": [
-        "Categorize and select controls with CNSSI 1253",
-        "Tailor for PII with the Privacy Overlay",
+        "Categorize and select controls with CNSSI 1253 and NIST's baselines",
         "Start an SSP from NIST's outline",
-        "Draft a RAR from DCSA's template"
+        "Track findings with POA&M guidance and formats",
+        "Plan ConMon and configuration management from official guides"
       ],
       "training": {
         "guide": "/training/ato-templates",
