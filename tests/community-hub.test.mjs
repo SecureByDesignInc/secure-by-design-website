@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { federalJobsApi, federalJobsFrom } from '../server/federal-jobs.js';
+import { federalJobsApi, federalJobsFrom, usajobsLink } from '../server/federal-jobs.js';
 
 const states = JSON.parse(fs.readFileSync('content/community-states.json', 'utf8'));
 const nav = JSON.parse(fs.readFileSync('content/navigation.json', 'utf8'));
@@ -50,7 +50,7 @@ test('without a USAJOBS key the endpoint says so, and unknown states and other m
   assert.equal((await federalJobsApi(request('?state=VA', 'POST'), {})).status, 405);
 });
 
-const item = (title, places, uri = 'https://www.usajobs.gov/job/123') => ({ MatchedObjectDescriptor: {
+const item = (title, places, uri = 'https://www.usajobs.gov:443/job/123') => ({ MatchedObjectDescriptor: {
   PositionTitle: title, OrganizationName: 'Example Agency', PositionURI: uri, ApplicationCloseDate: '2026-11-01T23:59:59.997',
   PositionLocation: places.map(([LocationName, CountrySubDivisionCode]) => ({ LocationName, CountrySubDivisionCode })),
 } });
@@ -92,4 +92,10 @@ test('with a key, the endpoint asks USAJOBS for series 2210 in the state and rep
   } finally {
     globalThis.fetch = before;
   }
+});
+
+test('USAJOBS links keep their address without the :443 port, and other sites are refused', () => {
+  assert.equal(usajobsLink('https://www.usajobs.gov:443/job/850999700'), 'https://www.usajobs.gov/job/850999700');
+  assert.equal(usajobsLink('https://www.usajobs.gov/job/1'), 'https://www.usajobs.gov/job/1');
+  for (const bad of ['http://www.usajobs.gov/job/1', 'https://usajobs.gov.example.com/job/1', 'https://example.com/job', 'javascript:alert(1)', '', null]) assert.equal(usajobsLink(bad), '', String(bad));
 });
