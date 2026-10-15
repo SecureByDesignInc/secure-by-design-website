@@ -1,7 +1,11 @@
-import type { CatalogEntry, Library, TrainingCourse } from './catalog-types';
+import type { CatalogEntry, Library, ReferenceLibrary, TrainingCourse } from './catalog-types';
 
 export function isTrainingCourse(entry: CatalogEntry): entry is TrainingCourse {
   return 'moduleCount' in entry;
+}
+
+export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibrary {
+  return 'kind' in entry && entry.kind === 'library';
 }
 
 export function getCatalogEntries(library: Library): CatalogEntry[] {
@@ -11,6 +15,7 @@ export function getCatalogEntries(library: Library): CatalogEntry[] {
     entries.push(episode, ...courses.filter(course => course.afterEpisode === episode.id));
   }
   entries.push(...courses.filter(course => !library.episodes.some(episode => episode.id === course.afterEpisode)));
+  entries.push(...(library.references ?? []));
   const categoryOrder = new Map((library.categories ?? []).map((category, index) => [category.id, index]));
   return entries.sort((a, b) =>
     (categoryOrder.get(a.categoryId ?? '') ?? categoryOrder.size) -

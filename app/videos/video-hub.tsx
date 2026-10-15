@@ -10,6 +10,8 @@ import {
   Check,
   ChevronUp,
   Clock,
+  FileText,
+  Link2,
   Network,
   Search,
   SlidersHorizontal,
@@ -18,17 +20,25 @@ import {
 } from 'lucide-react';
 import EpisodeExperience from './episode-experience';
 import CourseExperience from './course-experience';
+import LibraryExperience from './library-experience';
 import CatalogSequenceGrid from './catalog-sequence';
 import type { CatalogEntry, Library } from './catalog-types';
+import atoTemplates from '../../content/ato-templates.json';
 import {
   filterEpisodes,
   getCatalogEntries,
   groupCatalogEntries,
   getCatalogTopics,
   getYouTubeEmbedUrl,
+  isReferenceLibrary,
   isTrainingCourse,
   supportsIdentityScene,
 } from './video-utils';
+
+const ART_SERIES: Record<string, string> = {
+  'network-authorization': 'FROM BUILD TO AUTHORIZATION',
+  'templates-references': 'TEMPLATES & REFERENCES',
+};
 
 // Large enough that both paths (1.1–1.19 and 2.1–2.3) show without "Show more".
 const PAGE_SIZE = 24;
@@ -44,9 +54,15 @@ function EpisodeTile({
 }) {
   const opener = useRef<HTMLButtonElement>(null);
   const course = isTrainingCourse(episode);
+  // Reference tiles (the ATO Template Library) share the course tile's layout: labels beside a cover, no recording.
+  const reference = isReferenceLibrary(episode);
   // Coming-soon tiles hold their place in the path but have no material yet: no cover, no download, no opening.
   const comingSoon = course && episode.kind === 'coming-soon';
-  const available = !course && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
+  const available = !course && !reference && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
+  const series = ART_SERIES[episode.categoryId ?? ''] ?? 'THE NETWORK BUILD SERIES';
+  const templateCount = atoTemplates.templates.length;
+  const artifactCount = atoTemplates.groups.length;
+  const openLabel = reference ? 'library' : 'training';
   const close = () => {
     onToggle();
     opener.current?.focus();
@@ -54,17 +70,17 @@ function EpisodeTile({
 
   return (
     <article
-      className={`vc-catalog-tile ${expanded ? 'vc-tile-expanded' : ''}`}
+      className={`vc-catalog-tile ${expanded ? 'vc-tile-expanded' : ''}${reference ? ' vc-tile-reference' : ''}`}
       aria-labelledby={`tile-title-${episode.id}`}
     >
       <div className="vc-tile-overview">
         <div className="vc-tile-art" aria-hidden="true">
           <div className="vc-tile-art-top">
-            <span>{episode.categoryId === 'network-authorization' ? 'FROM BUILD TO AUTHORIZATION' : 'THE NETWORK BUILD SERIES'}</span>
-            <b>{episode.number}</b>
+            <span>{series}</span>
+            {!reference && <b>{episode.number}</b>}
           </div>
-          {course ? <>
-            <div className={`vc-course-art vc-art-${episode.id}${episode.training.cover ? ' vc-course-art-book' : ''}`}>{(episode.artLabels ?? ['Risk Management Framework', 'Body of Evidence', 'Authorization to Operate']).map(label => <span key={label}>{label.replace(/ ([+→]) /g, '\u00a0$1 ')}</span>)}</div>
+          {course || reference ? <>
+            <div className={`vc-course-art vc-art-${episode.id}${episode.training.cover ? ' vc-course-art-book' : ''}`}>{(episode.artLabels ?? ['Risk Management Framework', 'Body of Evidence', 'Authorization to Operate']).map(label => <span key={label}>{label.replace(/ ([+→]) /g, ' $1 ')}</span>)}</div>
             {/* Every tile shows its workbook, as the identity build's does: the same placement and size. */}
             {episode.training.cover && <div className="vc-tile-topology">
               <Image
@@ -104,21 +120,21 @@ function EpisodeTile({
           </div>}
           <div className="vc-tile-art-bottom">
             <span>
-              {course ? <BookOpen size={13} /> : <Network size={13} />}
-              {comingSoon ? 'IN PREPARATION' : course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
+              {course || reference ? <BookOpen size={13} /> : <Network size={13} />}
+              {reference ? 'TEMPLATE LIBRARY' : comingSoon ? 'IN PREPARATION' : course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{reference ? `${templateCount} TEMPLATES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
           <div className="vc-tile-description">
             <p className="vc-kicker">
-              {episode.categoryOrder === 1 && <span className="vc-start-here">START HERE</span>}
-              {`COURSE ${episode.number}`}
+              {episode.categoryOrder === 1 && !reference && <span className="vc-start-here">START HERE</span>}
+              {reference ? 'REFERENCE LIBRARY' : `COURSE ${episode.number}`}
               {/* Compact tiles hide the topic visually so the kicker fits one line; it stays in the DOM and shows when expanded. */}
-              <span className="vc-kicker-topic">{` / ${episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}</span>
+              <span className="vc-kicker-topic">{` / ${reference ? 'TEMPLATES' : episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}</span>
             </p>
             <h3 id={`tile-title-${episode.id}`} title={episode.title}>{episode.title}</h3>
             <p className="vc-tile-subtitle" title={episode.subtitle}>{episode.subtitle}</p>
@@ -133,7 +149,17 @@ function EpisodeTile({
             <p className="vc-tile-soon-badge"><Clock size={15} aria-hidden="true" />Coming soon</p>
             <p className="vc-tile-included">Training materials are in preparation.</p>
           </div> : <div className="vc-tile-actions">
-            <div className="vc-tile-status">
+            {reference ? <div className="vc-tile-status">
+              <span>
+                <Check size={13} />
+                Free official templates
+              </span>
+              <span className="vc-tile-course-size"><FileText size={13} />{templateCount} templates · {artifactCount} artifacts</span>
+              <span>
+                <Link2 size={13} />
+                Links checked {episode.training.updated}
+              </span>
+            </div> : <div className="vc-tile-status">
               <span>
                 <Check size={13} />
                 Written training available
@@ -143,7 +169,7 @@ function EpisodeTile({
                 <Video size={13} />
                 {available ? 'Video available' : 'Video coming soon'}
               </span>
-            </div>
+            </div>}
             <button
               ref={opener}
               id={`episode-open-${episode.id}`}
@@ -151,15 +177,15 @@ function EpisodeTile({
               className="vc-tile-open"
               aria-expanded={expanded}
               aria-controls={`episode-content-${episode.id}`}
-              aria-label={`${expanded ? 'Close training' : 'Open training'}: ${episode.title}`}
+              aria-label={`${expanded ? `Close ${openLabel}` : `Open ${openLabel}`}: ${episode.title}`}
               onClick={onToggle}
             >
-              <span>{expanded ? 'Close training' : 'Open training'}</span>
+              <span>{expanded ? `Close ${openLabel}` : `Open ${openLabel}`}</span>
               {expanded ? <ChevronUp size={18} /> : <BookOpen size={18} />}
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              Interactive guide<span>·</span>One download
+              {reference ? <>Template library<span>·</span>Official sources</> : <>Interactive guide<span>·</span>One download</>}
             </p>
           </div>}
         </div>
@@ -167,12 +193,12 @@ function EpisodeTile({
       <div id={`episode-content-${episode.id}`} hidden={!expanded}>
         {expanded && (
           <>
-            {course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
+            {reference ? <LibraryExperience library={episode} /> : course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
             <div className="vc-tile-close-row">
-              <span>Your course materials, in one place.</span>
+              <span>{reference ? 'Your templates, in one place.' : 'Your course materials, in one place.'}</span>
               <button type="button" onClick={close}>
                 <ChevronUp size={16} />
-                Close training
+                {`Close ${openLabel}`}
               </button>
             </div>
           </>
@@ -201,6 +227,12 @@ export default function VideoHub({ library }: { library: Library }) {
   const matches = filterEpisodes(catalog, query, topic).filter(entry => !category || entry.categoryId === category);
   const visible = matches.slice(0, visibleCount);
   const groups = groupCatalogEntries(visible, library);
+  // Reference groups (Templates & References) sit outside the learning paths and the course count.
+  const referenceGroups = new Set((library.categories ?? []).filter(item => item.kind === 'reference').map(item => item.id));
+  const paths = (library.categories ?? []).filter(item => !referenceGroups.has(item.id));
+  const referenceCount = catalog.filter(isReferenceLibrary).length;
+  const courseCount = catalog.length - referenceCount;
+  const noun = matches.every(entry => !isReferenceLibrary(entry)) ? `course${matches.length === 1 ? '' : 's'}` : `item${matches.length === 1 ? '' : 's'}`;
   const filtered = Boolean(query.trim() || topic || category);
   const reset = () => {
     setQuery('');
@@ -244,7 +276,8 @@ export default function VideoHub({ library }: { library: Library }) {
             <h2 id="episode-library-title">Choose your next course.</h2>
           </div>
           <span>
-            {(library.categories ?? []).length} learning paths · {catalog.length} course{catalog.length === 1 ? '' : 's'}
+            {paths.length} learning paths · {courseCount} course{courseCount === 1 ? '' : 's'}
+            {referenceCount > 0 && ` · ${referenceCount} template librar${referenceCount === 1 ? 'y' : 'ies'}`}
           </span>
         </div>
         <div className="vc-category-filters" role="group" aria-label="Training category">
@@ -313,7 +346,7 @@ export default function VideoHub({ library }: { library: Library }) {
           <output aria-live="polite">
             {matches.length === 0
               ? 'No training materials found'
-              : `Showing ${visible.length} of ${matches.length} course${matches.length === 1 ? '' : 's'}`}
+              : `Showing ${visible.length} of ${matches.length} ${noun}`}
             {topic && ` · ${topic}`}
           </output>
           {filtered && (
@@ -323,11 +356,16 @@ export default function VideoHub({ library }: { library: Library }) {
           )}
         </div>
         {groups.map((group, groupIndex) => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
-          {groupIndex > 0 && <p className="vc-path-next">
+          {groupIndex > 0 && (referenceGroups.has(group.id) ? <p className="vc-path-next">
+            <FileText size={15} aria-hidden="true" />
+            <span>Keep these beside you on any course</span>
+          </p> : <p className="vc-path-next">
             <ArrowDown size={15} aria-hidden="true" />
             <span>Then continue to {group.title}</span>
-          </p>}
-          <div className="vc-category-heading"><div><h3 id={`category-${group.id}`}>{group.title}</h3><p>{group.description}{group.entries.length > 1 && <span className="vc-sr-only"> Take these courses in order.</span>}</p></div><span>{group.entries.length} course{group.entries.length === 1 ? '' : 's'}</span></div>
+          </p>)}
+          <div className="vc-category-heading"><div><h3 id={`category-${group.id}`}>{group.title}</h3><p>{group.description}{group.entries.length > 1 && !referenceGroups.has(group.id) && <span className="vc-sr-only"> Take these courses in order.</span>}</p></div><span>{referenceGroups.has(group.id)
+            ? `${group.entries.length} ${group.entries.length === 1 ? 'library' : 'libraries'}`
+            : `${group.entries.length} course${group.entries.length === 1 ? '' : 's'}`}</span></div>
           <CatalogSequenceGrid>
           {group.entries.map((episode) => (
             <EpisodeTile
