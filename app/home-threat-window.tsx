@@ -22,7 +22,6 @@ export default function HomeThreatWindow() {
   const [on, setOn] = useState(false);
   const [ready, setReady] = useState(false);
   const [scale, setScale] = useState(0);
-  const [clock, setClock] = useState('');
 
   // Decide once the page runs: live monitor on larger screens, still screen otherwise.
   useEffect(() => {
@@ -60,15 +59,6 @@ export default function HomeThreatWindow() {
     return () => observer.disconnect();
   }, [mode]);
 
-  // The console's UTC clock (ours, for atmosphere; it is not Radware data).
-  useEffect(() => {
-    if (!on) return;
-    const tick = () => setClock(new Date().toISOString().slice(11, 19) + ' UTC');
-    tick();
-    const timer = window.setInterval(tick, 1000);
-    return () => window.clearInterval(timer);
-  }, [on]);
-
   const live = mode === 'live';
   return <section ref={section} className="sbd-watch container" aria-labelledby="sbd-watch-title">
     <div className="sbd-watch-copy">
@@ -84,8 +74,7 @@ export default function HomeThreatWindow() {
     <figure className={`sbd-monitor${live && on ? ' is-on' : ''}${mode === 'still' ? ' is-still' : ''}`}>
       <div className="sbd-monitor-bezel">
         <div className="sbd-monitor-bar">
-          <span className="sbd-monitor-live"><span aria-hidden="true"/>SOC-01 · Live feed</span>
-          <span className="sbd-monitor-clock" aria-hidden="true">{clock}</span>
+          <span className="sbd-monitor-live"><span aria-hidden="true"/>Live feed</span>
           <span>Radware</span>
         </div>
         <div ref={screen} className="sbd-monitor-screen">
