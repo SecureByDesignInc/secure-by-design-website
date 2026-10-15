@@ -182,3 +182,11 @@ window.CATALOG = [
     "sources": "[1,2]"
   }
 ];
+
+// The three Network Authorization courses as the Training Library presents them (content/videos.json);
+// the page's learning path groups the modules by these. tests/video-catalog.test.mjs keeps them equal.
+window.CATALOG_PARTS = [
+  { number: '2.1', title: 'Risk Management Framework', modules: ['01', '02', '03', '04'] },
+  { number: '2.2', title: 'Body of Evidence', modules: ['05', '06', '07', '08', '09'] },
+  { number: '2.3', title: 'Authorization to Operate', modules: ['10', '11', '12'], capstone: true },
+];

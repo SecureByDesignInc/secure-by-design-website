@@ -94,6 +94,20 @@ test('authorization parts cover the existing course once and preserve saved prog
   }
 });
 
+test('the Network Authorization page groups its modules by the catalog courses and shows their edition', () => {
+  const context = { window: {} };
+  runInNewContext(readFileSync(new URL('../public/training/rmf/catalog-data.js', import.meta.url), 'utf8'), context);
+  const parts = getCatalogEntries(library).filter(entry => entry.categoryId === 'network-authorization');
+  assert.deepEqual(JSON.parse(JSON.stringify(context.window.CATALOG_PARTS)).map(part => [part.number, part.title, part.modules]), parts.map(part => [part.number, part.title, part.moduleIds]));
+  const editions = new Set(parts.map(part => part.training.materialsEdition));
+  assert.equal(editions.size, 1);
+  const page = readFileSync(new URL('../public/training/rmf/index.html', import.meta.url), 'utf8');
+  const shown = [...page.matchAll(/[Ee]dition\s+([\d.]+)/g)].map(match => match[1]);
+  assert.ok(shown.length >= 2);
+  assert.deepEqual([...new Set(shown)], [...editions], 'the page shows the catalog edition everywhere');
+  assert.ok(page.includes(`Updated ${parts[0].training.updated}`));
+});
+
 test('configuration lessons have complete guides, checklists, quizzes and shared progress identifiers', () => {
   const configurations = JSON.parse(readFileSync(new URL('../content/configuration-courses.json', import.meta.url), 'utf8'));
   const progress = JSON.parse(readFileSync(new URL('../content/training-progress.json', import.meta.url), 'utf8'));
