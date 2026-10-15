@@ -165,7 +165,7 @@ export default function TemplateLibrary() {
         <aside className="tl-gaps" aria-labelledby="template-gaps">
           <h3 id="template-gaps">What isn&apos;t posted, and why</h3>
           <ul>
-            <li><b>The Intelligence and Cross Domain Solution overlays</b> are distributed by CAC only, so their columns were removed from the SCTM worksheet. The Classified, Accessibility, Isolated LAN, Stand-alone and Privacy overlays remain.</li>
+            <li><b>Some SCTM overlays.</b> The Intelligence and Cross Domain Solution overlays are FOUO and CAC-only, and the JSIG Accessibility, Isolated LAN and Standalone overlays could not be verified as publicly released, so their columns were removed. The Classified (2014) and Privacy (2015) overlays remain, with the current CNSS editions linked under Select.</li>
             <li><b>The DAF IT Categorization and Selection Checklist (ITCSC)</b> is distributed on the Air Force RMF Knowledge Service, which needs a CAC. Its entry describes what it records.</li>
             <li><b>The Sanitization Plan Review Checklist</b> is marked not releasable outside its issuing office. Its entry points to NIST SP 800-88 Rev. 2 and NSA/CSS Policy Manual 9-12, which teach the same steps.</li>
             <li><b>Decision letters, the System Validation Memorandum, Mission Impact Memorandum and PPSM matrix</b> have no public templates. They are kept on the RMF Knowledge Service, in SAP eMASS or inside each organization.</li>

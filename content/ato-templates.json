@@ -232,11 +232,11 @@
     {
       "group": "select",
       "title": "SCTM Worksheet (53Rev4) with Overlays",
-      "source": "DoD JSCS Working Group, 1 February 2025 edition; overlay columns sanitized for public release",
+      "source": "DoD JSCS Working Group, 1 February 2025 edition; sanitized for public release",
       "framework": "JSIG",
       "status": "adapted",
       "rmf": "S-1, S-2, A-4",
-      "note": "The SCTM workbook with CNSSI 1253 (May 2014) baselines, JSIG guidance and the Classified, Accessibility, Isolated LAN, Stand-alone and Privacy overlays. The Intelligence and Cross Domain Solution overlay columns were removed because those overlays are distributed by CAC only.",
+      "note": "The SCTM workbook with CNSSI 1253 (May 2014) baselines, JSIG guidance, the Classified (May 2014) and Privacy (April 2015) overlays, and the CNSSI 1253 Appendix D insider threat and common control columns. Overlays that are CAC-only or could not be verified as publicly released were removed; see the two entries below.",
       "links": [
         {
           "label": "Download",
@@ -260,6 +260,32 @@
           "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
         }
       ]
+    },
+    {
+      "group": "select",
+      "title": "CNSS Intelligence Overlay and Cross Domain Solution Overlay",
+      "source": "CNSS, CNSSI 1253F Attachment 4 and 1253E Attachment 3",
+      "framework": "CNSS",
+      "status": "restricted",
+      "rmf": "S-2",
+      "note": "Marked FOUO in the CNSS library and available only with a CAC or PKI login, so their columns were removed from the SCTM worksheet. Apply them only when your categorization calls for them, using your ISSM's copy.",
+      "links": [
+        {
+          "label": "CNSS Instructions page",
+          "format": "WEB",
+          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "select",
+      "title": "JSIG Accessibility, Isolated LAN and Standalone overlays",
+      "source": "DoD JSCS Working Group, 2016 and 2019",
+      "framework": "JSIG",
+      "status": "restricted",
+      "rmf": "S-2",
+      "note": "The JSIG names these scenarios but does not publish the overlays' control selections, and no official public copy was found, so their columns were removed from the SCTM worksheet. Get the current versions from your ISSM or PSO.",
+      "links": []
     },
     {
       "group": "select",

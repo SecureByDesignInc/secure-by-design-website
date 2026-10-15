@@ -18,8 +18,13 @@ Published as provided (personal metadata such as author names and file paths rem
 
 Adapted for training:
   JSIG-SCTM-Worksheet-53Rev4-with-Overlays-1FEB2025.xlsx
-    The Intelligence Overlay and Cross Domain Solution overlay columns were removed:
-    those CNSS overlays are distributed by CAC only. Everything else is unchanged.
+    Keeps the CNSSI 1253 (May 2014) baselines, JSIG guidance, the Classified (May 2014)
+    and Privacy (April 2015) overlays and the CNSSI 1253 Appendix D insider threat and
+    common control columns. Removed: the Intelligence and Cross Domain Solution overlays
+    (FOUO, CAC-only on the CNSS site), and the JSIG Accessibility, Isolated LAN and
+    Standalone overlays and the legacy Space Platform (2012) and draft Tactical (2012)
+    overlays, which could not be verified as publicly released. Get those from your
+    ISSM or PSO.
   DATO-Decommissioning-Memo-Template-Training-Adaptation.docx
     Office names, letterhead seal, people, address and phone replaced with placeholders.
   ATO-ATC-Package-Checklist-Training-Adaptation.docx
