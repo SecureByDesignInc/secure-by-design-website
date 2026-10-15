@@ -15,7 +15,7 @@ export default function Privacy() {
     <article className="privacy container">
       <p className="privacy-kicker">Secure By Design · Privacy</p>
       <h1>Privacy policy</h1>
-      <p className="privacy-meta">Effective 8 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
+      <p className="privacy-meta">Effective 14 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
       <p className="privacy-lead">Secure By Design Team LLC (“Secure By Design”, “we”) runs this website and app to teach cybersecurity. You can learn without an account. We collect only what we need to run accounts, keep your progress, and send emails you ask for. We don’t sell personal information, show ads, or track you across other sites and apps.</p>
 
       <nav className="privacy-toc" aria-label="On this page">
@@ -73,6 +73,7 @@ export default function Privacy() {
           <li><strong>Resend</strong> delivers our emails.</li>
           <li><strong>PostHog</strong> (United States) receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
           <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
+          <li><strong>Radware</strong> provides the live threat map on our Threat Map page, in the homepage’s live threat window, and in the app. The map loads from Radware when you open the Threat Map page, scroll to the live threat window on the homepage (on larger screens, unless you have reduced motion or data saving turned on), or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
           <li><strong>UserJot</strong> hosts our public idea board. It opens in your browser only if you choose to visit it, and posts there are public.</li>
           <li><strong>Apple</strong> and <strong>Google</strong> distribute the app under their own privacy policies.</li>
         </ul>

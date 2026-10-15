@@ -28,3 +28,44 @@ body.site-editorial:has(.sbd-home){background:#050b14;color:#f4f8ff}
 .sbd-home .sbd-creator-card p{max-width:900px;font-size:16px;line-height:1.8;color:#bccddd}
 .sbd-creator-signature{display:block;margin-top:15px;font-size:14px;color:#95bdcf}
 @media(max-width:600px){.sbd-creator-note{padding-bottom:35px}.sbd-creator-card{gap:13px;padding:21px 17px}.sbd-creator-initials{flex-basis:38px;height:38px;font-size:13px}.sbd-home .sbd-creator-card p{font-size:14px}}
+
+/* Live threat window: a security operations monitor that powers on as it scrolls into view (app/home-threat-window.tsx). */
+.sbd-watch{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.6fr);gap:48px;align-items:center;padding-top:36px;padding-bottom:72px}
+.sbd-watch.container{width:min(1260px,calc(100% - 72px))}
+.sbd-watch h2{margin-bottom:22px}.sbd-watch-copy>p:not(.sbd-kicker){max-width:380px}
+.sbd-watch-actions{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:22px}.sbd-watch-actions .sbd-inline-link{min-height:40px}
+.sbd-monitor{margin:0;min-width:0}
+.sbd-monitor-bezel{padding:10px;border:1px solid #2b3d53;border-radius:18px;background:linear-gradient(160deg,#13253a,#08111c 60%);box-shadow:0 30px 90px #0007,inset 0 1px 0 #ffffff0d;transition:box-shadow .8s}
+.sbd-monitor.is-on .sbd-monitor-bezel{box-shadow:0 30px 90px #0007,0 0 70px #2a9fd426,inset 0 1px 0 #ffffff0d}
+.sbd-monitor-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:3px 8px 10px;color:#89a8c0;font:600 11px/1.4 var(--font-geist-mono),ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
+.sbd-monitor-live{display:inline-flex;align-items:center;gap:8px}.sbd-monitor-live span{width:8px;height:8px;border-radius:50%;background:#3a4b5e}
+.sbd-monitor.is-on .sbd-monitor-live span{background:#ff5d6c;animation:sbd-blink 1.6s steps(2,start) infinite}
+@keyframes sbd-blink{to{visibility:hidden}}
+.sbd-monitor-screen{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px;background:#02070d;isolation:isolate}
+.sbd-monitor-screen iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;opacity:0;pointer-events:none;transition:opacity 1s .35s}
+.sbd-monitor.is-on .sbd-monitor-screen iframe.is-ready{opacity:1}
+/* Idle screen (before power-on, while loading, and the still screen for phones / reduced motion / Save-Data). */
+.sbd-monitor-idle{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 55%,#12405a55,transparent 70%),repeating-linear-gradient(0deg,#8ae5ef0b 0 1px,transparent 1px 30px),repeating-linear-gradient(90deg,#8ae5ef0b 0 1px,transparent 1px 30px),#030a12;opacity:.45;transition:opacity .6s}
+.sbd-monitor.is-on .sbd-monitor-idle,.sbd-monitor.is-still .sbd-monitor-idle{opacity:1}
+.sbd-monitor-arc{position:absolute;border:2px solid transparent;border-top-color:#83dcfa;border-radius:50%;opacity:.5}
+.sbd-monitor-arc.a{left:12%;top:36%;width:36%;height:30%}.sbd-monitor-arc.b{left:44%;top:30%;width:32%;height:24%;border-top-color:#ff5d6c}.sbd-monitor-arc.c{left:26%;top:52%;width:46%;height:20%;border-top-color:#f7bd68;opacity:.35}
+/* CRT texture: scan lines, a slow sweep, and a vignette. */
+.sbd-monitor-scan{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,#ffffff07 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 60%,#000a 100%)}
+.sbd-monitor-scan:after{content:'';position:absolute;left:0;right:0;top:-20%;height:20%;background:linear-gradient(180deg,transparent,#83dcfa12,transparent);opacity:0}
+.sbd-monitor.is-on .sbd-monitor-scan:after{opacity:1;animation:sbd-sweep 7s linear infinite 1.2s}
+@keyframes sbd-sweep{to{top:100%}}
+.sbd-monitor-corners{position:absolute;inset:12px;z-index:3;pointer-events:none;opacity:.7;background:linear-gradient(#83dcfa,#83dcfa) top left/22px 2px no-repeat,linear-gradient(#83dcfa,#83dcfa) top left/2px 22px no-repeat,linear-gradient(#83dcfa,#83dcfa) top right/22px 2px no-repeat,linear-gradient(#83dcfa,#83dcfa) top right/2px 22px no-repeat,linear-gradient(#83dcfa,#83dcfa) bottom left/22px 2px no-repeat,linear-gradient(#83dcfa,#83dcfa) bottom left/2px 22px no-repeat,linear-gradient(#83dcfa,#83dcfa) bottom right/22px 2px no-repeat,linear-gradient(#83dcfa,#83dcfa) bottom right/2px 22px no-repeat}
+/* Power-on: a bright line opens across the screen, then the picture fades up behind it. */
+.sbd-monitor-screen:before{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;background:#c9f5ff;opacity:0;transform:scale(0,.004)}
+.sbd-monitor.is-on .sbd-monitor-screen:before{animation:sbd-power .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes sbd-power{0%{opacity:1;transform:scale(0,.004)}35%{opacity:1;transform:scale(1,.004)}70%{opacity:.5;transform:scale(1,1)}100%{opacity:0;transform:scale(1,1)}}
+/* The whole screen links to the full map. */
+.sbd-monitor-link{position:absolute;inset:0;z-index:5;display:flex;align-items:flex-end;justify-content:flex-end;padding:22px}
+.sbd-monitor-link span{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #4f9edd;border-radius:10px;background:#06101bdd;color:#e3f6ff;font-size:.875rem;font-weight:600;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.sbd-monitor-link:hover span,.sbd-monitor-link:focus-visible span,.sbd-monitor.is-still .sbd-monitor-link span{opacity:1;transform:none}
+.sbd-monitor.is-still .sbd-monitor-link{align-items:center;justify-content:center}
+.sbd-home .sbd-monitor-link:focus-visible{outline-offset:-6px}
+.sbd-monitor-stand{width:24%;height:22px;margin:0 auto;background:linear-gradient(180deg,#0f1f31,#0a1522);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}
+.sbd-monitor figcaption{margin-top:12px;text-align:center;color:#7f99ab;font-size:.75rem;line-height:1.6}
+@media(max-width:1000px){.sbd-watch{grid-template-columns:1fr;gap:30px}.sbd-watch.container{width:calc(100% - 48px)}.sbd-watch-copy>p:not(.sbd-kicker){max-width:560px}}
+@media(max-width:700px){.sbd-watch{padding-top:20px;padding-bottom:50px}.sbd-watch.container{width:calc(100% - 40px)}.sbd-monitor-bezel{padding:7px;border-radius:14px}.sbd-monitor-bar{font-size:10px;letter-spacing:.08em;padding-bottom:7px}.sbd-monitor-link{padding:14px}}

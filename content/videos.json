@@ -16,6 +16,11 @@
       "channelUrl": "https://www.instagram.com/securebydesigninc/"
     },
     {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "channelUrl": "https://www.linkedin.com/company/secure-by-design-inc/"
+    },
+    {
       "id": "discord",
       "name": "Discord",
       "channelUrl": "https://discord.gg/MDrGbP4cAY"

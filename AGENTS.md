@@ -474,3 +474,47 @@ The owner answered the audit's judgment calls (a Word document with comments). T
 - **No time thresholds:** no numeric drift limits or daily reference-check schedule; verification shows each system's source and small, stable offsets.
 - **Retention periods and alert thresholds are "dependent on your environment";** courses say what each stage keeps and why, and the learner records the value chosen.
 - **STIG values** that couldn't be verified against current DISA content are worded "per the current STIG".
+
+## Community & Careers hub — October 14, 2026
+
+The owner asked to publish a Community & Careers hub with a page for every state, chose federal job leads at launch (member-shared leads later), all 50 states plus Washington, DC, and verified state links. This supersedes the "Offline sections" note above for Community only: the retired `/careers` pages, role directory and their forms stay offline and unchanged.
+
+- **Pages.** `/community` (app/community/page.tsx) is the hub: masthead, a state finder (plain links, with a browser-side search box), what every state page holds, and an "In the works" list. `/community/<slug>` (app/community/[state]/page.tsx) is one template for all 51 places; unknown slugs are 404. The main navigation entry is “Community & Careers Hub”, between Training Library and My Account (content/navigation.json, also in the generated shells). The sitemap lists the hub and every state page.
+- **State data.** `content/community-states.json` holds code, name, slug and up to three official links per state: `stateJobs` (state government job portal), `workforceAgency` (runs WIOA and American Job Centers) and `jobBoard` (the state's public job board). They were researched from official state pages in October 2026; a missing link is left out rather than guessed (CT, MT and NM job boards, KS and NH state jobs, NH job board). When stateJobs and jobBoard share a URL (Texas) the page shows it once. National directories (chapters, apprenticeships, SkillBridge, CAE, CyberSeek, DoD 8140) live in app/community/community-data.ts.
+- **Federal openings.** `GET /api/community/federal-jobs?state=XX` (server/federal-jobs.js) asks the USAJOBS Search API for series 2210 openings in the state, keeps only those with a work location in that state and a usajobs.gov link, returns up to 8, and caches each state for three hours. It needs the Worker secrets `USAJOBS_API_KEY` and `USAJOBS_EMAIL` (free key from developer.usajobs.gov); without them it answers `{configured:false}` and the page shows "coming soon" with its USAJOBS search link. No visitor data is sent or stored.
+- **Not yet.** Member-shared leads (submission, moderation queue, 30-day expiry, reports), profiles, State Ambassadors and the career tools listed under "In the works" are not built. Suggestions go by email to support@securebydesigninc.com. Member features are described only as coming soon; don't add membership tiers or prices to Community pages.
+- **Checks.** `tests/community-hub.test.mjs` covers the 51 entries, HTTPS links, navigation, sitemap and the federal endpoint.
+
+## Live Threat Map — October 14, 2026
+
+The owner asked for a live cyber threat map on the website and in the app. They first chose Check Point's map, then replaced it the same day with Radware's Live Threat Map (`https://livethreatmap.radware.com/`). Don't restore Check Point.
+
+- **Page.** `/threat-map` (`app/threat-map/`), "Threat Map" in the shared navigation after Training Library (Community shells regenerated), in the sitemap. It uses the Training Library's dark design: intro, the map panel, then "How to read it" (what the map shows, its limits, links to the Training Library and Inside the Network) and a credit line saying the map is Radware's, shown unchanged, and that Secure By Design is not affiliated with Radware. Don't present Radware as a partner or put it beside Tenable and Red Hat.
+- **What the map is.** Radware describes it as near real-time, anonymized and sampled network and application attacks from its global threat deception network and cloud security services. Don't claim more than that (for example specific panels, sensors, or completeness).
+- **Loads automatically (owner's request, 14 October 2026; supersedes the earlier click-to-load button).** The frame is added as soon as the page runs in the browser, fades in over our own placeholder (spinner, "Loading the live map…") when Radware's page loads, and after 12 seconds the placeholder adds an "Open it on Radware" link. Radware's page carries its own analytics (Google Tag Manager) and cookies, which the privacy policy discloses as loading when the page opens. `scripts/browser-check.mjs` ignores requests, console output and CSP probes from Radware's frame only. The frame has `sandbox="allow-scripts allow-same-origin"` and `referrerPolicy="no-referrer"`; Full screen applies to our own stage. "Open on Radware" is always visible. Radware sends no X-Frame-Options or frame-ancestors header (checked 14 October 2026); if that changes, the direct link still works. Don't proxy, scrape, or call Radware's data feed.
+- **Policy.** `frame-src` adds only `https://livethreatmap.radware.com`. The privacy policy (effective 14 October 2026) lists Radware under "Who helps us run the service". `tests/threat-map.test.mjs` checks these rules.
+- **App.** The native app opens the same map from Explore (see that repository).
+
+## Community & Careers Hub name and design — October 14, 2026
+
+The owner renamed Community to “Community & Careers Hub” (navigation, kicker and page titles) and asked that the section match the rest of the site. The hub and state pages now use the Training Library's dark design rather than light reading surfaces: `main.cm-page` on #071521, the `vc-intro` layout (kicker, two-tone heading with a cyan second line, intro copy on the right), Training Library section headings, the catalog toolbar for the state search, pill links, and catalog-tile surfaces (#102737, #365469 borders, 17px corners) with the amber focus ring. Styles are in app/community/community.css (`cm-` classes) and follow app/videos/videos.css; keep them in step if the Training Library design changes.
+
+## Homepage live threat window — October 14, 2026
+
+The owner chose the "window" idea for putting Radware's map on the homepage. `app/home-threat-window.tsx` (styles at the end of `app/template-home.css`) sits after "A note from Secure By Design" and before "More ways to figure it out"; the note stays immediately after Start building your network.
+
+- **Look.** A security operations monitor: bezel, a "SOC-01 · Live feed" bar with a blinking light and our own UTC clock (atmosphere, not Radware data), scan lines, a slow sweep, corner brackets, and a stand. It stays dark until it scrolls into view, then powers on (a bright line opens across the screen) and Radware's map fades in. Heading: "Right now, somewhere, a network is under attack." with links to `/threat-map` and `/training`.
+- **Loading.** On screens wider than 700px without reduced motion or Save-Data, the frame is added when the monitor is within 600px of the viewport (never on page load). Radware's dashboard is drawn at 1440 × 810 and scaled to the monitor's width. The frame is `inert`, sandboxed (`allow-scripts allow-same-origin`) and sends no referrer; the whole screen is a link to `/threat-map`, so homepage scrolling is never caught in the frame. Phones, reduced motion and Save-Data get a still screen with "Watch live attacks" and never load Radware.
+- **Policy.** The privacy policy's Radware entry names the homepage window and when it loads. `tests/threat-map.test.mjs` checks these rules.
+
+## Homepage order and a larger live threat window — October 14, 2026 (evening)
+
+The owner asked to trade the live threat window and "Start building your network" and to make the window slightly larger. This supersedes the October 5 placement of Start building your network immediately after the hero, and the note's "immediately after Start building your network" placement.
+
+- **Order:** hero, live threat window, "A note from Secure By Design", Start building your network, More ways to figure it out, Choose your next step, About. The note stayed where it was, so it now sits between the window and Start building. `tests/threat-map.test.mjs` checks this order.
+- **Size:** the window's section is up to 1260px wide (the site container is 1120px), and the monitor takes about 72% of it (copy column .62fr, monitor 1.6fr, 48px gap). Phones and tablets keep the stacked layout.
+
+## Threat Map menu spot and a plainer monitor bar — October 14, 2026 (evening)
+
+- **Menu:** Threat Map now sits after Community & Careers Hub and before My Account (owner's choice). This supersedes "Threat Map in the shared navigation after Training Library"; Community shells regenerated.
+- **Live threat window:** the owner removed the UTC clock and the "SOC-01" label. The monitor bar reads "Live feed" (blinking light once powered on) on the left and "Radware" on the right. Don't add them back.
