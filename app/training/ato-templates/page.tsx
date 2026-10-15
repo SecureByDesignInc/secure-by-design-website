@@ -4,7 +4,7 @@ import './templates.css';
 import { sharePreview } from '../../share-preview';
 
 // The ATO Template Library: the Training Library's reference tile opens here. Data: content/ato-templates.json.
-const description = 'The DoD SAP / JSIG templates an authorization package is built from, arranged by RMF step: SSP, SCTM, RAR, POA&M, ConMon strategy, appointment letter and more to download, with official sources for the rest of the Body of Evidence.';
+const description = 'Official sources for building an authorization package, arranged by RMF step and verified as publicly released by their publishers: DCSA\'s Risk Assessment Report template, CNSSI 1253 and the CNSS Privacy Overlay.';
 export const metadata = {
   title: 'ATO Template Library',
   description,

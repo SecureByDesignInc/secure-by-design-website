@@ -1,6 +1,7 @@
 // Labels for the ATO Template Library (content/ato-templates.json), shared by the expanded catalog tile
 // (library-experience.tsx) and the full library page (app/training/ato-templates).
-// Owner direction, 15 October 2026: the library is a DoD SAP / JSIG set arranged by RMF step.
+// Owner direction, 15 October 2026: the library lists only documents verified as publicly released by an
+// official publisher, each linked to the publisher's own copy. Nothing is hosted here.
 export const FRAMEWORKS: { id: string; label: string }[] = [
   { id: 'JSIG', label: 'DoD SAP / JSIG' },
   { id: 'DAF', label: 'Air Force' },
@@ -11,16 +12,13 @@ export const FRAMEWORKS: { id: string; label: string }[] = [
   { id: 'Other', label: 'Other' },
 ];
 
-// What a learner can do with each entry: download our copy, download an adapted copy, follow the publisher's link,
-// or read about an item that cannot be posted.
+// What a learner gets from an entry: every entry opens its publisher's own copy.
 export const STATUSES: Record<string, { label: string; detail: string }> = {
-  hosted: { label: 'Download', detail: 'Unclassified template, posted here as published with personal metadata removed' },
-  adapted: { label: 'Adapted', detail: 'Generalized for training: restricted content, offices, people and contact details removed' },
-  official: { label: 'Official link', detail: 'Opens the publisher\'s current copy' },
-  restricted: { label: 'Restricted', detail: 'CAC-only, internal or not releasable, so described here and not posted' },
+  official: { label: 'Official link', detail: 'Opens the publisher\'s own copy' },
 };
 
 export const frameworkLabel = (id: string) => FRAMEWORKS.find(framework => framework.id === id)?.label ?? id;
 
-/** Files posted on this site download directly; everything else opens the publisher's page in a new tab. */
-export const isHostedFile = (href: string) => href.startsWith('/training/library/');
+/** Opens a sentence with the entry count: "Three official sources", "One official source". */
+export const sourcesPhrase = (count: number) =>
+  `${['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][count] ?? count} official source${count === 1 ? '' : 's'}`;

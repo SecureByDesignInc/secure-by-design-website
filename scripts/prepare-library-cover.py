@@ -28,7 +28,7 @@ draw.text((54, 122), 'EDUCATE. EMPOWER. SECURE THE FUTURE.', font=regular(7), fi
 draw.text((54, 175), 'TEMPLATES & REFERENCES   /   TEMPLATE LIBRARY', font=bold(8), fill=TEAL)
 draw.text((52, 197), 'ATO Template', font=bold(33), fill=NAVY)
 draw.text((52, 236), 'Library', font=bold(33), fill=NAVY)
-draw.text((54, 283), 'The DoD SAP / JSIG templates, step by step', font=bold(15), fill=TEAL)
+draw.text((54, 283), 'Verified public sources, by RMF step', font=bold(15), fill=TEAL)
 
 def wrap(text, font, width):
     lines, line = [], ''
@@ -41,10 +41,11 @@ def wrap(text, font, width):
             line = trial
     return lines + [line]
 
-posted = sum(t['status'] in ('hosted', 'adapted') for t in data['templates'])
-intro = (f"{posted} Word and Excel templates to download, arranged by RMF step, with official sources for "
-         "the rest of the Body of Evidence. They follow the JSIG of 11 April 2016 with its 2018 errata "
-         "and are adapted for instruction and practice. Use your AO and PSO's current templates on a real system.")
+total = len(data['templates'])
+count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][total] if total < 10 else str(total)
+intro = (f"{count} official source{'' if total == 1 else 's'} for building an authorization package, arranged by RMF step. Each one is "
+         "verified as publicly released by its publisher, and every link opens the publisher's own copy. "
+         "For instruction and practice: use your AO and PSO's current templates on a real system.")
 y = 318
 for line in wrap(intro, regular(10), 500):
     draw.text((54, y), line, font=regular(10), fill=BODY)
@@ -53,19 +54,19 @@ for line in wrap(intro, regular(10), 500):
 y += 18
 draw.text((54, y), 'IN THIS LIBRARY', font=bold(8), fill=TEAL)
 y += 18
-groups = [g for g in data['groups'] if any(t['group'] == g['id'] for t in data['templates'])]
-half = (len(groups) + 1) // 2
-for index, group in enumerate(groups):
-    count = sum(t['group'] == group['id'] for t in data['templates'])
-    column, row = divmod(index, half)
-    x, gy = 54 + column * 255, y + row * 16
-    draw.text((x, gy), f"{index + 1:02d}", font=bold(8), fill=TEAL)
-    draw.text((x + 18, gy), f"{group['title']}  ·  {group['abbr']}  ·  {count}", font=regular(8.5), fill=BODY)
+# One line per entry: its RMF step, short title (before any comma) and publisher (the abbreviation in brackets).
+steps = {g['id']: g['title'] for g in data['groups']}
+for index, item in enumerate(data['templates']):
+    gy = y + index * 18
+    name = item['title'].split(',')[0]
+    publisher = item['source'].split('(')[1].split(')')[0] if '(' in item['source'] else item['source']
+    draw.text((54, gy), f"{index + 1:02d}", font=bold(8), fill=TEAL)
+    draw.text((72, gy), f"{steps[item['group']]}  ·  {name}  ·  {publisher}", font=regular(8.5), fill=BODY)
 
 from datetime import date
 checked_on = date.fromisoformat(data['checked'])
 checked = f'{checked_on.day} {checked_on:%B %Y}'
-draw.text((54, 744), f'© 2026 Secure By Design Team LLC.   Template library · Links checked {checked}', font=regular(7), fill=MUTED)
+draw.text((54, 744), f'© 2026 Secure By Design Team LLC.   Reference library · Links checked {checked}', font=regular(7), fill=MUTED)
 out = ROOT / 'public/training/library/ato-templates-cover.webp'
 out.parent.mkdir(parents=True, exist_ok=True)
 page.save(out, 'WEBP', quality=90)

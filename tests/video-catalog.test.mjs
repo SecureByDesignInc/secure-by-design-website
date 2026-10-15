@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
@@ -38,7 +38,7 @@ test('related build courses stay together before authorization and materials rem
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
   assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
-  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence', 'ato-templates']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence']);
   assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-authorization-to-operate']);
   for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
     for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
@@ -371,9 +371,10 @@ test('every course tile carries the companion details the expanded tile shows', 
 });
 
 
-// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group,
-// rebuilt the same day around the owner's DoD SAP / JSIG template set, arranged by RMF step.
-test('the ATO Template Library tile is a reference entry with valid templates and a page', () => {
+// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group.
+// Owner direction the same day: list only documents verified as publicly released by an official publisher,
+// each linked to the publisher's own copy. Nothing is hosted here.
+test('the ATO Template Library tile lists only verified public sources, linked to their publishers', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
   const [reference] = library.references;
   const category = library.categories.find(item => item.id === reference.categoryId);
@@ -385,35 +386,30 @@ test('the ATO Template Library tile is a reference entry with valid templates an
   assert.ok(existsSync(new URL('../public' + reference.training.cover, import.meta.url)), 'cover');
   assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
   assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
-  assert.deepEqual(templates.groups.map(group => group.id), ['start', 'prepare', 'categorize', 'select', 'implement', 'assess', 'authorize', 'monitor', 'decommission', 'reference']);
-  assert.equal(new Set(templates.templates.map(item => item.title)).size, templates.templates.length, 'unique entry titles');
+  // The verified set: add an entry only when its publisher posts it publicly (see AGENTS.md).
+  assert.deepEqual(templates.groups.map(group => group.id), ['categorize', 'select', 'assess']);
+  assert.deepEqual(templates.templates.map(item => item.title), [
+    'CNSSI 1253, Categorization and Control Selection for National Security Systems',
+    'CNSS Privacy Overlay',
+    'Risk Assessment Report (RAR) template',
+  ]);
   const groupIds = templates.groups.map(group => group.id);
   for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has entries`);
   for (const item of templates.templates) {
     assert.ok(groupIds.includes(item.group), `${item.title} group`);
-    assert.ok(['JSIG', 'DAF', 'DoD', 'CNSS', 'NIST', 'FedRAMP', 'Other'].includes(item.framework), `${item.title} source`);
-    assert.ok(['hosted', 'adapted', 'official', 'restricted'].includes(item.status), `${item.title} status`);
+    assert.ok(['DoD', 'CNSS', 'NIST'].includes(item.framework), `${item.title} publisher`);
+    assert.equal(item.status, 'official', `${item.title} links to its publisher`);
     assert.ok(item.rmf && item.source && item.note, `${item.title} details`);
-    if (item.status !== 'restricted') assert.ok(item.links.length > 0, `${item.title} has a file or link`);
+    assert.ok(item.links.length > 0, `${item.title} has a link`);
     for (const link of item.links) {
       assert.ok(link.label && link.format, `${item.title} link label`);
       assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);
-      if (link.href.startsWith('/')) {
-        assert.ok(['hosted', 'adapted'].includes(item.status), `${item.title}: only posted entries link to files here`);
-        assert.ok(existsSync(new URL('../public' + link.href, import.meta.url)), `${link.href} exists`);
-      } else assert.match(link.href, /^https:\/\//, `${item.title} links to its publisher`);
+      assert.match(link.href, /^https:\/\/([a-z0-9-]+\.)+(gov|mil)\//, `${item.title} links to an official government site`);
     }
   }
-  // The owner's set: every posted file is listed, and nothing restricted is posted.
-  const posted = templates.templates.filter(item => ['hosted', 'adapted'].includes(item.status)).flatMap(item => item.links.map(link => link.href));
-  const folder = new URL('../public/training/library/ato-templates/', import.meta.url);
-  const files = readdirSync(folder).filter(name => /\.(docx|xlsx)$/.test(name));
-  assert.deepEqual(files.map(name => '/training/library/ato-templates/' + name).sort(), [...posted].sort());
-  assert.ok(existsSync(new URL('../public' + templates.download.href, import.meta.url)), 'download-all ZIP');
-  for (const name of ['ITCSC', 'Sanitization']) assert.ok(!files.some(file => file.includes(name)), `${name} is not posted`);
-  for (const title of ['DAF IT Categorization and Selection Checklist (ITCSC) v10.1', 'Sanitization Plan Review Checklist']) {
-    assert.equal(templates.templates.find(item => item.title === title)?.status, 'restricted', title);
-  }
+  // Nothing is hosted: the owner's JSIG files, the adaptations, the README and the ZIP stay removed.
+  assert.ok(!existsSync(new URL('../public/training/library/ato-templates/', import.meta.url)), 'no library files are posted');
+  assert.equal(templates.download, undefined, 'no download-all ZIP');
   for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
   assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['ato-templates']);
 });

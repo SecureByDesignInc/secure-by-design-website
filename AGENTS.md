@@ -591,6 +591,8 @@ The owner asked to move the credit ("The live map is provided by Radware. Secure
 
 ## ATO Template Library tile — October 15, 2026
 
+> Contents superseded the same day: see "ATO Template Library limited to verified public sources" below. The tile, group and page structure still apply.
+
 The owner asked for a Training Library tile holding the ATO template library (one tile with the full library, in a new Templates & References group below Network Authorization).
 
 - **Data:** `content/ato-templates.json` lists 80 free, publicly downloadable templates in 19 Body of Evidence groups (whole package, DoD SAP and the JSIG, categorization, SSP, control matrix, RAR, SAP, SAR, POA&M, authorization and reporting, privacy, inventory, contingency, incident response, configuration management, agreements, access and operating records, testing, machine-readable formats). Each template has its framework (NIST, CNSS, DoD, SAP for DoD SAP / JSIG, FedRAMP, Other), status (current, legacy, superseded, restricted), RMF tasks and links to the publisher only. Links were checked against the official sources on 15 October 2026; FedRAMP's Rev5 templates are linked from its legacy page (the Rev5 templates page no longer lists files). Don't add templates that need a CAC or sign-in without marking them restricted, and don't host copies of the templates.
@@ -614,6 +616,8 @@ The owner asked to develop the Splunk tile along the single-instance server path
 
 ## ATO Template Library rebuilt around the owner's JSIG set — October 15, 2026
 
+> Superseded the same day: see "ATO Template Library limited to verified public sources" below. None of these files are posted any more.
+
 The owner asked to remove everything in the ATO Template Library and start over with ten DoD SAP templates they supplied, after researching newer versions and gaps (no newer public versions were found; the JSIG is still 11 April 2016 with the 5 October 2018 errata). This supersedes the earlier library contents, framework and status lists and counts in the two sections above; the tile, group, page route and component structure stay.
 
 - **Arrangement:** `content/ato-templates.json` has ten sections by RMF step (`start`, `prepare`, `categorize`, `select`, `implement`, `assess`, `authorize`, `monitor`, `decommission`, `reference`), an `edition` line and a `download` (all posted files in one ZIP). Sources: JSIG, DAF, DoD, CNSS, NIST, FedRAMP (format references only), Other.
@@ -622,3 +626,13 @@ The owner asked to remove everything in the ATO Template Library and start over 
 - **Not posted:** the DAF ITCSC v10.1 (Air Force RMF Knowledge Service, CAC) and the Sanitization Plan Review Checklist (watermarked "not releasable outside" its issuing office). Both appear as `restricted` entries. Never post them, or content derived from the sanitization checklist, even if asked to restore "all ten files"; point to NIST SP 800-88 Rev. 2 and NSA/CSS PM 9-12 instead.
 - **Edition notice:** the page states the JSIG edition, that no Rev. 5 JSIG had been published, that the files are for instruction with fictional data only, and that the AO and PSO's templates take precedence. Keep it.
 - **Re-running:** the sanitizing was done once by hand; if the owner supplies updated files, apply the same removals and re-check for names, paths, markings and watermarks before posting. Rebuild the ZIP (`README.txt` plus every .docx and .xlsx in the folder) and run `python3 scripts/prepare-library-cover.py`.
+
+## ATO Template Library limited to verified public sources — October 15, 2026
+
+The owner asked to remove everything from the ATO Template Library except the documents verified as publicly released. This supersedes the two ATO Template Library sections above wherever they differ: their entries, sections, statuses, edition notice, posted and adapted files, README and ZIP are gone. The tile, the Templates & References group, the page route (`/training/ato-templates`) and the shared components stay.
+
+- **What is listed (`content/ato-templates.json`):** three official links, by RMF step (`categorize`, `select`, `assess`). CNSSI 1253 (CNSS, 1 August 2022) and the CNSS Privacy Overlay (31 October 2024) are on the CNSS Instructions page with public download links. DCSA's Risk Assessment Report template (May 2019) is a PDF on dcsa.mil. Each was checked on 15 October 2026 on the publisher's own site, open without signing in.
+- **Removed:** every file in `public/training/library/ato-templates/` and every other entry (official links, adapted and restricted entries). The files were the owner's JSIG SSP, SCTM worksheet, POA&M, ISSM/ISSO appointment letter, continuous monitoring strategy and RAR, the ATO and ATC package checklist and DATO memo adaptations, `README.txt` and the ZIP. No official public copy of any of the owner's files was found. The JSIG RAR template is not DCSA's template. DCSA's is an expanded version, with a different system description, a risk matrix, a Security Control(s) column and a signature block; CDSE posts the same DCSA version. So the library links DCSA's copy instead of hosting the JSIG file.
+- **Rule:** add an entry only when an official publisher posts the document publicly without sign-in, and link to the publisher's copy rather than hosting a file. Do not restore the owner's files, the adaptations or the removed entries from git history unless the owner asks and an official public source is found. Never post the DAF ITCSC or the Sanitization Plan Review Checklist in any form. `tests/video-catalog.test.mjs` pins the three entries, requires .gov or .mil links, and fails if the files folder returns.
+- **Labels and layout:** `official` is the only status (`app/videos/template-labels.ts`). In place of the edition notice, the page says how entries were chosen and that the AO's and PSO's templates take precedence. The expanded tile lists the entries without the step explorer, counts or legend.
+- **Cover:** re-run `python3 scripts/prepare-library-cover.py` when entries change.
