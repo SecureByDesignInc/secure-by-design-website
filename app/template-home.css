@@ -30,10 +30,11 @@ body.site-editorial:has(.sbd-home){background:#050b14;color:#f4f8ff}
 @media(max-width:600px){.sbd-creator-note{padding-bottom:35px}.sbd-creator-card{gap:13px;padding:21px 17px}.sbd-creator-initials{flex-basis:38px;height:38px;font-size:13px}.sbd-home .sbd-creator-card p{font-size:14px}}
 
 /* Live threat window: a security operations monitor that powers on as it scrolls into view (app/home-threat-window.tsx). */
-.sbd-watch{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.6fr);gap:48px;align-items:center;padding-top:36px;padding-bottom:72px}
+.sbd-watch{padding-top:36px;padding-bottom:72px}
+.sbd-watch-copy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:20px 56px;align-items:end;margin-bottom:30px}
 .sbd-watch.container{width:min(1260px,calc(100% - 72px))}
-.sbd-watch h2{margin-bottom:22px}.sbd-watch-copy>p:not(.sbd-kicker){max-width:380px}
-.sbd-watch-actions{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:22px}.sbd-watch-actions .sbd-inline-link{min-height:40px}
+.sbd-watch-copy p:not(.sbd-kicker){max-width:520px}
+.sbd-watch-actions{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:16px}.sbd-watch-actions .sbd-inline-link{min-height:40px}
 .sbd-monitor{margin:0;min-width:0}
 .sbd-monitor-bezel{padding:10px;border:1px solid #2b3d53;border-radius:18px;background:linear-gradient(160deg,#13253a,#08111c 60%);box-shadow:0 30px 90px #0007,inset 0 1px 0 #ffffff0d;transition:box-shadow .8s}
 .sbd-monitor.is-on .sbd-monitor-bezel{box-shadow:0 30px 90px #0007,0 0 70px #2a9fd426,inset 0 1px 0 #ffffff0d}
@@ -41,7 +42,7 @@ body.site-editorial:has(.sbd-home){background:#050b14;color:#f4f8ff}
 .sbd-monitor-live{display:inline-flex;align-items:center;gap:8px}.sbd-monitor-live span{width:8px;height:8px;border-radius:50%;background:#3a4b5e}
 .sbd-monitor.is-on .sbd-monitor-live span{background:#ff5d6c;animation:sbd-blink 1.6s steps(2,start) infinite}
 @keyframes sbd-blink{to{visibility:hidden}}
-.sbd-monitor-screen{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:10px;background:#02070d;isolation:isolate}
+.sbd-monitor-screen{position:relative;aspect-ratio:1240/800;overflow:hidden;border-radius:10px;background:#02070d;isolation:isolate}
 .sbd-monitor-screen iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;opacity:0;pointer-events:none;transition:opacity 1s .35s}
 .sbd-monitor.is-on .sbd-monitor-screen iframe.is-ready{opacity:1}
 /* Idle screen (before power-on, while loading, and the still screen for phones / reduced motion / Save-Data). */
@@ -67,5 +68,5 @@ body.site-editorial:has(.sbd-home){background:#050b14;color:#f4f8ff}
 .sbd-home .sbd-monitor-link:focus-visible{outline-offset:-6px}
 .sbd-monitor-stand{width:24%;height:22px;margin:0 auto;background:linear-gradient(180deg,#0f1f31,#0a1522);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}
 .sbd-monitor figcaption{margin-top:12px;text-align:center;color:#7f99ab;font-size:.75rem;line-height:1.6}
-@media(max-width:1000px){.sbd-watch{grid-template-columns:1fr;gap:30px}.sbd-watch.container{width:calc(100% - 48px)}.sbd-watch-copy>p:not(.sbd-kicker){max-width:560px}}
+@media(max-width:1000px){.sbd-watch-copy{grid-template-columns:1fr;gap:16px;margin-bottom:24px}.sbd-watch.container{width:calc(100% - 48px)}}
 @media(max-width:700px){.sbd-watch{padding-top:20px;padding-bottom:50px}.sbd-watch.container{width:calc(100% - 40px)}.sbd-monitor-bezel{padding:7px;border-radius:14px}.sbd-monitor-bar{font-size:10px;letter-spacing:.08em;padding-bottom:7px}.sbd-monitor-link{padding:14px}}
