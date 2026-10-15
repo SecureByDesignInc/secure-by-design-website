@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { test } from 'node:test';
+import { runInNewContext } from 'node:vm';
 import { crc32 } from 'node:zlib';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url));
@@ -56,10 +57,37 @@ test('every Training Library tile has exactly one download', () => {
       assert.equal(course.training.package, undefined, course.id);
       assert.equal(course.training.word, undefined, course.id);
     } else {
-      // The authorization tiles share one Word catalog; it is their only download.
-      assert.equal(course.training.package, undefined, course.id);
-      assert.ok(existsSync(publicFile(course.training.word)), course.training.word);
+      // Owner request, 15 October 2026: each authorization course has its own materials, like the build courses.
+      const folder = /^\/training\/([a-z0-9-]+)\//.exec(course.training.guide)[1];
+      assert.equal(course.training.package, `/training/${folder}/SecureByDesign-${folder}-Learning-Package.zip`, course.id);
+      for (const key of ['package', 'word', 'pdf', 'cover']) assert.ok(existsSync(publicFile(course.training[key])), course.training[key]);
     }
+  }
+});
+
+// The Network Authorization courses' ZIPs are built by scripts/prepare-rmf-workbooks.py --all: the workbook in PDF and
+// Word, and a blank starter for each practice artifact the course's modules start or update.
+test('each authorization course ZIP holds its workbook and its evidence starters', () => {
+  const context = { window: {} };
+  for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(read(`public/training/rmf/${file}`).toString(), context);
+  const { CATALOG: modules, CATALOG_PARTS: parts, LEARNING: lessons, ARTIFACTS: artifacts } = context.window;
+  for (const part of parts) {
+    const course = library.courses.find(item => item.id === part.id);
+    const folder = `/training/${part.folder}`;
+    const starters = [];
+    for (const id of part.modules) for (const artifact of lessons[modules.findIndex(m => m.id === id)].artifacts) if (!starters.includes(artifact)) starters.push(artifact);
+    const names = ['START-HERE.txt', `SecureByDesign-${part.folder}-Workbook.pdf`, `SecureByDesign-${part.folder}-Workbook.docx`,
+      ...starters.flatMap(id => [`Evidence starters/${id}-starter.md`, ...(artifacts.find(a => a.id === id).columns ? [`Evidence starters/${id}-starter.csv`] : [])])];
+    const entries = zipEntries(readFileSync(publicFile(course.training.package)));
+    assert.deepEqual(entries.map(entry => entry.name), names, `${part.folder} members`);
+    for (const entry of entries.slice(1, 3)) {
+      const data = readFileSync(publicFile(`${folder}/${entry.name}`));
+      assert.equal(entry.crc, crc32(data), `${part.folder}: ${entry.name}; run python3 scripts/prepare-rmf-workbooks.py --all`);
+    }
+    assert.equal(course.training.word, `${folder}/SecureByDesign-${part.folder}-Workbook.docx`);
+    assert.equal(course.training.pdf, `${folder}/SecureByDesign-${part.folder}-Workbook.pdf`);
+    const pdf = readFileSync(publicFile(course.training.pdf)).toString('latin1');
+    assert.equal((pdf.match(/\/Type\s*\/Page[^s]/g) || []).length, course.training.pages, `${part.folder} workbook page count`);
   }
 });
 
@@ -92,8 +120,14 @@ test('the training has no share controls, and the 1.1 guide offers the same sing
   for (const file of ['companion.tsx', 'video-hub.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
     assert.doesNotMatch(read(`app/videos/${file}`).toString(), /TrainingShare|training-share|Share2/, file);
   }
-  for (const path of ['/training/dc01-dc02/index.html', '/training/rmf/index.html']) {
+  const authorization = library.courses.filter(course => course.kind === 'authorization');
+  for (const path of ['/training/dc01-dc02/index.html', ...authorization.map(course => course.training.guide.replace(/#.*$/, ''))]) {
     assert.doesNotMatch(readFileSync(publicFile(path), 'utf8'), /data-learning-share|guide-share|learning-share/, path);
+  }
+  for (const course of authorization) {
+    const page = readFileSync(publicFile(course.training.guide.replace(/#.*$/, '')), 'utf8');
+    const downloads = [...page.matchAll(/<a [^>]*href="([^"]+)"[^>]*\bdownload\b/g)].map(match => match[1]);
+    assert.deepEqual([...new Set(downloads)], [course.training.package], `${course.id} offers its one download`);
   }
   const guide = readFileSync(publicFile('/training/dc01-dc02/index.html'), 'utf8');
   const downloads = [...guide.matchAll(/<a [^>]*href="([^"]+)"[^>]*\bdownload\b/g)].map(match => match[1]);
@@ -123,7 +157,8 @@ test('training content names Windows releases without version numbers', () => {
   }
   const files = [
     'public/training/dc01-dc02/START-HERE.txt', 'public/training/dc01-dc02/notices.html',
-    'public/training/rmf/learning-data.js', 'public/training/rmf/index.html',
+    'public/training/rmf/catalog-data.js', 'public/training/rmf/learning-data.js', 'public/training/rmf/network-data.js',
+    'public/training/rmf/index.html', 'public/training/rmf-body-of-evidence/index.html', 'public/training/rmf-authorization-to-operate/index.html',
     ...readdirSync(new URL('../public/inside-network-model/', import.meta.url)).filter(name => /\.(js|html|csv|md)$/.test(name)).map(name => `public/inside-network-model/${name}`),
   ];
   for (const file of files) assert.doesNotMatch(read(file).toString(), release, file);

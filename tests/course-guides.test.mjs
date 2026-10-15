@@ -4,6 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const configurations = JSON.parse(read('content/configuration-courses.json'));
@@ -44,4 +45,60 @@ test('every configuration course has a guide in the 1.1 design that carries its 
 test('guide content names Windows releases without version numbers', () => {
   const release = /Windows Server 20\d\d|Server 20\d\d|Windows 1[01]\b|\b2[0-9]H[12]\b/i;
   for (const course of configurations) assert.doesNotMatch(read(`content/course-guides/${course.id}.json`), release, course.id);
+});
+
+// Owner requests, 15 October 2026: the Network Authorization courses (2.1–2.3) follow the same design, and each course
+// has its own page and materials. scripts/prepare-rmf-courses.mjs builds the pages from content/videos.json and
+// window.CATALOG_PARTS; they load the guides' stylesheet and 3D scene from the shared copies the guide generator writes.
+test('each Network Authorization course has its own page in the course guide design', () => {
+  assert.ok(read('public/training/guide/course-guide.css').startsWith(read('scripts/course-guide/style.css')));
+  assert.equal(read('public/training/guide/scene.js'), read('scripts/course-guide/scene.js'));
+  const context = { window: {} };
+  runInNewContext(read('public/training/rmf/catalog-data.js'), context);
+  const library = JSON.parse(read('content/videos.json'));
+  const resources = JSON.parse(read('content/training-resources.json'));
+  const headers = read('public/_headers');
+  const parts = context.window.CATALOG_PARTS;
+  assert.deepEqual(Array.from(parts, part => part.folder), ['rmf', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  for (const part of parts) {
+    const course = library.courses.find(item => item.id === part.id);
+    const page = read(`public/training/${part.folder}/index.html`);
+    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Training Library', '/training/account-progress.js',
+      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
+      assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
+    // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.
+    const guide = /<section class="sbd-account-progress" aria-label="Account learning progress" data-guide="([a-z0-9-]+)">/.exec(page)?.[1];
+    assert.ok(resources.some(item => item.id === guide && !item.retired && item.url === `https://securebydesigninc.com/training/${part.folder}/index.html`), `course ${part.number} saves ${guide}`);
+    assert.match(headers, new RegExp(`^/training/${part.folder}/\\*\\n  Content-Security-Policy: [^\\n]*worker-src 'self' blob:`, 'm'), `course ${part.number} has a content security policy`);
+  }
+  // Saved materials that point at these courses open a page or file that exists.
+  for (const item of resources.filter(item => !item.retired && /^https:\/\/securebydesigninc\.com\/training\/rmf/.test(item.url))) {
+    const path = new URL(item.url).pathname;
+    assert.ok(existsSync(new URL(`../public${path}`, import.meta.url)), `${item.id} → ${path}`);
+  }
+});
+
+test('the authorization view covers every module with real parts of the network', () => {
+  const context = { window: {} };
+  runInNewContext(read('public/training/rmf/catalog-data.js') + read('public/training/rmf/network-data.js'), context);
+  const { CATALOG: modules, RMF_NETWORK: view } = context.window;
+  const network = JSON.parse(read('content/inside-the-network.json'));
+  assert.equal(view.modules.length, modules.length);
+  const ids = new Set(view.scene.nodes.map(node => node.id));
+  for (const node of view.scene.nodes) {
+    for (const key of ['name', 'sub', 'title', 'description', 'button']) assert.ok(typeof node[key] === 'string' && node[key].trim(), `${node.id} ${key}`);
+    assert.ok(node.focus.every(index => Number.isInteger(index) && index >= 0 && index < modules.length), `${node.id} focus`);
+    const vlan = /^VLAN (\d+)$/.exec(node.name);
+    if (vlan) assert.equal(network.segments.find(segment => segment.number === Number(vlan[1]))?.name, node.sub, `${node.name} is named as in Inside the Network`);
+  }
+  for (const flow of view.scene.flows) {
+    assert.ok(ids.has(flow.from) && ids.has(flow.to) && flow.from !== flow.to, `${flow.from}→${flow.to}`);
+    assert.ok(flow.lessons.length && flow.lessons.every(index => Number.isInteger(index) && index >= 0 && index < modules.length), `${flow.from}→${flow.to} modules`);
+  }
+  modules.forEach((module, index) => {
+    assert.ok(view.modules[index].status && view.modules[index].caption, `module ${module.id} caption`);
+    assert.ok(view.scene.nodes.some(node => node.focus.includes(index)), `module ${module.id} highlights part of the network`);
+  });
+  const systems = new Set(network.systems.map(system => system.name));
+  for (const name of JSON.stringify(view).match(/SBD-[A-Z0-9-]*\d{2}|AdminJumpBox01/g)) assert.ok(systems.has(name), `${name} is in Inside the Network`);
 });

@@ -1405,8 +1405,8 @@
       "number": "2.1",
       "afterEpisode": "dc01-dc02",
       "title": "Risk Management Framework",
-      "subtitle": "Scope, categorization, and control selection",
-      "description": "Apply the Risk Management Framework (RMF) to the network the Build the Network courses (1.1–1.19) create, the system shown in Inside the Network. Establish responsibilities and boundaries, justify mission impacts, and select a defensible control set before developing its Body of Evidence.",
+      "subtitle": "Prepare, Categorize, and Select",
+      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in Inside the Network, through the Prepare, Categorize, and Select steps of the Risk Management Framework (RMF), following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Define and register the system, describe and categorize it in a draft System Security Plan, and select its controls with a draft risk assessment and a monitoring strategy, ready for the Body of Evidence in course 2.2.",
       "tags": [
         "Risk Management Framework",
         "RMF",
@@ -1418,75 +1418,83 @@
       "lessonCount": 12,
       "estimatedHours": 6,
       "outcomes": [
-        "Explain the RMF lifecycle and authorization responsibilities.",
-        "Define and categorize the Inside the Network practice system.",
-        "Select and tailor controls with documented ownership and rationale."
+        "Explain RMF roles and how NIST SP 800-37 Revision 2 and the 2016 JSIG organize the steps and their outputs.",
+        "Prepare, register, describe, and categorize the Inside the Network practice system.",
+        "Select, tailor, and allocate controls with a draft Risk Assessment Report and a monitoring strategy for plan approval."
       ],
       "stages": [
         {
           "number": "01",
-          "title": "RMF and authorization fundamentals",
-          "detail": "Explain the relationship between the RMF lifecycle, the Body of Evidence, the authorization package, and the authorization decision.",
+          "title": "RMF roles, steps, and editions",
+          "detail": "Explain who performs, assesses, and approves Risk Management Framework (RMF) work, and how NIST and the Joint Special Access Program Implementation Guide (JSIG) organize its steps and outputs.",
           "href": "/training/rmf/index.html#catalog/01",
           "hours": "1",
           "lessons": [
-            "01.1 Risk and mission impact",
+            "01.1 Risk and the authorization decision",
             "01.2 Roles and accountability",
-            "01.3 How the package fits together"
+            "01.3 NIST, the JSIG, and their editions"
           ]
         },
         {
           "number": "02",
-          "title": "Prepare and define the system",
-          "detail": "Establish what is being authorized, why it exists, and which organizational and system preparation decisions must be made before documentation expands.",
+          "title": "Define and register the system",
+          "detail": "Establish what is being authorized and why: the mission, stakeholders, assets, boundary, information and its life cycle, early risks, and requirements. Then register the system.",
           "href": "/training/rmf/index.html#catalog/02",
           "hours": "1.5",
           "lessons": [
-            "02.1 Mission and stakeholders",
-            "02.2 Boundary and data flows",
-            "02.3 Governance and inherited services"
+            "02.1 Organization and mission",
+            "02.2 Assets, boundary, and information",
+            "02.3 Risk, requirements, and registration"
           ]
         },
         {
           "number": "03",
-          "title": "Categorize information and impacts",
-          "detail": "Justify confidentiality, integrity, and availability impacts using information types and mission consequences. Treat privacy applicability as an explicit decision.",
+          "title": "Describe and categorize the system",
+          "detail": "Describe the system, justify its confidentiality, integrity, and availability impacts in the draft System Security Plan (SSP), and route the categorization for approval. Treat privacy applicability as an explicit decision.",
           "href": "/training/rmf/index.html#catalog/03",
           "hours": "1.5",
           "lessons": [
-            "03.1 Information types and impact",
-            "03.2 Categorization rationale",
-            "03.3 Federal and national security contexts"
+            "03.1 System description",
+            "03.2 Impact and rationale",
+            "03.3 Authority, approval, and registration"
           ]
         },
         {
           "number": "04",
-          "title": "Select and tailor controls",
-          "detail": "Translate the approved categorization and applicable requirements into a justified, assignable control set. Distinguish the control catalog from a selected baseline.",
+          "title": "Select controls and plan monitoring",
+          "detail": "Turn the approved categorization into a selected, tailored, and allocated control set, with a draft Risk Assessment Report and a continuous monitoring strategy, ready for plan review and approval.",
           "href": "/training/rmf/index.html#catalog/04",
           "hours": "2",
           "lessons": [
-            "04.1 Baselines and overlays",
-            "04.2 Tailoring and parameters",
-            "04.3 Ownership and inheritance"
+            "04.1 Baselines, overlays, and tailoring",
+            "04.2 Allocation and the security plan",
+            "04.3 Risk, monitoring, and plan approval"
           ]
         }
       ],
       "training": {
         "guide": "/training/rmf/index.html#catalog/01",
-        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 10,
-        "materialsEdition": "1.5",
-        "updated": "14 October 2026",
-        "relatedResources": [],
-        "cover": "/training/rmf/catalog-cover.webp"
+        "word": "/training/rmf/SecureByDesign-rmf-Workbook.docx",
+        "pdf": "/training/rmf/SecureByDesign-rmf-Workbook.pdf",
+        "package": "/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
+        "pages": 24,
+        "materialsEdition": "2.0",
+        "updated": "15 October 2026",
+        "relatedResources": [
+          {
+            "title": "Open the evidence workspace",
+            "detail": "Six practice artifacts with editable Markdown and CSV starters",
+            "href": "/training/rmf/index.html#evidence"
+          }
+        ],
+        "cover": "/training/rmf/workbook-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 1,
       "artLabels": [
-        "Scope + responsibilities",
-        "Categorize the system",
-        "Select + tailor controls"
+        "Prepare + register",
+        "Describe + categorize",
+        "Select + plan monitoring"
       ],
       "kind": "authorization",
       "seriesPart": 1,
@@ -1496,7 +1504,7 @@
         "03",
         "04"
       ],
-      "outcomeSummary": "A defined system, a justified categorization, and a control set with an owner and a reason for every choice.",
+      "outcomeSummary": "A registered system, a justified categorization, and a control set with an owner, a reason, a risk picture, and a monitoring strategy, ready for plan approval.",
       "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     },
     {
@@ -1504,12 +1512,12 @@
       "number": "2.2",
       "afterEpisode": "dc01-dc02",
       "title": "Body of Evidence",
-      "subtitle": "Document, demonstrate, and assess the network",
-      "description": "Develop the Body of Evidence for the same Inside the Network build. Write the System Security Plan, connect implementation to proof, organize evidence, and assess findings and residual risk for authorization review.",
+      "subtitle": "Implement and Assess: document, prove, and test the network",
+      "description": "Develop the Body of Evidence for the same Inside the Network build through the Risk Management Framework (RMF) Implement and Assess steps, following NIST SP 800-37 Revision 2 with the 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Record the controls as implemented, prove them with indexed evidence, prepare and perform an independent assessment, and carry its findings into a Security Assessment Report (SAR) and a Plan of Action and Milestones (POA&M).",
       "tags": [
         "Body of Evidence",
-        "SSP",
-        "Assessment",
+        "RMF Implement and Assess",
+        "Security assessment",
         "POA&M"
       ],
       "systems": [],
@@ -1517,93 +1525,95 @@
       "lessonCount": 15,
       "estimatedHours": 9,
       "outcomes": [
-        "Write specific implementation statements for the practice system.",
-        "Organize traceable, current technical and operational evidence.",
-        "Assess selected objectives and document findings, risk, and corrective actions."
+        "Implement the controls, document them as built, and prove them with indexed evidence.",
+        "Prepare and perform an independent assessment, and report supported findings in a Security Assessment Report.",
+        "Remediate and reassess what can be fixed now, and carry open findings into a risk-ranked POA&M."
       ],
       "stages": [
         {
           "number": "05",
-          "title": "Write the system security plan",
-          "detail": "Write a System Security Plan (SSP) that describes the actual system and explains how selected controls are implemented.",
-          "href": "/training/rmf/index.html#catalog/05",
+          "title": "Implement and document the controls",
+          "detail": "Implement the selected controls and record them as built in the System Security Plan (SSP) and Security Controls Traceability Matrix (SCTM), in statements an assessor can test.",
+          "href": "/training/rmf-body-of-evidence/index.html#catalog/05",
           "hours": "2",
           "lessons": [
-            "05.1 System description and environment",
-            "05.2 Implementation statements",
-            "05.3 Policies and supporting plans"
+            "05.1 Implement the approved controls",
+            "05.2 As-implemented statements",
+            "05.3 Planned work and supporting plans"
           ]
         },
         {
           "number": "06",
           "title": "Connect implementation to proof",
-          "detail": "Collect technical and operational evidence that addresses the selected requirement and can support an assessment.",
-          "href": "/training/rmf/index.html#catalog/06",
+          "detail": "Collect technical and operational evidence of the as-built system, index it, and correct the SSP and SCTM wherever the evidence and the plan disagree.",
+          "href": "/training/rmf-body-of-evidence/index.html#catalog/06",
           "hours": "2",
           "lessons": [
-            "06.1 Configuration and STIG evidence",
+            "06.1 Configuration and hardening evidence",
             "06.2 Security operations evidence",
-            "06.3 Coverage and evidence limitations"
+            "06.3 The evidence index and the as-built plan"
           ]
         },
         {
           "number": "07",
-          "title": "Organize the Body of Evidence",
-          "detail": "Make evidence easy to retrieve, trace, and maintain across system changes and assessment cycles.",
-          "href": "/training/rmf/index.html#catalog/07",
+          "title": "Prepare the assessment",
+          "detail": "Select an independent assessor, hand over current evidence, and get a Security Assessment Plan approved before any testing starts.",
+          "href": "/training/rmf-body-of-evidence/index.html#catalog/07",
           "hours": "1.5",
           "lessons": [
-            "07.1 Evidence index and identifiers",
-            "07.2 Control traceability",
-            "07.3 Currency and version control"
+            "07.1 Assessor selection and independence",
+            "07.2 The evidence the assessor receives",
+            "07.3 The Security Assessment Plan"
           ]
         },
         {
           "number": "08",
-          "title": "Plan and perform assessment",
-          "detail": "Turn implementation claims into assessable objectives and distinguish a planned test from an observed result.",
-          "href": "/training/rmf/index.html#catalog/08",
+          "title": "Perform and report the assessment",
+          "detail": "Assess the controls as planned, report supported findings in a Security Assessment Report (SAR), and remediate and reassess what can be fixed now.",
+          "href": "/training/rmf-body-of-evidence/index.html#catalog/08",
           "hours": "2",
           "lessons": [
-            "08.1 Assessment scope and independence",
-            "08.2 Examine interview and test",
-            "08.3 Findings and assessment reporting"
+            "08.1 Examine, interview, and test",
+            "08.2 The Security Assessment Report",
+            "08.3 Initial remediation and reassessment"
           ]
         },
         {
           "number": "09",
-          "title": "Manage findings and residual risk",
-          "detail": "Translate weaknesses into mission-relevant risk and an accountable response. Explain the difference between technical severity and contextual risk.",
-          "href": "/training/rmf/index.html#catalog/09",
+          "title": "Build the plan of action and milestones",
+          "detail": "Turn the findings still open into a risk-ranked Plan of Action and Milestones (POA&M) with accountable owners, resources, dated milestones, and closure criteria.",
+          "href": "/training/rmf-body-of-evidence/index.html#catalog/09",
           "hours": "1.5",
           "lessons": [
-            "09.1 Findings and risk analysis",
+            "09.1 From findings to ranked risk",
             "09.2 Writing an actionable POA&M",
-            "09.3 Remediation and verification"
+            "09.3 Tracking to verified closure"
           ]
         }
       ],
       "training": {
-        "guide": "/training/rmf/index.html#catalog/05",
-        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 10,
-        "materialsEdition": "1.5",
-        "updated": "14 October 2026",
+        "guide": "/training/rmf-body-of-evidence/index.html#catalog/05",
+        "word": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Workbook.docx",
+        "pdf": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Workbook.pdf",
+        "package": "/training/rmf-body-of-evidence/SecureByDesign-rmf-body-of-evidence-Learning-Package.zip",
+        "pages": 27,
+        "materialsEdition": "2.0",
+        "updated": "15 October 2026",
         "relatedResources": [
           {
             "title": "Open the Body of Evidence workspace",
-            "detail": "Ten examples with editable Markdown and CSV starters",
-            "href": "/training/rmf/index.html#evidence"
+            "detail": "Seven practice artifacts with editable Markdown and CSV starters",
+            "href": "/training/rmf-body-of-evidence/index.html#evidence"
           }
         ],
-        "cover": "/training/rmf/catalog-cover.webp"
+        "cover": "/training/rmf-body-of-evidence/workbook-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 2,
       "artLabels": [
-        "Write the security plan",
-        "Collect + organize proof",
-        "Assess + manage findings"
+        "Document + prove controls",
+        "Plan + run the assessment",
+        "Report, remediate + POA&M"
       ],
       "kind": "authorization",
       "seriesPart": 2,
@@ -1614,7 +1624,7 @@
         "08",
         "09"
       ],
-      "outcomeSummary": "Implementation, assessment, and evidence organized so a reviewer can trace every control to proof.",
+      "outcomeSummary": "An as-built plan, an approved and independent assessment, and every open finding carried into an accountable action.",
       "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     },
     {
@@ -1622,8 +1632,8 @@
       "number": "2.3",
       "afterEpisode": "dc01-dc02",
       "title": "Authorization to Operate",
-      "subtitle": "Assemble, brief, and maintain the authorization package",
-      "description": "Turn the network’s Body of Evidence into a reviewable Authorization to Operate (ATO) package. Assemble the submission, brief the Authorizing Official on supported conclusions and remaining risk, and maintain evidence after the decision. Complete the shared course with the package capstone.",
+      "subtitle": "Authorize and Monitor: the package, the decision, and continuous monitoring",
+      "description": "Take the Body of Evidence for the Inside the Network system through the Authorize and Monitor steps of the Risk Management Framework (RMF) in NIST SP 800-37 Revision 2, with the matching tasks of the Joint Special Access Program (SAP) Implementation Guide (JSIG), 11 April 2016. Assemble the authorization package, brief the risk for the Authorizing Official (AO), record a fictional decision with its terms, conditions, and duration, and keep the authorization current through change, reporting, and disposal before the package capstone.",
       "tags": [
         "Authorization to Operate",
         "ATO",
@@ -1635,74 +1645,76 @@
       "lessonCount": 9,
       "estimatedHours": 9,
       "outcomes": [
-        "Assemble a consistent authorization package for the practice system.",
-        "Present supported conclusions and residual risk for the Authorizing Official’s decision.",
-        "Complete the package capstone and plan ongoing monitoring."
+        "Assemble and submit an authorization package that meets JSIG Task 5-2 and NIST Task R-1.",
+        "Brief the risk for the AO’s determination and record a fictional authorization decision with its terms, conditions, and duration.",
+        "Keep the authorization current through security impact analysis, ongoing assessment, status reporting, and disposal."
       ],
       "stages": [
         {
           "number": "10",
           "title": "Assemble the authorization package",
-          "detail": "Build a reviewable package whose claims, assessment results, and open risks agree across documents.",
-          "href": "/training/rmf/index.html#catalog/10",
+          "detail": "Assemble an authorization package whose plans, assessment results, and open risks agree, and submit it for the authorizing official’s decision.",
+          "href": "/training/rmf-authorization-to-operate/index.html#catalog/10",
           "hours": "2",
           "lessons": [
-            "10.1 Package structure and manifest",
+            "10.1 Package contents in the JSIG and NIST",
             "10.2 Consistency and readiness review",
             "10.3 Submission workflow"
           ]
         },
         {
           "number": "11",
-          "title": "Present the authorization decision",
-          "detail": "Communicate mission need, the assessed security posture, unresolved risk, and proposed risk responses to the decision maker.",
-          "href": "/training/rmf/index.html#catalog/11",
+          "title": "Support the authorization decision",
+          "detail": "Brief the risk the authorizing official must determine, propose a response to each significant risk, and record what an authorization decision contains.",
+          "href": "/training/rmf-authorization-to-operate/index.html#catalog/11",
           "hours": "1.5",
           "lessons": [
-            "11.1 Briefing residual risk",
-            "11.2 AO review and questions",
-            "11.3 Decision and operating conditions"
+            "11.1 Risk determination",
+            "11.2 Risk response",
+            "11.3 The decision and its reporting"
           ]
         },
         {
           "number": "12",
           "title": "Monitor and maintain authorization",
-          "detail": "Keep the authorization evidence useful as the system, threats, personnel, and dependencies change.",
-          "href": "/training/rmf/index.html#catalog/12",
+          "detail": "Keep the authorization true as the system changes: analyze each change, assess and report as the strategy requires, support ongoing authorization, and plan disposal.",
+          "href": "/training/rmf-authorization-to-operate/index.html#catalog/12",
           "hours": "1.5",
           "lessons": [
-            "12.1 Monitoring strategy and measures",
-            "12.2 Change impact and reassessment",
-            "12.3 Updating the package"
+            "12.1 Changes and security impact analysis",
+            "12.2 Assessment, updates, and reporting",
+            "12.3 Ongoing authorization and disposal"
           ]
         }
       ],
       "training": {
-        "guide": "/training/rmf/index.html#catalog/10",
-        "word": "/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx",
-        "pages": 10,
-        "materialsEdition": "1.5",
-        "updated": "14 October 2026",
+        "guide": "/training/rmf-authorization-to-operate/index.html#catalog/10",
+        "word": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Workbook.docx",
+        "pdf": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Workbook.pdf",
+        "package": "/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip",
+        "pages": 22,
+        "materialsEdition": "2.0",
+        "updated": "15 October 2026",
         "relatedResources": [
           {
             "title": "Open the authorization package capstone",
             "detail": "Four hour exercise · Assemble, defend, and maintain the practice package",
-            "href": "/training/rmf/index.html#capstone"
+            "href": "/training/rmf-authorization-to-operate/index.html#capstone"
           },
           {
             "title": "Open the package manifest",
             "detail": "Organize the evidence and submission records",
-            "href": "/training/rmf/index.html#evidence/manifest"
+            "href": "/training/rmf-authorization-to-operate/index.html#evidence/manifest"
           }
         ],
-        "cover": "/training/rmf/catalog-cover.webp"
+        "cover": "/training/rmf-authorization-to-operate/workbook-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 3,
       "artLabels": [
-        "Assemble the package",
-        "Brief the risk decision",
-        "Monitor + maintain"
+        "Authorize: the package",
+        "Authorize: the decision",
+        "Monitor: keep it current"
       ],
       "kind": "authorization",
       "seriesPart": 3,
@@ -1712,7 +1724,7 @@
         "12"
       ],
       "capstoneHours": 4,
-      "outcomeSummary": "A complete package, an honest risk picture, and a decision the authorizing official can defend.",
+      "outcomeSummary": "A complete package, an honest risk picture, a decision record with clear conditions, and monitoring that keeps the authorization true.",
       "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION"
     }
   ],
@@ -1725,7 +1737,7 @@
     {
       "id": "network-authorization",
       "title": "Network Authorization",
-      "description": "Prepare the network’s Body of Evidence and Authorization to Operate package. Start after the network build, with course 2.1."
+      "description": "Take the network through the Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in: prepare, categorize, and select (2.1); implement and assess (2.2); then authorize and monitor (2.3). Start after the network build, with course 2.1."
     }
   ]
 }

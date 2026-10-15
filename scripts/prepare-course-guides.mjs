@@ -147,6 +147,12 @@ function page(course, configuration, guide, lesson) {
 `;
 }
 
+// The Network Authorization page (public/training/rmf/) is hand-built, so it loads the same stylesheet and
+// 3D scene as files instead of inlining them. tests/course-guides.test.mjs keeps the copies equal.
+mkdirSync(new URL('guide/', outDir), { recursive: true });
+writeFileSync(new URL('guide/course-guide.css', outDir), style + extraStyle);
+writeFileSync(new URL('guide/scene.js', outDir), sceneModule);
+
 let built = 0;
 // ONLY=<course id> builds one guide (handy while writing its content).
 for (const configuration of configurations.filter(c => !process.env.ONLY || c.id === process.env.ONLY)) {

@@ -37,14 +37,17 @@ test('related build courses stay together before authorization and materials rem
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
-  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', ''), [course]);
+  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence']);
   assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-authorization-to-operate']);
-  for (const resource of Object.values(course.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
-    assert.ok(existsSync(new URL('.' + resource, new URL('../public/', import.meta.url))), resource);
+  for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
+    for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
+      assert.ok(existsSync(new URL('.' + resource.replace(/#.*$/, ''), new URL('../public/', import.meta.url))), resource);
+    }
+    const page = readFileSync(new URL('../public' + part.training.guide.replace(/#.*$/, ''), import.meta.url), 'utf8');
+    assert.doesNotMatch(page, /PRIVATE REVIEW|noindex/);
+    assert.match(page, /Back to the Training Library/);
   }
-  const page = readFileSync(new URL('../public/training/rmf/index.html', import.meta.url), 'utf8');
-  assert.doesNotMatch(page, /PRIVATE REVIEW|noindex/);
-  assert.match(page, /Back to the Training Library/);
 });
 
 test('category groups preserve course identity and omit groups with no matches', () => {
@@ -78,9 +81,11 @@ test('authorization parts cover the existing course once and preserve saved prog
     assert.equal(part.moduleCount, selected.length);
     assert.equal(part.lessonCount, selected.reduce((sum, module) => sum + module.lessons.length, 0));
     assert.equal(part.estimatedHours, selected.reduce((sum, module) => sum + Number(module.hours), 0) + (part.capstoneHours ?? 0));
-    assert.equal(part.training.guide, `/training/rmf/index.html#catalog/${selected[0].id}`);
+    // Owner request, 15 October 2026: each course has its own page; progress IDs keep the original course's name.
+    const page = `/training/${context.window.CATALOG_PARTS.find(item => item.id === part.id).folder}/index.html`;
+    assert.equal(part.training.guide, `${page}#catalog/${selected[0].id}`);
     for (const [index, module] of selected.entries()) {
-      assert.equal(part.stages[index].href, `/training/rmf/index.html#catalog/${module.id}`);
+      assert.equal(part.stages[index].href, `${page}#catalog/${module.id}`);
       // The expanded tile's module explorer lists these; keep them equal to the module catalog.
       assert.deepEqual(part.stages[index].lessons, module.lessons);
       assert.equal(part.stages[index].hours, module.hours);
@@ -88,9 +93,24 @@ test('authorization parts cover the existing course once and preserve saved prog
     }
     for (const resource of part.training.relatedResources) {
       const url = new URL(resource.href, 'https://securebydesigninc.com');
-      assert.equal(url.pathname, '/training/rmf/index.html');
+      assert.equal(url.pathname, page);
       assert(['#evidence', '#evidence/manifest', '#capstone'].includes(url.hash));
     }
+  }
+});
+
+test('the Network Authorization pages group their modules by the catalog courses and show their edition', () => {
+  const context = { window: {} };
+  runInNewContext(readFileSync(new URL('../public/training/rmf/catalog-data.js', import.meta.url), 'utf8'), context);
+  const parts = getCatalogEntries(library).filter(entry => entry.categoryId === 'network-authorization');
+  assert.deepEqual(JSON.parse(JSON.stringify(context.window.CATALOG_PARTS)).map(part => [part.number, part.title, part.modules]), parts.map(part => [part.number, part.title, part.moduleIds]));
+  for (const part of parts) {
+    const page = readFileSync(new URL('../public' + part.training.guide.replace(/#.*$/, ''), import.meta.url), 'utf8');
+    const shown = [...page.matchAll(/[Ee]dition\s+([\d.]+)/g)].map(match => match[1]);
+    assert.ok(shown.length >= 2);
+    assert.deepEqual([...new Set(shown)], [part.training.materialsEdition], `course ${part.number} shows its edition everywhere`);
+    assert.ok(page.includes(`Updated ${part.training.updated}`));
+    assert.ok(page.includes(`<body data-course="${part.number}">`));
   }
 });
 

@@ -559,74 +559,74 @@
   },
   {
     "id": "training:rmf-boe-ato:01",
-    "title": "01 · RMF and authorization fundamentals",
+    "title": "RMF roles, steps, and editions",
     "href": "/training/rmf/index.html#catalog/01",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:02",
-    "title": "02 · Prepare and define the system",
+    "title": "Define and register the system",
     "href": "/training/rmf/index.html#catalog/02",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:03",
-    "title": "03 · Categorize information and impacts",
+    "title": "Describe and categorize the system",
     "href": "/training/rmf/index.html#catalog/03",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:04",
-    "title": "04 · Select and tailor controls",
+    "title": "Select controls and plan monitoring",
     "href": "/training/rmf/index.html#catalog/04",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:05",
-    "title": "05 · Write the system security plan",
-    "href": "/training/rmf/index.html#catalog/05",
+    "title": "Implement and document the controls",
+    "href": "/training/rmf-body-of-evidence/index.html#catalog/05",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:06",
-    "title": "06 · Connect implementation to proof",
-    "href": "/training/rmf/index.html#catalog/06",
+    "title": "Connect implementation to proof",
+    "href": "/training/rmf-body-of-evidence/index.html#catalog/06",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:07",
-    "title": "07 · Organize the Body of Evidence",
-    "href": "/training/rmf/index.html#catalog/07",
+    "title": "Prepare the assessment",
+    "href": "/training/rmf-body-of-evidence/index.html#catalog/07",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:08",
-    "title": "08 · Plan and perform assessment",
-    "href": "/training/rmf/index.html#catalog/08",
+    "title": "Perform and report the assessment",
+    "href": "/training/rmf-body-of-evidence/index.html#catalog/08",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:09",
-    "title": "09 · Manage findings and residual risk",
-    "href": "/training/rmf/index.html#catalog/09",
+    "title": "Build the plan of action and milestones",
+    "href": "/training/rmf-body-of-evidence/index.html#catalog/09",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:10",
-    "title": "10 · Assemble the authorization package",
-    "href": "/training/rmf/index.html#catalog/10",
+    "title": "Assemble the authorization package",
+    "href": "/training/rmf-authorization-to-operate/index.html#catalog/10",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:11",
-    "title": "11 · Present the authorization decision",
-    "href": "/training/rmf/index.html#catalog/11",
+    "title": "Support the authorization decision",
+    "href": "/training/rmf-authorization-to-operate/index.html#catalog/11",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:12",
-    "title": "12 · Monitor and maintain authorization",
-    "href": "/training/rmf/index.html#catalog/12",
+    "title": "Monitor and maintain authorization",
+    "href": "/training/rmf-authorization-to-operate/index.html#catalog/12",
     "group": "Network authorization"
   }
 ]

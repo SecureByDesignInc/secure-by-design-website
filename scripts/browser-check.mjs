@@ -8,6 +8,7 @@
 // Problems are printed as GitHub annotations; the exit code is 1 when a page has a blocking problem.
 import { createRequire } from 'node:module';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 
 const base = (process.argv[2] || 'http://127.0.0.1:8787').replace(/\/$/, '');
 const require = createRequire(import.meta.url);
@@ -157,6 +158,50 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
     await page.close();
   }
 }
+
+// Network Authorization courses 2.1–2.3 (scripts/prepare-rmf-courses.mjs), one page each. Open each course's first
+// module from the old single-page address, check it lands on that course's page, walk the five module tabs, then open
+// the course's evidence workspace (and the capstone on 2.3). Screenshots are kept for review.
+const rmfData = { window: {} };
+for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(readFileSync(`public/training/rmf/${file}`, 'utf8'), rmfData);
+const { CATALOG_PARTS: rmfParts, CATALOG: rmfModules, LEARNING: rmfLessons } = rmfData.window;
+for (const part of rmfParts) {
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(String(error.message || error).slice(0, 200)));
+  const first = part.modules[0], at = `/training/${part.folder}/`;
+  const artifacts = new Set(part.modules.flatMap(id => rmfLessons[rmfModules.findIndex(m => m.id === id)].artifacts));
+  try {
+    // The 2.1 page moves a 2.2 or 2.3 module to its own page while loading, which can interrupt this navigation.
+    await page.goto(`${base}/training/rmf/index.html#catalog/${first}`, { waitUntil: 'load', timeout: 60000 }).catch(() => {});
+    await page.waitForURL(url => url.pathname.replace(/index\.html$/, '') === at && url.hash === `#catalog/${first}`, { timeout: 15000 });
+    await page.locator('#lesson .tabs').waitFor({ timeout: 15000 });
+    const listed = await page.locator('#module-list .num:not(.word)').count();
+    if (listed !== part.modules.length) throw new Error(`${listed} modules listed, expected ${part.modules.length}`);
+    for (const [name, panel] of [['Learn', '#learn-panel .lesson-body'], ['See', '#see-panel .step'], ['Build', '#build-panel .artifact-links'], ['Prove', '#prove-panel .quiz'], ['RMF step', '#step-panel .controlid']]) {
+      await page.getByRole('tab', { name, exact: true }).click();
+      await page.locator(panel).first().waitFor({ timeout: 5000 });
+    }
+    await page.waitForTimeout(1200);
+    const scene = (await page.locator('#stage canvas').count()) ? 'canvas' : (await page.locator('#fallback:not([hidden])').count()) ? 'fallback' : '';
+    if (!scene) throw new Error('neither the authorization view nor its fallback appeared');
+    await page.screenshot({ path: `guide-screens/rmf-${part.number}-desktop.png` });
+    await page.evaluate(() => { location.hash = 'evidence'; });
+    await page.locator('.artifact-menu button').first().waitFor({ timeout: 5000 });
+    const shown = await page.locator('.artifact-menu button').count();
+    if (shown !== artifacts.size) throw new Error(`${shown} practice artifacts shown, expected ${artifacts.size}`);
+    if (part.capstone) {
+      await page.evaluate(() => { location.hash = 'capstone'; });
+      await page.locator('.deliverables li').first().waitFor({ timeout: 5000 });
+    }
+    if (errors.length) throw new Error('script error: ' + errors.join(' | '));
+    guides.push(`Course ${part.number} ok (${scene}, ${listed} modules, ${shown} artifacts)`);
+  } catch (error) {
+    guides.push(`Course ${part.number}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
+    blocking++;
+  }
+  await page.close();
+}
 await phone.close();
 
 // Where crawlers and link previews find the page title, description, picture and canonical address.
@@ -195,6 +240,7 @@ await check('security.txt', { path: '/security.txt' }, async r => r.status === 2
 await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
 await check('apple-app-site-association', { path: '/.well-known/apple-app-site-association' }, async r => r.status === 200 && (r.headers.get('content-type') || '').includes('application/json') && (await r.text()).includes('PZK2PZT6KP.com.securebydesigninc.secureByDesignApp'));
 await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA' }, async r => r.status === 200 && (await r.text()).includes('securebydesign://auth?code=AAAAAAAAAAAAAAAAAAAAAAAA'));
+await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
 await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.status === 200 && (await r.arrayBuffer()).byteLength < 20000);
