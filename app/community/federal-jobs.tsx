@@ -22,25 +22,25 @@ export default function FederalJobs({ code, name, searchUrl }: { code: string; n
     return () => { live = false; };
   }, [code]);
 
-  const search = <a href={searchUrl} target="_blank" rel="noopener noreferrer">Search all federal openings in {name} on USAJOBS<span className="community-sr"> (opens in a new tab)</span></a>;
-  if (!result) return <p className="federal-status" role="status">Loading federal openings…</p>;
+  const search = <a href={searchUrl} target="_blank" rel="noopener noreferrer">Search all federal openings in {name} on USAJOBS<span className="cm-sr"> (opens in a new tab)</span></a>;
+  if (!result) return <p className="cm-status" role="status">Loading federal openings…</p>;
   if (!result.configured || result.error || result.jobs.length === 0) {
     const reason = !result.configured ? 'The live list of federal openings is coming soon.'
       : result.error ? 'USAJOBS didn’t answer just now.'
         : `No federal IT and cybersecurity openings in ${name} are listed right now.`;
-    return <p className="federal-status">{reason} {search}</p>;
+    return <p className="cm-status">{reason} {search}</p>;
   }
-  return <div className="federal-jobs">
-    <ul>
+  return <div>
+    <ul className="cm-list cm-jobs">
       {result.jobs.map(job => <li key={job.url}>
-        <div className="federal-job-main">
-          <a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}<span className="community-sr"> (opens USAJOBS in a new tab)</span></a>
+        <div className="cm-job-main">
+          <a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}<span className="cm-sr"> (opens USAJOBS in a new tab)</span></a>
           <span>{job.organization}</span>
         </div>
-        <span className="federal-job-meta">{job.location}</span>
-        {job.closes ? <span className="federal-job-meta">Closes {closing(job.closes)}</span> : null}
+        <span className="cm-meta">{job.location}</span>
+        {job.closes ? <span className="cm-meta">Closes {closing(job.closes)}</span> : null}
       </li>)}
     </ul>
-    <p className="federal-more">{search}</p>
+    <p className="cm-more cm-status">{search}</p>
   </div>;
 }

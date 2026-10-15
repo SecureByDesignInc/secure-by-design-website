@@ -21,7 +21,7 @@ for(const name of pages){
  if(!pattern.test(html))throw new Error('Shared header links missing: '+name);
  const current=['career-explorer','careers'].includes(name)?'/careers':'';
  const links=JSON.parse(readFileSync(new URL('content/navigation.json',root),'utf8'));
- const navigation='<nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${label}</a>`).join('')+'</nav>';
+ const navigation='<nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${escape(label)}</a>`).join('')+'</nav>';
  const footerPattern=/<footer class="site-footer container">[\s\S]*?<\/footer>/;
  if(!footerPattern.test(html))throw new Error('Shared footer missing: '+name);
  const footer='<footer class="site-footer container"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a>'+partnerMarkup+'<div class="footer-actions"><a href="/#about">About Secure By Design</a><a href="/privacy">Privacy</a>'+renderFooterShare()+'</div></footer>';
