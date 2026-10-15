@@ -1,0 +1,1532 @@
+{
+  "checked": "2026-10-15",
+  "description": "Free, publicly downloadable ATO package templates, grouped by the Body of Evidence artifact they support, including the DoD SAP, JSIG and CNSS templates a SAP system uses. Every link goes to the publisher. Checked against the official sources on the date above; review every six months.",
+  "groups": [
+    {
+      "id": "package",
+      "title": "Whole package",
+      "abbr": "BoE",
+      "note": "Start here for a complete set in one download or one manual."
+    },
+    {
+      "id": "sap-jsig",
+      "title": "DoD SAP and the JSIG",
+      "abbr": "SAP / JSIG",
+      "note": "For SAP information systems. DoDM 5205.07 (17 January 2025) requires the JSIG, or its successor, with CNSSI 1253. The public JSIG (11 April 2016) maps to SP 800-53 Rev. 4, so map its baselines to Rev. 5 under your PSO and AO's direction."
+    },
+    {
+      "id": "categorization",
+      "title": "Security categorization",
+      "abbr": "C / I / A",
+      "note": "How much harm a loss of confidentiality, integrity or availability would cause. National security systems, SAP systems included, categorize under CNSSI 1253."
+    },
+    {
+      "id": "ssp",
+      "title": "System Security Plan",
+      "abbr": "SSP",
+      "note": "The system's description and how each control is implemented."
+    },
+    {
+      "id": "sctm",
+      "title": "Control matrix",
+      "abbr": "SCTM / CRM / SRTM",
+      "note": "Row-per-control worksheets to build an SCTM from. FedRAMP's SRTM (assessment results) is under SAR."
+    },
+    {
+      "id": "rar",
+      "title": "Risk Assessment Report",
+      "abbr": "RAR",
+      "note": "Threats, likelihood, impact and residual risk, following NIST SP 800-30."
+    },
+    {
+      "id": "sap",
+      "title": "Security Assessment Plan",
+      "abbr": "SAP",
+      "note": "Watch the name clash: in FedRAMP, RAR means Readiness Assessment Report, an assessor document. It is listed here, not under risk."
+    },
+    {
+      "id": "sar",
+      "title": "Security Assessment Report",
+      "abbr": "SAR / RET / SRTM",
+      "note": "The assessor's findings, risk exposure table and test-results matrix."
+    },
+    {
+      "id": "poam",
+      "title": "Plan of Action & Milestones",
+      "abbr": "POA&M",
+      "note": "Weakness tracking. FedRAMP 2026 replaces POA&Ms with Accepted Weaknesses; DoD and agency systems still use POA&Ms."
+    },
+    {
+      "id": "auth",
+      "title": "Authorization decision & reporting",
+      "abbr": "ATO / ConMon",
+      "note": "The decision letter and the recurring reports that keep it in force."
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy",
+      "abbr": "PTA / PIA",
+      "note": ""
+    },
+    {
+      "id": "inventory",
+      "title": "Inventory & diagrams",
+      "abbr": "HW / SW / Boundary",
+      "note": ""
+    },
+    {
+      "id": "cp",
+      "title": "Contingency planning",
+      "abbr": "ISCP / BIA",
+      "note": ""
+    },
+    {
+      "id": "ir",
+      "title": "Incident response",
+      "abbr": "IRP",
+      "note": ""
+    },
+    {
+      "id": "cm",
+      "title": "Configuration management & hardening",
+      "abbr": "CMP / STIG",
+      "note": ""
+    },
+    {
+      "id": "isa",
+      "title": "Interconnection agreements",
+      "abbr": "ISA / MOU / IEA",
+      "note": ""
+    },
+    {
+      "id": "ops",
+      "title": "Access, rules of behavior & operating records",
+      "abbr": "RoB / Forms",
+      "note": ""
+    },
+    {
+      "id": "test",
+      "title": "Plan testing & exercises",
+      "abbr": "TT&E",
+      "note": "Evidence for CP-4 and IR-3 tests."
+    },
+    {
+      "id": "mr",
+      "title": "Machine-readable formats",
+      "abbr": "OSCAL / JSON",
+      "note": "For teaching how the artifacts link: the SAP imports the SSP, the SAR imports the SAP, the POA&M imports the SSP."
+    }
+  ],
+  "templates": [
+    {
+      "group": "package",
+      "title": "FedRAMP Legacy Assets (all Rev5 templates)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "All steps",
+      "note": "One zip with every FedRAMP legacy template listed below: SSP, appendices, SAP, SAR, RET, SRTM, POA&M, ConMon and more.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "ZIP",
+          "href": "https://www.fedramp.gov/legacy/assets/fedramp-legacy-assets.zip"
+        }
+      ]
+    },
+    {
+      "group": "package",
+      "title": "FedRAMP Initial Authorization Package Checklist",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "R-1",
+      "note": "Lists every document a complete package needed. Useful as a BoE checklist for any framework.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY_FedRAMP-Initial-Certification-Package-Checklist.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "package",
+      "title": "DCSA Assessment and Authorization Process Manual (DAAPM) v2.2",
+      "source": "DCSA, 31 Aug 2020",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "All steps",
+      "note": "The manual's 25 appendices include fill-in templates for the RAR (C), SSP certification statement (D), hardware and software lists (F, G), contingency plan (P), incident response plan (Q) and ISA (U). Each is listed in its section below. Written for cleared-industry (NISP) collateral systems; SAP systems follow the JSIG and the PSO's direction, but the formats are useful models.",
+      "links": [
+        {
+          "label": "Open manual",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "DoD Manual 5205.07, Special Access Program Security Manual",
+      "source": "DoD, 17 January 2025",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "P-1",
+      "note": "The governing manual for SAP security. Its cybersecurity section requires the JSIG, or its successor, with CNSSI 1253. A manual rather than a template: read it before the SAP templates.",
+      "links": [
+        {
+          "label": "Open manual",
+          "format": "PDF",
+          "href": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodm/520507m1.PDF"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "JSIG Appendix C: SAP Security Control Baselines",
+      "source": "DoD Joint SAP Implementation Guide, 11 April 2016",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "S-1, S-2",
+      "note": "The SAP baselines and tailoring that seed a SAP SCTM. Built on SP 800-53 Rev. 4: map each control to Rev. 5 and confirm the current selection with your PSO and AO.",
+      "links": [
+        {
+          "label": "Open JSIG (Appendix C)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/portals/91/documents/ctp/nao/JSIG_2016April11_Final_(53Rev4).pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP RMF Cybersecurity Compliance Checklist v1.1",
+      "source": "DoD SAP Working Group, posted by DCSA, 17 November 2017",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "A-3, M-2",
+      "note": "JSIG-based checks by control family, including the SAP controls that cannot be tailored out. Use it to self-assess a SAP system before an inspection.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SAP_RMF_Checklist_17Nov2017.docx"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP Security Compliance Inspection Checklist",
+      "source": "DoD SAP Working Group (January 2026); CDSE edition (September 2026)",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "A-3, M-2",
+      "note": "Security management, personnel, physical, information and cybersecurity questions used for self-inspections and formal inspections under DoDM 5205.07.",
+      "links": [
+        {
+          "label": "DCSA edition",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/DoW%20SAP%20Security%20Compliance%20Checklist%20January%202026%20v2.pdf"
+        },
+        {
+          "label": "CDSE spreadsheet",
+          "format": "XLSX",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/sap/SAP-Security-Compliance-Inspection-Checklist.xlsx"
+        },
+        {
+          "label": "CDSE",
+          "format": "PDF",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/sap/SAP-Security-Compliance-Inspection-Checklist.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP Inspection Report Form and Template",
+      "source": "DoD SAP Working Group, posted by DCSA",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "A-4, M-2",
+      "note": "How a SAP inspection records its findings. A useful comparison when teaching how a SAR reports results.",
+      "links": [
+        {
+          "label": "Report form (January 2026)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/DoW%20SAP%20Inspection%20Report%20Form%20FINAL%20January%202026.pdf"
+        },
+        {
+          "label": "Report template",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SPECIAL_ACCESS_PROGRAM_INSPECTION_REPORT_TEMPLATE.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP Standard Operating Procedures (SOP) Template",
+      "source": "DoD SAP Working Group, posted by DCSA",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Chapters for security management, clearances, training, visits, subcontracting and automated information systems. The program SOP that a SAP system's procedure controls point to.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/STANDARD_OPERATING_PROCEDURES_(SOP)_TEMPLATE.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP Training Record Template",
+      "source": "DoD SAP Working Group, posted by DCSA, March 2021",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "I-1, M-2",
+      "note": "Initial, annual and event-driven SAP training by topic, cybersecurity included. Evidence for the awareness and training controls.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SAP_Training_Record_Template_Mar%202021.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "Waiver Request From Security Criteria",
+      "source": "DoD SAP Working Group, posted by DCSA",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "R-3",
+      "note": "Deficiency, corrective action, justification, cost and approvals for a waiver. Shows how a security deviation is documented and approved.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SAP_WAIVER_REQ_TEMPLATE.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "Program Access Request (DD Form 2835)",
+      "source": "DoD SAP Working Group, posted by DCSA, January 2025",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "The request and approval for a person's access to a SAP. Evidence for the personnel security controls on who may use the system.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/PAR_dd2835_012025.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAPF, SAP SWA and SAP CA Addendum Template (ICD 705) and SAPTSWA Checklist",
+      "source": "DoD SAP Working Group, posted by DCSA",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Facility documentation for SAP facilities, secure working areas and compartmented areas. Evidence for the physical and environmental protection family.",
+      "links": [
+        {
+          "label": "Addendum template",
+          "format": "DOC",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SAPF-SAP_SWA-SAP_CA_ADDENDUM_TEMPLATE_705.doc"
+        },
+        {
+          "label": "SAPTSWA checklist",
+          "format": "DOC",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/SAPTSWA_CHECKLIST.doc"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "SAP Transportation Plan Template",
+      "source": "CDSE job aid, July 2015",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "What a transportation plan covers and who approves it (the PSO, 30 days ahead), with a fill-in template for moving SAP material.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/sap/CDSE-Transportation-Plan-JobAid.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "DoD SAP Program Manager's Handbook to the JSIG and the RMF",
+      "source": "DoD, 11 August 2015, posted by DCSA",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "All steps",
+      "note": "A guide rather than a fill-in template: SAP RMF roles, steps and the SCTM, written for program managers.",
+      "links": [
+        {
+          "label": "Open handbook",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/128/Documents/CTP/special/DoD_SAP_PM_Handbook_JSIG_RMF_2015Aug11.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap-jsig",
+      "title": "Introduction to the RMF for SAPs",
+      "source": "CDSE job aid, April 2019",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "All steps",
+      "note": "A quick reference to the RMF under the JSIG, including the SRTM to SCTM terminology change.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/sap/SAJ0115-jobaid.pdf"
+        }
+      ]
+    },
+    {
+      "group": "categorization",
+      "title": "CNSSI 1253, Categorization and Control Selection for National Security Systems",
+      "source": "CNSS, 1 August 2022",
+      "framework": "CNSS",
+      "status": "current",
+      "rmf": "C-2, S-1, S-2",
+      "note": "Separate confidentiality, integrity and availability values, plus the national security system baselines and overlays. The categorization rules a SAP system follows.",
+      "links": [
+        {
+          "label": "CNSS Instructions page",
+          "format": "WEB",
+          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "categorization",
+      "title": "JSIG Appendix D: Confidentiality Impact Level Flowchart",
+      "source": "DoD Joint SAP Implementation Guide, 11 April 2016",
+      "framework": "SAP",
+      "status": "current",
+      "rmf": "C-2",
+      "note": "A decision flowchart for a SAP system's confidentiality impact level. The closest public worksheet for SAP categorization.",
+      "links": [
+        {
+          "label": "Open JSIG (Appendix D)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/portals/91/documents/ctp/nao/JSIG_2016April11_Final_(53Rev4).pdf"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "Security Plan Example Outline (SP 800-18 Rev. 2)",
+      "source": "NIST, final 30 Jun 2026",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-4, S-6",
+      "note": "NIST's current SSP outline, aligned to the RMF tasks. Framework-neutral, so it suits a first lesson on SSP structure.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_system_security_plan_outline_example.docx"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "Privacy Plan and C-SCRM Plan Example Outlines (SP 800-18 Rev. 2)",
+      "source": "NIST, final 30 Jun 2026",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-4",
+      "note": "Companion outlines for the system privacy plan and the supply chain risk management plan.",
+      "links": [
+        {
+          "label": "Privacy plan",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_system_privacy_plan_outline_example.docx"
+        },
+        {
+          "label": "C-SCRM plan",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_c-scrm_plan_outline_example.docx"
+        },
+        {
+          "label": "Roles & responsibilities",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_roles_and_responsibilities.docx"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "RMF System Security Plan Template",
+      "source": "CDSE course CS250 resources (DCSA / NISP)",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "S-4",
+      "note": "A workbook-style SSP for cleared-industry systems under the DAAPM. Closest public match to an eMASS-style SSP plus control matrix.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/cyber/NEW_RMF_SSP.xlsx?ver=wKN1pvgASXF_D8ejR_N-ug%3d%3d"
+        },
+        {
+          "label": "Course resources page",
+          "format": "WEB",
+          "href": "https://www.cdse.edu/Training/eLearning/CS250-resources/"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "DAAPM Appendix D: RMF Security Plan Submission and Certification Statement",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "S-6, R-1",
+      "note": "The signed statement that accompanies an SSP submission.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendix D)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "FedRAMP SSP (High, Moderate, Low, LI-SaaS)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "S-4",
+      "note": "The best-known full SSP template, with FIPS 199 categorization, boundary and roles sections. Replaced for cloud providers by the 2026 Security Decision Record.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY_FedRAMP-High-Moderate-Low-LI-SaaS-Baseline-System-Security-Plan-(SSP).docx"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "CUI SSP Template (SP 800-171 Rev. 2)",
+      "source": "NIST",
+      "framework": "NIST",
+      "status": "superseded",
+      "rmf": "S-4",
+      "note": "Rev. 2 was withdrawn in May 2024, but CMMC Level 2 still assesses against Rev. 2, so this template remains common for defense contractors.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/cui-ssp-template-final.docx"
+        }
+      ]
+    },
+    {
+      "group": "ssp",
+      "title": "GovRAMP SSP Template / Core Controls Matrix (Moderate, Rev. 5)",
+      "source": "GovRAMP (state and local government cloud program)",
+      "framework": "Other",
+      "status": "restricted",
+      "rmf": "S-4",
+      "note": "Spreadsheet SSP used for state and local cloud authorizations. The file is publicly linked; GovRAMP says official templates come with membership.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://govramp.org/hubfs/GovRAMP-Controls-Matrix_Mod_Rev5_V1.06.xlsx"
+        },
+        {
+          "label": "Templates page",
+          "format": "WEB",
+          "href": "https://govramp.org/rev-5-templates-and-resources/"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "SP 800-53B Control Baselines spreadsheet",
+      "source": "NIST, Release 5.2.0",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-1, S-2",
+      "note": "Every 800-53 control with its Low, Moderate, High and Privacy baseline marks. The fastest starting point for a teaching SCTM: add implementation, inheritance and test-result columns.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/53/b/upd1/final/docs/sp800-53b-control-baselines.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "SP 800-53 and 800-53A catalogs (Release 5.2.0)",
+      "source": "NIST Cybersecurity and Privacy Reference Tool",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-2, A-2",
+      "note": "Browse or export control text and assessment procedures to fill SCTM columns for control statements and test methods.",
+      "links": [
+        {
+          "label": "800-53 catalog",
+          "format": "WEB",
+          "href": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_2_0/home"
+        },
+        {
+          "label": "800-53A procedures",
+          "format": "WEB",
+          "href": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_A_5_2_0/home"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "Control Collaboration Index Template",
+      "source": "NIST SP 800-53 Rev. 5 supplemental",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-2, S-4",
+      "note": "Maps each control to the security and privacy programs that share it. Good for teaching common, hybrid and inherited controls.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53-collaboration-index-template.xlsx"
+        },
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53-collaboration-index-template.docx"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "CNSSI 1253E Attachment 5: Classified System Overlay",
+      "source": "CNSS, 30 September 2022",
+      "framework": "CNSS",
+      "status": "current",
+      "rmf": "S-2",
+      "note": "Tailors the baseline for systems that store or process classified information. Apply it in the SCTM of any classified or SAP system.",
+      "links": [
+        {
+          "label": "CNSS Instructions page",
+          "format": "WEB",
+          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "CNSSI 1253E Attachment 1: Security Overlays Template",
+      "source": "CNSS, 12 December 2022",
+      "framework": "CNSS",
+      "status": "current",
+      "rmf": "S-2",
+      "note": "The CNSS format for writing an overlay: characteristics, applicability, control tailoring and justification.",
+      "links": [
+        {
+          "label": "CNSS Instructions page",
+          "format": "WEB",
+          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "DAAPM Appendix A: Security Controls (DCSA organizational values)",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "S-2",
+      "note": "DCSA's assigned parameter values for each control. Appendix B adds the DCSA overlays.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendices A, B)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "FedRAMP SSP Appendix A: Security Controls",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "S-4, I-2",
+      "note": "Control-by-control implementation statements with responsible role, status and origination fields. The FedRAMP equivalent of an SCTM's implementation half.",
+      "links": [
+        {
+          "label": "High",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-A-High-FedRAMP-Security-Controls.docx"
+        },
+        {
+          "label": "Moderate",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-A-Moderate-FedRAMP-Security-Controls.docx"
+        },
+        {
+          "label": "Low",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-A-Low-FedRAMP-Security-Controls.docx"
+        },
+        {
+          "label": "LI-SaaS",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-A-LI-SaaS-FedRAMP-Security-Controls.docx"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "FedRAMP Security Controls Baseline",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "S-2",
+      "note": "FedRAMP's tailored baselines with its parameter values.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "sctm",
+      "title": "FedRAMP SSP Appendix J: CIS and CRM Workbook",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "S-2, S-4",
+      "note": "Control Implementation Summary and Customer Responsibility Matrix. Shows who owns each control, which is how inheritance is taught.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-J-CSO-CIS-and-CRM-Workbook.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "rar",
+      "title": "DAAPM Appendix C: Risk Assessment Report Template",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-14, R-2",
+      "note": "System description, scope, approach with NIST SP 800-30 likelihood and impact scales, results, and owner signature.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendix C)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "rar",
+      "title": "Risk Assessment Report Template",
+      "source": "CDSE course CS250 resources",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-14, R-2",
+      "note": "Standalone copy of the DCSA RAR for course use.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.cdse.edu/Portals/124/Documents/jobaids/cyber/Risk-Assessment-Report-Template.pdf"
+        }
+      ]
+    },
+    {
+      "group": "rar",
+      "title": "Risk Assessment Report (RAR) template, May 2019",
+      "source": "DCSA tools",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-14, R-2",
+      "note": "Earlier DCSA edition with sample threat sources. Useful for showing how the template evolved.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/portals/91/documents/ctp/tools/Risk_Assessment_Report_(May%202019).pdf"
+        }
+      ]
+    },
+    {
+      "group": "sap",
+      "title": "FedRAMP Security Assessment Plan (SAP)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-2",
+      "note": "Scope, methods, tools, rules of engagement, sampling and schedule. Works as a model SAP for any framework.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Security-Assessment-Plan-(SAP)-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "sap",
+      "title": "FedRAMP Annual Assessment Controls Selection Worksheet",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-2, M-2",
+      "note": "How assessors chose the subset of controls tested each year.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY_CSP_Annual_Assessment_Controls_Selection_Worksheet%203.1.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "sap",
+      "title": "FedRAMP Readiness Assessment Report (High, Moderate)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-3",
+      "note": "A 3PAO readiness check before full assessment. Not a risk assessment, despite sharing the RAR acronym.",
+      "links": [
+        {
+          "label": "High",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-High-Readiness-Assessment-Report-(RAR)-Template.docx"
+        },
+        {
+          "label": "Moderate",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Moderate-Readiness-Assessment-Report-(RAR)-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "sar",
+      "title": "FedRAMP Security Assessment Report (SAR)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-4",
+      "note": "Findings, risk ratings and recommendations. One of the four core package documents.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Security-Assessment-Report-(SAR)-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "sar",
+      "title": "SAR Appendix A: Risk Exposure Table (RET)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-4, R-2",
+      "note": "Every open risk with likelihood, impact and adjusted rating.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SAR-Appendix-A-FedRAMP-Risk-Exposure-Table-(RET)-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "sar",
+      "title": "SAR Appendix B: Security Requirements Traceability Matrix (SRTM)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-3, A-4",
+      "note": "Assessor's per-control test results. Pair with an SCTM lesson to show the DoD and FedRAMP naming difference.",
+      "links": [
+        {
+          "label": "High",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-High-Security-Requirements-Traceability-Matrix-Template.xlsx"
+        },
+        {
+          "label": "Moderate",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-Moderate-Security-Requirements-Traceability-Matrix-Template.xlsx"
+        },
+        {
+          "label": "Low",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-Low-Security-Requirements-Traceability-Matrix-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "sar",
+      "title": "Agency Authorization SAR Debrief Guidance",
+      "source": "FedRAMP, updated 27 Jul 2022",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "R-1",
+      "note": "How to brief SAR results to an authorizing official. A model for an Executive Summary.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "PDF",
+          "href": "https://www.fedramp.gov/resources/templates/FedRAMP-Agency-Authorization-SAR-Debrief-Guidance.pdf"
+        }
+      ]
+    },
+    {
+      "group": "poam",
+      "title": "FedRAMP Plan of Action and Milestones (POA&M)",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-6, M-3",
+      "note": "The most widely copied POA&M layout: weakness, source, asset, risk, milestones, deviation status.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-POAM-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "poam",
+      "title": "FedRAMP Vulnerability Deviation Request Form",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "A-6, R-3",
+      "note": "Requests for risk adjustment, false positive or operational requirement on a POA&M item.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Vulnerability-Deviation-Request-Form.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "poam",
+      "title": "CUI Plan of Action Template (SP 800-171 Rev. 2)",
+      "source": "NIST",
+      "framework": "NIST",
+      "status": "superseded",
+      "rmf": "A-6",
+      "note": "Short Word-format plan of action. Still common for CMMC Level 2 contractors.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/171/r2/upd1/final/docs/cui-plan-of-action-template-final.docx"
+        }
+      ]
+    },
+    {
+      "group": "poam",
+      "title": "Accepted Vulnerability Info schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "A-6, M-3",
+      "note": "The JSON format that replaces the POA&M for FedRAMP cloud providers under the 2026 rules.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-accepted-vulnerability-info-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "auth",
+      "title": "FedRAMP ATO Letter Template",
+      "source": "FedRAMP (Rev5 era)",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "R-4",
+      "note": "An agency's signed authorization letter with terms and conditions. A public model for teaching the decision document.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/resources/templates/FedRAMP-ATO-Letter-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "auth",
+      "title": "Continuous Monitoring Monthly Executive Summary",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "M-6",
+      "note": "Monthly posture summary for the AO.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Continuous-Monitoring-Monthly-Executive-Summary-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "auth",
+      "title": "Continuous Monitoring Deliverables Template",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "S-5, M-2",
+      "note": "Which ConMon deliverables are due and how often.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-Continuous-Monitoring-Deliverables-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "auth",
+      "title": "Ongoing Certification Report schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "M-6",
+      "note": "Quarterly report that replaces monthly ConMon for cloud providers.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-ongoing-certification-report-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "privacy",
+      "title": "DD Form 2930, Privacy Impact Assessment",
+      "source": "DoD forms (WHS), edition 5 Feb 2025",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-1, C-2",
+      "note": "DoD's PIA form, which also records the PII confidentiality level used for the Privacy Overlay. Download the current edition from the forms page; older PDFs online are the 2017 edition.",
+      "links": [
+        {
+          "label": "Forms page",
+          "format": "WEB",
+          "href": "https://www.esd.whs.mil/Directives/forms/dd2500_2999/DD2930/"
+        }
+      ]
+    },
+    {
+      "group": "privacy",
+      "title": "FedRAMP Privacy Impact Assessment (SSP Attachment 4)",
+      "source": "FedRAMP, last revised 2017",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "C-2",
+      "note": "Includes a privacy threshold analysis section, then the full PIA.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/assets/resources/templates/SSP-A04-FedRAMP-PIA-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "privacy",
+      "title": "CNSSI 1253F Attachment 6: Privacy Overlay",
+      "source": "CNSS, 31 October 2024",
+      "framework": "CNSS",
+      "status": "current",
+      "rmf": "C-2, S-2",
+      "note": "Privacy control tailoring for national security systems that handle personal information, keyed to the PII confidentiality level.",
+      "links": [
+        {
+          "label": "CNSS Instructions page",
+          "format": "WEB",
+          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "inventory",
+      "title": "FedRAMP SSP Appendix M: Integrated Inventory Workbook",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "P-10, M-2",
+      "note": "One asset inventory used by the SSP, contingency plan, SAP, SAR and POA&M.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "XLSX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-M-Integrated-Inventory-Workbook-Template.xlsx"
+        }
+      ]
+    },
+    {
+      "group": "inventory",
+      "title": "DAAPM Appendices F, G, H: Hardware List, Software List, Network Diagram",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-10, P-11",
+      "note": "DoD-style hardware and software list formats and diagram expectations.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendices F–H)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "inventory",
+      "title": "FedRAMP SSP Appendix Q: Cryptographic Modules Table",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "I-2",
+      "note": "FIPS-validated modules for data at rest and in transit. Pair with data flow diagrams.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-Q-Cryptographic-Modules-Table.docx"
+        }
+      ]
+    },
+    {
+      "group": "cp",
+      "title": "Business Impact Analysis Template",
+      "source": "NIST SP 800-34 Rev. 1",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Sets RTO, RPO and maximum tolerable downtime that the contingency plan must meet.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/34/r1/upd1/final/docs/sp800-34-rev1_bia_template.docx"
+        }
+      ]
+    },
+    {
+      "group": "cp",
+      "title": "Information System Contingency Plan (Low, Moderate, High)",
+      "source": "NIST SP 800-34 Rev. 1",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Three ISCP templates sized to the system's impact level.",
+      "links": [
+        {
+          "label": "Low",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/34/r1/upd1/final/docs/sp800-34-rev1_cp_template_low_impact_system.docx"
+        },
+        {
+          "label": "Moderate",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/34/r1/upd1/final/docs/sp800-34-rev1_cp_template_moderate_impact_system.docx"
+        },
+        {
+          "label": "High",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/34/r1/upd1/final/docs/sp800-34-rev1_cp_template_high_impact_system.docx"
+        }
+      ]
+    },
+    {
+      "group": "cp",
+      "title": "FedRAMP SSP Appendix G: Information System Contingency Plan",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "I-1",
+      "note": "",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-G-Information-System-Contingency-Plan-(ISCP)-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "cp",
+      "title": "DAAPM Appendix P: Contingency Plan Template",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendix P)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ir",
+      "title": "DAAPM Appendix Q: Incident Response Plan Template",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Appendix R adds classified spill cleanup procedures.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendices Q, R)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ir",
+      "title": "Incident Report schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "M-1",
+      "note": "Initial, ongoing and final incident reports in one JSON format.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-incident-report-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "cm",
+      "title": "STIG checklists (build in STIG Viewer)",
+      "source": "DoD Cyber Exchange",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "I-1, A-3",
+      "note": "Download a STIG, open it in STIG Viewer 3.x and save a CKLB checklist. SCC produces the matching automated results.",
+      "links": [
+        {
+          "label": "STIG library",
+          "format": "WEB",
+          "href": "https://www.cyber.mil/stigs/downloads"
+        },
+        {
+          "label": "STIG Viewer 3.x guide",
+          "format": "PDF",
+          "href": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/pdf/U_STIG_Viewer_3-x_User_Guide_V1R5.pdf"
+        },
+        {
+          "label": "SCAP Compliance Checker",
+          "format": "WEB",
+          "href": "https://www.niwcatlantic.navy.mil/Technology/SCAP/"
+        }
+      ]
+    },
+    {
+      "group": "cm",
+      "title": "DAAPM Appendices L and N: Upgrade/Downgrade Record, Change Log",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "M-1",
+      "note": "Maintenance, operating system and security software change log, plus upgrade and downgrade records.",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendices L, N)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "cm",
+      "title": "Significant Change Notification schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "M-1",
+      "note": "The change notice cloud providers file before a significant change.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-significant-change-notifications-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "isa",
+      "title": "Agreement Templates: ISA, MOU/A, IEA (SP 800-47 Rev. 1, Appendix C)",
+      "source": "NIST, July 2021",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "P-11, S-4",
+      "note": "Sample interconnection security agreement, memorandum of understanding or agreement, and information exchange agreement with guidance.",
+      "links": [
+        {
+          "label": "Open PDF (Appendix C)",
+          "format": "PDF",
+          "href": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-47r1.pdf"
+        }
+      ]
+    },
+    {
+      "group": "isa",
+      "title": "DAAPM Appendix U: Government-to-Contractor ISA Template",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-11, S-4",
+      "note": "",
+      "links": [
+        {
+          "label": "Open DAAPM (Appendix U)",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ops",
+      "title": "FedRAMP SSP Appendix F: Rules of Behavior",
+      "source": "FedRAMP legacy page",
+      "framework": "FedRAMP",
+      "status": "legacy",
+      "rmf": "I-1",
+      "note": "Separate rules for internal, external and privileged users.",
+      "links": [
+        {
+          "label": "Download",
+          "format": "DOCX",
+          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-F-Rules-of-Behavior-(RoB)-Template.docx"
+        }
+      ]
+    },
+    {
+      "group": "ops",
+      "title": "DAAPM Appendices E, J, K, V: Appointment Letter, Access Forms, Warning Banner",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "P-1, I-1",
+      "note": "ISSM appointment letter, user and privileged access authorization and briefing forms, and the system warning banner.",
+      "links": [
+        {
+          "label": "Open DAAPM",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ops",
+      "title": "DAAPM Appendices I, M, O, S, T: Classified-system records",
+      "source": "DCSA DAAPM v2.2",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Record of controlled area, security seal log, data transfer procedures, media sanitization and mobility system plan.",
+      "links": [
+        {
+          "label": "Open DAAPM",
+          "format": "PDF",
+          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/DCSA%20Assessment%20and%20Authorization%20Process%20Manual%20Version%202.2.pdf"
+        }
+      ]
+    },
+    {
+      "group": "ops",
+      "title": "DD Form 2875, System Authorization Access Request (SAAR)",
+      "source": "DoD forms (WHS), edition 6 May 2022",
+      "framework": "DoD",
+      "status": "current",
+      "rmf": "I-1",
+      "note": "Who asked for an account, who approved it and what access it has. Evidence for account management.",
+      "links": [
+        {
+          "label": "Forms page",
+          "format": "WEB",
+          "href": "https://www.esd.whs.mil/Directives/forms/dd2500_2999/DD2875/"
+        }
+      ]
+    },
+    {
+      "group": "test",
+      "title": "Tabletop, Functional Exercise and Test Documentation (SP 800-84)",
+      "source": "NIST, September 2006",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "A-3, M-2",
+      "note": "Appendix A tabletop materials, Appendix B functional exercise materials, Appendix C test documentation, each with an after action report.",
+      "links": [
+        {
+          "label": "Open PDF (Appendices A–C)",
+          "format": "PDF",
+          "href": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-84.pdf"
+        }
+      ]
+    },
+    {
+      "group": "test",
+      "title": "CISA Tabletop Exercise Packages (CTEPs)",
+      "source": "CISA",
+      "framework": "Other",
+      "status": "restricted",
+      "rmf": "A-3, M-2",
+      "note": "Ransomware, insider threat, phishing and sector scenarios with an after action report template. Packages are requested through CISA.",
+      "links": [
+        {
+          "label": "CTEP page",
+          "format": "WEB",
+          "href": "https://www.cisa.gov/resources-tools/services/cisa-tabletop-exercise-packages"
+        }
+      ]
+    },
+    {
+      "group": "mr",
+      "title": "OSCAL example artifacts: SSP, Assessment Plan, Assessment Results, POA&M",
+      "source": "NIST oscal-content repository",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-4 → A-6",
+      "note": "Worked JSON, XML and YAML examples for each core document, plus component definitions and leveraged-authorization SSPs.",
+      "links": [
+        {
+          "label": "SSP",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/examples/ssp"
+        },
+        {
+          "label": "Assessment plan",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/examples/ap"
+        },
+        {
+          "label": "Assessment results",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/examples/ar"
+        },
+        {
+          "label": "POA&M",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/examples/poam"
+        },
+        {
+          "label": "Component definition",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/examples/component-definition"
+        }
+      ]
+    },
+    {
+      "group": "mr",
+      "title": "SP 800-53 Rev. 5 catalog and baselines in OSCAL",
+      "source": "NIST oscal-content repository",
+      "framework": "NIST",
+      "status": "current",
+      "rmf": "S-1, S-2",
+      "note": "Machine-readable control catalog and Low, Moderate, High and Privacy baseline profiles.",
+      "links": [
+        {
+          "label": "Rev. 5 content",
+          "format": "GITHUB",
+          "href": "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5"
+        }
+      ]
+    },
+    {
+      "group": "mr",
+      "title": "Certification Package Overview schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "R-1",
+      "note": "Identifies the cloud offering, its contacts and supporting documents. Required in every 2026 certification package.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "mr",
+      "title": "Security Decision Record schema (FedRAMP 2026)",
+      "source": "FedRAMP schemas, 24 Jun 2026",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "S-4, R-1",
+      "note": "Replaces the SSP and appendices for FedRAMP cloud providers.",
+      "links": [
+        {
+          "label": "Schema",
+          "format": "JSON",
+          "href": "https://www.fedramp.gov/schemas/fedramp-security-decision-record-schema-2026-06-24.json"
+        }
+      ]
+    },
+    {
+      "group": "mr",
+      "title": "FedRAMP schema library and validator",
+      "source": "FedRAMP",
+      "framework": "FedRAMP",
+      "status": "current",
+      "rmf": "R-1",
+      "note": "All 11 schemas from June 2026, with a browser tool that checks a JSON document against them.",
+      "links": [
+        {
+          "label": "All schemas",
+          "format": "WEB",
+          "href": "https://www.fedramp.gov/schemas/"
+        },
+        {
+          "label": "Validator",
+          "format": "WEB",
+          "href": "https://www.fedramp.gov/schemas/validator/"
+        },
+        {
+          "label": "Rules dataset",
+          "format": "GITHUB",
+          "href": "https://github.com/FedRAMP/rules"
+        }
+      ]
+    }
+  ]
+}

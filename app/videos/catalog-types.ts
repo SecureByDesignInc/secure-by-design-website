@@ -81,6 +81,35 @@ export type TrainingCourse = {
     relatedResources?: { title: string; detail: string; href: string }[];
   };
 };
-export type CatalogEntry = Episode | TrainingCourse;
-export type CatalogCategory = { id: string; title: string; description: string };
-export type Library = { episodes: Episode[]; courses?: TrainingCourse[]; categories?: CatalogCategory[] };
+/**
+ * A reference tile (kind 'library'): a collection of outside templates rather than a course.
+ * Its contents come from its own data file (the ATO Template Library reads content/ato-templates.json),
+ * so the tile carries only its catalog details, artwork and page.
+ */
+export type ReferenceLibrary = {
+  categoryId?: string;
+  categoryOrder?: number;
+  /** Always 'library' (typed as a string because the catalog is read from JSON). */
+  kind: string;
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  tags: string[];
+  systems: string[];
+  artLabels: string[];
+  outcomeSummary: string;
+  outcomes: string[];
+  training: {
+    /** The full library page. */
+    guide: string;
+    /** Library cover, shown where a course shows its workbook. */
+    cover: string;
+    updated: string;
+    relatedResources?: { title: string; detail: string; href: string }[];
+  };
+};
+export type CatalogEntry = Episode | TrainingCourse | ReferenceLibrary;
+/** kind 'reference' marks a group of reference tiles: it is not a learning path and has no course order. */
+export type CatalogCategory = { id: string; title: string; description: string; kind?: string };
+export type Library = { episodes: Episode[]; courses?: TrainingCourse[]; references?: ReferenceLibrary[]; categories?: CatalogCategory[] };

@@ -16,6 +16,8 @@ for (const entry of [...library.episodes, ...library.courses]) {
   // Configuration course guides are served at /training/<id>/ (the old /training/<id> redirects there).
   if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, '').replace(/\/index\.html$/, '/').replace(/^(\/training\/[a-z0-9-]+)$/, '$1/'));
 }
+// Reference tiles (the ATO Template Library) are app pages, served without a trailing slash.
+for (const reference of library.references ?? []) paths.push(reference.training.guide);
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 for (const state of communityStates) paths.push(`/community/${state.slug}`);
 const unique = [...new Set(paths)];

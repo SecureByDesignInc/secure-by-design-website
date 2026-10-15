@@ -1748,6 +1748,59 @@
       "id": "network-authorization",
       "title": "Network Authorization",
       "description": "Take the network through the Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in: prepare, categorize, and select (2.1); implement and assess (2.2); then authorize and monitor (2.3). Start after the network build, with course 2.1."
+    },
+    {
+      "id": "templates-references",
+      "title": "Templates & References",
+      "kind": "reference",
+      "description": "Free, official templates to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
+    }
+  ],
+  "references": [
+    {
+      "kind": "library",
+      "id": "ato-templates",
+      "categoryId": "templates-references",
+      "categoryOrder": 1,
+      "title": "ATO Template Library",
+      "subtitle": "Free templates for every Body of Evidence artifact, SAP and JSIG included",
+      "description": "Free, publicly downloadable templates for the major ATO package artifacts: categorization, the SSP, control matrix, RAR, SAP, SAR, POA&M, privacy, contingency, incident response and interconnection agreements, plus the DoD SAP, JSIG and CNSS templates a SAP system uses. They come from NIST, CNSS, DoD and DCSA, FedRAMP and GovRAMP, and each is tagged with its framework, its status and the RMF tasks it supports.",
+      "tags": [
+        "Templates",
+        "Body of Evidence",
+        "JSIG",
+        "NIST"
+      ],
+      "systems": [],
+      "artLabels": [
+        "SSP · SCTM · RAR",
+        "SAP · SAR · POA&M",
+        "NIST · JSIG · CNSS"
+      ],
+      "outcomeSummary": "Every template links to its official source, so you always work from the publisher's own file.",
+      "outcomes": [
+        "Find the template for each package artifact",
+        "Use the SAP and JSIG templates beside NIST",
+        "Tell current templates from legacy ones",
+        "Match each template to its RMF tasks"
+      ],
+      "training": {
+        "guide": "/training/ato-templates",
+        "cover": "/training/library/ato-templates-cover.webp",
+        "updated": "15 October 2026",
+        "relatedResources": [
+          {
+            "title": "Open the Body of Evidence workspace (course 2.2)",
+            "detail": "Practice the SSP, SCTM, SAR and POA&M these templates support",
+            "href": "/training/rmf-body-of-evidence/index.html#evidence"
+          },
+          {
+            "title": "Open the Authorization Workspace",
+            "detail": "Record your evidence against your controls and take it to an ATO decision",
+            "href": "/authorization-workspace"
+          }
+        ]
+      }
     }
   ]
 }

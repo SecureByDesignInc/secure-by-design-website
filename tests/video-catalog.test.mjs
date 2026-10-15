@@ -33,12 +33,12 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
-  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
-  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence']);
+  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence', 'ato-templates']);
   assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-authorization-to-operate']);
   for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
     for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
@@ -53,7 +53,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 3]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 3], ['templates-references', 1]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -370,3 +370,38 @@ test('every course tile carries the companion details the expanded tile shows', 
   }
 });
 
+
+// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group.
+test('the ATO Template Library tile is a reference entry with valid templates and a page', () => {
+  const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
+  const [reference] = library.references;
+  const category = library.categories.find(item => item.id === reference.categoryId);
+  assert.equal(reference.id, 'ato-templates');
+  assert.equal(reference.kind, 'library');
+  assert.equal(category.kind, 'reference');
+  assert.equal(library.categories.at(-1).id, category.id, 'the reference group comes after the learning paths');
+  assert.equal(isTrainingCourse(reference), false);
+  assert.ok(existsSync(new URL('../public' + reference.training.cover, import.meta.url)), 'cover');
+  assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
+  assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
+  const groupIds = templates.groups.map(group => group.id);
+  assert.equal(new Set(groupIds).size, groupIds.length, 'unique artifact groups');
+  assert.equal(new Set(templates.templates.map(item => item.title)).size, templates.templates.length, 'unique template titles');
+  for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has templates`);
+  for (const item of templates.templates) {
+    assert.ok(groupIds.includes(item.group), `${item.title} group`);
+    assert.ok(['NIST', 'CNSS', 'DoD', 'SAP', 'FedRAMP', 'Other'].includes(item.framework), `${item.title} framework`);
+    assert.ok(['current', 'legacy', 'superseded', 'restricted'].includes(item.status), `${item.title} status`);
+    assert.ok(item.rmf && item.source && item.links.length > 0, `${item.title} details`);
+    for (const link of item.links) {
+      assert.match(link.href, /^https:\/\//, `${item.title} links to its publisher`);
+      assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);
+      assert.ok(link.label && link.format, `${item.title} link label`);
+    }
+  }
+  for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
+  // Owner direction: the templates serve a DoD SAP network under NIST Rev. 5 and the JSIG.
+  assert.ok(templates.templates.filter(item => item.framework === 'SAP').length >= 10, 'SAP and JSIG templates');
+  assert.ok(templates.templates.some(item => /CNSSI 1253E Attachment 5/.test(item.title)), 'classified system overlay');
+  assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['ato-templates']);
+});
