@@ -38,7 +38,7 @@ export default function HomeThreatMap() {
           <p className="tm-links"><a href="/training">Open the Training Library</a><a href="/inside-the-network">Explore Inside the Network</a></p>
         </article>
       </div>
-      <p className="tm-credit">The live map is provided by Radware. Radware’s sales button is blurred here; the map itself is unchanged. Secure By Design is not affiliated with Radware.</p>
+      <p className="tm-credit">The live map is provided by Radware. Secure By Design is not affiliated with Radware.</p>
     </section>
   </div>;
 }
