@@ -61,7 +61,7 @@ export type TrainingCourse = {
   outcomes: string[];
   /** One-line promise shown above the outcomes in the expanded tile. */
   outcomeSummary?: string;
-  /** Where the course's systems sit in Inside the Network, shown in the lesson explorer. */
+  /** Where the course's systems sit in the System Hub, shown in the lesson explorer. */
   networkLabel?: string;
   /** RMF parts list each module's lessons and study hours (kept equal to public/grc-rmf-training/rmf/catalog-data.js by a test). */
   stages: { title: string; detail: string; number?: string; href?: string; hours?: string; lessons?: string[] }[];

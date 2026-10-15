@@ -1,4 +1,4 @@
-// Writes public/sitemap.xml from the published pages: the main sections and every Technical Training Library course.
+// Writes public/sitemap.xml from the published pages: the main sections and every Configuration Hub course.
 // Offline sections (Security Journal, Cyber Range, the retired /careers Community pages) are deliberately left out.
 // Community & Careers at /community and its state pages are published.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -18,7 +18,7 @@ for (const entry of [...library.episodes, ...library.courses]) {
 }
 // Reference tiles (the ATO Template Library) are app pages, served without a trailing slash.
 for (const reference of library.references ?? []) paths.push(reference.training.guide);
-// The ATO Template Library page in the GRC & RMF Training Library, linked from each step of course 2.1.
+// The ATO Template Library page in the Compliance Hub, linked from each step of course 2.1.
 if (!paths.includes('/grc-rmf-training/templates')) paths.push('/grc-rmf-training/templates');
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 for (const state of communityStates) paths.push(`/community/${state.slug}`);

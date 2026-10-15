@@ -1,4 +1,4 @@
-// Owner request, 9 October 2026: one download per Technical Training Library tile, no share controls in the
+// Owner request, 9 October 2026: one download per Configuration Hub tile, no share controls in the
 // training, and no specific Windows release numbers. The ZIPs are built by
 // scripts/prepare-training-packages.py; these checks fail when one no longer matches its files.
 import assert from 'node:assert/strict';
@@ -43,7 +43,7 @@ function assertMatchesFolder(zipPath, folder, names) {
   }
 }
 
-test('every Technical Training Library tile has exactly one download', () => {
+test('every Configuration Hub tile has exactly one download', () => {
   for (const episode of library.episodes) {
     assert.match(episode.training.package, /\.zip$/);
     assert.ok(existsSync(publicFile(episode.training.package)), episode.training.package);

@@ -36,11 +36,11 @@ export default function NetworkExplorer() {
       ref={frame}
       className="inside-network-frame"
       src="/inside-network-model/model.html"
-      title="Inside the Network — interactive 3D security architecture"
+      title="System Hub — interactive 3D security architecture"
       style={frameHeight ? { height: frameHeight } : undefined}
       onLoad={() => { requestHeight(); openFromHash(); }}
       allowFullScreen
     />
-    <noscript><p className="network-fallback">This interactive model needs JavaScript. <a href="/inside-network-model/model.html">Open Inside the Network</a>.</p></noscript>
+    <noscript><p className="network-fallback">This interactive model needs JavaScript. <a href="/inside-network-model/model.html">Open the System Hub</a>.</p></noscript>
   </>;
 }

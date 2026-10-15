@@ -1,6 +1,6 @@
 // Secure By Design courses that teach how to build or authorize parts of this network.
 // Build the Network path (1.1–1.19) builds every modeled system; Network Authorization (2.x) authorizes it.
-// Courses 1.16 and 1.17 are coming soon: they link to the Technical Training Library until their material exists.
+// Courses 1.16 and 1.17 are coming soon: they link to the Configuration Hub until their material exists.
 export const courses={
  identity:{title:'1.1 · Promote Primary & Secondary Domain Controller',detail:'Two Active Directory domain controllers on Windows Server, on VLAN 10',href:'/training/dc01-dc02/index.html'},
  dns:{title:'1.2 · Configure DNS',detail:"Service discovery, zones, records & troubleshooting",href:'/training/dns-configuration'},

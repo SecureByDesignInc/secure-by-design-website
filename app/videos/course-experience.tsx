@@ -61,7 +61,7 @@ function moduleSteps(course: TrainingCourse): Step[] {
     id: stage.number ?? pad(index + 1),
     label: stage.title,
     summary: stage.detail,
-    note: { label: 'IN THE NETWORK', text: 'Apply this module to the Inside the Network practice system you built in the Build the Network courses.' },
+    note: { label: 'IN THE NETWORK', text: 'Apply this module to the System Hub practice system you built in the Build the Network courses.' },
     duration: stage.hours ? `ABOUT ${stage.hours} ${stage.hours === '1' ? 'HOUR' : 'HOURS'}` : undefined,
     listHeading: 'Lessons in this module',
     objectives: stage.lessons ?? [],
@@ -210,7 +210,7 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
             <div className="vc-scene-meta">
               <span>
                 <i />
-                {course.systems.length ? course.systems.join(' + ') : 'Inside the Network practice system'}
+                {course.systems.length ? course.systems.join(' + ') : 'System Hub practice system'}
               </span>
               <span>{course.networkLabel}</span>
             </div>

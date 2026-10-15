@@ -1,5 +1,5 @@
 /* My Account (/my-progress) and the app sign-in page (/app-sign-in).
-   Both use the site's dark design, like the homepage and the Technical Training Library (owner request,
+   Both use the site's dark design, like the homepage and the Configuration Hub (owner request,
    9 October 2026). <main class="account-page"> spans the window. The "dark theme" rules restyle the
    shared reader styles from app/reader-progress.css inside it only, so the light reading surfaces
    that also use some of those styles (guides, articles) are unchanged. */

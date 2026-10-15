@@ -73,6 +73,6 @@
 /training/guide/*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
-# The Authorization Workspace control catalog (scripts/build-control-catalog.py); about 115 KB compressed.
+# The ATO Package Builder control catalog (scripts/build-control-catalog.py); about 115 KB compressed.
 /grc-rmf-training/workspace/*
   Cache-Control: public, max-age=86400

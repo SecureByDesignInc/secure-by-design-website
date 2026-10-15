@@ -6,7 +6,7 @@ export const CONSENT_TEXT = 'Email me three getting-started messages from Secure
 export const messages = [
   {key: 'welcome', alias: 'sbd-app-welcome-v1', subject: 'A small first step with Secure By Design',
     paragraphs: ['Welcome to Secure By Design. You do not need to learn everything at once.', 'Open the app and choose one path: Active Directory, Security Monitoring, or Risk Management Framework. Try the first lesson and its knowledge check at your own pace.', 'What are you hoping to get better at? Reply to this email and tell us.'],
-    link: 'https://securebydesigninc.com/technical-training', label: 'Explore the Technical Training Library'},
+    link: 'https://securebydesigninc.com/technical-training', label: 'Explore the Configuration Hub'},
   {key: 'tip', alias: 'sbd-app-learning-tip-v1', subject: 'Keep your useful cybersecurity references together',
     paragraphs: ['A small habit can make your next learning session easier.', 'In the app, open Resources and bookmark one reference that you want to come back to. Use the Saved filter to find it again.', 'The current app preview keeps lesson progress and bookmarks on your device. Choose one small next step and build from there.'],
     link: 'https://securebydesigninc.com/technical-training', label: 'Find something to explore'},

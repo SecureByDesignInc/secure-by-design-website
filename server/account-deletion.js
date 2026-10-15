@@ -8,7 +8,7 @@ export async function deleteAccount(env,account,{fetcher=fetch}={}){
  const systems="(SELECT id FROM auth_systems WHERE account_id=?)";
  await env.DB.batch([
   env.DB.prepare('DELETE FROM reader_sessions WHERE account_id=?').bind(account.id),
-  // Authorization Workspace systems and everything recorded in them.
+  // ATO Package Builder systems and everything recorded in them.
   ...['auth_history','auth_packages','auth_poam','auth_artifacts','auth_controls'].map(table=>env.DB.prepare(`DELETE FROM ${table} WHERE system_id IN ${systems}`).bind(account.id)),
   env.DB.prepare('DELETE FROM auth_systems WHERE account_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_progress WHERE user_id=?').bind(account.id),

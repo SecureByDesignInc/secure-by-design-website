@@ -1,4 +1,4 @@
-// The authorization view beside each module: the Inside the Network system as eight VLANs plus the
+// The authorization view beside each module: the System Hub system as eight VLANs plus the
 // offline root CA, drawn by the course guides' 3D scene (public/training/guide/scene.js). A node's focus
 // lists the module indexes (0 = module 01) that highlight it; a flow's lessons list the modules that draw
 // it. Denied flows are the attack drill's refused attempts; final flows show in the whole-boundary view.

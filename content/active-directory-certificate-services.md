@@ -62,7 +62,7 @@ Microsoft’s [certificate-validation guidance](https://learn.microsoft.com/en-u
 
 If the connection succeeds but the portal says Dylan can’t open a project, we’re back to an authorization question. A trusted server certificate doesn’t grant Dylan permission to every page it hosts.
 
-Inside the Network shows both outcomes: [Use a web app, step 2](/inside-the-network#process=web&step=2) verifies a valid certificate, and [What if a certificate expired?](/inside-the-network#process=cert-expired) shows the browser refusing one the network still allows.
+System Hub shows both outcomes: [Use a web app, step 2](/inside-the-network#process=web&step=2) verifies a valid certificate, and [What if a certificate expired?](/inside-the-network#process=cert-expired) shows the browser refusing one the network still allows.
 
 ## Internal trust still has to reach the client
 

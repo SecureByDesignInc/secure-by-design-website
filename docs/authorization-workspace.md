@@ -1,4 +1,4 @@
-# Authorization Workspace
+# ATO Package Builder
 
 `/grc-rmf-training/workspace` is where a signed-in learner takes a practice system through an Authorization to Operate (ATO). It models how authorization teams manage an ATO in eMASS (DoD's Enterprise Mission Assurance Support Service) and Telos Xacta 360: a system record, the selected controls, a Body of Evidence, a Plan of Action and Milestones (POA&M), approval chains for each control and for the package, the Authorizing Official's decision, and continuous monitoring. It is an original Secure By Design teaching tool. It is not affiliated with DISA or Telos and copies neither product's screens or branding.
 

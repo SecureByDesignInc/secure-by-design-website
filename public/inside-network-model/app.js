@@ -278,7 +278,7 @@ renderSystem();changeScenario(0);setMotion(moving);setPlaying(playing);
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{if(event.matches)setMotion(false);});
 window.addEventListener('pagehide',event=>{if(!event.persisted)relationships?.dispose();});
 try{scene=createNetworkScene($('viewport'),nodes,inspect,()=>{if(!recorder?.active)setPlaying(false);},{onHover:showHoverTip,onPacket:showPacketCard,onView,onVlan:id=>inspectVlan(id)});}catch(e){console.error(e);$('loading').hidden=false;$('loading').innerHTML='<strong>3D graphics unavailable</strong><span>Use a browser with WebGL 2 and hardware acceleration.</span><span>All technical explanations remain available.</span>';}
-// Inside the Network opens on the architecture explorer; traffic walkthroughs are optional, further down.
+// System Hub opens on the architecture explorer; traffic walkthroughs are optional, further down.
 architectureOverview();
 // Automated browser checks open the model with ?qa to reach the scene; nothing else uses this.
 if(new URLSearchParams(location.search).has('qa'))window.insideNetworkQA={packets:()=>scene?.debugPackets()||[],project:id=>scene?.debugProject(id),labels:()=>scene?.debugLabels()||[],state:()=>scene?.debugState()};

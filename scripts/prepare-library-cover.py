@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Draw the ATO Template Library cover (public/training/library/ato-templates-cover.webp).
 
-The Technical Training Library shows a cover on every tile, normally the first page of a course workbook.
+The Configuration Hub shows a cover on every tile, normally the first page of a course workbook.
 The template library has no workbook, so this draws a matching first page from
 content/ato-templates.json: the same 612 x 792 page, logo, type and colors as the workbook covers.
 Re-run after changing the library's counts or groups:  python3 scripts/prepare-library-cover.py

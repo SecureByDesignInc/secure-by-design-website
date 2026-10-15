@@ -35,7 +35,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Catalog and content tests
         run: node --test tests/video-catalog.test.mjs
-      - name: Inside the Network model checks
+      - name: System Hub model checks
         run: |
           node scripts/check-network-architecture.mjs
           node scripts/check-network-relationships.mjs

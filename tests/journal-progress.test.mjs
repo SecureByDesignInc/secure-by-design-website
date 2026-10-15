@@ -24,9 +24,9 @@ const expectedIds = [
 
 test('the complete recognized progress catalog retains every original ID and its order', () => {
   assert.deepEqual(catalog.progressCatalog.filter(item=>!item.id.startsWith('training:')).map(item => item.id), expectedIds);
-  // Journal (rmf:*, article:*) and Cyber Range (path:*) entries are offline; only the Technical Training Library counts.
+  // Journal (rmf:*, article:*) and Cyber Range (path:*) entries are offline; only the Configuration Hub counts.
   assert.deepEqual(catalog.activeProgressCatalog.map(item => item.id), training.map(item=>item.id));
-  // Technical courses live under /training/; the RMF to ATO course under the GRC & RMF Training Library (15 October 2026).
+  // Technical courses live under /training/; the RMF to ATO course under the Compliance Hub (15 October 2026).
   assert.ok(catalog.activeProgressCatalog.every(item => /^\/(training|grc-rmf-training)\//.test(item.href)));
 });
 
@@ -91,16 +91,16 @@ test('rendered dashboard counts only active training; offline Journal and Cyber 
   ]);
   assert.match(html, /<span>Completed<\/span><strong>1<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
-  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/technical-training">Explore the Technical Training Library/);
+  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/technical-training">Explore the Configuration Hub/);
   assert.doesNotMatch(html, /Learning path|cyber-range|Security Journal|Technical articles|<h2>RMF lifecycle|href="\/(?:blogs?|rmf-series)/);
   assert.ok(catalog.progressCatalog.some(item => item.id === 'path:domain'), 'Cyber Range IDs remain recognized for saved progress');
 });
 
-test('journal-only accounts get zero active counts and Technical Training Library discovery without journal resume links', () => {
+test('journal-only accounts get zero active counts and Configuration Hub discovery without journal resume links', () => {
   const html = renderDashboard([{ id: 'article:what-is-active-directory', status: 'in_progress' }, { id: 'rmf:prepare', status: 'completed' }]);
   assert.match(html, /<span>Completed<\/span><strong>0<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
-  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/technical-training">Explore the Technical Training Library/);
+  assert.match(html, /<h2 id="resume-title">Find something to explore\.<\/h2><a href="\/technical-training">Explore the Configuration Hub/);
   assert.doesNotMatch(html, /Continue reading|Security Journal|href="\/(?:blogs?|rmf-series)/);
 });
 

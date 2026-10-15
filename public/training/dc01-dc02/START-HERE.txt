@@ -18,7 +18,7 @@ WORKBOOK AND NOTICES
 The 13-page workbook includes foundations (including where the controllers
 live and the ports a domain member needs), configuration steps, domain
 health checks, evidence questions, and Notices and permissions on page 13.
-QR codes open the matching views in Inside the Network. DNS is taught in
+QR codes open the matching views in the System Hub. DNS is taught in
 course 1.2. The table of contents links directly to each section. The guide
 footer links to notices.html, which includes the rights notice and software
 license link.

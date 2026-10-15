@@ -81,7 +81,7 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
             </a>
             <a href="/grc-rmf-training/workspace">
               <Maximize2 size={15} />
-              <span>Authorization Workspace</span>
+              <span>ATO Package Builder</span>
             </a>
           </div>
         </div>
