@@ -1,0 +1,62 @@
+SECURE BY DESIGN - MEASURE AGAINST THE STIG
+Course 1.4 | Materials edition 1.0 | Updated 14 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Understand STIGs, SCAP and checklists
+Get-CimInstance Win32_OperatingSystem | Select-Object CSName, Caption, Version
+(Get-CimInstance Win32_ComputerSystem).DomainRole   # 5 = primary domain controller (holds the PDC emulator role), 4 = backup domain controller
+Get-WindowsFeature AD-Domain-Services, DNS | Select-Object Name, InstallState
+Get-ADForest | Select-Object Name, ForestMode, Domains
+
+What success looks like: The applicability record lists each controller's operating system and roles, the STIGs that apply with the release you will measure against, and the later-scope STIGs with an owner and a review date.
+
+2. Stage the DISA content across the air gap
+Get-ChildItem C:\Staging\DISA -File | Select-Object Name, Length, LastWriteTime
+New-Item -ItemType Directory C:\Evidence\baseline\transfer -Force | Out-Null
+Get-ChildItem C:\Staging\DISA -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\baseline\transfer\lab-side-hashes.csv -NoTypeInformation
+# connected-side-hashes.csv came with the media; no output means every hash matches
+Compare-Object (Import-Csv C:\Evidence\baseline\transfer\connected-side-hashes.csv).Hash (Import-Csv C:\Evidence\baseline\transfer\lab-side-hashes.csv).Hash
+
+What success looks like: Every transferred file's hash matches the value recorded on the connected side on both controllers, SCC and STIG Viewer match DISA's published checksums, SCC runs on both controllers and STIG Viewer on SBD-DC01, and every version is written down.
+
+3. Capture the pre-hardening baseline
+# On each controller, after its SCC scan. Adapt the path to SCC's results directory.
+New-Item -ItemType Directory C:\Evidence\baseline -Force | Out-Null
+$session = Get-ChildItem "$env:USERPROFILE\SCC\Sessions" -Directory | Sort-Object Name | Select-Object -Last 1
+Copy-Item $session.FullName -Destination "C:\Evidence\baseline\$env:COMPUTERNAME" -Recurse
+Get-ChildItem "C:\Evidence\baseline\$env:COMPUTERNAME" -Recurse -Filter '*XCCDF-Results*.xml' | Select-Object Name, LastWriteTime
+Get-ChildItem "C:\Evidence\baseline\$env:COMPUTERNAME" -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv "C:\Evidence\baseline\$env:COMPUTERNAME-hashes.csv" -NoTypeInformation
+# On SBD-DC02: carry its set to SBD-DC01. Then, on SBD-DC01, no output means the copy is identical.
+Copy-Item C:\Evidence\baseline\SBD-DC02, C:\Evidence\baseline\SBD-DC02-hashes.csv -Destination '\\SBD-DC01\C$\Evidence\baseline\' -Recurse
+Compare-Object (Import-Csv C:\Evidence\baseline\SBD-DC02-hashes.csv).Hash (Get-ChildItem C:\Evidence\baseline\SBD-DC02 -Recurse -File | Get-FileHash -Algorithm SHA256).Hash
+
+What success looks like: Both controllers have a dated baseline session from the same SCC version, benchmark release and profile; the already-compliant operating system defaults are noted; and both raw result sets sit hashed in C:\Evidence\baseline on SBD-DC01, with SBD-DC02's hashes matching after the copy.
+
+4. Build the checklists and answer the manual checks
+foreach ($t in 'SBD-DC01', 'SBD-DC02', 'sbd.test') {
+  $ckl = Get-Content "C:\Evidence\baseline\checklists\$t.cklb" -Raw -Encoding UTF8 | ConvertFrom-Json
+  $ckl.stigs | Select-Object @{n='Checklist';e={$t}}, stig_name, version, release_info | Format-Table -AutoSize
+  $ckl.stigs.rules | Group-Object status | Select-Object @{n='Checklist';e={$t}}, Name, Count | Format-Table -AutoSize   # expect no not_reviewed
+}
+Get-ChildItem C:\Evidence\baseline\checklists -Filter *.cklb | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\baseline\checklists-hashes.csv -NoTypeInformation
+
+What success looks like: All three checklists hold the intended STIG releases and target data, each import matched by exact revision or had its mismatches reviewed, no rule is left Not Reviewed, and every manual answer carries its observation in Finding Details.
+
+5. Write the findings record for hardening
+New-Item -ItemType Directory C:\Evidence\baseline\findings -Force | Out-Null
+$rows = foreach ($t in 'SBD-DC01', 'SBD-DC02', 'sbd.test') {
+  $ckl = Get-Content "C:\Evidence\baseline\checklists\$t.cklb" -Raw -Encoding UTF8 | ConvertFrom-Json
+  $ckl.stigs.rules | Where-Object status -eq 'open' | Select-Object @{n='Target';e={$t}}, @{n='GroupId';e={$_.group_id}}, @{n='StigId';e={$_.rule_version}}, @{n='Severity';e={$_.severity}}, @{n='CCIs';e={$_.ccis -join ' '}}, @{n='Title';e={$_.rule_title}}, Classification, Owner, TargetDate
+}
+$rows | Group-Object Target, Severity | Select-Object Name, Count
+$rows | Export-Csv C:\Evidence\baseline\findings\findings-record.csv -NoTypeInformation
+# After you fill in Classification, Owner and TargetDate and write handoff.txt, close the baseline:
+Get-ChildItem C:\Evidence\baseline -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\baseline-manifest.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\baseline-manifest.csv
+
+What success looks like: The findings record lists every open rule from the three checklists with target, severity and CCIs; each carries one of the three classifications and an owner, POA&M candidates also a planned date; the counts by severity are recorded; and handoff.txt and the manifest give course 1.5 every version, path and hash it reuses.
+
+© 2026 Secure By Design Team LLC

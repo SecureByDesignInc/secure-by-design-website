@@ -13,6 +13,7 @@ import {nativeOnboardingApi} from './native-onboarding.js';
 import {signInApi} from './sign-in-methods.js';
 import {federalJobsApi} from './federal-jobs.js';
 import {hsts,protect} from './security-headers.js';
+import trainingProgress from '../content/training-progress.json' with {type:'json'};
 // Only the default export may leave this file: the Workers runtime treats every named export of the
 // entry module as an entrypoint and refuses to start if one isn't a handler.
 // The site now runs on its own Cloudflare Worker. ChatGPT Sites used to inject the oai-authenticated-* identity
@@ -51,9 +52,18 @@ function retiredCourse(url){
  }
  return null;
 }
+// Course guides 1.2–1.10 are static pages at /training/<id>/ (scripts/prepare-course-guides.mjs). Cloudflare's
+// static assets normally add the trailing slash first; this covers anything that reaches the Worker. Browsers keep
+// the #lesson fragment across the redirect.
+const courseGuides=new Set(trainingProgress.map(item=>/^\/training\/([a-z0-9-]+)#/.exec(item.href)?.[1]).filter(Boolean));
+function courseGuide(url){
+ const match=/^\/training\/([a-z0-9-]+)$/.exec(url.pathname);
+ return match&&courseGuides.has(match[1])?new URL(`/training/${match[1]}/${url.search}`,url).toString():null;
+}
 async function route(request,env,ctx){
  const path=new URL(request.url).pathname;
  const moved=retiredCourse(new URL(request.url));if(moved)return redirect(moved,false);
+ const guide=courseGuide(new URL(request.url));if(guide)return redirect(guide,false);
  // Vulnerability-report contact (RFC 9116). public/.well-known/security.txt normally answers first.
  if(path==='/.well-known/apple-app-site-association'||path==='/apple-app-site-association')return new Response(appSiteAssociation,{headers:{'content-type':'application/json','cache-control':'public, max-age=3600'}});
  if(path==='/app-auth/callback')return appCallbackPage(new URL(request.url));

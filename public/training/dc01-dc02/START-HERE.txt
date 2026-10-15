@@ -1,7 +1,7 @@
 SECURE BY DESIGN
 PROMOTE PRIMARY & SECONDARY DOMAIN CONTROLLER
 Windows Server - DC01 and DC02
-Course 1.1 | Materials edition 0.6 | Updated 9 October 2026
+Course 1.1 | Materials edition 0.7 | Updated 14 October 2026
 © 2026 Secure By Design Team LLC.
 
 1. Extract this entire folder from the ZIP.

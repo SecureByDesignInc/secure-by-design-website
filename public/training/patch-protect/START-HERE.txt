@@ -1,11 +1,11 @@
 SECURE BY DESIGN
-PATCH, PROTECT, AND WATCH FOR WEAKNESS
-Windows Server · Linux - WSUS rings, approved sources, ePO & credentialed scanning
-Course 1.8 | Materials edition 1.4 | Updated 9 October 2026
+DELIVER WINDOWS UPDATES FROM SBD-WSUS01
+Windows Server - Air-gapped WSUS: offline import, four rings & Group Policy targeting
+Course 1.14 | Materials edition 2.0 | Updated 14 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-patch-protect-Workbook.pdf    Companion workbook, 16 pages
+SecureByDesign-patch-protect-Workbook.pdf    Companion workbook, 18 pages
 SecureByDesign-patch-protect-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                   Configuration and evidence checklist
 Verification-Commands.txt                    Each lesson's commands, ready to copy

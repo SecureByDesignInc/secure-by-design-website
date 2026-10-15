@@ -1,0 +1,414 @@
+{
+  "id": "two-tier-pki",
+  "hero": {
+    "title": "Configure the",
+    "accent": "two-tier PKI.",
+    "text": "Build an offline root CA on SBD-ROOTCA01 and an enterprise issuing CA on SBD-SUBCA01, signed through a controlled ceremony, with trust data served from pki.sbd.test on SBD-PKI-MGMT01. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "TWO-TIER PKI"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-ROOTCA01",
+      "Offline · workgroup · no network address"
+    ],
+    [
+      "SBD-SUBCA01",
+      "10.0.30.20 / 24 · VLAN 30"
+    ],
+    [
+      "SBD-PKI-MGMT01",
+      "10.0.30.30 / 24 · VLAN 30"
+    ],
+    [
+      "Publication name",
+      "pki.sbd.test · AIA and CDP"
+    ],
+    [
+      "Root CA example",
+      "RSA 4096 · SHA-256 · 20 years"
+    ],
+    [
+      "Issuing CA example",
+      "RSA 4096 · SHA-256 · 10 years"
+    ]
+  ],
+  "scene": {
+    "tag": "OFFLINE ROOT + VLAN 30 · PKI",
+    "label": "Interactive 3D lesson network showing the offline root CA SBD-ROOTCA01 reached only by hand-carried media, the issuing CA SBD-SUBCA01 and publication host SBD-PKI-MGMT01 on VLAN 30, and SBD-DC01 on VLAN 10, which fetches trust data from pki.sbd.test and autoenrolls its domain controller certificate.",
+    "completeStatus": "PKI IN SERVICE",
+    "completeCaption": "The root is back in the vault and offline, the issuing CA publishes only the three planned templates, both domain controllers hold their own certificates, and pki.sbd.test serves current certificates and CRLs at the exact URLs every certificate carries. Enrollment and revocation were proven end to end.",
+    "nodes": [
+      {
+        "id": "root",
+        "name": "SBD-ROOTCA01",
+        "sub": "Offline · no network",
+        "kind": "offline",
+        "row": "back",
+        "from": 1,
+        "button": "SBD-ROOTCA01",
+        "title": "SBD-ROOTCA01 · offline, no network address",
+        "description": "The trust anchor: a standalone root CA in a workgroup with no network path, configured in lesson 2. It signs the issuing CA’s certificate at the ceremony and publishes a base CRL every 26 weeks; everything crossing its boundary travels on approved removable media."
+      },
+      {
+        "id": "subca",
+        "name": "SBD-SUBCA01",
+        "sub": "10.0.30.20",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-SUBCA01",
+        "title": "SBD-SUBCA01 · 10.0.30.20",
+        "description": "The enterprise issuing CA, joined to sbd.test on VLAN 30. It creates its request in lesson 3, starts with its signed certificate in lesson 5, writes its CRLs to pki.sbd.test, and publishes only the three templates from lesson 9."
+      },
+      {
+        "id": "pkimgmt",
+        "name": "SBD-PKI-MGMT01",
+        "sub": "10.0.30.30",
+        "kind": "server",
+        "row": "back",
+        "from": 5,
+        "button": "SBD-PKI-MGMT01",
+        "title": "SBD-PKI-MGMT01 · 10.0.30.30",
+        "description": "A hardened member server on VLAN 30 with two jobs in this course: from lesson 6 it hosts the pki.sbd.test publication site over plain HTTP, and from lesson 8 it is the only seat for certificate template administration. In lesson 10 it is also the pilot that autoenrolls a computer certificate."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "Domain controller from course 1.1, with SBD-DC02 holding the same data by replication: the pki.sbd.test alias from course 1.2, the Group Policy that distributes the root and turns on autoenrollment, and the templates as directory objects. From VLAN 10 it runs the cross-VLAN checks against pki.sbd.test (rule F18), and in lesson 10 both controllers autoenroll their domain controller certificates.",
+        "from": 4
+      }
+    ],
+    "flows": [
+      {
+        "from": "subca",
+        "to": "root",
+        "lessons": [
+          3
+        ],
+        "label": "Ceremony media · request in, public artifacts out",
+        "twoWay": true,
+        "offline": true
+      },
+      {
+        "from": "dc1",
+        "to": "pkimgmt",
+        "lessons": [
+          5,
+          6,
+          9
+        ],
+        "label": "AIA / CDP retrieval · HTTP TCP 80 (F18)",
+        "twoWay": true
+      },
+      {
+        "from": "subca",
+        "to": "pkimgmt",
+        "lessons": [
+          6,
+          9
+        ],
+        "label": "Issuing CA CRL publication · on schedule"
+      },
+      {
+        "from": "root",
+        "to": "pkimgmt",
+        "lessons": [
+          6,
+          9
+        ],
+        "label": "Root certificate and CRL · hand-carried media",
+        "offline": true
+      },
+      {
+        "from": "pkimgmt",
+        "to": "dc1",
+        "lessons": [
+          7,
+          8
+        ],
+        "label": "Template administration · directory objects"
+      },
+      {
+        "from": "dc1",
+        "to": "subca",
+        "lessons": [
+          9
+        ],
+        "label": "Domain controller autoenrollment · RPC",
+        "twoWay": true
+      }
+    ]
+  },
+  "lessons": {
+    "design": {
+      "short": "Design the hierarchy",
+      "tag": "01 / DESIGN",
+      "status": "PLANNED",
+      "stepTitles": [
+        "Draw the offline root and issuing CA hierarchy",
+        "Record names, cryptography, lifetimes, and owners",
+        "Start from this lab’s example values",
+        "Map each value to the setting that applies it",
+        "Plan the pki.sbd.test publication name",
+        "Choose the publication host, paths, and schedule"
+      ],
+      "mistake": "Leaving the issuing CA’s lifetime to the issuing CA. A subordinate CA’s certificate lifetime comes from the root that signs it, so if CA\\ValidityPeriod and CA\\ValidityPeriodUnits are not set on the root before the ceremony, the issuing CA gets the root’s existing setting instead of the planned 10 years.",
+      "network": "Nothing is built yet. SBD-ROOTCA01 is planned with no network connection, and SBD-SUBCA01 and SBD-PKI-MGMT01 are planned on VLAN 30. SBD-DC01 already provides the domain and DNS the issuing CA will depend on.",
+      "control": {
+        "id": "SC-12",
+        "name": "Cryptographic Key Establishment and Management",
+        "phase": "Prepare → Implement",
+        "body": "Key management starts before any key exists. Recording each CA’s algorithm, key size, hash, lifetime, and CRL period, with the setting that applies it and a named renewal owner, gives you the plan to follow now and to show later.",
+        "question": "Which of this lab’s example values would your own policy change, and who approves that change?"
+      },
+      "checklist": [
+        "I drew the hierarchy with no network path to the root.",
+        "I recorded each CA’s key, hash, lifetime, and CRL period with the setting that applies it.",
+        "I mapped every planned AIA and CDP URL to its publisher and a file on pki.sbd.test."
+      ]
+    },
+    "root": {
+      "short": "Configure the offline root",
+      "tag": "02 / ROOT CA",
+      "status": "ROOT CA · OFFLINE",
+      "stepTitles": [
+        "Verify the disconnected workgroup host",
+        "Place the root’s CAPolicy.inf in %SystemRoot%",
+        "Install a standalone root CA with approved settings",
+        "Set subordinate policy, CRL schedule, and backup"
+      ],
+      "mistake": "Placing CAPolicy.inf after the role is configured. Setup reads it only during configuration, so the root starts with default CRL settings instead of the planned 26-week base CRL with no delta CRL.",
+      "network": "SBD-ROOTCA01 is now a standalone root CA in the offline vault, drawn in amber with no cable to the core. Nothing travels to or from it yet; SBD-SUBCA01 and SBD-PKI-MGMT01 are still planned.",
+      "control": {
+        "id": "CP-9",
+        "name": "System Backup",
+        "phase": "Implement",
+        "body": "The root’s protected backup is captured before it signs anything, so the trust anchor can be recovered without rebuilding the hierarchy. That backup holds the private key: store and record it with the same care as the root itself.",
+        "question": "Where is the root backup kept, who can reach it, and how would you show that it restores?"
+      },
+      "checklist": [
+        "I confirmed SBD-ROOTCA01 is in a workgroup with no network path and set its clock from the approved reference.",
+        "I checked the publication URLs, 10-year subordinate validity, and 26-week CRL period with certutil -getreg before signing anything.",
+        "I captured a protected root backup and recorded where it is stored."
+      ]
+    },
+    "request": {
+      "short": "Create the CA request",
+      "tag": "03 / REQUEST",
+      "status": "ISSUING CA WAITING",
+      "stepTitles": [
+        "Confirm the issuing host’s final identity",
+        "Prepare the issuing CA’s CAPolicy.inf",
+        "Install an enterprise subordinate CA",
+        "Save, inspect, and hash the request"
+      ],
+      "mistake": "Treating the waiting CA as a failed install and reinstalling the role. A subordinate CA cannot start before its certificate is signed, and a reinstall can create a new key pair, leaving the original request matching nothing.",
+      "network": "SBD-SUBCA01 joins VLAN 30 at 10.0.30.20 as an enterprise subordinate CA, waiting for its certificate. Its request file carries only the public key and goes to the media custodian, not across the network.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "The issuing CA’s CAPolicy.inf fixes its settings before setup reads them: a weekly base CRL, a daily delta CRL, and no default templates. Keep the file and the reviewed request fields as the record of what was configured and why.",
+        "question": "Why is LoadDefaultTemplates=0 a configuration decision rather than a convenience?"
+      },
+      "checklist": [
+        "I confirmed SBD-SUBCA01’s name, domain membership, address, DNS, and time before installing the role.",
+        "I inspected the request’s subject and public key and recorded its SHA-256 hash.",
+        "I left the CA in its waiting state and kept private keys out of the transfer package."
+      ]
+    },
+    "sign": {
+      "short": "Sign at the ceremony",
+      "tag": "04 / CEREMONY",
+      "status": "SIGNING CEREMONY",
+      "stepTitles": [
+        "Check the clock, carry the request in, verify its hash",
+        "Check root policy, then submit and approve",
+        "Export and verify the public artifacts",
+        "Carry public artifacts back and secure the root"
+      ],
+      "mistake": "Checking the request’s filename instead of its hash. A matching name proves nothing; only a recalculated SHA-256 that matches the independently recorded value shows the approved request is the one being signed.",
+      "network": "The request travels to SBD-ROOTCA01 on approved removable media, and the signed subordinate certificate, root certificate, and current root CRL travel back the same way. The amber path is carried by hand; there is no network link to the root.",
+      "control": {
+        "id": "MP-5",
+        "name": "Media Transport",
+        "phase": "Implement → Assess",
+        "body": "Removable media is the only path across the root boundary. Custody records, hashes checked on both sides, and a list of exactly what moved show that only the reviewed request went in and only public artifacts came out.",
+        "question": "If the custody record had a gap, what would you repeat before trusting the artifacts?"
+      },
+      "checklist": [
+        "I set the root’s clock against the approved reference, and the recalculated request hash matched the recorded value.",
+        "I checked the issued certificate’s identity, validity, and URLs and recorded the request ID and artifact hashes.",
+        "I carried back only public artifacts and recorded the root’s shutdown."
+      ]
+    },
+    "publish": {
+      "short": "Activate the issuing CA",
+      "tag": "05 / ACTIVATE",
+      "status": "ISSUING CA ONLINE",
+      "stepTitles": [
+        "Install the signed certificate and start the CA",
+        "Set the AIA and CDP URLs before issuing",
+        "Distribute root trust through domain policy",
+        "Hold templates for lessons 8 and 9"
+      ],
+      "mistake": "Issuing a test certificate before the AIA and CDP settings point at pki.sbd.test. That certificate carries the old locations for its whole life, and clients will keep looking for files nobody publishes.",
+      "network": "SBD-SUBCA01 is now a running issuing CA on VLAN 30, and SBD-DC01 carries the Group Policy that delivers the approved root to domain clients. SBD-PKI-MGMT01 is still planned, so the pki.sbd.test URLs have nowhere to answer yet.",
+      "control": {
+        "id": "SC-17",
+        "name": "Public Key Infrastructure Certificates",
+        "phase": "Implement",
+        "body": "This control asks for certificates issued under an approved policy and trust stores that hold only approved trust anchors. Installing the signed certificate completes the approved hierarchy, and managed domain policy keeps the root trust decision deliberate and reversible.",
+        "question": "Which systems should trust this root, and how would you remove that trust if you had to?"
+      },
+      "checklist": [
+        "I added the root certificate and CRL to the issuing CA’s stores and confirmed Certificate Services is running with the signed certificate installed.",
+        "I checked that the AIA and CDP settings carry the planned pki.sbd.test URLs.",
+        "I found the approved root in a domain client’s trusted root store, delivered by policy."
+      ]
+    },
+    "publication": {
+      "short": "Build the publication site",
+      "tag": "06 / PUBLICATION",
+      "status": "PKI.SBD.TEST ONLINE",
+      "stepTitles": [
+        "Install the web server and publication folder",
+        "Confirm the alias and the register row",
+        "Keep the site on plain HTTP",
+        "Limit who can write to the folder"
+      ],
+      "mistake": "Moving the site to HTTPS because it looks more secure. Clients would have to validate the site’s certificate before they could fetch the CRL that validation depends on. The files are public and signed, so integrity comes from the signatures, not the transport.",
+      "network": "SBD-PKI-MGMT01 comes online at 10.0.30.30 and answers for pki.sbd.test on HTTP TCP 80. SBD-DC01, outside VLAN 30, resolves the name and reaches the site across the core under rule F18.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Implement",
+        "body": "Clients read from the publication folder; only the CA’s publishing process and the PKI administrators write to it. Granting no more access than publication needs keeps a reader from ever becoming a publisher of trust data.",
+        "question": "Which accounts can write to the publication folder today, and does each one need to?"
+      },
+      "checklist": [
+        "I confirmed pki.sbd.test resolves to 10.0.30.30 from SBD-DC01, outside VLAN 30.",
+        "I confirmed the site answers on port 80, allows double escaping for delta CRL names, and holds only certificates and CRLs.",
+        "I recorded the folder permissions that separate writers from readers."
+      ]
+    },
+    "publish-trust": {
+      "short": "Publish the trust data",
+      "tag": "07 / PUBLISH",
+      "status": "TRUST DATA LIVE",
+      "stepTitles": [
+        "Map every embedded URL to a file",
+        "Copy the current certificates and CRLs into place",
+        "Point the issuing CA’s CRL publication at the site",
+        "Verify live retrieval from outside VLAN 30"
+      ],
+      "mistake": "Renaming published files to something tidier. Certificates already carry the exact URLs, so a renamed file is a missing file, and chain building and revocation checks fail for every certificate issued so far.",
+      "network": "Trust data now reaches pki.sbd.test: the issuing CA writes its CRLs to the site on schedule, and the root’s certificate and CRL arrive by hand-carried media. SBD-DC01 fetches each AIA and CDP URL over HTTP TCP 80.",
+      "control": {
+        "id": "IA-5(2)",
+        "name": "Authenticator Management | Public Key-based Authentication",
+        "phase": "Implement → Assess",
+        "body": "When PKI is used, this enhancement expects certificates to be validated by building a path to an accepted trust anchor, including status information. certutil -verify -urlfetch from a cache-cleared system outside VLAN 30 is that validation, run against the live site rather than a cache.",
+        "question": "What happens to every client if the root CRL on the site expires before the next ceremony?"
+      },
+      "checklist": [
+        "I mapped each embedded AIA and CDP URL to a real file on the site.",
+        "I confirmed the issuing CA’s next CRL landed on the site at the same filename.",
+        "I ran certutil -verify -urlfetch from SBD-DC01, outside VLAN 30, with its URL cache cleared, and the chain built."
+      ]
+    },
+    "template-admin": {
+      "short": "Separate template admin",
+      "tag": "08 / DELEGATE",
+      "status": "TEMPLATE SEAT READY",
+      "stepTitles": [
+        "Install the template tools on SBD-PKI-MGMT01",
+        "Delegate template rights to a PKI administrators group",
+        "Remove routine template editing elsewhere",
+        "Write the template change process"
+      ],
+      "mistake": "Delegating template permissions to individual accounts. Group membership is meant to be the record of who may change what the CA signs; scattered individual permissions leave no single list to review.",
+      "network": "SBD-PKI-MGMT01 is now also the template administration seat. Template work goes from it to the directory on SBD-DC01, where templates live as objects; the issuing CA’s console stays for CA operations.",
+      "control": {
+        "id": "AC-5",
+        "name": "Separation of Duties",
+        "phase": "Implement",
+        "body": "Deciding what the PKI may sign is separated from running the CA. A named group on a dedicated seat holds template rights, and no Domain Admins or Enterprise Admins account edits templates as routine work.",
+        "question": "Who could change a template today without going through the change process?"
+      },
+      "checklist": [
+        "I opened the Certificate Templates console from SBD-PKI-MGMT01.",
+        "I delegated template permissions to the PKI administrators group under the Admin OU.",
+        "I wrote a change process that names the requester, reviewer, and versioning action."
+      ]
+    },
+    "first-templates": {
+      "short": "Publish first templates",
+      "tag": "09 / TEMPLATES",
+      "status": "THREE TEMPLATES PUBLISHED",
+      "stepTitles": [
+        "Duplicate Kerberos Authentication for the controllers",
+        "Duplicate Computer as SBD Computer Authentication",
+        "Duplicate Web Server as SBD Server Authentication",
+        "Record each template through the change process",
+        "Publish only the three planned templates"
+      ],
+      "mistake": "Editing the built-in Kerberos Authentication, Computer or Web Server template directly. The original is lost as a baseline, and the change has no name or version of its own to record or roll back.",
+      "network": "Templates are configured from SBD-PKI-MGMT01 and stored in the directory on SBD-DC01, and SBD-SUBCA01 now publishes exactly the three planned templates. Nothing has enrolled yet.",
+      "control": {
+        "id": "CM-7",
+        "name": "Least Functionality",
+        "phase": "Implement",
+        "body": "The CA publishes only the templates the plan calls for. Removing the defaults it does not need means fewer certificate types can be requested at all, because an unpublished template cannot be mis-enrolled.",
+        "question": "Which default template would you be most tempted to keep, and what would it let someone request?"
+      },
+      "checklist": [
+        "I duplicated Kerberos Authentication, Computer and Web Server with the approved key size and validity.",
+        "I left autoenrollment to the domain controllers on SBD Domain Controller Authentication and to the pilot group on SBD Computer Authentication.",
+        "I confirmed the CA publishes exactly the three planned templates, each with a change record."
+      ]
+    },
+    "validate": {
+      "short": "Validate the PKI",
+      "tag": "10 / VALIDATE",
+      "status": "PKI PROVEN",
+      "stepTitles": [
+        "Autoenroll the controllers and the pilot",
+        "Verify the chain with live retrieval",
+        "Revoke a disposable test certificate",
+        "Assign renewal owners; list the backups for course 1.19",
+        "Baseline the PKI servers and rescan the controllers",
+        "Close the controller finding and file the evidence"
+      ],
+      "mistake": "Turning off revocation checking when a CRL cannot be retrieved. The certificate may be valid, but the bypass hides a broken publication path that every relying system depends on. Fix the retrieval or the stale file and retest.",
+      "network": "Both domain controllers autoenroll from SBD-SUBCA01 across the core, and the pilot, SBD-PKI-MGMT01, inside VLAN 30. SBD-DC01 validates against pki.sbd.test over HTTP TCP 80, the issuing CA publishes its updated CRL to the site, and the root’s replacement CRLs keep arriving through scheduled, hand-carried ceremonies.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The closing tests assess the PKI the way relying systems see it: hands-free enrollment, live chain and revocation checks, and a revoked certificate rejected for the expected reason. The scans, the answered domain controller rule and the filed evidence keep those results reviewable later.",
+        "question": "Which of these results would you rerun after the next root ceremony, and why?"
+      },
+      "checklist": [
+        "I watched both domain controllers and the pilot receive their certificates without touching a request.",
+        "I revoked the test certificate, published a new CRL, and saw a fresh evaluation reject it.",
+        "I recorded CRL and renewal owners, listed the PKI items course 1.19 backs up, filed the PKI servers’ baselines and the controllers’ rescans, and answered the controller certificate rule."
+      ]
+    }
+  }
+}

@@ -1,11 +1,11 @@
 SECURE BY DESIGN
-SEE EVERYTHING: THE LOGGING PIPELINE
-Windows Server · Linux - Collect, protect & analyze before the fleet arrives
-Course 1.6 | Materials edition 1.4 | Updated 9 October 2026
+COLLECT THE RECORD ON SBD-SYSLOG01
+Windows Server · Linux - Design the logging pipeline and build its collector
+Course 1.10 | Materials edition 2.0 | Updated 14 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-logging-pipeline-Workbook.pdf    Companion workbook, 16 pages
+SecureByDesign-logging-pipeline-Workbook.pdf    Companion workbook, 15 pages
 SecureByDesign-logging-pipeline-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                      Configuration and evidence checklist
 Verification-Commands.txt                       Each lesson's commands, ready to copy

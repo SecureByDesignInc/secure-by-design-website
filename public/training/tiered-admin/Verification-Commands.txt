@@ -1,26 +1,20 @@
-SECURE BY DESIGN - ADDRESSING AND TIERED ADMINISTRATION
-Course 1.5 | Materials edition 1.5 | Updated 13 October 2026
+SECURE BY DESIGN - TIERED ADMINISTRATION
+Course 1.8 | Materials edition 2.0 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
 the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
 
-1. Design the tiers and the address plan
-# Capture the design inputs: OU targets and current account separation.
+1. Design the tiers and the admin seats
+# At SBD-DC01's console until lesson 2 builds AdminJumpBox01: OU targets, current account separation, and the role groups.
 Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
 Get-ADGroupMember 'Domain Admins' | Select-Object Name, SamAccountName
+'SBD Tier 0 Admins', 'SBD Tier 2 Admins', 'SBD Audit Custodians' | ForEach-Object { New-ADGroup $_ -GroupScope Global -Path 'OU=Admin,OU=SBD,DC=sbd,DC=test' }
+Get-ADGroup -SearchBase 'OU=Admin,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name   # SBD Tier 1 Admins came from course 1.7
 
-What success looks like: The tier map names systems, OUs, admin seats, and accounts per tier, with SBD-ADMIN-PC01 a virtual machine on SBD-ADMIN-SRV01; the exception record holds the seat plan's STIG differences and open PAW items; the DHCP plan is written; and the register has the new permit and deny rows with owners.
+What success looks like: The tier map names systems, OUs, admin seats, accounts, and groups per tier, with SBD-ADMIN-PC01 a virtual machine on SBD-ADMIN-SRV01; the exception record holds the seat plan's STIG differences and open PAW items; the role groups exist in the Admin OU; and the register has the new permit and deny rows with owners.
 
-2. Build SBD-DHCP01 and the relay
-Get-DhcpServerInDC
-Get-DhcpServerv4Scope | Select-Object ScopeId, StartRange, EndRange, State
-Get-DhcpServerv4OptionValue -ScopeId 10.0.80.0 | Select-Object OptionId, Value
-Resolve-DnsName sbd-test80.sbd.test
-
-What success looks like: The server shows as authorized, the scope serves the planned range and options through the relay, and the test client's secure dynamic DNS record exists on both DCs.
-
-3. Build the administration systems
+2. Build the administration systems
 Get-ADComputer -SearchBase 'OU=Admin,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name, DistinguishedName
 Get-GPInheritance -Target 'OU=Admin Servers,OU=Admin,OU=SBD,DC=sbd,DC=test'
 Get-GPInheritance -Target 'OU=Admin Workstations,OU=Admin,OU=SBD,DC=sbd,DC=test'
@@ -29,34 +23,43 @@ Get-LocalGroupMember Administrators   # each seat: its maintenance group, no tie
 Get-VM | Select-Object Name, Generation, State, AutomaticStartAction   # Start
 (Get-VMFirmware SBD-ADMIN-PC01).SecureBoot; (Get-VMSecurity SBD-ADMIN-PC01).TpmEnabled
 Get-VMHost | Select-Object EnableEnhancedSessionMode   # False
-Get-VMIntegrationService SBD-ADMIN-PC01 | Select-Object Name, Enabled
+Get-VMIntegrationService SBD-ADMIN-PC01 | Select-Object Name, Enabled   # Guest Service Interface, Key-Value Pair Exchange, Time Synchronization: False
 Get-LocalGroupMember 'Hyper-V Administrators'   # the console users' Tier 1 accounts
 Resolve-DnsName SBD-ADMIN-PC01.sbd.test   # 10.0.60.30
+Invoke-Command SBD-DHCP01.sbd.test { Get-DhcpServerv4Scope }   # Tier 1 account, over remote management (A02)
 # Inside SBD-ADMIN-PC01: Credential Guard is running when the list includes 1.
 $dg = Get-CimInstance Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard
 $dg.SecurityServicesRunning
+w32tm /query /source   # a domain controller, never the VM IC Time Synchronization Provider
 # On AdminJumpBox01: Hyper-V stays Available, never Installed.
 Get-WindowsFeature Hyper-V | Select-Object Name, InstallState
+Uninstall-WindowsFeature RSAT-DHCP -ComputerName SBD-DC01   # course 1.7's DHCP tools leave the controller
 Test-NetConnection SBD-DC01.sbd.test -Port 5985
 gpresult /r /scope:computer
 
-What success looks like: AdminJumpBox01 and SBD-ADMIN-SRV01 sit in Admin Servers and the SBD-ADMIN-PC01 virtual machine in Admin Workstations, with the STIG and seat GPOs applied; each seat's local Administrators holds its maintenance group, no tier group; SBD-ADMIN-SRV01 runs only SBD-ADMIN-PC01 (10.0.60.30, generation 2, Secure Boot on, TPM, Credential Guard, starts with the host) with enhanced session mode, the Guest Service Interface, and Key-Value Pair Exchange off; AdminJumpBox01 has no Hyper-V role; management ports answer from the correct seat per tier; and user space can open no session toward VLAN 60.
+What success looks like: AdminJumpBox01 and SBD-ADMIN-SRV01 sit in Admin Servers and the SBD-ADMIN-PC01 virtual machine in Admin Workstations, with the STIG and seat GPOs applied; each seat's local Administrators holds its maintenance group, no tier group; SBD-ADMIN-SRV01 runs only SBD-ADMIN-PC01 (10.0.60.30, generation 2, Secure Boot on, TPM, Credential Guard, starts with the host) with enhanced session mode, the Guest Service Interface, Key-Value Pair Exchange, and Time Synchronization off, and the guest takes its time from a domain controller; AdminJumpBox01 has no Hyper-V role; SBD-DHCP01 is managed from SBD-ADMIN-SRV01 and the DHCP tools are gone from SBD-DC01; management ports answer from the correct seat per tier; and user space can open no session toward VLAN 60.
 
-4. Restrict where privilege can sign in
+3. Restrict where privilege can sign in
 Get-ADComputer -SearchBase 'OU=Tier 0 Servers,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name
 Get-ADGroupMember 'Protected Users' | Select-Object Name
+Invoke-Command SBD-DHCP01.sbd.test { Get-LocalGroupMember Administrators }   # from SBD-ADMIN-SRV01: SBD Tier 1 Admins, no Domain Admins
+dsacls 'OU=Workstations,OU=SBD,DC=sbd,DC=test' /G 'SBD\SBD Tier 2 Admins:CC;computer'   # from AdminJumpBox01 (Tier 0)
+# On the test client, as its local administrator: join with a Tier 2 account, then, after the restart, its managers
+Add-Computer -DomainName sbd.test -Credential (Get-Credential) -Restart
+Add-LocalGroupMember Administrators -Member 'SBD\SBD Tier 2 Admins'; Enable-PSRemoting -Force
+Set-NetFirewallRule -DisplayGroup 'Windows Remote Management' -RemoteAddress 10.0.60.30
 # On the Tier 2 test machine: export the effective logon rights and read the deny lines.
 secedit /export /mergedpolicy /cfg C:\Evidence\tiered-admin\user-rights.inf /areas user_rights
 Select-String -Path C:\Evidence\tiered-admin\user-rights.inf -Pattern 'SeDeny'
-(Get-ADGroup 'SBD Tier 0 Admins').SID.Value   # from an admin seat: this SID must appear on those lines
+'SBD Tier 0 Admins', 'SBD Tier 1 Admins', 'SBD Audit Custodians' | ForEach-Object { (Get-ADGroup $_).SID.Value }   # from an admin seat: these SIDs must appear on those lines
 # Repeat on each seat as its maintenance account, and read who may sign in there.
 Select-String -Path C:\Evidence\tiered-admin\user-rights.inf -Pattern 'SeInteractive'
 # After the refused Tier 0 sign-in: event 4625 with status 0xC000015B (logon type not granted).
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Where-Object Message -match '0xC000015B' | Select-Object TimeCreated, Id
 
-What success looks like: SBD-SUBCA01 and SBD-PKI-MGMT01 sit in the Tier 0 Servers OU and still accept Tier 0 sign-ins; on a Tier 2 test machine the deny rights list the Tier 0 group's SID, and a Tier 0 sign-in there is refused with Security event 4625 (status 0xC000015B); each admin seat lets only its own groups sign in and denies the other tiers — Tier 0 and Tier 1 inside SBD-ADMIN-PC01, Tier 0 and Tier 2 on SBD-ADMIN-SRV01, Tier 1 and Tier 2 on AdminJumpBox01; the exception record holds the console network-logon exception and the seat GPOs' STIG differences; Protected Users contains the Tier 0 admins; and the break-glass and MFA decisions are written.
+What success looks like: SBD-SUBCA01 and SBD-PKI-MGMT01 sit in the Tier 0 Servers OU and still accept Tier 0 sign-ins; the Servers OU's administrators GPO puts SBD Tier 1 Admins, not Domain Admins, in SBD-DHCP01's local Administrators; on the Tier 2 test machine, course 1.7's test client now in the Workstations OU, the deny rights list the SIDs of the Tier 0, Tier 1, and audit custodian groups, and a Tier 0 sign-in there is refused with Security event 4625 (status 0xC000015B); each admin seat lets only its own groups sign in and denies the other tiers — Tier 0, Tier 1, and the audit custodians inside SBD-ADMIN-PC01, Tier 0 and Tier 2 on SBD-ADMIN-SRV01, Tier 1 and Tier 2 on AdminJumpBox01; the exception record holds the console network-logon exception and the seat GPOs' STIG differences; Protected Users contains the Tier 0 admins; and the break-glass and MFA decisions are written.
 
-5. Prove the tiers and the addressing
+4. Prove the tiers end to end
 Enter-PSSession SBD-DHCP01.sbd.test   # from SBD-ADMIN-SRV01, Tier 1 account
 vmconnect.exe localhost SBD-ADMIN-PC01   # same account, not elevated: the console opens
 Test-NetConnection SBD-ADMIN-SRV01.sbd.test -Port 5985   # from the guest: must fail
@@ -65,12 +68,29 @@ ipconfig /renew   # on the VLAN 80 test client
 # Where a sign-in was refused: last hour's 0xC000015B failures (logon type not granted).
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Where-Object Message -match '0xC000015B' | Select-Object TimeCreated, Id
 
-What success looks like: Every in-tier path succeeds, every tested out-of-tier path fails with captured evidence — in both directions across the seat virtual machine's boundary too — and DHCP with dynamic DNS still works end to end under the full rule set.
+What success looks like: Every in-tier path succeeds, every tested out-of-tier path fails with captured evidence — in both directions across the seat virtual machine's boundary too — and course 1.7's DHCP service and secure registration still work end to end under the full rule set.
 
-6. Delta scan and hand off
+5. Move the scan tools, rescan, and hand off
+# On AdminJumpBox01 (Tier 0): carry the evidence over; no output means a set matches its manifest
+Copy-Item \\SBD-DC01\C$\Evidence -Destination C:\ -Recurse
+'baseline', 'hardened', 'pki', 'dhcp' | ForEach-Object { Compare-Object (Import-Csv "C:\Evidence\$_-manifest.csv").Hash (Get-ChildItem "C:\Evidence\$_" -Recurse -File | Get-FileHash -Algorithm SHA256).Hash }
+Invoke-Command SBD-DC01, SBD-DC02 { Test-Path 'C:\Program Files*\SCAP Compliance Checker*' }   # False once SCC is removed
+# On SBD-ADMIN-SRV01 (Tier 1): course 1.7's server record, checked the same way
+$s = New-PSSession SBD-DHCP01.sbd.test
+Copy-Item C:\Evidence\dhcp, C:\Evidence\dhcp-manifest.csv -FromSession $s -Destination C:\Evidence\ -Recurse
+Compare-Object (Import-Csv C:\Evidence\dhcp-manifest.csv).Hash (Get-ChildItem C:\Evidence\dhcp -Recurse -File | Get-FileHash -Algorithm SHA256).Hash
+# Still on SBD-ADMIN-SRV01, as a Hyper-V administrator: the media set's ISO into the Tier 2 seat, read-only
+Set-VMDvdDrive -VMName SBD-ADMIN-PC01 -Path '<course 1.4 media set ISO>'
+# Inside SBD-ADMIN-PC01 (Tier 2), with the ISO as D: the installer matches the record (expected: True); keep both for course 1.13
+$scc = Get-Item 'D:\<SCC installer>'
+(Get-FileHash $scc.FullName -Algorithm SHA256).Hash -in (Import-Csv D:\connected-side-hashes.csv).Hash
+New-Item -ItemType Directory -Force C:\Staging\DISA | Out-Null
+Copy-Item $scc.FullName, D:\connected-side-hashes.csv -Destination C:\Staging\DISA\
+Set-VMDvdDrive -VMName SBD-ADMIN-PC01 -Path $null   # back on the host, after the install: detach the ISO
+# On each seat, after its scans: this course's evidence, hashed
 Get-ChildItem C:\Evidence\tiered-admin -Recurse | Select-Object Name, LastWriteTime
 Get-FileHash -Algorithm SHA256 C:\Evidence\tiered-admin\*
 
-What success looks like: Four baselines and the Tier 0 server rescans are filed with attributed deltas, the exception record and register carry the new rows, and the handoff names the logging course's management constraint.
+What success looks like: SCC and STIG Viewer run from AdminJumpBox01 and are gone from the controllers, every moved evidence set matches its manifest, and each seat has its tier's tools; first baselines for the three seats, SBD-ADMIN-PC01's from its own SCC copy, and rescans of SBD-SUBCA01, SBD-PKI-MGMT01, SBD-DHCP01, and both domain controllers are filed with attributed deltas; SBD-DHCP01's checklist is complete; the exception record and register carry the new rows; and the handoff names the management constraint for course 1.9 and the logging courses.
 
 © 2026 Secure By Design Team LLC

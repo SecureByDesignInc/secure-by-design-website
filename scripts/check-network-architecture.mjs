@@ -71,7 +71,7 @@ for(const scenario of sequences)scenario.steps.forEach((step,index)=>{
 });
 assert.equal(Object.keys(packetProfiles).length,sequences.flatMap(s=>s.steps.filter(step=>!step.manual)).length,'No stale packet profiles');
 for(const [id,keys] of Object.entries({...systemCourses,...processCourses}))for(const key of keys)assert(courses[key]&&(byId.has(id)||sequences.some(s=>s.id===id)),`Course link ${id} → ${key}`);
-for(const course of Object.values(courses))assert(/^\/training\//.test(course.href),'Course links stay on this site');
+for(const course of Object.values(courses))assert(/^\/training(\/|#episode-library$)/.test(course.href),'Course links stay on this site');
 for(const scenario of [...scenarios,drill]){
  const checks=knowledgeChecks[scenario.id];assert(checks?.length>=2,`${scenario.id}: knowledge check`);
  for(const q of checks){assert(q.question&&q.explanation&&q.answers.length>=3);assert(Number.isInteger(q.correct)&&q.correct>=0&&q.correct<q.answers.length);assert.equal(new Set(q.answers).size,q.answers.length);}
@@ -81,7 +81,8 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.le
 console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences plus ${whatIfs.length} what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.`);
 const designIds=new Set([...byId.keys(),...facilities.map(f=>f.id)]);
 for(const p of securityPractices){for(const id of p.ids)assert(designIds.has(id));for(const c of p.controls)assert(controls[c],`Unknown security control ${c}`);assert(p.tests.length&&p.evidence.length);}
-for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id),`Unknown policy endpoint ${id}`);
+// The core router is a facility, not a named system; only its deny-log row (F24) names it.
+for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id)||id==='core'&&r.id==='F24',`Unknown policy endpoint ${id}`);
 assert.equal(new Set(trafficRules.map(r=>r.id)).size,trafficRules.length);
 for(const id of singleInstances)assert.equal(nodes.filter(n=>n.id===id).length,1);
 assert.equal(evaluateFlow('workstations','fs','SMB').status,'permit');

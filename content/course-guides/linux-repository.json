@@ -1,0 +1,258 @@
+{
+  "id": "linux-repository",
+  "hero": {
+    "title": "Build the Linux repository",
+    "accent": "on SBD-REPO01.",
+    "text": "Build the one approved source of Linux packages on SBD-REPO01: verified signing keys, a hardened minimal web server on VLAN 70, dated snapshots carried across the air gap, and the client configuration every Linux server will use. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "LINUX",
+    "REPOSITORY",
+    "",
+    "SBD-REPO01"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test (REPO01 not joined)"
+    ],
+    [
+      "SBD-REPO01",
+      "10.0.70.20 / 24 · VLAN 70"
+    ],
+    [
+      "Package path",
+      "HTTP · TCP 80 (F19)"
+    ],
+    [
+      "Administration",
+      "SSH 22 from SBD-ADMIN-SRV01 · 10.0.60.20"
+    ],
+    [
+      "DNS and time",
+      "SBD-DC01 10.0.10.10 · SBD-DC02 10.0.10.11"
+    ],
+    [
+      "Consumers",
+      "SBD-SPLUNK01 · SBD-NESSUS01 · SBD-WEB01"
+    ]
+  ],
+  "scene": {
+    "tag": "LINUX PACKAGES · VLAN 70",
+    "label": "Interactive 3D lesson network showing SBD-REPO01 behind the core, the domain controllers it takes DNS and time from, and SBD-ADMIN-SRV01 administering it over SSH from VLAN 60.",
+    "completeStatus": "COURSE TARGET",
+    "completeCaption": "SBD-REPO01 serves a verified, dated snapshot on TCP 80, takes DNS and time from both domain controllers, and is administered only from SBD-ADMIN-SRV01. The Linux servers in courses 1.12 and 1.18 patch from it from their first day.",
+    "nodes": [
+      {
+        "id": "repo",
+        "name": "SBD-REPO01",
+        "sub": "10.0.70.20",
+        "kind": "server",
+        "row": "back",
+        "from": 1,
+        "button": "SBD-REPO01",
+        "title": "SBD-REPO01 · 10.0.70.20",
+        "description": "The Linux repository this course builds. Not domain-joined, it serves dated, signature-verified snapshots over HTTP on TCP 80 (F19) and accepts SSH only from SBD-ADMIN-SRV01."
+      },
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "The PDC emulator and the domain's time source from course 1.3. It answers SBD-REPO01's DNS queries (F01) and serves its time on UDP 123 through the row lesson 1 adds."
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "existing": true,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second controller, so SBD-REPO01 keeps DNS and time if SBD-DC01 is down. chrony on REPO01 lists both."
+      },
+      {
+        "id": "adminsrv",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "existing": true,
+        "button": "ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The Tier 1 administration seat from course 1.8 (rule A02). The only place SSH to SBD-REPO01 comes from, and where the course's evidence folder lives."
+      }
+    ],
+    "flows": [
+      {
+        "from": "repo",
+        "to": "dc1",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "DNS (F01) and time · UDP 123"
+      },
+      {
+        "from": "repo",
+        "to": "dc2",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "DNS (F01) and time · UDP 123"
+      },
+      {
+        "from": "adminsrv",
+        "to": "repo",
+        "lessons": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "label": "Administration · SSH 22 (A02)"
+      }
+    ]
+  },
+  "lessons": {
+    "repo-design": {
+      "short": "Design the repository",
+      "tag": "01 / DESIGN",
+      "status": "PLANNED",
+      "stepTitles": [
+        "Write the repository's job and its consumers",
+        "Choose one distribution and what to mirror",
+        "Verify the upstream signing keys",
+        "Place REPO01 and register its paths"
+      ],
+      "mistake": "Trusting a signing key because it came with the packages. If the key and the packages arrive from the same place, anyone able to alter one could alter both; compare each fingerprint with the vendor's published value through a second channel and record where you checked it.",
+      "network": "SBD-REPO01 is planned on VLAN 70. The domain controllers and SBD-ADMIN-SRV01 already run from earlier courses; no paths are shown until the server exists.",
+      "control": {
+        "id": "CM-7",
+        "name": "Least Functionality",
+        "phase": "Prepare → Implement",
+        "body": "The design limits the repository to one job, one distribution and the operating-system repositories alone, and everything else is an exception. Fewer sources and fewer packages mean less to verify and less to defend.",
+        "question": "Which repositories would you leave out of the mirror, and what would a server lose without them?"
+      },
+      "checklist": [
+        "I wrote the repository's job, its three planned consumers, and the one distribution and repositories it mirrors.",
+        "I compared each upstream signing key's fingerprint with the vendor's published value and recorded where I checked it.",
+        "I confirmed F19, F01 and F07 in the register and added SBD-REPO01's time row to both domain controllers with an owner."
+      ]
+    },
+    "repo-build": {
+      "short": "Build and harden REPO01",
+      "tag": "02 / BUILD",
+      "status": "REPO01 ONLINE",
+      "stepTitles": [
+        "Install the server, its address, and its DNS record",
+        "Apply course 1.3's chrony file, time sync off",
+        "Lock administration to one seat; trust the SBD root",
+        "Serve only the repository directory",
+        "Make the host firewall match the register"
+      ],
+      "mistake": "Leaving the distribution's default web page and directory listings on. The server then advertises its software and lets anyone browse every file; serve only /srv/repo with Indexes off, and check that the web root returns 403.",
+      "network": "SBD-REPO01 is live on VLAN 70. It queries both domain controllers for DNS and time, and SBD-ADMIN-SRV01 reaches it over SSH 22; its HTTP listener waits for consumers that later courses build.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Each hardening choice (SSH settings, the single web site, the firewall zones) is a recorded setting, captured from the running system rather than from the configuration files alone.",
+        "question": "Which captured output proves the setting is in effect, not merely written in a file?"
+      },
+      "checklist": [
+        "I applied course 1.3's chrony file with the hypervisor's time sync off, and chrony syncs from a domain controller with a small, stable offset.",
+        "I captured sshd -T showing root login and passwords refused and only the admin group allowed, and added the course 1.6 root, its hash checked, to the trust store.",
+        "I confirmed only TCP 22 and 80 listen, the firewall matches the register, and the web root returns 403."
+      ]
+    },
+    "repo": {
+      "short": "Mirror and publish",
+      "tag": "03 / SNAPSHOT",
+      "status": "FIRST SNAPSHOT",
+      "stepTitles": [
+        "Mirror with signature checks on",
+        "Rebuild metadata only if you trim, then hash",
+        "Check hashes and signatures on arrival",
+        "Publish the dated snapshot atomically",
+        "Record the snapshot in the catalog"
+      ],
+      "mistake": "Treating a clean manifest check as proof the packages are genuine. The manifest only shows the copy matches what left the connected side; a package that was bad before it crossed passes it. Check every signature on SBD-REPO01 as well.",
+      "network": "The first snapshot crosses by hand on approved media (no network path) and is checked on SBD-REPO01 before it is published. SBD-ADMIN-SRV01 keeps the catalog copy; no consumer is connected yet.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement → Assess",
+        "body": "Two independent checks guard the content: the hash manifest proves nothing changed in transit, and the vendor's signatures prove what was mirrored is what the vendor released. Either failure stops publication.",
+        "question": "If a signature check failed on one package, what would you record, and who would decide what happens next?"
+      },
+      "checklist": [
+        "I mirrored with signature checks on and carried the set across with its hashed manifest.",
+        "I ran the manifest check and the signature check on SBD-REPO01, and both passed with no exceptions.",
+        "I switched current to the dated snapshot and recorded it in the catalog with the fingerprints and manifest hash."
+      ]
+    },
+    "repo-consumers": {
+      "short": "Configure the clients",
+      "tag": "04 / CLIENTS",
+      "status": "CLIENT CONFIG READY",
+      "stepTitles": [
+        "Write one source definition by name",
+        "Trust only the verified keys",
+        "Remove every other source",
+        "Prove it on SBD-REPO01",
+        "Package it for the later Linux servers"
+      ],
+      "mistake": "Adding the internal repository but leaving the external source definitions enabled. Nothing reaches them across the air gap, so it looks harmless, but the one-source rule is then a convention rather than configuration, and a review of the consumer's sources finds it.",
+      "network": "SBD-REPO01 tests the client configuration against itself. The Linux servers that will use it, SBD-SPLUNK01, SBD-NESSUS01 and SBD-WEB01, are built in later courses and are not shown.",
+      "control": {
+        "id": "CM-11",
+        "name": "User-installed Software",
+        "phase": "Implement",
+        "body": "With one source and only verified keys trusted, the package manager can install only software that came through the reviewed snapshot. Anything else needs a documented exception.",
+        "question": "If a package outside the snapshot were needed tomorrow, what record would its exception leave?"
+      },
+      "checklist": [
+        "I wrote the source definition by name and confirmed signature checking is on.",
+        "I listed the trusted keys and removed or disabled every other package source on SBD-REPO01.",
+        "I refreshed without errors, confirmed rsyslog-gnutls resolves from the snapshot, and filed the hashed client package."
+      ]
+    },
+    "repo-prove": {
+      "short": "Keep it current and prove it",
+      "tag": "05 / PROVE",
+      "status": "BASELINED",
+      "stepTitles": [
+        "Write the snapshot cadence",
+        "Promote a snapshot and roll it back",
+        "Stage SCC for Linux and the STIG benchmark",
+        "Take SBD-REPO01's first SCAP baseline",
+        "File the record and hand off to course 1.10"
+      ],
+      "mistake": "Assuming a rollback undoes updates already installed. Switching current back only changes what can be installed next; a server that already updated keeps the newer packages until you undo or downgrade them there, as a recorded change.",
+      "network": "The next snapshot crosses by hand on approved media and is promoted, then rolled back. SCC for Linux is staged on SBD-ADMIN-SRV01, SBD-REPO01 is scanned in place over SSH, and its record is collected there.",
+      "control": {
+        "id": "SI-2",
+        "name": "Flaw Remediation",
+        "phase": "Implement → Monitor",
+        "body": "The cadence decides how fast vendor fixes reach the Linux servers, with an expedited path for critical ones. The catalog shows which snapshot was current on any date, and the rollback shows a bad one can be withdrawn.",
+        "question": "How long can a critical Linux fix wait on the connected side before the expedited path must be used?"
+      },
+      "checklist": [
+        "I wrote the cadence, the expedited path and the approver for each crossing.",
+        "I promoted a new snapshot and rolled back, and both switches show in the catalog and in the client's view.",
+        "I staged the Linux assessment set on SBD-ADMIN-SRV01, filed SBD-REPO01's first baseline with every open item classified, and filed the hashed record and the handoff to course 1.10."
+      ]
+    }
+  }
+}

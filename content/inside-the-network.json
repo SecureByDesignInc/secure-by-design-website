@@ -282,6 +282,11 @@
           "note": "Configure the collector listener and trusted senders."
         },
         {
+          "name": "Router deny log",
+          "port": "UDP 514 (F24)",
+          "note": "The core router reports the traffic it denies; existing network configuration."
+        },
+        {
           "name": "Splunk forwarder",
           "port": "TCP 9997 with TLS (F10)",
           "note": "Queues events while Splunk is down and replays them afterwards."
@@ -349,13 +354,13 @@
       "services": [
         {
           "name": "Certificate enrollment",
-          "port": "Transport to define",
-          "note": ""
+          "port": "RPC TCP 135 · dynamic TCP 49152–65535 (F23)",
+          "note": "Domain members request and autoenroll for the templates their groups are permitted, defined in course 1.6."
         },
         {
           "name": "CRL / AIA publication",
-          "port": "Endpoints to define",
-          "note": ""
+          "port": "Published to pki.sbd.test on SBD-PKI-MGMT01 · HTTP 80 (F18)",
+          "note": "The CA writes its CRLs and certificate to the publication site; clients never fetch them from the CA."
         }
       ],
       "controls": [

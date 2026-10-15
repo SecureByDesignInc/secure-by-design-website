@@ -50,3 +50,15 @@ test('sync leaves archived reading and bookmark records intact',async()=>{
  assert.equal(env.raw.prepare('SELECT status FROM reader_progress WHERE item_id=?').get('article:what-is-active-directory').status,'completed');
  const data=await(await readerProgressApi(web(),env)).json();assert.deepEqual(data.bookmarks,[]);assert.equal(env.raw.prepare('SELECT saved FROM reader_bookmarks WHERE item_id=?').get('journal').saved,1);
 });
+test('lessons that moved to another course keep their saved progress (October 2026 restructure)',async()=>{
+ // Older app builds still send a moved lesson's old identifier: it is translated and merged with the new one.
+ const env=await setup();
+ const result=await nativeProgressApi(native({records:[{id:'training:harden-baseline:staging',status:'completed'},{id:'training:stig-scap:staging',status:'in_progress'},{id:'training:patch-protect:epo',status:'completed'}],bookmarks:[]}),env);
+ assert.equal(result.status,200);
+ assert.deepEqual((await result.json()).records.map(r=>[r.id,r.status]),[['training:stig-scap:staging','completed']]);
+ // The migration carries records saved under the old identifiers; a completed record wins.
+ env.raw.prepare('INSERT INTO reader_progress (user_id,item_id,status,updated_at) VALUES (?,?,?,?)').run('bob','training:dns-configuration:time','completed','2026-10-01T00:00:00.000Z');
+ env.raw.prepare('INSERT INTO reader_progress (user_id,item_id,status,updated_at) VALUES (?,?,?,?)').run('bob','training:domain-time:time','in_progress','2026-10-02T00:00:00.000Z');
+ env.raw.exec(readFileSync('drizzle/0013_course_split.sql','utf8'));
+ assert.deepEqual(env.raw.prepare("SELECT item_id, status FROM reader_progress WHERE user_id='bob' ORDER BY item_id").all().map(r=>[r.item_id,r.status]),[['training:domain-time:time','completed']]);
+});

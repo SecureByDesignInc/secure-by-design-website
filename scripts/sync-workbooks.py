@@ -82,6 +82,10 @@ CLOSE_BLOCKS = ["Lesson completion", "Open items carried forward", "Next in the 
 # edit no longer needs. Headings not listed get no forced break.
 BREAK_BEFORE = {
     ("tiered-admin", "prove", "Your record"),
+    ("domain-time", "time-plan", "Think it through"),
+    ("patch-protect", "wsus-offline", "Think it through"),
+    ("linux-repository", "repo", "Think it through"),
+    ("prove-recovery", "directory", "Your record"),
 }
 # Paragraph properties that come before w:pageBreakBefore in w:pPr (schema order).
 PPR_BEFORE_PAGE_BREAK = ("pStyle", "keepNext", "keepLines")
@@ -446,7 +450,7 @@ def map_lesson(wb: Workbook, section: list, n: int, lesson: dict, course: dict) 
     set_labelled(think[remember[0]], "REMEMBER", "  ".join(lesson["recap"]))
     missing = [sid for sid in lesson["sources"] if sid not in {s["id"] for s in sources}]
     expect(not missing, "%s: unknown source ids %r" % (where, missing))
-    # Same order as the guide (app/videos/configuration-guide.tsx): course order.
+    # Same order as the guide (public/training/<id>/index.html, from scripts/prepare-course-guides.mjs): course order.
     lesson_sources = [s for s in sources if s["id"] in lesson["sources"]]
     for p, source in zip(resize(links, len(lesson_sources), "%s sources" % where), lesson_sources):
         wb.set_link(p, source["title"], source["url"])

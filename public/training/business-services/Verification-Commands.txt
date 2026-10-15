@@ -1,52 +1,77 @@
 SECURE BY DESIGN - STAND UP THE BUSINESS SERVICES
-Course 1.9 | Materials edition 1.3 | Updated 9 October 2026
+Course 1.18 | Materials edition 1.4 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
 the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
 
 1. Design the service paths and identities
-Get-ADServiceAccount -Filter * | Select-Object Name, Enabled
+# From AdminJumpBox01 (Tier 0): the course 1.11 KDS root key, the existing gMSAs, and the role groups
+Invoke-Command SBD-DC01 { Get-KdsRootKey | Select-Object KeyId, EffectiveTime }   # one key, from course 1.11
+Get-ADServiceAccount -Filter * | Select-Object Name, Enabled   # course 1.11's three; this course's arrive with their hosts
 Get-ADGroup -SearchBase 'OU=Groups,OU=SBD,DC=sbd,DC=test' -Filter * | Select-Object Name
-Test-NetConnection 10.0.40.20 -Port 1433   # expected before build: TcpTestSucceeded False
 
-What success looks like: The register carries every service row — the SQL path restricted to APPS01 alone, the WEB01-to-SQL01 deny, and WEB01's repository and syslog rows — the gMSAs and role groups exist, and the three server certificates are issued and recorded.
+What success looks like: The register carries every VLAN 40 service row with its ID and owner — the SQL path restricted to APPS01 alone (F22), the WEB01-to-SQL01 deny (F14), and WEB01's repository, syslog and time rows — the course 1.11 KDS root key is the forest's only one, the role groups exist, and each server certificate is planned for the host that will request it.
 
 2. Build SBD-FS01 with least-privilege shares
-Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData   # on FS01
-Get-SmbServerConfiguration | Select-Object RequireSecuritySignature   # on FS01: expected True
-Get-SmbConnection -ServerName SBD-FS01 | Select-Object ShareName, Dialect, Signed, Encrypted   # on the fleet machine, during the test session
+# In a Tier 1 session on SBD-FS01 from SBD-ADMIN-SRV01
+([adsisearcher]"(&(objectCategory=computer)(name=$env:COMPUTERNAME))").FindOne().Path   # ...OU=Servers,OU=SBD,DC=sbd,DC=test
+w32tm /query /source   # a domain controller, never the local clock
+Get-SmbShare | Select-Object Name, Path, FolderEnumerationMode, EncryptData
+Get-SmbServerConfiguration | Select-Object RequireSecuritySignature   # expected True
 icacls D:\Shares\Projects | Select-String 'SBD'
+auditpol /get /subcategory:"Detailed File Share"   # Failure
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=5145} -MaxEvents 5 | Select-Object TimeCreated, Message
+# On the fleet machine, during the test session
+Get-SmbConnection | Where-Object ServerName -like 'SBD-FS01*' | Select-Object ShareName, Dialect, Signed, Encrypted
 
-What success looks like: Shares grant to role groups only, FS01 requires signing, a live connection from the fleet shows Signed True — or, on the encrypted share, Encrypted True, where Signed reads False even though an encrypted connection is also signed — and the two-role test proves both the access and the invisible-denied behavior.
+What success looks like: SBD-FS01 sits in the Servers OU with time from a domain controller, shares grant to role groups only, FS01 requires signing, a live connection from the fleet shows Signed True — or, on the encrypted share, Encrypted True, where Signed reads False because encryption, which also protects integrity, takes the place of signing — and the two-role test proves both the access and the invisible-denied behavior, with each refusal recorded as event 5145.
 
 3. Build SBD-SQL01 behind its applications
-Get-Service MSSQLSERVER -ComputerName SBD-SQL01 | Select-Object Status
-# From SBD-APPS01, the registered caller: expected TcpTestSucceeded True.
+# From AdminJumpBox01 (Tier 0): one gMSA per service, each allowed to one computer
+New-ADServiceAccount SBD-SQL -DNSHostName SBD-SQL.sbd.test -PrincipalsAllowedToRetrieveManagedPassword 'SBD-SQL01$'
+New-ADServiceAccount SBD-Apps -DNSHostName SBD-Apps.sbd.test -PrincipalsAllowedToRetrieveManagedPassword 'SBD-APPS01$'
+# In a Tier 1 session on SBD-SQL01 from SBD-ADMIN-SRV01: identity, encryption, certificate, firewall scope
+Get-CimInstance Win32_Service -Filter "Name='MSSQLSERVER'" | Select-Object Name, StartName, State   # StartName SBD\SBD-SQL$
+Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\*\MSSQLServer\SuperSocketNetLib' | Select-Object ForceEncryption, Certificate   # 1 and the thumbprint
+$cer = Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -like '*SBD-SQL01*' | Export-Certificate -FilePath "$env:TEMP\sql01.cer"
+certutil -verify -urlfetch $cer.FullName   # chain and revocation from pki.sbd.test
+Get-NetFirewallPortFilter | Where-Object LocalPort -eq 1433 | Get-NetFirewallRule | Where-Object { $_.Enabled -eq 'True' -and $_.Direction -eq 'Inbound' } | Get-NetFirewallAddressFilter | Select-Object RemoteAddress   # 10.0.40.30 only
+# From SBD-APPS01: expected TcpTestSucceeded True. From SBD-FS01 and from a fleet machine: expected False.
 Test-NetConnection SBD-SQL01.sbd.test -Port 1433
-# From a fleet machine: expected TcpTestSucceeded False.
-Test-NetConnection SBD-SQL01.sbd.test -Port 1433
-# From SBD-WEB01 (Linux): expected to be refused or time out.
-nc -zv SBD-SQL01.sbd.test 1433
-certutil -verify -urlfetch C:\Evidence\services\sql01.cer
 
-What success looks like: The service runs as the gMSA, connections are certificate-encrypted with a validating chain, APPS01's access works by database role, and both direct attempts fail with a record: SBD-WEB01's at SQL01's host firewall, the fleet's at the router.
+What success looks like: The service runs as the gMSA, Force Encryption is on with the issued certificate bound and its chain validating, the database role admits SBD\SBD-Apps$ alone, TCP 1433 is open to 10.0.40.30 only, APPS01 reaches it, and both other attempts fail with a record: SBD-FS01's at SQL01's host firewall, the fleet's at the router.
 
 4. Build SBD-APPS01 and SBD-WEB01
-Test-NetConnection SBD-WEB01.sbd.test -Port 443   # from a fleet machine
-certutil -verify -urlfetch C:\Evidence\services\web01.cer
-Test-NetConnection SBD-SQL01.sbd.test -Port 1433   # from the fleet: expected False
-# On SBD-WEB01 (Linux): domain membership, the API answers, the database does not.
-realm list
+# On SBD-WEB01 (Tier 1 SSH session from SBD-ADMIN-SRV01): time, packages, domain, firewall, logging, web
+chronyc sources -v; chronyc tracking   # ^* one controller, ^+ or ^- the other
+dnf repolist --all   # expected: only the sbd-repo01 repositories enabled
+realm list   # sbd.test, kerberos-member, permitted group SBD Tier 1 Admins
+sudo firewall-cmd --get-active-zones
+openssl s_client -connect SBD-SYSLOG01.sbd.test:6514 -verify_hostname SBD-SYSLOG01.sbd.test </dev/null 2>/dev/null | grep 'Verify return code'   # 0 (ok): the SBD root is trusted
+logger -t sbd-web-proof 'SBD-WEB01 syslog over TLS test'
+sudo apachectl -S   # one HTTPS site on 10.0.40.40:443
 curl -sS -o /dev/null -w '%{http_code}\n' https://SBD-APPS01.sbd.test/   # use your application's health path
-nc -zv SBD-SQL01.sbd.test 1433   # expected: refused or timed out
+timeout 5 bash -c '</dev/tcp/SBD-SQL01.sbd.test/1433' && echo open || echo 'refused or timed out'   # expected: refused or timed out
+# On SBD-ADMIN-SRV01: the issued certificate's chain and revocation
+certutil -verify -urlfetch C:\Evidence\business-services\web01.cer
+# From a fleet machine: the page answers, the database does not
+Test-NetConnection SBD-WEB01.sbd.test -Port 443
+Test-NetConnection SBD-SQL01.sbd.test -Port 1433   # expected: False
+# On SBD-SQL01, in a query: APPS01's live session is encrypted
+# SELECT client_net_address, encrypt_option, auth_scheme FROM sys.dm_exec_connections WHERE client_net_address = '10.0.40.30'
 
-What success looks like: The licensing path works as registered, SBD-WEB01 is domain-joined with SSSD and patches only from SBD-REPO01, the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration, and the end-to-end request proves fleet → web → application → database with both shortcuts denied.
+What success looks like: The licensing path and the application API work as registered under the managed identity; SBD-WEB01 takes its time from the controllers and its packages only from SBD-REPO01, trusts the SBD root, is domain-joined with SSSD in the Servers OU, and sends its syslog to the collector over TLS; the Apache host serves HTTPS with a validating internal chain from a hardened, hashed configuration; and the end-to-end request proves fleet → web → application → database, encrypted to the database, with both shortcuts denied.
 
 5. Reconcile, scan, and hand off
-Get-ChildItem C:\Evidence\business-services -Recurse | Select-Object Name, LastWriteTime
-Get-FileHash -Algorithm SHA256 C:\Evidence\business-services\*
+# On SBD-SYSLOG01 (Tier 1 session): the new sources report
+wecutil gr SBD-ForwardedSecurity   # SBD-FS01, SBD-SQL01 and SBD-APPS01: Active
+Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; StartTime=(Get-Date).AddHours(-1)} | Group-Object MachineName | Select-Object Name, Count
+Select-String -Path D:\Logs\Syslog\*\*.log -Pattern 'sbd-web-proof' | Select-Object -First 1
+# On SBD-ADMIN-SRV01: collect the course's records and hash them
+Get-ChildItem C:\Evidence\business-services -Recurse -File | Select-Object FullName, LastWriteTime
+Get-ChildItem C:\Evidence\business-services -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\business-services-hashes.csv -NoTypeInformation
 
-What success looks like: The matrix covers every VLAN 40 row with paired permit/deny proof, the four hosts carry baselines or config records with triaged scan findings, and inventory, register, and exception record all reflect the finished services.
+What success looks like: The three Windows servers forward their events and SBD-WEB01 its syslog, the register covers every VLAN 40 row with paired permit/deny proof, all four hosts carry first baselines with classified findings, and inventory, register, and exception record all reflect the finished services.
 
 © 2026 Secure By Design Team LLC
