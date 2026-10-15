@@ -196,6 +196,14 @@ test('monitoring flags expiry, the annual review, overdue POA&M items, lapsed pr
  assert.deepEqual(phases({...state,controls:[]},now).map(p=>p.done),[false,false,false,false,false,true,false]);
 });
 
+test('the workspace is in the main menu right after Training Library, including the Community shells',()=>{
+ const nav=JSON.parse(fs.readFileSync('content/navigation.json','utf8'));
+ const at=href=>nav.findIndex(([path])=>path===href);
+ assert.deepEqual(nav[at('/authorization-workspace')],['/authorization-workspace','Authorization Workspace']);
+ assert.equal(at('/authorization-workspace'),at('/training')+1);
+ for(const name of ['career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/authorization-workspace"/,name);
+});
+
 test('deleting a system or the account removes every record',async()=>{
  const env=setup();const first=await register(env),second=await register(env);
  await ok(call(env,'alice','POST',`/systems/${first.system.id}/poam`,poam('AU-6','CAT II')),201);
