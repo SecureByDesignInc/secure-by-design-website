@@ -68,7 +68,10 @@ export default function ThreatMapFrame() {
 
   return <div className="tm-frame">
     <div className="tm-toolbar">
-      <span className="tm-live"><span aria-hidden="true" />Live · Radware</span>
+      <div className="tm-source">
+        <span className="tm-live"><span aria-hidden="true" />Live · Radware</span>
+        <p className="tm-credit">The live map is provided by Radware. Secure By Design is not affiliated with Radware.</p>
+      </div>
       <div>
         <button type="button" className="tm-tool" onClick={toggleFullscreen}>
           {fullscreen ? <Minimize2 size={15} aria-hidden="true" /> : <Maximize2 size={15} aria-hidden="true" />}

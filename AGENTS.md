@@ -584,3 +584,7 @@ The owner asked to remove "A note from Secure By Design" and "Start building you
 - **Loading:** Radware's frame is added when the map is within 600px of the screen (just below the hero, so it usually loads right away), never during hydration. The privacy policy's Radware entry now says the map loads when you open the homepage or the map in the app.
 - **Removed:** `app/threat-map/page.tsx`, `app/home-threat-window.tsx` and their homepage styles (monitor, note, Start building). The creator note text stays in `content/membership-plans.json` for the memberships page. `/threat-map` is out of the navigation (Community shells updated), the sitemap and `scripts/prepare-sitemap.mjs`; `server/index.js` redirects `/threat-map` to `/#threat-map`.
 - **Unchanged:** the sales-button blur, sandboxing, CSP and Radware credit rules above. The app still opens the map from Explore.
+
+## Radware credit under "Live · Radware" — October 15, 2026
+
+The owner asked to move the credit ("The live map is provided by Radware. Secure By Design is not affiliated with Radware.") from the end of "How to read it" to just below "Live · Radware" in the map's toolbar (`app/threat-map/threat-map-frame.tsx`, `.tm-source` in `app/threat-map/threat-map.css`). The wording is unchanged; there is no credit line at the end of the section any more.

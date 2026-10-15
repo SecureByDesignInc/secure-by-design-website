@@ -39,9 +39,10 @@ test('the map loads automatically, sandboxed, over a placeholder, with a direct 
 });
 
 test('the homepage credits Radware without implying a partnership, and privacy discloses it', () => {
-  const section = read('app/home-threat-map.tsx');
-  assert.match(section, /provided by Radware/);
-  assert.match(section, /not affiliated with Radware/);
+  // The credit sits just under "Live · Radware" in the map's toolbar (owner's request, 15 October 2026).
+  const section = read('app/threat-map/threat-map-frame.tsx');
+  assert.match(section, /<div className="tm-source">\s*<span className="tm-live">[\s\S]*?Live · Radware<\/span>\s*<p className="tm-credit">The live map is provided by Radware\. Secure By Design is not affiliated with Radware\.<\/p>/);
+  assert.doesNotMatch(read('app/home-threat-map.tsx'), /tm-credit/);
   const privacy = read('app/privacy/page.tsx');
   assert.match(privacy, /<strong>Radware<\/strong>/);
   assert.match(privacy, /loads from Radware when you open the homepage/);
@@ -90,5 +91,5 @@ test('Radware’s “Contact sales” button is blurred', () => {
   assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
   assert.match(css, /\.sbd-sales-cover\.is-shown\{[^}]*pointer-events:auto/, 'the cover catches clicks meant for the button');
   // Owner's request (15 October 2026): the page doesn't mention the blur or call the map unchanged.
-  assert.doesNotMatch(read('app/home-threat-map.tsx'), /blurred|unchanged/i);
+  assert.doesNotMatch(read('app/home-threat-map.tsx') + read('app/threat-map/threat-map-frame.tsx'), /blurred|unchanged/i);
 });
