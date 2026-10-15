@@ -85,8 +85,55 @@ test('systems belong to one account; writes need this site as their origin',asyn
  assert.equal((await call(env,'alice','PATCH',`/systems/${state.system.id}`,{owner:'bob'})).status,400);
  const list=await ok(call(env,'alice','GET'));assert.equal(list.systems.length,1);
  assert.equal((await ok(call(env,'bob','GET'))).systems.length,0);
- for(let i=1;i<5;i++)await register(env);
- assert.equal((await call(env,'alice','POST','/systems',{template:'sbd-enclave'})).status,409);
+ for(let i=1;i<5;i++)await ok(call(env,'alice','POST','/systems',{template:'blank',name:`Practice system ${i}`}),201);
+ const full=await call(env,'alice','POST','/systems',{template:'blank',name:'One too many'});
+ assert.equal(full.status,409);assert.match(full.data.error,/up to 5 systems/);
+});
+
+// Owner report, 15 October 2026: clicking the enclave again after registering it created a duplicate.
+test('an account keeps one Secure By Design enclave and no two systems share a name',async()=>{
+ const env=setup();const first=await register(env);
+ const again=await call(env,'alice','POST','/systems',{template:'sbd-enclave'});
+ assert.equal(again.status,409);assert.match(again.data.error,/already have the Secure By Design enclave/);
+ assert.equal((await call(env,'alice','POST','/systems',{template:'sbd-enclave',name:'Another enclave'})).status,409,'renaming does not get around the rule');
+ assert.equal((await ok(call(env,'alice','GET'))).systems.length,1);
+ // The database refuses a second enclave even if two requests pass the check at the same moment.
+ assert.throws(()=>env.raw.prepare("INSERT INTO auth_systems (id,account_id,profile,created_at,updated_at,registration_key) VALUES ('x','alice','{}','t','t','sbd-enclave')").run(),/UNIQUE/);
+ // Blank systems: any number, but not the same name twice (a repeated click), whatever the case or spacing.
+ await ok(call(env,'alice','POST','/systems',{template:'blank',name:'Lab Network'}),201);
+ const dup=await call(env,'alice','POST','/systems',{template:'blank',name:'  lab   network '});
+ assert.equal(dup.status,409);assert.match(dup.data.error,/already have a system named/);
+ await ok(call(env,'alice','POST','/systems',{template:'blank',name:'Lab Network 2'}),201);
+ // Another account has its own enclave; deleting yours lets you register it again.
+ await register(env,'bob');
+ await ok(call(env,'alice','DELETE',`/systems/${first.system.id}`));
+ await register(env);
+ assert.equal((await call(env,'alice','POST','/systems',{template:'__proto__'})).status,400);
+});
+
+// drizzle/0015 cleans up duplicates made before the fix: untouched copies go, worked-on systems stay.
+test('the one-enclave migration removes untouched duplicates and keeps work',()=>{
+ const raw=new DatabaseSync(':memory:');
+ const files=fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort();
+ const fix=files.indexOf('0015_auth_one_enclave.sql');assert.ok(fix>0);
+ for(const file of files.slice(0,fix))raw.exec(fs.readFileSync('drizzle/'+file,'utf8'));
+ const enclave=JSON.stringify({name:'Secure By Design Enclave',template:'sbd-enclave'});
+ for(const user of ['alice','bob','carol'])raw.prepare('INSERT INTO reader_accounts (id,email,created_at) VALUES (?,?,?)').run(user,user+'@example.invalid','2026-10-01T00:00:00Z');
+ const sys=(id,account,created,updated=created)=>{
+  raw.prepare('INSERT INTO auth_systems (id,account_id,profile,created_at,updated_at) VALUES (?,?,?,?,?)').run(id,account,enclave,created,updated);
+  raw.prepare('INSERT INTO auth_controls (system_id,control_id,updated_at) VALUES (?,?,?)').run(id,'AC-2',created);
+  raw.prepare('INSERT INTO auth_history (system_id,at,role,action,subject,detail) VALUES (?,?,?,?,?,?)').run(id,created,'System','Registered the system','','');
+ };
+ sys('a1','alice','2026-10-15T10:00:00Z');sys('a2','alice','2026-10-15T10:00:05Z');   // alice: two untouched copies
+ sys('b1','bob','2026-10-15T10:00:00Z');sys('b2','bob','2026-10-15T10:01:00Z','2026-10-15T11:00:00Z'); // bob worked in the second
+ sys('c1','carol','2026-10-15T10:00:00Z','2026-10-15T12:00:00Z');sys('c2','carol','2026-10-15T10:02:00Z','2026-10-15T12:30:00Z'); // carol worked in both
+ raw.exec(fs.readFileSync('drizzle/0015_auth_one_enclave.sql','utf8'));
+ const rows=Object.fromEntries(raw.prepare('SELECT id,registration_key FROM auth_systems ORDER BY id').all().map(r=>[r.id,r.registration_key]));
+ assert.deepEqual(Object.keys(rows),['a1','b2','c1','c2']);
+ assert.equal(rows.a1,'sbd-enclave');assert.equal(rows.b2,'sbd-enclave');assert.equal(rows.c1,'sbd-enclave');assert.equal(rows.c2,null);
+ assert.equal(raw.prepare("SELECT count(*) AS n FROM auth_controls WHERE system_id IN ('a2','b1')").get().n,0);
+ assert.equal(raw.prepare("SELECT count(*) AS n FROM auth_history WHERE system_id IN ('a2','b1')").get().n,0);
+ assert.equal(raw.prepare("SELECT count(*) AS n FROM sqlite_master WHERE name IN ('_auth_enclaves','_auth_enclave_duplicates')").get().n,0,'helper tables are dropped');
 });
 
 test('the control approval chain needs a statement and evidence, and returns to the ISSO when changed',async()=>{
@@ -205,7 +252,7 @@ test('the workspace is in the main menu right after Training Library, including 
 });
 
 test('deleting a system or the account removes every record',async()=>{
- const env=setup();const first=await register(env),second=await register(env);
+ const env=setup();const first=await register(env),second=await ok(call(env,'alice','POST','/systems',{template:'blank',name:'Second system'}),201);
  await ok(call(env,'alice','POST',`/systems/${first.system.id}/poam`,poam('AU-6','CAT II')),201);
  await ok(call(env,'alice','DELETE',`/systems/${first.system.id}`));
  assert.equal(env.raw.prepare('SELECT count(*) n FROM auth_poam').get().n,0);

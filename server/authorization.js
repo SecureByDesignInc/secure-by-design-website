@@ -97,18 +97,28 @@ function cleanProfile(data,current){
 }
 async function createSystem(env,accountId,data){
  only(data,['template','name']);
- const template=TEMPLATES[data.template];if(!template)throw new Bad('Choose a starting point.');
- const count=await env.DB.prepare('SELECT count(*) AS n FROM auth_systems WHERE account_id=?').bind(accountId).first();
- if(count.n>=LIMITS.systems)throw new Bad(`You can keep up to ${LIMITS.systems} systems. Delete one to register another.`,409);
+ const template=Object.prototype.hasOwnProperty.call(TEMPLATES,data.template)?TEMPLATES[data.template]:null;if(!template)throw new Bad('Choose a starting point.');
  const profile={...template.profile,roles:{},infoTypes:[],categorization:{c:null,i:null,a:null},categorizationRationale:'',selectionRationale:'',template:data.template};
  if(data.name!=null){const name=str(data.name,120,'System name');if(name)profile.name=name;}
  if(!profile.name)throw new Bad('Give the system a name.');
+ // One registration per system (owner report, 15 October 2026): an account keeps one Secure By Design enclave
+ // (enforced by the unique registration_key, so two requests at once cannot both succeed), and no two systems
+ // share a name, so a repeated click cannot register the same system twice.
+ const key=template.once?data.template:null;
+ const onceMessage=`You already have the ${template.label}. Open it from Your systems.`;
+ const existing=(await env.DB.prepare('SELECT profile,registration_key FROM auth_systems WHERE account_id=?').bind(accountId).all()).results;
+ if(key&&existing.some(r=>r.registration_key===key))throw new Bad(onceMessage,409);
+ const sameName=n=>String(n||'').trim().replace(/\s+/g,' ').toLowerCase();
+ if(existing.some(r=>sameName(json(r.profile,{}).name)===sameName(profile.name)))throw new Bad(`You already have a system named ${profile.name}. Open it from Your systems, or choose another name.`,409);
+ if(existing.length>=LIMITS.systems)throw new Bad(`You can keep up to ${LIMITS.systems} systems. Delete one to register another.`,409);
  const id=crypto.randomUUID(),now=nowIso();
- await env.DB.batch([
-  env.DB.prepare('INSERT INTO auth_systems (id,account_id,profile,current_decision,created_at,updated_at) VALUES (?,?,?,NULL,?,?)').bind(id,accountId,JSON.stringify(profile),now,now),
-  ...template.controls.map(c=>env.DB.prepare('INSERT INTO auth_controls (system_id,control_id,updated_at) VALUES (?,?,?)').bind(id,c,now)),
-  log(env,id,'System','Registered the system',profile.name,`Started from: ${template.label}.`),
- ]);
+ try{
+  await env.DB.batch([
+   env.DB.prepare('INSERT INTO auth_systems (id,account_id,profile,current_decision,created_at,updated_at,registration_key) VALUES (?,?,?,NULL,?,?,?)').bind(id,accountId,JSON.stringify(profile),now,now,key),
+   ...template.controls.map(c=>env.DB.prepare('INSERT INTO auth_controls (system_id,control_id,updated_at) VALUES (?,?,?)').bind(id,c,now)),
+   log(env,id,'System','Registered the system',profile.name,`Started from: ${template.label}.`),
+  ]);
+ }catch(error){if(key&&/UNIQUE/i.test(String(error?.message)))throw new Bad(onceMessage,409);throw error;}
  return id;
 }
 
