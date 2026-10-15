@@ -19,6 +19,11 @@ const extra = ['/my-progress', '/account?returnTo=%2Ftraining', '/app-sign-in', 
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
+// Radware's live threat map (/threat-map) is a third-party page in a sandboxed frame: its own requests,
+// console output and script errors are Radware's, not this site's. Our page's policy blocking the frame
+// itself still shows up as a CSP violation in the main frame.
+const thirdPartyFrame = frame => { try { return /^https:\/\/livethreatmap\.radware\.com\//.test(frame?.url() || ''); } catch { return false; } };
+const fromThirdParty = (url, frame) => /^https:\/\/livethreatmap\.radware\.com\//.test(url || '') || thirdPartyFrame(frame);
 
 const annotate = (level, title, message) => console.log(`::${level} title=${title}::${String(message).replace(/\r?\n/g, ' | ').slice(0, 3800)}`);
 const results = [];
@@ -38,6 +43,7 @@ for (const path of pages) {
   const page = await context.newPage();
   const problems = [], notes = [];
   page.on('console', message => {
+    if (fromThirdParty(message.location()?.url, null)) return;
     const text = message.text();
     if (/Content Security Policy|Refused to/i.test(text)) problems.push(`console: ${text.slice(0, 300)}`);
     else if (message.type() === 'error' && !/Failed to load resource/.test(text)) notes.push(`console error: ${text.slice(0, 200)}`);
@@ -45,6 +51,8 @@ for (const path of pages) {
   page.on('pageerror', error => problems.push(`script error: ${String(error.message || error).slice(0, 300)}`));
   page.on('requestfailed', request => {
     const failure = request.failure()?.errorText || '';
+    let frame = null; try { frame = request.frame(); } catch {}
+    if (fromThirdParty(request.url(), frame)) return;
     if (!ignoredRequest(request.url()) && !/ERR_ABORTED/.test(failure)) problems.push(`request failed: ${request.url().replace(base, '')} (${failure})`);
   });
   page.on('response', response => {
@@ -59,6 +67,7 @@ for (const path of pages) {
     await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
     await page.waitForTimeout(1500);
     for (const frame of page.frames()) {
+      if (thirdPartyFrame(frame)) continue;
       const found = await frame.evaluate(() => window.__violations || []).catch(() => []);
       for (const item of found) problems.push(`CSP: ${item}${frame === page.mainFrame() ? '' : ` [frame ${frame.url().replace(base, '')}]`}`);
     }

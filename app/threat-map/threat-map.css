@@ -140,14 +140,21 @@
   min-height: 0;
 }
 .tm-stage iframe {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.tm-stage iframe.is-ready {
+  opacity: 1;
   background: #050f18;
 }
 
-/* Before the visitor loads the map: a quiet placeholder of our own, not a copy of Radware's art. */
+/* While Radware's map loads: a quiet placeholder of our own, not a copy of Radware's art. */
 .tm-poster {
   position: absolute;
   inset: 0;
@@ -180,22 +187,26 @@
   max-width: 420px;
   text-align: center;
 }
-.tm-load {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 0 24px;
-  border: 0;
-  border-radius: 12px;
-  background: #91dfeb;
-  color: #071521;
-  font: 700 15px/1 var(--font-geist-sans), Arial, sans-serif;
-  cursor: pointer;
-  box-shadow: 0 10px 30px #8ae5ef33;
+.tm-spinner {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border: 3px solid #8ae5ef33;
+  border-top-color: #8ae5ef;
+  border-radius: 50%;
+  animation: tm-spin 0.9s linear infinite;
 }
-.tm-load:hover {
-  background: #aeeaf3;
+@keyframes tm-spin {
+  to { transform: rotate(360deg); }
+}
+.tm-poster-copy .tm-loading {
+  color: #e0f5ff;
+  font-size: 15px;
+  font-weight: 650;
+}
+.tm-poster-copy a {
+  color: #8ae5ef;
+  border-bottom: 1px solid #42798c;
 }
 .tm-poster-copy p {
   margin: 16px 0 0;
@@ -288,7 +299,11 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tm-live span {
+  .tm-live span,
+  .tm-spinner {
     animation: none;
+  }
+  .tm-stage iframe {
+    transition: none;
   }
 }
