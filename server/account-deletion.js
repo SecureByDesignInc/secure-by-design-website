@@ -5,8 +5,12 @@ import {revokeAppleToken} from './oidc.js';
 export async function deleteAccount(env,account,{fetcher=fetch}={}){
  const now=new Date().toISOString();
  const apple=await env.DB.prepare("SELECT refresh_token FROM reader_identities WHERE account_id=? AND provider='apple' AND refresh_token IS NOT NULL").bind(account.id).all();
+ const systems="(SELECT id FROM auth_systems WHERE account_id=?)";
  await env.DB.batch([
   env.DB.prepare('DELETE FROM reader_sessions WHERE account_id=?').bind(account.id),
+  // Authorization Workspace systems and everything recorded in them.
+  ...['auth_history','auth_packages','auth_poam','auth_artifacts','auth_controls'].map(table=>env.DB.prepare(`DELETE FROM ${table} WHERE system_id IN ${systems}`).bind(account.id)),
+  env.DB.prepare('DELETE FROM auth_systems WHERE account_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_progress WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_bookmarks WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_profiles WHERE user_id=?').bind(account.id),
