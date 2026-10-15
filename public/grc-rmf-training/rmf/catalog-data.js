@@ -722,8 +722,8 @@ window.CATALOG = [
   }
 ];
 
-// The course as the GRC & RMF Training Library presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
-// 2026: courses 2.1, 2.2 and 2.3, the ATO Template Library and the Authorization Workspace became one learning process,
+// The course as the Authorization Studio presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
+// 2026: courses 2.1, 2.2 and 2.3, the ATO Template Library and the ATO Package Builder became one learning process,
 // course 2.1 "RMF to ATO" at /grc-rmf-training/rmf/, built by scripts/prepare-rmf-courses.mjs. Module IDs and the
 // training:rmf-boe-ato:NN progress IDs are unchanged.
 window.CATALOG_PARTS = [
@@ -733,14 +733,14 @@ window.CATALOG_PARTS = [
     "id": "rmf-boe-ato",
     "folder": "rmf",
     "title": "RMF to ATO",
-    "hero": "Take the system you built in Build the Network all the way to an Authorization to Operate, one RMF step at a time. Each step pairs its lessons with the same task in the Authorization Workspace and the templates that step uses, from preparing the system to keeping its authorization current.",
+    "hero": "Take the system you built in Build the Network all the way to an Authorization to Operate, one RMF step at a time. Each step pairs its lessons with the same task in the ATO Package Builder and the templates that step uses, from preparing the system to keeping its authorization current.",
     "modules": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
     "capstone": true
   }
 ];
 
 // The seven RMF steps of NIST SP 800-37 Rev. 2 that organize the course. Each step groups its modules, names the
-// Authorization Workspace tab and check that match it (lib/authorization/model.mjs phases(), same IDs), and the
+// ATO Package Builder tab and check that match it (lib/authorization/model.mjs phases(), same IDs), and the
 // ATO Template Library section with its sources (content/ato-templates.json groups, same IDs; Authorize has none).
 window.RMF_STEPS = [
   {"id": "prepare", "number": 1, "title": "Prepare", "modules": ["01", "02"], "tab": "system",

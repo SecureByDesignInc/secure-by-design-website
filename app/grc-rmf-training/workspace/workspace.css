@@ -1,4 +1,4 @@
-/* Authorization Workspace (/grc-rmf-training/workspace). An account page, so it uses the site's dark account
+/* ATO Package Builder (/grc-rmf-training/workspace). An account page, so it uses the site's dark account
    design (AGENTS.md, "My Account uses the site's dark design"): #071521 page, #0b2131 / #102737 panels,
    #2d4b61 / #365469 borders, cyan primary buttons, dark inputs. Everything is scoped to .awx-page. */
 body.site-editorial:has(.awx-page){background:#071521}

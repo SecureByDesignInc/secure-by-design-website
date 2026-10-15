@@ -5,7 +5,7 @@ Each course in public/grc-rmf-training/rmf/catalog-data.js (window.CATALOG_PARTS
 
   SecureByDesign-<folder>-Workbook.docx          the companion workbook
   SecureByDesign-<folder>-Workbook.pdf           (--all) a tagged PDF export of it
-  workbook-cover.webp                            (--all) page 1, for the GRC & RMF Training Library tile
+  workbook-cover.webp                            (--all) page 1, for the Authorization Studio tile
   SecureByDesign-<folder>-Learning-Package.zip   (--all) the PDF, the Word file, START-HERE.txt and the
                                                  course's evidence starters (Markdown, plus CSV for tables)
 

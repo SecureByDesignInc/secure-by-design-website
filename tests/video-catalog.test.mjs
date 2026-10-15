@@ -46,7 +46,7 @@ test('related build courses stay together before authorization and materials rem
     }
     const page = readFileSync(new URL('../public' + part.training.guide.replace(/#.*$/, ''), import.meta.url), 'utf8');
     assert.doesNotMatch(page, /PRIVATE REVIEW|noindex/);
-    assert.match(page, /Back to the GRC &amp; RMF Training Library/);
+    assert.match(page, /Back to the Authorization Studio/);
   }
 });
 
@@ -66,7 +66,7 @@ test('category groups preserve course identity and omit groups with no matches',
   assert.deepEqual(groupCatalogEntries([unknown], library)[0].entries, [unknown]);
 });
 
-// Owner direction, 15 October 2026: courses 2.1-2.3, the ATO Template Library and the Authorization Workspace became one
+// Owner direction, 15 October 2026: courses 2.1-2.3, the ATO Template Library and the ATO Package Builder became one
 // course, 2.1 "RMF to ATO", organized by the seven RMF steps. Module and progress IDs are unchanged.
 test('Network Authorization is one course of seven RMF steps that keeps every module and its progress', () => {
   const context = { window: {} };

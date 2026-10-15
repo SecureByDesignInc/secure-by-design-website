@@ -11,7 +11,8 @@ test('membership options show one "Coming soon" statement and no plan specifics'
   assert.deepEqual(Object.keys(catalog).sort(), ['comingSoon', 'comingSoonDetail', 'creatorNote']);
   assert.equal(catalog.comingSoon, 'Coming soon');
   const published = [read('content/membership-plans.json'), read('app/memberships/plans.tsx'), read('app/template-home.tsx'), read('app/my-progress/progress-dashboard.tsx')].join('\n');
-  assert.doesNotMatch(published, /\$\d|Builder|Guided|founding|per month|\/month|annual|quarter/i, 'no plan names, prices or billing are published');
+  // "ATO Package Builder" is the authorization practice tool (15 October 2026), not the archived Builder plan.
+  assert.doesNotMatch(published, /\$\d|(?<!Package )Builder|Guided|founding|per month|\/month|annual|quarter/i, 'no plan names, prices or billing are published');
   assert.doesNotMatch(read('app/my-progress/progress-dashboard.tsx'), /reader-membership-summary/, 'no membership summary card');
 });
 

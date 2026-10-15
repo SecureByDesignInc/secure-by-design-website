@@ -1,4 +1,4 @@
-// Authorization Workspace API: /api/authorization/...
+// ATO Package Builder API: /api/authorization/...
 //
 // Each signed-in learner keeps up to five practice systems and takes them through an authorization the
 // way eMASS and Xacta 360 organize one: the system record, selected controls (implementation, then
@@ -311,7 +311,7 @@ export async function authorizationApi(request,env){
  if(!reader){
   if(method==='GET'&&!parts.length)return reply({user:null,systems:[]});
   if(method==='GET'&&parts.length===1&&parts[0]==='progress')return reply({user:null,system:null,steps:[]});
-  return reply({error:'Sign in to use the Authorization Workspace.'},401);
+  return reply({error:'Sign in to use the ATO Package Builder.'},401);
  }
  if(!env.DB)return reply({error:'The workspace is unavailable. Please try again.'},503);
  if(method!=='GET'&&(request.headers.get('origin')!==url.origin||request.headers.get('sec-fetch-site')==='cross-site'))return reply({error:'This request could not be verified. Reload the page and try again.'},403);

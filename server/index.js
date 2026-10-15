@@ -43,9 +43,9 @@ const redirect=(location,https)=>new Response(null,{status:301,headers:{location
 // personal data, no email. Owner reads and the email-preference links in sent emails keep working.
 const retiredForms=new Set(['/api/career-submissions','/api/community-contributions','/api/resource-signups']);
 // October 2026 library restructure: course 1.5 (connect-segment) was removed, and course 1.6 (pki-services)
-// merged into course 1.4 (two-tier-pki). Old links land on the Technical Training Library or the merged course.
-// Two libraries (15 October 2026): the Training Library became the Technical Training Library at /technical-training,
-// and Network Authorization (course, Authorization Workspace, ATO Template Library) moved to the GRC & RMF Training
+// merged into course 1.4 (two-tier-pki). Old links land on the Build Studio or the merged course.
+// Two libraries (15 October 2026): the Training Library became the Build Studio at /technical-training,
+// and Network Authorization (course, ATO Package Builder, ATO Template Library) moved to the GRC & RMF Training
 // Library at /grc-rmf-training. Old addresses land there; browsers keep the #fragment (#catalog/NN, #system=…).
 const keepQuery=(target,url)=>{const next=new URL(target,url);next.search=url.search;return next.toString();};
 function retiredCourse(url){

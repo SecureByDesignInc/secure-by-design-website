@@ -11,7 +11,7 @@ export default function MembershipPlans() {
       <h2 id="membership-options-title">Membership options</h2>
       <p className="membership-coming-soon"><Clock size={16} aria-hidden="true" />{catalog.comingSoon}</p>
       <p>{catalog.comingSoonDetail}</p>
-      <a className="membership-continue" href="/technical-training">Keep learning in the Technical Training Library</a>
+      <a className="membership-continue" href="/technical-training">Keep learning in the Build Studio</a>
     </header>
     <aside className="membership-creator" aria-label="A note from Secure By Design">
       <div className="membership-initials" aria-hidden="true">SBD</div>

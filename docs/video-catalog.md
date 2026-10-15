@@ -1,6 +1,6 @@
-# Technical Training Library and companion materials
+# Build Studio and companion materials
 
-The Technical Training Library at `/technical-training` and the GRC & RMF Training Library at `/grc-rmf-training` share one catalog (`content/videos.json`) and one page component (`app/videos/video-hub.tsx`, `edition` prop). A category marked `"library": "grc"` (Network Authorization) appears only in the GRC & RMF library; the rest are technical. Each library presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package, course 1.1 (Promote Primary & Secondary Domain Controller), covers DC01 and DC02 on Windows Server. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
+The Build Studio at `/technical-training` and the Authorization Studio at `/grc-rmf-training` share one catalog (`content/videos.json`) and one page component (`app/videos/video-hub.tsx`, `edition` prop). A category marked `"library": "grc"` (Network Authorization) appears only in the GRC & RMF library; the rest are technical. Each library presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package, course 1.1 (Promote Primary & Secondary Domain Controller), covers DC01 and DC02 on Windows Server. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
 
 ## Content
 

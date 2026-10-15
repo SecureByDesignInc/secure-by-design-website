@@ -2,9 +2,9 @@
   'use strict';
   // Network Authorization, course 2.1 "RMF to ATO" (/grc-rmf-training/rmf/, built by scripts/prepare-rmf-courses.mjs in the
   // Build the Network guide design). Owner direction, 15 October 2026: the former courses 2.1-2.3, the ATO Template
-  // Library and the Authorization Workspace are one learning process organized by the seven RMF steps of NIST
+  // Library and the ATO Package Builder are one learning process organized by the seven RMF steps of NIST
   // SP 800-37 Rev. 2 (window.RMF_STEPS), with the April 2016 JSIG mapped in. Each step page (#step/prepare) lists its
-  // modules, the same task in the Authorization Workspace with the learner's live status, and the templates it uses.
+  // modules, the same task in the ATO Package Builder with the learner's live status, and the templates it uses.
   // Each module card opens on its step, tasks and outputs, then Learn / See / Build / Prove, with the 3D view beside it.
   // Routes are hashes (#step/assess, #catalog/05, #evidence/ssp, #steps, #capstone, #sources). The old 2.2 and 2.3
   // pages redirect here (server/index.js) and keep their #catalog and #evidence fragments.
@@ -46,7 +46,7 @@
   const moduleHref = id => `#catalog/${id}`;
 
   // Account progress: module completions (training:rmf-boe-ato:NN, /api/reader-progress) and the learner's Secure By
-  // Design enclave in the Authorization Workspace (/api/authorization/progress, the workspace's own phases() checks).
+  // Design enclave in the ATO Package Builder (/api/authorization/progress, the workspace's own phases() checks).
   // A step is complete when its modules are marked complete and its workspace check passes.
   const progress = { loaded: false, user: null, records: [], system: null, phases: [] };
   const moduleDone = id => progress.records.some(r => r.id === `training:rmf-boe-ato:${id}` && r.status === 'completed');
@@ -56,9 +56,9 @@
     return { done, total: step.modules.length, workspace, complete: done === step.modules.length && workspace };
   };
   const stepNote = step => {
-    if (!progress.user) return `${step.modules.length} module${step.modules.length > 1 ? 's' : ''} · workspace · templates`;
+    if (!progress.user) return `${step.modules.length} module${step.modules.length > 1 ? 's' : ''} · package builder · templates`;
     const st = stepState(step);
-    return st.complete ? 'Step complete ✓' : `Modules ${st.done}/${st.total} · Workspace ${st.workspace ? '✓' : progress.system ? 'to do' : 'not started'}`;
+    return st.complete ? 'Step complete ✓' : `Modules ${st.done}/${st.total} · Package Builder ${st.workspace ? '✓' : progress.system ? 'to do' : 'not started'}`;
   };
   async function loadProgress() {
     if (location.protocol === 'file:') return;
@@ -101,7 +101,7 @@
           return chapter(`#catalog/${id}`, done(id) ? '✓' : id, m.title, here('catalog', id) ? `Current module · ${hours(m.hours)}` : `${done(id) ? 'Complete · ' : ''}${hours(m.hours)}`, here('catalog', id), false, ` module-chapter${done(id) ? ' is-complete' : ''}`);
         }).join('');
     }).join('')}${course.capstone ? chapter('#capstone', 'ATO', 'Authorization to Operate capstone', '4 hours · guided exercise', here('capstone'), true) : ''}
-      <div class="path-course">Course tools</div>${chapter('/grc-rmf-training/workspace', 'WS', 'Authorization Workspace', progress.system ? `Your ${progress.system.acronym || 'system'}` : 'Do each step on your enclave', false, true)}${chapter('/grc-rmf-training/templates', 'Lib', 'ATO Template Library', 'Official sources and samples', false, true)}${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}`;
+      <div class="path-course">Course tools</div>${chapter('/grc-rmf-training/workspace', 'WS', 'ATO Package Builder', progress.system ? `Your ${progress.system.acronym || 'system'}` : 'Do each step on your enclave', false, true)}${chapter('/grc-rmf-training/templates', 'Lib', 'ATO Template Library', 'Official sources and samples', false, true)}${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}`;
   }
   function renderPath(r) {
     $('module-list').innerHTML = pathMarkup(r);
@@ -146,11 +146,11 @@
     const previous = modules[index - 1], next = modules[index + 1];
     const panel = (name, body) => `<section class="content" role="tabpanel" id="${name}-panel" aria-labelledby="${name}-tab"${name === tab ? '' : ' hidden'}>${body}</section>`;
     // Within a step, modules lead to each other; the last module of a step leads back to the step page, where the
-    // learner does the step in the Authorization Workspace before moving on.
+    // learner does the step in the ATO Package Builder before moving on.
     const step = stepOf(id), lastInStep = step.modules.at(-1) === id;
     const prevLink = !previous ? `<a class="btn" href="#step/${step.id}">← Step ${step.number} overview</a>` : step.modules[0] === id
       ? `<a class="btn" href="#step/${step.id}">← Step ${step.number} overview</a>` : `<a class="btn" href="#catalog/${previous.id}">← Previous module</a>`;
-    const nextLink = lastInStep ? `<a class="btn primary" href="#step/${step.id}">Finish step ${step.number}: the workspace and templates →</a>`
+    const nextLink = lastInStep ? `<a class="btn primary" href="#step/${step.id}">Finish step ${step.number}: the package builder and templates →</a>`
       : `<a class="btn primary" href="#catalog/${next.id}">Next module →</a>`;
     card.className = 'lesson';
     card.innerHTML = `<header class="lesson-head"><div class="eyebrow"><a class="eyebrow-link" href="#step/${step.id}">Step ${step.number} · ${esc(step.title)}</a> / Module ${m.id} · ${esc(m.phase)}</div><h2 id="view-title">${esc(m.title)}</h2><p>${text(m.outcome)}</p><p class="module-facts"><span>${hours(m.hours)}</span>${m.rmf.nist.length ? `<span>NIST ${esc(m.rmf.nist[0][0])}${m.rmf.nist.length > 1 ? `–${esc(m.rmf.nist.at(-1)[0])}` : ''}</span>` : ''}${m.rmf.jsig.length ? `<span>JSIG ${esc(m.rmf.jsig[0][0])}${m.rmf.jsig.length > 1 ? `–${esc(m.rmf.jsig.at(-1)[0])}` : ''}</span>` : ''}<span>Sources ${esc(m.sources)}</span></p></header>
@@ -164,15 +164,15 @@
     syncNetwork();
   }
 
-  // A step: its modules, the same task in the Authorization Workspace (with the learner's status), and its templates.
+  // A step: its modules, the same task in the ATO Package Builder (with the learner's status), and its templates.
   function workspacePanel(step) {
     const st = stepState(step), base = '/grc-rmf-training/workspace';
     let status, action;
-    if (!progress.loaded) { status = 'Checking your workspace…'; action = `<a class="btn primary" href="${base}">Open the Authorization Workspace →</a>`; }
+    if (!progress.loaded) { status = 'Checking your package builder…'; action = `<a class="btn primary" href="${base}">Open the ATO Package Builder →</a>`; }
     else if (!progress.user) { status = 'Sign in to save your progress and do this step on your own Secure By Design enclave.'; action = `<a class="btn primary" href="/my-progress?returnTo=${encodeURIComponent('/grc-rmf-training/rmf/index.html#step/' + step.id)}">Sign in or create an account →</a>`; }
-    else if (!progress.system) { status = 'Start by registering your Secure By Design enclave in the workspace.'; action = `<a class="btn primary" href="${base}">Register your enclave →</a>`; }
+    else if (!progress.system) { status = 'Start by registering your Secure By Design enclave in the ATO Package Builder.'; action = `<a class="btn primary" href="${base}">Register your enclave →</a>`; }
     else { status = st.workspace ? `Done on ${esc(progress.system.name)}.` : `Not done yet on ${esc(progress.system.name)}.`; action = `<a class="btn primary" href="${base}#system=${encodeURIComponent(progress.system.id)}&tab=${step.tab}">Open ${esc(progress.system.acronym || 'your system')} · ${esc(step.tab)} →</a>`; }
-    return `<section class="step-section workspace-task${st.workspace ? ' is-done' : ''}" aria-labelledby="step-do"><h3 class="panel-title" id="step-do"><span class="step-num">2</span>Do it in the Authorization Workspace</h3>
+    return `<section class="step-section workspace-task${st.workspace ? ' is-done' : ''}" aria-labelledby="step-do"><h3 class="panel-title" id="step-do"><span class="step-num">2</span>Do it in the ATO Package Builder</h3>
       <p>${text(step.task)}</p><p class="done-when"><b>Done when</b> ${text(step.done)}</p><p class="workspace-status" role="status">${st.workspace ? '✓ ' : ''}${status}</p>${action}</section>`;
   }
   function templatesPanel(step) {
@@ -192,7 +192,7 @@
     const prev = steps[index - 1], next = steps[index + 1];
     card.className = 'lesson wide';
     card.innerHTML = `<header class="lesson-head"><div class="eyebrow">Course ${course.number} / Step ${step.number} of ${steps.length}</div><h2 id="view-title">${esc(step.title)}</h2><p>${text(step.lead)}</p><p class="module-facts"><span>${hours(studied)}</span>${range('nist') ? `<span>NIST ${esc(range('nist'))}</span>` : ''}${range('jsig') ? `<span>JSIG ${esc(range('jsig'))}</span>` : ''}<span>${list.length} module${list.length > 1 ? 's' : ''}</span></p>
-      ${progress.user ? `<p class="step-progress${st.complete ? ' is-complete' : ''}" role="status">${st.complete ? '✓ Step complete: its modules are complete and the workspace check passes.' : `Modules complete: ${st.done} of ${st.total} · Workspace: ${st.workspace ? 'done' : 'not yet'}`}</p>` : ''}</header>
+      ${progress.user ? `<p class="step-progress${st.complete ? ' is-complete' : ''}" role="status">${st.complete ? '✓ Step complete: its modules are complete and the ATO Package Builder check passes.' : `Modules complete: ${st.done} of ${st.total} · Package Builder: ${st.workspace ? 'done' : 'not yet'}`}</p>` : ''}</header>
       <div class="content step-page">
       <section class="step-section" aria-labelledby="step-learn"><h3 class="panel-title" id="step-learn"><span class="step-num">1</span>Learn</h3><ul class="step-modules">${list.map(m => `<li class="${moduleDone(m.id) ? 'is-done' : ''}"><a href="#catalog/${m.id}"><span class="mod-id">${moduleDone(m.id) ? '✓' : m.id}</span><span><b>${esc(m.title)}</b><small>${hours(m.hours)} · ${m.lessons.length} lessons${moduleDone(m.id) ? ' · complete' : ''}</small><span class="mod-outcome">${text(m.outcome)}</span></span></a></li>`).join('')}</ul></section>
       ${workspacePanel(step)}
@@ -232,7 +232,7 @@
     const c = capstone;
     card.className = 'lesson wide';
     card.innerHTML = `${wideHead(`Course ${course.number} / Capstone · 4 hours · guided exercise`, 'Authorization to Operate package capstone', 'Assemble and defend the fictional enclave’s authorization package. Show where the evidence supports a conclusion, where it does not, and what happens next.')}
-      <div class="content"><div class="capstone-intro"><section class="card-panel"><h3>Your submission</h3><ol class="deliverables">${c.deliverables.map(item => `<li>${text(item)}</li>`).join('')}</ol></section><section class="card-panel"><div class="eyebrow ink">Practice scope</div><h3>${esc(c.scopeTitle)}</h3><p class="control-ids">${esc(c.scopeControls)}</p>${c.scopeText.map(p => `<p>${text(p)}</p>`).join('')}<a class="text-link" href="#evidence/manifest">Start with the package manifest →</a><p>Then run the package in the <a class="text-link" href="/grc-rmf-training/workspace">Authorization Workspace</a>: register the system, implement and assess these controls, link your evidence, open POA&amp;M items, and route the package through the ISSM, the assessor, and the Authorizing Official.</p></section></div>
+      <div class="content"><div class="capstone-intro"><section class="card-panel"><h3>Your submission</h3><ol class="deliverables">${c.deliverables.map(item => `<li>${text(item)}</li>`).join('')}</ol></section><section class="card-panel"><div class="eyebrow ink">Practice scope</div><h3>${esc(c.scopeTitle)}</h3><p class="control-ids">${esc(c.scopeControls)}</p>${c.scopeText.map(p => `<p>${text(p)}</p>`).join('')}<a class="text-link" href="#evidence/manifest">Start with the package manifest →</a><p>Then run the package in the <a class="text-link" href="/grc-rmf-training/workspace">ATO Package Builder</a>: register the system, implement and assess these controls, link your evidence, open POA&amp;M items, and route the package through the ISSM, the assessor, and the Authorizing Official.</p></section></div>
       <section class="card-panel"><h3>Course scoring rubric</h3><div class="score-total"><strong>100</strong><span>available points</span></div>${renderTable(['Criterion', 'Points', 'What the reviewer looks for'], c.rubric)}<p class="help">${text(c.rubricNote)}</p></section>
       <h3 class="panel-title">The review sequence</h3><div class="review-chain">${c.sequence.map(([label, title, body]) => `<div><small>${esc(label)}</small><h3>${esc(title)}</h3><p>${text(body)}</p></div>`).join('')}</div>
       <h3 class="panel-title">Reviewer challenges</h3><p class="help">Try each question before opening its review guidance.</p>${c.challenges.map(([q, a]) => `<details class="challenge"><summary>${text(q)}</summary><div>${text(a)}</div></details>`).join('')}</div>

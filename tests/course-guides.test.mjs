@@ -64,7 +64,7 @@ test('the Network Authorization course has its page in the course guide design',
   for (const part of parts) {
     const course = library.courses.find(item => item.id === part.id);
     const page = read(`public/grc-rmf-training/${part.folder}/index.html`);
-    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the GRC &amp; RMF Training Library', '/training/account-progress.js',
+    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Authorization Studio', '/training/account-progress.js',
       `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/grc-rmf-training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
       assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
     // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.

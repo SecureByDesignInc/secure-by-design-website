@@ -8,8 +8,8 @@ export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibra
   return 'kind' in entry && entry.kind === 'library';
 }
 
-// Two libraries share one catalog (owner direction, 15 October 2026): the Technical Training Library (/technical-training)
-// holds the network build; the GRC & RMF Training Library (/grc-rmf-training) holds the categories marked
+// Two libraries share one catalog (owner direction, 15 October 2026): the Build Studio (/technical-training)
+// holds the network build; the Authorization Studio (/grc-rmf-training) holds the categories marked
 // "library": "grc" in content/videos.json (Network Authorization). Categories without the field are technical.
 export type LibraryEdition = 'technical' | 'grc';
 export function libraryFor(library: Library, edition: LibraryEdition): Library {

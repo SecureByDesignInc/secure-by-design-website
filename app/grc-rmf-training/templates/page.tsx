@@ -3,7 +3,7 @@ import '../../videos/videos.css';
 import './templates.css';
 import { sharePreview } from '../../share-preview';
 
-// The ATO Template Library, in the GRC & RMF Training Library (/grc-rmf-training). Data: content/ato-templates.json.
+// The ATO Template Library, in the Authorization Studio (/grc-rmf-training). Data: content/ato-templates.json.
 const description = 'Official sources for building an authorization package, arranged by RMF step and verified as publicly released by their publishers: CNSSI 1253, NIST control baselines and SSP outline, DCSA appointment letter and RAR templates, POA&M guidance, and FedRAMP formats for the traceability matrix, inventory and continuous monitoring.';
 export const metadata = {
   title: 'ATO Template Library',

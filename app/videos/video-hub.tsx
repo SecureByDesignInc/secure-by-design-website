@@ -212,22 +212,23 @@ function EpisodeTile({
   );
 }
 
-// The two libraries' headings (owner direction, 15 October 2026). Both use this page and the same tiles.
+// The two libraries' headings (owner direction, 15 October 2026): Build Studio (technical training) and Authorization
+// Studio (GRC & RMF training). The kicker names the kind of training so visitors know the studio is training. Both use this page and the same tiles.
 const EDITIONS: Record<LibraryEdition, { kicker: string; title: string; em: string; copy: string; heading: string; choose: string }> = {
   technical: {
-    kicker: 'TECHNICAL TRAINING LIBRARY',
+    kicker: 'BUILD STUDIO · TECHNICAL TRAINING',
     title: 'Build your skills.',
     em: 'Understand the why.',
     copy: 'Explore practical training, interactive guides, and resources that help you build your skills. Choose a topic and follow your own learning path.',
-    heading: 'YOUR TECHNICAL TRAINING LIBRARY',
+    heading: 'TECHNICAL TRAINING',
     choose: 'Choose your next course.',
   },
   grc: {
-    kicker: 'GRC & RMF TRAINING LIBRARY',
+    kicker: 'AUTHORIZATION STUDIO · GRC & RMF TRAINING',
     title: 'Take a system to an ATO.',
     em: 'One RMF step at a time.',
-    copy: 'Governance, risk and compliance training built on the Risk Management Framework: the RMF to ATO course, the Authorization Workspace where you do each step, and the ATO Template Library with the documents each step uses.',
-    heading: 'YOUR GRC & RMF TRAINING LIBRARY',
+    copy: 'Governance, risk and compliance training built on the Risk Management Framework: the RMF to ATO course, the ATO Package Builder where you do each step, and the ATO Template Library with the documents each step uses.',
+    heading: 'GRC & RMF TRAINING',
     choose: 'Start the course.',
   },
 };
@@ -445,16 +446,16 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
             <ArrowDown size={15} aria-hidden="true" />
             <span>Do each step and use its templates</span>
           </p>
-          <div className="vc-category-heading"><div><h3 id="grc-tools-title">Course tools</h3><p>Every step of the course links to both: the Authorization Workspace for the practice task, and the ATO Template Library for the documents it produces.</p></div><span>2 tools</span></div>
+          <div className="vc-category-heading"><div><h3 id="grc-tools-title">Course tools</h3><p>Every step of the course links to both: the ATO Package Builder for the practice task, and the ATO Template Library for the documents it produces.</p></div><span>2 tools</span></div>
           <ul className="vc-tool-list">
             <li>
               <ClipboardCheck size={26} strokeWidth={1.4} aria-hidden="true" />
               <div>
                 <p className="vc-kicker">PRACTICE TOOL</p>
-                <h4>Authorization Workspace</h4>
+                <h4>ATO Package Builder</h4>
                 <p>Register the Secure By Design enclave and take it through every RMF step: system record and categorization, controls and evidence, assessment, the POA&amp;M, the package and the AO&apos;s decision, then continuous monitoring. Saved privately to your account.</p>
               </div>
-              <Link href="/grc-rmf-training/workspace">Open the workspace <ArrowRight size={16} /></Link>
+              <Link href="/grc-rmf-training/workspace">Open the package builder <ArrowRight size={16} /></Link>
             </li>
             <li>
               <FileText size={26} strokeWidth={1.4} aria-hidden="true" />
@@ -474,7 +475,7 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
               Authorize the network you built.
             </p>
             <Link href="/technical-training">
-              Build it first in the Technical Training Library <ArrowRight size={17} />
+              Build it first in the Build Studio <ArrowRight size={17} />
             </Link>
           </> : <>
             <p>

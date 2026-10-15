@@ -22,9 +22,9 @@ export default function Workspace(){
  },[route.system,list?.user,state?.system.id]);
  const go=(system:string|null,tab='overview')=>{const hash=system?`#system=${system}&tab=${tab}`:'#systems';if(location.hash!==hash)history.pushState(null,'',hash);setRoute({system,tab});window.scrollTo({top:0});};
 
- const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">GRC &amp; RMF TRAINING LIBRARY</a> · PRACTICE</p><h1>Authorization Workspace</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
+ const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">AUTHORIZATION STUDIO</a> · PRACTICE</p><h1>ATO Package Builder</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
  if(error&&!list)return <>{intro}<p className="reader-error" role="alert">{error} <button type="button" onClick={()=>void refreshList()}>Try again</button></p></>;
- if(!list)return <>{intro}<p className="reader-loading"><output>Loading your workspace…</output></p></>;
+ if(!list)return <>{intro}<p className="reader-loading"><output>Loading the ATO Package Builder…</output></p></>;
  if(!list.user)return <>{intro}<Landing/></>;
  if(route.system){
   if(state&&state.system.id===route.system)return <SystemView state={state} setState={setState} tab={route.tab} go={tab=>go(route.system,tab)} back={()=>{go(null);void refreshList();}} onDeleted={()=>{setState(null);go(null);void refreshList();}}/>;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the Authorization Workspace's NIST SP 800-53 Rev. 5 control catalog.
+"""Builds the ATO Package Builder's NIST SP 800-53 Rev. 5 control catalog.
 
 Source: NIST's OSCAL content (github.com/usnistgov/oscal-content, nist.gov/SP800-53/rev5/json):
 the Rev. 5 catalog and the SP 800-53B LOW / MODERATE / HIGH baseline profiles. NIST publications are
