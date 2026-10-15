@@ -36,4 +36,4 @@ The repository-wide TypeScript check still reports the three previously confirme
 
 ## Reference tiles
 
-`references` in `content/videos.json` holds catalog entries that are not courses. The first is the ATO Template Library (`kind: "library"`), shown in the Templates & References group (`kind: "reference"` on the category). Its templates live in `content/ato-templates.json`; the expanded tile is `app/videos/library-experience.tsx` and the full list is `/training/ato-templates`. See AGENTS.md (October 15, 2026) for the rules.
+`references` in `content/videos.json` holds catalog entries that are not courses. The first is the ATO Template Library (`kind: "library"`), shown in the Templates & References group (`kind: "reference"` on the category). It is a DoD SAP / JSIG template set arranged by RMF step; its entries live in `content/ato-templates.json` and its posted files in `public/training/library/ato-templates/`; the expanded tile is `app/videos/library-experience.tsx` and the full list is `/training/ato-templates`. See AGENTS.md (October 15, 2026) for the rules.

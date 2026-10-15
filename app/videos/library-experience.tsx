@@ -2,14 +2,15 @@
 
 // The expanded tile for a reference library (the ATO Template Library). It keeps the companion layout every
 // expanded tile shares (companion.tsx): the heading, the materials panel and a right-hand column, then an explorer
-// below. The explorer lists the templates for one Body of Evidence artifact at a time; the full, filterable list
-// is the library page at /training/ato-templates. Templates come from content/ato-templates.json.
+// below. The explorer lists the templates for one RMF step at a time; the full, filterable list is the library
+// page at /training/ato-templates. Templates come from content/ato-templates.json (a DoD SAP / JSIG set).
 import { useState, type CSSProperties } from 'react';
-import { ArrowRight, ArrowUpRight, BookOpen, ExternalLink, FileText, Maximize2 } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BookOpen, Download, FileText, Maximize2 } from 'lucide-react';
 import type { ReferenceLibrary } from './catalog-types';
 import { CompanionHeading, CompanionMaterials, type CompanionLink } from './companion';
 import templates from '../../content/ato-templates.json';
-import { FRAMEWORKS, STATUSES, frameworkLabel } from './template-labels';
+import { STATUSES, frameworkLabel } from './template-labels';
+import TemplateEntry from './template-entry';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -21,13 +22,17 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
   const items = templates.templates.filter(item => item.group === group.id);
   const total = templates.templates.length;
   const training = library.training;
-  const links: CompanionLink[] = (training.relatedResources ?? []).map(resource => ({
-    href: resource.href,
-    title: resource.title,
-    detail: resource.detail,
-    icon: <BookOpen size={19} />,
-    trailing: <ArrowUpRight size={16} />,
-  }));
+  const posted = templates.templates.filter(item => item.status === 'hosted' || item.status === 'adapted').length;
+  const links: CompanionLink[] = [
+    { href: templates.download.href, title: templates.download.label, detail: `ZIP · ${posted} Word and Excel templates with a README`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true },
+    ...(training.relatedResources ?? []).map(resource => ({
+      href: resource.href,
+      title: resource.title,
+      detail: resource.detail,
+      icon: <BookOpen size={19} />,
+      trailing: <ArrowUpRight size={16} />,
+    })),
+  ];
   const frameworksIn = [...new Set(items.map(item => frameworkLabel(item.framework)))];
 
   return (
@@ -35,7 +40,7 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
       <section className="vc-episode" aria-labelledby={`library-resources-${library.id}`}>
         <CompanionHeading
           id={`library-resources-${library.id}`}
-          intro="Open the full library to search and filter every template, or browse one artifact at a time below."
+          intro="Download the JSIG templates, open the full library, or browse one RMF step at a time below."
           action={{ href: training.guide, label: 'Open the full library', icon: <BookOpen size={16} /> }}
         />
         <div className="vc-episode-content">
@@ -44,32 +49,32 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
             cover={training.cover}
             coverAlt={`Cover of the Secure By Design ${library.title}`}
             heading={['Keep the templates.', 'Build the Body of Evidence.']}
-            summary={`${total} free templates from NIST, CNSS, DoD and DCSA, the DoD SAP community, FedRAMP and GovRAMP, grouped by the ${groups.length} artifacts they support.`}
+            summary={`A DoD SAP / JSIG template set: ${posted} templates to download and ${total - posted} more entries that point to the official source, arranged by RMF step.`}
             guide={{
               href: training.guide,
               title: `Open the ${library.title}`,
-              detail: `${total} templates · search · filter by framework and status`,
+              detail: `${total} entries · search · filter by source and downloads`,
               icon: <BookOpen size={20} />,
               trailing: <ArrowUpRight size={19} />,
             }}
             links={links}
             edition={<>
-              <p>Template library · Links checked {training.updated}</p>
-              <p>Templates belong to their publishers. Each link goes to the official source.</p>
+              <p>Edition: {templates.edition}</p>
+              <p>For instruction and practice. Your AO and PSO&apos;s current templates take precedence. Links checked {training.updated}.</p>
               <p>© 2026 Secure By Design Team LLC.</p>
             </>}
           />
           <div className="vc-watch vc-library-key">
-            <div className="vc-library-counts" role="list" aria-label="Templates by framework">
-              {FRAMEWORKS.map(framework => (
-                <div role="listitem" key={framework.id}>
-                  <b>{templates.templates.filter(item => item.framework === framework.id).length}</b>
-                  <span>{framework.label}</span>
+            <div className="vc-library-counts" role="list" aria-label="Entries by status">
+              {Object.entries(STATUSES).map(([id, status]) => (
+                <div role="listitem" key={id}>
+                  <b>{templates.templates.filter(item => item.status === id).length}</b>
+                  <span>{status.label}</span>
                 </div>
               ))}
             </div>
             <div className="vc-library-legend">
-              <span>HOW TO READ A TEMPLATE'S STATUS</span>
+              <span>WHAT EACH ENTRY GIVES YOU</span>
               <ul>
                 {Object.entries(STATUSES).map(([id, status]) => (
                   <li key={id}>
@@ -100,8 +105,8 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
           <div className="vc-stage-title">
             <FileText size={21} />
             <div>
-              <p className="vc-kicker">ARTIFACT EXPLORER</p>
-              <h4 id={`artifact-explorer-${library.id}`}>Choose an artifact to see its templates.</h4>
+              <p className="vc-kicker">RMF STEP EXPLORER</p>
+              <h4 id={`artifact-explorer-${library.id}`}>Choose a step to see its templates.</h4>
             </div>
           </div>
           <div className="vc-scene-tools">
@@ -122,14 +127,14 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
               <p>
                 THE BODY OF EVIDENCE
                 <br />
-                <b>{groups.length} artifacts</b>
+                <b>{groups.length} sections</b>
               </p>
             </div>
             <h5>{group.title}</h5>
             {group.note && <p>{group.note}</p>}
             <div className="vc-network-note">
               <span>{group.abbr}</span>
-              <p>{items.length} template{items.length === 1 ? '' : 's'} · {frameworksIn.join(', ')}</p>
+              <p>{items.length} entr{items.length === 1 ? 'y' : 'ies'} · {frameworksIn.join(', ')}</p>
             </div>
             <a className="vc-library-deeplink" href={`${training.guide}#${group.id}`}>
               Open {group.title} in the full library
@@ -137,30 +142,9 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
             </a>
           </aside>
           <div className="vc-scene-wrap vc-library-stage">
-            <p className="vc-kicker">ARTIFACT {active + 1} OF {groups.length} · {items.length} TEMPLATE{items.length === 1 ? '' : 'S'}</p>
+            <p className="vc-kicker">SECTION {active + 1} OF {groups.length} · {items.length} ENTR{items.length === 1 ? 'Y' : 'IES'}</p>
             <ul className="vc-library-list">
-              {items.map(item => (
-                <li key={item.title}>
-                  <div className="vc-library-item-head">
-                    <h5>{item.title}</h5>
-                    <span className="vc-library-badges">
-                      <i className="vc-framework">{frameworkLabel(item.framework)}</i>
-                      <i className={`vc-status vc-status-${item.status}`}>{STATUSES[item.status]?.label ?? item.status}</i>
-                    </span>
-                  </div>
-                  <p className="vc-library-source">{item.source} · <span>RMF {item.rmf}</span></p>
-                  {item.note && <p>{item.note}</p>}
-                  <div className="vc-library-links">
-                    {item.links.map(link => (
-                      <a key={link.href + link.label} href={link.href} target="_blank" rel="noopener noreferrer">
-                        {link.label}
-                        <small>{link.format}</small>
-                        <ExternalLink size={12} aria-hidden="true" />
-                      </a>
-                    ))}
-                  </div>
-                </li>
-              ))}
+              {items.map(item => <TemplateEntry key={item.title} item={item} />)}
             </ul>
           </div>
         </div>
