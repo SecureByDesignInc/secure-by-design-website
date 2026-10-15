@@ -1770,7 +1770,7 @@
       "categoryOrder": 1,
       "title": "ATO Template Library",
       "subtitle": "Verified public sources for the Body of Evidence",
-      "description": "Official sources for building an authorization package, arranged by RMF step: DCSA's Risk Assessment Report (RAR) template, CNSSI 1253 and the CNSS Privacy Overlay. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
+      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253, the CNSS Privacy Overlay, NIST's System Security Plan (SSP) outline and DCSA's Risk Assessment Report (RAR) template. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
       "tags": [
         "Templates",
         "Body of Evidence",
@@ -1778,16 +1778,16 @@
       ],
       "systems": [],
       "artLabels": [
-        "Risk Assessment Report",
+        "SSP · RAR",
         "CNSSI 1253 · Privacy Overlay",
         "Verified public sources"
       ],
-      "outcomeSummary": "Open the official, publicly released sources for three parts of the package.",
+      "outcomeSummary": "Open the official, publicly released sources for four parts of the package.",
       "outcomes": [
-        "Draft a RAR from DCSA's template",
         "Categorize and select controls with CNSSI 1253",
         "Tailor for PII with the Privacy Overlay",
-        "Open every document from its publisher"
+        "Start an SSP from NIST's outline",
+        "Draft a RAR from DCSA's template"
       ],
       "training": {
         "guide": "/training/ato-templates",
