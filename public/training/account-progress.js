@@ -6,8 +6,8 @@
  // Configuration course guides (1.2–1.10) name their course, guide bookmark and first lesson on the reserved panel.
  const named=document.querySelector('.sbd-account-progress[data-course]')?.dataset;
  const dc=location.pathname.includes('/dc01-dc02/'),lessons=dc||!!named;
- // The Network Authorization pages (courses 2.1–2.3) name only their guide bookmark: their modules come from #catalog/NN
- // and keep the training:rmf-boe-ato:NN progress IDs.
+ // The Network Authorization course (2.1, /training/rmf/) names only its guide bookmark: its modules come from #catalog/NN
+ // and keep the training:rmf-boe-ato:NN progress IDs. Saving tells the course page (sbd-progress-changed) to refresh its steps.
  const reserved=document.querySelector('.sbd-account-progress')?.dataset;
  const course=named?.course||(dc?'dc01-dc02':'rmf-boe-ato'),guide=named?.guide||reserved?.guide||(dc?'dc-guide':'rmf-guide');
  // Reuse a panel the page reserved in its HTML (so nothing shifts when this deferred script runs).
@@ -33,6 +33,6 @@
   const link=el('a','My Account →');link.href='/my-progress';link.target='_top';panel.append(link);
  }
  async function refresh(){try{const response=await fetch('/api/reader-progress',{cache:'no-store'});if(!response.ok)throw Error();data=await response.json();error=''}catch{error='Account progress is unavailable. Your lesson and local evidence are still available.'}render()}
- async function save(path,body){busy=true;error='';render();try{const response=await fetch('/api/reader-progress'+path,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!response.ok)throw Error();await refresh()}catch{error='Could not save account progress. Please try again.'}finally{busy=false;render()}}
+ async function save(path,body){busy=true;error='';render();try{const response=await fetch('/api/reader-progress'+path,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!response.ok)throw Error();await refresh();window.dispatchEvent(new Event('sbd-progress-changed'))}catch{error='Could not save account progress. Please try again.'}finally{busy=false;render()}}
  window.addEventListener('hashchange',render);window.addEventListener('sbd-learning-unit',render);window.addEventListener('focus',refresh);render();refresh();
 })();

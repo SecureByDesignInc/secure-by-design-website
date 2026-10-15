@@ -158,7 +158,7 @@ test('training content names Windows releases without version numbers', () => {
   const files = [
     'public/training/dc01-dc02/START-HERE.txt', 'public/training/dc01-dc02/notices.html',
     'public/training/rmf/catalog-data.js', 'public/training/rmf/learning-data.js', 'public/training/rmf/network-data.js',
-    'public/training/rmf/index.html', 'public/training/rmf-body-of-evidence/index.html', 'public/training/rmf-authorization-to-operate/index.html',
+    'public/training/rmf/index.html', 'public/training/rmf/templates-data.js',
     ...readdirSync(new URL('../public/inside-network-model/', import.meta.url)).filter(name => /\.(js|html|csv|md)$/.test(name)).map(name => `public/inside-network-model/${name}`),
   ];
   for (const file of files) assert.doesNotMatch(read(file).toString(), release, file);

@@ -41,6 +41,7 @@
   ],
   "samples": [
     {
+      "group": "select",
       "title": "SCTM workbook (NIST SP 800-53 Rev. 5)",
       "artifact": "SCTM",
       "rmf": "S-1, S-2, I-2, A-3",
@@ -50,6 +51,7 @@
       "note": "All 1,014 Rev. 5 controls and enhancements with NIST's baseline marks and SP 800-53A methods, plus columns to record the CNSSI 1253 baseline, overlays, tailoring rationale, implementation and assessment result. A summary sheet counts status and results as you fill it in."
     },
     {
+      "group": "assess",
       "title": "POA&M workbook",
       "artifact": "POA&M",
       "rmf": "A-6, M-3",
@@ -59,6 +61,7 @@
       "note": "eMASS-style columns, one row per milestone, with the JSIG minimum (tasks, resources, milestones with percentage complete, scheduled dates) and a summary sheet."
     },
     {
+      "group": "prepare",
       "title": "ISSM, ISSO and ISSE appointment letters",
       "artifact": "Appointment letters",
       "rmf": "P-1",
@@ -68,6 +71,7 @@
       "note": "Three memoranda, one page each, with the duties the JSIG assigns each role, who appoints them, and an acknowledgment block."
     },
     {
+      "group": "implement",
       "title": "Hardware and software lists",
       "artifact": "Hardware/software lists",
       "rmf": "P-10, I-2",
@@ -77,6 +81,7 @@
       "note": "A hardware list with the JSIG CM-8 minimum fields and an approved software list (deny-all, permit-by-exception), each with CCB approval and integrity-check columns."
     },
     {
+      "group": "monitor",
       "title": "Continuous monitoring strategy",
       "artifact": "ConMon strategy",
       "rmf": "S-5, M-2, M-5",
@@ -86,6 +91,7 @@
       "note": "Roles, metrics, monitoring and assessment frequencies, analysis, reporting and change handling, organized by CA-7 a to g, with fill-in tables."
     },
     {
+      "group": "implement",
       "title": "Configuration management plan",
       "artifact": "CM plan",
       "rmf": "I-1, M-1",

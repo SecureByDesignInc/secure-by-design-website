@@ -33,13 +33,13 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
-  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate', 'ato-templates']);
-  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-body-of-evidence', 'ato-templates']);
-  assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-authorization-to-operate']);
+  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-boe-ato']);
+  assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-boe-ato']);
   for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
     for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
       assert.ok(existsSync(new URL('.' + resource.replace(/#.*$/, ''), new URL('../public/', import.meta.url))), resource);
@@ -53,7 +53,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 3], ['templates-references', 1]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -66,42 +66,51 @@ test('category groups preserve course identity and omit groups with no matches',
   assert.deepEqual(groupCatalogEntries([unknown], library)[0].entries, [unknown]);
 });
 
-test('authorization parts cover the existing course once and preserve saved progress and resource destinations', () => {
+// Owner direction, 15 October 2026: courses 2.1-2.3, the ATO Template Library and the Authorization Workspace became one
+// course, 2.1 "RMF to ATO", organized by the seven RMF steps. Module and progress IDs are unchanged.
+test('Network Authorization is one course of seven RMF steps that keeps every module and its progress', () => {
   const context = { window: {} };
   runInNewContext(readFileSync(new URL('../public/training/rmf/catalog-data.js', import.meta.url), 'utf8'), context);
   const modules = JSON.parse(JSON.stringify(context.window.CATALOG));
+  const steps = JSON.parse(JSON.stringify(context.window.RMF_STEPS));
   const parts = getCatalogEntries(library).filter(entry => entry.categoryId === 'network-authorization');
   const progress = JSON.parse(readFileSync(new URL('../content/training-progress.json', import.meta.url), 'utf8'));
-  assert.deepEqual(parts.map(part => part.title), ['Risk Management Framework', 'Body of Evidence', 'Authorization to Operate']);
-  assert.deepEqual(parts.flatMap(part => part.moduleIds), modules.map(module => module.id));
-  assert.equal(parts.reduce((sum, part) => sum + part.estimatedHours, 0), 24);
-  assert.equal(parts.reduce((sum, part) => sum + part.lessonCount, 0), 36);
-  for (const part of parts) {
-    const selected = modules.filter(module => part.moduleIds.includes(module.id));
-    assert.equal(part.moduleCount, selected.length);
-    assert.equal(part.lessonCount, selected.reduce((sum, module) => sum + module.lessons.length, 0));
-    assert.equal(part.estimatedHours, selected.reduce((sum, module) => sum + Number(module.hours), 0) + (part.capstoneHours ?? 0));
-    // Owner request, 15 October 2026: each course has its own page; progress IDs keep the original course's name.
-    const page = `/training/${context.window.CATALOG_PARTS.find(item => item.id === part.id).folder}/index.html`;
-    assert.equal(part.training.guide, `${page}#catalog/${selected[0].id}`);
-    for (const [index, module] of selected.entries()) {
-      assert.equal(part.stages[index].href, `${page}#catalog/${module.id}`);
-      // The expanded tile's module explorer lists these; keep them equal to the module catalog.
-      assert.deepEqual(part.stages[index].lessons, module.lessons);
-      assert.equal(part.stages[index].hours, module.hours);
-      assert(progress.some(entry => entry.id === `training:rmf-boe-ato:${module.id}` && entry.href === part.stages[index].href));
-    }
-    for (const resource of part.training.relatedResources) {
-      const url = new URL(resource.href, 'https://securebydesigninc.com');
-      // The Authorization Workspace (app/authorization-workspace) is where the capstone is run.
-      if (url.pathname === '/authorization-workspace') continue;
-      assert.equal(url.pathname, page);
-      assert(['#evidence', '#evidence/manifest', '#capstone'].includes(url.hash));
-    }
+  assert.deepEqual(parts.map(part => [part.id, part.number, part.title]), [['rmf-boe-ato', '2.1', 'RMF to ATO']]);
+  const [part] = parts;
+  assert.deepEqual(part.moduleIds, modules.map(module => module.id));
+  assert.deepEqual(steps.map(step => step.id), ['prepare', 'categorize', 'select', 'implement', 'assess', 'authorize', 'monitor']);
+  assert.deepEqual(steps.flatMap(step => step.modules), part.moduleIds, 'every module belongs to one step, in order');
+  for (const step of steps) assert.ok(step.task && step.done && step.lead && step.tab, step.id);
+  assert.equal(part.moduleCount, modules.length);
+  assert.equal(part.lessonCount, 36);
+  assert.equal(part.estimatedHours, 24);
+  assert.equal(part.estimatedHours, modules.reduce((sum, module) => sum + Number(module.hours), 0) + part.capstoneHours);
+  const page = '/training/rmf/index.html';
+  assert.equal(part.training.guide, `${page}#catalog/01`);
+  for (const [index, module] of modules.entries()) {
+    assert.equal(part.stages[index].href, `${page}#catalog/${module.id}`);
+    assert.deepEqual(part.stages[index].lessons, module.lessons);
+    assert.equal(part.stages[index].hours, module.hours);
+    assert(progress.some(entry => entry.id === `training:rmf-boe-ato:${module.id}` && entry.href === part.stages[index].href));
   }
+  for (const resource of part.training.relatedResources) {
+    const url = new URL(resource.href, 'https://securebydesigninc.com');
+    if (['/authorization-workspace', '/training/ato-templates'].includes(url.pathname)) continue;
+    assert.equal(url.pathname, page);
+    assert(['#evidence', '#evidence/manifest', '#capstone'].includes(url.hash));
+  }
+  // The workspace checks behind each step are the same seven, with the same IDs (lib/authorization/model.mjs).
+  const model = readFileSync(new URL('../lib/authorization/model.mjs', import.meta.url), 'utf8');
+  for (const step of steps) assert.match(model, new RegExp(`\\['${step.id}','${step.title}',`), step.id);
+  const map = /COURSE_STEP_MODULES=(\{[^}]*\})/.exec(model)[1].replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+  assert.deepEqual(JSON.parse(map), Object.fromEntries(steps.map(step => [step.id, step.modules])), 'My Progress uses the same step map');
+  // The old 2.2 and 2.3 pages are gone (server/index.js redirects them here).
+  for (const folder of ['rmf-body-of-evidence', 'rmf-authorization-to-operate']) assert.ok(!existsSync(new URL(`../public/training/${folder}/`, import.meta.url)), folder);
+  const templates = readFileSync(new URL('../public/training/rmf/templates-data.js', import.meta.url), 'utf8');
+  assert.ok(templates.includes(JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8')).templates[0].title), 'templates-data.js is current; run scripts/prepare-rmf-courses.mjs');
 });
 
-test('the Network Authorization pages group their modules by the catalog courses and show their edition', () => {
+test('the Network Authorization page matches the catalog course and shows its edition', () => {
   const context = { window: {} };
   runInNewContext(readFileSync(new URL('../public/training/rmf/catalog-data.js', import.meta.url), 'utf8'), context);
   const parts = getCatalogEntries(library).filter(entry => entry.categoryId === 'network-authorization');
@@ -113,6 +122,7 @@ test('the Network Authorization pages group their modules by the catalog courses
     assert.deepEqual([...new Set(shown)], [part.training.materialsEdition], `course ${part.number} shows its edition everywhere`);
     assert.ok(page.includes(`Updated ${part.training.updated}`));
     assert.ok(page.includes(`<body data-course="${part.number}">`));
+    assert.ok(page.includes('/training/rmf/templates-data.js'));
   }
 });
 
@@ -371,21 +381,18 @@ test('every course tile carries the companion details the expanded tile shows', 
 });
 
 
-// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group.
-// Owner direction the same day: list only documents verified as publicly released by an official publisher,
-// each linked to the publisher's own copy. Nothing is hosted here.
-test('the ATO Template Library tile lists only verified public sources, linked to their publishers', () => {
+// Owner request, 15 October 2026: an ATO Template Library, listing only documents verified as publicly released by an
+// official publisher, each linked to the publisher's own copy. Owner direction the same day: its catalog tile merged into
+// course 2.1, whose step pages show each step's sources; the full page stays at /training/ato-templates.
+test('the ATO Template Library lists only verified public sources and is part of course 2.1', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
-  const [reference] = library.references;
-  const category = library.categories.find(item => item.id === reference.categoryId);
-  assert.equal(reference.id, 'ato-templates');
-  assert.equal(reference.kind, 'library');
-  assert.equal(category.kind, 'reference');
-  assert.equal(library.categories.at(-1).id, category.id, 'the reference group comes after the learning paths');
-  assert.equal(isTrainingCourse(reference), false);
-  assert.ok(existsSync(new URL('../public' + reference.training.cover, import.meta.url)), 'cover');
-  assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
-  assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
+  const reference = { training: { relatedResources: [] } };
+  assert.deepEqual(library.references ?? [], [], 'no separate library tile');
+  assert.ok(!library.categories.some(item => item.id === 'templates-references'));
+  const course = library.courses.find(item => item.id === 'rmf-boe-ato');
+  assert.ok(course.training.relatedResources.some(item => item.href === '/training/ato-templates'), 'the course links the library');
+  assert.ok(existsSync(new URL('../app/training/ato-templates/page.tsx', import.meta.url)), 'library page');
+  for (const sample of templates.samples) assert.ok(templates.groups.some(group => group.id === sample.group), `${sample.title} step`);
   // The verified set: add an entry only when its publisher posts it publicly (see AGENTS.md).
   assert.deepEqual(templates.groups.map(group => group.id), ['prepare', 'categorize', 'select', 'implement', 'assess', 'monitor']);
   assert.deepEqual(templates.templates.map(item => item.title), [
@@ -433,5 +440,5 @@ test('the ATO Template Library tile lists only verified public sources, linked t
     assert.ok(item.title && item.artifact && item.rmf && item.basis && item.note && item.format, `${item.title} details`);
   }
   for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
-  assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['ato-templates']);
+  assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['rmf-boe-ato']);
 });

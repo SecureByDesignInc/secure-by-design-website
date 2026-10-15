@@ -96,6 +96,10 @@ body.site-editorial:has(.awx-page){background:#071521}
 .awx-phases li span{display:grid;place-items:center;width:28px;height:28px;border:1px solid #4a6a80;border-radius:50%;font-size:.8rem}
 .awx-phases li.done{border-color:#3c9a73;color:#d7f6e6}
 .awx-phases li.done span{border-color:#6fd3a5;background:#6fd3a5;color:#06281c}
+.awx-phases li>a{display:flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none}
+.awx-phases li>a small{font-size:.68rem;font-weight:500;color:#7fb4c9}
+.awx-phases li:hover{border-color:#91dfeb}
+.awx-phases li>a:focus-visible{outline:3px solid #ffbf69;outline-offset:4px;border-radius:8px}
 .awx-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
 .awx-stats button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px;border-color:#2d4b61;border-radius:16px;background:#0b2131;text-align:left}
 .awx-stats strong{font-size:2.2rem;line-height:1;color:#f1f8ff}

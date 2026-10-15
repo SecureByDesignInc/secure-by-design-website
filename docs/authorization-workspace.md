@@ -2,7 +2,7 @@
 
 `/authorization-workspace` is where a signed-in learner takes a practice system through an Authorization to Operate (ATO). It models how authorization teams manage an ATO in eMASS (DoD's Enterprise Mission Assurance Support Service) and Telos Xacta 360: a system record, the selected controls, a Body of Evidence, a Plan of Action and Milestones (POA&M), approval chains for each control and for the package, the Authorizing Official's decision, and continuous monitoring. It is an original Secure By Design teaching tool. It is not affiliated with DISA or Telos and copies neither product's screens or branding.
 
-It is where Network Authorization 2.1–2.3 (the RMF course at `/training/rmf/`) sends learners to run the package capstone, on the network the Build the Network courses create.
+It is the hands-on half of course 2.1 "RMF to ATO" (`/training/rmf/`): each RMF step page in the course links to the matching workspace tab and shows whether that step's workspace check passes (`GET /api/authorization/progress`), and the lifecycle list here links back to the course steps. The capstone runs here, on the network the Build the Network courses create.
 
 ## What the learner does
 

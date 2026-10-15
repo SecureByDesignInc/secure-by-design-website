@@ -1,12 +1,13 @@
 (() => {
   'use strict';
-  // Network Authorization: courses 2.1, 2.2 and 2.3, each on its own page (/training/rmf/,
-  // /training/rmf-body-of-evidence/, /training/rmf-authorization-to-operate/) built by scripts/prepare-rmf-courses.mjs
-  // in the Build the Network guide design. <body data-course="2.2"> names the page's course. Modules follow the RMF
-  // steps of NIST SP 800-37 Rev. 2 with the April 2016 JSIG mapped in: each module card opens on its step, tasks and
-  // outputs, then Learn / See / Build / Prove, with the 3D authorization view beside it. Routes are hashes
-  // (#catalog/05, #evidence/ssp, #steps, #capstone, #sources); a link to another course's module or artifact moves to
-  // that course's page, so older links to /training/rmf/ keep working.
+  // Network Authorization, course 2.1 "RMF to ATO" (/training/rmf/, built by scripts/prepare-rmf-courses.mjs in the
+  // Build the Network guide design). Owner direction, 15 October 2026: the former courses 2.1-2.3, the ATO Template
+  // Library and the Authorization Workspace are one learning process organized by the seven RMF steps of NIST
+  // SP 800-37 Rev. 2 (window.RMF_STEPS), with the April 2016 JSIG mapped in. Each step page (#step/prepare) lists its
+  // modules, the same task in the Authorization Workspace with the learner's live status, and the templates it uses.
+  // Each module card opens on its step, tasks and outputs, then Learn / See / Build / Prove, with the 3D view beside it.
+  // Routes are hashes (#step/assess, #catalog/05, #evidence/ssp, #steps, #capstone, #sources). The old 2.2 and 2.3
+  // pages redirect here (server/index.js) and keep their #catalog and #evidence fragments.
   const modules = window.CATALOG;
   const parts = window.CATALOG_PARTS;
   const lessons = window.LEARNING;
@@ -14,7 +15,10 @@
   const capstone = window.CAPSTONE;
   const sources = window.RMF_SOURCES;
   const net = window.RMF_NETWORK;
-  const course = parts.find(part => part.number === document.body.dataset.course) || parts[0];
+  const steps = window.RMF_STEPS;
+  const library = window.RMF_TEMPLATES;
+  const course = parts[0];
+  const stepOf = id => steps.find(step => step.modules.includes(id));
   const $ = id => document.getElementById(id);
   const main = $('main');
   const card = $('lesson');
@@ -30,8 +34,6 @@
   const hours = h => `${h} ${Number(h) === 1 ? 'hour' : 'hours'}`;
   const tabs = [['step', 'RMF step'], ['learn', 'Learn'], ['see', 'See'], ['build', 'Build'], ['prove', 'Prove']];
   const indexOf = id => modules.findIndex(m => m.id === id);
-  const partOf = id => parts.find(part => part.modules.includes(id));
-  const pageOf = part => `/training/${part.folder}/`;
   // The practice artifacts a course's modules start or update, in module order.
   const artifactsOf = part => {
     const ids = [];
@@ -40,8 +42,35 @@
   };
   const ours = artifactsOf(course);
   const isOurs = id => ours.some(a => a.id === id);
-  const artifactHref = id => isOurs(id) ? `#evidence/${id}` : `${pageOf(partOf(artifacts.find(a => a.id === id).module))}#evidence/${id}`;
-  const moduleHref = id => course.modules.includes(id) ? `#catalog/${id}` : `${pageOf(partOf(id))}#catalog/${id}`;
+  const artifactHref = id => `#evidence/${id}`;
+  const moduleHref = id => `#catalog/${id}`;
+
+  // Account progress: module completions (training:rmf-boe-ato:NN, /api/reader-progress) and the learner's Secure By
+  // Design enclave in the Authorization Workspace (/api/authorization/progress, the workspace's own phases() checks).
+  // A step is complete when its modules are marked complete and its workspace check passes.
+  const progress = { loaded: false, user: null, records: [], system: null, phases: [] };
+  const moduleDone = id => progress.records.some(r => r.id === `training:rmf-boe-ato:${id}` && r.status === 'completed');
+  const workspaceDone = step => progress.phases.find(p => p.id === step.id)?.done === true;
+  const stepState = step => {
+    const done = step.modules.filter(moduleDone).length, workspace = workspaceDone(step);
+    return { done, total: step.modules.length, workspace, complete: done === step.modules.length && workspace };
+  };
+  const stepNote = step => {
+    if (!progress.user) return `${step.modules.length} module${step.modules.length > 1 ? 's' : ''} · workspace · templates`;
+    const st = stepState(step);
+    return st.complete ? 'Step complete ✓' : `Modules ${st.done}/${st.total} · Workspace ${st.workspace ? '✓' : progress.system ? 'to do' : 'not started'}`;
+  };
+  async function loadProgress() {
+    if (location.protocol === 'file:') return;
+    try {
+      const [reader, workspace] = await Promise.all([fetch('/api/reader-progress', { cache: 'no-store' }), fetch('/api/authorization/progress', { cache: 'no-store' })]);
+      if (reader.ok) { const data = await reader.json(); progress.user = data.user || null; progress.records = data.records || []; }
+      if (workspace.ok) { const data = await workspace.json(); progress.system = data.system || null; progress.phases = data.steps || []; }
+      progress.loaded = true;
+    } catch { return; }
+    const r = route();
+    if (!r.moved) { renderPath(r); if (r.view === 'step') renderStep(r.id); }
+  }
 
   // The 3D scene (public/training/guide/scene.js, loaded as a module after this script) reads these. Module
   // indexes are the same on every course page, so each module's focus and flows stay put.
@@ -49,36 +78,35 @@
 
   function route() {
     const [view, id] = location.hash.slice(1).split('/');
-    if (view === 'evidence') {
-      if (!id || isOurs(id)) return { view: 'evidence', id: id || ours[0].id };
-      const artifact = artifacts.find(a => a.id === id);
-      return artifact ? { moved: artifactHref(id) } : { view: 'evidence', id: ours[0].id };
-    }
-    if (view === 'capstone') return course.capstone ? { view: 'capstone' } : { moved: `${pageOf(parts.find(part => part.capstone))}#capstone` };
-    if (view === 'sources' || view === 'steps') return { view };
-    if (view === 'catalog' && indexOf(id) >= 0) return course.modules.includes(id) ? { view: 'catalog', id } : { moved: moduleHref(id) };
-    return { view: 'catalog', id: course.modules[0] };
+    if (view === 'evidence') return { view: 'evidence', id: id && isOurs(id) ? id : ours[0].id };
+    if (view === 'capstone' || view === 'sources' || view === 'steps') return { view };
+    if (view === 'step' && steps.some(step => step.id === id)) return { view: 'step', id };
+    if (view === 'catalog' && indexOf(id) >= 0) return { view: 'catalog', id };
+    return { view: 'step', id: steps[0].id };
   }
 
   // Learning path: this course's modules (and its capstone), its workspace, then the three courses.
-  function chapter(href, num, title, note, current, word = false) {
-    return `<a class="chapter" href="${href}"${current ? ' aria-current="page"' : ''}><span class="num${word ? ' word' : ''}">${num}</span><span><b>${esc(title)}</b><small>${esc(note)}</small></span></a>`;
+  function chapter(href, num, title, note, current, word = false, extra = '') {
+    return `<a class="chapter${extra}" href="${href}"${current ? ' aria-current="page"' : ''}><span class="num${word ? ' word' : ''}">${num}</span><span><b>${esc(title)}</b><small>${esc(note)}</small></span></a>`;
   }
+  // Learning path: the seven steps, each with its modules beneath it, then the capstone and the course tools.
   function pathMarkup(r) {
     const here = (view, id) => r.view === view && (id === undefined || r.id === id);
-    return `<div class="path-course">Course ${course.number} · ${esc(course.title)}</div>${course.modules.map(id => {
-      const m = modules[indexOf(id)];
-      return chapter(`#catalog/${id}`, id, m.title, here('catalog', id) ? `Current module · ${m.phase}` : `${m.phase} · ${hours(m.hours)}`, here('catalog', id));
+    const done = progress.user ? id => moduleDone(id) : () => false;
+    return `<div class="path-course">Course ${course.number} · ${esc(course.title)}</div>${steps.map(step => {
+      const st = progress.user ? stepState(step) : null;
+      return chapter(`#step/${step.id}`, st?.complete ? '✓' : step.number, `Step ${step.number} · ${step.title}`, stepNote(step), here('step', step.id), false, ` step-chapter${st?.complete ? ' is-complete' : ''}`)
+        + step.modules.map(id => {
+          const m = modules[indexOf(id)];
+          return chapter(`#catalog/${id}`, done(id) ? '✓' : id, m.title, here('catalog', id) ? `Current module · ${hours(m.hours)}` : `${done(id) ? 'Complete · ' : ''}${hours(m.hours)}`, here('catalog', id), false, ` module-chapter${done(id) ? ' is-complete' : ''}`);
+        }).join('');
     }).join('')}${course.capstone ? chapter('#capstone', 'ATO', 'Authorization to Operate capstone', '4 hours · guided exercise', here('capstone'), true) : ''}
-      <div class="path-course">Course workspace</div>${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}
-      <div class="path-course">Network Authorization</div>${parts.map(part => part === course
-        ? chapter(`#catalog/${part.modules[0]}`, part.number, part.title, 'This course', false, true)
-        : chapter(`${pageOf(part)}#catalog/${part.modules[0]}`, part.number, part.title, `Modules ${part.modules[0]}–${part.modules.at(-1)}${part.capstone ? ' and the capstone' : ''}`, false, true)).join('')}`;
+      <div class="path-course">Course tools</div>${chapter('/authorization-workspace', 'WS', 'Authorization Workspace', progress.system ? `Your ${progress.system.acronym || 'system'}` : 'Do each step on your enclave', false, true)}${chapter('/training/ato-templates', 'Lib', 'ATO Template Library', 'Official sources and samples', false, true)}${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}`;
   }
   function renderPath(r) {
     $('module-list').innerHTML = pathMarkup(r);
     $('module-list-mobile').innerHTML = pathMarkup(r);
-    $('mobile-summary').textContent = r.view === 'catalog' ? `Module ${r.id} · Browse course ${course.number}` : `${viewLabel(r)} · Browse course ${course.number}`;
+    $('mobile-summary').textContent = r.view === 'catalog' ? `Step ${stepOf(r.id).number} · Module ${r.id} · Browse the course` : `${viewLabel(r)} · Browse the course`;
     main.querySelector('.mobile-path').open = false;
   }
 
@@ -107,8 +135,8 @@
   }
   function artifactList(ids) {
     return `<aside class="model-link artifact-links"><b>Practice artifacts</b><ul>${ids.map(id => {
-      const a = artifacts.find(item => item.id === id), home = partOf(a.module);
-      return `<li><a href="${artifactHref(id)}">${esc(a.title)} →</a>${isOurs(id) ? '' : ` <span class="elsewhere">course ${home.number}</span>`}<span class="purpose">${text(a.purpose)}</span></li>`;
+      const a = artifacts.find(item => item.id === id);
+      return `<li><a href="${artifactHref(id)}">${esc(a.title)} →</a><span class="purpose">${text(a.purpose)}</span></li>`;
     }).join('')}</ul></aside>`;
   }
 
@@ -117,14 +145,15 @@
     const tab = state.step[id] || 'step', pick = state.lesson[id] || 0;
     const previous = modules[index - 1], next = modules[index + 1];
     const panel = (name, body) => `<section class="content" role="tabpanel" id="${name}-panel" aria-labelledby="${name}-tab"${name === tab ? '' : ' hidden'}>${body}</section>`;
-    const prevLink = !previous ? '<span></span>' : course.modules.includes(previous.id)
-      ? `<a class="btn" href="#catalog/${previous.id}">← Previous module</a>`
-      : `<a class="btn" href="${moduleHref(previous.id)}">← Course ${partOf(previous.id).number}</a>`;
-    const nextLink = !next ? (course.capstone ? '<a class="btn primary" href="#capstone">Open the capstone →</a>' : '<span></span>')
-      : course.modules.includes(next.id) ? `<a class="btn primary" href="#catalog/${next.id}">Next module →</a>`
-      : `<a class="btn primary" href="${moduleHref(next.id)}">Course ${partOf(next.id).number}: ${esc(partOf(next.id).title)} →</a>`;
+    // Within a step, modules lead to each other; the last module of a step leads back to the step page, where the
+    // learner does the step in the Authorization Workspace before moving on.
+    const step = stepOf(id), lastInStep = step.modules.at(-1) === id;
+    const prevLink = !previous ? `<a class="btn" href="#step/${step.id}">← Step ${step.number} overview</a>` : step.modules[0] === id
+      ? `<a class="btn" href="#step/${step.id}">← Step ${step.number} overview</a>` : `<a class="btn" href="#catalog/${previous.id}">← Previous module</a>`;
+    const nextLink = lastInStep ? `<a class="btn primary" href="#step/${step.id}">Finish step ${step.number}: the workspace and templates →</a>`
+      : `<a class="btn primary" href="#catalog/${next.id}">Next module →</a>`;
     card.className = 'lesson';
-    card.innerHTML = `<header class="lesson-head"><div class="eyebrow">Course ${course.number} / Module ${m.id} · ${esc(m.phase)}</div><h2 id="view-title">${esc(m.title)}</h2><p>${text(m.outcome)}</p><p class="module-facts"><span>${hours(m.hours)}</span>${m.rmf.nist.length ? `<span>NIST ${esc(m.rmf.nist[0][0])}${m.rmf.nist.length > 1 ? `–${esc(m.rmf.nist.at(-1)[0])}` : ''}</span>` : ''}${m.rmf.jsig.length ? `<span>JSIG ${esc(m.rmf.jsig[0][0])}${m.rmf.jsig.length > 1 ? `–${esc(m.rmf.jsig.at(-1)[0])}` : ''}</span>` : ''}<span>Sources ${esc(m.sources)}</span></p></header>
+    card.innerHTML = `<header class="lesson-head"><div class="eyebrow"><a class="eyebrow-link" href="#step/${step.id}">Step ${step.number} · ${esc(step.title)}</a> / Module ${m.id} · ${esc(m.phase)}</div><h2 id="view-title">${esc(m.title)}</h2><p>${text(m.outcome)}</p><p class="module-facts"><span>${hours(m.hours)}</span>${m.rmf.nist.length ? `<span>NIST ${esc(m.rmf.nist[0][0])}${m.rmf.nist.length > 1 ? `–${esc(m.rmf.nist.at(-1)[0])}` : ''}</span>` : ''}${m.rmf.jsig.length ? `<span>JSIG ${esc(m.rmf.jsig[0][0])}${m.rmf.jsig.length > 1 ? `–${esc(m.rmf.jsig.at(-1)[0])}` : ''}</span>` : ''}<span>Sources ${esc(m.sources)}</span></p></header>
       <div class="tabs" role="tablist" aria-label="Module ${m.id}">${tabs.map(([key, label]) => `<button type="button" role="tab" id="${key}-tab" data-step="${key}" aria-controls="${key}-panel" aria-selected="${key === tab}" tabindex="${key === tab ? 0 : -1}">${label}</button>`).join('')}</div>
       ${panel('step', stepPanel(m))}
       ${panel('learn', `<div class="lesson-picks" role="tablist" aria-label="Module ${m.id} lessons">${m.lessons.map((label, i) => `<button type="button" role="tab" id="pick-${i}" data-lesson="${i}" aria-selected="${i === pick}" aria-controls="lesson-panel" tabindex="${i === pick ? 0 : -1}"><small>Lesson ${esc(label.split(' ')[0])}</small>${esc(label.slice(label.indexOf(' ') + 1))}</button>`).join('')}</div><div class="lesson-body" role="tabpanel" id="lesson-panel" aria-labelledby="pick-${pick}" tabindex="0">${lessonBody(index, pick)}</div><p class="help">Source references ${esc(m.sources)} · <a class="text-link" href="#sources">View the source documents</a></p>${nextStep('see', 'the worked example')}`)}
@@ -133,6 +162,42 @@
       ${panel('prove', `<div class="callout warm"><b>Explain and defend your work</b><p>${text(m.prove)}</p></div><p class="help">Use your outputs and evidence references to support your answer.</p>${quiz(index)}`)}
       <footer class="lesson-foot">${prevLink}${nextLink}</footer>`;
     syncNetwork();
+  }
+
+  // A step: its modules, the same task in the Authorization Workspace (with the learner's status), and its templates.
+  function workspacePanel(step) {
+    const st = stepState(step), base = '/authorization-workspace';
+    let status, action;
+    if (!progress.loaded) { status = 'Checking your workspace…'; action = `<a class="btn primary" href="${base}">Open the Authorization Workspace →</a>`; }
+    else if (!progress.user) { status = 'Sign in to save your progress and do this step on your own Secure By Design enclave.'; action = `<a class="btn primary" href="/my-progress?returnTo=${encodeURIComponent('/training/rmf/index.html#step/' + step.id)}">Sign in or create an account →</a>`; }
+    else if (!progress.system) { status = 'Start by registering your Secure By Design enclave in the workspace.'; action = `<a class="btn primary" href="${base}">Register your enclave →</a>`; }
+    else { status = st.workspace ? `Done on ${esc(progress.system.name)}.` : `Not done yet on ${esc(progress.system.name)}.`; action = `<a class="btn primary" href="${base}#system=${encodeURIComponent(progress.system.id)}&tab=${step.tab}">Open ${esc(progress.system.acronym || 'your system')} · ${esc(step.tab)} →</a>`; }
+    return `<section class="step-section workspace-task${st.workspace ? ' is-done' : ''}" aria-labelledby="step-do"><h3 class="panel-title" id="step-do"><span class="step-num">2</span>Do it in the Authorization Workspace</h3>
+      <p>${text(step.task)}</p><p class="done-when"><b>Done when</b> ${text(step.done)}</p><p class="workspace-status" role="status">${st.workspace ? '✓ ' : ''}${status}</p>${action}</section>`;
+  }
+  function templatesPanel(step) {
+    const official = library.templates.filter(t => t.group === step.id), samples = library.samples.filter(t => t.group === step.id);
+    const item = t => `<li><div><b>${esc(t.title)}</b><small>${esc(t.source)}</small></div><span class="tpl-links">${t.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} <small>${esc(l.format)}</small> ↗</a>`).join('')}</span></li>`;
+    const sample = t => `<li class="is-sample"><div><b>${esc(t.title)}</b><small>Secure By Design training sample · not an official form</small></div><span class="tpl-links"><a href="${esc(t.href)}" download>↓ Download <small>${esc(t.format)}</small></a></span></li>`;
+    const body = official.length || samples.length
+      ? `${official.length ? `<p class="tpl-kicker">Official sources, verified public</p><ul class="tpl-list">${official.map(item).join('')}</ul>` : ''}${samples.length ? `<p class="tpl-kicker">Practice templates</p><ul class="tpl-list">${samples.map(sample).join('')}</ul>` : ''}`
+      : `<p>The package is assembled from the documents of the earlier steps: the SSP with its SCTM, the RAR, the assessment results and the POA&amp;M. Use the <a class="text-link" href="#evidence/manifest">package manifest</a> and the capstone to bring them together.</p>`;
+    return `<section class="step-section" aria-labelledby="step-use"><h3 class="panel-title" id="step-use"><span class="step-num">3</span>Use the templates</h3>${body}<p class="help"><a class="text-link" href="/training/ato-templates#${step.id}">Open this step in the ATO Template Library →</a></p></section>`;
+  }
+  function renderStep(id) {
+    const step = steps.find(s => s.id === id), index = steps.indexOf(step), st = stepState(step);
+    const list = step.modules.map(mid => modules[indexOf(mid)]);
+    const range = key => { const all = list.flatMap(m => m.rmf[key]); return all.length ? `${all[0][0]}${all.length > 1 ? `–${all.at(-1)[0]}` : ''}` : ''; };
+    const studied = list.reduce((sum, m) => sum + Number(m.hours), 0);
+    const prev = steps[index - 1], next = steps[index + 1];
+    card.className = 'lesson wide';
+    card.innerHTML = `<header class="lesson-head"><div class="eyebrow">Course ${course.number} / Step ${step.number} of ${steps.length}</div><h2 id="view-title">${esc(step.title)}</h2><p>${text(step.lead)}</p><p class="module-facts"><span>${hours(studied)}</span>${range('nist') ? `<span>NIST ${esc(range('nist'))}</span>` : ''}${range('jsig') ? `<span>JSIG ${esc(range('jsig'))}</span>` : ''}<span>${list.length} module${list.length > 1 ? 's' : ''}</span></p>
+      ${progress.user ? `<p class="step-progress${st.complete ? ' is-complete' : ''}" role="status">${st.complete ? '✓ Step complete: its modules are complete and the workspace check passes.' : `Modules complete: ${st.done} of ${st.total} · Workspace: ${st.workspace ? 'done' : 'not yet'}`}</p>` : ''}</header>
+      <div class="content step-page">
+      <section class="step-section" aria-labelledby="step-learn"><h3 class="panel-title" id="step-learn"><span class="step-num">1</span>Learn</h3><ul class="step-modules">${list.map(m => `<li class="${moduleDone(m.id) ? 'is-done' : ''}"><a href="#catalog/${m.id}"><span class="mod-id">${moduleDone(m.id) ? '✓' : m.id}</span><span><b>${esc(m.title)}</b><small>${hours(m.hours)} · ${m.lessons.length} lessons${moduleDone(m.id) ? ' · complete' : ''}</small><span class="mod-outcome">${text(m.outcome)}</span></span></a></li>`).join('')}</ul></section>
+      ${workspacePanel(step)}
+      ${templatesPanel(step)}</div>
+      <footer class="lesson-foot">${prev ? `<a class="btn" href="#step/${prev.id}">← Step ${prev.number} · ${esc(prev.title)}</a>` : '<span></span>'}${next ? `<a class="btn primary" href="#step/${next.id}">Step ${next.number} · ${esc(next.title)} →</a>` : (course.capstone ? '<a class="btn primary" href="#capstone">Open the capstone →</a>' : '<span></span>')}</footer>`;
   }
 
   function renderTable(columns, rows) {
@@ -144,10 +209,10 @@
     card.className = 'lesson wide';
     const rows = course.modules.map(id => {
       const m = modules[indexOf(id)], r = m.rmf, list = tasks => tasks.length ? tasks.map(t => `<span class="nb">${esc(t[0])}</span>`).join(', ') : '—';
-      return `<tr><td><a class="text-link" href="#catalog/${id}">${id} ${esc(m.title)}</a></td><td>${esc(r.step)}</td><td>${list(r.nist)}</td><td>${list(r.jsig)}</td><td>${r.jsigOutputs.length ? r.jsigOutputs.map(esc).join('; ') : '—'}</td></tr>`;
+      return `<tr><td><a class="text-link" href="#step/${stepOf(id).id}">${stepOf(id).number} ${esc(stepOf(id).title)}</a></td><td><a class="text-link" href="#catalog/${id}">${id} ${esc(m.title)}</a></td><td>${esc(r.step)}</td><td>${list(r.nist)}</td><td>${list(r.jsig)}</td><td>${r.jsigOutputs.length ? r.jsigOutputs.map(esc).join('; ') : '—'}</td></tr>`;
     }).join('');
     card.innerHTML = `${wideHead(`Course ${course.number} / RMF step map`, 'Steps, tasks, and outputs', 'Each module follows one Risk Management Framework (RMF) step in NIST SP 800-37 Revision 2 order, with the matching tasks and outputs of the Joint Special Access Program Implementation Guide (JSIG), 11 April 2016. Open a module for its roles, its outputs, and where the two documents differ.')}
-      <div class="content"><div class="table-wrap"><table class="step-map"><thead><tr><th scope="col">Module</th><th scope="col">RMF step</th><th scope="col">NIST tasks</th><th scope="col">JSIG tasks</th><th scope="col">JSIG step outputs</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="content"><div class="table-wrap"><table class="step-map"><thead><tr><th scope="col">Step</th><th scope="col">Module</th><th scope="col">RMF step</th><th scope="col">NIST tasks</th><th scope="col">JSIG tasks</th><th scope="col">JSIG step outputs</th></tr></thead><tbody>${rows}</tbody></table></div>
       <div class="callout"><b>Two documents, one sequence</b><p>NIST SP 800-37 Revision 2 has seven steps, starting with Prepare. The 2016 JSIG follows Revision 1's six steps, from Categorize to Monitor, with SP 800-53 Revision 4 and CNSSI 1253 (March 2014). Confirm whether your program directs the JSIG, its successor, or other guidance.</p></div></div>`;
   }
 
@@ -158,7 +223,7 @@
     card.innerHTML = `${wideHead(`Course ${course.number} / Evidence workspace · ${ours.length} practice artifacts`, 'Evidence workspace', esc(course.workspace))}
       <div class="content"><div class="evidence-layout"><nav class="artifact-menu" aria-label="Practice artifacts">${ours.map(item => `<button type="button" data-artifact="${item.id}" aria-pressed="${item.id === id}"><span>${esc(item.short)}</span>${esc(item.title)}</button>`).join('')}</nav>
       <article class="artifact-sheet" aria-labelledby="artifact-title"><div class="artifact-sheet-head"><div><div class="eyebrow ink">${esc(a.kind)}</div><h3 id="artifact-title">${esc(a.title)}</h3><p>Owner: ${esc(a.owner)}</p></div><div class="toggle" role="group" aria-label="Artifact view"><button type="button" data-mode="example" aria-pressed="${example}">Example</button><button type="button" data-mode="template" aria-pressed="${!example}">Blank starter</button></div></div>
-      <div class="artifact-actions"><button type="button" class="btn primary" data-download="md">↓ ${example ? 'Example' : 'Starter'} · Markdown</button>${a.columns ? '<button type="button" class="btn" data-download="csv">↓ CSV</button>' : ''}<a class="btn" href="${moduleHref(a.module)}">Starts in module ${a.module}${course.modules.includes(a.module) ? '' : ` · course ${partOf(a.module).number}`}</a></div>
+      <div class="artifact-actions"><button type="button" class="btn primary" data-download="md">↓ ${example ? 'Example' : 'Starter'} · Markdown</button>${a.columns ? '<button type="button" class="btn" data-download="csv">↓ CSV</button>' : ''}<a class="btn" href="${moduleHref(a.module)}">Starts in module ${a.module} · step ${stepOf(a.module).number}</a></div>
       <div class="artifact-preview"><h4>${example ? 'Fictional exercise excerpt' : 'Your starting structure'}</h4><p>${text(a.purpose)}</p>${preview}</div><div class="artifact-note">${text(a.note)}</div></article></div>
       <p class="help workspace-note">These starters are editable text documents; the course's training materials download includes every one as Markdown (and CSV for tables). The exercise records describe technical evidence to collect; those exports are not included.</p></div>`;
   }
@@ -262,6 +327,7 @@
   $('reset-view').addEventListener('click', () => window.dispatchEvent(new Event('sbd-reset-camera')));
 
   function viewLabel(r) {
+    if (r.view === 'step') { const step = steps.find(s => s.id === r.id); return `Step ${step.number} · ${step.title}`; }
     return r.view === 'catalog' ? modules[indexOf(r.id)].title : ({evidence:'Evidence workspace', capstone:'Authorization to Operate capstone', sources:'Source documents', steps:'RMF step map'}[r.view]);
   }
   function render(shouldFocus = false) {
@@ -270,6 +336,7 @@
     renderPath(r);
     $('network').hidden = r.view !== 'catalog';
     if (r.view === 'catalog') renderModule(r.id);
+    else if (r.view === 'step') renderStep(r.id);
     else if (r.view === 'evidence') renderEvidence(r.id);
     else if (r.view === 'capstone') renderCapstone();
     else if (r.view === 'steps') renderSteps();
@@ -312,4 +379,9 @@
     event.preventDefault(); main.focus({preventScroll:true}); main.scrollIntoView({block:'start'});
   });
   render();
+  // Load account progress after the first render; refresh it when the learner comes back from the workspace or
+  // saves a module (public/training/account-progress.js sends sbd-progress-changed).
+  loadProgress();
+  window.addEventListener('focus', loadProgress);
+  window.addEventListener('sbd-progress-changed', loadProgress);
 })();

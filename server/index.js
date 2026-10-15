@@ -55,6 +55,14 @@ function retiredCourse(url){
  // old download, which the app's saved materials still link to, lands on the course 2.1 workbook.
  if(path==='/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx')return new URL('/training/rmf/SecureByDesign-rmf-Workbook.docx',url).toString();
  if(path==='/training/rmf/catalog-cover.webp')return new URL('/training/rmf/workbook-cover.webp',url).toString();
+ // Network Authorization became one course (15 October 2026): the former 2.2 and 2.3 pages and their downloads land on
+ // course 2.1 "RMF to ATO". Browsers keep the #catalog/NN or #evidence/<id> fragment, which the course page opens.
+ const merged=/^\/training\/(rmf-body-of-evidence|rmf-authorization-to-operate)(?:\/(.*))?$/.exec(path);
+ if(merged){
+  const file=merged[2]||'',ext=/-Workbook\.(docx|pdf)$/.exec(file)?.[1];
+  const target=ext?`/training/rmf/SecureByDesign-rmf-Workbook.${ext}`:file.endsWith('-Learning-Package.zip')?'/training/rmf/SecureByDesign-rmf-Learning-Package.zip':file==='workbook-cover.webp'?'/training/rmf/workbook-cover.webp':'/training/rmf/index.html';
+  return new URL(target,url).toString();
+ }
  // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.
  if(path==='/threat-map'||path==='/threat-map/')return new URL('/#threat-map',url).toString();
  return null;

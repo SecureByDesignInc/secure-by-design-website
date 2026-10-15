@@ -111,6 +111,25 @@ test('an account keeps one Secure By Design enclave and no two systems share a n
  assert.equal((await call(env,'alice','POST','/systems',{template:'__proto__'})).status,400);
 });
 
+// Course 2.1 "RMF to ATO" and My Progress read where the learner's enclave stands on each RMF step.
+test('step progress reports the enclave\'s phases and nothing for signed-out visitors',async()=>{
+ const env=setup();
+ assert.deepEqual((await call(env,null,'GET','/progress')).data,{user:null,system:null,steps:[]});
+ assert.deepEqual((await ok(call(env,'alice','GET','/progress'))).system,null,'no enclave yet');
+ await ok(call(env,'alice','POST','/systems',{template:'blank',name:'Other system'}),201);
+ assert.equal((await ok(call(env,'alice','GET','/progress'))).system,null,'only the Secure By Design enclave counts');
+ const {system}=await register(env);
+ let p=await ok(call(env,'alice','GET','/progress'));
+ assert.equal(p.system.id,system.id);
+ assert.deepEqual(p.steps.map(s=>s.id),['prepare','categorize','select','implement','assess','authorize','monitor']);
+ assert.equal(p.steps.find(s=>s.id==='prepare').done,false);
+ await ok(call(env,'alice','PATCH',`/systems/${system.id}`,profile));
+ p=await ok(call(env,'alice','GET','/progress'));
+ assert.deepEqual(p.steps.filter(s=>s.done).map(s=>s.id),['prepare','categorize','select']);
+ assert.equal((await ok(call(env,'bob','GET','/progress'))).system,null,'each account sees only its own enclave');
+ assert.equal((await call(env,'alice','POST','/progress',{})).status,405);
+});
+
 // drizzle/0015 cleans up duplicates made before the fix: untouched copies go, worked-on systems stay.
 test('the one-enclave migration removes untouched duplicates and keeps work',()=>{
  const raw=new DatabaseSync(':memory:');

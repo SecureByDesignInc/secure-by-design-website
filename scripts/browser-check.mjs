@@ -159,48 +159,57 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
-// Network Authorization courses 2.1–2.3 (scripts/prepare-rmf-courses.mjs), one page each. Open each course's first
-// module from the old single-page address, check it lands on that course's page, walk the five module tabs, then open
-// the course's evidence workspace (and the capstone on 2.3). Screenshots are kept for review.
+// Network Authorization, course 2.1 "RMF to ATO" (scripts/prepare-rmf-courses.mjs): one page organized by the seven RMF
+// steps. Open it, check the step page and learning path, walk a module's five tabs, follow an old 2.2 address to the
+// same module here, then open the evidence workspace and the capstone. Screenshots are kept for review.
 const rmfData = { window: {} };
 for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(readFileSync(`public/training/rmf/${file}`, 'utf8'), rmfData);
-const { CATALOG_PARTS: rmfParts, CATALOG: rmfModules, LEARNING: rmfLessons } = rmfData.window;
+const { CATALOG_PARTS: rmfParts, CATALOG: rmfModules, LEARNING: rmfLessons, RMF_STEPS: rmfSteps } = rmfData.window;
 for (const part of rmfParts) {
-  const page = await context.newPage();
-  const errors = [];
-  page.on('pageerror', error => errors.push(String(error.message || error).slice(0, 200)));
-  const first = part.modules[0], at = `/training/${part.folder}/`;
-  const artifacts = new Set(part.modules.flatMap(id => rmfLessons[rmfModules.findIndex(m => m.id === id)].artifacts));
-  try {
-    // The 2.1 page moves a 2.2 or 2.3 module to its own page while loading, which can interrupt this navigation.
-    await page.goto(`${base}/training/rmf/index.html#catalog/${first}`, { waitUntil: 'load', timeout: 60000 }).catch(() => {});
-    await page.waitForURL(url => url.pathname.replace(/index\.html$/, '') === at && url.hash === `#catalog/${first}`, { timeout: 15000 });
-    await page.locator('#lesson .tabs').waitFor({ timeout: 15000 });
-    const listed = await page.locator('#module-list .num:not(.word)').count();
-    if (listed !== part.modules.length) throw new Error(`${listed} modules listed, expected ${part.modules.length}`);
-    for (const [name, panel] of [['Learn', '#learn-panel .lesson-body'], ['See', '#see-panel .step'], ['Build', '#build-panel .artifact-links'], ['Prove', '#prove-panel .quiz'], ['RMF step', '#step-panel .controlid']]) {
-      await page.getByRole('tab', { name, exact: true }).click();
-      await page.locator(panel).first().waitFor({ timeout: 5000 });
+  for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
+    const page = await context.newPage();
+    await page.setViewportSize(size);
+    const errors = [];
+    page.on('pageerror', error => errors.push(String(error.message || error).slice(0, 200)));
+    const artifacts = new Set(part.modules.flatMap(id => rmfLessons[rmfModules.findIndex(m => m.id === id)].artifacts));
+    try {
+      await page.goto(`${base}/training/${part.folder}/`, { waitUntil: 'load', timeout: 60000 });
+      await page.locator('#lesson .step-page').waitFor({ timeout: 15000 });
+      const stepsListed = await page.locator('#module-list .step-chapter').count(), modulesListed = await page.locator('#module-list .module-chapter').count();
+      if (stepsListed !== rmfSteps.length || modulesListed !== part.modules.length) throw new Error(`${stepsListed} steps and ${modulesListed} modules listed, expected ${rmfSteps.length} and ${part.modules.length}`);
+      if (!(await page.locator('.workspace-task').count()) || !(await page.locator('.tpl-list li').count())) throw new Error('the step page has no workspace task or templates');
+      await page.screenshot({ path: `guide-screens/rmf-step-prepare-${label}.png`, fullPage: label === 'phone' });
+      await page.evaluate(() => { location.hash = 'step/assess'; });
+      await page.locator('#view-title', { hasText: 'Assess' }).waitFor({ timeout: 5000 });
+      await page.screenshot({ path: `guide-screens/rmf-step-assess-${label}.png`, fullPage: label === 'phone' });
+      if (label === 'desktop') {
+        // An old course 2.2 address lands on the same module here (server/index.js keeps the fragment).
+        await page.goto(`${base}/training/rmf-body-of-evidence/index.html#catalog/05`, { waitUntil: 'load', timeout: 60000 }).catch(() => {});
+        await page.waitForURL(url => url.pathname.replace(/index\.html$/, '') === `/training/${part.folder}/` && url.hash === '#catalog/05', { timeout: 15000 });
+        await page.locator('#lesson .tabs').waitFor({ timeout: 15000 });
+        for (const [name, panel] of [['Learn', '#learn-panel .lesson-body'], ['See', '#see-panel .step'], ['Build', '#build-panel .artifact-links'], ['Prove', '#prove-panel .quiz'], ['RMF step', '#step-panel .controlid']]) {
+          await page.getByRole('tab', { name, exact: true }).click();
+          await page.locator(panel).first().waitFor({ timeout: 5000 });
+        }
+        await page.waitForTimeout(1200);
+        const scene = (await page.locator('#stage canvas').count()) ? 'canvas' : (await page.locator('#fallback:not([hidden])').count()) ? 'fallback' : '';
+        if (!scene) throw new Error('neither the authorization view nor its fallback appeared');
+        await page.screenshot({ path: `guide-screens/rmf-module-05-${label}.png` });
+        await page.evaluate(() => { location.hash = 'evidence'; });
+        await page.locator('.artifact-menu button').first().waitFor({ timeout: 5000 });
+        const shown = await page.locator('.artifact-menu button').count();
+        if (shown !== artifacts.size) throw new Error(`${shown} practice artifacts shown, expected ${artifacts.size}`);
+        await page.evaluate(() => { location.hash = 'capstone'; });
+        await page.locator('.deliverables li').first().waitFor({ timeout: 5000 });
+      }
+      if (errors.length) throw new Error('script error: ' + errors.join(' | '));
+      guides.push(`Course ${part.number} ${label} ok (${stepsListed} steps, ${modulesListed} modules)`);
+    } catch (error) {
+      guides.push(`Course ${part.number} ${label}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
+      blocking++;
     }
-    await page.waitForTimeout(1200);
-    const scene = (await page.locator('#stage canvas').count()) ? 'canvas' : (await page.locator('#fallback:not([hidden])').count()) ? 'fallback' : '';
-    if (!scene) throw new Error('neither the authorization view nor its fallback appeared');
-    await page.screenshot({ path: `guide-screens/rmf-${part.number}-desktop.png` });
-    await page.evaluate(() => { location.hash = 'evidence'; });
-    await page.locator('.artifact-menu button').first().waitFor({ timeout: 5000 });
-    const shown = await page.locator('.artifact-menu button').count();
-    if (shown !== artifacts.size) throw new Error(`${shown} practice artifacts shown, expected ${artifacts.size}`);
-    if (part.capstone) {
-      await page.evaluate(() => { location.hash = 'capstone'; });
-      await page.locator('.deliverables li').first().waitFor({ timeout: 5000 });
-    }
-    if (errors.length) throw new Error('script error: ' + errors.join(' | '));
-    guides.push(`Course ${part.number} ok (${scene}, ${listed} modules, ${shown} artifacts)`);
-  } catch (error) {
-    guides.push(`Course ${part.number}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
-    blocking++;
+    await page.close();
   }
-  await page.close();
 }
 await phone.close();
 
@@ -240,6 +249,8 @@ await check('security.txt', { path: '/security.txt' }, async r => r.status === 2
 await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
 await check('apple-app-site-association', { path: '/.well-known/apple-app-site-association' }, async r => r.status === 200 && (r.headers.get('content-type') || '').includes('application/json') && (await r.text()).includes('PZK2PZT6KP.com.securebydesigninc.secureByDesignApp'));
 await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA' }, async r => r.status === 200 && (await r.text()).includes('securebydesign://auth?code=AAAAAAAAAAAAAAAAAAAAAAAA'));
+await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/index.html'));
+await check('old course 2.3 package moves to the course 2.1 package', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/SecureByDesign-rmf-Learning-Package.zip'));
 await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
