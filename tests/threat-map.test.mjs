@@ -89,6 +89,6 @@ test('Radware’s “Contact sales” button is blurred', () => {
   const css = read('app/template-shared.css');
   assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
   assert.match(css, /\.sbd-sales-cover\.is-shown\{[^}]*pointer-events:auto/, 'the cover catches clicks meant for the button');
-  // The credit no longer says the map is shown unchanged.
-  assert.doesNotMatch(read('app/home-threat-map.tsx'), /shown here unchanged/);
+  // Owner's request (15 October 2026): the page doesn't mention the blur or call the map unchanged.
+  assert.doesNotMatch(read('app/home-threat-map.tsx'), /blurred|unchanged/i);
 });
