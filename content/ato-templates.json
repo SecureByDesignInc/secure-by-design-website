@@ -39,6 +39,62 @@
       "note": "Keep the authorization current: watch the controls, review changes and report on schedule."
     }
   ],
+  "samples": [
+    {
+      "title": "SCTM workbook (NIST SP 800-53 Rev. 5)",
+      "artifact": "SCTM",
+      "rmf": "S-1, S-2, I-2, A-3",
+      "format": "XLSX",
+      "href": "/training/library/training-samples/SBD-Training-SCTM-SP800-53r5.xlsx",
+      "basis": "JSIG Tasks 2-2 and 3-2; NIST SP 800-53 Rev. 5 Release 5.2.0, SP 800-53A and SP 800-53B (NIST OSCAL data)",
+      "note": "All 1,014 Rev. 5 controls and enhancements with NIST's baseline marks and SP 800-53A methods, plus columns to record the CNSSI 1253 baseline, overlays, tailoring rationale, implementation and assessment result. A summary sheet counts status and results as you fill it in."
+    },
+    {
+      "title": "POA&M workbook",
+      "artifact": "POA&M",
+      "rmf": "A-6, M-3",
+      "format": "XLSX",
+      "href": "/training/library/training-samples/SBD-Training-POAM.xlsx",
+      "basis": "JSIG Task 5-1; CDSE POA&M Job Aid field names; NIST SP 800-30 risk scale",
+      "note": "eMASS-style columns, one row per milestone, with the JSIG minimum (tasks, resources, milestones with percentage complete, scheduled dates) and a summary sheet."
+    },
+    {
+      "title": "ISSM, ISSO and ISSE appointment letters",
+      "artifact": "Appointment letters",
+      "rmf": "P-1",
+      "format": "DOCX",
+      "href": "/training/library/training-samples/SBD-Training-RMF-Appointment-Letters.docx",
+      "basis": "JSIG sections 1.5.13 to 1.5.15; DCSA ISSM appointment letter layout",
+      "note": "Three memoranda, one page each, with the duties the JSIG assigns each role, who appoints them, and an acknowledgment block."
+    },
+    {
+      "title": "Hardware and software lists",
+      "artifact": "Hardware/software lists",
+      "rmf": "P-10, I-2",
+      "format": "XLSX",
+      "href": "/training/library/training-samples/SBD-Training-Hardware-Software-Lists.xlsx",
+      "basis": "JSIG CM-3, CM-7 and CM-8",
+      "note": "A hardware list with the JSIG CM-8 minimum fields and an approved software list (deny-all, permit-by-exception), each with CCB approval and integrity-check columns."
+    },
+    {
+      "title": "Continuous monitoring strategy",
+      "artifact": "ConMon strategy",
+      "rmf": "S-5, M-2, M-5",
+      "format": "DOCX",
+      "href": "/training/library/training-samples/SBD-Training-ConMon-Strategy.docx",
+      "basis": "JSIG RMF Step 6 and CA-7; NIST SP 800-53 Rev. 5 CA-7; NIST SP 800-137",
+      "note": "Roles, metrics, monitoring and assessment frequencies, analysis, reporting and change handling, organized by CA-7 a to g, with fill-in tables."
+    },
+    {
+      "title": "Configuration management plan",
+      "artifact": "CM plan",
+      "rmf": "I-1, M-1",
+      "format": "DOCX",
+      "href": "/training/library/training-samples/SBD-Training-CM-Plan.docx",
+      "basis": "JSIG CM-2, CM-3, CM-4, CM-7, CM-8 and CM-9; NIST SP 800-53 Rev. 5 CM-9; NIST SP 800-128",
+      "note": "Roles, configuration items, baselines, the CCB and the JSIG's site rules, a six-step change process with a worked change request, compliance monitoring and plan approval."
+    }
+  ],
   "templates": [
     {
       "group": "prepare",
