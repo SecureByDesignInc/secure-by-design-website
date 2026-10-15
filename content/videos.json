@@ -870,13 +870,14 @@
       "id": "splunk-analysis",
       "categoryOrder": 12,
       "number": "1.12",
-      "estimatedHours": 2.8,
+      "estimatedHours": 3.7,
       "title": "Analyze the record in SBD-SPLUNK01",
-      "subtitle": "Search a working copy, own the alerts, prove the chain",
-      "description": "The last of three logging courses: build SBD-SPLUNK01 as a domain-joined Linux server patched only from SBD-REPO01, install Splunk Enterprise from hashed media, forward the collector's two streams over TLS, build the searches that answer this network's first questions, turn them and the pipeline's own failures into alerts someone owns, and trace one event from its source through the collector and the repository to the analyst's screen.",
+      "subtitle": "Search a working copy, harden it, own the alerts, prove the chain",
+      "description": "The last of three logging courses: build SBD-SPLUNK01 as a single Splunk instance on domain-joined Linux patched only from SBD-REPO01, install Splunk Enterprise from hashed media, forward the collector's two streams over TLS, harden it to DISA's STIG, build the searches that answer this network's first questions, turn them and the pipeline's own failures into alerts someone owns, and trace one event from its source to the analyst's screen.",
       "tags": [
         "Splunk",
         "Linux",
+        "STIG",
         "Logging",
         "SIEM",
         "Alerting"
@@ -892,23 +893,28 @@
         "Alerts someone owns"
       ],
       "outcomes": [
-        "Plan analysis — indexes, a retention period set for your environment, roles, and console paths — and build SBD-SPLUNK01 on domain time, patched only from SBD-REPO01.",
-        "Install Splunk Enterprise and forward the collector's two streams over TLS, with counts and times that match the collector.",
-        "Build the working searches and turn them, and the pipeline's own failures, into tested alerts with named responders.",
+        "Plan the single instance — indexes, retention, roles, console paths — and build SBD-SPLUNK01, patched only from SBD-REPO01.",
+        "Prepare the host, install Splunk, and forward the collector's streams over TLS, matching its counts and times.",
+        "Harden Splunk to DISA's STIG and record each item met another way.",
+        "Build working searches, and turn them and the pipeline's failures into tested alerts someone owns.",
         "Trace one event from its source through the collector and the repository to the analyst's screen."
       ],
       "stages": [
         {
           "title": "Plan analysis and build SBD-SPLUNK01",
-          "detail": "Analysis works on a copy, not on the record: SBD-AUDIT01 keeps the evidence, and SBD-SPLUNK01 keeps a searchable working copy, for a period your environment sets, for the people who question them. Decide the indexes, retention, roles, and console paths first, then build the domain-joined Linux host that runs it — patched only from SBD-REPO01 and on domain time from its first boot."
+          "detail": "Analysis works on a copy, not on the record: SBD-AUDIT01 keeps the evidence, and SBD-SPLUNK01 keeps a searchable working copy, for a period your environment sets, for the people who question them. Decide what the single instance holds, its indexes, retention, roles, and console paths first, then build the domain-joined Linux host that runs it — patched only from SBD-REPO01 and on domain time from its first boot."
         },
         {
-          "title": "Install Splunk and bring in the streams",
-          "detail": "Install Splunk Enterprise on SBD-SPLUNK01 with the indexes, roles, and TLS receiving port lesson 1 designed, then put a universal forwarder on SBD-SYSLOG01 that reads the collector's two streams and sends them over rule F10. Finish by proving the copy is faithful: Splunk's counts and times must match the collector's."
+          "title": "Prepare the host, install Splunk, and bring in the streams",
+          "detail": "Prepare SBD-SPLUNK01's hardened Linux for Splunk, then install Splunk Enterprise with the indexes, roles, and TLS receiving port lesson 1 designed, its indexes hashing every event from the first. Put a universal forwarder on SBD-SYSLOG01 that reads the collector's two streams and sends them over rule F10, and finish by proving the copy is faithful: Splunk's counts and times must match the collector's."
+        },
+        {
+          "title": "Harden Splunk to the STIG",
+          "detail": "Splunk now holds the network's working copy, and DISA's Splunk Enterprise STIG says how it should behave. Before anyone else signs in, put the settings in place: the notice and session limits at the front door, password and lockout rules for Splunk's own accounts, a free-space reserve the health report watches, and Splunk's audit trail under review. Then create the people's accounts, seal the install-time admin, and record every STIG item this network meets another way."
         },
         {
           "title": "Build the working searches",
-          "detail": "Analysis earns its place with three working searches: failed privileged sign-ins, the boundary's denies, and the health of time — questions this network can already answer about itself. Build them as an analyst, prove each against an event you caused, and save them for the alerts in lesson 4."
+          "detail": "Analysis earns its place with three working searches: failed privileged sign-ins, the boundary's denies, and the health of time — questions this network can already answer about itself. Build them as an analyst, prove each against an event you caused, and save them for the alerts in lesson 5."
         },
         {
           "title": "Own the alerts",
@@ -924,8 +930,8 @@
       "afterEpisode": "dc01-dc02",
       "categoryId": "network-build",
       "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
+      "moduleCount": 6,
+      "lessonCount": 6,
       "training": {
         "guide": "/training/splunk-analysis",
         "checklist": "/training/splunk-analysis/configuration-checklist.md",
@@ -933,10 +939,10 @@
         "pdf": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.pdf",
         "word": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.docx",
         "package": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Learning-Package.zip",
-        "pages": 18,
+        "pages": 22,
         "cover": "/training/splunk-analysis/workbook-cover.webp",
-        "materialsEdition": "1.0",
-        "updated": "14 October 2026"
+        "materialsEdition": "2.0",
+        "updated": "15 October 2026"
       }
     },
     {

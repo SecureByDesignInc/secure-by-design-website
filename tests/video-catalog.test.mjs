@@ -122,7 +122,7 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 7, 5, 5, 5, 6]);
+  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 6, 7, 5, 5, 5, 6]);
   // Every Build the Network tile is numbered in path order, 1.1 to 1.19; coming-soon tiles hold their place without material.
   assert.deepEqual(getCatalogEntries(library).filter(entry => entry.categoryId === 'network-build' || entry.id === 'dc01-dc02').map(entry => entry.number), Array.from({ length: 19 }, (_, i) => `1.${i + 1}`));
   assert.deepEqual(library.courses.filter(course => course.kind === 'coming-soon').map(course => course.id), ['endpoint-protection', 'vulnerability-scanning']);

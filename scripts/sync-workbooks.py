@@ -86,6 +86,7 @@ BREAK_BEFORE = {
     ("patch-protect", "wsus-offline", "Think it through"),
     ("linux-repository", "repo", "Think it through"),
     ("prove-recovery", "directory", "Your record"),
+    ("splunk-analysis", "prove", "Your record"),
 }
 # Paragraph properties that come before w:pageBreakBefore in w:pPr (schema order).
 PPR_BEFORE_PAGE_BREAK = ("pStyle", "keepNext", "keepLines")
