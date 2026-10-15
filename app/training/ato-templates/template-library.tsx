@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import templates from '../../../content/ato-templates.json';
-import TemplateEntry from '../../videos/template-entry';
+import TemplateEntry, { SampleEntry } from '../../videos/template-entry';
 import { sourcesPhrase } from '../../videos/template-labels';
 
 const checked = new Date(`${templates.checked}T12:00:00Z`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -29,7 +29,9 @@ export default function TemplateLibrary() {
         <div className="vc-intro-copy">
           <p>
             {sourcesPhrase(total)} for building an authorization package, arranged by RMF step. Each one is
-            verified as publicly released by its publisher, and every link opens the publisher&apos;s own copy.
+            verified as publicly released by its publisher, and every link opens the publisher&apos;s own copy. Below them
+            are {templates.samples.length} Secure By Design training samples for the documents with no public DoD or JSIG
+            version.
           </p>
         </div>
       </section>
@@ -75,8 +77,26 @@ export default function TemplateLibrary() {
           </section>
         ))}
 
+        <section id="training-samples" className="tl-group tl-samples" aria-labelledby="training-samples-title">
+          <div className="vc-category-heading">
+            <div>
+              <p className="vc-kicker">SECURE BY DESIGN TRAINING SAMPLES</p>
+              <h3 id="training-samples-title">Practice templates <span className="tl-abbr">Not official forms</span></h3>
+              <p>
+                No public DoD or JSIG version exists for these documents, so Secure By Design wrote practice versions from
+                the public JSIG, CNSSI 1253 and NIST guidance named on each. They are not DoD, DCSA, PSO or AO forms. Fill
+                them in with fictional data only, and use your AO&apos;s and PSO&apos;s templates on a real system.
+              </p>
+            </div>
+            <span>{templates.samples.length} files</span>
+          </div>
+          <ul className="vc-library-list tl-list">
+            {templates.samples.map(item => <SampleEntry key={item.href} item={item} heading="h4" />)}
+          </ul>
+        </section>
+
         <div className="vc-library-footer">
-          <p>Official documents belong to their publishers. Links checked {checked}.</p>
+          <p>Official documents belong to their publishers. Training samples © 2026 Secure By Design Team LLC. Links checked {checked}.</p>
           <Link href="/training">
             <ArrowLeft size={17} /> Back to the Training Library
           </Link>

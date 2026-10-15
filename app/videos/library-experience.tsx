@@ -6,7 +6,7 @@ import { ArrowUpRight, BookOpen, FileText, Maximize2 } from 'lucide-react';
 import type { ReferenceLibrary } from './catalog-types';
 import { CompanionHeading, CompanionMaterials, type CompanionLink } from './companion';
 import templates from '../../content/ato-templates.json';
-import TemplateEntry from './template-entry';
+import TemplateEntry, { SampleEntry } from './template-entry';
 import { sourcesPhrase } from './template-labels';
 
 export default function LibraryExperience({ library }: { library: ReferenceLibrary }) {
@@ -88,6 +88,10 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
         <div className="vc-library-stage">
           <ul className="vc-library-list">
             {templates.templates.map(item => <TemplateEntry key={item.title} item={item} />)}
+          </ul>
+          <p className="vc-kicker vc-library-samples-kicker">SECURE BY DESIGN TRAINING SAMPLES · NOT OFFICIAL FORMS · FICTIONAL DATA ONLY</p>
+          <ul className="vc-library-list">
+            {templates.samples.map(item => <SampleEntry key={item.href} item={item} />)}
           </ul>
         </div>
       </section>

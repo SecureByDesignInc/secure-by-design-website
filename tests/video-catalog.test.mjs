@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
@@ -424,6 +424,14 @@ test('the ATO Template Library tile lists only verified public sources, linked t
   // Nothing is hosted: the owner's JSIG files, the adaptations, the README and the ZIP stay removed.
   assert.ok(!existsSync(new URL('../public/training/library/ato-templates/', import.meta.url)), 'no library files are posted');
   assert.equal(templates.download, undefined, 'no download-all ZIP');
+  // Secure By Design training samples (owner direction, 15 October 2026): original practice templates written from
+  // public guidance, hosted in their own folder, named SBD-Training-*, and labeled as not official forms.
+  const sampleFiles = readdirSync(new URL('../public/training/library/training-samples/', import.meta.url)).sort();
+  assert.deepEqual(templates.samples.map(item => item.href.split('/').pop()).sort(), sampleFiles, 'every sample file is listed, and only those');
+  for (const item of templates.samples) {
+    assert.match(item.href, /^\/training\/library\/training-samples\/SBD-Training-[A-Za-z0-9-]+\.(docx|xlsx)$/, `${item.title} file`);
+    assert.ok(item.title && item.artifact && item.rmf && item.basis && item.note && item.format, `${item.title} details`);
+  }
   for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
   assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['ato-templates']);
 });
