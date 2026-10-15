@@ -81,8 +81,10 @@ export const readerAuthFlows=sqliteTable('reader_auth_flows',{
 // Authorization Workspace (0014): each learner's practice systems, controls, evidence, POA&M, packages and audit trail.
 export const authSystems=sqliteTable('auth_systems',{
  id:text('id').primaryKey(),accountId:text('account_id').notNull().references(()=>readerAccounts.id,{onDelete:'cascade'}),
- profile:text('profile').notNull(),currentDecision:text('current_decision'),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()
-},t=>[index('idx_auth_systems_account').on(t.accountId)]);
+ profile:text('profile').notNull(),currentDecision:text('current_decision'),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull(),
+ // 'sbd-enclave' for the one Secure By Design enclave an account may keep (drizzle/0015); NULL otherwise.
+ registrationKey:text('registration_key')
+},t=>[index('idx_auth_systems_account').on(t.accountId),uniqueIndex('uq_auth_systems_registration').on(t.accountId,t.registrationKey)]);
 export const authControls=sqliteTable('auth_controls',{
  systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),controlId:text('control_id').notNull(),
  implementationStatus:text('implementation_status').notNull().default('planned'),provider:text('provider'),narrative:text('narrative').notNull().default(''),

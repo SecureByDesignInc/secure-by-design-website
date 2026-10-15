@@ -60,3 +60,7 @@ To refresh after NIST updates the catalog: clone or download that folder, run `p
 ## Tests
 
 `tests/authorization.test.mjs` covers the catalog, signed-out access, ownership and origin checks, limits, the control approval chain, an ATO with conditions, a denial for CAT I followed by remediation and a full ATO, risk acceptance decisions, the ISSM's independence, categorization and inheritance checks, monitoring alerts, and deletion with the system and the account.
+
+## One registration per system
+
+An account keeps one Secure By Design enclave (`once: true` on its template in `lib/authorization/model.mjs`), and no two of its systems share a name (compared ignoring case and spacing). The server checks both before registering, and `auth_systems.registration_key` (`'sbd-enclave'` for the enclave, NULL for blank systems) has a unique index on (`account_id`, `registration_key`), so two requests sent together cannot both create an enclave. Once the enclave exists, the page shows it as already added with a button to open it, and ignores a second tap while a registration is in flight. Deleting the enclave frees the key. Migration `drizzle/0015_auth_one_enclave.sql` removed duplicate enclaves made before this rule if nothing was ever saved in them; a duplicate someone worked on was kept, without the key, for them to review or delete.

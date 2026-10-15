@@ -1,5 +1,5 @@
 'use client';
-import {useCallback,useEffect,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import {TEMPLATES,DECISION_SHORT,authorizationStatus} from '../../lib/authorization/model.mjs';
 import {api,Badge,decisionTone,formatDate,type State,type System} from './shared';
 import SystemView from './system-view';
@@ -53,9 +53,21 @@ function Landing(){
 }
 
 function Systems({list,open,created}:{list:List;open:(id:string)=>void;created:(s:State)=>void}){
- const [template,setTemplate]=useState('sbd-enclave');const [name,setName]=useState('');const [busy,setBusy]=useState(false);const [error,setError]=useState('');
+ // An account keeps one of each "once" template (the Secure By Design enclave): once registered, that choice
+ // shows as already added with a link to open it. The server enforces the same rule (server/authorization.js).
+ const registered=(id:string)=>list.systems.find(s=>s.profile.template===id);
+ const available=(id:string)=>!((TEMPLATES as any)[id]?.once&&registered(id));
+ const [template,setTemplate]=useState(()=>available('sbd-enclave')?'sbd-enclave':'blank');const [name,setName]=useState('');const [busy,setBusy]=useState(false);const [error,setError]=useState('');
+ const sending=useRef(false);
+ useEffect(()=>{if(!available(template))setTemplate('blank');});
  const full=list.systems.length>=(list.limit||5);
- async function register(e:React.FormEvent){e.preventDefault();setBusy(true);setError('');try{created(await api('POST','/systems',{template,...(name.trim()?{name:name.trim()}:{})}))}catch(err){setError((err as Error).message)}finally{setBusy(false)}}
+ async function register(e:React.FormEvent){
+  e.preventDefault();
+  // A second tap while the first request is in flight is ignored, so one click registers one system.
+  if(sending.current||!available(template))return;
+  sending.current=true;setBusy(true);setError('');
+  try{created(await api('POST','/systems',{template,...(name.trim()?{name:name.trim()}:{})}))}catch(err){setError((err as Error).message)}finally{sending.current=false;setBusy(false)}
+ }
  return <>
   {list.systems.length>0&&<section className="awx-section" aria-labelledby="awx-systems"><h2 id="awx-systems">Your systems</h2>
    <ul className="awx-system-list">{list.systems.map(s=>{const status=authorizationStatus(s);return <li key={s.id}><button type="button" onClick={()=>open(s.id)}>
@@ -67,11 +79,13 @@ function Systems({list,open,created}:{list:List;open:(id:string)=>void;created:(
    {full?<p className="reader-note">You can keep up to {list.limit||5} systems. Delete one (System tab) to register another.</p>:
    <form onSubmit={register}>
     <fieldset className="awx-templates"><legend className="awx-label">Start from</legend>
-     {Object.entries(TEMPLATES).map(([id,t]:[string,any])=><label key={id} className={template===id?'selected':''}><input type="radio" name="template" value={id} checked={template===id} onChange={()=>setTemplate(id)}/><strong>{t.label}</strong><span>{t.detail}</span></label>)}
+     {Object.entries(TEMPLATES).map(([id,t]:[string,any])=>{const existing=available(id)?null:registered(id);return existing
+      ?<div key={id} className="awx-template-added"><strong>{t.label}</strong><span>Already in your systems. You keep one, so your work stays in one place.</span><button type="button" onClick={()=>open(existing.id)}>Open {existing.profile.name}</button></div>
+      :<label key={id} className={template===id?'selected':''}><input type="radio" name="template" value={id} checked={template===id} onChange={()=>setTemplate(id)}/><strong>{t.label}</strong><span>{t.detail}</span></label>})}
     </fieldset>
     <label className="awx-field"><span className="awx-label">System name{template==='sbd-enclave'?' (optional)':''}</span><input value={name} maxLength={120} onChange={e=>setName(e.target.value)} placeholder={template==='sbd-enclave'?'Secure By Design Enclave':'Name the system'} required={template==='blank'}/></label>
     {error&&<p className="reader-error" role="alert">{error}</p>}
-    <button className="reader-primary" disabled={busy}>{busy?'Registering…':'Register the system'}</button>
+    <button className="reader-primary" disabled={busy||!available(template)}>{busy?'Registering…':'Register the system'}</button>
    </form>}
   </section>
   <p className="reader-note awx-signed-in">Signed in as {list.user?.email}. <a href="/my-progress">My Account</a></p>
