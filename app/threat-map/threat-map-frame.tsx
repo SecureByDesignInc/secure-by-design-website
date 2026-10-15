@@ -5,8 +5,8 @@ import RadwareSalesCover, { RADWARE_H, RADWARE_W } from '../radware-sales-cover'
 
 const threatMapUrl = 'https://livethreatmap.radware.com/';
 
-// Radware's map loads as soon as the page opens. The frame is added once the page is running in the browser
-// (so its load event is never missed during hydration) and fades in over our own placeholder when Radware's
+// Radware's map loads as its section nears the screen. The frame is added once the page is running in the
+// browser (so its load event is never missed during hydration) and fades in over our own placeholder when Radware's
 // page has loaded. The direct link stays visible in case the frame can't load. The map is drawn at a fixed
 // 1240 × 800 and scaled to fit, so Radware always shows the same layout and the blur over its "Contact
 // sales" button lands in the right place on any screen (and in full screen).
@@ -18,8 +18,19 @@ export default function ThreatMapFrame() {
   const stage = useRef<HTMLDivElement>(null);
   const [fit, setFit] = useState({ scale: 0, x: 0, y: 0 });
 
+  // Add Radware's frame as the map comes near the screen (on the homepage it sits just below the hero), so
+  // nothing loads from Radware during hydration or for visitors who never reach it.
   useEffect(() => {
-    setMounted(true);
+    const element = stage.current;
+    if (!element || typeof IntersectionObserver !== 'function') { setMounted(true); return; }
+    const near = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setMounted(true); near.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    near.observe(element);
+    return () => near.disconnect();
+  }, []);
+
+  useEffect(() => {
     const sync = () => setFullscreen(document.fullscreenElement === stage.current);
     document.addEventListener('fullscreenchange', sync);
     return () => document.removeEventListener('fullscreenchange', sync);
@@ -41,10 +52,10 @@ export default function ThreatMapFrame() {
   }, []);
 
   useEffect(() => {
-    if (ready) return;
+    if (ready || !mounted) return;
     const timer = window.setTimeout(() => setSlow(true), 12000);
     return () => window.clearTimeout(timer);
-  }, [ready]);
+  }, [ready, mounted]);
 
   const toggleFullscreen = async () => {
     try {

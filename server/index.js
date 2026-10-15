@@ -55,6 +55,8 @@ function retiredCourse(url){
  // old download, which the app's saved materials still link to, lands on the course 2.1 workbook.
  if(path==='/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx')return new URL('/training/rmf/SecureByDesign-rmf-Workbook.docx',url).toString();
  if(path==='/training/rmf/catalog-cover.webp')return new URL('/training/rmf/workbook-cover.webp',url).toString();
+ // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.
+ if(path==='/threat-map'||path==='/threat-map/')return new URL('/#threat-map',url).toString();
  return null;
 }
 // Course guides 1.2–1.10 are static pages at /training/<id>/ (scripts/prepare-course-guides.mjs). Cloudflare's
