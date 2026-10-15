@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const mapUrl = 'https://livethreatmap.radware.com/';
-// Radware's dashboard is laid out for a desktop screen, so it is drawn at this size and scaled down to fit
-// the monitor, like a security operations centre wall screen seen from across the room.
-const SCREEN_W = 1440;
-const SCREEN_H = 810;
+// Radware's dashboard shows its full detail (attack types, top attackers and attacked countries, attack vectors,
+// application violations, scanned ports) only at desktop size. It is drawn at the size of the Threat Map page's
+// own view and scaled to the monitor, which spans the section, so on a computer it appears at about full size.
+const SCREEN_W = 1240;
+const SCREEN_H = 800;
 
 type ConnectionInfo = EventTarget & { saveData?: boolean };
 
@@ -62,12 +63,16 @@ export default function HomeThreatWindow() {
   const live = mode === 'live';
   return <section ref={section} className="sbd-watch container" aria-labelledby="sbd-watch-title">
     <div className="sbd-watch-copy">
-      <p className="sbd-kicker">Live threat window</p>
-      <h2 id="sbd-watch-title">Right now, somewhere,<br/><span>a network is under attack.</span></h2>
+      <div>
+        <p className="sbd-kicker">Live threat window</p>
+        <h2 id="sbd-watch-title">Right now, somewhere,<br/><span>a network is under attack.</span></h2>
+      </div>
+      <div>
       <p>This is Radware’s live view of attacks recorded around the world. Every arc is a reminder of why you build it right: hardened, patched, logged, and segmented.</p>
       <div className="sbd-watch-actions">
         <a className="sbd-inline-link" href="/threat-map">Open the full Threat Map <ArrowRight size={17}/></a>
         <a className="sbd-inline-link" href="/training">Learn the defenses <ArrowRight size={17}/></a>
+      </div>
       </div>
     </div>
 

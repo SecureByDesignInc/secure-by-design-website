@@ -527,3 +527,10 @@ The owner asked to trade the live threat window and "Start building your network
 
 - **Menu:** Threat Map now sits after Community & Careers Hub and before My Account (owner's choice). This supersedes "Threat Map in the shared navigation after Training Library"; Community shells regenerated.
 - **Live threat window:** the owner removed the UTC clock and the "SOC-01" label. The monitor bar reads "Live feed" (blinking light once powered on) on the left and "Radware" on the right. Don't add them back.
+
+## Live threat window at full detail — October 14, 2026 (night)
+
+The owner wanted the homepage window to show the same level of detail as the Threat Map page (Radware's attack-type filters, top attackers and attacked countries, network attack vectors, application violations, scanned ports and the timeline). This supersedes the side-by-side layout and the 1440 × 810 scaled-down drawing in the notes above.
+
+- **Layout:** the heading ("Right now, somewhere, a network is under attack.") sits above the monitor, with the description and links beside it; the monitor spans the whole section (up to 1260px), so on a computer Radware's dashboard appears at about full size.
+- **Drawing size:** the map is drawn at 1240 × 800, close to the Threat Map page's own view, and scaled to the monitor's width (about 1:1 at full width); the screen keeps that 1240:800 shape. Loading rules, inert preview, link to `/threat-map`, phone/reduced-motion/Save-Data still screen and the "Live feed / Radware" bar are unchanged.

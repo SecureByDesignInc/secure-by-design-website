@@ -78,3 +78,11 @@ test('the live threat window shows no clock or console name', () => {
   assert.doesNotMatch(window, /SOC-01|setClock|UTC/);
   assert.doesNotMatch(read('app/template-home.css'), /sbd-monitor-clock/);
 });
+
+test('the live threat window draws Radware at the Threat Map page’s size, across the whole section', () => {
+  const window = read('app/home-threat-window.tsx');
+  assert.match(window, /const SCREEN_W = 1240;/);
+  assert.match(window, /const SCREEN_H = 800;/);
+  assert.match(read('app/template-home.css'), /\.sbd-monitor-screen\{position:relative;aspect-ratio:1240\/800;/);
+});
+
