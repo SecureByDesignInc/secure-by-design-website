@@ -459,3 +459,11 @@ The owner asked for a live cyber threat map on the website and in the app. They 
 ## Community & Careers Hub name and design — October 14, 2026
 
 The owner renamed Community to “Community & Careers Hub” (navigation, kicker and page titles) and asked that the section match the rest of the site. The hub and state pages now use the Training Library's dark design rather than light reading surfaces: `main.cm-page` on #071521, the `vc-intro` layout (kicker, two-tone heading with a cyan second line, intro copy on the right), Training Library section headings, the catalog toolbar for the state search, pill links, and catalog-tile surfaces (#102737, #365469 borders, 17px corners) with the amber focus ring. Styles are in app/community/community.css (`cm-` classes) and follow app/videos/videos.css; keep them in step if the Training Library design changes.
+
+## Homepage live threat window — October 14, 2026
+
+The owner chose the "window" idea for putting Radware's map on the homepage. `app/home-threat-window.tsx` (styles at the end of `app/template-home.css`) sits after "A note from Secure By Design" and before "More ways to figure it out"; the note stays immediately after Start building your network.
+
+- **Look.** A security operations monitor: bezel, a "SOC-01 · Live feed" bar with a blinking light and our own UTC clock (atmosphere, not Radware data), scan lines, a slow sweep, corner brackets, and a stand. It stays dark until it scrolls into view, then powers on (a bright line opens across the screen) and Radware's map fades in. Heading: "Right now, somewhere, a network is under attack." with links to `/threat-map` and `/training`.
+- **Loading.** On screens wider than 700px without reduced motion or Save-Data, the frame is added when the monitor is within 600px of the viewport (never on page load). Radware's dashboard is drawn at 1440 × 810 and scaled to the monitor's width. The frame is `inert`, sandboxed (`allow-scripts allow-same-origin`) and sends no referrer; the whole screen is a link to `/threat-map`, so homepage scrolling is never caught in the frame. Phones, reduced motion and Save-Data get a still screen with "Watch live attacks" and never load Radware.
+- **Policy.** The privacy policy's Radware entry names the homepage window and when it loads. `tests/threat-map.test.mjs` checks these rules.

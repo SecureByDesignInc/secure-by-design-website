@@ -49,3 +49,21 @@ test('the browser check ignores only Radware’s own frame, not this site’s er
   assert.match(check, /const thirdPartyFrame = frame =>/);
   assert.match(check, /livethreatmap\\.radware\\.com/);
 });
+
+test('the homepage live window loads Radware only near view, on larger screens, as a non-interactive preview', () => {
+  const window = read('app/home-threat-window.tsx');
+  assert.match(window, /const mapUrl = 'https:\/\/livethreatmap\.radware\.com\/'/);
+  assert.match(window, /\{live && near && scale > 0 && <iframe/, 'the frame waits until the monitor is near the viewport');
+  assert.match(window, /prefers-reduced-motion: reduce/);
+  assert.match(window, /max-width: 700px/);
+  assert.match(window, /saveData/);
+  assert.match(window, /sandbox="allow-scripts allow-same-origin"/);
+  assert.match(window, /referrerPolicy="no-referrer"/);
+  assert.match(window, /\binert\b/, 'the preview takes no focus or clicks');
+  assert.match(window, /href="\/threat-map"/);
+  assert.match(window, /not affiliated with Radware/);
+  const home = read('app/template-home.tsx');
+  assert.ok(home.indexOf('sbd-creator-note') < home.indexOf('<HomeThreatWindow/>'), 'the note keeps its place right after Start building your network');
+  assert.ok(home.indexOf('<HomeThreatWindow/>') < home.indexOf('sbd-future'), 'the window comes before More ways to figure it out');
+  assert.match(read('app/privacy/page.tsx'), /live threat window on the homepage/);
+});
