@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/orbit';
 import {vlans,facilities} from './architecture.js';
 import {createEquipment} from './equipment.js';
-import {roomBounds,rooms,coldAisle,racks,hosts,appliances,tileOffset,faceZ,deskScale,officeDesks,activeDesk,peerDesk,seatedDesks,adminDesks,idfPosition,facilityPositions,offlinePosition,trayHeight,trayNodes,trayEdges,rackTray,deskRowTray,adminTray,hubPoint as hubAt,walkExits,walkPoints,placements as systemPlacements,zoneLabels} from './data-center-layout.js';
+import {roomBounds,rooms,coldAisle,racks,hosts,appliances,tileOffset,faceZ,deskScale,officeDesks,activeDesk,peerDesk,seatedDesks,adminDesks,adminVMs,idfPosition,facilityPositions,offlinePosition,trayHeight,trayNodes,trayEdges,rackTray,deskRowTray,adminTray,hubPoint as hubAt,walkExits,walkPoints,placements as systemPlacements,zoneLabels} from './data-center-layout.js';
 
 // A polyline with exact arc-length parameters. Traffic routes follow the overhead cable trays.
 class Route extends THREE.Curve{
@@ -211,13 +211,20 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
     fitBox:new THREE.Box3(new THREE.Vector3(r.x-9,0,r.z-4),new THREE.Vector3(r.x+9,13,r.z+13)),labelOffset:new THREE.Vector3(0,.55,.7)});
   }
  }
- // Administration: three dedicated seats, the Tier 0 seat behind its own glass screen.
+ // Administration: two dedicated seats, the Tier 0 seat behind its own glass screen. The Tier 2 seat is a
+ // virtual machine on the Tier 1 seat, shown as a second screen on that desk.
  const adminSeats=new Map();
  for(const [id,[x,z]] of Object.entries(adminDesks)){
   const g=new THREE.Group();g.position.set(x,0,z);g.userData.fadeKey='desk-'+id;physical.add(g);
   const desk=equipment.workstation(g,0,0,deskScale,'#3f6a86');adminSeats.set(id,equipment.seated(desk,id.length));equipment.contact(x,z+1.2,7.4,6.4);
   addObject(id,{group:g,dimensions:[6.8,6,7.4],center:new THREE.Vector3(0,3,1.4),anchor:new THREE.Vector3(0,4.55,-.7),fadeKey:'desk-'+id,zone:'admin',color:vlanOf(id).color,
    fitBox:new THREE.Box3(new THREE.Vector3(x-6,0,z-3),new THREE.Vector3(x+6,7,z+8)),labelOffset:new THREE.Vector3(0,6.4,.4)});
+ }
+ for(const [id,vm] of Object.entries(adminVMs)){
+  const [x,z]=adminDesks[vm.host],g=new THREE.Group();g.position.set(x+2.45,0,z-.5);g.rotation.y=-.35;g.userData.fadeKey='desk-'+vm.host;physical.add(g);
+  const n=nodes.find(k=>k.id===id),v=vlanOf(id);equipment.vmScreen(g,{id,name:shortName(n.name),color:v.color,vlan:v.number});
+  addObject(id,{group:g,dimensions:[1.9,1.7,.7],center:new THREE.Vector3(0,4.3,0),anchor:new THREE.Vector3(0,4.3,.2),fadeKey:'desk-'+vm.host,zone:'admin',color:v.color,
+   fitBox:new THREE.Box3(new THREE.Vector3(x-6,0,z-3),new THREE.Vector3(x+6,7,z+8)),labelOffset:new THREE.Vector3(3.4,5.4,.6)});
  }
  {const screen=new THREE.Group();screen.userData.fadeKey='desk-jump';physical.add(screen);equipment.box(screen,.1,5.4,9,31,2.7,-16.5,new THREE.MeshStandardMaterial({color:'#7fb2c4',transparent:true,opacity:.16,depthWrite:false}));equipment.plate(screen,'TIER 0',2.4,31.08,5,-16.5,{height:.4,color:'#f7c477'}).rotation.y=Math.PI/2;}
  // Office: twelve representative desks for fifty users, an access-switch closet (IDF), and people at work.
@@ -463,6 +470,8 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  function drop(id,y,desk=activeDesk){
   const where_=where.get(id);
   if(id==='workstations'){const [x,z]=officeDesks[desk],a=deskAnchor(desk);return {node:deskRowTray[z],points:[a,V(x,y,z-.7),V(x,y,z),V(trayNodes.o1[0],y,z)]};}
+  // A seat VM's traffic goes through its host's network adapter: across to the host desk, then up the host's riser.
+  if(where_?.kind==='seatvm'){const a=anchorOf(id),h=anchorOf(where_.host);return {node:adminTray[id],points:[a,h,V(h.x,y,h.z),V(h.x,y,trayNodes.adm[1])]};}
   if(where_?.kind==='desk'){const a=anchorOf(id);return {node:adminTray[id],points:[a,V(a.x,y,a.z),V(a.x,y,trayNodes.adm[1])]};}
   if(where_?.kind==='vm'||where_?.kind==='appliance'){const a=anchorOf(id),r=where_.rack,front=r.z+3.75;return {node:rackTray[r.id],points:[a,V(a.x,a.y,front),V(a.x,y,front),V(a.x,y,trayNodes.a1[1]),V(r.x,y,trayNodes.a1[1])]};}
   return null;

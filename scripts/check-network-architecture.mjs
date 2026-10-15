@@ -7,7 +7,7 @@ import {stepPolicy,serviceFor} from '../public/inside-network-model/flow-policy.
 import {packetProfiles,describePacket} from '../public/inside-network-model/packets.js';
 import {courses,systemCourses,processCourses} from '../public/inside-network-model/courses.js';
 import {knowledgeChecks} from '../public/inside-network-model/knowledge-checks.js';
-import {placements,hosts,racks,rooms,roomBounds,facilityPositions,offlinePosition,trayNodes,trayEdges,walkExits,tileOffset,tileWidth,tileGap} from '../public/inside-network-model/data-center-layout.js';
+import {placements,hosts,racks,rooms,roomBounds,facilityPositions,offlinePosition,trayNodes,trayEdges,walkExits,tileOffset,tileWidth,tileGap,adminDesks,adminTray} from '../public/inside-network-model/data-center-layout.js';
 import {securityPractices,adminMatrix,trafficRules,policyServices,evaluateFlow,singleInstances,windowsMembers,linuxMembers,domainMembers} from '../public/inside-network-model/security.js';
 
 const nodes=buildArchitectureNodes(inventory.nodes),byId=new Map(nodes.map(n=>[n.id,n]));
@@ -71,7 +71,7 @@ for(const scenario of sequences)scenario.steps.forEach((step,index)=>{
 });
 assert.equal(Object.keys(packetProfiles).length,sequences.flatMap(s=>s.steps.filter(step=>!step.manual)).length,'No stale packet profiles');
 for(const [id,keys] of Object.entries({...systemCourses,...processCourses}))for(const key of keys)assert(courses[key]&&(byId.has(id)||sequences.some(s=>s.id===id)),`Course link ${id} → ${key}`);
-for(const course of Object.values(courses))assert(/^\/training\//.test(course.href),'Course links stay on this site');
+for(const course of Object.values(courses))assert(/^\/training(\/|#episode-library$)/.test(course.href),'Course links stay on this site');
 for(const scenario of [...scenarios,drill]){
  const checks=knowledgeChecks[scenario.id];assert(checks?.length>=2,`${scenario.id}: knowledge check`);
  for(const q of checks){assert(q.question&&q.explanation&&q.answers.length>=3);assert(Number.isInteger(q.correct)&&q.correct>=0&&q.correct<q.answers.length);assert.equal(new Set(q.answers).size,q.answers.length);}
@@ -81,7 +81,8 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.le
 console.log(`Architecture checks passed: ${nodes.length-1} named systems, eight VLANs, unique addresses, ${scenarios.length} valid sequences plus ${whatIfs.length} what-ifs (including the attack drill), policy-matched motion, packet inspection, course links, knowledge checks, and offline-root isolation.`);
 const designIds=new Set([...byId.keys(),...facilities.map(f=>f.id)]);
 for(const p of securityPractices){for(const id of p.ids)assert(designIds.has(id));for(const c of p.controls)assert(controls[c],`Unknown security control ${c}`);assert(p.tests.length&&p.evidence.length);}
-for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id),`Unknown policy endpoint ${id}`);
+// The core router is a facility, not a named system; only its deny-log row (F24) names it.
+for(const r of trafficRules)for(const id of [...r.from,...r.to])assert(byId.has(id)||id==='core'&&r.id==='F24',`Unknown policy endpoint ${id}`);
 assert.equal(new Set(trafficRules.map(r=>r.id)).size,trafficRules.length);
 for(const id of singleInstances)assert.equal(nodes.filter(n=>n.id===id).length,1);
 assert.equal(evaluateFlow('workstations','fs','SMB').status,'permit');
@@ -132,6 +133,21 @@ for(const id of ['dc1','dc2','subca','templates'])assert(hostOf(id).vms.every(v=
 for(const v of vlans)if(v.ids.length>1&&v.ids.every(id=>hostOf(id))){const vmHosts=new Set(v.ids.map(id=>hostOf(id)?.id));if(v.id!=='v10'&&v.id!=='v30')assert.equal(vmHosts.size,1,`VLAN ${v.number} servers share a host, so same-VLAN traffic stays on its virtual switch`);}
 for(const [id,p] of where){if(p.kind==='desk')assert(inRoom('admin',adminDeskX(id),adminDeskZ(id)),`${id} sits in the administration room`);}
 function adminDeskX(id){return where.get(id).x;}function adminDeskZ(id){return where.get(id).z;}
+// Seat virtual machines (13 October 2026): two physical admin seats. The Tier 2 seat, SBD-ADMIN-PC01, runs as a VM on the
+// Tier 1 seat (the DISA Windows PAW STIG exception for sites short on workstations) and keeps its own address; the Tier 0 seat hosts nothing.
+const seatTier={jump:0,jump1:1,jump2:2};
+assert.deepEqual(Object.keys(adminDesks).sort(),['jump','jump1'],'Two physical admin seats');
+for(const [id,p] of where)if(p.kind==='seatvm'){
+ assert(p.host in adminDesks,`${id} runs on a physical admin seat`);
+ assert.notEqual(p.host,'jump',`${id} is not hosted on the Tier 0 seat`);
+ assert(seatTier[p.host]<seatTier[id],`${id} runs on a higher-tier seat`);
+ assert(inRoom('admin',p.x,p.z),`${id} sits in the administration room`);
+ assert(adminTray[id]&&trayNodes[adminTray[id]],`${id} has a cable route`);
+}
+assert.equal(where.get('jump2').kind,'seatvm','SBD-ADMIN-PC01 runs as a virtual machine');
+assert.equal(where.get('jump2').host,'jump1','SBD-ADMIN-PC01 runs on the SBD-ADMIN-SRV01 seat');
+assert.equal(byId.get('jump2').address,'10.0.60.30','The Tier 2 VM keeps its own address, so rule A03 still names it alone');
+assert.equal(evaluateFlow('jump2','jump1','Management').status,'deny','The Tier 2 VM cannot manage its host seat');
 assert(inRoom('vault',...offlinePosition),'Offline root stays in the vault');
 assert(inRoom('media',...facilityPositions.media)&&inRoom('vault',...facilityPositions.backup)&&inRoom('server',...facilityPositions.core),'Media handling, backups, and the core sit in their rooms');
 for(const [k,[x,z]] of Object.entries(trayNodes))assert(!inRoom('vault',x,z)&&!inRoom('media',x,z),`Cable tray node ${k} stays out of the media room and vault`);

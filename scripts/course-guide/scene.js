@@ -1,0 +1,48 @@
+import * as THREE from 'three';
+import {OrbitControls} from 'three/orbit';
+// Lesson network for the course guides, generalised from the course 1.1 guide's scene: the same floor,
+// lighting, server and workstation models, labels, selection rings, cables and animated flows, laid out
+// from window.SBD_LESSON.scene. Back-row systems sit behind the core switch, front-row ones in front.
+const host=document.getElementById('stage');
+try {
+const spec=window.SBD_LESSON.scene;
+const scene=new THREE.Scene();scene.background=new THREE.Color('#091b2b');
+const rows={back:spec.nodes.filter(n=>n.row!=='front'),front:spec.nodes.filter(n=>n.row==='front')};
+const widest=Math.max(rows.back.length,rows.front.length),spacing=widest>3?Math.min(5.6,22/(widest-1)):widest===3?6.8:widest===2?10:0;
+const span=Math.max(10,spacing*(widest-1)),zoom=Math.max(1,(span+9)/19);
+const home=[17*zoom,17*zoom,24*zoom];
+const camera=new THREE.PerspectiveCamera(36,1,.1,150*zoom);camera.position.set(...home);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label',spec.label+' System buttons provide equivalent selection.');host.append(renderer.domElement);
+const orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,1.2,0);orbit.minDistance=18;orbit.maxDistance=48*zoom;orbit.maxPolarAngle=Math.PI*.47;orbit.minPolarAngle=.25;orbit.enablePan=false;orbit.enableDamping=false;
+scene.add(new THREE.HemisphereLight('#d7f4ff','#10213c',2.6));const key=new THREE.DirectionalLight('#b3deff',4);key.position.set(6,16,8);scene.add(key);const rim=new THREE.DirectionalLight('#21a8f0',3);rim.position.set(-9,6,-6);scene.add(rim);
+const mat=(c,emissive=false)=>new THREE.MeshStandardMaterial({color:c,roughness:.42,metalness:.5,emissive:emissive?c:'#000000',emissiveIntensity:emissive?.6:0});
+function box(g,w,h,d,x,y,z,c){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c));m.position.set(x,y,z);g.add(m);return m;}
+const floorW=Math.max(38,span+18);const floor=new THREE.Mesh(new THREE.PlaneGeometry(floorW,32),mat('#0a2033'));floor.rotation.x=-Math.PI/2;floor.position.y=-.14;scene.add(floor);const grid=new THREE.GridHelper(Math.round(floorW-2),Math.round(floorW-2),'#1e4961','#143247');grid.material.transparent=true;grid.material.opacity=.55;scene.add(grid);
+const labelWidth=widest>2?Math.min(6.4,spacing*.94):6.4;
+function label(t,sub){const cv=document.createElement('canvas');cv.width=720;cv.height=170;const ctx=cv.getContext('2d');ctx.fillStyle='rgba(6,22,37,.94)';ctx.beginPath();ctx.roundRect(4,4,712,162,15);ctx.fill();ctx.strokeStyle='#396a86';ctx.lineWidth=3;ctx.stroke();ctx.textAlign='center';let size=48;ctx.font=`bold ${size}px Arial`;while(ctx.measureText(t).width>680&&size>28){size-=2;ctx.font=`bold ${size}px Arial`;}ctx.fillStyle='#e1f8ff';ctx.fillText(t,360,68);ctx.font='32px Arial';ctx.fillStyle='#88c3df';ctx.fillText(sub,360,123);const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false}));sprite.scale.set(labelWidth,labelWidth*.236,1);sprite.renderOrder=20;return sprite;}
+const nodes={},pick=[],positions={};
+function ringFor(g,offline){const ring=new THREE.Mesh(new THREE.TorusGeometry(2.7,.025,8,100),new THREE.MeshBasicMaterial({color:offline?'#f0b45c':'#67d6e8',transparent:true,opacity:.65}));ring.rotation.x=-Math.PI/2;ring.position.y=.22;g.add(ring);return ring;}
+function server(n,g){box(g,4.2,.2,3.9,0,.1,0,'#1b405b');box(g,2.15,3.8,2,0,2.1,0,'#314d68');box(g,1.84,3.48,.09,0,2.12,1.05,'#0a1d32');for(let i=0;i<5;i++){box(g,1.55,.38,.12,0,.85+i*.53,1.12,'#213e58');const led=new THREE.Mesh(new THREE.SphereGeometry(.065,10,8),mat(n.kind==='offline'?'#f0b45c':'#68e3e9',true));led.position.set(.57,.85+i*.53,1.21);g.add(led);}const strip=box(g,.09,3.24,.1,-.8,2.13,1.17,'#62d7eb');strip.material=mat(n.kind==='offline'?'#e0a24a':'#51c9e6',true);return 5.23;}
+function workstation(n,g){const many=n.kind==='fleet';const offsets=many?[[-1.5,-.9],[1.5,-.9],[0,.7]]:[[0,0]];for(const [ox,oz] of offsets){box(g,2.6,1.7,.2,ox,1.9,oz,'#436981');box(g,2.3,1.38,.08,ox,1.94,oz+.14,'#216084');box(g,.3,.9,.3,ox,.6,oz,'#38546b');box(g,1.6,.15,1,ox,.18,oz,'#38546b');}return 3.7;}
+function place(list,z){list.forEach((n,i)=>{const x=list.length===1?0:-spacing*(list.length-1)/2+i*spacing;positions[n.id]=[x,z];const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);const top=n.kind==='server'||n.kind==='offline'?server(n,g):workstation(n,g);const ring=n.kind==='viewpoint'?null:ringFor(g,n.kind==='offline');const text=label(n.name,n.sub);text.position.set(0,top,0);g.add(text);g.traverse(o=>{if(o.isMesh){o.userData.node=n.id;pick.push(o);}});nodes[n.id]={group:g,label:text,ring,spec:n};});}
+place(rows.back,-3.4);place(rows.front,7);
+const sw=new THREE.Group();sw.position.set(0,0,.9);scene.add(sw);box(sw,3,.45,1.9,0,.45,0,'#245777');for(let i=0;i<8;i++)box(sw,.19,.11,.1,-1.09+i*.3,.5,1,'#63d3e9');
+const lines=[];function curve(points,color,dashed=false){const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(c.getPoints(70)),dashed?new THREE.LineDashedMaterial({color,dashSize:.18,gapSize:.12,transparent:true,opacity:.75}):new THREE.LineBasicMaterial({color,transparent:true,opacity:.75}));if(dashed)l.computeLineDistances();scene.add(l);lines.push(l);return c;}
+// Cables to the core switch. The offline root never connects.
+for(const n of spec.nodes){if(n.kind==='offline')continue;const [x,z]=positions[n.id];curve(x===0?[[0,.24,z],[0,.25,.9]]:[[x,.24,z],[x,.25,.9],[0,.25,.9]],'#245d7d');}
+// Flows: an arc between two systems, or a dashed hand-carry path for offline media.
+// "core" is the learner-built core router, drawn as the switch in the middle.
+positions.core=[0,.9];const rise=id=>id==='core'?.75:2.6;
+const flows=(spec.flows||[]).map((f,i)=>{const [ax,az]=positions[f.from],[bx,bz]=positions[f.to];const lift=4+(i%3)*.5;const pts=f.offline?[[ax,2.4,az],[(ax+bx)/2,1.2,(az+bz)/2+1.4],[bx,2.4,bz]]:[[ax,rise(f.from),az],[ax+(bx-ax)*.3,lift,az+(bz-az)*.3-.8],[ax+(bx-ax)*.7,lift,az+(bz-az)*.7-.8],[bx,rise(f.to),bz]];const path=curve(pts,f.offline?'#f0b45c':i%2?'#5cafff':'#73e6ef',true);const line=lines.at(-1);const dots=[0,1,2].map(j=>{const p=new THREE.Mesh(new THREE.SphereGeometry(.09,12,8),new THREE.MeshBasicMaterial({color:f.offline?'#ffd08a':j%2?'#80bfff':'#a9f5f5'}));scene.add(p);return p;});return{spec:f,path,line,dots};});
+let state=window.SBD_NETWORK_STATE||{stage:0,selected:spec.nodes[0].id,motion:true,complete:false},time=0,last=performance.now();
+const last_=window.SBD_LESSON.chapters.length-1;
+function update(s){state=s;for(const id in nodes){const n=nodes[id].spec;const active=n.existing||(Number.isInteger(n.from)&&s.stage>=n.from);nodes[id].group.traverse(o=>{if(o.isMesh){o.material.transparent=true;o.material.opacity=active?1:.19;}});nodes[id].label.material.opacity=active?1:.55;if(nodes[id].ring){nodes[id].ring.material.opacity=id===s.selected?.9:active?.38:.1;nodes[id].ring.material.color.set(id===s.selected?'#b4f9ff':n.kind==='offline'?'#c08a3a':'#3599bf');}}
+for(const f of flows){const on=s.complete?(f.spec.lessons.includes(last_)||f.spec.final===true):f.spec.lessons.includes(s.stage);f.line.visible=on;f.dots.forEach(d=>d.visible=on);}}
+window.addEventListener('sbd-network-state',e=>update(e.detail));window.addEventListener('sbd-reset-camera',()=>{camera.position.set(...home);orbit.target.set(0,1.2,0);orbit.update();});
+const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2();let down;renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(mouse,camera);const hit=raycaster.intersectObjects(pick)[0];if(hit)window.dispatchEvent(new CustomEvent('sbd-select-node',{detail:hit.object.userData.node}));});
+function resize(){const r=host.getBoundingClientRect();renderer.setSize(r.width,r.height);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(host);resize();orbit.update();update(state);
+// A frame's timestamp can be a little earlier than the moment the loop starts, so elapsed time is clamped at
+// zero and the path position wraps into 0–1: a negative position makes three.js read a point that doesn't exist.
+renderer.setAnimationLoop(stamp=>{const now=Number.isFinite(stamp)?stamp:performance.now();const dt=Math.max(0,Math.min((now-last)/1000,.06));last=now;if(state.motion)time+=dt;for(const f of flows){if(!f.line.visible)continue;f.dots.forEach((d,j)=>{const t=((time*.15+j/3)%1+1)%1;d.position.copy(f.path.getPoint(f.spec.twoWay&&j%2?1-t:t));});}renderer.render(scene,camera);});
+renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();document.getElementById('fallback').hidden=false;renderer.domElement.hidden=true;});
+}catch(e){document.getElementById('fallback').hidden=false;console.warn('The lesson remains available without the 3D view.',e);}

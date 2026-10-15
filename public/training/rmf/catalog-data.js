@@ -86,8 +86,8 @@ window.CATALOG = [
       "06.2 Security operations evidence",
       "06.3 Coverage and evidence limitations"
     ],
-    "build": "Collect configuration exports, a reviewed hardening checklist, scan coverage, log review records, and a recovery-test result. Use Splunk, Tenable, and Trellix examples or equivalent supplied training records.",
-    "prove": "Explain what each item proves and leaves untested. Identify a failed authenticated scan, an unreviewed alert, and a configuration screenshot that lacks system or time context.",
+    "build": "Collect configuration exports, a reviewed hardening checklist, scan coverage, log review records, and a recovery-test result. Use the practice network's SCAP Compliance Checker results, STIG Viewer checklists, Splunk review records, and course 1.19 restore record, or equivalent supplied training records.",
+    "prove": "Explain what each item proves and leaves untested. Identify a scan that missed an in-scope host, an unreviewed alert, and a configuration screenshot that lacks system or time context.",
     "sources": "[2,3]"
   },
   {
@@ -149,7 +149,7 @@ window.CATALOG = [
     ],
     "build": "Assemble an executive summary, security and applicable privacy planning material, assessment reports, POA&M, and required supporting references. Add a versioned manifest and review record.",
     "prove": "Reconcile control identifiers, asset counts, findings, dates, and status across the SSP, SCTM, SAR, and POA&M. Demonstrate a generic eMASS-style record workflow using training data.",
-    "sources": "[1,7]"
+    "sources": "[1,5,7]"
   },
   {
     "id": "11",

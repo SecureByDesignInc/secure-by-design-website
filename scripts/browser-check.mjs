@@ -7,7 +7,7 @@
 // PLAYWRIGHT points at an installed playwright package (CI installs one outside the project).
 // Problems are printed as GitHub annotations; the exit code is 1 when a page has a blocking problem.
 import { createRequire } from 'node:module';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const base = (process.argv[2] || 'http://127.0.0.1:8787').replace(/\/$/, '');
 const require = createRequire(import.meta.url);
@@ -19,6 +19,11 @@ const extra = ['/my-progress', '/account?returnTo=%2Ftraining', '/app-sign-in', 
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
+// Radware's live threat map (/threat-map) is a third-party page in a sandboxed frame: its own requests,
+// console output and script errors are Radware's, not this site's. Our page's policy blocking the frame
+// itself still shows up as a CSP violation in the main frame.
+const thirdPartyFrame = frame => { try { return /^https:\/\/livethreatmap\.radware\.com\//.test(frame?.url() || ''); } catch { return false; } };
+const fromThirdParty = (url, frame) => /^https:\/\/livethreatmap\.radware\.com\//.test(url || '') || thirdPartyFrame(frame);
 
 const annotate = (level, title, message) => console.log(`::${level} title=${title}::${String(message).replace(/\r?\n/g, ' | ').slice(0, 3800)}`);
 const results = [];
@@ -38,6 +43,7 @@ for (const path of pages) {
   const page = await context.newPage();
   const problems = [], notes = [];
   page.on('console', message => {
+    if (fromThirdParty(message.location()?.url, null)) return;
     const text = message.text();
     if (/Content Security Policy|Refused to/i.test(text)) problems.push(`console: ${text.slice(0, 300)}`);
     else if (message.type() === 'error' && !/Failed to load resource/.test(text)) notes.push(`console error: ${text.slice(0, 200)}`);
@@ -45,6 +51,8 @@ for (const path of pages) {
   page.on('pageerror', error => problems.push(`script error: ${String(error.message || error).slice(0, 300)}`));
   page.on('requestfailed', request => {
     const failure = request.failure()?.errorText || '';
+    let frame = null; try { frame = request.frame(); } catch {}
+    if (fromThirdParty(request.url(), frame)) return;
     if (!ignoredRequest(request.url()) && !/ERR_ABORTED/.test(failure)) problems.push(`request failed: ${request.url().replace(base, '')} (${failure})`);
   });
   page.on('response', response => {
@@ -59,6 +67,7 @@ for (const path of pages) {
     await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
     await page.waitForTimeout(1500);
     for (const frame of page.frames()) {
+      if (thirdPartyFrame(frame)) continue;
       const found = await frame.evaluate(() => window.__violations || []).catch(() => []);
       for (const item of found) problems.push(`CSP: ${item}${frame === page.mainFrame() ? '' : ` [frame ${frame.url().replace(base, '')}]`}`);
     }
@@ -79,8 +88,8 @@ for (const path of pages) {
 // Back links on course and checklist pages (they did nothing when clicked before the fix).
 const backLinks = [];
 for (const [from, label, to] of [
-  ['/training/dns-configuration', 'Back to the Training Library', '/training'],
-  ['/training/dns-configuration/checklist', 'Back to', '/training/dns-configuration'],
+  // The course guide is served at /training/<id>/ (the old address redirects there).
+  ['/training/dns-configuration/checklist', 'Back to', '/training/dns-configuration/'],
 ]) {
   const page = await context.newPage();
   try {
@@ -95,6 +104,60 @@ for (const [from, label, to] of [
   }
   await page.close();
 }
+
+// Course guides 1.2–1.10: static pages in the course 1.1 guide's design (scripts/prepare-course-guides.mjs).
+// Open each from its old address with a lesson link, walk the three tabs, and keep screenshots for review.
+const guides = [];
+const configurations = JSON.parse(readFileSync('content/configuration-courses.json', 'utf8'));
+mkdirSync('guide-screens', { recursive: true });
+const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+for (const [index, course] of configurations.entries()) {
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(String(error.message || error).slice(0, 200)));
+  const lesson = course.lessons[1];
+  try {
+    await page.goto(`${base}/training/${course.id}#${lesson.id}`, { waitUntil: 'load', timeout: 60000 });
+    const landed = new URL(page.url());
+    if (landed.pathname !== `/training/${course.id}/` || landed.hash !== `#${lesson.id}`) throw new Error(`landed on ${landed.pathname}${landed.hash}`);
+    await page.waitForFunction(() => window.SBD_GUIDE_READY === true, null, { timeout: 15000 });
+    const listed = await page.locator('#chapter-list .chapter').count();
+    if (listed !== course.lessons.length) throw new Error(`${listed} lessons listed, expected ${course.lessons.length}`);
+    const title = (await page.locator('#chapter-title').textContent() || '').trim();
+    if (title !== lesson.title) throw new Error(`the lesson link opened "${title}"`);
+    if ((await page.locator('#guide-panel .step').count()) !== lesson.steps.length) throw new Error('walkthrough steps missing');
+    await page.getByRole('tab', { name: 'Security reasoning' }).click();
+    await page.locator('#security-panel .controlcard').waitFor({ timeout: 5000 });
+    await page.getByRole('tab', { name: 'My evidence' }).click();
+    const quizzes = await page.locator('#evidence-panel .quiz').count();
+    if (quizzes !== lesson.quizzes.length) throw new Error(`${quizzes} knowledge checks shown, expected ${lesson.quizzes.length}`);
+    await page.getByRole('tab', { name: 'Walkthrough' }).click();
+    await page.waitForTimeout(1200);
+    const scene = (await page.locator('#stage canvas').count()) ? 'canvas' : (await page.locator('#fallback:not([hidden])').count()) ? 'fallback' : '';
+    if (!scene) throw new Error('neither the lesson network nor its fallback appeared');
+    if (errors.length) throw new Error('script error: ' + errors.join(' | '));
+    await page.screenshot({ path: `guide-screens/${String(index + 2).padStart(2, '0')}-${course.id}-desktop.png` });
+    guides.push(`${course.id} ok (${scene})`);
+  } catch (error) {
+    guides.push(`${course.id}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
+    blocking++;
+  }
+  await page.close();
+}
+for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/training/two-tier-pki/']) {
+  const name = path.split('/')[2];
+  for (const [label, ctx] of [['desktop', context], ['phone', phone]]) {
+    if (label === 'desktop' && name !== 'dc01-dc02') continue;
+    const page = await ctx.newPage();
+    try {
+      await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
+      await page.waitForTimeout(2000);
+      await page.screenshot({ path: `guide-screens/compare-${name}-${label}.png`, fullPage: label === 'phone' });
+    } catch {}
+    await page.close();
+  }
+}
+await phone.close();
 
 // Where crawlers and link previews find the page title, description, picture and canonical address.
 const share = [];
@@ -163,9 +226,10 @@ if (failing.length > 9) annotate('error', 'Browser check (more pages)', failing.
 const noted = results.filter(result => result.notes.length);
 if (noted.length) annotate('notice', 'Other console messages and 4xx responses', noted.map(result => `${result.path}: ${result.notes.join('; ')}`).join(' ### '));
 annotate('notice', 'Back links', backLinks.join(' || '));
+annotate(guides.some(line => !/ ok /.test(line + ' ')) ? 'error' : 'notice', 'Course guides', guides.join(' || '));
 annotate('notice', 'Share previews and crawlers', share.join(' || '));
 annotate(server.some(line => line.startsWith('FAIL')) ? 'warning' : 'notice', 'Server checks', server.join(' || '));
 annotate(/FAILED|error/.test(analytics) ? 'warning' : 'notice', 'Cloudflare Web Analytics', analytics);
-writeFileSync('browser-check.json', JSON.stringify({ base, results, backLinks, share, server, analytics }, null, 1));
+writeFileSync('browser-check.json', JSON.stringify({ base, results, backLinks, guides, share, server, analytics }, null, 1));
 console.log(`${results.length} pages, ${failing.length} with problems; ${blocking} blocking issue(s).`);
 process.exit(blocking ? 1 : 0);

@@ -1,13 +1,13 @@
-# Configure DNS and time — configuration checklist
+# Configure DNS — configuration checklist
 
-Secure By Design · Edition 1.4 · 9 October 2026
+Secure By Design · Edition 2.0 · 14 October 2026
 
-The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS or time dependency: names resolve on the domain controllers, and time comes from the PDC emulator, SBD-DC01.
+The addresses and names below continue the training example. Match every change to your own address plan. This network has no internet DNS dependency: names resolve on the domain controllers, and nothing is forwarded outside.
 
 ## Before you start
 
 - [ ] Complete course 1.1, the DC01 + DC02 identity build, with both domain controllers healthy. Both were promoted with the DNS server option selected, and SBD-DC02 still uses SBD-DC01 for DNS.
-- [ ] Use an isolated Windows Server practice environment and an account delegated to manage DNS.
+- [ ] Use an isolated Windows Server practice environment, and work at a domain controller's VM console with an authorized Domain Admin account: until course 1.8 builds AdminJumpBox01, that is where administration happens.
 - [ ] Continue the existing sbd.test example: SBD-DC01 is 10.0.10.10 and SBD-DC02 is 10.0.10.11 on 10.0.10.0/24.
 - [ ] The network's routing and VLAN segmentation are already in place, with a documented service-path register.
 
@@ -52,7 +52,7 @@ Notes / result / date: __________________________
 
 ```
 Get-DnsServerZone -ComputerName SBD-DC01 |
-  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope
+  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope, SecureSecondaries
 Get-DnsServerZone -ComputerName SBD-DC02
 ```
 
@@ -66,7 +66,7 @@ Notes / result / date: __________________________
 
 - [ ] Review the DC A and PTR records first. Correct mismatches through the owning host and DNS administration process rather than blindly adding another record with the same name.
 - [ ] Choose one approved service host from your address plan. In sbd.test, use New Host (A or AAAA), enter its actual name and address, and select the associated PTR option when the reverse zone is ready.
-- [ ] For a service alias, use New Alias (CNAME) and select the intended fully qualified host. For the later PKI course, reserve pki.sbd.test for the approved internal publication host; do not point it at the offline root.
+- [ ] For a service alias, use New Alias (CNAME) and enter the intended fully qualified host. For the course 1.6 PKI, create pki.sbd.test as an alias for SBD-PKI-MGMT01.sbd.test, the internal publication host that course builds at 10.0.30.30; the alias answers with an address once that host exists, and it never points at the offline root.
 - [ ] Set the record lifetime to the operational plan, record static ownership, and remove only records confirmed obsolete. An alias cannot coexist with other record types at the same name.
 
 **Commands:**
@@ -75,9 +75,12 @@ Notes / result / date: __________________________
 Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test
 Resolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10
 Resolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10
+# The alias course 1.6 relies on; its target is built in course 1.6
+Add-DnsServerResourceRecordCName -ComputerName SBD-DC01 -ZoneName sbd.test -Name pki -HostNameAlias SBD-PKI-MGMT01.sbd.test
+Resolve-DnsName pki.sbd.test -Type CNAME -Server 10.0.10.11   # after replication: SBD-PKI-MGMT01.sbd.test
 ```
 
-**Verify:** Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.
+**Verify:** Forward and reverse responses agree with the address plan. Each alias names the intended host (pki.sbd.test returns an address only once course 1.6 builds SBD-PKI-MGMT01), and creating a DNS name alone does not configure its service.
 
 **Evidence:** Keep a record table with owner, type, target, time to live, and reason for the change.
 
@@ -120,34 +123,6 @@ pktmon filter remove
 
 Notes / result / date: __________________________
 
-## Make SBD-DC01 the domain's time source
-
-- [ ] Confirm which domain controller holds the PDC emulator role — SBD-DC01 in this sample. The PDC emulator of the forest root domain sits at the top of the Windows Time hierarchy, so it is the one system you configure; everything else follows it.
-- [ ] On SBD-DC01, mark Windows Time as a reliable time source with no external peer, so it serves time from its own clock. In an air-gapped network that clock is the reference by declaration: record how it is set and checked — for example, compared on a schedule against an approved reference and corrected by an administrator, with each correction recorded — and the drift threshold you will hold it to.
-- [ ] Turn off the hypervisor's time synchronization for both domain controller virtual machines, so the host clock cannot silently override the PDC emulator. SBD-DC02 syncs from the PDC emulator, every other domain member keeps the default domain-hierarchy sync from the domain controllers, and the domain-joined Linux servers in later courses point chrony or ntpd at both domain controllers.
-- [ ] Confirm the network's service-path register permits time — every member to both domain controllers on UDP 123 — and write the time design into the build record: course 1.3's hardening Group Policy objects (GPOs) must leave it intact, and if a Security Technical Implementation Guide (STIG) value disagrees with it, that course's deviation record is where the decision lives.
-- [ ] Verify the chain end to end: SBD-DC01 serving as the reliable source, SBD-DC02 and a member server sourcing from a domain controller, and offsets within your recorded threshold.
-
-**Commands:**
-
-```
-Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
-# On SBD-DC01 (the PDC emulator): serve time from its own clock as the reliable source
-w32tm /config /reliable:yes /update
-Restart-Service w32time
-w32tm /query /source   # on SBD-DC01: Local CMOS Clock
-# On SBD-DC02 and a member server:
-w32tm /query /source   # expected: a domain controller
-w32tm /query /status
-w32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly
-```
-
-**Verify:** SBD-DC01 reports itself as the reliable source (Local CMOS Clock), SBD-DC02 and the member server report a domain controller, host time synchronization is off for both domain controllers, and measured offsets sit inside the documented threshold.
-
-**Evidence:** Record the time design decisions (how DC01's clock is set and checked, and the drift threshold), the source and status output from both controllers and the member, the stripchart offsets, the hypervisor setting for both domain controller VMs, and the register rows that permit time: every member to the domain controllers.
-
-Notes / result / date: __________________________
-
 ## Find the fault and record the fix
 
 - [ ] For a failing lookup, record the exact name, record type, client, resolver, timestamp, and error. Compare the fully qualified name with any short-name search behavior.
@@ -178,14 +153,12 @@ Notes / result / date: __________________________
 - [Microsoft · Manage DNS zones](https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-dns-zones)
 - [Microsoft · Active Directory-integrated DNS zones](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/active-directory-integrated-dns-zones)
 - [Microsoft · Manage DNS resource records](https://learn.microsoft.com/en-us/windows-server/networking/dns/manage-resource-records)
-- [Microsoft · Locating domain controllers](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/dc-locator-changes)
+- [Microsoft · Locating domain controllers](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/dc-locator)
 - [Microsoft · Resolve-DnsName](https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname)
 - [Microsoft · Dcdiag](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dcdiag)
 - [Microsoft · Packet Monitor (pktmon)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pktmon)
 - [Microsoft · Service overview and network port requirements](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements)
 - [Microsoft · AD DS configuration wizard page descriptions](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/ad-ds-installation-and-removal-wizard-page-descriptions)
 - [Microsoft · Install-ADDSForest](https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest)
-- [Microsoft · Windows Time service](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-top)
-- [Microsoft · Windows Time service tools and settings](https://learn.microsoft.com/en-us/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings)
 
 © 2026 Secure By Design Team LLC

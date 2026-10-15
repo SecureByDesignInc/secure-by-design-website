@@ -1,0 +1,85 @@
+SECURE BY DESIGN - ANALYZE THE RECORD IN SBD-SPLUNK01
+Course 1.12 | Materials edition 1.0 | Updated 14 October 2026
+
+Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
+Some lessons include the configuration commands they verify: read each command before you run it, and adapt
+the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
+
+1. Plan analysis and build SBD-SPLUNK01
+# On SBD-SPLUNK01 (Tier 1 SSH session from SBD-ADMIN-SRV01)
+cd /srv/media && sha256sum -c --quiet SHA256SUMS-splunk.txt   # expected: no output
+dnf repolist --all              # expected: only the sbd-repo01 repositories enabled
+chronyc sources -v; chronyc tracking   # ^* one controller, ^+ or ^- the other
+realm list                      # sbd.test, kerberos-member, one permitted group
+openssl x509 -inform der -in /tmp/sbd-root.cer -noout -fingerprint -sha256   # matches course 1.6's record
+firewall-cmd --get-active-zones
+logger -t sbd-splunk-proof 'SBD-SPLUNK01 syslog over TLS test'
+# On SBD-SYSLOG01 (Tier 1 session): the test message in SBD-SPLUNK01's daily file
+Select-String -Path D:\Logs\Syslog\*\*.log -Pattern 'sbd-splunk-proof' | Select-Object -First 1
+
+What success looks like: The design names analysis's job, both indexes with their retention and sizing, the roles and who holds them, and the console paths; the media matches its published and transfer hashes; and SBD-SPLUNK01 resolves to 10.0.50.10, lists SBD-REPO01 as its only package source, has a controller selected with a small, stable offset, is joined with one permitted group, trusts the course 1.6 root whose hash matches that course's record, admits only the registered paths, and its test message arrives on the collector.
+
+2. Install Splunk and bring in the streams
+# On SBD-SPLUNK01 (Tier 1 SSH session): the first-start decisions, an index, and the TLS port
+grep -E '^SPLUNK_(DB|FIPS)' /opt/splunk/etc/splunk-launch.conf
+sudo -u splunk /opt/splunk/bin/splunk btool indexes list sbd_wineventlog | grep -E 'frozenTimePeriodInSecs|maxTotalDataSizeMB'
+sudo -u splunk /opt/splunk/bin/splunk btool inputs list splunktcp-ssl:9997 --debug
+openssl s_client -connect SBD-SPLUNK01.sbd.test:9997 -CAfile /opt/splunk/etc/auth/sbd/sbd-chain.pem </dev/null 2>/dev/null | grep -E 'Verify return code|Protocol'
+# On SBD-SYSLOG01 (Tier 1 session): the forwarder's account and connection, and one closed hour
+Get-CimInstance Win32_Service -Filter "Name='SplunkForwarder'" | Select-Object StartName, State
+Select-String 'C:\Program Files\SplunkUniversalForwarder\var\log\splunk\splunkd.log' -Pattern 'Connected to idx' | Select-Object -Last 1
+$start = (Get-Date).Date.AddHours((Get-Date).Hour - 2); $end = $start.AddHours(1)
+(Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; StartTime=$start; EndTime=$end}).Count
+# In Splunk Web (Search), as sbd_admin: the same hour, the forwarder's connection, and the stored size
+index=sbd_wineventlog earliest=-2h@h latest=-1h@h | stats count
+index=_internal source=*metrics.log group=tcpin_connections | stats latest(connectionType) AS type, latest(version) AS version BY hostname, sourceIp
+| dbinspect index=sbd_wineventlog index=sbd_syslog | stats sum(sizeOnDiskMB) AS MB BY index
+
+What success looks like: Splunk runs as splunk under systemd with the designed indexes and retention, Splunk Web answers over HTTPS, TCP 9997 presents the SBD-SPLUNK01 certificate over TLS 1.2, the forwarder runs as NT SERVICE\SplunkForwarder with a TLS connection to the indexer, and a closed hour's count and one event's time match the collector for both streams.
+
+3. Build the working searches
+# In Splunk Web (Search), signed in as an analyst from SBD-ADMIN-SRV01
+| rest /services/authentication/current-context splunk_server=local | table username roles capabilities
+| tstats count where index=sbd_* by index, host, sourcetype
+index=sbd_wineventlog EventCode=4625 [| inputlookup sbd_tier_admins.csv | fields TargetUserName] | stats count, values(IpAddress) AS sources, latest(_time) AS last BY host, TargetUserName | convert ctime(last)
+index=sbd_syslog host=<core> src_ip=* | eval src_vlan="VLAN ".mvindex(split(src_ip, "."), 2) | stats count BY src_vlan, dest_port
+(index=sbd_wineventlog "Microsoft-Windows-Time-Service") OR (index=sbd_syslog chronyd) | fillnull value="-" EventCode | stats count, latest(_time) AS last BY host, EventCode | convert ctime(last)
+# On SBD-SYSLOG01 (Tier 1 session): course 1.10's subscription carries the Time-Service query
+wecutil gs SBD-ForwardedSecurity /f:xml | Select-String 'Time-Service'
+
+What success looks like: The analyst role searches both indexes and carries no delete capability, every source system appears with the right host and source type, the subscription carries the Time-Service query, and each saved search finds its known test event.
+
+4. Own the alerts
+# In Splunk Web (Search), as sbd_admin: the alerts as built
+| rest /servicesNS/-/-/saved/searches splunk_server=local | search title="SBD - *" is_scheduled=1 | table title cron_schedule dispatch.earliest_time alert.severity alert.suppress.period alert.expires actions
+# Each alert's runs and what it triggered, from the scheduler's own log
+index=_internal sourcetype=scheduler savedsearch_name="SBD - *" | stats count, sum(result_count) AS results, values(alert_actions) AS actions BY savedsearch_name
+# The silent-source alert's search: each expected source's last event against its limit
+| inputlookup sbd_expected_sources.csv | join type=left host [| tstats max(_time) AS last where index=sbd_* earliest=-7d by host] | where isnull(last) OR last < relative_time(now(), "-" . max_quiet_minutes . "m")
+# The pipeline test, on SBD-SYSLOG01 (Tier 1 session): stop the forwarder past the silence threshold
+Stop-Service SplunkForwarder; Start-Sleep -Seconds <silence threshold plus one run interval, in seconds>; Start-Service SplunkForwarder
+
+What success looks like: Every alert in the register has a recorded threshold, schedule, expiration, severity, responder with deputy, and written first response; each safe condition fired its alert in a test, with the cause and the alert's time recorded; the forwarder stop fired the pipeline alert and its backlog arrived without a gap; and the first daily and weekly reviews are on record.
+
+5. Prove the chain and hand off
+# From AdminJumpBox01 (Tier 0): the test event on its source
+Invoke-Command SBD-DC01 { Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, Id, MachineName }
+# On SBD-SYSLOG01 (Tier 1 session): the same event on the collector
+Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; Id=4625; StartTime=(Get-Date).AddHours(-1)} | Select-Object TimeCreated, MachineName
+# In Splunk Web (Search), as an analyst: the same event; its alert is in Triggered Alerts
+index=sbd_wineventlog host=SBD-DC01* EventCode=4625 earliest=-1h | table _time host TargetUserName
+# Next morning, in an auditor's or the custodian's session on SBD-AUDIT01: that UTC day's archive
+Get-WinEvent -Path D:\LogArchive\ForwardedEvents\ForwardedEvents-<UTC date>.evtx -FilterXPath '*[System[EventID=4625]]' | Select-Object TimeCreated, MachineName
+# On SBD-ADMIN-SRV01: copy course 1.9's Linux assessment set to the host
+scp C:\Staging\DISA\linux\<SCC for Linux package> C:\Staging\DISA\linux\<STIG benchmark> <your-account>@SBD-SPLUNK01.sbd.test:/tmp/
+# On SBD-SPLUNK01: the same hashes, then SCC's command-line scanner as root (path and options from the SCC readme)
+sha256sum /tmp/<SCC for Linux package> /tmp/<STIG benchmark>
+sudo <SCC install directory>/cscc
+# On SBD-ADMIN-SRV01: collect the session, then hash the course's evidence
+New-Item -ItemType Directory -Force C:\Evidence\splunk-analysis\baseline | Out-Null
+scp -r <your-account>@SBD-SPLUNK01.sbd.test:<SCC session folder> C:\Evidence\splunk-analysis\baseline\SBD-SPLUNK01
+Get-ChildItem C:\Evidence\splunk-analysis -Recurse -File | Get-FileHash -Algorithm SHA256
+
+What success looks like: The test event appears on SBD-DC01, in ForwardedEvents, in Splunk with its alert fired, and in the next morning's archive with matching catalog hashes, all with the same source time; the probe's deny appears in search two and fired its alert; and SBD-SPLUNK01 has its first baseline and Splunk STIG checklist with every open item classified.
+
+© 2026 Secure By Design Team LLC

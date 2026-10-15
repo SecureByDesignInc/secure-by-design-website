@@ -39,16 +39,16 @@
   },
   {
     "id": "dns-configuration-guide",
-    "title": "Configure DNS and time · Interactive guide",
+    "title": "Configure DNS · Interactive guide",
     "url": "https://securebydesigninc.com/training/dns-configuration",
-    "description": "Service discovery, zones, records, domain time & troubleshooting",
+    "description": "Service discovery, zones, records & troubleshooting · 5 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
   },
   {
     "id": "dns-configuration-package",
-    "title": "Configure DNS and time · Training materials (ZIP)",
+    "title": "Configure DNS · Training materials (ZIP)",
     "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Learning-Package.zip",
     "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
@@ -57,7 +57,7 @@
   },
   {
     "id": "dns-configuration-checklist",
-    "title": "Configure DNS and time · Configuration checklist",
+    "title": "Configure DNS · Configuration checklist",
     "url": "https://securebydesigninc.com/training/dns-configuration/configuration-checklist.md",
     "description": "Download a Markdown checklist for your configuration and evidence.",
     "category": "Training materials",
@@ -69,7 +69,7 @@
     "id": "two-tier-pki-guide",
     "title": "Configure the two-tier PKI · Interactive guide",
     "url": "https://securebydesigninc.com/training/two-tier-pki",
-    "description": "Offline root, issuing CA, pki.sbd.test publication & templates",
+    "description": "Offline root, issuing CA, pki.sbd.test publication & templates · 10 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -131,16 +131,16 @@
   },
   {
     "id": "harden-guide",
-    "title": "Harden the baseline · configuration guide",
+    "title": "Harden with Group Policy · Interactive guide",
     "url": "https://securebydesigninc.com/training/harden-baseline",
-    "description": "OU design, DISA GPOs, and STIG/SCAP verification · 6 lessons",
+    "description": "OU design, Group Policy processing & DISA GPOs proven by rescan · 5 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
   },
   {
     "id": "harden-baseline-package",
-    "title": "Harden the baseline · Training materials (ZIP)",
+    "title": "Harden with Group Policy · Training materials (ZIP)",
     "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Learning-Package.zip",
     "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
@@ -149,16 +149,16 @@
   },
   {
     "id": "tiered-admin-guide",
-    "title": "Addressing and tiered administration · configuration guide",
+    "title": "Tiered administration · Interactive guide",
     "url": "https://securebydesigninc.com/training/tiered-admin",
-    "description": "DHCP, admin seats & where privilege may sign in · 6 lessons",
+    "description": "Admin seats, the tier rules & where privilege may sign in · 5 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
   },
   {
     "id": "tiered-admin-package",
-    "title": "Addressing and tiered administration · Training materials (ZIP)",
+    "title": "Tiered administration · Training materials (ZIP)",
     "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Learning-Package.zip",
     "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
@@ -167,16 +167,16 @@
   },
   {
     "id": "logging-pipeline-guide",
-    "title": "See everything: the logging pipeline · configuration guide",
+    "title": "Collect the record on SBD-SYSLOG01 · Interactive guide",
     "url": "https://securebydesigninc.com/training/logging-pipeline",
-    "description": "Collect, protect & analyze before the fleet arrives · 6 lessons",
+    "description": "Design the logging pipeline and build its collector · 5 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
   },
   {
     "id": "logging-pipeline-package",
-    "title": "See everything: the logging pipeline · Training materials (ZIP)",
+    "title": "Collect the record on SBD-SYSLOG01 · Training materials (ZIP)",
     "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Learning-Package.zip",
     "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
@@ -185,7 +185,7 @@
   },
   {
     "id": "workstation-fleet-guide",
-    "title": "Bring in the fleet · configuration guide",
+    "title": "Bring in the fleet · Interactive guide",
     "url": "https://securebydesigninc.com/training/workstation-fleet",
     "description": "50 Windows endpoints, managed from first boot · 7 lessons",
     "category": "Training materials",
@@ -203,16 +203,16 @@
   },
   {
     "id": "patch-protect-guide",
-    "title": "Patch, protect, and watch for weakness · configuration guide",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Interactive guide",
     "url": "https://securebydesigninc.com/training/patch-protect",
-    "description": "WSUS rings, approved sources, ePO & credentialed scanning · 6 lessons",
+    "description": "Air-gapped WSUS: offline import, four rings & Group Policy targeting · 5 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
   },
   {
     "id": "patch-protect-package",
-    "title": "Patch, protect, and watch for weakness · Training materials (ZIP)",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Training materials (ZIP)",
     "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Learning-Package.zip",
     "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
@@ -221,7 +221,7 @@
   },
   {
     "id": "business-services-guide",
-    "title": "Stand up the business services · configuration guide",
+    "title": "Stand up the business services · Interactive guide",
     "url": "https://securebydesigninc.com/training/business-services",
     "description": "Files, database, licensing & web — by documented paths · 5 lessons",
     "category": "Training materials",
@@ -239,7 +239,7 @@
   },
   {
     "id": "prove-recovery-guide",
-    "title": "Prove you can recover · configuration guide",
+    "title": "Prove you can recover · Interactive guide",
     "url": "https://securebydesigninc.com/training/prove-recovery",
     "description": "Backups with custody, one rehearsed restore & the closing record · 6 lessons",
     "category": "Training materials",
@@ -257,9 +257,9 @@
   },
   {
     "id": "dns-configuration-pdf",
-    "title": "Configure DNS and time · Workbook PDF",
+    "title": "Configure DNS · Workbook PDF",
     "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
-    "description": "16 pages · edition 1.3",
+    "description": "14 pages · edition 2.0",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -267,7 +267,7 @@
   },
   {
     "id": "dns-configuration-word",
-    "title": "Configure DNS and time · Editable workbook (Word)",
+    "title": "Configure DNS · Editable workbook (Word)",
     "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
     "description": "Make the workbook your own.",
     "category": "Training materials",
@@ -277,7 +277,7 @@
   },
   {
     "id": "dns-configuration-checklist-page",
-    "title": "Configure DNS and time · Printable checklist",
+    "title": "Configure DNS · Printable checklist",
     "url": "https://securebydesigninc.com/training/dns-configuration/checklist",
     "description": "Print the configuration and evidence checklist.",
     "category": "Training materials",
@@ -287,9 +287,9 @@
   },
   {
     "id": "harden-baseline-pdf",
-    "title": "Harden the baseline · Workbook PDF",
+    "title": "Harden with Group Policy · Workbook PDF",
     "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
-    "description": "16 pages · edition 1.2",
+    "description": "17 pages · edition 2.0",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -297,7 +297,7 @@
   },
   {
     "id": "harden-baseline-word",
-    "title": "Harden the baseline · Editable workbook (Word)",
+    "title": "Harden with Group Policy · Editable workbook (Word)",
     "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
     "description": "Make the workbook your own.",
     "category": "Training materials",
@@ -307,7 +307,7 @@
   },
   {
     "id": "harden-baseline-checklist-page",
-    "title": "Harden the baseline · Printable checklist",
+    "title": "Harden with Group Policy · Printable checklist",
     "url": "https://securebydesigninc.com/training/harden-baseline/checklist",
     "description": "Print the configuration and evidence checklist.",
     "category": "Training materials",
@@ -317,7 +317,7 @@
   },
   {
     "id": "harden-baseline-checklist",
-    "title": "Harden the baseline · Configuration checklist",
+    "title": "Harden with Group Policy · Configuration checklist",
     "url": "https://securebydesigninc.com/training/harden-baseline/configuration-checklist.md",
     "description": "Download a Markdown checklist for your configuration and evidence.",
     "category": "Training materials",
@@ -329,7 +329,7 @@
     "id": "two-tier-pki-pdf",
     "title": "Configure the two-tier PKI · Workbook PDF",
     "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
-    "description": "24 pages · edition 2.0",
+    "description": "25 pages · edition 2.2",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -357,9 +357,9 @@
   },
   {
     "id": "tiered-admin-pdf",
-    "title": "Addressing and tiered administration · Workbook PDF",
+    "title": "Tiered administration · Workbook PDF",
     "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
-    "description": "17 pages · edition 1.3",
+    "description": "20 pages · edition 2.0",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -367,7 +367,7 @@
   },
   {
     "id": "tiered-admin-word",
-    "title": "Addressing and tiered administration · Editable workbook (Word)",
+    "title": "Tiered administration · Editable workbook (Word)",
     "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
     "description": "Make the workbook your own.",
     "category": "Training materials",
@@ -377,7 +377,7 @@
   },
   {
     "id": "tiered-admin-checklist-page",
-    "title": "Addressing and tiered administration · Printable checklist",
+    "title": "Tiered administration · Printable checklist",
     "url": "https://securebydesigninc.com/training/tiered-admin/checklist",
     "description": "Print the configuration and evidence checklist.",
     "category": "Training materials",
@@ -387,7 +387,7 @@
   },
   {
     "id": "tiered-admin-checklist",
-    "title": "Addressing and tiered administration · Configuration checklist",
+    "title": "Tiered administration · Configuration checklist",
     "url": "https://securebydesigninc.com/training/tiered-admin/configuration-checklist.md",
     "description": "Download a Markdown checklist for your configuration and evidence.",
     "category": "Training materials",
@@ -397,9 +397,9 @@
   },
   {
     "id": "logging-pipeline-pdf",
-    "title": "See everything: the logging pipeline · Workbook PDF",
+    "title": "Collect the record on SBD-SYSLOG01 · Workbook PDF",
     "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
-    "description": "16 pages · edition 1.3",
+    "description": "15 pages · edition 2.0",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -407,7 +407,7 @@
   },
   {
     "id": "logging-pipeline-word",
-    "title": "See everything: the logging pipeline · Editable workbook (Word)",
+    "title": "Collect the record on SBD-SYSLOG01 · Editable workbook (Word)",
     "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
     "description": "Make the workbook your own.",
     "category": "Training materials",
@@ -417,7 +417,7 @@
   },
   {
     "id": "logging-pipeline-checklist-page",
-    "title": "See everything: the logging pipeline · Printable checklist",
+    "title": "Collect the record on SBD-SYSLOG01 · Printable checklist",
     "url": "https://securebydesigninc.com/training/logging-pipeline/checklist",
     "description": "Print the configuration and evidence checklist.",
     "category": "Training materials",
@@ -427,7 +427,7 @@
   },
   {
     "id": "logging-pipeline-checklist",
-    "title": "See everything: the logging pipeline · Configuration checklist",
+    "title": "Collect the record on SBD-SYSLOG01 · Configuration checklist",
     "url": "https://securebydesigninc.com/training/logging-pipeline/configuration-checklist.md",
     "description": "Download a Markdown checklist for your configuration and evidence.",
     "category": "Training materials",
@@ -439,7 +439,7 @@
     "id": "workstation-fleet-pdf",
     "title": "Bring in the fleet · Workbook PDF",
     "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
-    "description": "18 pages · edition 1.3",
+    "description": "20 pages · edition 1.5",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -477,9 +477,9 @@
   },
   {
     "id": "patch-protect-pdf",
-    "title": "Patch, protect, and watch for weakness · Workbook PDF",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Workbook PDF",
     "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
-    "description": "16 pages · edition 1.3",
+    "description": "18 pages · edition 2.0",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -487,7 +487,7 @@
   },
   {
     "id": "patch-protect-word",
-    "title": "Patch, protect, and watch for weakness · Editable workbook (Word)",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Editable workbook (Word)",
     "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
     "description": "Make the workbook your own.",
     "category": "Training materials",
@@ -497,7 +497,7 @@
   },
   {
     "id": "patch-protect-checklist-page",
-    "title": "Patch, protect, and watch for weakness · Printable checklist",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Printable checklist",
     "url": "https://securebydesigninc.com/training/patch-protect/checklist",
     "description": "Print the configuration and evidence checklist.",
     "category": "Training materials",
@@ -507,7 +507,7 @@
   },
   {
     "id": "patch-protect-checklist",
-    "title": "Patch, protect, and watch for weakness · Configuration checklist",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Configuration checklist",
     "url": "https://securebydesigninc.com/training/patch-protect/configuration-checklist.md",
     "description": "Download a Markdown checklist for your configuration and evidence.",
     "category": "Training materials",
@@ -519,7 +519,7 @@
     "id": "business-services-pdf",
     "title": "Stand up the business services · Workbook PDF",
     "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.pdf",
-    "description": "14 pages · edition 1.2",
+    "description": "15 pages · edition 1.4",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -559,7 +559,7 @@
     "id": "prove-recovery-pdf",
     "title": "Prove you can recover · Workbook PDF",
     "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
-    "description": "16 pages · edition 1.3",
+    "description": "19 pages · edition 1.4",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory",
@@ -600,6 +600,132 @@
     "title": "Package manifest",
     "url": "https://securebydesigninc.com/training/rmf/index.html#evidence/manifest",
     "description": "Organize the evidence and submission records",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "domain-time-guide",
+    "title": "Configure domain time · Interactive guide",
+    "url": "https://securebydesigninc.com/training/domain-time",
+    "description": "The Windows Time hierarchy, the PDC emulator & chrony · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "domain-time-package",
+    "title": "Configure domain time · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/domain-time/SecureByDesign-domain-time-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "stig-scap-guide",
+    "title": "Measure against the STIG · Interactive guide",
+    "url": "https://securebydesigninc.com/training/stig-scap",
+    "description": "DISA STIGs, SCAP scans & STIG Viewer checklists · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "stig-scap-package",
+    "title": "Measure against the STIG · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/stig-scap/SecureByDesign-stig-scap-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dhcp-guide",
+    "title": "Run DHCP on SBD-DHCP01 · Interactive guide",
+    "url": "https://securebydesigninc.com/training/dhcp",
+    "description": "Workstation leases, secure name registration & an audited lease trail · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "dhcp-package",
+    "title": "Run DHCP on SBD-DHCP01 · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/dhcp/SecureByDesign-dhcp-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "linux-repository-guide",
+    "title": "Build the Linux repository on SBD-REPO01 · Interactive guide",
+    "url": "https://securebydesigninc.com/training/linux-repository",
+    "description": "Mirrored, signature-verified package snapshots for the Linux servers · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "linux-repository-package",
+    "title": "Build the Linux repository on SBD-REPO01 · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/linux-repository/SecureByDesign-linux-repository-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "audit-repository-guide",
+    "title": "Protect the record on SBD-AUDIT01 · Interactive guide",
+    "url": "https://securebydesigninc.com/training/audit-repository",
+    "description": "Keep the audit record intact, even from its administrators · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "audit-repository-package",
+    "title": "Protect the record on SBD-AUDIT01 · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/audit-repository/SecureByDesign-audit-repository-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "splunk-analysis-guide",
+    "title": "Analyze the record in SBD-SPLUNK01 · Interactive guide",
+    "url": "https://securebydesigninc.com/training/splunk-analysis",
+    "description": "Search a working copy, own the alerts, prove the chain · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "splunk-analysis-package",
+    "title": "Analyze the record in SBD-SPLUNK01 · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/splunk-analysis/SecureByDesign-splunk-analysis-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "management-server-guide",
+    "title": "Keep the living inventory on SBD-MGMT01 · Interactive guide",
+    "url": "https://securebydesigninc.com/training/management-server",
+    "description": "Component inventory, discovery sources & monthly reconciliation · 5 lessons",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
+    "id": "management-server-package",
+    "title": "Keep the living inventory on SBD-MGMT01 · Training materials (ZIP)",
+    "url": "https://securebydesigninc.com/training/management-server/SecureByDesign-management-server-Learning-Package.zip",
+    "description": "Workbook (PDF and Word), checklist, and verification commands.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"

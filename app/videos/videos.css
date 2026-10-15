@@ -2206,3 +2206,21 @@
     display: none;
   }
 }
+
+/* Coming-soon tiles (kind "coming-soon" in content/videos.json) — October 14, 2026: same compact size, no opening. */
+.vc-tile-soon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 0 0 10px;
+  border: 1px dashed #4f7f96;
+  border-radius: 12px;
+  color: #c4f1ff;
+  font-size: 14px;
+  font-weight: 650;
+}
+.vc-tile-soon .vc-tile-included {
+  justify-content: center;
+}

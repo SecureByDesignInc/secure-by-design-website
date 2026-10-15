@@ -37,18 +37,20 @@ Assessment result: ____________________
 Owner role: Identity and platform owners
 Controls: AC-5, AC-6, IA-2(1), AU-12, AC-6(5)
 
-Three dedicated administration hosts use separate identities and target scopes. Tier 0 covers identity, PKI, and every system that can control them. No host has universal administrative reach.
+Three administration seats on two machines use separate identities and target scopes: the endpoint seat runs as a virtual machine on the server seat, the arrangement the Defense Information Systems Agency (DISA) Windows Privileged Access Workstation (PAW) Security Technical Implementation Guide (STIG) allows where workstations are scarce. Tier 0 covers identity, PKI, and every system that can control them, and its seat runs no virtual machines. No host has universal administrative reach.
 
-- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01 handles clients.
+- [ ] Tier 0 (AdminJumpBox01): the DCs, issuing CA, template administration, the core switch, the hypervisor hosts and their console, and the DC-facing scopes of WSUS, ePO, Nessus, and Splunk. ADMIN-SRV01 handles member servers, with the audit custodian in separate accounts and sessions; ADMIN-PC01, a virtual machine on the ADMIN-SRV01 seat, handles clients.
 - [ ] Require offline-compatible MFA and separate everyday and privileged accounts. Prohibit ordinary browsing, email, and general file use on administrative hosts.
 - [ ] Deny cross-tier sessions with host and routed controls. Within the server tier, separate scanner, endpoint-policy, SIEM, and audit-custodian permissions.
 - [ ] Manage unique local credentials, service-account scope, emergency access, session logs, and account removal.
+- [ ] Keep the seat virtual machine’s boundary: Tier 1 accounts sign in only on the ADMIN-SRV01 host and Tier 2 accounts only in the ADMIN-PC01 virtual machine, with no shared clipboard, drives, folders, or key-value data between them. Each seat has its own maintenance group; tier accounts only use the seats. AdminJumpBox01 never hosts a virtual machine.
 
 ### Acceptance checks
 
 - [ ] An endpoint administrator cannot manage a DC, issuing CA, or member server.
 - [ ] A server operator cannot alter protected audit retention.
 - [ ] MFA failure blocks privileged access; emergency access is recorded and reviewed.
+- [ ] Each seat refuses the other tiers’ accounts: Tier 0 and Tier 2 on the ADMIN-SRV01 host, Tier 1 and Tier 2 on AdminJumpBox01, and Tier 0 and Tier 1 inside the ADMIN-PC01 virtual machine.
 - [ ] A server-tier operator cannot approve DC updates, change DC agent policy, or run credentialed scans against the domain controllers.
 
 Evidence: Privileged-access matrix and account review; MFA, session audit, and negative access tests.
@@ -175,19 +177,19 @@ Assessment result: ____________________
 Owner role: Recovery lead and system owners
 Controls: CP-2, CP-4, CP-9, CP-10, IR-3, IR-4, CP-9(1), CA-5, PL-2, RA-7, CA-6
 
-Splunk, Tenable/Nessus, and Trellix ePO/DLP each have exactly one server instance. Recovery uses protected backups, not clustering or standby servers.
+Splunk, Tenable/Nessus, and Trellix ePO/DLP each run on one server. Recovery uses protected backups, not clustering or standby servers.
 
-- [ ] Define recovery time and recovery point objectives per service; record the accepted outage exposure of each single instance.
+- [ ] Define recovery time and recovery point objectives per service.
 - [ ] Protect offline backups of required data, configurations, licenses, keys, and vendor-supported application/database recovery material. Use separate backup credentials.
 - [ ] Restore identity/DNS/time dependencies, PKI, data services, then security and management functions in a dependency-tested order. Put the two DCs in separate infrastructure failure domains where feasible.
 - [ ] During a Splunk outage retain and monitor local logs; during a Nessus outage track deferred scans; during an ePO/DLP outage verify installed agents retain their last policy and document lost central visibility.
 - [ ] Exercise malicious-media, ransomware, and privileged-account compromise scenarios; retain results and corrective actions.
 - [ ] Backup path: each server writes its backup (DC system state, CA database and keys, configurations, the audit archive) to a protected local backup volume. Tier 0 custodians carry DC and CA backups, and the audit custodian carries the archive, to the offline backup facility under the media custody procedure. No network path to the backup facility exists.
-- [ ] Document the single-instance design for Splunk, Tenable/Nessus, and Trellix ePO/DLP in the system security plan, with offline backups as its mitigation (PL-2): one server each suits the small network and the tools’ modest resource needs. The risk response records the rationale and the remaining risk (RA-7); accepting that risk is the authorizing official’s authorization decision (CA-6). Restore gaps are tracked in the POA&M (CA-5).
+- [ ] Track restore gaps found in recovery exercises in the POA&M (CA-5).
 
 ### Acceptance checks
 
-- [ ] Restore each of the three single-instance security platforms independently.
+- [ ] Restore each of the three security platforms independently.
 - [ ] Verify restored policies, searches, scan configuration, agent reconnection, and required data.
 - [ ] Time a full recovery exercise and compare observed results with approved objectives.
 
@@ -234,4 +236,4 @@ Transfer ID / direction / media ID / custodian / source / destination / classifi
 
 ## Recovery exercise record template
 
-Service / single-instance dependencies / protected backup ID / last successful backup / approved RPO and RTO / outage procedure / restoration steps / actual start and finish / recovered data cutoff / functional checks / issues / owner and due date.
+Service / dependencies / protected backup ID / last successful backup / approved RPO and RTO / outage procedure / restoration steps / actual start and finish / recovered data cutoff / functional checks / issues / owner and due date.

@@ -51,6 +51,10 @@ test('every Training Library tile has exactly one download', () => {
     if (course.kind === 'configuration') {
       assert.equal(course.training.package, `/training/${course.id}/SecureByDesign-${course.id}-Learning-Package.zip`);
       assert.ok(existsSync(publicFile(course.training.package)), course.training.package);
+    } else if (course.kind === 'coming-soon') {
+      // Coming-soon tiles hold their place in the path with no material and no download yet.
+      assert.equal(course.training.package, undefined, course.id);
+      assert.equal(course.training.word, undefined, course.id);
     } else {
       // The authorization tiles share one Word catalog; it is their only download.
       assert.equal(course.training.package, undefined, course.id);
@@ -85,7 +89,7 @@ test('the course 1.1 learning package matches its manifest and edition', () => {
 
 test('the training has no share controls, and the 1.1 guide offers the same single download', () => {
   assert.equal(existsSync(new URL('../app/videos/training-share.tsx', import.meta.url)), false);
-  for (const file of ['companion.tsx', 'video-hub.tsx', 'configuration-guide.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
+  for (const file of ['companion.tsx', 'video-hub.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
     assert.doesNotMatch(read(`app/videos/${file}`).toString(), /TrainingShare|training-share|Share2/, file);
   }
   for (const path of ['/training/dc01-dc02/index.html', '/training/rmf/index.html']) {

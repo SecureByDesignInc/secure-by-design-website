@@ -1,45 +1,45 @@
 {
   "package": "Secure By Design DC01 DC02 learning companion",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "entryPoint": "index.html",
   "copyrightOwner": "Secure By Design Team LLC",
   "copyrightYear": 2026,
-  "materialsEdition": "0.6",
-  "updated": "2026-10-09",
+  "materialsEdition": "0.7",
+  "updated": "2026-10-14",
   "components": {
     "interactiveLesson": {
       "version": "0.1.0"
     },
     "workbook": {
-      "edition": "Materials edition 0.6",
+      "edition": "Materials edition 0.7",
       "pages": 13
     }
   },
   "files": [
     {
       "name": "index.html",
-      "bytes": 1392656,
-      "sha256": "6988fbce7181bc4f520e329749414089389d49faaf7c0c4457b2781313e92f64"
+      "bytes": 1392736,
+      "sha256": "0aac0aba1a0423830001e5a61df727a00367e6da3433c12d15182604bb680a48"
     },
     {
       "name": "lesson.json",
-      "bytes": 34591,
-      "sha256": "fa0a4590eb0e79e9d536511978277d87503d47d0cb0e84d5a864b55be30b37f4"
+      "bytes": 34670,
+      "sha256": "e3fc43398f5a389130d7b6e8bab69a978eb1eddbb392a6db1af44408ba4bebc1"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.docx",
-      "bytes": 316484,
-      "sha256": "71d7b4f72611022850d43cd421775de7ceb22de9e26039ea9d8ddc2ba4c23d51"
+      "bytes": 316502,
+      "sha256": "8e1432c97fa6f5b217c5076abfff240138df82062f37c2317ef8951a7fdbd75c"
     },
     {
       "name": "SecureByDesign-DC01-DC02-Workbook.pdf",
-      "bytes": 287076,
-      "sha256": "1aabe6261a11f7ca04f93797314c110462321061bdb7b207912115462d757e97"
+      "bytes": 287085,
+      "sha256": "d7dba2526173eeabc087eebea0964fc03b9a827bfe0176f1f9fa665f4ec67262"
     },
     {
       "name": "START-HERE.txt",
-      "bytes": 3158,
-      "sha256": "15c4e3eea89bca421c0c0af7eb2a54a8af62dd92add5abc169768c2e09bf5ff2"
+      "bytes": 3159,
+      "sha256": "c5a05ace70a6adb0ac3d2b625135bb2263a9a8892016933002e8d2b629c4aa42"
     },
     {
       "name": "THREE-LICENSE.txt",
@@ -48,13 +48,13 @@
     },
     {
       "name": "Verification-Commands.txt",
-      "bytes": 2973,
-      "sha256": "7e50c3de4e318bfc2abb8d6e75fd736737c4c45b0167eedf57dddf58b041c3d8"
+      "bytes": 2974,
+      "sha256": "13c07ddbe929b170ab420c22bfd299ba4c1876de8d961867f9a44b5283714e3c"
     },
     {
       "name": "notices.html",
-      "bytes": 4012,
-      "sha256": "bc6387793e10c82fea5599e7dae5ecd34ff8aa7e57d4a1103bc420b7704f201f"
+      "bytes": 4014,
+      "sha256": "b36843f00426bdfd159376cc55dfc2ec2274be75506d3b3a23145825c89933ca"
     },
     {
       "name": "account-progress.js",

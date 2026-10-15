@@ -1,57 +1,91 @@
 SECURE BY DESIGN - PROVE YOU CAN RECOVER
-Course 1.10 | Materials edition 1.3 | Updated 8 October 2026
+Course 1.19 | Materials edition 1.4 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
 the example names, addresses, and paths to your own plan. Nothing in this file runs by itself.
 
 1. Decide what recovery must prove
-# Capture the current protection state before this course changes it.
+# On each Windows server in the recovery set: capture the current protection state before this course changes it.
 wbadmin get versions
-Get-ChildItem E:\Backups -ErrorAction SilentlyContinue | Measure-Object   # this server's protected backup volume
+Get-Volume -DriveLetter E | Select-Object DriveLetter, FileSystemLabel, SizeRemaining   # the protected backup volume
+# The tombstone lifetime bounds the directory's recovery point (empty means the 180-day default).
+(Get-ADObject "CN=Directory Service,CN=Windows NT,CN=Services,$((Get-ADRootDSE).configurationNamingContext)" -Properties tombstoneLifetime).tombstoneLifetime
 
-What success looks like: The recovery set is ordered by dependency with point and time objectives per item, the backup placement and access rules are written, and the DSRM and root-key custody records check out.
+What success looks like: The recovery set is ordered by dependency with point and time objectives per item, the backup schedule defines every backup in one place, the placement and access rules are written, and the DSRM and root-key custody records check out.
 
-2. Back up the directory, on schedule
-wbadmin get versions
+2. Back up Tier 0: directory, CA, and policy
+# Tier 0 session from AdminJumpBox01: daily schedules on each controller and the issuing CA (E: is never a volume being backed up)
+Invoke-Command SBD-DC01.sbd.test, SBD-DC02.sbd.test, SBD-SUBCA01.sbd.test { wbadmin enable backup -addtarget:E: -schedule:21:00 -systemState -allCritical -quiet }
+Invoke-Command SBD-DC01.sbd.test, SBD-DC02.sbd.test { wbadmin get versions }   # after the first run
+# On SBD-SUBCA01 (Tier 0 session): the CA's own backup, to its protected volume, never to the evidence folder
+certutil -backup E:\Backups\CA   # prompts for the password that protects the exported key
+reg export HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration E:\Backups\CA\certsvc-config.reg
+Get-ChildItem E:\Backups\CA -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv E:\Backups\ca-backup-hashes.csv -NoTypeInformation   # only this list goes to C:\Evidence\recovery
+# On SBD-DC01: C:\Scripts\Backup-SbdGpo.ps1 (writable by Tier 0 administrators only) runs these lines, then the task runs it daily
+#   $d = 'E:\Backups\GPO\{0:yyyy-MM-dd}' -f (Get-Date); New-Item -ItemType Directory $d -Force | Out-Null; Backup-GPO -All -Path $d
+#   @('DC=sbd,DC=test') + (Get-ADOrganizationalUnit -Filter *).DistinguishedName | ForEach-Object { (Get-GPInheritance -Target $_).GpoLinks } | Select-Object Target, Order, DisplayName, Enabled, Enforced | Export-Csv "$d\gpo-links.csv" -NoTypeInformation
+Register-ScheduledTask 'SBD GPO backup' -Action (New-ScheduledTaskAction -Execute powershell.exe -Argument '-NoProfile -File C:\Scripts\Backup-SbdGpo.ps1') -Trigger (New-ScheduledTaskTrigger -Daily -At 22:00) -User 'NT AUTHORITY\SYSTEM' -RunLevel Highest
+# Back on AdminJumpBox01: the Recycle Bin, then the catalog
+Enable-ADOptionalFeature 'Recycle Bin Feature' -Scope ForestOrConfigurationSet -Target sbd.test -Server SBD-DC01.sbd.test
 Get-ADOptionalFeature -Filter {Name -like 'Recycle Bin*'} | Select-Object Name, EnabledScopes
 Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\backup-catalog.txt
 
-What success looks like: Both DCs show scheduled, completed system state versions on the protected target, the Recycle Bin reports an enabled scope, and the decision tree names the tool for each failure class.
+What success looks like: Both DCs and SBD-SUBCA01 show scheduled, completed system state and critical-volume versions on their protected volumes; the CA backup and its configuration sit on SBD-SUBCA01's protected volume with key custody recorded and only hashes in evidence; the GPO task has written a dated set with its link export; the Recycle Bin reports an enabled scope; and the decision tree names the tool for each failure class.
 
-3. Back up the CA, policy, boundary, and records
-# On SBD-SUBCA01: back up to the protected backup volume, never to the evidence folder.
-certutil -backup E:\Backups\SBD-SUBCA01\ca-backup   # prompts for the password that protects the exported key
-# Only the hashes and the custody record go into evidence.
-Get-ChildItem E:\Backups\SBD-SUBCA01\ca-backup -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\recovery\ca-backup-hashes.csv -NoTypeInformation
-Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\gpo-backup\* | Select-Object -First 6
+3. Back up the member servers and records
+# Tier 1 sessions from SBD-ADMIN-SRV01. On SBD-DHCP01, the task script (C:\Scripts, writable by SBD Tier 1 Admins only):
+$b = 'E:\Backups\DHCP\{0:yyyy-MM-dd}' -f (Get-Date); New-Item -ItemType Directory $b -Force | Out-Null; $dir = Join-Path $env:windir 'System32\dhcp\backup'
+Backup-DhcpServer -Path $dir; Copy-Item $dir (Join-Path $b 'database') -Recurse; Export-DhcpServer -File (Join-Path $b 'SBD-DHCP01.xml') -Leases
+# On SBD-MGMT01, SBD-FS01 and SBD-APPS01: one daily schedule each, to the local E:
+wbadmin enable backup -addtarget:E: -include:D:\Inventory -schedule:22:00 -quiet   # SBD-MGMT01
+wbadmin enable backup -addtarget:E: -include:D:\Shares -schedule:22:00 -quiet   # SBD-FS01; then, after each access change:
+icacls D:\Shares\* /save E:\Backups\FS01\shares-acl.txt /t /c; reg export HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Shares E:\Backups\FS01\shares.reg /y
+wbadmin enable backup -addtarget:E: -schedule:22:30 -systemState -allCritical -quiet   # SBD-APPS01
+# On SBD-SQL01: the engine's identity may write the backup folder; the Agent job's step runs this T-SQL for each database
+icacls E:\Backups\SQL /grant 'SBD\SBD-SQL$:(OI)(CI)M'
+#   BACKUP DATABASE [master] TO DISK = N'E:\Backups\SQL\master.bak' WITH CHECKSUM, INIT;   -- then model, msdb, each application database
+#   RESTORE VERIFYONLY FROM DISK = N'E:\Backups\SQL\master.bak' WITH CHECKSUM;
+sqlcmd -S SBD-SQL01.sbd.test -E -Q "SELECT name, type_desc, sid FROM sys.server_principals WHERE type IN ('U','G','S')"   # the login record
+# On SBD-WEB01 (and the same pattern on SBD-REPO01 and SBD-SPLUNK01): the cron job's work, run once by hand
+sudo tar --selinux --acls --xattrs -czf /srv/backup/web01-$(date +%F).tar.gz /etc/httpd /etc/pki/tls /etc/sssd
+sudo sha256sum /srv/backup/web01-*.tar.gz
 
-What success looks like: The CA backup sits on SBD-SUBCA01's protected backup volume with key custody recorded and only its hashes in evidence, the policy and router exports are current and hashed, and the catalog covers logs and living records alongside the systems.
+What success looks like: Every member-server row in the schedule has run once and verified: SBD-DHCP01's set with its restore note, D:\Inventory, SBD-FS01's shares with the ACL record and share definitions, SBD-SQL01's application and system databases verified with RESTORE VERIFYONLY and the login record filed, SBD-APPS01's full-server backup, and the dated archives on SBD-WEB01, SBD-REPO01 and SBD-SPLUNK01 — and the catalog covers them with the log archive, router export, and living records.
 
 4. Carry the copies to the offline cabinet
-# Hash on the protected volume, then on the media.
-Get-FileHash -Algorithm SHA256 E:\Backups\SBD-DC02\*.vhdx
-Get-FileHash -Algorithm SHA256 F:\Media-0012\SBD-DC02\*.vhdx
+# On SBD-DC02 (Tier 0), with encrypted media MEDIA-0012 attached as F:: hash on the volume, copy, hash on the media
+Get-ChildItem E:\WindowsImageBackup\SBD-DC02 -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv F:\MEDIA-0012-volume.csv -NoTypeInformation
+Copy-Item E:\WindowsImageBackup -Destination F:\ -Recurse
+Get-ChildItem F:\WindowsImageBackup\SBD-DC02 -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv F:\MEDIA-0012-media.csv -NoTypeInformation
+Compare-Object (Import-Csv F:\MEDIA-0012-volume.csv).Hash (Import-Csv F:\MEDIA-0012-media.csv).Hash   # no output means the copy matches
+wbadmin get versions -backupTarget:F: -machine:SBD-DC02   # the media is readable as a backup
 
 What success looks like: Every item in the recovery set has an offline copy with matching hashes on the volume and the media, a custody entry with a named custodian of the right tier, and one copy has been retrieved and verified.
 
 5. Rehearse a real restore, in isolation
 # On the isolated copy of SBD-DC02: start in DSRM, then sign in with the DSRM password.
 bcdedit /set safeboot dsrepair
-shutdown -t 0 -r
-wbadmin get versions -backupTarget:<media-volume> -machine:SBD-DC02
-wbadmin start systemstaterecovery -version:<version-id> -backupTarget:<media-volume> -machine:SBD-DC02
+shutdown /r /t 0
+wbadmin get versions -backupTarget:F: -machine:SBD-DC02   # F: = the retrieved media
+wbadmin start systemstaterecovery -version:<version-id> -backupTarget:F: -machine:SBD-DC02 -authsysvol
 bcdedit /deletevalue safeboot   # then restart normally
-Get-Service NTDS,DNS,Netlogon   # after restart, on the restored controller
-Restore-ADObject -Identity <deleted-object-guid>   # production Recycle Bin rehearsal
+# After the restart, on the restored copy
+Get-Service NTDS, DNS, Netlogon, DFSR | Select-Object Name, Status
+Get-SmbShare -Name SYSVOL, NETLOGON
+Get-ADDomain -Server localhost | Select-Object DNSRoot, PDCEmulator
+w32tm /query /status   # then compare Get-Date with the reference clock and record the offset
+# Back in production, from AdminJumpBox01: the Recycle Bin rehearsal
+Get-ADObject -Filter "Name -eq '<test object name>'" -IncludeDeletedObjects | Restore-ADObject
 
-What success looks like: The isolated restore ran in DSRM and reached a healthy directory within (or honestly against) the time objective, the DSRM boot setting is removed, the teardown is confirmed, and the production object restore returned the test object intact.
+What success looks like: The isolated restore ran in DSRM and reached a healthy directory within (or honestly against) the time objective, its clock offset is recorded, the DSRM boot setting is removed, the teardown is confirmed, and the production object restore returned the test object intact.
 
 6. File the recovery record and close the path
+# On AdminJumpBox01 (Tier 0), then the same on SBD-ADMIN-SRV01 (Tier 1): seal each half of the recovery record
 Get-ChildItem C:\Evidence -Directory | Select-Object Name
-Get-ChildItem C:\Evidence\recovery -Recurse | Measure-Object
-Get-FileHash -Algorithm SHA256 C:\Evidence\recovery\recovery-record.pdf -ErrorAction SilentlyContinue
+Get-ChildItem C:\Evidence\recovery -Recurse -File | Get-FileHash -Algorithm SHA256 | Export-Csv C:\Evidence\recovery-manifest.csv -NoTypeInformation
+Get-FileHash -Algorithm SHA256 C:\Evidence\recovery-manifest.csv
 
-What success looks like: The recovery record is complete with an owner and next-rehearsal date, the closing snapshot is filed with triage, and all three living records reconcile cleanly into the handoff note.
+What success looks like: The recovery record is complete with an owner and next-rehearsal date and sealed on both seats, the closing SCAP snapshot is filed with triage, and all three living records reconcile cleanly into the handoff note.
 
 © 2026 Secure By Design Team LLC

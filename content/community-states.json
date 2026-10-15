@@ -1,0 +1,845 @@
+[
+ {
+  "code": "AL",
+  "name": "Alabama",
+  "slug": "alabama",
+  "stateJobs": {
+   "label": "Alabama State Personnel Department",
+   "url": "https://personnel.alabama.gov/Jobs.aspx"
+  },
+  "workforceAgency": {
+   "label": "Alabama Department of Workforce",
+   "url": "https://workforce.alabama.gov/"
+  },
+  "jobBoard": {
+   "label": "AlabamaWorks",
+   "url": "https://alabamaworks.workforce.alabama.gov/vosnet/default.aspx"
+  }
+ },
+ {
+  "code": "AK",
+  "name": "Alaska",
+  "slug": "alaska",
+  "stateJobs": {
+   "label": "Workplace Alaska",
+   "url": "https://workplace.alaska.gov"
+  },
+  "workforceAgency": {
+   "label": "Alaska Department of Labor and Workforce Development",
+   "url": "https://labor.alaska.gov/"
+  },
+  "jobBoard": {
+   "label": "AlaskaJobs",
+   "url": "https://alaskajobs.alaska.gov/"
+  }
+ },
+ {
+  "code": "AZ",
+  "name": "Arizona",
+  "slug": "arizona",
+  "stateJobs": {
+   "label": "AZStateJobs",
+   "url": "https://www.azstatejobs.gov/jobs/search"
+  },
+  "workforceAgency": {
+   "label": "Arizona Department of Economic Security (ARIZONA@WORK)",
+   "url": "https://des.az.gov/"
+  },
+  "jobBoard": {
+   "label": "Arizona Job Connection",
+   "url": "https://www.azjobconnection.gov/job_seeker"
+  }
+ },
+ {
+  "code": "AR",
+  "name": "Arkansas",
+  "slug": "arkansas",
+  "stateJobs": {
+   "label": "ARCareers",
+   "url": "https://arcareers.arkansas.gov/"
+  },
+  "workforceAgency": {
+   "label": "Arkansas Division of Workforce Services",
+   "url": "https://www.dws.arkansas.gov/"
+  },
+  "jobBoard": {
+   "label": "Arkansas JobLink",
+   "url": "https://arjoblink.arkansas.gov/"
+  }
+ },
+ {
+  "code": "CA",
+  "name": "California",
+  "slug": "california",
+  "stateJobs": {
+   "label": "CalCareers",
+   "url": "https://www.calcareers.ca.gov/"
+  },
+  "workforceAgency": {
+   "label": "Employment Development Department (EDD)",
+   "url": "https://edd.ca.gov/"
+  },
+  "jobBoard": {
+   "label": "CalJOBS",
+   "url": "https://www.caljobs.ca.gov/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "CO",
+  "name": "Colorado",
+  "slug": "colorado",
+  "stateJobs": {
+   "label": "State of Colorado Careers",
+   "url": "https://careers.colorado.gov/"
+  },
+  "workforceAgency": {
+   "label": "Colorado Department of Labor and Employment (CDLE)",
+   "url": "https://cdle.colorado.gov"
+  },
+  "jobBoard": {
+   "label": "Connecting Colorado",
+   "url": "https://connectingcolorado.com"
+  }
+ },
+ {
+  "code": "CT",
+  "name": "Connecticut",
+  "slug": "connecticut",
+  "stateJobs": {
+   "label": "State of Connecticut Executive Branch Jobs (DAS)",
+   "url": "https://portal.ct.gov/das/statewide-hr/apply-for-state-job-openings"
+  },
+  "workforceAgency": {
+   "label": "Connecticut Department of Labor",
+   "url": "https://portal.ct.gov/dol"
+  }
+ },
+ {
+  "code": "DE",
+  "name": "Delaware",
+  "slug": "delaware",
+  "stateJobs": {
+   "label": "Delaware State Jobs",
+   "url": "https://statejobs.delaware.gov/careers/index.shtml"
+  },
+  "workforceAgency": {
+   "label": "Delaware Department of Labor",
+   "url": "https://labor.delaware.gov/"
+  },
+  "jobBoard": {
+   "label": "Delaware JobLink",
+   "url": "https://joblink.delaware.gov"
+  }
+ },
+ {
+  "code": "DC",
+  "name": "District of Columbia",
+  "slug": "district-of-columbia",
+  "stateJobs": {
+   "label": "Careers DC",
+   "url": "https://careers.dc.gov/"
+  },
+  "workforceAgency": {
+   "label": "DC Department of Employment Services",
+   "url": "https://does.dc.gov/"
+  },
+  "jobBoard": {
+   "label": "DC Networks",
+   "url": "https://www.dcnetworks.org/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "FL",
+  "name": "Florida",
+  "slug": "florida",
+  "stateJobs": {
+   "label": "People First (State of Florida careers)",
+   "url": "https://jobs.myflorida.com/"
+  },
+  "workforceAgency": {
+   "label": "FloridaCommerce",
+   "url": "https://www.floridajobs.org/"
+  },
+  "jobBoard": {
+   "label": "Employ Florida",
+   "url": "https://www.employflorida.com/"
+  }
+ },
+ {
+  "code": "GA",
+  "name": "Georgia",
+  "slug": "georgia",
+  "stateJobs": {
+   "label": "Team Georgia Careers",
+   "url": "https://careers.georgia.gov/"
+  },
+  "workforceAgency": {
+   "label": "WorkSource Georgia",
+   "url": "https://www.tcsg.edu/worksource/"
+  },
+  "jobBoard": {
+   "label": "WorkSource Georgia Portal",
+   "url": "https://www.worksourcegaportal.com/"
+  }
+ },
+ {
+  "code": "HI",
+  "name": "Hawaii",
+  "slug": "hawaii",
+  "stateJobs": {
+   "label": "State of Hawai'i careers",
+   "url": "https://jobs.hawaii.gov/"
+  },
+  "workforceAgency": {
+   "label": "DLIR Workforce Development Division",
+   "url": "https://labor.hawaii.gov/wdd/"
+  },
+  "jobBoard": {
+   "label": "HireNet Hawaii",
+   "url": "https://hirenethawaii.com"
+  }
+ },
+ {
+  "code": "ID",
+  "name": "Idaho",
+  "slug": "idaho",
+  "stateJobs": {
+   "label": "State of Idaho Job Openings",
+   "url": "https://statecareers.idaho.gov/"
+  },
+  "workforceAgency": {
+   "label": "Idaho Department of Labor",
+   "url": "https://www.labor.idaho.gov/"
+  },
+  "jobBoard": {
+   "label": "IdahoWorks",
+   "url": "https://idahoworks.gov/"
+  }
+ },
+ {
+  "code": "IL",
+  "name": "Illinois",
+  "slug": "illinois",
+  "stateJobs": {
+   "label": "State of Illinois Employment Opportunities",
+   "url": "https://careers.illinois.gov/"
+  },
+  "workforceAgency": {
+   "label": "Illinois DCEO Workforce Development",
+   "url": "https://dceo.illinois.gov/workforcedevelopment.html"
+  },
+  "jobBoard": {
+   "label": "Illinois JobLink",
+   "url": "https://www.illinoisjoblink.com/"
+  }
+ },
+ {
+  "code": "IN",
+  "name": "Indiana",
+  "slug": "indiana",
+  "stateJobs": {
+   "label": "Work for Indiana",
+   "url": "https://workforindiana.in.gov/"
+  },
+  "workforceAgency": {
+   "label": "Indiana Department of Workforce Development",
+   "url": "https://www.in.gov/dwd/"
+  },
+  "jobBoard": {
+   "label": "Indiana Career Connect",
+   "url": "https://www.indianacareerconnect.com"
+  }
+ },
+ {
+  "code": "IA",
+  "name": "Iowa",
+  "slug": "iowa",
+  "stateJobs": {
+   "label": "State of Iowa job openings",
+   "url": "https://www.governmentjobs.com/careers/iowa"
+  },
+  "workforceAgency": {
+   "label": "Iowa Workforce Development",
+   "url": "https://workforce.iowa.gov/"
+  },
+  "jobBoard": {
+   "label": "IowaWORKS",
+   "url": "https://www.iowaworks.gov/vosnet/default.aspx"
+  }
+ },
+ {
+  "code": "KS",
+  "name": "Kansas",
+  "slug": "kansas",
+  "workforceAgency": {
+   "label": "Kansas Department of Commerce Workforce Services",
+   "url": "https://www.kansascommerce.gov/workforce/"
+  },
+  "jobBoard": {
+   "label": "KANSASWORKS",
+   "url": "https://www.kansasworks.com/ada/r/"
+  }
+ },
+ {
+  "code": "KY",
+  "name": "Kentucky",
+  "slug": "kentucky",
+  "stateJobs": {
+   "label": "Kentucky Personnel Cabinet careers",
+   "url": "https://careers.ky.gov/"
+  },
+  "workforceAgency": {
+   "label": "Kentucky Career Center",
+   "url": "https://kcc.ky.gov/"
+  },
+  "jobBoard": {
+   "label": "Kentucky Career Portal",
+   "url": "https://kyjobs.usnlx.com/jobs/"
+  }
+ },
+ {
+  "code": "LA",
+  "name": "Louisiana",
+  "slug": "louisiana",
+  "stateJobs": {
+   "label": "Louisiana State Civil Service jobs",
+   "url": "https://jobs.la.gov/"
+  },
+  "workforceAgency": {
+   "label": "Louisiana Workforce Commission",
+   "url": "https://www.laworks.net/"
+  },
+  "jobBoard": {
+   "label": "HiRE",
+   "url": "https://www.louisianaworks.net/hire/vosnet/default.aspx"
+  }
+ },
+ {
+  "code": "ME",
+  "name": "Maine",
+  "slug": "maine",
+  "stateJobs": {
+   "label": "Maine state jobs",
+   "url": "https://www.maine.gov/bhr/state-jobs"
+  },
+  "workforceAgency": {
+   "label": "Maine Department of Labor",
+   "url": "https://www.maine.gov/labor/"
+  },
+  "jobBoard": {
+   "label": "Maine JobLink",
+   "url": "https://joblink.maine.gov/"
+  }
+ },
+ {
+  "code": "MD",
+  "name": "Maryland",
+  "slug": "maryland",
+  "stateJobs": {
+   "label": "State of Maryland Online Employment Center",
+   "url": "https://jobapscloud.com/MD/"
+  },
+  "workforceAgency": {
+   "label": "Maryland Department of Labor",
+   "url": "https://labor.maryland.gov/"
+  },
+  "jobBoard": {
+   "label": "Maryland Workforce Exchange",
+   "url": "https://mwejobs.maryland.gov/"
+  }
+ },
+ {
+  "code": "MA",
+  "name": "Massachusetts",
+  "slug": "massachusetts",
+  "stateJobs": {
+   "label": "MassCareers",
+   "url": "https://www.mass.gov/MassCareers"
+  },
+  "workforceAgency": {
+   "label": "Executive Office of Labor and Workforce Development",
+   "url": "https://www.mass.gov/orgs/executive-office-of-labor-and-workforce-development"
+  },
+  "jobBoard": {
+   "label": "MassHire JobQuest",
+   "url": "https://jobquest.mass.gov/JobQuest/NewSearch.aspx"
+  }
+ },
+ {
+  "code": "MI",
+  "name": "Michigan",
+  "slug": "michigan",
+  "stateJobs": {
+   "label": "State of Michigan Employment",
+   "url": "https://www.michigan.gov/som/job-seekers/state-of-michigan-employment"
+  },
+  "workforceAgency": {
+   "label": "Michigan Department of Labor and Economic Opportunity",
+   "url": "https://www.michigan.gov/leo"
+  },
+  "jobBoard": {
+   "label": "Pure Michigan Talent Connect",
+   "url": "https://www.mitalent.org/"
+  }
+ },
+ {
+  "code": "MN",
+  "name": "Minnesota",
+  "slug": "minnesota",
+  "stateJobs": {
+   "label": "Careers in Minnesota State Government",
+   "url": "https://mn.gov/mmb/careers/"
+  },
+  "workforceAgency": {
+   "label": "Minnesota Department of Employment and Economic Development (DEED)",
+   "url": "https://mn.gov/deed/"
+  },
+  "jobBoard": {
+   "label": "CareerForce",
+   "url": "https://careerforce.mn.gov/"
+  }
+ },
+ {
+  "code": "MS",
+  "name": "Mississippi",
+  "slug": "mississippi",
+  "stateJobs": {
+   "label": "Mississippi state jobs (MSPB)",
+   "url": "https://www.governmentjobs.com/careers/mississippi"
+  },
+  "workforceAgency": {
+   "label": "Mississippi Department of Employment Security (MDES)",
+   "url": "https://mdes.ms.gov/"
+  },
+  "jobBoard": {
+   "label": "MS Works job search",
+   "url": "https://wings.mdes.ms.gov/wings/spring/self-service/job-order/job-order-lookup?orderBy=openDate&orderDir=desc"
+  }
+ },
+ {
+  "code": "MO",
+  "name": "Missouri",
+  "slug": "missouri",
+  "stateJobs": {
+   "label": "MO Careers",
+   "url": "https://mocareers.mo.gov/hiretrue/mo/mocareers/index.html"
+  },
+  "workforceAgency": {
+   "label": "Missouri Office of Workforce Development",
+   "url": "https://jobs.mo.gov/"
+  },
+  "jobBoard": {
+   "label": "MoJobs",
+   "url": "https://app-jobs.mo.gov/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "MT",
+  "name": "Montana",
+  "slug": "montana",
+  "stateJobs": {
+   "label": "State of Montana Careers",
+   "url": "https://statecareers.mt.gov"
+  },
+  "workforceAgency": {
+   "label": "Montana Department of Labor & Industry",
+   "url": "https://www.dli.mt.gov"
+  }
+ },
+ {
+  "code": "NE",
+  "name": "Nebraska",
+  "slug": "nebraska",
+  "stateJobs": {
+   "label": "Nebraska State Jobs",
+   "url": "https://statejobs.nebraska.gov/"
+  },
+  "workforceAgency": {
+   "label": "Nebraska Department of Labor",
+   "url": "https://dol.nebraska.gov/"
+  },
+  "jobBoard": {
+   "label": "NEworks",
+   "url": "https://neworks.nebraska.gov/"
+  }
+ },
+ {
+  "code": "NV",
+  "name": "Nevada",
+  "slug": "nevada",
+  "stateJobs": {
+   "label": "NV Jobs",
+   "url": "https://nvjobs.nv.gov/"
+  },
+  "workforceAgency": {
+   "label": "Nevada Department of Employment, Training and Rehabilitation (DETR)",
+   "url": "https://detr.nv.gov/"
+  },
+  "jobBoard": {
+   "label": "EmployNV",
+   "url": "https://www.employnv.gov/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "NH",
+  "name": "New Hampshire",
+  "slug": "new-hampshire",
+  "workforceAgency": {
+   "label": "New Hampshire Employment Security (NHES)",
+   "url": "https://www.nhes.nh.gov/"
+  }
+ },
+ {
+  "code": "NJ",
+  "name": "New Jersey",
+  "slug": "new-jersey",
+  "stateJobs": {
+   "label": "NJ Civil Service Commission job announcements",
+   "url": "https://www.nj.gov/csc/jobs/"
+  },
+  "workforceAgency": {
+   "label": "NJ Department of Labor and Workforce Development",
+   "url": "https://www.nj.gov/labor/"
+  },
+  "jobBoard": {
+   "label": "Job Source",
+   "url": "https://jobsource.nj.gov/jz/views/jobzone/guest.jsf"
+  }
+ },
+ {
+  "code": "NM",
+  "name": "New Mexico",
+  "slug": "new-mexico",
+  "stateJobs": {
+   "label": "Work for New Mexico (State Personnel Office)",
+   "url": "https://www.spo.state.nm.us/work-for-new-mexico/"
+  },
+  "workforceAgency": {
+   "label": "New Mexico Department of Workforce Solutions",
+   "url": "https://www.dws.state.nm.us/"
+  }
+ },
+ {
+  "code": "NY",
+  "name": "New York",
+  "slug": "new-york",
+  "stateJobs": {
+   "label": "StateJobsNY",
+   "url": "https://statejobs.ny.gov/"
+  },
+  "workforceAgency": {
+   "label": "New York State Department of Labor",
+   "url": "https://dol.ny.gov/"
+  },
+  "jobBoard": {
+   "label": "NYS Job Bank",
+   "url": "https://myjobsny.usnlx.com/"
+  }
+ },
+ {
+  "code": "NC",
+  "name": "North Carolina",
+  "slug": "north-carolina",
+  "stateJobs": {
+   "label": "Work for NC",
+   "url": "https://oshr.nc.gov/work-nc"
+  },
+  "workforceAgency": {
+   "label": "NC Commerce Division of Workforce Solutions",
+   "url": "https://www.commerce.nc.gov/about-us/divisions-programs/workforce-solutions-division"
+  },
+  "jobBoard": {
+   "label": "NCWorks Online",
+   "url": "https://www.ncworks.gov/"
+  }
+ },
+ {
+  "code": "ND",
+  "name": "North Dakota",
+  "slug": "north-dakota",
+  "stateJobs": {
+   "label": "Team ND careers",
+   "url": "https://www.omb.nd.gov/team-nd-careers/career-openings"
+  },
+  "workforceAgency": {
+   "label": "Job Service North Dakota",
+   "url": "https://www.jobsnd.com/"
+  },
+  "jobBoard": {
+   "label": "North Dakota Workforce Connection",
+   "url": "https://www.ndworkforceconnection.com/"
+  }
+ },
+ {
+  "code": "OH",
+  "name": "Ohio",
+  "slug": "ohio",
+  "stateJobs": {
+   "label": "Careers.Ohio.gov",
+   "url": "https://careers.ohio.gov/"
+  },
+  "workforceAgency": {
+   "label": "Ohio Department of Job and Family Services (ODJFS)",
+   "url": "https://jfs.ohio.gov/"
+  },
+  "jobBoard": {
+   "label": "OhioMeansJobs",
+   "url": "https://ohiomeansjobs.ohio.gov/home"
+  }
+ },
+ {
+  "code": "OK",
+  "name": "Oklahoma",
+  "slug": "oklahoma",
+  "stateJobs": {
+   "label": "State of Oklahoma careers",
+   "url": "https://oklahoma.gov/omes/careers.html"
+  },
+  "workforceAgency": {
+   "label": "Oklahoma Employment Security Commission",
+   "url": "https://oklahoma.gov/oesc.html"
+  },
+  "jobBoard": {
+   "label": "EmployOklahoma",
+   "url": "https://www.employoklahoma.gov/"
+  }
+ },
+ {
+  "code": "OR",
+  "name": "Oregon",
+  "slug": "oregon",
+  "stateJobs": {
+   "label": "Oregon Job Opportunities",
+   "url": "https://www.oregon.gov/jobs/Pages/index.aspx"
+  },
+  "workforceAgency": {
+   "label": "Oregon Employment Department",
+   "url": "https://www.oregon.gov/employ/Pages/default.aspx"
+  },
+  "jobBoard": {
+   "label": "WorkSource Oregon",
+   "url": "https://worksourceoregon.org/jobsearch"
+  }
+ },
+ {
+  "code": "PA",
+  "name": "Pennsylvania",
+  "slug": "pennsylvania",
+  "stateJobs": {
+   "label": "Commonwealth of Pennsylvania Jobs",
+   "url": "https://www.pa.gov/agencies/employment/open-jobs"
+  },
+  "workforceAgency": {
+   "label": "Pennsylvania Department of Labor & Industry",
+   "url": "https://www.pa.gov/agencies/dli"
+  },
+  "jobBoard": {
+   "label": "PA CareerLink",
+   "url": "https://www.pacareerlink.pa.gov/jponline/"
+  }
+ },
+ {
+  "code": "RI",
+  "name": "Rhode Island",
+  "slug": "rhode-island",
+  "stateJobs": {
+   "label": "Apply RI",
+   "url": "https://apply.ri.gov/"
+  },
+  "workforceAgency": {
+   "label": "Rhode Island Department of Labor and Training",
+   "url": "https://dlt.ri.gov/"
+  },
+  "jobBoard": {
+   "label": "EmployRI",
+   "url": "https://www.employri.org"
+  }
+ },
+ {
+  "code": "SC",
+  "name": "South Carolina",
+  "slug": "south-carolina",
+  "stateJobs": {
+   "label": "SC State Government Careers",
+   "url": "https://careers.sc.gov"
+  },
+  "workforceAgency": {
+   "label": "SC Department of Employment and Workforce",
+   "url": "https://dew.sc.gov/"
+  },
+  "jobBoard": {
+   "label": "SC Works Online Services",
+   "url": "https://jobs.scworks.org/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "SD",
+  "name": "South Dakota",
+  "slug": "south-dakota",
+  "stateJobs": {
+   "label": "South Dakota state jobs (Bureau of Human Resources)",
+   "url": "https://bhr.sd.gov/job-seekers"
+  },
+  "workforceAgency": {
+   "label": "South Dakota Department of Labor and Regulation",
+   "url": "https://dlr.sd.gov/default.aspx"
+  },
+  "jobBoard": {
+   "label": "SDWORKS",
+   "url": "https://www.southdakotaworks.org/"
+  }
+ },
+ {
+  "code": "TN",
+  "name": "Tennessee",
+  "slug": "tennessee",
+  "stateJobs": {
+   "label": "State of Tennessee Careers",
+   "url": "https://www.tn.gov/careers.html"
+  },
+  "workforceAgency": {
+   "label": "Tennessee Department of Labor and Workforce Development",
+   "url": "https://www.tn.gov/workforce.html"
+  },
+  "jobBoard": {
+   "label": "Jobs4TN",
+   "url": "https://www.jobs4tn.gov/"
+  }
+ },
+ {
+  "code": "TX",
+  "name": "Texas",
+  "slug": "texas",
+  "stateJobs": {
+   "label": "WorkInTexas (State of Texas Application)",
+   "url": "https://www.workintexas.com/vosnet/Default.aspx"
+  },
+  "workforceAgency": {
+   "label": "Texas Workforce Commission",
+   "url": "https://twc.texas.gov/"
+  },
+  "jobBoard": {
+   "label": "WorkInTexas",
+   "url": "https://www.workintexas.com/vosnet/Default.aspx"
+  }
+ },
+ {
+  "code": "UT",
+  "name": "Utah",
+  "slug": "utah",
+  "stateJobs": {
+   "label": "Utah State Jobs",
+   "url": "https://statejobs.utah.gov/"
+  },
+  "workforceAgency": {
+   "label": "Utah Department of Workforce Services",
+   "url": "https://jobs.utah.gov/"
+  },
+  "jobBoard": {
+   "label": "DWS job search",
+   "url": "https://jobs.utah.gov/jobseeker/index.html"
+  }
+ },
+ {
+  "code": "VT",
+  "name": "Vermont",
+  "slug": "vermont",
+  "stateJobs": {
+   "label": "State of Vermont Careers",
+   "url": "https://careers.vermont.gov"
+  },
+  "workforceAgency": {
+   "label": "Vermont Department of Labor",
+   "url": "https://labor.vermont.gov"
+  },
+  "jobBoard": {
+   "label": "Vermont JobLink",
+   "url": "https://www.vermontjoblink.com"
+  }
+ },
+ {
+  "code": "VA",
+  "name": "Virginia",
+  "slug": "virginia",
+  "stateJobs": {
+   "label": "Virginia Jobs",
+   "url": "https://jobs.virginia.gov"
+  },
+  "workforceAgency": {
+   "label": "Virginia Works",
+   "url": "https://virginiaworks.gov"
+  },
+  "jobBoard": {
+   "label": "Virginia Workforce Connection",
+   "url": "https://www.vawc.virginia.gov"
+  }
+ },
+ {
+  "code": "WA",
+  "name": "Washington",
+  "slug": "washington",
+  "stateJobs": {
+   "label": "Washington State Careers",
+   "url": "https://careers.wa.gov"
+  },
+  "workforceAgency": {
+   "label": "Employment Security Department",
+   "url": "https://esd.wa.gov"
+  },
+  "jobBoard": {
+   "label": "WorkSourceWA",
+   "url": "https://worksourcewa.com/"
+  }
+ },
+ {
+  "code": "WV",
+  "name": "West Virginia",
+  "slug": "west-virginia",
+  "stateJobs": {
+   "label": "West Virginia state jobs",
+   "url": "https://www.governmentjobs.com/careers/wv"
+  },
+  "workforceAgency": {
+   "label": "WorkForce West Virginia",
+   "url": "https://workforcewv.org"
+  },
+  "jobBoard": {
+   "label": "WorkForce WV job search",
+   "url": "https://macc.workforcewv.org/jobs"
+  }
+ },
+ {
+  "code": "WI",
+  "name": "Wisconsin",
+  "slug": "wisconsin",
+  "stateJobs": {
+   "label": "Wisc.Jobs",
+   "url": "https://wisc.jobs"
+  },
+  "workforceAgency": {
+   "label": "Department of Workforce Development",
+   "url": "https://dwd.wisconsin.gov"
+  },
+  "jobBoard": {
+   "label": "Job Center of Wisconsin",
+   "url": "https://jobcenterofwisconsin.com/"
+  }
+ },
+ {
+  "code": "WY",
+  "name": "Wyoming",
+  "slug": "wyoming",
+  "stateJobs": {
+   "label": "State of Wyoming Jobs",
+   "url": "https://statejobs.state.wy.us"
+  },
+  "workforceAgency": {
+   "label": "Wyoming Department of Workforce Services",
+   "url": "https://dws.wyo.gov"
+  },
+  "jobBoard": {
+   "label": "HireWYO",
+   "url": "https://hirewyo.com"
+  }
+ }
+]

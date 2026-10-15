@@ -33,7 +33,7 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'harden-baseline', 'two-tier-pki', 'tiered-admin', 'logging-pipeline', 'workstation-fleet', 'patch-protect', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'rmf-body-of-evidence', 'rmf-authorization-to-operate']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
@@ -50,7 +50,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 10], ['network-authorization', 3]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 3]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -100,7 +100,10 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [6, 10, 6, 6, 6, 7, 6, 5, 6]);
+  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 7, 5, 5, 5, 6]);
+  // Every Build the Network tile is numbered in path order, 1.1 to 1.19; coming-soon tiles hold their place without material.
+  assert.deepEqual(getCatalogEntries(library).filter(entry => entry.categoryId === 'network-build' || entry.id === 'dc01-dc02').map(entry => entry.number), Array.from({ length: 19 }, (_, i) => `1.${i + 1}`));
+  assert.deepEqual(library.courses.filter(course => course.kind === 'coming-soon').map(course => course.id), ['endpoint-protection', 'vulnerability-scanning']);
   for (const configuration of configurations) {
     const course = library.courses.find(item => item.id === configuration.id);
     assert.equal(course.kind, 'configuration');
@@ -125,7 +128,7 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
         assert.ok(quiz.explanation, `${lesson.id} explains each answer`);
       }
       assert.ok(new Set(lesson.quizzes.map(quiz => quiz.correct)).size > 1, `${lesson.id} varies the correct answer position`);
-      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/'].some(origin => source.url.startsWith(origin)))));
+      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://help.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/', 'https://access.redhat.com/', 'https://dnf-plugins-core.readthedocs.io/', 'https://github.com/rpm-software-management/', 'https://manpages.debian.org/', 'https://httpd.apache.org/', 'https://man.openbsd.org/', 'https://chrony-project.org/', 'https://firewalld.org/', 'https://www.rfc-editor.org/'].some(origin => source.url.startsWith(origin)))));
       assert.ok(checklist.includes(lesson.title));
       const entry = progress.find(item => item.id === `training:${course.id}:${lesson.id}`);
       assert.equal(entry?.href, `${course.training.guide}#${lesson.id}`);
@@ -336,6 +339,8 @@ test('the first recording remains unpublished and the retired formats are remove
 
 test('every course tile carries the companion details the expanded tile shows', () => {
   for (const course of library.courses) {
+    assert.ok(course.outcomeSummary || course.kind === 'coming-soon', `${course.id} outcome summary`);
+    if (course.kind === 'coming-soon') { assert.ok(course.networkLabel && course.artLabels?.length >= 2, course.id); continue; }
     assert.ok(course.training.cover && existsSync(new URL('../public' + course.training.cover, import.meta.url)), `${course.id} cover`);
     assert.ok(course.outcomeSummary, `${course.id} outcome summary`);
     assert.ok(course.networkLabel, `${course.id} network label`);

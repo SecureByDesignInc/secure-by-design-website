@@ -54,15 +54,99 @@
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:time",
-    "title": "Make SBD-DC01 the domain's time source",
-    "href": "/training/dns-configuration#time",
-    "group": "Network build"
-  },
-  {
     "id": "training:dns-configuration:troubleshoot",
     "title": "Find the fault and record the fix",
     "href": "/training/dns-configuration#troubleshoot",
+    "group": "Network build"
+  },
+  {
+    "id": "training:domain-time:time-plan",
+    "title": "Plan the domain's time",
+    "href": "/training/domain-time#time-plan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:domain-time:time",
+    "title": "Make SBD-DC01 the domain's time source",
+    "href": "/training/domain-time#time",
+    "group": "Network build"
+  },
+  {
+    "id": "training:domain-time:time-members",
+    "title": "Bring every system onto the hierarchy",
+    "href": "/training/domain-time#time-members",
+    "group": "Network build"
+  },
+  {
+    "id": "training:domain-time:time-verify",
+    "title": "Prove the time chain",
+    "href": "/training/domain-time#time-verify",
+    "group": "Network build"
+  },
+  {
+    "id": "training:domain-time:time-troubleshoot",
+    "title": "Find the time fault and record the fix",
+    "href": "/training/domain-time#time-troubleshoot",
+    "group": "Network build"
+  },
+  {
+    "id": "training:stig-scap:stig-basics",
+    "title": "Understand STIGs, SCAP and checklists",
+    "href": "/training/stig-scap#stig-basics",
+    "group": "Network build"
+  },
+  {
+    "id": "training:stig-scap:staging",
+    "title": "Stage the DISA content across the air gap",
+    "href": "/training/stig-scap#staging",
+    "group": "Network build"
+  },
+  {
+    "id": "training:stig-scap:baseline",
+    "title": "Capture the pre-hardening baseline",
+    "href": "/training/stig-scap#baseline",
+    "group": "Network build"
+  },
+  {
+    "id": "training:stig-scap:checklists",
+    "title": "Build the checklists and answer the manual checks",
+    "href": "/training/stig-scap#checklists",
+    "group": "Network build"
+  },
+  {
+    "id": "training:stig-scap:findings",
+    "title": "Write the findings record for hardening",
+    "href": "/training/stig-scap#findings",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:ou-design",
+    "title": "Design and build the OU structure",
+    "href": "/training/harden-baseline#ou-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:gpo-basics",
+    "title": "Learn how Group Policy applies",
+    "href": "/training/harden-baseline#gpo-basics",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:apply",
+    "title": "Import and link the DISA GPOs",
+    "href": "/training/harden-baseline#apply",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:rescan",
+    "title": "Rescan, reconcile, and record",
+    "href": "/training/harden-baseline#rescan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:harden-baseline:maintain",
+    "title": "Set the rescan cadence and exception record",
+    "href": "/training/harden-baseline#maintain",
     "group": "Network build"
   },
   {
@@ -121,8 +205,356 @@
   },
   {
     "id": "training:two-tier-pki:validate",
-    "title": "Validate enrollment, revocation, and recovery",
+    "title": "Validate enrollment, revocation, and renewal",
     "href": "/training/two-tier-pki#validate",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dhcp:dhcp-design",
+    "title": "Design the addressing service",
+    "href": "/training/dhcp#dhcp-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dhcp:dhcp",
+    "title": "Build SBD-DHCP01 and its scope",
+    "href": "/training/dhcp#dhcp",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dhcp:dhcp-dns",
+    "title": "Register client names securely",
+    "href": "/training/dhcp#dhcp-dns",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dhcp:dhcp-audit",
+    "title": "Audit leases and write the restore note",
+    "href": "/training/dhcp#dhcp-audit",
+    "group": "Network build"
+  },
+  {
+    "id": "training:dhcp:dhcp-prove",
+    "title": "Prove the service and hand off",
+    "href": "/training/dhcp#dhcp-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:design",
+    "title": "Design the tiers and the admin seats",
+    "href": "/training/tiered-admin#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:admin-hosts",
+    "title": "Build the administration systems",
+    "href": "/training/tiered-admin#admin-hosts",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:logon-restrictions",
+    "title": "Restrict where privilege can sign in",
+    "href": "/training/tiered-admin#logon-restrictions",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:prove",
+    "title": "Prove the tiers end to end",
+    "href": "/training/tiered-admin#prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:tiered-admin:scan",
+    "title": "Move the scan tools, rescan, and hand off",
+    "href": "/training/tiered-admin#scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:linux-repository:repo-design",
+    "title": "Design the repository and its trust",
+    "href": "/training/linux-repository#repo-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:linux-repository:repo-build",
+    "title": "Build and harden SBD-REPO01",
+    "href": "/training/linux-repository#repo-build",
+    "group": "Network build"
+  },
+  {
+    "id": "training:linux-repository:repo",
+    "title": "Mirror, verify, and publish a snapshot",
+    "href": "/training/linux-repository#repo",
+    "group": "Network build"
+  },
+  {
+    "id": "training:linux-repository:repo-consumers",
+    "title": "Configure the Linux clients",
+    "href": "/training/linux-repository#repo-consumers",
+    "group": "Network build"
+  },
+  {
+    "id": "training:linux-repository:repo-prove",
+    "title": "Keep it current and prove it",
+    "href": "/training/linux-repository#repo-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:design",
+    "title": "Design collect, protect, analyze",
+    "href": "/training/logging-pipeline#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:auditing",
+    "title": "Turn on the right auditing",
+    "href": "/training/logging-pipeline#auditing",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:collector",
+    "title": "Build the collector",
+    "href": "/training/logging-pipeline#collector",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:collector-health",
+    "title": "Keep the collector trustworthy",
+    "href": "/training/logging-pipeline#collector-health",
+    "group": "Network build"
+  },
+  {
+    "id": "training:logging-pipeline:collector-prove",
+    "title": "Prove collection and hand off",
+    "href": "/training/logging-pipeline#collector-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:audit-repository:repository-design",
+    "title": "Design the repository and build SBD-AUDIT01",
+    "href": "/training/audit-repository#repository-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:audit-repository:protect",
+    "title": "Archive, hash, and protect the record",
+    "href": "/training/audit-repository#protect",
+    "group": "Network build"
+  },
+  {
+    "id": "training:audit-repository:integrity",
+    "title": "Verify the catalog and watch the repository",
+    "href": "/training/audit-repository#integrity",
+    "group": "Network build"
+  },
+  {
+    "id": "training:audit-repository:retention",
+    "title": "Run retention and prove retrieval",
+    "href": "/training/audit-repository#retention",
+    "group": "Network build"
+  },
+  {
+    "id": "training:audit-repository:repository-prove",
+    "title": "Prove the record survives and hand off",
+    "href": "/training/audit-repository#repository-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:analysis-plan",
+    "title": "Plan analysis and build SBD-SPLUNK01",
+    "href": "/training/splunk-analysis#analysis-plan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:ingest",
+    "title": "Install Splunk and bring in the streams",
+    "href": "/training/splunk-analysis#ingest",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:analyze",
+    "title": "Build the working searches",
+    "href": "/training/splunk-analysis#analyze",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:alerts",
+    "title": "Own the alerts",
+    "href": "/training/splunk-analysis#alerts",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:prove",
+    "title": "Prove the chain and hand off",
+    "href": "/training/splunk-analysis#prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:prepare",
+    "title": "Prepare the fleet rollout",
+    "href": "/training/workstation-fleet#prepare",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:pilot",
+    "title": "Join the pilot and inspect first boot",
+    "href": "/training/workstation-fleet#pilot",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:laps",
+    "title": "Manage local administrators with Windows LAPS",
+    "href": "/training/workstation-fleet#laps",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:certificates",
+    "title": "Autoenroll the fleet's certificates",
+    "href": "/training/workstation-fleet#certificates",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:nac",
+    "title": "Admit only enrolled devices with 802.1X",
+    "href": "/training/workstation-fleet#nac",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:scale",
+    "title": "Scale to fifty, enforce 802.1X, and prove by sample",
+    "href": "/training/workstation-fleet#scale",
+    "group": "Network build"
+  },
+  {
+    "id": "training:workstation-fleet:scan",
+    "title": "Delta scan the fleet and hand off",
+    "href": "/training/workstation-fleet#scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:design",
+    "title": "Design the rings and the Windows update rule",
+    "href": "/training/patch-protect#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:wsus",
+    "title": "Build SBD-WSUS01 as a disconnected server",
+    "href": "/training/patch-protect#wsus",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:wsus-offline",
+    "title": "Carry updates across the air gap",
+    "href": "/training/patch-protect#wsus-offline",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:wsus-targeting",
+    "title": "Target the rings with computer groups and Group Policy",
+    "href": "/training/patch-protect#wsus-targeting",
+    "group": "Network build"
+  },
+  {
+    "id": "training:patch-protect:wsus-prove",
+    "title": "Run the first cycle and prove it",
+    "href": "/training/patch-protect#wsus-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:management-server:mgmt-design",
+    "title": "Design the inventory and its keeper",
+    "href": "/training/management-server#mgmt-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:management-server:mgmt-build",
+    "title": "Build and harden SBD-MGMT01",
+    "href": "/training/management-server#mgmt-build",
+    "group": "Network build"
+  },
+  {
+    "id": "training:management-server:mgmt",
+    "title": "Build the living inventory",
+    "href": "/training/management-server#mgmt",
+    "group": "Network build"
+  },
+  {
+    "id": "training:management-server:inventory-sources",
+    "title": "Feed it from what the network already knows",
+    "href": "/training/management-server#inventory-sources",
+    "group": "Network build"
+  },
+  {
+    "id": "training:management-server:mgmt-prove",
+    "title": "Reconcile the inventory and prove it",
+    "href": "/training/management-server#mgmt-prove",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:design",
+    "title": "Design the service paths and identities",
+    "href": "/training/business-services#design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:fileserver",
+    "title": "Build SBD-FS01 with least-privilege shares",
+    "href": "/training/business-services#fileserver",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:database",
+    "title": "Build SBD-SQL01 behind its applications",
+    "href": "/training/business-services#database",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:apps-web",
+    "title": "Build SBD-APPS01 and SBD-WEB01",
+    "href": "/training/business-services#apps-web",
+    "group": "Network build"
+  },
+  {
+    "id": "training:business-services:prove-scan",
+    "title": "Reconcile, scan, and hand off",
+    "href": "/training/business-services#prove-scan",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:requirements",
+    "title": "Decide what recovery must prove",
+    "href": "/training/prove-recovery#requirements",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:directory",
+    "title": "Back up Tier 0: directory, CA, and policy",
+    "href": "/training/prove-recovery#directory",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:trust-state",
+    "title": "Back up the member servers and records",
+    "href": "/training/prove-recovery#trust-state",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:offline-copies",
+    "title": "Carry the copies to the offline cabinet",
+    "href": "/training/prove-recovery#offline-copies",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:rehearse",
+    "title": "Rehearse a real restore, in isolation",
+    "href": "/training/prove-recovery#rehearse",
+    "group": "Network build"
+  },
+  {
+    "id": "training:prove-recovery:record",
+    "title": "File the recovery record and close the path",
+    "href": "/training/prove-recovery#record",
     "group": "Network build"
   },
   {
@@ -196,257 +628,5 @@
     "title": "12 · Monitor and maintain authorization",
     "href": "/training/rmf/index.html#catalog/12",
     "group": "Network authorization"
-  },
-  {
-    "id": "training:harden-baseline:ou-design",
-    "title": "Design and build the OU structure",
-    "href": "/training/harden-baseline#ou-design",
-    "group": "Network build"
-  },
-  {
-    "id": "training:harden-baseline:staging",
-    "title": "Stage the tooling across the air gap",
-    "href": "/training/harden-baseline#staging",
-    "group": "Network build"
-  },
-  {
-    "id": "training:harden-baseline:baseline",
-    "title": "Capture the pre-hardening baseline",
-    "href": "/training/harden-baseline#baseline",
-    "group": "Network build"
-  },
-  {
-    "id": "training:harden-baseline:apply",
-    "title": "Import and link the DISA GPOs",
-    "href": "/training/harden-baseline#apply",
-    "group": "Network build"
-  },
-  {
-    "id": "training:harden-baseline:rescan",
-    "title": "Rescan, reconcile, and record",
-    "href": "/training/harden-baseline#rescan",
-    "group": "Network build"
-  },
-  {
-    "id": "training:harden-baseline:maintain",
-    "title": "Set the rescan cadence and exception record",
-    "href": "/training/harden-baseline#maintain",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:design",
-    "title": "Design the tiers and the address plan",
-    "href": "/training/tiered-admin#design",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:dhcp",
-    "title": "Build SBD-DHCP01 and the relay",
-    "href": "/training/tiered-admin#dhcp",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:admin-hosts",
-    "title": "Build the administration systems",
-    "href": "/training/tiered-admin#admin-hosts",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:logon-restrictions",
-    "title": "Restrict where privilege can sign in",
-    "href": "/training/tiered-admin#logon-restrictions",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:prove",
-    "title": "Prove the tiers and the addressing",
-    "href": "/training/tiered-admin#prove",
-    "group": "Network build"
-  },
-  {
-    "id": "training:tiered-admin:scan",
-    "title": "Delta scan and hand off",
-    "href": "/training/tiered-admin#scan",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:design",
-    "title": "Design collect, protect, analyze",
-    "href": "/training/logging-pipeline#design",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:auditing",
-    "title": "Turn on the right auditing",
-    "href": "/training/logging-pipeline#auditing",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:collector",
-    "title": "Build the collector",
-    "href": "/training/logging-pipeline#collector",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:protect",
-    "title": "Protect the record on SBD-AUDIT01",
-    "href": "/training/logging-pipeline#protect",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:analyze",
-    "title": "Analyze in SBD-SPLUNK01",
-    "href": "/training/logging-pipeline#analyze",
-    "group": "Network build"
-  },
-  {
-    "id": "training:logging-pipeline:prove",
-    "title": "Prove the chain and delta scan",
-    "href": "/training/logging-pipeline#prove",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:prepare",
-    "title": "Prepare the fleet rollout",
-    "href": "/training/workstation-fleet#prepare",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:pilot",
-    "title": "Join the pilot and inspect first boot",
-    "href": "/training/workstation-fleet#pilot",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:laps",
-    "title": "Manage local administrators with Windows LAPS",
-    "href": "/training/workstation-fleet#laps",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:certificates",
-    "title": "Autoenroll the fleet's certificates",
-    "href": "/training/workstation-fleet#certificates",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:nac",
-    "title": "Admit only enrolled devices with 802.1X",
-    "href": "/training/workstation-fleet#nac",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:scale",
-    "title": "Scale to fifty and prove by sample",
-    "href": "/training/workstation-fleet#scale",
-    "group": "Network build"
-  },
-  {
-    "id": "training:workstation-fleet:scan",
-    "title": "Delta scan the fleet and hand off",
-    "href": "/training/workstation-fleet#scan",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:design",
-    "title": "Design the rings and the software rules",
-    "href": "/training/patch-protect#design",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:wsus",
-    "title": "Build SBD-WSUS01 and the ring policies",
-    "href": "/training/patch-protect#wsus",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:repo",
-    "title": "Build SBD-REPO01 for approved packages",
-    "href": "/training/patch-protect#repo",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:mgmt",
-    "title": "SBD-MGMT01 and the living inventory",
-    "href": "/training/patch-protect#mgmt",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:epo",
-    "title": "Endpoint protection through SBD-EPO01",
-    "href": "/training/patch-protect#epo",
-    "group": "Network build"
-  },
-  {
-    "id": "training:patch-protect:nessus",
-    "title": "SBD-NESSUS01 and the standing cadence",
-    "href": "/training/patch-protect#nessus",
-    "group": "Network build"
-  },
-  {
-    "id": "training:business-services:design",
-    "title": "Design the service paths and identities",
-    "href": "/training/business-services#design",
-    "group": "Network build"
-  },
-  {
-    "id": "training:business-services:fileserver",
-    "title": "Build SBD-FS01 with least-privilege shares",
-    "href": "/training/business-services#fileserver",
-    "group": "Network build"
-  },
-  {
-    "id": "training:business-services:database",
-    "title": "Build SBD-SQL01 behind its applications",
-    "href": "/training/business-services#database",
-    "group": "Network build"
-  },
-  {
-    "id": "training:business-services:apps-web",
-    "title": "Build SBD-APPS01 and SBD-WEB01",
-    "href": "/training/business-services#apps-web",
-    "group": "Network build"
-  },
-  {
-    "id": "training:business-services:prove-scan",
-    "title": "Reconcile, scan, and close the wave",
-    "href": "/training/business-services#prove-scan",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:requirements",
-    "title": "Decide what recovery must prove",
-    "href": "/training/prove-recovery#requirements",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:directory",
-    "title": "Back up the directory, on schedule",
-    "href": "/training/prove-recovery#directory",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:trust-state",
-    "title": "Back up the CA, policy, boundary, and records",
-    "href": "/training/prove-recovery#trust-state",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:offline-copies",
-    "title": "Carry the copies to the offline cabinet",
-    "href": "/training/prove-recovery#offline-copies",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:rehearse",
-    "title": "Rehearse a real restore, in isolation",
-    "href": "/training/prove-recovery#rehearse",
-    "group": "Network build"
-  },
-  {
-    "id": "training:prove-recovery:record",
-    "title": "File the recovery record and close the path",
-    "href": "/training/prove-recovery#record",
-    "group": "Network build"
   }
 ]

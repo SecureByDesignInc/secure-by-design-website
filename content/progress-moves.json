@@ -1,0 +1,17 @@
+{
+  "moved": {
+    "training:dns-configuration:time": "training:domain-time:time",
+    "training:harden-baseline:staging": "training:stig-scap:staging",
+    "training:harden-baseline:baseline": "training:stig-scap:baseline",
+    "training:tiered-admin:dhcp": "training:dhcp:dhcp",
+    "training:patch-protect:repo": "training:linux-repository:repo",
+    "training:patch-protect:mgmt": "training:management-server:mgmt",
+    "training:logging-pipeline:protect": "training:audit-repository:protect",
+    "training:logging-pipeline:analyze": "training:splunk-analysis:analyze",
+    "training:logging-pipeline:prove": "training:splunk-analysis:prove"
+  },
+  "withdrawn": [
+    "training:patch-protect:epo",
+    "training:patch-protect:nessus"
+  ]
+}

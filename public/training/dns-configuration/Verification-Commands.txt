@@ -1,5 +1,5 @@
-SECURE BY DESIGN - CONFIGURE DNS AND TIME
-Course 1.2 | Materials edition 1.4 | Updated 9 October 2026
+SECURE BY DESIGN - CONFIGURE DNS
+Course 1.2 | Materials edition 2.0 | Updated 14 October 2026
 
 Run each check in an elevated PowerShell session, or a shell on the Linux servers, on the host the lesson names.
 Some lessons include the configuration commands they verify: read each command before you run it, and adapt
@@ -21,7 +21,7 @@ What success looks like: Both controllers run the DNS Server service and, once r
 
 2. Configure forward and reverse zones
 Get-DnsServerZone -ComputerName SBD-DC01 |
-  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope
+  Select-Object ZoneName, ZoneType, IsDsIntegrated, DynamicUpdate, ReplicationScope, SecureSecondaries
 Get-DnsServerZone -ComputerName SBD-DC02
 
 What success looks like: The intended forward and reverse zones appear on both DNS hosts after replication. The reverse zone for this /24 is 10.0.10.in-addr.arpa.
@@ -30,8 +30,11 @@ What success looks like: The intended forward and reverse zones appear on both D
 Get-DnsServerResourceRecord -ComputerName SBD-DC01 -ZoneName sbd.test
 Resolve-DnsName SBD-DC01.sbd.test -Type A -Server 10.0.10.10
 Resolve-DnsName 10.0.10.10 -Type PTR -Server 10.0.10.10
+# The alias course 1.6 relies on; its target is built in course 1.6
+Add-DnsServerResourceRecordCName -ComputerName SBD-DC01 -ZoneName sbd.test -Name pki -HostNameAlias SBD-PKI-MGMT01.sbd.test
+Resolve-DnsName pki.sbd.test -Type CNAME -Server 10.0.10.11   # after replication: SBD-PKI-MGMT01.sbd.test
 
-What success looks like: Forward and reverse responses agree with the address plan. Each alias reaches the intended host; creating a DNS name alone does not configure its service.
+What success looks like: Forward and reverse responses agree with the address plan. Each alias names the intended host (pki.sbd.test returns an address only once course 1.6 builds SBD-PKI-MGMT01), and creating a DNS name alone does not configure its service.
 
 4. Prove resolution and directory discovery
 foreach ($server in '10.0.10.10','10.0.10.11') {
@@ -55,20 +58,7 @@ pktmon filter remove
 
 What success looks like: Both DNS servers return both controllers' host records and the domain controller locator records, the DCDiag DNS findings are explained, replication is healthy, and the client still resolves internal names when either resolver is unavailable. If you ran the capture, it shows the query from 10.0.10.11 and the answer from 10.0.10.10.
 
-5. Make SBD-DC01 the domain's time source
-Get-ADDomain | Select-Object PDCEmulator   # expected: SBD-DC01.sbd.test
-# On SBD-DC01 (the PDC emulator): serve time from its own clock as the reliable source
-w32tm /config /reliable:yes /update
-Restart-Service w32time
-w32tm /query /source   # on SBD-DC01: Local CMOS Clock
-# On SBD-DC02 and a member server:
-w32tm /query /source   # expected: a domain controller
-w32tm /query /status
-w32tm /stripchart /computer:SBD-DC01.sbd.test /samples:3 /dataonly
-
-What success looks like: SBD-DC01 reports itself as the reliable source (Local CMOS Clock), SBD-DC02 and the member server report a domain controller, host time synchronization is off for both domain controllers, and measured offsets sit inside the documented threshold.
-
-6. Find the fault and record the fix
+5. Find the fault and record the fix
 Get-DnsClientServerAddress -AddressFamily IPv4
 Get-DnsClientCache
 Resolve-DnsName SBD-DC02.sbd.test -Server 10.0.10.10

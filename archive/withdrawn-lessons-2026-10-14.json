@@ -1,0 +1,216 @@
+{
+  "note": "Withdrawn from course 1.14 patch-protect on 14 October 2026 and kept unpublished. The owner lists SBD-EPO01 (course 1.16) and SBD-NESSUS01 (course 1.17) as coming soon until their material is prepared. Lessons, their sources and their guide entries are copied verbatim from the repository (content/configuration-courses.json, content/course-guides/patch-protect.json, content/videos.json) as published at materials edition 1.4, so their course numbers are the old ones (1.3, 1.5, 1.6, 1.7, 1.8, 1.9). Saved progress IDs: training:patch-protect:epo and training:patch-protect:nessus.",
+  "course": "patch-protect",
+  "withdrawn": "2026-10-14",
+  "lessons": [
+    {
+      "id": "epo",
+      "title": "Endpoint protection through SBD-EPO01",
+      "minutes": 30,
+      "summary": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show.",
+      "objectives": [
+        "Stand up the ePO server and its agent deployment.",
+        "Apply the protection and DLP policy baseline by ring.",
+        "Verify coverage and wire detections into the pipeline."
+      ],
+      "steps": [
+        "Build SBD-EPO01 in VLAN 50, fed its definitions through the offline process on the lesson-1 cadence, with its console reachable only from the admin plane — the register row from lesson 1 carries the agents' check-ins, and with the agent's peer-to-peer and RelayServer features turned off, endpoints open no listener for the server (TCP 8081, UDP 8082).",
+        "Deploy agents to the pilot ring first, confirm check-ins, then follow the ring order through the fleet, the member servers, and the critical ring — the same earn-your-way-up discipline as updates. Agent policy for the domain controllers is a Tier 0 scope in ePO, changed only from AdminJumpBox01 with a Tier 0 account. Add SBD-EPO01 to the SBD Tier 0 Console Hosts group and restart it, so course 1.5's recorded network-logon exception covers that console.",
+        "Apply the policy baseline: on-access protection, the scan schedule, and the data-loss-prevention policy scoped to what the model's DLP role calls for — each setting a decision in the record, not a default accepted silently.",
+        "Verify coverage against the living inventory — every endpoint present and checking in — and forward the server's threat events into the course 1.6 pipeline so detections land beside everything else; a standard test file makes the whole path fire once, on record."
+      ],
+      "command": "Test-NetConnection SBD-EPO01.sbd.test -Port 443\nGet-Service -ComputerName SBD-PC01 -Name 'masvc' -ErrorAction SilentlyContinue | Select-Object Status\nGet-WinEvent -LogName ForwardedEvents -MaxEvents 5 | Select-Object TimeCreated, MachineName",
+      "check": "Every inventoried endpoint shows a checking-in agent, the policy baseline is applied and recorded, and a test detection traveled from endpoint to console to the analyst's search.",
+      "evidence": "Keep the coverage-vs-inventory comparison, the policy baseline record, and the traced test detection.",
+      "quizzes": [
+        {
+          "question": "What answers 'is every endpoint protected'?",
+          "answers": [
+            "Asking the help desk",
+            "The console's coverage reconciled against the living inventory — agents checking in, compared to machines that exist",
+            "The install media's label"
+          ],
+          "correct": 1,
+          "explanation": "Coverage is a comparison, not a feeling. Lesson 4's inventory is the denominator that makes the claim checkable."
+        },
+        {
+          "question": "Why do protection detections flow into the 1.6 pipeline?",
+          "answers": [
+            "One place to look: detections correlate with sign-ins and boundary denies on the same analyst screen",
+            "The console cannot store events",
+            "Syslog is faster than consoles"
+          ],
+          "correct": 0,
+          "explanation": "A detection next to the surrounding sign-ins and denies tells a story; a detection alone tells a fact."
+        },
+        {
+          "question": "How do definition updates reach this server?",
+          "answers": [
+            "Live from the vendor cloud",
+            "They never update in a lab",
+            "On the written offline cadence — the same hashed-media ceremony as everything else"
+          ],
+          "correct": 2,
+          "explanation": "Protection content ages fast, which is why the feeding cadence was a lesson-1 decision with a schedule, not an afterthought."
+        }
+      ],
+      "recap": [
+        "Agents by ring, policy from one console, console from the admin plane.",
+        "Coverage is proven against the inventory, not assumed.",
+        "Detections join the pipeline — one screen tells the whole story."
+      ],
+      "next": "The final lesson adds the scanner and makes the cadence routine.",
+      "sources": [
+        "trellix",
+        "controls"
+      ]
+    },
+    {
+      "id": "nessus",
+      "title": "SBD-NESSUS01 and the standing cadence",
+      "minutes": 25,
+      "summary": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's five new systems getting their own baselines on the way out.",
+      "objectives": [
+        "Stand up the scanner with least-privilege credentialed access.",
+        "Run the first full-network credentialed scan and triage it.",
+        "Fold scanning into the standing cadence and close the course's scans."
+      ],
+      "steps": [
+        "Build SBD-NESSUS01 on Linux in VLAN 50, joined to the sbd.test domain with its time taken from both domain controllers, plugins fed on the offline cadence, with dedicated scan accounts — least privilege for credentialed checks, its use logged, its register row the deliberate wide permit from lesson 1. The account that scans the domain controllers is a Tier 0 credential, kept apart from the member-server scan account and used only for DC scan jobs. Allow the scanner through the host firewalls it must reach — on the fleet, add SBD-NESSUS01 to the course 1.7 workstation firewall policy for SMB 445 and WMI.",
+        "Run the first credentialed scan VLAN by VLAN against the inventory, and triage like the course 1.3 rescan taught: every finding becomes fix-now, documented deviation, or POA&M candidate — never unexplained.",
+        "Wire results outward: findings into the analysis pipeline for trending, the triage into the living exception record, and the scan schedule into the cadence — quarterly with the Defense Information Systems Agency (DISA) release cycle, plus change-triggered, now automated enough to keep.",
+        "Close this course's own books: baselines for WSUS01, REPO01 (config-export pattern), MGMT01, EPO01, and NESSUS01, rescans where agents and policies changed existing systems, and the handoff — the network now sustains itself; course 1.9 finally gives it something to serve."
+      ],
+      "command": "Test-NetConnection SBD-NESSUS01.sbd.test -Port 8834\nGet-ChildItem C:\\Evidence\\patch-protect -Recurse | Select-Object Name, LastWriteTime\nGet-FileHash -Algorithm SHA256 C:\\Evidence\\patch-protect\\*",
+      "check": "The credentialed scan covered the inventory with the scan account's use logged, every finding is classified, results and schedule are wired into pipeline and cadence, and the course's baselines and rescans are filed.",
+      "evidence": "Keep the scan summary with its triage, the scan-account and register records, the cadence entry, and the course's scan set.",
+      "quizzes": [
+        {
+          "question": "Why credentialed scans rather than unauthenticated ones?",
+          "answers": [
+            "They run quieter on the network",
+            "Logged-in checks see the real configuration state — patch levels and settings — instead of guessing from the outside",
+            "Credentials are required by law"
+          ],
+          "correct": 1,
+          "explanation": "The cadence wants configuration truth, which only an authenticated look provides; the scan account's scoping and logging keep that power honest."
+        },
+        {
+          "question": "Where does a scanner finding end up?",
+          "answers": [
+            "In one of three classified places: fixed, documented as a deviation, or on the POA&M path",
+            "Deleted if inconvenient",
+            "In the scanner only"
+          ],
+          "correct": 0,
+          "explanation": "The triage rule from 1.3 scales up unchanged: open items end classified, and the classifications feed the kind of records course 2.2 teaches you to assemble."
+        },
+        {
+          "question": "What did this course change about the cadence itself?",
+          "answers": [
+            "It ended the cadence",
+            "It moved scans to the fleet's discretion",
+            "It gave it an instrument — scheduled credentialed scanning makes the quarterly-plus-change rhythm sustainable"
+          ],
+          "correct": 2,
+          "explanation": "Course 1.3 set the rhythm by hand; the scanner is what lets a real operation keep the beat."
+        }
+      ],
+      "recap": [
+        "Credentialed, least-privilege, logged — the scanner earns its wide row.",
+        "Findings end classified and flow into pipeline and records.",
+        "This course's systems are baselined; the network now maintains itself."
+      ],
+      "next": "That completes course 1.8. Course 1.9 stands up the business services the users actually came for — file, database, licensing, and web.",
+      "sources": [
+        "tenable",
+        "disa-tools",
+        "controls"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "trellix",
+      "title": "Trellix · product documentation",
+      "url": "https://docs.trellix.com/"
+    },
+    {
+      "id": "tenable",
+      "title": "Tenable · Nessus documentation",
+      "url": "https://docs.tenable.com/nessus/"
+    },
+    {
+      "id": "disa-tools",
+      "title": "DISA · SRG/STIG tools (SCC and STIG Viewer)",
+      "url": "https://www.cyber.mil/stigs/srg-stig-tools"
+    },
+    {
+      "id": "controls",
+      "title": "NIST · SP 800-53 Rev. 5 security controls",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    }
+  ],
+  "guide": {
+    "epo": {
+      "short": "Protect through EPO01",
+      "tag": "05 / PROTECT",
+      "status": "AGENTS CHECKING IN",
+      "stepTitles": [
+        "Build SBD-EPO01 with no listeners on the endpoints",
+        "Deploy agents ring by ring",
+        "Apply the protection and DLP policy baseline",
+        "Verify coverage and trace a test detection"
+      ],
+      "mistake": "Leaving the agent’s peer-to-peer and RelayServer features on. Every endpoint then opens listeners for the server (TCP 8081, UDP 8082) that no register row allows; with them off, the agent starts each connection on TCP 443 and endpoints open no listener.",
+      "network": "SBD-EPO01 is live on VLAN 50. Agents on the fleet start their check-ins on TCP 443, the fleet keeps its WSUS path, and the console stays reachable only from the administration plane on VLAN 60.",
+      "control": {
+        "id": "SI-3",
+        "name": "Malicious Code Protection",
+        "phase": "Implement → Assess",
+        "body": "Managed agents give every endpoint the same protection policy from one console, with definitions fed on the written offline cadence. Coverage reconciled against the inventory and a traced test detection show the mechanism works, not just that it was installed.",
+        "question": "If an endpoint stopped checking in, how soon would you know, and which record would show it?"
+      },
+      "checklist": [
+        "I compared the agents checking in with the living inventory and recorded every gap.",
+        "I recorded each policy baseline setting, including on-access protection, the scan schedule, and the DLP scope, as a decision.",
+        "I traced a standard test file’s detection from the endpoint to the console and into the analyst’s search."
+      ]
+    },
+    "nessus": {
+      "short": "Scan with NESSUS01",
+      "tag": "06 / SCAN",
+      "status": "STANDING CADENCE",
+      "stepTitles": [
+        "Build SBD-NESSUS01 with least-privilege scan accounts",
+        "Run the first credentialed scan and triage it",
+        "Wire results into the pipeline, records, and cadence",
+        "Baseline this course’s systems and hand off"
+      ],
+      "mistake": "Using one scan account for every target. The domain controller scan credential is Tier 0; reusing it on member servers or the fleet exposes it to lower tiers. Keep it apart from the member-server account and use it only for DC scan jobs.",
+      "network": "SBD-NESSUS01 is live on VLAN 50 and scans across the VLANs, shown here reaching the fleet over SMB 445 and WMI. It installs packages only from SBD-REPO01, and the fleet keeps its WSUS and ePO paths.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess → Monitor",
+        "body": "Scheduled credentialed scans, plus scans triggered by change, make vulnerability scanning routine rather than an event. Classifying every finding as fixed, a documented deviation, or a POA&M candidate keeps the results usable.",
+        "question": "What evidence shows a finding was fixed, rather than simply no longer reported?"
+      },
+      "checklist": [
+        "I kept the scan accounts separate, used the domain controller account only for DC scan jobs, and confirmed their use is logged.",
+        "I classified every finding from the first credentialed scan as fix-now, a documented deviation, or a POA&M candidate.",
+        "I filed baselines for this course’s five systems and rescans of the systems whose agents or policies changed."
+      ]
+    }
+  },
+  "stages": [
+    {
+      "title": "Endpoint protection through SBD-EPO01",
+      "detail": "Protection becomes a managed fact, not fifty local settings: the ePO server deploys agents ring by ring, policy comes from one console, and the fleet's protection state is something the dashboard can simply show."
+    },
+    {
+      "title": "SBD-NESSUS01 and the standing cadence",
+      "detail": "The course 1.3 cadence grows its instrument: credentialed scans per VLAN on schedule, findings flowing into the pipeline and the Plan of Action and Milestones (POA&M) habit, and this course's five new systems getting their own baselines on the way out."
+    }
+  ]
+}
