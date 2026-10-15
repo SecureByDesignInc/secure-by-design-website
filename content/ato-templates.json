@@ -15,6 +15,12 @@
       "note": "Start from the CNSSI 1253 baseline, then tailor it with the overlays that fit the system."
     },
     {
+      "id": "implement",
+      "title": "Implement",
+      "abbr": "SSP",
+      "note": "Record how each selected control is implemented. The SSP is drafted when the controls are selected and completed here."
+    },
+    {
       "id": "assess",
       "title": "Assess",
       "abbr": "RAR",
@@ -51,6 +57,27 @@
           "label": "CNSS Instructions page",
           "format": "WEB",
           "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+        }
+      ]
+    },
+    {
+      "group": "implement",
+      "title": "System Security Plan (SSP) outline example",
+      "source": "National Institute of Standards and Technology (NIST), SP 800-18 Rev. 2, June 2026",
+      "framework": "NIST",
+      "status": "official",
+      "rmf": "S-4, S-6, I-2",
+      "note": "NIST's example outline for a system security plan, published with SP 800-18 Rev. 2, which supersedes the 2006 Rev. 1. Its 14 sections run from the system overview, categorization and authorization boundary to the component inventory and control implementation details, and NIST says organizations can adapt it to their own needs. For a SAP system, add the CNSSI 1253 categorization and overlays and the roles your AO and PSO require.",
+      "links": [
+        {
+          "label": "SSP outline example",
+          "format": "DOCX",
+          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_system_security_plan_outline_example.docx"
+        },
+        {
+          "label": "SP 800-18 Rev. 2 page",
+          "format": "WEB",
+          "href": "https://csrc.nist.gov/pubs/sp/800/18/r2/final"
         }
       ]
     },

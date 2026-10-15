@@ -387,10 +387,11 @@ test('the ATO Template Library tile lists only verified public sources, linked t
   assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
   assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
   // The verified set: add an entry only when its publisher posts it publicly (see AGENTS.md).
-  assert.deepEqual(templates.groups.map(group => group.id), ['categorize', 'select', 'assess']);
+  assert.deepEqual(templates.groups.map(group => group.id), ['categorize', 'select', 'implement', 'assess']);
   assert.deepEqual(templates.templates.map(item => item.title), [
     'CNSSI 1253, Categorization and Control Selection for National Security Systems',
     'CNSS Privacy Overlay',
+    'System Security Plan (SSP) outline example',
     'Risk Assessment Report (RAR) template',
   ]);
   const groupIds = templates.groups.map(group => group.id);
