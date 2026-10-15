@@ -1434,7 +1434,7 @@
           "number": "01",
           "title": "RMF roles, steps, and editions",
           "detail": "Explain who performs, assesses, and approves Risk Management Framework (RMF) work, and how NIST and the Joint Special Access Program Implementation Guide (JSIG) organize its steps and outputs.",
-          "href": "/training/rmf/index.html#catalog/01",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/01",
           "hours": "1",
           "lessons": [
             "01.1 Risk and the authorization decision",
@@ -1446,7 +1446,7 @@
           "number": "02",
           "title": "Define and register the system",
           "detail": "Establish what is being authorized and why: the mission, stakeholders, assets, boundary, information and its life cycle, early risks, and requirements. Then register the system.",
-          "href": "/training/rmf/index.html#catalog/02",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/02",
           "hours": "1.5",
           "lessons": [
             "02.1 Organization and mission",
@@ -1458,7 +1458,7 @@
           "number": "03",
           "title": "Describe and categorize the system",
           "detail": "Describe the system, justify its confidentiality, integrity, and availability impacts in the draft System Security Plan (SSP), and route the categorization for approval. Treat privacy applicability as an explicit decision.",
-          "href": "/training/rmf/index.html#catalog/03",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/03",
           "hours": "1.5",
           "lessons": [
             "03.1 System description",
@@ -1470,7 +1470,7 @@
           "number": "04",
           "title": "Select controls and plan monitoring",
           "detail": "Turn the approved categorization into a selected, tailored, and allocated control set, with a draft Risk Assessment Report and a continuous monitoring strategy, ready for plan review and approval.",
-          "href": "/training/rmf/index.html#catalog/04",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/04",
           "hours": "2",
           "lessons": [
             "04.1 Baselines, overlays, and tailoring",
@@ -1482,7 +1482,7 @@
           "number": "05",
           "title": "Implement and document the controls",
           "detail": "Implement the selected controls and record them as built in the System Security Plan (SSP) and Security Controls Traceability Matrix (SCTM), in statements an assessor can test.",
-          "href": "/training/rmf/index.html#catalog/05",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/05",
           "hours": "2",
           "lessons": [
             "05.1 Implement the approved controls",
@@ -1494,7 +1494,7 @@
           "number": "06",
           "title": "Connect implementation to proof",
           "detail": "Collect technical and operational evidence of the as-built system, index it, and correct the SSP and SCTM wherever the evidence and the plan disagree.",
-          "href": "/training/rmf/index.html#catalog/06",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/06",
           "hours": "2",
           "lessons": [
             "06.1 Configuration and hardening evidence",
@@ -1506,7 +1506,7 @@
           "number": "07",
           "title": "Prepare the assessment",
           "detail": "Select an independent assessor, hand over current evidence, and get a Security Assessment Plan approved before any testing starts.",
-          "href": "/training/rmf/index.html#catalog/07",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/07",
           "hours": "1.5",
           "lessons": [
             "07.1 Assessor selection and independence",
@@ -1518,7 +1518,7 @@
           "number": "08",
           "title": "Perform and report the assessment",
           "detail": "Assess the controls as planned, report supported findings in a Security Assessment Report (SAR), and remediate and reassess what can be fixed now.",
-          "href": "/training/rmf/index.html#catalog/08",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/08",
           "hours": "2",
           "lessons": [
             "08.1 Examine, interview, and test",
@@ -1530,7 +1530,7 @@
           "number": "09",
           "title": "Build the plan of action and milestones",
           "detail": "Turn the findings still open into a risk-ranked Plan of Action and Milestones (POA&M) with accountable owners, resources, dated milestones, and closure criteria.",
-          "href": "/training/rmf/index.html#catalog/09",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/09",
           "hours": "1.5",
           "lessons": [
             "09.1 From findings to ranked risk",
@@ -1542,7 +1542,7 @@
           "number": "10",
           "title": "Assemble the authorization package",
           "detail": "Assemble an authorization package whose plans, assessment results, and open risks agree, and submit it for the authorizing official’s decision.",
-          "href": "/training/rmf/index.html#catalog/10",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/10",
           "hours": "2",
           "lessons": [
             "10.1 Package contents in the JSIG and NIST",
@@ -1554,7 +1554,7 @@
           "number": "11",
           "title": "Support the authorization decision",
           "detail": "Brief the risk the authorizing official must determine, propose a response to each significant risk, and record what an authorization decision contains.",
-          "href": "/training/rmf/index.html#catalog/11",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/11",
           "hours": "1.5",
           "lessons": [
             "11.1 Risk determination",
@@ -1566,7 +1566,7 @@
           "number": "12",
           "title": "Monitor and maintain authorization",
           "detail": "Keep the authorization true as the system changes: analyze each change, assess and report as the strategy requires, support ongoing authorization, and plan disposal.",
-          "href": "/training/rmf/index.html#catalog/12",
+          "href": "/grc-rmf-training/rmf/index.html#catalog/12",
           "hours": "1.5",
           "lessons": [
             "12.1 Changes and security impact analysis",
@@ -1576,10 +1576,10 @@
         }
       ],
       "training": {
-        "guide": "/training/rmf/index.html#catalog/01",
-        "word": "/training/rmf/SecureByDesign-rmf-Workbook.docx",
-        "pdf": "/training/rmf/SecureByDesign-rmf-Workbook.pdf",
-        "package": "/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
+        "guide": "/grc-rmf-training/rmf/index.html#catalog/01",
+        "word": "/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx",
+        "pdf": "/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.pdf",
+        "package": "/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip",
         "pages": 59,
         "materialsEdition": "2.0",
         "updated": "15 October 2026",
@@ -1587,20 +1587,20 @@
           {
             "title": "Open the Authorization Workspace",
             "detail": "Do each step on your Secure By Design enclave: register, categorize, implement, assess, authorize and monitor",
-            "href": "/authorization-workspace"
+            "href": "/grc-rmf-training/workspace"
           },
           {
             "title": "Open the ATO Template Library",
             "detail": "Official sources and Secure By Design training samples for every step",
-            "href": "/training/ato-templates"
+            "href": "/grc-rmf-training/templates"
           },
           {
             "title": "Open the evidence workspace",
             "detail": "Fourteen practice artifacts with editable Markdown and CSV starters",
-            "href": "/training/rmf/index.html#evidence"
+            "href": "/grc-rmf-training/rmf/index.html#evidence"
           }
         ],
-        "cover": "/training/rmf/workbook-cover.webp"
+        "cover": "/grc-rmf-training/rmf/workbook-cover.webp"
       },
       "categoryId": "network-authorization",
       "categoryOrder": 1,
@@ -1637,6 +1637,7 @@
     },
     {
       "id": "network-authorization",
+      "library": "grc",
       "title": "Network Authorization",
       "description": "Take the network through all seven Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in, to an Authorization to Operate. One course: each step's lessons, the same task in the Authorization Workspace, and the templates it uses. Start after the network build."
     }

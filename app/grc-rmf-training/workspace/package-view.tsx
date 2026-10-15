@@ -3,7 +3,7 @@ import {useEffect,useState,type ReactNode} from 'react';
 import {
  issmReview,scaReview,riskCounts,compliance,PACKAGE_TYPES,PACKAGE_STAGES,DECISIONS,DECISION_SHORT,IMPLEMENTATION,COMPLIANCE,RESULTS,ROLES,SYSTEM_TYPES,LEVELS,
  PACKAGE_ROLES,ARTIFACT_KINDS,SEVERITY,RISK,POAM_STATUS,TERMS,controlTitle,providerById,catalogSource,acceptedEvidence,
-} from '../../lib/authorization/model.mjs';
+} from '../../../lib/authorization/model.mjs';
 import {Badge,Checklist,Field,Hat,decisionTone,formatDate,useCatalog,download,csv,type Act,type State,type Package} from './shared';
 
 export default function PackageTab({state,act,busy,go}:{state:State;act:Act;busy:boolean;go:(tab:string)=>void}){

@@ -1,4 +1,4 @@
-/* ATO Template Library page. Builds on app/videos/videos.css (Training Library design, loaded first):
+/* ATO Template Library page. Builds on app/videos/videos.css (Technical Training Library design, loaded first):
    the same intro and category headings, with the entry styles from the expanded library tile (.vc-library-list).
    Owner direction, 15 October 2026: a short list of official links, so no filters or search. */
 .tl-group{scroll-margin-top:24px}
@@ -14,3 +14,4 @@
 .tl-samples .vc-kicker{color:#f2cf7c}
 .tl-samples .tl-abbr{color:#f2cf7c}
 @media (max-width:600px){.tl-list{padding:4px 16px}.tl-edition{padding:18px 16px}}
+.tl-page .vc-intro .vc-kicker a{color:inherit;text-decoration:underline;text-underline-offset:3px}

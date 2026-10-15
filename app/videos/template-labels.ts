@@ -1,5 +1,5 @@
 // Labels for the ATO Template Library (content/ato-templates.json), shared by the expanded catalog tile
-// (library-experience.tsx) and the full library page (app/training/ato-templates).
+// (library-experience.tsx) and the full library page (app/grc-rmf-training/templates).
 // Owner direction, 15 October 2026: the library lists only documents verified as publicly released by an
 // official publisher, each linked to the publisher's own copy. Nothing is hosted here.
 export const FRAMEWORKS: { id: string; label: string }[] = [

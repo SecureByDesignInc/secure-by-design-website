@@ -43,24 +43,34 @@ const redirect=(location,https)=>new Response(null,{status:301,headers:{location
 // personal data, no email. Owner reads and the email-preference links in sent emails keep working.
 const retiredForms=new Set(['/api/career-submissions','/api/community-contributions','/api/resource-signups']);
 // October 2026 library restructure: course 1.5 (connect-segment) was removed, and course 1.6 (pki-services)
-// merged into course 1.4 (two-tier-pki). Old links land on the Training Library or the merged course.
+// merged into course 1.4 (two-tier-pki). Old links land on the Technical Training Library or the merged course.
+// Two libraries (15 October 2026): the Training Library became the Technical Training Library at /technical-training,
+// and Network Authorization (course, Authorization Workspace, ATO Template Library) moved to the GRC & RMF Training
+// Library at /grc-rmf-training. Old addresses land there; browsers keep the #fragment (#catalog/NN, #system=…).
+const keepQuery=(target,url)=>{const next=new URL(target,url);next.search=url.search;return next.toString();};
 function retiredCourse(url){
  const path=url.pathname;
- if(/^\/training\/connect-segment(\/|$)/.test(path))return new URL('/training',url).toString();
+ if(path==='/training'||path==='/training/')return keepQuery('/technical-training',url);
+ if(path==='/authorization-workspace'||path==='/authorization-workspace/')return keepQuery('/grc-rmf-training/workspace',url);
+ if(path.startsWith('/authorization-workspace/'))return keepQuery('/grc-rmf-training/workspace/'+path.slice('/authorization-workspace/'.length),url);
+ if(path==='/training/ato-templates'||path==='/training/ato-templates/')return keepQuery('/grc-rmf-training/templates',url);
+ if(/^\/training\/connect-segment(\/|$)/.test(path))return new URL('/technical-training',url).toString();
  if(/^\/training\/pki-services(\/|$)/.test(path)){
   const merged=new URL(path.replace(/^\/training\/pki-services\/SecureByDesign-pki-services-Workbook\./,'/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.').replace(/^\/training\/pki-services/,'/training/two-tier-pki'),url);
   merged.search=url.search;return merged.toString();
  }
  // Network Authorization split (October 2026): the combined RMF Word catalog became one workbook per course. The
  // old download, which the app's saved materials still link to, lands on the course 2.1 workbook.
- if(path==='/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx')return new URL('/training/rmf/SecureByDesign-rmf-Workbook.docx',url).toString();
- if(path==='/training/rmf/catalog-cover.webp')return new URL('/training/rmf/workbook-cover.webp',url).toString();
+ if(path==='/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx')return new URL('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx',url).toString();
+ if(path==='/training/rmf/catalog-cover.webp')return new URL('/grc-rmf-training/rmf/workbook-cover.webp',url).toString();
+ const rmf=/^\/training\/rmf(?:\/(.*))?$/.exec(path);
+ if(rmf)return keepQuery('/grc-rmf-training/rmf/'+(rmf[1]||''),url);
  // Network Authorization became one course (15 October 2026): the former 2.2 and 2.3 pages and their downloads land on
  // course 2.1 "RMF to ATO". Browsers keep the #catalog/NN or #evidence/<id> fragment, which the course page opens.
  const merged=/^\/training\/(rmf-body-of-evidence|rmf-authorization-to-operate)(?:\/(.*))?$/.exec(path);
  if(merged){
   const file=merged[2]||'',ext=/-Workbook\.(docx|pdf)$/.exec(file)?.[1];
-  const target=ext?`/training/rmf/SecureByDesign-rmf-Workbook.${ext}`:file.endsWith('-Learning-Package.zip')?'/training/rmf/SecureByDesign-rmf-Learning-Package.zip':file==='workbook-cover.webp'?'/training/rmf/workbook-cover.webp':'/training/rmf/index.html';
+  const target=ext?`/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.${ext}`:file.endsWith('-Learning-Package.zip')?'/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip':file==='workbook-cover.webp'?'/grc-rmf-training/rmf/workbook-cover.webp':'/grc-rmf-training/rmf/index.html';
   return new URL(target,url).toString();
  }
  // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.

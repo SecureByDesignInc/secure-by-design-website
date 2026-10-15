@@ -1,6 +1,6 @@
-# Training Library and companion materials
+# Technical Training Library and companion materials
 
-The Training Library at `/videos` presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package, course 1.1 (Promote Primary & Secondary Domain Controller), covers DC01 and DC02 on Windows Server. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
+The Technical Training Library at `/technical-training` and the GRC & RMF Training Library at `/grc-rmf-training` share one catalog (`content/videos.json`) and one page component (`app/videos/video-hub.tsx`, `edition` prop). A category marked `"library": "grc"` (Network Authorization) appears only in the GRC & RMF library; the rest are technical. Each library presents compact episode tiles that expand inline across the catalog width. Each expanded tile contains its complete build explorer, recording, and companion training materials. The first package, course 1.1 (Promote Primary & Secondary Domain Controller), covers DC01 and DC02 on Windows Server. Its recording is still in preparation; the workbook and guide are available. The user authorized publication of the catalog changes on October 4, 2026.
 
 ## Content
 
@@ -36,4 +36,4 @@ The repository-wide TypeScript check still reports the three previously confirme
 
 ## Reference tiles
 
-The ATO Template Library is no longer a catalog entry (October 15, 2026): it is part of course 2.1 "RMF to ATO", whose step pages list each RMF step's official sources and training samples and link to `/training/ato-templates#<step>`. Its entries live in `content/ato-templates.json`, which `scripts/prepare-rmf-courses.mjs` copies into `public/training/rmf/templates-data.js`. See AGENTS.md (October 15, 2026) for the rules.
+The ATO Template Library is no longer a catalog entry (October 15, 2026): it is part of course 2.1 "RMF to ATO", whose step pages list each RMF step's official sources and training samples and link to `/grc-rmf-training/templates#<step>`. Its entries live in `content/ato-templates.json`, which `scripts/prepare-rmf-courses.mjs` copies into `public/grc-rmf-training/rmf/templates-data.js`. See AGENTS.md (October 15, 2026) for the rules.

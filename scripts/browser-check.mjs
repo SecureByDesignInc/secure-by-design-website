@@ -16,7 +16,7 @@ const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const sitemap = existsSync('dist/client/sitemap.xml') ? readFileSync('dist/client/sitemap.xml', 'utf8') : '';
 const fromSitemap = [...sitemap.matchAll(/<loc>https?:\/\/[^/<]+([^<]*)<\/loc>/g)].map(match => match[1] || '/');
-const extra = ['/my-progress', '/authorization-workspace', '/account?returnTo=%2Ftraining', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
+const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo=%2Ftechnical-training', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/grc-rmf-training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
@@ -159,11 +159,32 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
+// The two libraries (15 October 2026): the Technical Training Library holds the network build; the GRC & RMF Training
+// Library holds the RMF to ATO course and its two tools. Screenshots are kept for review.
+for (const [path, name, tiles, tools] of [['/technical-training', 'technical-library', 19, 0], ['/grc-rmf-training', 'grc-rmf-library', 1, 2]]) {
+  for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
+    const page = await context.newPage();
+    await page.setViewportSize(size);
+    try {
+      await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
+      await page.locator('.vc-catalog-tile').first().waitFor({ timeout: 15000 });
+      const shown = await page.locator('.vc-catalog-tile').count(), toolCards = await page.locator('.vc-tool-list li').count();
+      if (shown !== tiles || toolCards !== tools) throw new Error(`${shown} tiles and ${toolCards} tools, expected ${tiles} and ${tools}`);
+      await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
+      guides.push(`${path} ${label} ok (${shown} tiles, ${toolCards} tools)`);
+    } catch (error) {
+      guides.push(`${path} ${label}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
+      blocking++;
+    }
+    await page.close();
+  }
+}
+
 // Network Authorization, course 2.1 "RMF to ATO" (scripts/prepare-rmf-courses.mjs): one page organized by the seven RMF
 // steps. Open it, check the step page and learning path, walk a module's five tabs, follow an old 2.2 address to the
 // same module here, then open the evidence workspace and the capstone. Screenshots are kept for review.
 const rmfData = { window: {} };
-for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(readFileSync(`public/training/rmf/${file}`, 'utf8'), rmfData);
+for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(readFileSync(`public/grc-rmf-training/rmf/${file}`, 'utf8'), rmfData);
 const { CATALOG_PARTS: rmfParts, CATALOG: rmfModules, LEARNING: rmfLessons, RMF_STEPS: rmfSteps } = rmfData.window;
 for (const part of rmfParts) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
@@ -173,7 +194,7 @@ for (const part of rmfParts) {
     page.on('pageerror', error => errors.push(String(error.message || error).slice(0, 200)));
     const artifacts = new Set(part.modules.flatMap(id => rmfLessons[rmfModules.findIndex(m => m.id === id)].artifacts));
     try {
-      await page.goto(`${base}/training/${part.folder}/`, { waitUntil: 'load', timeout: 60000 });
+      await page.goto(`${base}/grc-rmf-training/${part.folder}/`, { waitUntil: 'load', timeout: 60000 });
       await page.locator('#lesson .step-page').waitFor({ timeout: 15000 });
       const stepsListed = await page.locator('#module-list .step-chapter').count(), modulesListed = await page.locator('#module-list .module-chapter').count();
       if (stepsListed !== rmfSteps.length || modulesListed !== part.modules.length) throw new Error(`${stepsListed} steps and ${modulesListed} modules listed, expected ${rmfSteps.length} and ${part.modules.length}`);
@@ -185,7 +206,7 @@ for (const part of rmfParts) {
       if (label === 'desktop') {
         // An old course 2.2 address lands on the same module here (server/index.js keeps the fragment).
         await page.goto(`${base}/training/rmf-body-of-evidence/index.html#catalog/05`, { waitUntil: 'load', timeout: 60000 }).catch(() => {});
-        await page.waitForURL(url => url.pathname.replace(/index\.html$/, '') === `/training/${part.folder}/` && url.hash === '#catalog/05', { timeout: 15000 });
+        await page.waitForURL(url => url.pathname.replace(/index\.html$/, '') === `/grc-rmf-training/${part.folder}/` && url.hash === '#catalog/05', { timeout: 15000 });
         await page.locator('#lesson .tabs').waitFor({ timeout: 15000 });
         for (const [name, panel] of [['Learn', '#learn-panel .lesson-body'], ['See', '#see-panel .step'], ['Build', '#build-panel .artifact-links'], ['Prove', '#prove-panel .quiz'], ['RMF step', '#step-panel .controlid']]) {
           await page.getByRole('tab', { name, exact: true }).click();
@@ -249,9 +270,16 @@ await check('security.txt', { path: '/security.txt' }, async r => r.status === 2
 await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, async r => r.status === 200 && (await r.text()).includes('Contact: mailto:support@securebydesigninc.com'));
 await check('apple-app-site-association', { path: '/.well-known/apple-app-site-association' }, async r => r.status === 200 && (r.headers.get('content-type') || '').includes('application/json') && (await r.text()).includes('PZK2PZT6KP.com.securebydesigninc.secureByDesignApp'));
 await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA' }, async r => r.status === 200 && (await r.text()).includes('securebydesign://auth?code=AAAAAAAAAAAAAAAAAAAAAAAA'));
-await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/index.html'));
-await check('old course 2.3 package moves to the course 2.1 package', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/SecureByDesign-rmf-Learning-Package.zip'));
-await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/training/rmf/SecureByDesign-rmf-Workbook.docx'));
+await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
+await check('old course 2.3 package moves to the course 2.1 package', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip'));
+await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
+// The two libraries (15 October 2026): old addresses land in the Technical or the GRC & RMF Training Library.
+await check('old Training Library address moves to the Technical Training Library', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
+await check('old Authorization Workspace address moves into the GRC & RMF Training Library', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
+await check('old ATO Template Library address moves into the GRC & RMF Training Library', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
+await check('old course 2.1 page moves into the GRC & RMF Training Library', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
+await check('old course 2.1 workbook moves with it', { path: '/training/rmf/SecureByDesign-rmf-Workbook.pdf' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.pdf'));
+await check('old control catalog moves with the workspace', { path: '/authorization-workspace/controls-rev5.json' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace/controls-rev5.json'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));
 await check('logo size under 20 KB', { path: '/brand-lock.svg' }, async r => r.status === 200 && (await r.arrayBuffer()).byteLength < 20000);
@@ -265,7 +293,7 @@ const analytics = await (async () => {
   // A report still in flight when the page navigates away is aborted by the browser; that's expected.
   page.on('requestfailed', request => { if (/cloudflareinsights\.com|\/cdn-cgi\/rum/.test(request.url()) && !/ERR_ABORTED/.test(request.failure()?.errorText || '')) seen.push(`FAILED ${request.url()} (${request.failure()?.errorText})`); });
   try {
-    await page.goto(base + '/training', { waitUntil: 'load', timeout: 60000 });
+    await page.goto(base + '/technical-training', { waitUntil: 'load', timeout: 60000 });
     await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
     await page.goto(base + '/privacy', { waitUntil: 'load', timeout: 60000 }); // leaving the first page sends its report
     await page.waitForTimeout(4000);

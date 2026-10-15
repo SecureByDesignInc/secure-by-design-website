@@ -8,6 +8,17 @@ export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibra
   return 'kind' in entry && entry.kind === 'library';
 }
 
+// Two libraries share one catalog (owner direction, 15 October 2026): the Technical Training Library (/technical-training)
+// holds the network build; the GRC & RMF Training Library (/grc-rmf-training) holds the categories marked
+// "library": "grc" in content/videos.json (Network Authorization). Categories without the field are technical.
+export type LibraryEdition = 'technical' | 'grc';
+export function libraryFor(library: Library, edition: LibraryEdition): Library {
+  const categories = (library.categories ?? []).filter(category => (category.library ?? 'technical') === edition);
+  const ids = new Set(categories.map(category => category.id));
+  const keep = (entry: { categoryId?: string }) => ids.has(entry.categoryId ?? '');
+  return { ...library, categories, episodes: library.episodes.filter(keep), courses: (library.courses ?? []).filter(keep), references: (library.references ?? []).filter(keep) };
+}
+
 export function getCatalogEntries(library: Library): CatalogEntry[] {
   const entries: CatalogEntry[] = [];
   const courses = library.courses ?? [];

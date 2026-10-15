@@ -1,6 +1,6 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
-import {TEMPLATES,DECISION_SHORT,authorizationStatus} from '../../lib/authorization/model.mjs';
+import {TEMPLATES,DECISION_SHORT,authorizationStatus} from '../../../lib/authorization/model.mjs';
 import {api,Badge,decisionTone,formatDate,type State,type System} from './shared';
 import SystemView from './system-view';
 
@@ -22,7 +22,7 @@ export default function Workspace(){
  },[route.system,list?.user,state?.system.id]);
  const go=(system:string|null,tab='overview')=>{const hash=system?`#system=${system}&tab=${tab}`:'#systems';if(location.hash!==hash)history.pushState(null,'',hash);setRoute({system,tab});window.scrollTo({top:0});};
 
- const intro=<header className="reader-heading awx-heading"><p className="eyebrow">NETWORK AUTHORIZATION · PRACTICE</p><h1>Authorization Workspace</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
+ const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">GRC &amp; RMF TRAINING LIBRARY</a> · PRACTICE</p><h1>Authorization Workspace</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
  if(error&&!list)return <>{intro}<p className="reader-error" role="alert">{error} <button type="button" onClick={()=>void refreshList()}>Try again</button></p></>;
  if(!list)return <>{intro}<p className="reader-loading"><output>Loading your workspace…</output></p></>;
  if(!list.user)return <>{intro}<Landing/></>;
@@ -46,8 +46,8 @@ function Landing(){
   <div className="reader-welcome awx-signin">
    <h2>Sign in to start</h2>
    <p>Your systems are saved privately to your Secure By Design account, so you can pick up the package on any device. Nothing you enter is shared or published. Use practice or fictional details: never enter a real organization’s sensitive, controlled, or classified information.</p>
-   <a className="reader-primary" href="/my-progress?returnTo=%2Fauthorization-workspace#account">Create account or sign in</a>
-   <p className="reader-note">New to authorization? Start with <a href="/training/rmf/index.html#step/prepare">course 2.1, RMF to ATO</a>: each of its seven steps has the lessons, the same task here, and the templates it uses.</p>
+   <a className="reader-primary" href="/my-progress?returnTo=%2Fgrc-rmf-training%2Fworkspace#account">Create account or sign in</a>
+   <p className="reader-note">New to authorization? Start with <a href="/grc-rmf-training/rmf/index.html#step/prepare">course 2.1, RMF to ATO</a>: each of its seven steps has the lessons, the same task here, and the templates it uses.</p>
   </div>
  </section>;
 }

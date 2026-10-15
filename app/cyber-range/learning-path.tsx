@@ -42,7 +42,7 @@ const modulesById: Record<string, Module> = {
   lab:{id:'linux-discovery',eyebrow:'Invitation-only pilot',title:'Linux system discovery',description:'Use a browser terminal to explore your identity, Linux, file permissions, and sample login logs. An invited test account is required.',duration:'Up to 15 min',type:'Hands-on',lab:true},
   domain:{id:'domain',eyebrow:'Infrastructure',title:'Active Directory foundations',description:'Explore identities, directory services, and replication while configuring two domain controllers.',duration:'35 min',type:'Interactive guide',href:'/training/dc01-dc02/index.html'},
   monitoring:{id:'monitoring',eyebrow:'Defensive operations',title:'Security monitoring as a lifecycle',description:'Connect SIEM, user and entity behavior analytics, incident response, and continuous monitoring.',duration:'25 min',type:'Interactive module',href:'https://secure-by-design-monitoring-lab.wladozer.chatgpt.site'},
-  rmf:{id:'rmf',eyebrow:'Risk and compliance',title:'Follow the RMF lifecycle',description:'Move from preparation and categorization to controls, evidence, authorization, and monitoring.',duration:'12 modules',type:'Interactive course',href:'/training/rmf/index.html'},
+  rmf:{id:'rmf',eyebrow:'Risk and compliance',title:'Follow the RMF lifecycle',description:'Move from preparation and categorization to controls, evidence, authorization, and monitoring.',duration:'12 modules',type:'Interactive course',href:'/grc-rmf-training/rmf/index.html'},
 };
 
 const orderByGoal: Record<string,string[]> = {

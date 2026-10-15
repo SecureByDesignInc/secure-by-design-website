@@ -6,7 +6,7 @@
  // Configuration course guides (1.2–1.10) name their course, guide bookmark and first lesson on the reserved panel.
  const named=document.querySelector('.sbd-account-progress[data-course]')?.dataset;
  const dc=location.pathname.includes('/dc01-dc02/'),lessons=dc||!!named;
- // The Network Authorization course (2.1, /training/rmf/) names only its guide bookmark: its modules come from #catalog/NN
+ // The Network Authorization course (2.1, /grc-rmf-training/rmf/) names only its guide bookmark: its modules come from #catalog/NN
  // and keep the training:rmf-boe-ato:NN progress IDs. Saving tells the course page (sbd-progress-changed) to refresh its steps.
  const reserved=document.querySelector('.sbd-account-progress')?.dataset;
  const course=named?.course||(dc?'dc01-dc02':'rmf-boe-ato'),guide=named?.guide||reserved?.guide||(dc?'dc-guide':'rmf-guide');

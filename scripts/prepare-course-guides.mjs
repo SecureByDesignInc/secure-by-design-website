@@ -130,7 +130,7 @@ function page(course, configuration, guide, lesson) {
 <style>${style}${extraStyle}</style>
 </head><body>
 <a class="skip" href="#lesson">Skip to lesson</a>
-<header class="top"><a class="brand" href="https://securebydesigninc.com/" target="_blank" rel="noopener"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="https://securebydesigninc.com/">Home</a><a class="btn" href="https://securebydesigninc.com/my-progress">My Account</a><a class="btn" href="https://securebydesigninc.com/training" target="_blank" rel="noopener">Training Library ↗</a><a class="btn" href="${esc(t.package)}" download>↓ Training materials</a></nav></header>
+<header class="top"><a class="brand" href="https://securebydesigninc.com/" target="_blank" rel="noopener"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="https://securebydesigninc.com/">Home</a><a class="btn" href="https://securebydesigninc.com/my-progress">My Account</a><a class="btn" href="https://securebydesigninc.com/technical-training" target="_blank" rel="noopener">Technical Training Library ↗</a><a class="btn" href="${esc(t.package)}" download>↓ Training materials</a></nav></header>
 <section class="hero"><div><div class="eyebrow">THE NETWORK BUILD SERIES / COURSE ${esc(course.number)}</div><h1>${esc(guide.hero.title)} <span>${esc(guide.hero.accent)}</span></h1><p>${esc(guide.hero.text)}</p></div><div class="kitcard"><div class="book"><img src="/training/guide/brand.png" alt=""><span>${guide.book.map(esc).join('<br>')}</span></div><div><b>Your course companion</b><p>Interactive lesson · 3D network<br>Workbook · Personal evidence record</p><a href="${esc(t.package)}" download>Download the training materials →</a></div></div></section>
 <section class="sbd-account-progress" aria-label="Account learning progress" data-course="${esc(id)}" data-guide="${esc(bookmark ?? `${id}-guide`)}" data-unit="${esc(configuration.lessons[0].id)}"><strong>Continue across the website and app</strong><p>Save learning progress and this guide to your account. Lab observations and evidence exports stay in this browser.</p><button type="button" disabled>Load account progress</button></section>
 <main class="workspace"><aside class="chapters"><div class="eyebrow">YOUR LEARNING PATH</div><nav id="chapter-list" aria-label="Lesson chapters"></nav><div class="progressbox"><b id="progress-label">0 of ${n} lessons complete</b><progress id="progress" max="${n}" value="0" aria-label="Lesson completion"></progress><div class="local" id="storage-note">Progress stays in this browser. Export your record to take it with you.</div><button class="btn" id="export-side" style="margin-top:13px;font-size:10px;width:100%">↓ Export my record</button></div><div class="chapter-notice">One course. ${Count(n)} lessons.<br><br>Explore freely. Complete a lesson after recording your checks and answering its questions.</div><div class="mobile-tools" id="mobile-progress"></div></aside>
@@ -147,7 +147,7 @@ function page(course, configuration, guide, lesson) {
 `;
 }
 
-// The Network Authorization page (public/training/rmf/) is hand-built, so it loads the same stylesheet and
+// The Network Authorization page (public/grc-rmf-training/rmf/) is hand-built, so it loads the same stylesheet and
 // 3D scene as files instead of inlining them. tests/course-guides.test.mjs keeps the copies equal.
 mkdirSync(new URL('guide/', outDir), { recursive: true });
 writeFileSync(new URL('guide/course-guide.css', outDir), style + extraStyle);
@@ -157,7 +157,7 @@ let built = 0;
 // ONLY=<course id> builds one guide (handy while writing its content).
 for (const configuration of configurations.filter(c => !process.env.ONLY || c.id === process.env.ONLY)) {
   const course = library.courses.find(c => c.id === configuration.id);
-  if (!course) throw new Error(`No Training Library entry for ${configuration.id}`);
+  if (!course) throw new Error(`No Technical Training Library entry for ${configuration.id}`);
   const file = new URL(`${course.id}.json`, guidesDir);
   if (!existsSync(file)) throw new Error(`Missing content/course-guides/${course.id}.json`);
   const guide = JSON.parse(readFileSync(file, 'utf8'));

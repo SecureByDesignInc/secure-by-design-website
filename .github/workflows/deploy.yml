@@ -134,13 +134,15 @@ jobs:
               echo "::error title=Domain check $site::Serving build '${served:-none}', expected $GITHUB_SHA. Check CLOUDFLARE_WORKER_NAME and the Worker's custom domains."
               fail=1; continue
             fi
-            training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/training")
+            training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/technical-training")
+            grc=$(curl -sL -m 20 -o grc.html -w '%{http_code}' "$site/grc-rmf-training")
+            grctiles=$(grep -o 'id="tile-title-' grc.html | wc -l)
             tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
             course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/two-tier-pki")
             itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
-            echo "::notice title=Domain check $site::build $served | /training $training ($tiles tiles shown) | /training/two-tier-pki $course | /inside-the-network $itn"
-            if [ "$training" != 200 ] || [ "$tiles" -lt 20 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
-              echo "::error title=Domain check $site::A key page is missing or the catalog shows fewer than 20 tiles."
+            echo "::notice title=Domain check $site::build $served | /technical-training $training ($tiles tiles shown) | /grc-rmf-training $grc ($grctiles tiles shown) | /training/two-tier-pki $course | /inside-the-network $itn"
+            if [ "$training" != 200 ] || [ "$tiles" -lt 19 ] || [ "$grc" != 200 ] || [ "$grctiles" -lt 1 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing or a library shows fewer tiles than expected (19 technical, 1 GRC & RMF)."
               fail=1
             fi
           done
@@ -153,7 +155,7 @@ jobs:
         run: |
           # The Worker has no workers.dev route; this runs after the domain check confirms the new build is live.
           url=https://securebydesigninc.com
-          for path in / /training /training/harden-baseline /videos; do
+          for path in / /technical-training /grc-rmf-training /training/harden-baseline /videos; do
             code=$(curl -s -o page.html -w '%{http_code} %{redirect_url}' "$url$path")
             title=$(grep -o '<title>[^<]*' page.html | head -1 | sed 's/<title>//')
             mark=$(grep -c 'Harden the baseline' page.html || true)

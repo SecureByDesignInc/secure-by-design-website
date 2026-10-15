@@ -3,7 +3,7 @@ import {useEffect,useMemo,useState} from 'react';
 import {
  controlIndex,families,IMPLEMENTATION,RESULTS,CONTROL_STEPS,COMPLIANCE,FREQUENCIES,PROVIDERS,providerById,providerValidThrough,providerCurrent,
  compliance,submitProblems,validateProblems,objectivesFor,controlTitle,PRACTICE_CONTROLS,
-} from '../../lib/authorization/model.mjs';
+} from '../../../lib/authorization/model.mjs';
 import {Badge,Field,Hat,complianceTone,stepTone,artifactTone,formatDate,useCatalog,type Act,type Control,type State} from './shared';
 
 const sortIds=(a:string,b:string)=>a.localeCompare(b,'en',{numeric:true});

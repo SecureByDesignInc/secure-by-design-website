@@ -8,7 +8,7 @@ works of the U.S. Government and are not subject to copyright in the United Stat
 Usage: python3 scripts/build-control-catalog.py <folder holding the catalog and *_baseline_profile.json>
 
 Writes
-  public/authorization-workspace/controls-rev5.json  every active control and enhancement: title,
+  public/grc-rmf-training/workspace/controls-rev5.json  every active control and enhancement: title,
       statement and SP 800-53A assessment objectives, with parameters shown as
       [Assignment: ...] / [Selection: ...] the way the publication prints them (loaded on demand)
   content/authorization/control-index.json  id -> [title, family, baselines, objective ids] for the
@@ -131,10 +131,10 @@ for group in catalog['groups']:
         visit(ctl, group['id'].upper())
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.makedirs(os.path.join(root, 'public/authorization-workspace'), exist_ok=True)
+os.makedirs(os.path.join(root, 'public/grc-rmf-training/workspace'), exist_ok=True)
 meta = {'source': 'NIST SP 800-53 Rev. 5 (OSCAL catalog ' + version + ') with SP 800-53A Rev. 5 assessment objectives and SP 800-53B baselines',
         'families': families}
-with open(os.path.join(root, 'public/authorization-workspace/controls-rev5.json'), 'w') as f:
+with open(os.path.join(root, 'public/grc-rmf-training/workspace/controls-rev5.json'), 'w') as f:
     json.dump({**meta, 'controls': controls}, f, separators=(',', ':'), ensure_ascii=False)
 with open(os.path.join(root, 'content/authorization/control-index.json'), 'w') as f:
     json.dump({**meta, 'controls': index}, f, separators=(',', ':'), ensure_ascii=False)

@@ -96,7 +96,7 @@
   {
     "id": "rmf-guide",
     "title": "RMF to ATO · Interactive course",
-    "url": "https://securebydesigninc.com/training/rmf/index.html",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html",
     "description": "Course 2.1 · all seven RMF steps with the Authorization Workspace and the templates · 36 lessons",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -105,7 +105,7 @@
   {
     "id": "rmf-boe-ato-package",
     "title": "RMF to ATO · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/rmf/SecureByDesign-rmf-Learning-Package.zip",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip",
     "description": "Workbook (PDF and Word) and evidence starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -114,7 +114,7 @@
   {
     "id": "rmf-boe-ato-evidence",
     "title": "RMF to ATO · Evidence workspace",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#evidence",
     "description": "Course 2.1 · fourteen examples with editable Markdown and CSV starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -173,7 +173,7 @@
   {
     "id": "rmf-evidence",
     "title": "Body of Evidence examples and starters",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence/evidence",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#evidence/evidence",
     "description": "Course 2.1 · Body of Evidence examples with editable Markdown and CSV starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -182,7 +182,7 @@
   {
     "id": "rmf-capstone",
     "title": "Authorization package capstone",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#capstone",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#capstone",
     "description": "Assemble, defend, and maintain the practice package.",
     "category": "Training materials",
     "publisher": "Secure By Design",
@@ -657,7 +657,7 @@
   {
     "id": "rmf-evidence-manifest",
     "title": "Package manifest",
-    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence/manifest",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#evidence/manifest",
     "description": "Organize the evidence and submission records",
     "category": "Training materials",
     "publisher": "Secure By Design",

@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  // Network Authorization, course 2.1 "RMF to ATO" (/training/rmf/, built by scripts/prepare-rmf-courses.mjs in the
+  // Network Authorization, course 2.1 "RMF to ATO" (/grc-rmf-training/rmf/, built by scripts/prepare-rmf-courses.mjs in the
   // Build the Network guide design). Owner direction, 15 October 2026: the former courses 2.1-2.3, the ATO Template
   // Library and the Authorization Workspace are one learning process organized by the seven RMF steps of NIST
   // SP 800-37 Rev. 2 (window.RMF_STEPS), with the April 2016 JSIG mapped in. Each step page (#step/prepare) lists its
@@ -101,7 +101,7 @@
           return chapter(`#catalog/${id}`, done(id) ? '✓' : id, m.title, here('catalog', id) ? `Current module · ${hours(m.hours)}` : `${done(id) ? 'Complete · ' : ''}${hours(m.hours)}`, here('catalog', id), false, ` module-chapter${done(id) ? ' is-complete' : ''}`);
         }).join('');
     }).join('')}${course.capstone ? chapter('#capstone', 'ATO', 'Authorization to Operate capstone', '4 hours · guided exercise', here('capstone'), true) : ''}
-      <div class="path-course">Course tools</div>${chapter('/authorization-workspace', 'WS', 'Authorization Workspace', progress.system ? `Your ${progress.system.acronym || 'system'}` : 'Do each step on your enclave', false, true)}${chapter('/training/ato-templates', 'Lib', 'ATO Template Library', 'Official sources and samples', false, true)}${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}`;
+      <div class="path-course">Course tools</div>${chapter('/grc-rmf-training/workspace', 'WS', 'Authorization Workspace', progress.system ? `Your ${progress.system.acronym || 'system'}` : 'Do each step on your enclave', false, true)}${chapter('/grc-rmf-training/templates', 'Lib', 'ATO Template Library', 'Official sources and samples', false, true)}${chapter('#steps', 'RMF', 'RMF step map', 'Steps, tasks, and outputs', here('steps'), true)}${chapter('#evidence', 'BoE', 'Evidence workspace', `${ours.length} practice artifacts`, here('evidence'), true)}${chapter('#sources', 'Ref', 'Source documents', 'NIST, JSIG, and DoD references', here('sources'), true)}`;
   }
   function renderPath(r) {
     $('module-list').innerHTML = pathMarkup(r);
@@ -166,10 +166,10 @@
 
   // A step: its modules, the same task in the Authorization Workspace (with the learner's status), and its templates.
   function workspacePanel(step) {
-    const st = stepState(step), base = '/authorization-workspace';
+    const st = stepState(step), base = '/grc-rmf-training/workspace';
     let status, action;
     if (!progress.loaded) { status = 'Checking your workspace…'; action = `<a class="btn primary" href="${base}">Open the Authorization Workspace →</a>`; }
-    else if (!progress.user) { status = 'Sign in to save your progress and do this step on your own Secure By Design enclave.'; action = `<a class="btn primary" href="/my-progress?returnTo=${encodeURIComponent('/training/rmf/index.html#step/' + step.id)}">Sign in or create an account →</a>`; }
+    else if (!progress.user) { status = 'Sign in to save your progress and do this step on your own Secure By Design enclave.'; action = `<a class="btn primary" href="/my-progress?returnTo=${encodeURIComponent('/grc-rmf-training/rmf/index.html#step/' + step.id)}">Sign in or create an account →</a>`; }
     else if (!progress.system) { status = 'Start by registering your Secure By Design enclave in the workspace.'; action = `<a class="btn primary" href="${base}">Register your enclave →</a>`; }
     else { status = st.workspace ? `Done on ${esc(progress.system.name)}.` : `Not done yet on ${esc(progress.system.name)}.`; action = `<a class="btn primary" href="${base}#system=${encodeURIComponent(progress.system.id)}&tab=${step.tab}">Open ${esc(progress.system.acronym || 'your system')} · ${esc(step.tab)} →</a>`; }
     return `<section class="step-section workspace-task${st.workspace ? ' is-done' : ''}" aria-labelledby="step-do"><h3 class="panel-title" id="step-do"><span class="step-num">2</span>Do it in the Authorization Workspace</h3>
@@ -182,7 +182,7 @@
     const body = official.length || samples.length
       ? `${official.length ? `<p class="tpl-kicker">Official sources, verified public</p><ul class="tpl-list">${official.map(item).join('')}</ul>` : ''}${samples.length ? `<p class="tpl-kicker">Practice templates</p><ul class="tpl-list">${samples.map(sample).join('')}</ul>` : ''}`
       : `<p>The package is assembled from the documents of the earlier steps: the SSP with its SCTM, the RAR, the assessment results and the POA&amp;M. Use the <a class="text-link" href="#evidence/manifest">package manifest</a> and the capstone to bring them together.</p>`;
-    return `<section class="step-section" aria-labelledby="step-use"><h3 class="panel-title" id="step-use"><span class="step-num">3</span>Use the templates</h3>${body}<p class="help"><a class="text-link" href="/training/ato-templates#${step.id}">Open this step in the ATO Template Library →</a></p></section>`;
+    return `<section class="step-section" aria-labelledby="step-use"><h3 class="panel-title" id="step-use"><span class="step-num">3</span>Use the templates</h3>${body}<p class="help"><a class="text-link" href="/grc-rmf-training/templates#${step.id}">Open this step in the ATO Template Library →</a></p></section>`;
   }
   function renderStep(id) {
     const step = steps.find(s => s.id === id), index = steps.indexOf(step), st = stepState(step);
@@ -232,7 +232,7 @@
     const c = capstone;
     card.className = 'lesson wide';
     card.innerHTML = `${wideHead(`Course ${course.number} / Capstone · 4 hours · guided exercise`, 'Authorization to Operate package capstone', 'Assemble and defend the fictional enclave’s authorization package. Show where the evidence supports a conclusion, where it does not, and what happens next.')}
-      <div class="content"><div class="capstone-intro"><section class="card-panel"><h3>Your submission</h3><ol class="deliverables">${c.deliverables.map(item => `<li>${text(item)}</li>`).join('')}</ol></section><section class="card-panel"><div class="eyebrow ink">Practice scope</div><h3>${esc(c.scopeTitle)}</h3><p class="control-ids">${esc(c.scopeControls)}</p>${c.scopeText.map(p => `<p>${text(p)}</p>`).join('')}<a class="text-link" href="#evidence/manifest">Start with the package manifest →</a><p>Then run the package in the <a class="text-link" href="/authorization-workspace">Authorization Workspace</a>: register the system, implement and assess these controls, link your evidence, open POA&amp;M items, and route the package through the ISSM, the assessor, and the Authorizing Official.</p></section></div>
+      <div class="content"><div class="capstone-intro"><section class="card-panel"><h3>Your submission</h3><ol class="deliverables">${c.deliverables.map(item => `<li>${text(item)}</li>`).join('')}</ol></section><section class="card-panel"><div class="eyebrow ink">Practice scope</div><h3>${esc(c.scopeTitle)}</h3><p class="control-ids">${esc(c.scopeControls)}</p>${c.scopeText.map(p => `<p>${text(p)}</p>`).join('')}<a class="text-link" href="#evidence/manifest">Start with the package manifest →</a><p>Then run the package in the <a class="text-link" href="/grc-rmf-training/workspace">Authorization Workspace</a>: register the system, implement and assess these controls, link your evidence, open POA&amp;M items, and route the package through the ISSM, the assessor, and the Authorizing Official.</p></section></div>
       <section class="card-panel"><h3>Course scoring rubric</h3><div class="score-total"><strong>100</strong><span>available points</span></div>${renderTable(['Criterion', 'Points', 'What the reviewer looks for'], c.rubric)}<p class="help">${text(c.rubricNote)}</p></section>
       <h3 class="panel-title">The review sequence</h3><div class="review-chain">${c.sequence.map(([label, title, body]) => `<div><small>${esc(label)}</small><h3>${esc(title)}</h3><p>${text(body)}</p></div>`).join('')}</div>
       <h3 class="panel-title">Reviewer challenges</h3><p class="help">Try each question before opening its review guidance.</p>${c.challenges.map(([q, a]) => `<details class="challenge"><summary>${text(q)}</summary><div>${text(a)}</div></details>`).join('')}</div>

@@ -1,4 +1,4 @@
-// Shared building blocks of an expanded Training Library tile. The identity build (1.1)
+// Shared building blocks of an expanded Technical Training Library tile. The identity build (1.1)
 // and every course tile use the same companion: a heading, the training-materials
 // panel beside the recording, and an explorer below (see episode-experience.tsx and
 // course-experience.tsx), so all expanded tiles look and behave alike.
