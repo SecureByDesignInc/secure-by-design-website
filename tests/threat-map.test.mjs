@@ -21,10 +21,12 @@ test('the Threat Map page is in the navigation and the sitemap', () => {
   assert.match(read('scripts/prepare-sitemap.mjs'), /'\/threat-map'/);
 });
 
-test('the map loads from Radware only after the visitor asks, sandboxed, with a direct link', () => {
+test('the map loads automatically, sandboxed, over a placeholder, with a direct link', () => {
   const frame = read('app/threat-map/threat-map-frame.tsx');
-  assert.match(frame, /useState\(false\)/, 'starts unloaded');
-  assert.match(frame, /\{loaded\s*\n?\s*\? <iframe/, 'the iframe renders only once loaded');
+  assert.match(frame, /\{mounted && <iframe/, 'the frame is added as soon as the page runs, with no button to press');
+  assert.doesNotMatch(frame, /Load the live map/);
+  assert.match(frame, /onLoad=\{\(\) => setReady\(true\)\}/, 'the placeholder stays until Radware has loaded');
+  assert.match(frame, /Loading the live map/);
   assert.match(frame, /sandbox="allow-scripts allow-same-origin"/);
   assert.doesNotMatch(frame, /allow-top-navigation|allow-popups|allow-forms/);
   assert.match(frame, /referrerPolicy="no-referrer"/);
@@ -38,6 +40,12 @@ test('the page credits Radware without implying a partnership, and privacy discl
   assert.match(page, /not affiliated with Radware/);
   const privacy = read('app/privacy/page.tsx');
   assert.match(privacy, /<strong>Radware<\/strong>/);
-  assert.match(privacy, /only when you choose to open it/);
+  assert.match(privacy, /loads from Radware when you open the Threat Map page/);
   assert.doesNotMatch(privacy + page, /Check Point/);
+});
+
+test('the browser check ignores only Radware’s own frame, not this site’s errors', () => {
+  const check = read('scripts/browser-check.mjs');
+  assert.match(check, /const thirdPartyFrame = frame =>/);
+  assert.match(check, /livethreatmap\\.radware\\.com/);
 });

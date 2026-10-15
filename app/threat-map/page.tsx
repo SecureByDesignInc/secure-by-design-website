@@ -9,8 +9,8 @@ export const metadata = {
   ...sharePreview('Live Threat Map | Secure By Design', description, '/threat-map'),
 };
 
-// Radware's live map, shown in a frame that loads only when the visitor asks for it (it comes from
-// Radware's servers, under their analytics and cookies), with a direct link that always works.
+// Radware's live map, loaded in a sandboxed frame when the page opens (it comes from Radware's servers,
+// under their analytics and cookies), with a direct link that always works.
 export default function ThreatMapPage() {
   return <main id="main" className="tm-page">
     <section className="container tm-intro">
