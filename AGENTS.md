@@ -474,3 +474,8 @@ The owner asked to trade the live threat window and "Start building your network
 
 - **Order:** hero, live threat window, "A note from Secure By Design", Start building your network, More ways to figure it out, Choose your next step, About. The note stayed where it was, so it now sits between the window and Start building. `tests/threat-map.test.mjs` checks this order.
 - **Size:** the window's section is up to 1260px wide (the site container is 1120px), and the monitor takes about 72% of it (copy column .62fr, monitor 1.6fr, 48px gap). Phones and tablets keep the stacked layout.
+
+## Threat Map menu spot and a plainer monitor bar — October 14, 2026 (evening)
+
+- **Menu:** Threat Map now sits after Community & Careers Hub and before My Account (owner's choice). This supersedes "Threat Map in the shared navigation after Training Library"; Community shells regenerated.
+- **Live threat window:** the owner removed the UTC clock and the "SOC-01" label. The monitor bar reads "Live feed" (blinking light once powered on) on the left and "Radware" on the right. Don't add them back.

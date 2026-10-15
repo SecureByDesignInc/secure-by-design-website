@@ -16,7 +16,10 @@ test('only Radware’s map host is added to the frames the site may load', () =>
 test('the Threat Map page is in the navigation and the sitemap', () => {
   const links = JSON.parse(read('content/navigation.json'));
   assert.deepEqual(links.find(([href]) => href === '/threat-map'), ['/threat-map', 'Threat Map']);
-  assert.ok(links.findIndex(([href]) => href === '/threat-map') > links.findIndex(([href]) => href === '/training'));
+  // Owner's order (14 October 2026, evening): Threat Map right after Community & Careers Hub, before My Account.
+  const at = href => links.findIndex(([path]) => path === href);
+  assert.equal(at('/threat-map'), at('/community') + 1);
+  assert.equal(at('/my-progress'), at('/threat-map') + 1);
   assert.match(read('public/sitemap.xml'), /<loc>https:\/\/securebydesigninc\.com\/threat-map<\/loc>/);
   assert.match(read('scripts/prepare-sitemap.mjs'), /'\/threat-map'/);
 });
@@ -68,4 +71,10 @@ test('the homepage live window loads Radware only near view, on larger screens, 
   assert.ok(order.every(index => index >= 0), 'every homepage section is present');
   assert.deepEqual([...order].sort((a, b) => a - b), order, 'the live threat window follows the hero and comes before Start building your network');
   assert.match(read('app/privacy/page.tsx'), /live threat window on the homepage/);
+});
+
+test('the live threat window shows no clock or console name', () => {
+  const window = read('app/home-threat-window.tsx');
+  assert.doesNotMatch(window, /SOC-01|setClock|UTC/);
+  assert.doesNotMatch(read('app/template-home.css'), /sbd-monitor-clock/);
 });
