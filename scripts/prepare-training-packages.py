@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build each Training Library tile's one download (owner request, 9 October 2026).
+"""Build each Technical Training Library tile's one download (owner request, 9 October 2026).
 
 Configuration courses: public/training/<id>/SecureByDesign-<id>-Learning-Package.zip holds
 START-HERE.txt, the workbook (PDF and Word), configuration-checklist.md, and

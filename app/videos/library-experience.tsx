@@ -1,7 +1,7 @@
 // The expanded tile for a reference library (the ATO Template Library). It keeps the companion layout every
 // expanded tile shares (companion.tsx): the heading, the materials panel and a right-hand column, then the entries
 // below. Owner direction, 15 October 2026: the library lists only documents verified as publicly released, each
-// linked to its publisher (content/ato-templates.json). The full page is /training/ato-templates.
+// linked to its publisher (content/ato-templates.json). The full page is /grc-rmf-training/templates.
 import { ArrowUpRight, BookOpen, FileText, Maximize2 } from 'lucide-react';
 import type { ReferenceLibrary } from './catalog-types';
 import { CompanionHeading, CompanionMaterials, type CompanionLink } from './companion';
@@ -79,7 +79,7 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
               <BookOpen size={15} />
               <span>Full library</span>
             </a>
-            <a href="/authorization-workspace">
+            <a href="/grc-rmf-training/workspace">
               <Maximize2 size={15} />
               <span>Authorization Workspace</span>
             </a>

@@ -566,73 +566,73 @@
   {
     "id": "training:rmf-boe-ato:01",
     "title": "RMF roles, steps, and editions",
-    "href": "/training/rmf/index.html#catalog/01",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/01",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:02",
     "title": "Define and register the system",
-    "href": "/training/rmf/index.html#catalog/02",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/02",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:03",
     "title": "Describe and categorize the system",
-    "href": "/training/rmf/index.html#catalog/03",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/03",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:04",
     "title": "Select controls and plan monitoring",
-    "href": "/training/rmf/index.html#catalog/04",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/04",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:05",
     "title": "Implement and document the controls",
-    "href": "/training/rmf/index.html#catalog/05",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/05",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:06",
     "title": "Connect implementation to proof",
-    "href": "/training/rmf/index.html#catalog/06",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/06",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:07",
     "title": "Prepare the assessment",
-    "href": "/training/rmf/index.html#catalog/07",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/07",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:08",
     "title": "Perform and report the assessment",
-    "href": "/training/rmf/index.html#catalog/08",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/08",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:09",
     "title": "Build the plan of action and milestones",
-    "href": "/training/rmf/index.html#catalog/09",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/09",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:10",
     "title": "Assemble the authorization package",
-    "href": "/training/rmf/index.html#catalog/10",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/10",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:11",
     "title": "Support the authorization decision",
-    "href": "/training/rmf/index.html#catalog/11",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/11",
     "group": "Network authorization"
   },
   {
     "id": "training:rmf-boe-ato:12",
     "title": "Monitor and maintain authorization",
-    "href": "/training/rmf/index.html#catalog/12",
+    "href": "/grc-rmf-training/rmf/index.html#catalog/12",
     "group": "Network authorization"
   }
 ]

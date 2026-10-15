@@ -54,7 +54,7 @@ jobs:
             up 90 || { echo "::error title=vite preview did not start::$(log vite-preview.log)"; exit 1; }
             echo "::notice title=Local site::Running with vite preview"
           fi
-          echo "::notice title=Local site::Home $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/) | _headers file $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/_headers) (404 expected) | /training/rmf/ CSP headers: $(curl -sI http://127.0.0.1:8787/training/rmf/ | grep -ci content-security-policy)"
+          echo "::notice title=Local site::Home $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/) | _headers file $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8787/_headers) (404 expected) | /grc-rmf-training/rmf/ CSP headers: $(curl -sI http://127.0.0.1:8787/grc-rmf-training/rmf/ | grep -ci content-security-policy)"
       - name: Open every page in Chromium
         env:
           PLAYWRIGHT: ${{ runner.temp }}/pw/node_modules/playwright

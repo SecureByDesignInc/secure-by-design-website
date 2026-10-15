@@ -2,7 +2,7 @@
 import {useState} from 'react';
 import {
  ARTIFACT_KINDS,ARTIFACT_STATES,PACKAGE_ROLES,REQUIRED_PACKAGE_ROLES,SEVERITY,RISK,POAM_STATUS,POAM_SOURCES,poamProblems,compliance,controlTitle,
-} from '../../lib/authorization/model.mjs';
+} from '../../../lib/authorization/model.mjs';
 import {Badge,Field,Hat,artifactTone,severityTone,poamTone,formatDate,todayIso,download,csv,type Act,type Artifact,type Poam,type State} from './shared';
 
 const blankArtifact={title:'',kind:'configuration',packageRole:'none',description:'',content:'',location:'',version:'1.0',artifactDate:todayIso(),controls:[] as string[]};

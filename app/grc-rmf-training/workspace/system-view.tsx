@@ -3,7 +3,7 @@ import {useEffect,useRef,useState} from 'react';
 import {
  phases,issmReview,scaReview,monitoring,riskCounts,compliance,authorizationStatus,DECISION_SHORT,DECISIONS,PACKAGE_TYPES,ROLES,
  SYSTEM_TYPES,LEVELS,LEVEL_ORDER,highWater,FREQUENCIES,acceptedEvidence,daysUntil,
-} from '../../lib/authorization/model.mjs';
+} from '../../../lib/authorization/model.mjs';
 import {api,Badge,Checklist,Field,Hat,decisionTone,formatDate,formatTime,type Act,type State,type Profile} from './shared';
 import {ControlsTab,AssessmentTab} from './controls-views';
 import {EvidenceTab,PoamTab} from './evidence-poam';
@@ -60,8 +60,8 @@ function Overview({state,go}:{state:State;go:(tab:string)=>void}){
  const alerts=state.system.authorization?monitoring(state):[];
  const auth=state.system.authorization;
  return <>
-  {/* Each phase opens the same RMF step in course 2.1 "RMF to ATO" (public/training/rmf/), with its lessons and templates. */}
-  <ol className="awx-phases" aria-label="RMF lifecycle">{steps.map((s:any,i:number)=><li key={s.id} className={s.done?'done':''}><a href={`/training/rmf/index.html#step/${s.id}`} title={`${s.label}: lessons and templates in course 2.1`}><span>{s.done?'✓':i+1}</span>{s.label}<small>Learn this step</small></a></li>)}</ol>
+  {/* Each phase opens the same RMF step in course 2.1 "RMF to ATO" (public/grc-rmf-training/rmf/), with its lessons and templates. */}
+  <ol className="awx-phases" aria-label="RMF lifecycle">{steps.map((s:any,i:number)=><li key={s.id} className={s.done?'done':''}><a href={`/grc-rmf-training/rmf/index.html#step/${s.id}`} title={`${s.label}: lessons and templates in course 2.1`}><span>{s.done?'✓':i+1}</span>{s.label}<small>Learn this step</small></a></li>)}</ol>
   <div className="awx-stats">
    <button type="button" onClick={()=>go('controls')}><strong>{state.controls.length}</strong><span>controls in scope</span><small>{byCompliance.compliant||0} compliant · {byCompliance.non_compliant||0} non-compliant · {byCompliance.inherited||0} inherited · {byCompliance.not_assessed||0} not assessed</small></button>
    <button type="button" onClick={()=>go('evidence')}><strong>{accepted}<em>/{state.artifacts.length}</em></strong><span>evidence accepted</span><small>{state.artifacts.filter(a=>a.reviewState==='submitted').length} awaiting review</small></button>

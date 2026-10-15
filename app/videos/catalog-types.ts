@@ -63,7 +63,7 @@ export type TrainingCourse = {
   outcomeSummary?: string;
   /** Where the course's systems sit in Inside the Network, shown in the lesson explorer. */
   networkLabel?: string;
-  /** RMF parts list each module's lessons and study hours (kept equal to public/training/rmf/catalog-data.js by a test). */
+  /** RMF parts list each module's lessons and study hours (kept equal to public/grc-rmf-training/rmf/catalog-data.js by a test). */
   stages: { title: string; detail: string; number?: string; href?: string; hours?: string; lessons?: string[] }[];
   training: {
     guide: string;
@@ -111,5 +111,5 @@ export type ReferenceLibrary = {
 };
 export type CatalogEntry = Episode | TrainingCourse | ReferenceLibrary;
 /** kind 'reference' marks a group of reference tiles: it is not a learning path and has no course order. */
-export type CatalogCategory = { id: string; title: string; description: string; kind?: string };
+export type CatalogCategory = { id: string; title: string; description: string; kind?: string; library?: string };
 export type Library = { episodes: Episode[]; courses?: TrainingCourse[]; references?: ReferenceLibrary[]; categories?: CatalogCategory[] };

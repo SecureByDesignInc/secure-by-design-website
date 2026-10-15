@@ -1,4 +1,4 @@
-/* Live Threat Map on the homepage (app/home-threat-map.tsx): the Training Library's dark design around Radware's
+/* Live Threat Map on the homepage (app/home-threat-map.tsx): the Technical Training Library's dark design around Radware's
    live threat map. Imported after app/template-home.css so these rules win over the homepage's own type styles. */
 .tm-page {
   background: #071521;

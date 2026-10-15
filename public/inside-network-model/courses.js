@@ -1,6 +1,6 @@
 // Secure By Design courses that teach how to build or authorize parts of this network.
 // Build the Network path (1.1–1.19) builds every modeled system; Network Authorization (2.x) authorizes it.
-// Courses 1.16 and 1.17 are coming soon: they link to the Training Library until their material exists.
+// Courses 1.16 and 1.17 are coming soon: they link to the Technical Training Library until their material exists.
 export const courses={
  identity:{title:'1.1 · Promote Primary & Secondary Domain Controller',detail:'Two Active Directory domain controllers on Windows Server, on VLAN 10',href:'/training/dc01-dc02/index.html'},
  dns:{title:'1.2 · Configure DNS',detail:"Service discovery, zones, records & troubleshooting",href:'/training/dns-configuration'},
@@ -17,11 +17,11 @@ export const courses={
  fleet:{title:'1.13 · Bring in the fleet',detail:"50 Windows endpoints, managed from first boot",href:'/training/workstation-fleet'},
  patch:{title:'1.14 · Deliver Windows updates from SBD-WSUS01',detail:"Air-gapped WSUS: offline import, four rings & Group Policy targeting",href:'/training/patch-protect'},
  inventory:{title:'1.15 · Keep the living inventory on SBD-MGMT01',detail:"Component inventory, discovery sources & monthly reconciliation",href:'/training/management-server'},
- protection:{title:'1.16 · Endpoint protection on SBD-EPO01 (coming soon)',detail:"Managed agents, protection policy & DLP from one console",href:'/training#episode-library'},
- scanning:{title:'1.17 · Credentialed scanning with SBD-NESSUS01 (coming soon)',detail:"Scoped scan accounts, findings triage & the standing cadence",href:'/training#episode-library'},
+ protection:{title:'1.16 · Endpoint protection on SBD-EPO01 (coming soon)',detail:"Managed agents, protection policy & DLP from one console",href:'/technical-training#episode-library'},
+ scanning:{title:'1.17 · Credentialed scanning with SBD-NESSUS01 (coming soon)',detail:"Scoped scan accounts, findings triage & the standing cadence",href:'/technical-training#episode-library'},
  services:{title:'1.18 · Stand up the business services',detail:"Files, database, licensing & web — by documented paths",href:'/training/business-services'},
  recovery:{title:'1.19 · Prove you can recover',detail:"Backups with custody, one rehearsed restore & the closing record",href:'/training/prove-recovery'},
- rmf:{title:'2.1–2.3 · Prepare the network for authorization',detail:'Risk Management Framework, Body of Evidence & Authorization to Operate',href:'/training/rmf/index.html'}
+ rmf:{title:'2.1–2.3 · Prepare the network for authorization',detail:'Risk Management Framework, Body of Evidence & Authorization to Operate',href:'/grc-rmf-training/rmf/index.html'}
 };
 export const systemCourses={
  dc1:['identity','dns','time','stig','harden','recovery'],dc2:['identity','dns','time','stig','harden','recovery'],

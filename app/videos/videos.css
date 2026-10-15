@@ -2254,3 +2254,13 @@
 .vc-library-links a.vc-library-download:hover{background:#b0eef6}
 @media (max-width:800px){.vc-library-stage{padding:22px 18px 24px}}
 @media (max-width:520px){.vc-library-item-head{flex-direction:column;gap:6px}.vc-library-badges{justify-content:flex-start}}
+
+/* GRC & RMF Training Library (/grc-rmf-training): the course tools below the course tile. */
+.vc-tool-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.vc-tool-list li{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto;gap:12px 16px;padding:22px;border:1px solid #2b495e;border-radius:14px;background:#0c1d2b}
+.vc-tool-list li>svg{color:#7fd3ea;margin-top:2px}
+.vc-tool-list h4{margin:4px 0 8px;color:#effaff;font-size:19px;letter-spacing:-.02em}
+.vc-tool-list li>div>p:not(.vc-kicker){margin:0;color:#b2cad9;font-size:14px;line-height:1.6}
+.vc-tool-list li>a{grid-column:2;justify-self:start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid #3d6a83;border-radius:10px;color:#e4f6fc;font-size:13px;font-weight:600}
+.vc-tool-list li>a:hover{border-color:#7fd3ea;color:#fff}
+@media (max-width:760px){.vc-tool-list{grid-template-columns:1fr}.vc-tool-list li{grid-template-columns:1fr}.vc-tool-list li>a{grid-column:1}}

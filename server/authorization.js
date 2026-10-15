@@ -322,7 +322,7 @@ export async function authorizationApi(request,env){
    const rows=await env.DB.prepare('SELECT s.*,(SELECT count(*) FROM auth_controls c WHERE c.system_id=s.id) AS controls,(SELECT count(*) FROM auth_poam p WHERE p.system_id=s.id AND p.status IN (\'ongoing\',\'risk_acceptance_requested\')) AS open_poam FROM auth_systems s WHERE s.account_id=? ORDER BY s.created_at').bind(accountId).all();
    return reply({user:{email:reader.email},limit:LIMITS.systems,systems:rows.results.map(r=>({...systemRow(r),controls:r.controls,openPoam:r.open_poam}))});
   }
-  // Course 2.1 "RMF to ATO" (public/training/rmf/app.js) and My Progress show where the learner's Secure By Design
+  // Course 2.1 "RMF to ATO" (public/grc-rmf-training/rmf/app.js) and My Progress show where the learner's Secure By Design
   // enclave stands on each RMF step, from the same phases() checks the workspace uses.
   if(parts[0]==='progress'&&parts.length===1){
    if(method!=='GET')throw new Bad('Method not allowed.',405);

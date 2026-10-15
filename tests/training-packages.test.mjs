@@ -1,4 +1,4 @@
-// Owner request, 9 October 2026: one download per Training Library tile, no share controls in the
+// Owner request, 9 October 2026: one download per Technical Training Library tile, no share controls in the
 // training, and no specific Windows release numbers. The ZIPs are built by
 // scripts/prepare-training-packages.py; these checks fail when one no longer matches its files.
 import assert from 'node:assert/strict';
@@ -43,7 +43,7 @@ function assertMatchesFolder(zipPath, folder, names) {
   }
 }
 
-test('every Training Library tile has exactly one download', () => {
+test('every Technical Training Library tile has exactly one download', () => {
   for (const episode of library.episodes) {
     assert.match(episode.training.package, /\.zip$/);
     assert.ok(existsSync(publicFile(episode.training.package)), episode.training.package);
@@ -58,8 +58,8 @@ test('every Training Library tile has exactly one download', () => {
       assert.equal(course.training.word, undefined, course.id);
     } else {
       // Owner request, 15 October 2026: each authorization course has its own materials, like the build courses.
-      const folder = /^\/training\/([a-z0-9-]+)\//.exec(course.training.guide)[1];
-      assert.equal(course.training.package, `/training/${folder}/SecureByDesign-${folder}-Learning-Package.zip`, course.id);
+      const folder = /^\/grc-rmf-training\/([a-z0-9-]+)\//.exec(course.training.guide)[1];
+      assert.equal(course.training.package, `/grc-rmf-training/${folder}/SecureByDesign-${folder}-Learning-Package.zip`, course.id);
       for (const key of ['package', 'word', 'pdf', 'cover']) assert.ok(existsSync(publicFile(course.training[key])), course.training[key]);
     }
   }
@@ -69,11 +69,11 @@ test('every Training Library tile has exactly one download', () => {
 // Word, and a blank starter for each practice artifact the course's modules start or update.
 test('each authorization course ZIP holds its workbook and its evidence starters', () => {
   const context = { window: {} };
-  for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(read(`public/training/rmf/${file}`).toString(), context);
+  for (const file of ['catalog-data.js', 'learning-data.js']) runInNewContext(read(`public/grc-rmf-training/rmf/${file}`).toString(), context);
   const { CATALOG: modules, CATALOG_PARTS: parts, LEARNING: lessons, ARTIFACTS: artifacts } = context.window;
   for (const part of parts) {
     const course = library.courses.find(item => item.id === part.id);
-    const folder = `/training/${part.folder}`;
+    const folder = `/grc-rmf-training/${part.folder}`;
     const starters = [];
     for (const id of part.modules) for (const artifact of lessons[modules.findIndex(m => m.id === id)].artifacts) if (!starters.includes(artifact)) starters.push(artifact);
     const names = ['START-HERE.txt', `SecureByDesign-${part.folder}-Workbook.pdf`, `SecureByDesign-${part.folder}-Workbook.docx`,
@@ -157,8 +157,8 @@ test('training content names Windows releases without version numbers', () => {
   }
   const files = [
     'public/training/dc01-dc02/START-HERE.txt', 'public/training/dc01-dc02/notices.html',
-    'public/training/rmf/catalog-data.js', 'public/training/rmf/learning-data.js', 'public/training/rmf/network-data.js',
-    'public/training/rmf/index.html', 'public/training/rmf/templates-data.js',
+    'public/grc-rmf-training/rmf/catalog-data.js', 'public/grc-rmf-training/rmf/learning-data.js', 'public/grc-rmf-training/rmf/network-data.js',
+    'public/grc-rmf-training/rmf/index.html', 'public/grc-rmf-training/rmf/templates-data.js',
     ...readdirSync(new URL('../public/inside-network-model/', import.meta.url)).filter(name => /\.(js|html|csv|md)$/.test(name)).map(name => `public/inside-network-model/${name}`),
   ];
   for (const file of files) assert.doesNotMatch(read(file).toString(), release, file);

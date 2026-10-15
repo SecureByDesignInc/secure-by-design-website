@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """Build the Network Authorization workbook and training package (course 2.1, RMF to ATO: all seven RMF steps).
 
-Each course in public/training/rmf/catalog-data.js (window.CATALOG_PARTS) gets, in public/training/<folder>/:
+Each course in public/grc-rmf-training/rmf/catalog-data.js (window.CATALOG_PARTS) gets, in public/grc-rmf-training/<folder>/:
 
   SecureByDesign-<folder>-Workbook.docx          the companion workbook
   SecureByDesign-<folder>-Workbook.pdf           (--all) a tagged PDF export of it
-  workbook-cover.webp                            (--all) page 1, for the Training Library tile
+  workbook-cover.webp                            (--all) page 1, for the GRC & RMF Training Library tile
   SecureByDesign-<folder>-Learning-Package.zip   (--all) the PDF, the Word file, START-HERE.txt and the
                                                  course's evidence starters (Markdown, plus CSV for tables)
 
 The workbooks use the Build the Network companion workbook design. scripts/rmf-workbook/template.docx is a
 copy of one (course 1.7's); every paragraph, list and table below is a copy of one of its building blocks, so
 fonts, colours, spacing, numbering, links and the footer carry over. The text comes from the same data the
-course pages use (public/training/rmf/*.js) and from content/videos.json. With --all, training.pages in
+course pages use (public/grc-rmf-training/rmf/*.js) and from content/videos.json. With --all, training.pages in
 content/videos.json is updated from the PDF.
 
   python3 scripts/prepare-rmf-workbooks.py          Word workbooks only
@@ -73,7 +73,7 @@ def course_data() -> dict:
     script = (
         "const fs=require('fs'),vm=require('vm');const c={window:{}};"
         "for(const f of ['catalog-data.js','learning-data.js','network-data.js'])"
-        "vm.runInNewContext(fs.readFileSync('public/training/rmf/'+f,'utf8'),c);"
+        "vm.runInNewContext(fs.readFileSync('public/grc-rmf-training/rmf/'+f,'utf8'),c);"
         "process.stdout.write(JSON.stringify(c.window));"
     )
     return json.loads(subprocess.run(['node', '-e', script], cwd=ROOT, check=True, capture_output=True, text=True).stdout)
@@ -534,7 +534,7 @@ def export(course: dict, part: dict, data: dict, docx: Path):
              f'Materials edition {t["materialsEdition"]} · Updated {t["updated"]}\n\n'
              f'{docx.stem}.pdf  The companion workbook (also as Word: {docx.name})\n'
              'Evidence starters/  Blank starters for this course’s practice artifacts (Markdown; CSV for tables)\n\n'
-             f'Open the interactive course: {SITE}/training/{part["folder"]}/\n'
+             f'Open the interactive course: {SITE}/grc-rmf-training/{part["folder"]}/\n'
              'The course follows the RMF steps of NIST SP 800-37 Revision 2 with the April 2016 JSIG mapped in.\n'
              'Exercise records are fictional. They are not authorization decisions or assessment results.\n\n'
              f'{COPYRIGHT}\n')
@@ -562,7 +562,7 @@ def main():
     library = json.loads(videos_path.read_text(encoding='utf-8'))
     for part in data['CATALOG_PARTS']:
         course = next(c for c in library['courses'] if c['id'] == part['id'])
-        folder = ROOT / 'public/training' / part['folder']
+        folder = ROOT / 'public/grc-rmf-training' / part['folder']
         folder.mkdir(parents=True, exist_ok=True)
         docx = folder / Path(course['training']['word']).name
         write_workbook(data, course, part, docx)

@@ -1,8 +1,8 @@
 # Authorization Workspace
 
-`/authorization-workspace` is where a signed-in learner takes a practice system through an Authorization to Operate (ATO). It models how authorization teams manage an ATO in eMASS (DoD's Enterprise Mission Assurance Support Service) and Telos Xacta 360: a system record, the selected controls, a Body of Evidence, a Plan of Action and Milestones (POA&M), approval chains for each control and for the package, the Authorizing Official's decision, and continuous monitoring. It is an original Secure By Design teaching tool. It is not affiliated with DISA or Telos and copies neither product's screens or branding.
+`/grc-rmf-training/workspace` is where a signed-in learner takes a practice system through an Authorization to Operate (ATO). It models how authorization teams manage an ATO in eMASS (DoD's Enterprise Mission Assurance Support Service) and Telos Xacta 360: a system record, the selected controls, a Body of Evidence, a Plan of Action and Milestones (POA&M), approval chains for each control and for the package, the Authorizing Official's decision, and continuous monitoring. It is an original Secure By Design teaching tool. It is not affiliated with DISA or Telos and copies neither product's screens or branding.
 
-It is the hands-on half of course 2.1 "RMF to ATO" (`/training/rmf/`): each RMF step page in the course links to the matching workspace tab and shows whether that step's workspace check passes (`GET /api/authorization/progress`), and the lifecycle list here links back to the course steps. The capstone runs here, on the network the Build the Network courses create.
+It is the hands-on half of course 2.1 "RMF to ATO" (`/grc-rmf-training/rmf/`): each RMF step page in the course links to the matching workspace tab and shows whether that step's workspace check passes (`GET /api/authorization/progress`), and the lifecycle list here links back to the course steps. The capstone runs here, on the network the Build the Network courses create.
 
 ## What the learner does
 
@@ -52,7 +52,7 @@ All under `/api/authorization`, JSON, the reader session cookie, and same-origin
 
 `scripts/build-control-catalog.py` builds the catalog from NIST's OSCAL content (github.com/usnistgov/oscal-content, `nist.gov/SP800-53/rev5/json`: the Rev. 5 catalog and the LOW/MODERATE/HIGH baseline profiles):
 
-- `public/authorization-workspace/controls-rev5.json`: every active control and enhancement with its statement and SP 800-53A objectives, parameters shown as `[Assignment: …]` / `[Selection: …]`. About 850 KB (115 KB compressed); the page loads it only when control text is shown.
+- `public/grc-rmf-training/workspace/controls-rev5.json`: every active control and enhancement with its statement and SP 800-53A objectives, parameters shown as `[Assignment: …]` / `[Selection: …]`. About 850 KB (115 KB compressed); the page loads it only when control text is shown.
 - `content/authorization/control-index.json`: id → title, family, baselines and objective ids, bundled for validation and search.
 
 To refresh after NIST updates the catalog: clone or download that folder, run `python3 scripts/build-control-catalog.py <folder>`, and run `node --test tests/authorization.test.mjs`.

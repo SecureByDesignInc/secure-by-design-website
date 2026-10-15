@@ -1,5 +1,5 @@
 import { permanentRedirect } from 'next/navigation';
 
 export default function RetiredVideosPage() {
-  permanentRedirect('/training');
+  permanentRedirect('/technical-training');
 }

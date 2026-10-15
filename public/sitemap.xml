@@ -2,7 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://securebydesigninc.com/</loc></url>
   <url><loc>https://securebydesigninc.com/inside-the-network</loc></url>
-  <url><loc>https://securebydesigninc.com/training</loc></url>
+  <url><loc>https://securebydesigninc.com/technical-training</loc></url>
+  <url><loc>https://securebydesigninc.com/grc-rmf-training</loc></url>
   <url><loc>https://securebydesigninc.com/community</loc></url>
   <url><loc>https://securebydesigninc.com/privacy</loc></url>
   <url><loc>https://securebydesigninc.com/training/dc01-dc02/</loc></url>
@@ -22,8 +23,8 @@
   <url><loc>https://securebydesigninc.com/training/management-server/</loc></url>
   <url><loc>https://securebydesigninc.com/training/business-services/</loc></url>
   <url><loc>https://securebydesigninc.com/training/prove-recovery/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/rmf/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/ato-templates</loc></url>
+  <url><loc>https://securebydesigninc.com/grc-rmf-training/rmf/</loc></url>
+  <url><loc>https://securebydesigninc.com/grc-rmf-training/templates</loc></url>
   <url><loc>https://securebydesigninc.com/training/dns-configuration/checklist</loc></url>
   <url><loc>https://securebydesigninc.com/training/domain-time/checklist</loc></url>
   <url><loc>https://securebydesigninc.com/training/stig-scap/checklist</loc></url>

@@ -9,6 +9,7 @@ import {
   BookOpen,
   Check,
   ChevronUp,
+  ClipboardCheck,
   Clock,
   FileText,
   Link2,
@@ -32,7 +33,9 @@ import {
   getYouTubeEmbedUrl,
   isReferenceLibrary,
   isTrainingCourse,
+  libraryFor,
   supportsIdentityScene,
+  type LibraryEdition,
 } from './video-utils';
 
 const ART_SERIES: Record<string, string> = {
@@ -209,7 +212,30 @@ function EpisodeTile({
   );
 }
 
-export default function VideoHub({ library }: { library: Library }) {
+// The two libraries' headings (owner direction, 15 October 2026). Both use this page and the same tiles.
+const EDITIONS: Record<LibraryEdition, { kicker: string; title: string; em: string; copy: string; heading: string; choose: string }> = {
+  technical: {
+    kicker: 'TECHNICAL TRAINING LIBRARY',
+    title: 'Build your skills.',
+    em: 'Understand the why.',
+    copy: 'Explore practical training, interactive guides, and resources that help you build your skills. Choose a topic and follow your own learning path.',
+    heading: 'YOUR TECHNICAL TRAINING LIBRARY',
+    choose: 'Choose your next course.',
+  },
+  grc: {
+    kicker: 'GRC & RMF TRAINING LIBRARY',
+    title: 'Take a system to an ATO.',
+    em: 'One RMF step at a time.',
+    copy: 'Governance, risk and compliance training built on the Risk Management Framework: the RMF to ATO course, the Authorization Workspace where you do each step, and the ATO Template Library with the documents each step uses.',
+    heading: 'YOUR GRC & RMF TRAINING LIBRARY',
+    choose: 'Start the course.',
+  },
+};
+
+export default function VideoHub({ library: fullLibrary, edition = 'technical' }: { library: Library; edition?: LibraryEdition }) {
+  const library = libraryFor(fullLibrary, edition);
+  const text = EDITIONS[edition];
+  const grc = edition === 'grc';
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [topic, setTopic] = useState('');
@@ -248,21 +274,17 @@ export default function VideoHub({ library }: { library: Library }) {
     <main id="main" className="vc-page">
       <section className="container vc-intro">
         <div>
-          <p className="vc-kicker">TRAINING LIBRARY</p>
+          <p className="vc-kicker">{text.kicker}</p>
           <h1>
-            Build your skills.
+            {text.title}
             <br />
-            <em>Understand the why.</em>
+            <em>{text.em}</em>
           </h1>
         </div>
         <div className="vc-intro-copy">
-          <p>
-            Explore practical training, interactive guides, and resources
-            that help you build your skills. Choose a topic and follow
-            your own learning path.
-          </p>
+          <p>{text.copy}</p>
           <a href="#episode-library">
-            Explore the catalog <ArrowDown size={16} />
+            {grc ? 'Open the course and tools' : 'Explore the catalog'} <ArrowDown size={16} />
           </a>
         </div>
       </section>
@@ -273,14 +295,15 @@ export default function VideoHub({ library }: { library: Library }) {
       >
         <div className="vc-library-heading">
           <div>
-            <p className="vc-kicker">YOUR TRAINING LIBRARY</p>
-            <h2 id="episode-library-title">Choose your next course.</h2>
+            <p className="vc-kicker">{text.heading}</p>
+            <h2 id="episode-library-title">{text.choose}</h2>
           </div>
           <span>
-            {paths.length} learning paths · {courseCount} course{courseCount === 1 ? '' : 's'}
+            {grc ? `${courseCount} course · 2 tools` : `${paths.length} learning path${paths.length === 1 ? '' : 's'} · ${courseCount} course${courseCount === 1 ? '' : 's'}`}
             {referenceCount > 0 && ` · ${referenceCount} template librar${referenceCount === 1 ? 'y' : 'ies'}`}
           </span>
         </div>
+        {!grc && <>
         <div className="vc-category-filters" role="group" aria-label="Training category">
           {[{ id: '', title: 'All training' }, ...(library.categories ?? [])].map(item => <button
             type="button" key={item.id} aria-pressed={category === item.id}
@@ -356,6 +379,7 @@ export default function VideoHub({ library }: { library: Library }) {
             </button>
           )}
         </div>
+        </>}
         {groups.map((group, groupIndex) => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
           {groupIndex > 0 && (referenceGroups.has(group.id) ? <p className="vc-path-next">
             <FileText size={15} aria-hidden="true" />
@@ -416,14 +440,51 @@ export default function VideoHub({ library }: { library: Library }) {
             <span>{matches.length - visible.length} more to explore</span>
           </div>
         )}
-        <div className="vc-library-footer">
-          <p>
-            <Network size={20} />
-            Every build is part of a bigger network.
+        {grc && <section className="vc-category-group vc-grc-tools" aria-labelledby="grc-tools-title">
+          <p className="vc-path-next">
+            <ArrowDown size={15} aria-hidden="true" />
+            <span>Do each step and use its templates</span>
           </p>
-          <Link href="/inside-the-network">
-            Step inside the complete network <ArrowRight size={17} />
-          </Link>
+          <div className="vc-category-heading"><div><h3 id="grc-tools-title">Course tools</h3><p>Every step of the course links to both: the Authorization Workspace for the practice task, and the ATO Template Library for the documents it produces.</p></div><span>2 tools</span></div>
+          <ul className="vc-tool-list">
+            <li>
+              <ClipboardCheck size={26} strokeWidth={1.4} aria-hidden="true" />
+              <div>
+                <p className="vc-kicker">PRACTICE TOOL</p>
+                <h4>Authorization Workspace</h4>
+                <p>Register the Secure By Design enclave and take it through every RMF step: system record and categorization, controls and evidence, assessment, the POA&amp;M, the package and the AO&apos;s decision, then continuous monitoring. Saved privately to your account.</p>
+              </div>
+              <Link href="/grc-rmf-training/workspace">Open the workspace <ArrowRight size={16} /></Link>
+            </li>
+            <li>
+              <FileText size={26} strokeWidth={1.4} aria-hidden="true" />
+              <div>
+                <p className="vc-kicker">REFERENCE LIBRARY</p>
+                <h4>ATO Template Library</h4>
+                <p>{atoTemplates.templates.length} official sources verified as publicly released, arranged by RMF step and linked to each publisher&apos;s copy, with {atoTemplates.samples.length} Secure By Design training samples for the documents that have no public DoD or JSIG version.</p>
+              </div>
+              <Link href="/grc-rmf-training/templates">Open the library <ArrowRight size={16} /></Link>
+            </li>
+          </ul>
+        </section>}
+        <div className="vc-library-footer">
+          {grc ? <>
+            <p>
+              <Network size={20} />
+              Authorize the network you built.
+            </p>
+            <Link href="/technical-training">
+              Build it first in the Technical Training Library <ArrowRight size={17} />
+            </Link>
+          </> : <>
+            <p>
+              <Network size={20} />
+              Every build is part of a bigger network.
+            </p>
+            <Link href="/inside-the-network">
+              Step inside the complete network <ArrowRight size={17} />
+            </Link>
+          </>}
         </div>
       </section>
     </main>

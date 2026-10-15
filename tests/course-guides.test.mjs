@@ -54,7 +54,7 @@ test('the Network Authorization course has its page in the course guide design',
   assert.ok(read('public/training/guide/course-guide.css').startsWith(read('scripts/course-guide/style.css')));
   assert.equal(read('public/training/guide/scene.js'), read('scripts/course-guide/scene.js'));
   const context = { window: {} };
-  runInNewContext(read('public/training/rmf/catalog-data.js'), context);
+  runInNewContext(read('public/grc-rmf-training/rmf/catalog-data.js'), context);
   const library = JSON.parse(read('content/videos.json'));
   const resources = JSON.parse(read('content/training-resources.json'));
   const headers = read('public/_headers');
@@ -63,14 +63,14 @@ test('the Network Authorization course has its page in the course guide design',
   assert.deepEqual(Array.from(parts, part => part.folder), ['rmf']);
   for (const part of parts) {
     const course = library.courses.find(item => item.id === part.id);
-    const page = read(`public/training/${part.folder}/index.html`);
-    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Training Library', '/training/account-progress.js',
-      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
+    const page = read(`public/grc-rmf-training/${part.folder}/index.html`);
+    for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the GRC &amp; RMF Training Library', '/training/account-progress.js',
+      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/grc-rmf-training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
       assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
     // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.
     const guide = /<section class="sbd-account-progress" aria-label="Account learning progress" data-guide="([a-z0-9-]+)">/.exec(page)?.[1];
-    assert.ok(resources.some(item => item.id === guide && !item.retired && item.url === `https://securebydesigninc.com/training/${part.folder}/index.html`), `course ${part.number} saves ${guide}`);
-    assert.match(headers, new RegExp(`^/training/${part.folder}/\\*\\n  Content-Security-Policy: [^\\n]*worker-src 'self' blob:`, 'm'), `course ${part.number} has a content security policy`);
+    assert.ok(resources.some(item => item.id === guide && !item.retired && item.url === `https://securebydesigninc.com/grc-rmf-training/${part.folder}/index.html`), `course ${part.number} saves ${guide}`);
+    assert.match(headers, new RegExp(`^/grc-rmf-training/${part.folder}/\\*\\n  Content-Security-Policy: [^\\n]*worker-src 'self' blob:`, 'm'), `course ${part.number} has a content security policy`);
   }
   // Saved materials that point at these courses open a page or file that exists.
   for (const item of resources.filter(item => !item.retired && /^https:\/\/securebydesigninc\.com\/training\/rmf/.test(item.url))) {
@@ -81,7 +81,7 @@ test('the Network Authorization course has its page in the course guide design',
 
 test('the authorization view covers every module with real parts of the network', () => {
   const context = { window: {} };
-  runInNewContext(read('public/training/rmf/catalog-data.js') + read('public/training/rmf/network-data.js'), context);
+  runInNewContext(read('public/grc-rmf-training/rmf/catalog-data.js') + read('public/grc-rmf-training/rmf/network-data.js'), context);
   const { CATALOG: modules, RMF_NETWORK: view } = context.window;
   const network = JSON.parse(read('content/inside-the-network.json'));
   assert.equal(view.modules.length, modules.length);

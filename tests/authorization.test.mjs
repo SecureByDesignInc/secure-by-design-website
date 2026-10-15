@@ -64,7 +64,7 @@ test('the control catalog comes from NIST SP 800-53 Rev. 5 with SP 800-53A objec
  for(const id of PRACTICE_CONTROLS)assert.ok(objectivesFor(id).length>0,id);
  assert.equal(controlIndex['AC-2'][0],'Account Management');
  assert.ok(controlIndex['AC-2'][2].includes('M'));
- const full=JSON.parse(fs.readFileSync('public/authorization-workspace/controls-rev5.json','utf8'));
+ const full=JSON.parse(fs.readFileSync('public/grc-rmf-training/workspace/controls-rev5.json','utf8'));
  const ac2=full.controls.find(c=>c.id==='AC-2');
  assert.match(ac2.statement.find(s=>s[1]==='j.')[2],/\[Assignment: organization-defined frequency\]/);
  assert.ok(!JSON.stringify(full).includes('{{ insert'));
@@ -262,12 +262,14 @@ test('monitoring flags expiry, the annual review, overdue POA&M items, lapsed pr
  assert.deepEqual(phases({...state,controls:[]},now).map(p=>p.done),[false,false,false,false,false,true,false]);
 });
 
-test('the workspace is in the main menu right after Training Library, including the Community shells',()=>{
+test('the GRC & RMF Training Library follows the Technical Training Library in the main menu, including the Community shells',()=>{
  const nav=JSON.parse(fs.readFileSync('content/navigation.json','utf8'));
  const at=href=>nav.findIndex(([path])=>path===href);
- assert.deepEqual(nav[at('/authorization-workspace')],['/authorization-workspace','Authorization Workspace']);
- assert.equal(at('/authorization-workspace'),at('/training')+1);
- for(const name of ['career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/authorization-workspace"/,name);
+ assert.deepEqual(nav[at('/technical-training')],['/technical-training','Technical Training Library']);
+ assert.deepEqual(nav[at('/grc-rmf-training')],['/grc-rmf-training','GRC & RMF Training Library']);
+ assert.equal(at('/grc-rmf-training'),at('/technical-training')+1);
+ assert.ok(!nav.some(([path])=>path==='/training'||path==='/authorization-workspace'));
+ for(const name of ['careers','career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/technical-training"[^>]*>Technical Training Library<\/a><a href="\/grc-rmf-training"[^>]*>GRC &amp; RMF Training Library</,name);
 });
 
 test('deleting a system or the account removes every record',async()=>{

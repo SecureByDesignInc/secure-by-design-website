@@ -1,4 +1,4 @@
-// Writes public/sitemap.xml from the published pages: the main sections and every Training Library course.
+// Writes public/sitemap.xml from the published pages: the main sections and every Technical Training Library course.
 // Offline sections (Security Journal, Cyber Range, the retired /careers Community pages) are deliberately left out.
 // Community & Careers at /community and its state pages are published.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -9,17 +9,17 @@ const library = read('content/videos.json');
 const configuration = read('content/configuration-courses.json');
 const communityStates = read('content/community-states.json');
 // My Account is noindex (it is an account page), so it stays out of the sitemap.
-const paths = ['/', '/inside-the-network', '/training', '/community', '/privacy'];
+const paths = ['/', '/inside-the-network', '/technical-training', '/grc-rmf-training', '/community', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
-  // List the address a guide is served at: /training/rmf/index.html redirects to /training/rmf/.
+  // List the address a guide is served at: /grc-rmf-training/rmf/index.html redirects to /grc-rmf-training/rmf/.
   // Configuration course guides are served at /training/<id>/ (the old /training/<id> redirects there).
   if (guide && guide.startsWith('/')) paths.push(guide.replace(/#.*$/, '').replace(/\/index\.html$/, '/').replace(/^(\/training\/[a-z0-9-]+)$/, '$1/'));
 }
 // Reference tiles (the ATO Template Library) are app pages, served without a trailing slash.
 for (const reference of library.references ?? []) paths.push(reference.training.guide);
-// The ATO Template Library page, linked from each step of course 2.1 (its catalog tile was merged into the course).
-if (!paths.includes('/training/ato-templates')) paths.push('/training/ato-templates');
+// The ATO Template Library page in the GRC & RMF Training Library, linked from each step of course 2.1.
+if (!paths.includes('/grc-rmf-training/templates')) paths.push('/grc-rmf-training/templates');
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);
 for (const state of communityStates) paths.push(`/community/${state.slug}`);
 const unique = [...new Set(paths)];

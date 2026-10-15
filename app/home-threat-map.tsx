@@ -35,7 +35,7 @@ export default function HomeThreatMap() {
         <article>
           <h3>Where the defenses come in</h3>
           <p>The map shows the threat. The training shows the defenses: hardening to the DISA STIGs, patching, central logging, and default-deny segmentation that stops traffic no rule allows.</p>
-          <p className="tm-links"><a href="/training">Open the Training Library</a><a href="/inside-the-network">Explore Inside the Network</a></p>
+          <p className="tm-links"><a href="/technical-training">Open the Technical Training Library</a><a href="/inside-the-network">Explore Inside the Network</a></p>
         </article>
       </div>
     </section>

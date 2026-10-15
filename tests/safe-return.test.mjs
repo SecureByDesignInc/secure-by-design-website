@@ -12,7 +12,7 @@ runInNewContext(code, { exports, URL, window: { location: { origin: 'https://sec
 const { safeReturnPath } = exports;
 
 test('paths on this site are kept as they are', () => {
-  assert.equal(safeReturnPath('/training'), '/training');
+  assert.equal(safeReturnPath('/technical-training'), '/technical-training');
   assert.equal(safeReturnPath('/training/dns-configuration?x=1#zones'), '/training/dns-configuration?x=1#zones');
   assert.equal(safeReturnPath('/career-records'), '/career-records');
   assert.equal(safeReturnPath('https://securebydesigninc.com/privacy'), '/privacy');

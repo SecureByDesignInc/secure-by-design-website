@@ -29,7 +29,7 @@ export function useCatalog(enabled=true){
  const [catalog,setCatalog]=useState<Map<string,CatalogControl>|null>(null);const [failed,setFailed]=useState(false);
  useEffect(()=>{
   if(!enabled||catalog)return;
-  catalogPromise??=fetch('/authorization-workspace/controls-rev5.json').then(r=>{if(!r.ok)throw new Error();return r.json()}).then(d=>new Map((d.controls as CatalogControl[]).map(c=>[c.id,c])));
+  catalogPromise??=fetch('/grc-rmf-training/workspace/controls-rev5.json').then(r=>{if(!r.ok)throw new Error();return r.json()}).then(d=>new Map((d.controls as CatalogControl[]).map(c=>[c.id,c])));
   catalogPromise.then(setCatalog).catch(()=>{catalogPromise=null;setFailed(true)});
  },[enabled,catalog]);
  return {catalog,failed};

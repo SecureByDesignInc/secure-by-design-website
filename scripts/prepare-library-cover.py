@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Draw the ATO Template Library cover (public/training/library/ato-templates-cover.webp).
 
-The Training Library shows a cover on every tile, normally the first page of a course workbook.
+The Technical Training Library shows a cover on every tile, normally the first page of a course workbook.
 The template library has no workbook, so this draws a matching first page from
 content/ato-templates.json: the same 612 x 792 page, logo, type and colors as the workbook covers.
 Re-run after changing the library's counts or groups:  python3 scripts/prepare-library-cover.py
@@ -20,7 +20,7 @@ NAVY, TEAL, BODY, MUTED = (26, 46, 66), (21, 94, 117), (70, 82, 96), (110, 120, 
 page = Image.new('RGB', (612, 792), 'white')
 draw = ImageDraw.Draw(page)
 # The logo block from a workbook cover, so the brand mark is identical.
-logo = Image.open(ROOT / 'public/training/rmf/workbook-cover.webp').convert('RGB').crop((52, 52, 96, 96))
+logo = Image.open(ROOT / 'public/grc-rmf-training/rmf/workbook-cover.webp').convert('RGB').crop((52, 52, 96, 96))
 page.paste(logo, (52, 52))
 draw.text((54, 99), 'Secure By Design', font=bold(17), fill=NAVY)
 draw.text((54, 122), 'EDUCATE. EMPOWER. SECURE THE FUTURE.', font=regular(7), fill=MUTED)
