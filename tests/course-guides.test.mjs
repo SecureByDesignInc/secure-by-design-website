@@ -73,7 +73,7 @@ test('the Network Authorization course has its page in the course guide design',
     assert.match(headers, new RegExp(`^/grc-rmf-training/${part.folder}/\\*\\n  Content-Security-Policy: [^\\n]*worker-src 'self' blob:`, 'm'), `course ${part.number} has a content security policy`);
   }
   // Saved materials that point at these courses open a page or file that exists.
-  for (const item of resources.filter(item => !item.retired && /^https:\/\/securebydesigninc\.com\/training\/rmf/.test(item.url))) {
+  for (const item of resources.filter(item => !item.retired && /^https:\/\/securebydesigninc\.com\/grc-rmf-training\/rmf/.test(item.url))) {
     const path = new URL(item.url).pathname;
     assert.ok(existsSync(new URL(`../public${path}`, import.meta.url)), `${item.id} → ${path}`);
   }

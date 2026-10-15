@@ -26,7 +26,8 @@ test('the complete recognized progress catalog retains every original ID and its
   assert.deepEqual(catalog.progressCatalog.filter(item=>!item.id.startsWith('training:')).map(item => item.id), expectedIds);
   // Journal (rmf:*, article:*) and Cyber Range (path:*) entries are offline; only the Technical Training Library counts.
   assert.deepEqual(catalog.activeProgressCatalog.map(item => item.id), training.map(item=>item.id));
-  assert.ok(catalog.activeProgressCatalog.every(item => item.href.startsWith('/training/')));
+  // Technical courses live under /training/; the RMF to ATO course under the GRC & RMF Training Library (15 October 2026).
+  assert.ok(catalog.activeProgressCatalog.every(item => /^\/(training|grc-rmf-training)\//.test(item.href)));
 });
 
 test('the shared progress catalog imports only minimal article metadata rather than article prose', () => {
