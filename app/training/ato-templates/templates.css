@@ -12,8 +12,13 @@
 .tl-abbr{margin-left:8px;color:#8fd9e6;font-size:12px;font-weight:600;letter-spacing:.04em;vertical-align:middle}
 .tl-list{margin-bottom:12px;padding:6px 22px;border:1px solid #365469;border-radius:17px;background:#102737}
 .tl-list li:first-child{padding-top:16px}
+.tl-edition{margin:0 0 30px;padding:20px 24px;border:1px solid #365469;border-left:3px solid #8cdeea;border-radius:12px;background:#0d2232}
+.tl-edition h2{margin:0 0 10px;color:#effaff;font-size:18px;letter-spacing:-.02em}
+.tl-edition p{margin:0 0 8px;color:#b9d0dd;font-size:13px;line-height:1.65;max-width:900px}
+.tl-edition p:last-child{margin-bottom:0}
+.tl-edition b{color:#e4f4fb}
 .tl-gaps{margin-top:34px;padding:22px 24px;border:1px solid #365469;border-left:3px solid #f2cf7c;border-radius:12px;background:#0d2232}
 .tl-gaps h3{margin:0 0 12px;color:#effaff;font-size:18px;letter-spacing:-.02em}
 .tl-gaps ul{margin:0;padding-left:18px;display:grid;gap:9px;color:#b9d0dd;font-size:13px;line-height:1.65;max-width:900px}
 .tl-gaps b{color:#e4f4fb}
-@media (max-width:600px){.tl-list{padding:4px 16px}.tl-gaps{padding:18px 16px}.tl-toggle{white-space:normal}}
+@media (max-width:600px){.tl-list{padding:4px 16px}.tl-gaps,.tl-edition{padding:18px 16px}.tl-toggle{white-space:normal}}

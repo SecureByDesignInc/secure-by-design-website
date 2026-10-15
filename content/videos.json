@@ -1769,26 +1769,26 @@
       "categoryId": "templates-references",
       "categoryOrder": 1,
       "title": "ATO Template Library",
-      "subtitle": "Free templates for every Body of Evidence artifact, SAP and JSIG included",
-      "description": "Free, publicly downloadable templates for the major ATO package artifacts: categorization, the SSP, control matrix, RAR, SAP, SAR, POA&M, privacy, contingency, incident response and interconnection agreements, plus the DoD SAP, JSIG and CNSS templates a SAP system uses. They come from NIST, CNSS, DoD and DCSA, FedRAMP and GovRAMP, and each is tagged with its framework, its status and the RMF tasks it supports.",
+      "subtitle": "The DoD SAP / JSIG templates, arranged by RMF step",
+      "description": "The templates a DoD Special Access Program system is authorized with, arranged by RMF step: the JSIG SSP, SCTM worksheet with overlays, RAR, POA&M, continuous monitoring strategy, ISSM/ISSO appointment letter, ATO and ATC package checklist and DATO memo to download, plus official sources for the rest of the Body of Evidence. They follow the 2016 JSIG with its 2018 errata and are for instruction and practice.",
       "tags": [
         "Templates",
         "Body of Evidence",
         "JSIG",
-        "NIST"
+        "SAP"
       ],
       "systems": [],
       "artLabels": [
         "SSP · SCTM · RAR",
-        "SAP · SAR · POA&M",
-        "NIST · JSIG · CNSS"
+        "POA&M · ConMon · DATO",
+        "JSIG templates"
       ],
-      "outcomeSummary": "Every template links to its official source, so you always work from the publisher's own file.",
+      "outcomeSummary": "Download the JSIG templates and see where every other package artifact comes from.",
       "outcomes": [
-        "Find the template for each package artifact",
-        "Use the SAP and JSIG templates beside NIST",
-        "Tell current templates from legacy ones",
-        "Match each template to its RMF tasks"
+        "Download the JSIG package templates",
+        "Follow the package checklist step by step",
+        "See what is restricted and why",
+        "Map Rev. 4 templates to Rev. 5 for practice"
       ],
       "training": {
         "guide": "/training/ato-templates",

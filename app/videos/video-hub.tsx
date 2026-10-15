@@ -60,8 +60,9 @@ function EpisodeTile({
   const comingSoon = course && episode.kind === 'coming-soon';
   const available = !course && !reference && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
   const series = ART_SERIES[episode.categoryId ?? ''] ?? 'THE NETWORK BUILD SERIES';
-  const templateCount = atoTemplates.templates.length;
-  const artifactCount = atoTemplates.groups.length;
+  // The ATO Template Library counts its downloadable files (posted or adapted) and its RMF-step sections.
+  const downloadCount = atoTemplates.templates.filter(item => item.status === 'hosted' || item.status === 'adapted').length;
+  const sectionCount = atoTemplates.groups.length;
   const openLabel = reference ? 'library' : 'training';
   const close = () => {
     onToggle();
@@ -125,7 +126,7 @@ function EpisodeTile({
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{reference ? `${templateCount} TEMPLATES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{reference ? `${downloadCount} DOWNLOADS` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
@@ -152,9 +153,9 @@ function EpisodeTile({
             {reference ? <div className="vc-tile-status">
               <span>
                 <Check size={13} />
-                Free official templates
+                JSIG templates to download
               </span>
-              <span className="vc-tile-course-size"><FileText size={13} />{templateCount} templates · {artifactCount} artifacts</span>
+              <span className="vc-tile-course-size"><FileText size={13} />{downloadCount} downloads · {sectionCount} RMF sections</span>
               <span>
                 <Link2 size={13} />
                 Links checked {episode.training.updated}
@@ -185,7 +186,7 @@ function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {reference ? <>Template library<span>·</span>Official sources</> : <>Interactive guide<span>·</span>One download</>}
+              {reference ? <>Template library<span>·</span>One ZIP</> : <>Interactive guide<span>·</span>One download</>}
             </p>
           </div>}
         </div>

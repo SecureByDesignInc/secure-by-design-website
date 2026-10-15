@@ -2229,7 +2229,7 @@
    the right column holds framework counts and the status key in the recording's place, and the explorer
    lists one artifact's templates where a course shows its lesson stage. */
 .vc-library-key{display:flex;flex-direction:column}
-.vc-library-counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.vc-library-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .vc-library-counts>div{border:1px solid #325369;border-radius:10px;background:#0f2a3c;padding:14px 12px 12px;min-width:0}
 .vc-library-counts b{display:block;color:#effaff;font-size:26px;font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .vc-library-counts span{display:block;margin-top:6px;color:#9fc3d4;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
@@ -2240,9 +2240,9 @@
 .vc-library-legend li .vc-status{flex:0 0 84px;text-align:center}
 .vc-status,.vc-framework{display:inline-block;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:4px;white-space:nowrap}
 .vc-framework{background:#173a52;color:#a8e9f2;border:1px solid #2f5a74}
-.vc-status-current{background:#12382c;color:#8fe0b4;border:1px solid #2a6a50}
-.vc-status-legacy{background:#3a2e12;color:#f2cf7c;border:1px solid #6b5420}
-.vc-status-superseded{background:#2e2442;color:#ccb2ee;border:1px solid #57447a}
+.vc-status-hosted{background:#12382c;color:#8fe0b4;border:1px solid #2a6a50}
+.vc-status-adapted{background:#3a2e12;color:#f2cf7c;border:1px solid #6b5420}
+.vc-status-official{background:#173a52;color:#a8e9f2;border:1px solid #2f5a74}
 .vc-status-restricted{background:#3d1f22;color:#f1a7a7;border:1px solid #74393d}
 .vc-library-deeplink{display:inline-flex;align-items:center;gap:7px;margin-top:22px;color:#c4f3f8;font-size:11px;font-weight:600}
 .vc-library-deeplink:hover{text-decoration:underline}
@@ -2262,7 +2262,11 @@
 .vc-library-links a small{font-size:9px;letter-spacing:.06em;color:#8fd9e6}
 .vc-library-links a svg{opacity:.7}
 .vc-library-links a:hover{background:#1d4660;border-color:#8cdeea}
+.vc-library-links a.vc-library-download{background:#8cdeea;border-color:#8cdeea;color:#06273b}
+.vc-library-links a.vc-library-download small{color:#0d4a63}
+.vc-library-links a.vc-library-download:hover{background:#b0eef6}
+.vc-library-list .vc-library-restricted{display:flex;align-items:center;gap:6px;margin-top:10px;color:#f1a7a7;font-size:11px}
 .vc-chapters.vc-chapters-artifacts button b{display:block;line-height:1.3;text-wrap:balance}
-@media (max-width:480px){.vc-library-counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1100px){.vc-library-counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:800px){.vc-library-stage{padding:22px 18px 24px}}
 @media (max-width:520px){.vc-library-item-head{flex-direction:column;gap:6px}.vc-library-badges{justify-content:flex-start}.vc-library-legend li{flex-direction:column;gap:4px}.vc-library-legend li .vc-status{flex:none}}

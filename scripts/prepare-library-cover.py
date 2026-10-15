@@ -28,7 +28,7 @@ draw.text((54, 122), 'EDUCATE. EMPOWER. SECURE THE FUTURE.', font=regular(7), fi
 draw.text((54, 175), 'TEMPLATES & REFERENCES   /   TEMPLATE LIBRARY', font=bold(8), fill=TEAL)
 draw.text((52, 197), 'ATO Template', font=bold(33), fill=NAVY)
 draw.text((52, 236), 'Library', font=bold(33), fill=NAVY)
-draw.text((54, 283), 'Free templates for every Body of Evidence artifact', font=bold(15), fill=TEAL)
+draw.text((54, 283), 'The DoD SAP / JSIG templates, step by step', font=bold(15), fill=TEAL)
 
 def wrap(text, font, width):
     lines, line = [], ''
@@ -41,10 +41,10 @@ def wrap(text, font, width):
             line = trial
     return lines + [line]
 
-intro = (f"{len(data['templates'])} free, publicly downloadable templates for the artifacts in an "
-         "authorization package, with the DoD SAP, JSIG and CNSS templates a SAP system uses. From NIST, CNSS, "
-         "DoD and DCSA, FedRAMP and GovRAMP; each template links to its publisher and shows its framework, "
-         "its status and the RMF tasks it supports.")
+posted = sum(t['status'] in ('hosted', 'adapted') for t in data['templates'])
+intro = (f"{posted} Word and Excel templates to download, arranged by RMF step, with official sources for "
+         "the rest of the Body of Evidence. They follow the JSIG of 11 April 2016 with its 2018 errata "
+         "and are adapted for instruction and practice. Use your AO and PSO's current templates on a real system.")
 y = 318
 for line in wrap(intro, regular(10), 500):
     draw.text((54, y), line, font=regular(10), fill=BODY)
@@ -60,7 +60,7 @@ for index, group in enumerate(groups):
     column, row = divmod(index, half)
     x, gy = 54 + column * 255, y + row * 16
     draw.text((x, gy), f"{index + 1:02d}", font=bold(8), fill=TEAL)
-    draw.text((x + 18, gy), f"{group['title']}  ·  {count}", font=regular(8.5), fill=BODY)
+    draw.text((x + 18, gy), f"{group['title']}  ·  {group['abbr']}  ·  {count}", font=regular(8.5), fill=BODY)
 
 from datetime import date
 checked_on = date.fromisoformat(data['checked'])

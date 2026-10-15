@@ -4,7 +4,7 @@ import './templates.css';
 import { sharePreview } from '../../share-preview';
 
 // The ATO Template Library: the Training Library's reference tile opens here. Data: content/ato-templates.json.
-const description = 'Free, official templates for every major ATO package artifact, including DoD SAP, JSIG and CNSS templates, from NIST, CNSS, DoD and DCSA, FedRAMP and GovRAMP. Each one links to its publisher and is tagged with its status and RMF tasks.';
+const description = 'The DoD SAP / JSIG templates an authorization package is built from, arranged by RMF step: SSP, SCTM, RAR, POA&M, ConMon strategy, appointment letter and more to download, with official sources for the rest of the Body of Evidence.';
 export const metadata = {
   title: 'ATO Template Library',
   description,

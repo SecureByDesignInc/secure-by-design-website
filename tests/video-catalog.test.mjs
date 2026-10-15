@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
@@ -371,7 +371,8 @@ test('every course tile carries the companion details the expanded tile shows', 
 });
 
 
-// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group.
+// Owner request, 15 October 2026: an ATO Template Library tile in its own Templates & References group,
+// rebuilt the same day around the owner's DoD SAP / JSIG template set, arranged by RMF step.
 test('the ATO Template Library tile is a reference entry with valid templates and a page', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
   const [reference] = library.references;
@@ -384,24 +385,35 @@ test('the ATO Template Library tile is a reference entry with valid templates an
   assert.ok(existsSync(new URL('../public' + reference.training.cover, import.meta.url)), 'cover');
   assert.ok(existsSync(new URL('../app' + reference.training.guide + '/page.tsx', import.meta.url)), 'library page');
   assert.ok(reference.artLabels.length >= 2 && reference.outcomes.length && reference.outcomeSummary);
+  assert.deepEqual(templates.groups.map(group => group.id), ['start', 'prepare', 'categorize', 'select', 'implement', 'assess', 'authorize', 'monitor', 'decommission', 'reference']);
+  assert.equal(new Set(templates.templates.map(item => item.title)).size, templates.templates.length, 'unique entry titles');
   const groupIds = templates.groups.map(group => group.id);
-  assert.equal(new Set(groupIds).size, groupIds.length, 'unique artifact groups');
-  assert.equal(new Set(templates.templates.map(item => item.title)).size, templates.templates.length, 'unique template titles');
-  for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has templates`);
+  for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has entries`);
   for (const item of templates.templates) {
     assert.ok(groupIds.includes(item.group), `${item.title} group`);
-    assert.ok(['NIST', 'CNSS', 'DoD', 'SAP', 'FedRAMP', 'Other'].includes(item.framework), `${item.title} framework`);
-    assert.ok(['current', 'legacy', 'superseded', 'restricted'].includes(item.status), `${item.title} status`);
-    assert.ok(item.rmf && item.source && item.links.length > 0, `${item.title} details`);
+    assert.ok(['JSIG', 'DAF', 'DoD', 'CNSS', 'NIST', 'FedRAMP', 'Other'].includes(item.framework), `${item.title} source`);
+    assert.ok(['hosted', 'adapted', 'official', 'restricted'].includes(item.status), `${item.title} status`);
+    assert.ok(item.rmf && item.source && item.note, `${item.title} details`);
+    if (item.status !== 'restricted') assert.ok(item.links.length > 0, `${item.title} has a file or link`);
     for (const link of item.links) {
-      assert.match(link.href, /^https:\/\//, `${item.title} links to its publisher`);
-      assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);
       assert.ok(link.label && link.format, `${item.title} link label`);
+      assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);
+      if (link.href.startsWith('/')) {
+        assert.ok(['hosted', 'adapted'].includes(item.status), `${item.title}: only posted entries link to files here`);
+        assert.ok(existsSync(new URL('../public' + link.href, import.meta.url)), `${link.href} exists`);
+      } else assert.match(link.href, /^https:\/\//, `${item.title} links to its publisher`);
     }
   }
+  // The owner's set: every posted file is listed, and nothing restricted is posted.
+  const posted = templates.templates.filter(item => ['hosted', 'adapted'].includes(item.status)).flatMap(item => item.links.map(link => link.href));
+  const folder = new URL('../public/training/library/ato-templates/', import.meta.url);
+  const files = readdirSync(folder).filter(name => /\.(docx|xlsx)$/.test(name));
+  assert.deepEqual(files.map(name => '/training/library/ato-templates/' + name).sort(), [...posted].sort());
+  assert.ok(existsSync(new URL('../public' + templates.download.href, import.meta.url)), 'download-all ZIP');
+  for (const name of ['ITCSC', 'Sanitization']) assert.ok(!files.some(file => file.includes(name)), `${name} is not posted`);
+  for (const title of ['DAF IT Categorization and Selection Checklist (ITCSC) v10.1', 'Sanitization Plan Review Checklist']) {
+    assert.equal(templates.templates.find(item => item.title === title)?.status, 'restricted', title);
+  }
   for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
-  // Owner direction: the templates serve a DoD SAP network under NIST Rev. 5 and the JSIG.
-  assert.ok(templates.templates.filter(item => item.framework === 'SAP').length >= 10, 'SAP and JSIG templates');
-  assert.ok(templates.templates.some(item => /CNSSI 1253E Attachment 5/.test(item.title)), 'classified system overlay');
   assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['ato-templates']);
 });
