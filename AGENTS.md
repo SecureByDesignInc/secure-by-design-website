@@ -688,3 +688,19 @@ The owner renamed three menu sections, superseding the names in the section abov
 - **Addresses and code unchanged:** `/inside-the-network` (and `public/inside-network-model/`), `/technical-training`, `/grc-rmf-training`, file and component names, test IDs.
 - **Wording.** In running text the 3D model is "the System Hub" ("as the System Hub records it", "linking to the System Hub"); as a heading or menu label it is "System Hub". The model's video recorder caption reads "SECURE BY DESIGN · SYSTEM HUB".
 - **Materials updated:** the course text (`content/configuration-courses.json`, `content/videos.json`, articles), the configuration-course workbooks (`python3 scripts/sync-workbooks.py`, PDFs re-exported with LibreOffice, page counts unchanged), the course 1.1 workbook (text and QR alt text edited in place, 13 pages), the course 2.1 workbook, every package, the checklists, the System Hub text version and the Community menus.
+
+## Planned: System Hub VLAN topology "diagram mode" — recommended October 15, 2026 (not built)
+
+The owner dislikes the current VLAN topology layer in the System Hub (`public/inside-network-model/scene.js`, section "Network topology: a glass layer floating over the building"). This is the recommended redesign, recorded for the next session. Start with a flat mockup for the owner's approval before changing the 3D scene, and keep the branch, screenshot and PR approval workflow.
+
+- **Problems seen in a render (core switch selected, all eight VLANs shown):** the layer floats directly over the server room, so racks, room labels and VLAN circles merge into one busy scene. VLAN discs are faint (opacity about 0.14) and read as near-identical gray bubbles. VLAN names and subnets aren't visible on the layer. "Core switch stack" is labeled twice (the room's rack label and the layer's hub label), and rack labels R02/R04 land on the layer. The forward tilt (`rotation.x = .6`) squashes the back VLANs and pushes them under the toolbar. The uplink spokes are too thin to read as hub and spoke.
+- **Recommended: diagram mode.** When Topology is on, the camera turns to face the layer squarely and the building dims to an outline. The layer becomes a clean network diagram:
+  - the core switch stack in the center, with a ring labeled "default deny"
+  - each VLAN as a labeled, solid-colored rounded box showing its number, name, subnet and systems by name (chips, not icons alone)
+  - bold uplinks to the core that brighten when a traffic walkthrough step uses them
+  - the offline area set apart with no link
+  - room and rack labels hidden while the diagram shows
+  - a selected system still drops its dashed tether to where it physically sits
+  - frame the camera so all eight VLANs fit, including on phones
+  Keep shareable links (`#vlan=`, `#system=`, `topology=off`), the walkthrough twins on the layer, and the System Hub model checks (`scripts/check-network-*.mjs`) passing.
+- **Smaller alternative if the owner prefers to keep the floating layer:** raise it higher with less tilt so it clears the building, use solid VLAN colors, always show VLAN names and subnets, and remove the duplicate core label and the room labels while topology is on.
