@@ -129,17 +129,30 @@
   background: #15334a;
 }
 
+/* Radware's map is drawn at 1240 × 800 (so its layout, and the blur over its "Contact sales" button, stay
+   the same on every screen) and scaled to fit the stage; any spare room is the map's own dark colour. */
 .tm-stage {
   position: relative;
-  height: min(76vh, 780px);
-  min-height: 440px;
+  width: 100%;
+  aspect-ratio: 1240 / 800;
+  max-height: min(84vh, 800px);
+  overflow: hidden;
   background: #050f18;
 }
 .tm-stage:fullscreen {
   height: 100%;
-  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
 }
-.tm-stage iframe {
+.tm-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1240px;
+  height: 800px;
+  transform-origin: 0 0;
+}
+.tm-canvas iframe {
   position: absolute;
   inset: 0;
   display: block;
@@ -149,7 +162,7 @@
   opacity: 0;
   transition: opacity 0.5s ease;
 }
-.tm-stage iframe.is-ready {
+.tm-canvas iframe.is-ready {
   opacity: 1;
   background: #050f18;
 }
@@ -290,10 +303,6 @@
   .tm-intro-copy p {
     font-size: 14px;
   }
-  .tm-stage {
-    height: 70vh;
-    min-height: 420px;
-  }
   .tm-toolbar {
     padding: 10px 12px;
   }
@@ -303,7 +312,7 @@
   .tm-spinner {
     animation: none;
   }
-  .tm-stage iframe {
+  .tm-canvas iframe {
     transition: none;
   }
 }

@@ -87,3 +87,8 @@ body.site-editorial .app-store-item .app-store-availability{display:block;color:
 @media(max-width:359px){body.site-editorial :is(.header-app-stores,.site-header nav.header-socials){grid-template-columns:minmax(0,1fr)}}
 /* Landscape phones: the 88px logo with the store and social rows beside it. */
 @media(min-width:621px) and (max-width:1000px) and (max-height:540px){body.site-editorial .site-header .site-header-identity{grid-template-columns:minmax(0,1fr) auto}body.site-editorial .site-header .brand{grid-column:auto;font-size:1.5rem}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .header-connect{justify-self:end}body.site-editorial .site-header.container{padding-block:12px;gap:10px}}
+
+/* Frosted panel over Radware's "Contact sales" button on the homepage window and the Threat Map page
+   (app/radware-sales-cover.tsx). It blurs what sits beneath it and catches clicks meant for the button. */
+.sbd-sales-cover{position:absolute;z-index:1;display:block;border-radius:6px;background:rgba(6,18,30,.35);-webkit-backdrop-filter:blur(12px) saturate(.6);backdrop-filter:blur(12px) saturate(.6);opacity:0;pointer-events:none;transition:opacity .4s ease}
+.sbd-sales-cover.is-shown{opacity:1;pointer-events:auto;cursor:default}

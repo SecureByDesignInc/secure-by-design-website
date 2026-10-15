@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import RadwareSalesCover from './radware-sales-cover';
 
 const mapUrl = 'https://livethreatmap.radware.com/';
 // Radware's dashboard shows its full detail (attack types, top attackers and attacked countries, attack vectors,
 // application violations, scanned ports) only at desktop size. It is drawn at the size of the Threat Map page's
 // own view and scaled to the monitor, which spans the section, so on a computer it appears at about full size.
+// Keep this size in step with app/radware-sales-cover.tsx: the blur over Radware's "Contact sales" button is measured at it.
 const SCREEN_W = 1240;
 const SCREEN_H = 800;
 
@@ -100,6 +102,7 @@ export default function HomeThreatWindow() {
             style={{ transform: `scale(${scale})` }}
             onLoad={() => setReady(true)}
           />}
+          {live && near && <RadwareSalesCover show={ready}/>}
           <span className="sbd-monitor-scan" aria-hidden="true"/>
           <span className="sbd-monitor-corners" aria-hidden="true"/>
           <a className="sbd-monitor-link" href="/threat-map">
