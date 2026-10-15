@@ -1759,7 +1759,7 @@
       "id": "templates-references",
       "title": "Templates & References",
       "kind": "reference",
-      "description": "Free, official templates to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
+      "description": "Free, publicly released references to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
     }
   ],
   "references": [
@@ -1769,26 +1769,25 @@
       "categoryId": "templates-references",
       "categoryOrder": 1,
       "title": "ATO Template Library",
-      "subtitle": "The DoD SAP / JSIG templates, arranged by RMF step",
-      "description": "The templates a DoD Special Access Program system is authorized with, arranged by RMF step: the JSIG SSP, SCTM worksheet with overlays, RAR, POA&M, continuous monitoring strategy, ISSM/ISSO appointment letter, ATO and ATC package checklist and DATO memo to download, plus official sources for the rest of the Body of Evidence. They follow the 2016 JSIG with its 2018 errata and are for instruction and practice.",
+      "subtitle": "Verified public sources for the Body of Evidence",
+      "description": "Official sources for building an authorization package, arranged by RMF step: DCSA's Risk Assessment Report (RAR) template, CNSSI 1253 and the CNSS Privacy Overlay. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. For instruction and practice.",
       "tags": [
         "Templates",
         "Body of Evidence",
-        "JSIG",
-        "SAP"
+        "RMF"
       ],
       "systems": [],
       "artLabels": [
-        "SSP · SCTM · RAR",
-        "POA&M · ConMon · DATO",
-        "JSIG templates"
+        "Risk Assessment Report",
+        "CNSSI 1253 · Privacy Overlay",
+        "Verified public sources"
       ],
-      "outcomeSummary": "Download the JSIG templates and see where every other package artifact comes from.",
+      "outcomeSummary": "Open the official, publicly released sources for three parts of the package.",
       "outcomes": [
-        "Download the JSIG package templates",
-        "Follow the package checklist step by step",
-        "See what is restricted and why",
-        "Map Rev. 4 templates to Rev. 5 for practice"
+        "Draft a RAR from DCSA's template",
+        "Categorize and select controls with CNSSI 1253",
+        "Tailor for PII with the Privacy Overlay",
+        "Open every document from its publisher"
       ],
       "training": {
         "guide": "/training/ato-templates",
@@ -1797,7 +1796,7 @@
         "relatedResources": [
           {
             "title": "Open the Body of Evidence workspace (course 2.2)",
-            "detail": "Practice the SSP, SCTM, SAR and POA&M these templates support",
+            "detail": "Practice the SSP, SCTM, SAR and POA&M in the course workspace",
             "href": "/training/rmf-body-of-evidence/index.html#evidence"
           },
           {

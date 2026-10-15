@@ -60,8 +60,8 @@ function EpisodeTile({
   const comingSoon = course && episode.kind === 'coming-soon';
   const available = !course && !reference && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
   const series = ART_SERIES[episode.categoryId ?? ''] ?? 'THE NETWORK BUILD SERIES';
-  // The ATO Template Library counts its downloadable files (posted or adapted) and its RMF-step sections.
-  const downloadCount = atoTemplates.templates.filter(item => item.status === 'hosted' || item.status === 'adapted').length;
+  // The ATO Template Library counts its official sources and the RMF steps they are arranged by.
+  const sourceCount = atoTemplates.templates.length;
   const sectionCount = atoTemplates.groups.length;
   const openLabel = reference ? 'library' : 'training';
   const close = () => {
@@ -126,7 +126,7 @@ function EpisodeTile({
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{reference ? `${downloadCount} DOWNLOADS` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{reference ? `${sourceCount} SOURCES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
@@ -153,9 +153,9 @@ function EpisodeTile({
             {reference ? <div className="vc-tile-status">
               <span>
                 <Check size={13} />
-                JSIG templates to download
+                Verified public sources
               </span>
-              <span className="vc-tile-course-size"><FileText size={13} />{downloadCount} downloads · {sectionCount} RMF sections</span>
+              <span className="vc-tile-course-size"><FileText size={13} />{sourceCount} official links · {sectionCount} RMF steps</span>
               <span>
                 <Link2 size={13} />
                 Links checked {episode.training.updated}
@@ -186,7 +186,7 @@ function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {reference ? <>Template library<span>·</span>One ZIP</> : <>Interactive guide<span>·</span>One download</>}
+              {reference ? <>Reference library<span>·</span>Official links</> : <>Interactive guide<span>·</span>One download</>}
             </p>
           </div>}
         </div>
@@ -196,7 +196,7 @@ function EpisodeTile({
           <>
             {reference ? <LibraryExperience library={episode} /> : course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
             <div className="vc-tile-close-row">
-              <span>{reference ? 'Your templates, in one place.' : 'Your course materials, in one place.'}</span>
+              <span>{reference ? 'Your official sources, in one place.' : 'Your course materials, in one place.'}</span>
               <button type="button" onClick={close}>
                 <ChevronUp size={16} />
                 {`Close ${openLabel}`}
