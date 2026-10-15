@@ -367,8 +367,14 @@
   },
   {
     "id": "training:splunk-analysis:ingest",
-    "title": "Install Splunk and bring in the streams",
+    "title": "Prepare the host, install Splunk, and bring in the streams",
     "href": "/training/splunk-analysis#ingest",
+    "group": "Network build"
+  },
+  {
+    "id": "training:splunk-analysis:harden",
+    "title": "Harden Splunk to the STIG",
+    "href": "/training/splunk-analysis#harden",
     "group": "Network build"
   },
   {

@@ -13,7 +13,7 @@ export const courses={
  repo:{title:'1.9 · Build the Linux repository on SBD-REPO01',detail:"Mirrored, signature-verified package snapshots for the Linux servers",href:'/training/linux-repository'},
  logging:{title:'1.10 · Collect the record on SBD-SYSLOG01',detail:"Design the logging pipeline and build its collector",href:'/training/logging-pipeline'},
  archive:{title:'1.11 · Protect the record on SBD-AUDIT01',detail:"Keep the audit record intact, even from its administrators",href:'/training/audit-repository'},
- analysis:{title:'1.12 · Analyze the record in SBD-SPLUNK01',detail:"Search a working copy, own the alerts, prove the chain",href:'/training/splunk-analysis'},
+ analysis:{title:'1.12 · Analyze the record in SBD-SPLUNK01',detail:"Search a working copy, harden it, own the alerts, prove the chain",href:'/training/splunk-analysis'},
  fleet:{title:'1.13 · Bring in the fleet',detail:"50 Windows endpoints, managed from first boot",href:'/training/workstation-fleet'},
  patch:{title:'1.14 · Deliver Windows updates from SBD-WSUS01',detail:"Air-gapped WSUS: offline import, four rings & Group Policy targeting",href:'/training/patch-protect'},
  inventory:{title:'1.15 · Keep the living inventory on SBD-MGMT01',detail:"Component inventory, discovery sources & monthly reconciliation",href:'/training/management-server'},

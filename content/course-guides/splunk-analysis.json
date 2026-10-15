@@ -3,7 +3,7 @@
   "hero": {
     "title": "Analyze the record",
     "accent": "in SBD-SPLUNK01.",
-    "text": "Build SBD-SPLUNK01 on domain-joined Linux, forward the collector’s two streams to it over TLS, and turn them into searches and alerts someone owns — then trace one event through all three logging systems. Follow the build, explore the dependencies, and keep the evidence."
+    "text": "Build SBD-SPLUNK01 as a single Splunk instance on domain-joined Linux, forward the collector’s two streams to it over TLS, harden it to DISA’s STIG, and turn the streams into searches and alerts someone owns — then trace one event through all three logging systems. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
     "SPLUNK",
@@ -15,6 +15,10 @@
     [
       "Domain",
       "sbd.test"
+    ],
+    [
+      "Splunk shape",
+      "Single instance · indexer, search head, license manager"
     ],
     [
       "SBD-SPLUNK01",
@@ -34,7 +38,7 @@
     ],
     [
       "Console",
-      "Splunk Web HTTPS 8000 and SSH 22 · from VLAN 60 only"
+      "Splunk Web HTTPS 8000 and SSH 22 · from VLAN 60 only · 8089 and 8191 stay local"
     ],
     [
       "Packages and time",
@@ -56,7 +60,7 @@
         "from": 0,
         "button": "SBD-SPLUNK01",
         "title": "SBD-SPLUNK01 · 10.0.50.10",
-        "description": "The analysis server, built in lesson 1 on domain-joined Linux and patched only from SBD-REPO01. It indexes a working copy of the collector’s streams for searches and alerts; the protected record stays on SBD-AUDIT01."
+        "description": "The analysis server, a single Splunk instance built in lesson 1 on domain-joined Linux, patched only from SBD-REPO01, and hardened to DISA’s Splunk Enterprise STIG in lesson 3. It indexes a working copy of the collector’s streams for searches and alerts; the protected record stays on SBD-AUDIT01."
       },
       {
         "id": "syslog",
@@ -79,7 +83,7 @@
         "existing": true,
         "button": "SBD-AUDIT01",
         "title": "SBD-AUDIT01 · 10.0.50.40",
-        "description": "The repository from course 1.11, kept out of the analysis flow. Its findings become alerts in lesson 4, and lesson 5 finds the traced event in its next-morning archive."
+        "description": "The repository from course 1.11, kept out of the analysis flow. Its findings become alerts in lesson 5, and lesson 6 finds the traced event in its next-morning archive."
       },
       {
         "id": "dc1",
@@ -90,7 +94,7 @@
         "existing": true,
         "button": "SBD-DC01",
         "title": "SBD-DC01 · 10.0.10.10",
-        "description": "The PDC emulator and the domain’s time source. SBD-SPLUNK01 takes its time from the domain controllers and joins sbd.test in lesson 1, and lesson 5’s test event starts here."
+        "description": "The PDC emulator and the domain’s time source. SBD-SPLUNK01 takes its time from the domain controllers and joins sbd.test in lesson 1, and lesson 6’s test event starts here."
       },
       {
         "id": "repo",
@@ -142,7 +146,8 @@
           0,
           2,
           3,
-          4
+          4,
+          5
         ],
         "label": "SSH and Splunk Web · rule A02"
       },
@@ -153,7 +158,8 @@
           1,
           2,
           3,
-          4
+          4,
+          5
         ],
         "label": "Forwarder · TCP 9997 with TLS · F10"
       },
@@ -161,7 +167,7 @@
         "from": "jump",
         "to": "splunk",
         "lessons": [
-          3
+          4
         ],
         "label": "DC-facing alerts · rule A01"
       },
@@ -169,7 +175,7 @@
         "from": "dc1",
         "to": "syslog",
         "lessons": [
-          4
+          5
         ],
         "label": "Traced event · WinRM 5985 · F17"
       },
@@ -177,7 +183,7 @@
         "from": "syslog",
         "to": "audit",
         "lessons": [
-          4
+          5
         ],
         "label": "Next-morning archive · SMB 3 · F11"
       }
@@ -189,8 +195,9 @@
       "tag": "01 / PLAN",
       "status": "HOST BUILT · NOTHING INDEXED",
       "stepTitles": [
-        "Write analysis’s job, indexes, and retention",
-        "Decide the roles and the console paths",
+        "Decide the shape: one single instance",
+        "Write analysis’s job, indexes, retention, and reserve",
+        "Decide the roles, ports, and console paths",
         "Stage and hash the Splunk media",
         "Build the host and patch it from SBD-REPO01 only",
         "Take domain time, then join sbd.test",
@@ -206,24 +213,25 @@
         "question": "Which of your named Splunk accounts can change an alert that watches the domain controllers, and is each of those people meant to?"
       },
       "checklist": [
-        "I wrote analysis’s job, the two indexes with the retention period I chose and their sizing, and who holds each role from which seat.",
+        "I recorded what the single instance holds and its allocation, the two indexes with the retention period I chose and their sizing inside the free-space reserve, and who holds each role from which seat.",
         "I checked the Splunk media against its published and transfer hashes before opening anything.",
         "I confirmed SBD-SPLUNK01 uses SBD-REPO01 as its only package source, has a domain controller selected for time, and is joined to sbd.test."
       ]
     },
     "ingest": {
-      "short": "Install and ingest",
+      "short": "Prepare, install, ingest",
       "tag": "02 / INGEST",
       "status": "TWO STREAMS INDEXED",
       "stepTitles": [
+        "Prepare the host: THP off, SELinux, fapolicyd",
         "Install Splunk as its own account, FIPS decided first",
         "Add the certificate, HTTPS, the add-on, indexes, and roles",
-        "Open the receiving port with TLS",
+        "Open the receiving port with TLS, and never forward to itself",
         "Install the forwarder on SBD-SYSLOG01 and set its inputs",
         "Send both streams over F10 and start the forwarder",
         "Match counts and times with the collector"
       ],
-      "mistake": "Checking that data arrives but not when it says it happened. If the router’s deny log (F24) or the forwarded events index with the wrong time zone or the receive time, the searches and lesson 5’s trace disagree with the source. Compare an indexed event’s time with the original.",
+      "mistake": "Checking that data arrives but not when it says it happened. If the router’s deny log (F24) or the forwarded events index with the wrong time zone or the receive time, the searches and lesson 6’s trace disagree with the source. Compare an indexed event’s time with the original.",
       "network": "The forwarder on SBD-SYSLOG01 now sends the forwarded Windows events and the syslog files to SBD-SPLUNK01 over TLS on TCP 9997 (rule F10). SBD-AUDIT01 stays out of this flow by design.",
       "control": {
         "id": "SC-8(1)",
@@ -233,14 +241,41 @@
         "question": "What would someone on the path between VLAN 20 and VLAN 50 learn if the forwarder sent in plain TCP, and what does checking the server’s name stop?"
       },
       "checklist": [
-        "I installed Splunk as the splunk account, with SPLUNK_DB and the FIPS decision set before the first start.",
-        "I confirmed TCP 9997 presents the SBD-SPLUNK01 certificate over TLS and the forwarder’s connection uses it.",
+        "I turned Transparent Huge Pages off, kept SELinux enforcing, and trusted Splunk in fapolicyd before its first start.",
+        "I installed Splunk as the splunk account, with SPLUNK_DB, the FIPS decision, and integrity-checked indexes set before the first event.",
         "I matched a closed hour’s count and one event’s time between the collector and Splunk for both streams."
+      ]
+    },
+    "harden": {
+      "short": "Harden to the STIG",
+      "tag": "03 / HARDEN",
+      "status": "STIG SETTINGS IN PLACE",
+      "stepTitles": [
+        "Work from the staged STIG, in one app",
+        "Set the notice, timeouts, TLS, and banner",
+        "Set account rules, then create accounts and seal admin",
+        "Record the authentication item and others met differently",
+        "Reserve free space and watch it",
+        "Review Splunk’s own audit trail and finish the record"
+      ],
+      "mistake": "Putting the hardening in one place and leaving an older value in another. Splunk reads system/local ahead of every app, so a session timeout or TLS setting left there quietly wins, and the console looks hardened while it isn’t. Check each value with btool --debug, which names the file it came from.",
+      "network": "Nothing new crosses the network. SBD-SPLUNK01 keeps receiving over rule F10 while its console, accounts, and storage are hardened from SBD-ADMIN-SRV01 (rule A02), and only Splunk Web, the receiving port, and SSH stay open to other hosts.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement → Assess",
+        "body": "The STIG is the configuration baseline for the application. Each setting lives in one app, is shown by btool with the file it came from, and is tied to the STIG item it answers; every item met another way is recorded with its reason, ready for the checklist in lesson 6.",
+        "question": "If an assessor asked how Splunk enforces the 15-minute session limit, which file, value, and command would you show?"
+      },
+      "checklist": [
+        "I set the login notice, session timeouts, TLS 1.2, the banner, and the STIG’s password and lockout rules, and confirmed each with btool.",
+        "I created the named accounts after the rules, sealed the install-time admin, and recorded every STIG item met another way.",
+        "I set minFreeSpace to a quarter of the index volume, checked the indexes’ integrity, and reviewed Splunk’s _audit events."
       ]
     },
     "analyze": {
       "short": "Build the searches",
-      "tag": "03 / ANALYZE",
+      "tag": "04 / ANALYZE",
       "status": "SEARCHES LIVE",
       "stepTitles": [
         "Sign in as an analyst and read the data’s shape",
@@ -266,7 +301,7 @@
     },
     "alerts": {
       "short": "Own the alerts",
-      "tag": "04 / ALERT",
+      "tag": "05 / ALERT",
       "status": "ALERTS OWNED",
       "stepTitles": [
         "Write the alert register first",
@@ -293,7 +328,7 @@
     },
     "prove": {
       "short": "Prove the chain",
-      "tag": "05 / VERIFY",
+      "tag": "06 / VERIFY",
       "status": "CHAIN PROVEN",
       "stepTitles": [
         "Cause one failed sign-in and find it on the collector",
@@ -301,6 +336,7 @@
         "Find it in the next morning’s archive",
         "Trace a boundary deny on the analysis side",
         "Baseline SBD-SPLUNK01 and answer the Splunk STIG",
+        "Write the upgrade procedure",
         "File the trace and hand off to course 1.13"
       ],
       "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain’s account lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
@@ -315,7 +351,7 @@
       "checklist": [
         "I traced the test event from SBD-DC01’s Security log to ForwardedEvents, Splunk, and the next morning’s archive, with the same source time.",
         "I saw the privileged sign-in and boundary alerts fire for the test event and the probe.",
-        "I filed SBD-SPLUNK01’s baseline and Splunk STIG checklist with hashes, and the handoff note to course 1.13."
+        "I filed SBD-SPLUNK01’s baseline, the Splunk STIG checklist built on lesson 3’s record, the upgrade procedure, and the handoff note to course 1.13, with hashes."
       ]
     }
   }

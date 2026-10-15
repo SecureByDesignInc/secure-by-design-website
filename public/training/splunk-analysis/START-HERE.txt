@@ -1,11 +1,11 @@
 SECURE BY DESIGN
 ANALYZE THE RECORD IN SBD-SPLUNK01
-Linux · Windows Server - Search a working copy, own the alerts, prove the chain
-Course 1.12 | Materials edition 1.0 | Updated 14 October 2026
+Linux · Windows Server - Search a working copy, harden it, own the alerts, prove the chain
+Course 1.12 | Materials edition 2.0 | Updated 15 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-splunk-analysis-Workbook.pdf    Companion workbook, 18 pages
+SecureByDesign-splunk-analysis-Workbook.pdf    Companion workbook, 22 pages
 SecureByDesign-splunk-analysis-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                     Configuration and evidence checklist
 Verification-Commands.txt                      Each lesson's commands, ready to copy
