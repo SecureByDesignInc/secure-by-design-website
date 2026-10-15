@@ -145,7 +145,7 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
             title={course.title}
             embedUrl={null}
             servers={course.systems.length > 0}
-            tag={authorization ? `NETWORK AUTHORIZATION · PART ${course.seriesPart} OF 3` : course.tags[0]}
+            tag={authorization ? `NETWORK AUTHORIZATION · COURSE ${course.number}` : course.tags[0]}
             systems={posterSystems(course)}
             detail={course.tags.slice(1, 3).join(' & ')}
             outcomesLabel={authorization ? 'WHAT YOU WILL PREPARE' : 'WHAT YOU WILL BUILD'}

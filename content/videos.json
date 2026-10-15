@@ -1737,7 +1737,7 @@
     {
       "id": "network-authorization",
       "title": "Network Authorization",
-      "description": "Prepare the network’s Body of Evidence and Authorization to Operate package. Start after the network build, with course 2.1."
+      "description": "Take the network through the Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in: prepare, categorize, and select (2.1); implement and assess (2.2); then authorize and monitor (2.3). Start after the network build, with course 2.1."
     }
   ]
 }
