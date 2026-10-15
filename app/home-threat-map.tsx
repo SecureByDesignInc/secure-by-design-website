@@ -1,22 +1,15 @@
-import ThreatMapFrame from './threat-map-frame';
-import './threat-map.css';
-import { sharePreview } from '../share-preview';
+import ThreatMapFrame from './threat-map/threat-map-frame';
 
-const description = 'Watch cyberattacks detected around the world on Radware’s live threat map, learn how to read it, and see which Secure By Design training builds the defenses.';
-export const metadata = {
-  title: 'Live Threat Map',
-  description,
-  ...sharePreview('Live Threat Map | Secure By Design', description, '/threat-map'),
-};
-
-// Radware's live map, loaded in a sandboxed frame when the page opens (it comes from Radware's servers,
-// under their analytics and cookies), with a direct link that always works.
-export default function ThreatMapPage() {
-  return <main id="main" className="tm-page">
+// The Live Threat Map, on the homepage right after the hero (owner's request, 15 October 2026; it replaced
+// "A note from Secure By Design", "Start building your network", the live threat window and the separate
+// /threat-map page, which now redirects here). Radware's map loads in a sandboxed frame when the page opens
+// (it comes from Radware's servers, under their analytics and cookies), with a direct link that always works.
+export default function HomeThreatMap() {
+  return <div id="threat-map" className="tm-page tm-home" role="region" aria-labelledby="threat-map-title">
     <section className="container tm-intro">
       <div>
         <p className="tm-kicker">LIVE THREAT MAP</p>
-        <h1>The internet, under attack.<br /><em>Right now.</em></h1>
+        <h2 id="threat-map-title" className="tm-title">The internet, under attack.<br /><em>Right now.</em></h2>
       </div>
       <div className="tm-intro-copy">
         <p>Each line on this map is an attack that Radware recorded moments ago. Watch where attacks start, where they land, and which kinds are most common today.</p>
@@ -47,5 +40,5 @@ export default function ThreatMapPage() {
       </div>
       <p className="tm-credit">The live map is provided by Radware. Radware’s sales button is blurred here; the map itself is unchanged. Secure By Design is not affiliated with Radware.</p>
     </section>
-  </main>;
+  </div>;
 }

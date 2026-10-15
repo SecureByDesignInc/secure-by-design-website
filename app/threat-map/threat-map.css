@@ -1,4 +1,5 @@
-/* Live Threat Map: the Training Library's dark design around Radware's live threat map. */
+/* Live Threat Map on the homepage (app/home-threat-map.tsx): the Training Library's dark design around Radware's
+   live threat map. Imported after app/template-home.css so these rules win over the homepage's own type styles. */
 .tm-page {
   background: #071521;
   color: #eef7fc;
@@ -14,6 +15,10 @@
 .tm-page :is(button, a):focus-visible {
   outline: 3px solid #f7bd68;
   outline-offset: 4px;
+}
+.tm-home {
+  background: transparent;
+  scroll-margin-top: 24px;
 }
 .tm-page .container {
   max-width: 1320px;
@@ -37,14 +42,14 @@
   align-items: end;
   padding-block: 52px 34px;
 }
-.tm-kicker {
+.tm-page .tm-kicker {
   margin: 0 0 12px;
   color: #8bdbeb;
   font: 700 10px/1.5 var(--font-geist-sans), Arial, sans-serif;
   letter-spacing: 0.17em;
   text-transform: uppercase;
 }
-.tm-intro h1 {
+.tm-intro .tm-title {
   margin: 0;
   color: #f1f8ff;
   font-size: clamp(35px, 4.3vw, 64px);
@@ -52,7 +57,7 @@
   letter-spacing: -0.055em;
   font-weight: 600;
 }
-.tm-intro h1 em {
+.tm-intro .tm-title em {
   font-style: normal;
   color: #8bdde9;
 }
@@ -276,7 +281,7 @@
   border-bottom: 1px solid #42798c;
   padding-bottom: 4px;
 }
-.tm-credit {
+.tm-page .tm-credit {
   margin: 24px 0 0;
   color: #7f99ab;
   font-size: 12px;
@@ -294,7 +299,7 @@
     gap: 18px;
     padding-block: 34px 26px;
   }
-  .tm-intro h1 {
+  .tm-intro .tm-title {
     font-size: 40px;
   }
   .tm-intro-copy {

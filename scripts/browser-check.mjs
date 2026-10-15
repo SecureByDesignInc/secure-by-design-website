@@ -20,7 +20,7 @@ const extra = ['/my-progress', '/authorization-workspace', '/account?returnTo=%2
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
-// Radware's live threat map (/threat-map) is a third-party page in a sandboxed frame: its own requests,
+// Radware's live threat map (on the homepage) is a third-party page in a sandboxed frame: its own requests,
 // console output and script errors are Radware's, not this site's. Our page's policy blocking the frame
 // itself still shows up as a CSP violation in the main frame.
 const thirdPartyFrame = frame => { try { return /^https:\/\/livethreatmap\.radware\.com\//.test(frame?.url() || ''); } catch { return false; } };

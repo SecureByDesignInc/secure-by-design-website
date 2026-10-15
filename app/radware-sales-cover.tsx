@@ -1,4 +1,4 @@
-// Radware's map is drawn at this size on the homepage window and the Threat Map page. At this size Radware
+// Radware's map is drawn at this size in the homepage's Live Threat Map section. At this size Radware
 // lays out its full dashboard, which puts its red "Contact sales" button at the top, right of "Under attack".
 export const RADWARE_W = 1240;
 export const RADWARE_H = 800;

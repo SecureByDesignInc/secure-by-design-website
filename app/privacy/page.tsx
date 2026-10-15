@@ -74,7 +74,7 @@ export default function Privacy() {
           <li><strong>Resend</strong> delivers our emails.</li>
           <li><strong>PostHog</strong> (United States) receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
           <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
-          <li><strong>Radware</strong> provides the live threat map on our Threat Map page, in the homepage’s live threat window, and in the app. The map loads from Radware when you open the Threat Map page, scroll to the live threat window on the homepage (on larger screens, unless you have reduced motion or data saving turned on), or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
+          <li><strong>Radware</strong> provides the live threat map on our homepage and in the app. The map loads from Radware when you open the homepage (as its Live Threat Map section comes into view) or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
           <li><strong>UserJot</strong> hosts our public idea board. It opens in your browser only if you choose to visit it, and posts there are public.</li>
           <li><strong>Apple</strong> and <strong>Google</strong> distribute the app under their own privacy policies.</li>
         </ul>
