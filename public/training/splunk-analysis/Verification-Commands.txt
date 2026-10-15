@@ -39,7 +39,7 @@ Get-CimInstance Win32_Service -Filter "Name='SplunkForwarder'" | Select-Object S
 Select-String 'C:\Program Files\SplunkUniversalForwarder\var\log\splunk\splunkd.log' -Pattern 'Connected to idx' | Select-Object -Last 1
 $start = (Get-Date).Date.AddHours((Get-Date).Hour - 2); $end = $start.AddHours(1)
 (Get-WinEvent -FilterHashtable @{LogName='ForwardedEvents'; StartTime=$start; EndTime=$end}).Count
-# In Splunk Web (Search), as admin (lesson 3 creates the named accounts): the same hour, the forwarder's connection, and the stored size
+# In Splunk Web (Search), as admin (lesson 3 connects the domain accounts): the same hour, the forwarder's connection, and the stored size
 index=sbd_wineventlog earliest=-2h@h latest=-1h@h | stats count
 index=_internal source=*metrics.log group=tcpin_connections | stats latest(connectionType) AS type, latest(version) AS version BY hostname, sourceIp
 | dbinspect index=sbd_wineventlog index=sbd_syslog | stats sum(sizeOnDiskMB) AS MB BY index
@@ -50,18 +50,20 @@ What success looks like: THP shows [never], SELinux is enforcing with no denials
 # On SBD-SPLUNK01 (Tier 1 SSH session): each value, and the file it comes from
 sudo -u splunk /opt/splunk/bin/splunk btool web list settings --debug | grep -E 'login_content|sessions.timeout|ui_inactivity_timeout|sslVersions|enableSplunkWebSSL'
 sudo -u splunk /opt/splunk/bin/splunk btool server list --debug | grep -E 'sessionTimeout|sslVersions|minFreeSpace'
-sudo -u splunk /opt/splunk/bin/splunk btool authentication list splunk_auth --debug
+sudo -u splunk /opt/splunk/bin/splunk btool authentication list --debug | grep -E 'authType|authSettings|host|port|SSLEnabled|bindDN |roleMap|sbd_|minPassword|lockout'
+grep -E '^TLS_' /opt/splunk/etc/openldap/ldap.conf
+openssl s_client -connect sbd.test:636 -CAfile /opt/splunk/etc/auth/sbd/sbd-chain.pem </dev/null 2>/dev/null | grep -E 'Verify return code|Protocol'
 sudo -u splunk /opt/splunk/bin/splunk btool global-banner list --debug
 df -m /srv/splunk                                   # minFreeSpace = a quarter of this volume's size
 sudo -u splunk /opt/splunk/bin/splunk btool indexes list sbd_syslog | grep enableDataIntegrityControl
 sudo -u splunk /opt/splunk/bin/splunk check-integrity -index sbd_wineventlog
 stat -c '%U %a %n' /opt/splunk /srv/splunk          # splunk 700
 # In Splunk Web (Search), signed in with your sbd_admin account
-| rest /services/authentication/users splunk_server=local | table title roles
+| rest /services/authentication/users splunk_server=local | table title type roles
 index=_audit action="login attempt" earliest=-24h | stats count BY user, info
 index=_audit sourcetype=audittrail earliest=-24h | stats count BY action, info
 
-What success looks like: The login page shows the notice, an idle session ends within 15 minutes, Splunk Web and splunkd accept TLS 1.2 only, and the banner names the system; authentication.conf carries the STIG's password and lockout values, every person has a named account in one role, and the install-time admin is sealed; minFreeSpace is a quarter of the index volume, Disk Space is in the health report, and the Monitoring Console is in standalone mode; both indexes have integrity control and pass check-integrity; /opt/splunk and /srv/splunk are splunk's with mode 700; _audit shows the new accounts, the failed sign-in, and the changes; and every STIG item met another way has its reason recorded.
+What success looks like: The login page shows the notice, an idle session ends within 15 minutes, Splunk Web and splunkd accept TLS 1.2 only, and the banner names the system; Splunk reaches the domain controllers over LDAPS with a verified certificate, a domain account from each group signs in with the mapped role, and no Tier 0 account is in either group; [splunk_auth] carries the STIG's password and lockout values and the install-time admin is the one sealed local account; minFreeSpace is a quarter of the index volume, Disk Space is in the health report, and the Monitoring Console is in standalone mode; both indexes have integrity control and pass check-integrity; /opt/splunk and /srv/splunk are splunk's with mode 700; _audit shows the domain sign-ins, the failed sign-in, and the changes; and every STIG item met another way has its reason recorded.
 
 4. Build the working searches
 # In Splunk Web (Search), signed in as an analyst from SBD-ADMIN-SRV01

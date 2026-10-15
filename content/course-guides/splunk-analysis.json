@@ -210,7 +210,7 @@
         "name": "Least Privilege",
         "phase": "Prepare → Implement",
         "body": "Analysis gives each person only what the job needs: analysts search but change nothing, administrators are few and named, no one can delete indexed events, and the console answers only the administration seats. The roles are decided before the platform exists, so nothing is granted by default and taken back later.",
-        "question": "Which of your named Splunk accounts can change an alert that watches the domain controllers, and is each of those people meant to?"
+        "question": "Which domain accounts can change an alert that watches the domain controllers, and is each of those people meant to?"
       },
       "checklist": [
         "I recorded what the single instance holds and its allocation, the two indexes with the retention period I chose and their sizing inside the free-space reserve, and who holds each role from which seat.",
@@ -253,8 +253,8 @@
       "stepTitles": [
         "Work from the staged STIG, in one app",
         "Set the notice, timeouts, TLS, and banner",
-        "Set account rules, then create accounts and seal admin",
-        "Record the authentication item and others met differently",
+        "Connect sign-in to Active Directory over LDAPS",
+        "Seal the one local account; record the rest",
         "Reserve free space and watch it",
         "Review Splunk’s own audit trail and finish the record"
       ],
@@ -269,7 +269,7 @@
       },
       "checklist": [
         "I set the login notice, session timeouts, TLS 1.2, the banner, and the STIG’s password and lockout rules, and confirmed each with btool.",
-        "I created the named accounts after the rules, sealed the install-time admin, and recorded every STIG item met another way.",
+        "I connected sign-in to Active Directory over LDAPS with both groups mapped, sealed the install-time admin, and recorded every STIG item met another way.",
         "I set minFreeSpace to a quarter of the index volume, checked the indexes’ integrity, and reviewed Splunk’s _audit events."
       ]
     },

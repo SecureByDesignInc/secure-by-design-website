@@ -910,7 +910,7 @@
         },
         {
           "title": "Harden Splunk to the STIG",
-          "detail": "Splunk now holds the network's working copy, and DISA's Splunk Enterprise STIG says how it should behave. Before anyone else signs in, put the settings in place: the notice and session limits at the front door, password and lockout rules for Splunk's own accounts, a free-space reserve the health report watches, and Splunk's audit trail under review. Then create the people's accounts, seal the install-time admin, and record every STIG item this network meets another way."
+          "detail": "Splunk now holds the network's working copy, and DISA's Splunk Enterprise STIG says how it should behave. Before anyone else signs in, put the settings in place: the notice and session limits at the front door, sign-in with domain accounts over LDAPS, a free-space reserve the health report watches, and Splunk's audit trail under review. Then seal the install-time admin as the one local account, and record every STIG item this network meets another way."
         },
         {
           "title": "Build the working searches",
@@ -939,7 +939,7 @@
         "pdf": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.pdf",
         "word": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.docx",
         "package": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Learning-Package.zip",
-        "pages": 22,
+        "pages": 23,
         "cover": "/training/splunk-analysis/workbook-cover.webp",
         "materialsEdition": "2.0",
         "updated": "15 October 2026"

@@ -5,7 +5,7 @@ Course 1.12 | Materials edition 2.0 | Updated 15 October 2026
 © 2026 Secure By Design Team LLC.
 
 IN THIS DOWNLOAD
-SecureByDesign-splunk-analysis-Workbook.pdf    Companion workbook, 22 pages
+SecureByDesign-splunk-analysis-Workbook.pdf    Companion workbook, 23 pages
 SecureByDesign-splunk-analysis-Workbook.docx   Editable copy of the workbook
 configuration-checklist.md                     Configuration and evidence checklist
 Verification-Commands.txt                      Each lesson's commands, ready to copy
