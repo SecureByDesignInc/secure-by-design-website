@@ -56,6 +56,8 @@ export default function TemplateHome({ buildPath, buildCategory }: { buildPath: 
       <div className="sbd-hero-actions"><GradientButton asChild><a href="/training">Find your starting point <ArrowRight size={18}/></a></GradientButton><a className="sbd-secondary-button" href="/inside-the-network"><Network size={18}/> Step inside the network</a></div>
       <small>For the first question. The next challenge. And everything in between.</small>
     </div></section>
+    <HomeThreatWindow/>
+    <aside className="sbd-creator-note container" aria-labelledby="sbd-creator-title"><div className="sbd-creator-card"><span className="sbd-creator-initials" aria-hidden="true">SBD</span><div><h2 id="sbd-creator-title">A note from Secure By Design</h2><p>{membershipCatalog.creatorNote}</p><span className="sbd-creator-signature">Secure By Design</span></div></div></aside>
     <section className="sbd-start container" aria-labelledby="sbd-start-title">
       <div className="sbd-section-heading"><div><p className="sbd-kicker">A practical place to begin</p><h2 id="sbd-start-title">Start building<br/><span>your network.</span></h2></div><p>Two learning paths, one network: build it course by course, then prepare the same network for authorization.</p></div>
       <div className="sbd-start-grid">
@@ -63,8 +65,6 @@ export default function TemplateHome({ buildPath, buildCategory }: { buildPath: 
         <div className="sbd-start-next"><p className="sbd-kicker" id="sbd-start-next-title">Then keep building, in order</p><ol aria-labelledby="sbd-start-next-title">{next.map(course => <li key={course.id}><a href={course.href}><span><strong>{course.number} · {course.title}</strong><small>{buildCategory} · {course.subtitle}</small></span><ArrowUpRight size={18}/></a></li>)}<li className="sbd-start-path"><a href="/training/rmf/index.html"><span><strong>Path 2 · Prepare the network for authorization</strong><small>Network Authorization · Risk Management Framework, Body of Evidence &amp; Authorization to Operate</small></span><ArrowUpRight size={18}/></a></li></ol></div>
       </div><a className="sbd-inline-link sbd-start-catalog" href="/training">Explore all training <ArrowRight size={17}/></a>
     </section>
-    <aside className="sbd-creator-note container" aria-labelledby="sbd-creator-title"><div className="sbd-creator-card"><span className="sbd-creator-initials" aria-hidden="true">SBD</span><div><h2 id="sbd-creator-title">A note from Secure By Design</h2><p>{membershipCatalog.creatorNote}</p><span className="sbd-creator-signature">Secure By Design</span></div></div></aside>
-    <HomeThreatWindow/>
     <section className="sbd-future container" id="start-reading" aria-labelledby="sbd-future-title"><div><p className="sbd-kicker">Learn your way</p><h2 id="sbd-future-title">More ways<br/>to <span>figure it out.</span></h2><p>Read the training, watch the builds take shape, and keep building your understanding.</p></div><div className="sbd-future-list">
       <a href="/training"><BookOpen size={30} strokeWidth={1.2}/><div><h3>Training Library</h3><p>Interactive guides, workbooks, and templates for building a network and preparing it for authorization.</p></div><ArrowUpRight size={18}/></a>
       <a href="/inside-the-network"><Network size={30} strokeWidth={1.2}/><div><h3>Inside the Network</h3><p>Explore the complete training network in 3D and see how every course connects to the same build.</p></div><ArrowUpRight size={18}/></a>

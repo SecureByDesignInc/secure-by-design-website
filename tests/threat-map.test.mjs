@@ -63,7 +63,9 @@ test('the homepage live window loads Radware only near view, on larger screens, 
   assert.match(window, /href="\/threat-map"/);
   assert.match(window, /not affiliated with Radware/);
   const home = read('app/template-home.tsx');
-  assert.ok(home.indexOf('sbd-creator-note') < home.indexOf('<HomeThreatWindow/>'), 'the note keeps its place right after Start building your network');
-  assert.ok(home.indexOf('<HomeThreatWindow/>') < home.indexOf('sbd-future'), 'the window comes before More ways to figure it out');
+  // Owner's order (14 October 2026): hero, live threat window, the note, Start building your network, More ways.
+  const order = ['sbd-hero-title', '<HomeThreatWindow/>', 'sbd-creator-note', 'sbd-start container', 'sbd-future container'].map(marker => home.indexOf(marker));
+  assert.ok(order.every(index => index >= 0), 'every homepage section is present');
+  assert.deepEqual([...order].sort((a, b) => a - b), order, 'the live threat window follows the hero and comes before Start building your network');
   assert.match(read('app/privacy/page.tsx'), /live threat window on the homepage/);
 });

@@ -467,3 +467,10 @@ The owner chose the "window" idea for putting Radware's map on the homepage. `ap
 - **Look.** A security operations monitor: bezel, a "SOC-01 · Live feed" bar with a blinking light and our own UTC clock (atmosphere, not Radware data), scan lines, a slow sweep, corner brackets, and a stand. It stays dark until it scrolls into view, then powers on (a bright line opens across the screen) and Radware's map fades in. Heading: "Right now, somewhere, a network is under attack." with links to `/threat-map` and `/training`.
 - **Loading.** On screens wider than 700px without reduced motion or Save-Data, the frame is added when the monitor is within 600px of the viewport (never on page load). Radware's dashboard is drawn at 1440 × 810 and scaled to the monitor's width. The frame is `inert`, sandboxed (`allow-scripts allow-same-origin`) and sends no referrer; the whole screen is a link to `/threat-map`, so homepage scrolling is never caught in the frame. Phones, reduced motion and Save-Data get a still screen with "Watch live attacks" and never load Radware.
 - **Policy.** The privacy policy's Radware entry names the homepage window and when it loads. `tests/threat-map.test.mjs` checks these rules.
+
+## Homepage order and a larger live threat window — October 14, 2026 (evening)
+
+The owner asked to trade the live threat window and "Start building your network" and to make the window slightly larger. This supersedes the October 5 placement of Start building your network immediately after the hero, and the note's "immediately after Start building your network" placement.
+
+- **Order:** hero, live threat window, "A note from Secure By Design", Start building your network, More ways to figure it out, Choose your next step, About. The note stayed where it was, so it now sits between the window and Start building. `tests/threat-map.test.mjs` checks this order.
+- **Size:** the window's section is up to 1260px wide (the site container is 1120px), and the monitor takes about 72% of it (copy column .62fr, monitor 1.6fr, 48px gap). Phones and tablets keep the stacked layout.
