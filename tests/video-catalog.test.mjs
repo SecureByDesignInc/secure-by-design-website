@@ -93,6 +93,8 @@ test('authorization parts cover the existing course once and preserve saved prog
     }
     for (const resource of part.training.relatedResources) {
       const url = new URL(resource.href, 'https://securebydesigninc.com');
+      // The Authorization Workspace (app/authorization-workspace) is where the capstone is run.
+      if (url.pathname === '/authorization-workspace') continue;
       assert.equal(url.pathname, page);
       assert(['#evidence', '#evidence/manifest', '#capstone'].includes(url.hash));
     }

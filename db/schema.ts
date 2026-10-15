@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index, primaryKey } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index, uniqueIndex, primaryKey } from 'drizzle-orm/sqlite-core';
 export const readerAccounts=sqliteTable('reader_accounts',{id:text('id').primaryKey(),email:text('email').notNull().unique(),createdAt:text('created_at').notNull(),passwordHash:text('password_hash')});
 export const communityMemberships=sqliteTable('community_memberships',{
  email:text('email').primaryKey(),joinedAt:text('joined_at').notNull(),source:text('source').notNull(),
@@ -77,3 +77,40 @@ export const readerPasskeys=sqliteTable('reader_passkeys',{
 export const readerAuthFlows=sqliteTable('reader_auth_flows',{
  idHash:text('id_hash').primaryKey(),kind:text('kind').notNull(),data:text('data').notNull(),expiresAt:text('expires_at').notNull()
 },t=>[index('idx_reader_auth_flows_expires').on(t.expiresAt)]);
+
+// Authorization Workspace (0014): each learner's practice systems, controls, evidence, POA&M, packages and audit trail.
+export const authSystems=sqliteTable('auth_systems',{
+ id:text('id').primaryKey(),accountId:text('account_id').notNull().references(()=>readerAccounts.id,{onDelete:'cascade'}),
+ profile:text('profile').notNull(),currentDecision:text('current_decision'),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()
+},t=>[index('idx_auth_systems_account').on(t.accountId)]);
+export const authControls=sqliteTable('auth_controls',{
+ systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),controlId:text('control_id').notNull(),
+ implementationStatus:text('implementation_status').notNull().default('planned'),provider:text('provider'),narrative:text('narrative').notNull().default(''),
+ responsible:text('responsible').notNull().default(''),frequency:text('frequency').notNull().default('annual'),step:text('step').notNull().default('draft'),
+ results:text('results').notNull().default('{}'),assessorNotes:text('assessor_notes').notNull().default(''),returnComment:text('return_comment'),
+ reassessReason:text('reassess_reason'),lastAssessedAt:text('last_assessed_at'),updatedAt:text('updated_at').notNull()
+},t=>[primaryKey({columns:[t.systemId,t.controlId]})]);
+export const authArtifacts=sqliteTable('auth_artifacts',{
+ id:text('id').primaryKey(),systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),
+ title:text('title').notNull(),kind:text('kind').notNull(),packageRole:text('package_role').notNull().default('none'),description:text('description').notNull().default(''),
+ content:text('content').notNull().default(''),location:text('location').notNull().default(''),version:text('version').notNull().default('1.0'),artifactDate:text('artifact_date'),
+ controls:text('controls').notNull().default('[]'),reviewState:text('review_state').notNull().default('draft'),reviewNote:text('review_note').notNull().default(''),
+ createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()
+},t=>[index('idx_auth_artifacts_system').on(t.systemId)]);
+export const authPoam=sqliteTable('auth_poam',{
+ id:text('id').primaryKey(),systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),number:integer('number').notNull(),
+ controlId:text('control_id'),weakness:text('weakness').notNull().default(''),source:text('source').notNull().default('assessment'),severity:text('severity').notNull().default('CAT II'),
+ residualRisk:text('residual_risk').notNull().default('moderate'),mitigations:text('mitigations').notNull().default(''),resources:text('resources').notNull().default(''),
+ poc:text('poc').notNull().default(''),scheduledCompletion:text('scheduled_completion'),milestones:text('milestones').notNull().default('[]'),status:text('status').notNull().default('ongoing'),
+ comments:text('comments').notNull().default(''),completedAt:text('completed_at'),createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()
+},t=>[uniqueIndex('idx_auth_poam_number').on(t.systemId,t.number)]);
+export const authPackages=sqliteTable('auth_packages',{
+ id:text('id').primaryKey(),systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),type:text('type').notNull(),
+ stage:text('stage').notNull().default('draft'),executiveSummary:text('executive_summary').notNull().default(''),assessorSummary:text('assessor_summary').notNull().default(''),
+ review:text('review'),decision:text('decision'),snapshot:text('snapshot'),submittedAt:text('submitted_at'),decidedAt:text('decided_at'),
+ createdAt:text('created_at').notNull(),updatedAt:text('updated_at').notNull()
+},t=>[index('idx_auth_packages_system').on(t.systemId,t.createdAt)]);
+export const authHistory=sqliteTable('auth_history',{
+ id:integer('id').primaryKey({autoIncrement:true}),systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),
+ at:text('at').notNull(),role:text('role').notNull(),action:text('action').notNull(),subject:text('subject').notNull().default(''),detail:text('detail').notNull().default('')
+},t=>[index('idx_auth_history_system').on(t.systemId,t.id)]);

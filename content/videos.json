@@ -1604,6 +1604,11 @@
             "title": "Open the Body of Evidence workspace",
             "detail": "Seven practice artifacts with editable Markdown and CSV starters",
             "href": "/training/rmf-body-of-evidence/index.html#evidence"
+          },
+          {
+            "title": "Open the Authorization Workspace",
+            "detail": "Record your evidence against your controls and have it reviewed",
+            "href": "/authorization-workspace"
           }
         ],
         "cover": "/training/rmf-body-of-evidence/workbook-cover.webp"
@@ -1705,6 +1710,11 @@
             "title": "Open the package manifest",
             "detail": "Organize the evidence and submission records",
             "href": "/training/rmf-authorization-to-operate/index.html#evidence/manifest"
+          },
+          {
+            "title": "Run the capstone in the Authorization Workspace",
+            "detail": "Controls, Body of Evidence, POA&M, package review and the AO decision",
+            "href": "/authorization-workspace"
           }
         ],
         "cover": "/training/rmf-authorization-to-operate/workbook-cover.webp"

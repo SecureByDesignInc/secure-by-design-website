@@ -16,7 +16,7 @@ const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const sitemap = existsSync('dist/client/sitemap.xml') ? readFileSync('dist/client/sitemap.xml', 'utf8') : '';
 const fromSitemap = [...sitemap.matchAll(/<loc>https?:\/\/[^/<]+([^<]*)<\/loc>/g)].map(match => match[1] || '/');
-const extra = ['/my-progress', '/account?returnTo=%2Ftraining', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
+const extra = ['/my-progress', '/authorization-workspace', '/account?returnTo=%2Ftraining', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
