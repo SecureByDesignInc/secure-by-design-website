@@ -112,6 +112,15 @@
     "icon": "directory"
   },
   {
+    "id": "rmf-boe-ato-evidence",
+    "title": "Risk Management Framework · Evidence workspace",
+    "url": "https://securebydesigninc.com/training/rmf/index.html#evidence",
+    "description": "Course 2.1 · six examples with editable Markdown and CSV starters.",
+    "category": "Training materials",
+    "publisher": "Secure By Design",
+    "icon": "directory"
+  },
+  {
     "id": "rmf-body-of-evidence-guide",
     "title": "Body of Evidence · Interactive course",
     "url": "https://securebydesigninc.com/training/rmf-body-of-evidence/index.html",
