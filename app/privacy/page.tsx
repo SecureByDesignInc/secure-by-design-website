@@ -15,7 +15,7 @@ export default function Privacy() {
     <article className="privacy container">
       <p className="privacy-kicker">Secure By Design · Privacy</p>
       <h1>Privacy policy</h1>
-      <p className="privacy-meta">Effective 15 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
+      <p className="privacy-meta">Effective 16 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
       <p className="privacy-lead">Secure By Design Team LLC (“Secure By Design”, “we”) runs this website and app to teach cybersecurity. You can learn without an account. We collect only what we need to run accounts, keep your progress, and send emails you ask for. We don’t sell personal information, show ads, or track you across other sites and apps.</p>
 
       <nav className="privacy-toc" aria-label="On this page">
@@ -38,7 +38,7 @@ export default function Privacy() {
           <li><strong>Passkeys</strong>, if you add one: its public key and identifier, the kind of device you added it from, and when it was last used. Your fingerprint, face, or device PIN never leaves your device.</li>
           <li><strong>Learning records</strong>: course and lesson progress, saved materials, daily learning activity in the app (such as streak days and completed reviews), and the learning-path choices you make.</li>
           <li><strong>ATO Package Builder</strong>, if you use it: the practice systems you record there and their history, such as system descriptions, role names you enter, control statements, assessment results, evidence descriptions and excerpts, and POA&amp;M items. They are private to your account. Enter practice or fictional details, not real organizations’ sensitive information.</li>
-          <li><strong>Community membership</strong>: when you sign in or verify your email, we record a free Community membership with your email, the date, and where you joined.</li>
+          <li><strong>Community record</strong>: when you sign in or verify your email, we record that you joined the free Community, with your email, the date, and where you joined.</li>
           <li><strong>Sessions</strong>: a sign-in cookie on the website (up to 30 days) and a sign-in token in the app (up to 12 hours).</li>
         </ul>
         <h3>When you ask us to email you or send us a form</h3>
@@ -109,7 +109,7 @@ export default function Privacy() {
           <li><strong>In the app:</strong> open My Account, choose <em>Delete your account</em>, and confirm.</li>
           <li><strong>By email:</strong> if you can’t sign in, email <a href={deletionMail}>{contact}</a> from the address on your account with the subject “Delete my Secure By Design account”. We may reply to confirm the request comes from you, and we complete it within 30 days.</li>
         </ul>
-        <p>Deleting your account removes your account, password, sign-in methods and passkeys, sessions, learning progress, saved materials, learning activity, learning-path choices, ATO Package Builder systems, Community membership, and email preferences.</p>
+        <p>Deleting your account removes your account, password, sign-in methods and passkeys, sessions, learning progress, saved materials, learning activity, learning-path choices, ATO Package Builder systems, Community record, and email preferences.</p>
         <p>We keep only what the law requires, plus the minimal unsubscribe record that stops further emails. Progress stored only on your device is removed when you sign out of the app and delete it, or clear your browser’s site data.</p>
       </section>
 
