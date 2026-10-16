@@ -72,13 +72,12 @@
   line-height: 1.8;
 }
 
-/* The map panel */
+/* The map panel. No box around it: the toolbar sits on the page and the map's edges fade into the page
+   (owner's request, 15 October 2026: more transparent, especially around the edges, to blend with the site). */
 .tm-frame {
-  border: 1px solid #2d4b61;
   border-radius: 18px;
   overflow: hidden;
-  background: #0b2131;
-  box-shadow: 0 20px 70px #0003;
+  background: transparent;
 }
 .tm-toolbar {
   display: flex;
@@ -87,8 +86,8 @@
   align-items: center;
   gap: 10px 16px;
   padding: 12px 16px;
-  border-bottom: 1px solid #263f51;
-  background: linear-gradient(110deg, #153449, #0d2232);
+  /* A hairline under the toolbar that fades out at both ends, like the map below it. */
+  background: linear-gradient(90deg, transparent, #2d4b6199 18%, #2d4b6199 82%, transparent) bottom / 100% 1px no-repeat;
 }
 .tm-toolbar > div {
   display: flex;
@@ -135,19 +134,36 @@
 }
 
 /* Radware's map is drawn at 1240 × 800 (so its layout, and the blur over its "Contact sales" button, stay
-   the same on every screen) and scaled to fit the stage; any spare room is the map's own dark colour. */
+   the same on every screen) and scaled to fit the stage; any spare room is a see-through wash of the map's
+   dark colour. The stage fades to transparent on all four sides (most at the bottom, least under the
+   toolbar), so the map, the loading placeholder and the spare room all melt into the page. */
 .tm-stage {
   position: relative;
   width: 100%;
   aspect-ratio: 1240 / 800;
   max-height: min(84vh, 800px);
   overflow: hidden;
-  background: #050f18;
+  background: #050f1899;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 5%, #000 88%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 5%, #000 88%, transparent);
+  mask-composite: intersect;
 }
+/* Full screen shows the whole map, solid and edge to edge. */
 .tm-stage:fullscreen {
   height: 100%;
   max-height: none;
   aspect-ratio: auto;
+  background: #050f18;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.tm-stage:fullscreen .tm-canvas iframe.is-ready {
+  opacity: 1;
 }
 .tm-canvas {
   position: absolute;
@@ -168,7 +184,7 @@
   transition: opacity 0.5s ease;
 }
 .tm-canvas iframe.is-ready {
-  opacity: 1;
+  opacity: 0.9;
   background: #050f18;
 }
 
@@ -318,6 +334,23 @@
   }
   .tm-toolbar {
     padding: 10px 12px;
+  }
+}
+/* High-contrast (forced colours) mode keeps an opaque, outlined panel, as every surface on the site does. */
+@media (forced-colors: active) {
+  .tm-frame {
+    border: 1px solid CanvasText;
+  }
+  .tm-toolbar {
+    background: none;
+    border-bottom: 1px solid CanvasText;
+  }
+  .tm-stage {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .tm-canvas iframe.is-ready {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {
