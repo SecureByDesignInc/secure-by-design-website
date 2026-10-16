@@ -362,3 +362,10 @@
     transition: none;
   }
 }
+
+/* Once Radware's map has loaded, hide the loading placeholder so it doesn't show through the see-through map. */
+.tm-stage:has(.tm-canvas iframe.is-ready) .tm-poster {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
