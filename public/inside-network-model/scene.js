@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/orbit';
 import {vlans,facilities} from './architecture.js';
 import {createEquipment} from './equipment.js';
+import {desktopLayout,phoneLayout,chipPlaces,offlinePlaces,stepRoute,extent,drawCard,drawCore,drawOffline,dropTagPlace,cardTagPlace,drawTag,RING_LABEL,DROP_LABEL} from './topology-diagram.js';
 import {roomBounds,rooms,coldAisle,racks,hosts,appliances,tileOffset,faceZ,deskScale,officeDesks,activeDesk,peerDesk,seatedDesks,adminDesks,adminVMs,idfPosition,facilityPositions,offlinePosition,trayHeight,trayNodes,trayEdges,rackTray,deskRowTray,adminTray,hubPoint as hubAt,walkExits,walkPoints,placements as systemPlacements,zoneLabels} from './data-center-layout.js';
 
 // A polyline with exact arc-length parameters. Traffic routes follow the overhead cable trays.
@@ -43,7 +44,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
  // The equipment never moves, so shadows are drawn once and again only when the room's visibility changes.
  renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;
  let dirty=true;const refreshShadows=()=>{renderer.shadowMap.needsUpdate=true;dirty=true;};
- container.prepend(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','3D building with a locked server room, an administration room, an office of workstations, and a media room with an offline vault, with the network topology floating above. Drag to orbit, scroll to zoom, or select a system. Arrow keys rotate; Home shows the full network.');
+ container.prepend(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','3D building with a locked server room, an administration room, an office of workstations, and a media room with an offline vault. Choosing a system, segment or step shows a network diagram above the building: the VLANs involved around the core router and its default-deny ring. Drag to orbit, scroll to zoom, or select a system. Arrow keys rotate; Home shows the full network.');
  const orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=!reduced;orbit.dampingFactor=.075;orbit.minDistance=10;orbit.maxDistance=500;orbit.maxPolarAngle=Math.PI*.47;orbit.minPolarAngle=.09;orbit.enablePan=true;
  // Any drag or zoom hands the camera to the viewer for the rest of the step.
  orbit.addEventListener('start',()=>{transition=null;drift=null;if(guide)guide.user=true;onInteract();});
@@ -94,7 +95,7 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   text.texture?.dispose();const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.generateMipmaps=false;texture.minFilter=THREE.LinearFilter;
   text.texture=texture;text.texW=target;return texture;
  }
- // kind: zone | facility | node (physical) · island | lfacility | lnode (logical) · badge | connection (temporary)
+ // kind: zone | facility | node (physical) · badge | connection (temporary). The diagram draws its own names.
  const leaderMaterial=new THREE.SpriteMaterial({color:'#bfe3f2',transparent:true,depthWrite:false,depthTest:false,sizeAttenuation:false,fog:false});
  function screenLabel(text,{kind,id=null,zone=null,px=170,position,own=false,color='#bfe3f2'}){
   px*=text.grow||1;
@@ -105,34 +106,27 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   const entry={sprite,leader,text,kind,id,zone,px,position,own,alpha:0,show:false,scale:0,step:0};labels.push(entry);return entry;
  }
  function removeLabel(entry){const i=labels.indexOf(entry);if(i>=0)labels.splice(i,1);entry.sprite.removeFromParent();entry.leader.removeFromParent();entry.leader.material.dispose();if(entry.own)entry.text.texture?.dispose();entry.sprite.material.dispose();}
- const physicalKinds=new Set(['zone','facility','node']);
  const isActive=id=>activeIds.includes(id)||selection===id;
  function labelPriority(e,camDistance){
   if(e.kind==='badge')return flowGroup.visible?1000:-1;
   if(e.kind==='connection')return connectionGroup.visible?34:-1;
   if(labelMode==='off')return -1;
-  const onLayer=!physicalKinds.has(e.kind);
-  if(onLayer&&layerAmount*layerNear<.5)return -1;
-  // Layer labels follow their segment: hidden segments carry no names, and the layer has no title of its own.
-  if(onLayer){const z=e.kind==='island'?e.zone:e.id==='offline'?'offline':e.id&&e.id!=='topology'?layerZoneOf(e.id):null;if(!z||!relevant.has(z)||zv(z)<.5)return -1;}
+  // While the diagram shows, it carries the names: room, rack and equipment labels step aside, unless "All labels" asks for them.
+  if(layerAmount>.5&&labelMode!=='all')return -1;
   // During a traffic step, only the step's own systems, their segments, and the core keep labels
   // (others appear on hover), so the two or three things that matter stand out. "All labels" turns this off.
   // Phones also quiet the room around a selected system, since rack names would cover most of a small stage.
-  const narrow=!output&&!exportSize&&viewSize().w<600,quiet=labelMode==='focus'&&(stepMode||narrow&&(!!selection||activeIds.length>0)),hoverZone=hoverId&&(view==='logical'?objects.get(hoverId)?.vlan:objects.get(hoverId)?.zone);
+  const narrow=!output&&!exportSize&&viewSize().w<600,quiet=labelMode==='focus'&&(stepMode||narrow&&(!!selection||activeIds.length>0)),hoverZone=hoverId&&objects.get(hoverId)?.zone;
   const zoneActive=e.zone&&activeZones.has(e.zone);
-  if(e.kind==='island')return zoneActive||hoverVlan===e.zone?86:quiet||activeIds.length||selection?-1:54;
-  if(e.kind==='zone')return zoneActive?82:quiet&&e.zone!==hoverZone?-1:layerAmount*layerNear>.5&&!selection&&!activeIds.length?30:50;
-  if(e.kind==='lnode')return hoverId===e.id?92:-1;
-  if(e.kind==='lfacility'){if(e.id==='topology')return quiet?-1:40;if(e.id==='offline')return activeZones.has('offline')||activeZones.has('vault')?80:quiet?-1:36;return isActive(e.id)||e.id==='core'&&routedActive?70:-1;}
-  if(e.kind==='facility'||e.kind==='lfacility'){
+  if(e.kind==='zone')return zoneActive?82:quiet&&e.zone!==hoverZone?-1:50;
+  if(e.kind==='facility'){
    if(isActive(e.id)||quiet&&e.id==='core'&&routedActive)return 84;
-   if(layerAmount*layerNear>.5&&!selection&&!activeIds.length&&hoverId!==e.id)return 28;
    if(quiet&&hoverId!==e.id)return -1;
    return e.id==='core'?46:38;
   }
   // Server-level labels appear for active, selected, or hovered systems, and when the camera is close.
   if(isActive(e.id))return 100;if(hoverId===e.id)return 96;
-  return !quiet&&camDistance(e)<(view==='logical'?42:34)?60:-1;
+  return !quiet&&camDistance(e)<34?60:-1;
  }
  const projected=new THREE.Vector3(),placements=[[0,0],[1,0],[2,0],[1,-1],[1,1],[2,-1],[2,1],[3,0],[3,-1],[3,1],[2,-2],[2,2],[4,0],[4,-1],[4,1],[3,-2],[3,2],[5,0],[5,-1],[5,1]];
  // Each label tries its previous placement first; these orders are built once.
@@ -315,146 +309,222 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   for(const state of xray.values())state.value+=(state.target-state.value)*rate;
   applyFades();
   // Equipment outside the current step steps back (darker, still solid) so the step's systems stand out.
-  const quiet=stepMode&&view==='physical'&&!morph;
+  // While the diagram shows, the whole building dims so the outline and the diagram above it lead.
+  const quiet=stepMode&&view==='physical'&&!morph,diagramDim=1-.66*layerAmount;
   fading=[...xray.values(),...dimState.values()].some(state=>Math.abs(state.target-state.value)>.004);
   for(const [k,state] of dimState){
-   state.target=quiet&&k!=='room'&&!protectedKeys.has(k)?.42:1;
+   state.target=Math.min(diagramDim,quiet&&k!=='room'&&!protectedKeys.has(k)?.42:1);
    state.value+=(state.target-state.value)*rate;
    if(Math.abs(state.value-state.applied)>.004){equipment.setDim(registry,k,state.value);state.applied=state.value;}
   }
  }
 
- // ---- Network topology: a glass layer floating over the building ----
- // Each VLAN is a platform around the core switch stack, with its systems on it; spokes are the only way out of a segment.
- // Dashed tethers drop from a system's glyph to where it physically sits. The offline area floats apart with no uplink.
- // The layer leans toward the viewer like a glass panel, so its segments read from the room's usual camera angle.
- const LS=.92,LO=new THREE.Vector3(8,38,0);logical.position.copy(LO);logical.scale.setScalar(LS);logical.rotation.x=.6;logical.updateMatrixWorld(true);
+ // ---- Network topology: diagram mode ----
+ // When something is chosen, a flat diagram of the segments involved appears above the building, facing the camera, and the
+ // building dims to an outline. Layout and drawing live in topology-diagram.js: desktop keeps fixed slots, phones stack.
+ // Cards, uplinks and the DEFAULT DENY ring are drawn in the diagram's own plane (x right, y up, z toward the camera).
+ const DIAGRAM_ELEVATION=.42,diagramDir=new THREE.Vector3(0,Math.sin(DIAGRAM_ELEVATION),Math.cos(DIAGRAM_ELEVATION)),diagramUp=new THREE.Vector3(0,Math.cos(DIAGRAM_ELEVATION),-Math.sin(DIAGRAM_ELEVATION));
+ // One diagram unit is DIAGRAM_SCALE world units: the diagram leads and the building reads as context below it.
+ const DIAGRAM_SCALE=1.7;logical.scale.setScalar(DIAGRAM_SCALE);
+ logical.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(new THREE.Vector3(1,0,0),diagramUp,diagramDir));
  const toWorld=v=>logical.localToWorld(v.clone());
- const islandOrder=['v10','v20','v30','v40','v60','v80','v70','v50'],islandAngles=[202.5,247.5,292.5,337.5,22.5,67.5,112.5,157.5];
- const islands=new Map(),hubLogical=new THREE.Vector3(0,1.9,0),logicalFade=[];
- // Only the segments that matter to the current view show: each layer material belongs to a segment (a VLAN, the core, or the offline area).
- const zoneState=new Map([...['core','offline'],...islandOrder].map(z=>[z,{value:0,target:0}])),zv=z=>z?zoneState.get(z)?.value??1:1;let relevant=new Set();
- const fadeMaterial=(material,base,zone)=>{material.userData.base=base??material.opacity;material.userData.zone=zone;material.userData.depthWrite=material.depthWrite;material.transparent=true;logicalFade.push(material);return material;};
- const plateShape=new THREE.Shape();{const w=39,d=34,r=4,cz=3.8;plateShape.moveTo(-w+r,cz-d);plateShape.lineTo(w-r,cz-d);plateShape.quadraticCurveTo(w,cz-d,w,cz-d+r);plateShape.lineTo(w,cz+d-r);plateShape.quadraticCurveTo(w,cz+d,w-r,cz+d);plateShape.lineTo(-w+r,cz+d);plateShape.quadraticCurveTo(-w,cz+d,-w,cz+d-r);plateShape.lineTo(-w,cz-d+r);plateShape.quadraticCurveTo(-w,cz-d,-w+r,cz-d);}
- const gridCanvas=document.createElement('canvas');gridCanvas.width=gridCanvas.height=128;{const ctx=gridCanvas.getContext('2d');ctx.fillStyle='#0b2234';ctx.fillRect(0,0,128,128);ctx.fillStyle='#16384f';ctx.fillRect(0,0,128,2);ctx.fillRect(0,0,2,128);}
- const gridTexture=new THREE.CanvasTexture(gridCanvas);gridTexture.wrapS=gridTexture.wrapT=THREE.RepeatWrapping;gridTexture.repeat.set(1/6,1/6);gridTexture.colorSpace=THREE.SRGBColorSpace;
- const ground=new THREE.Mesh(new THREE.ShapeGeometry(plateShape).rotateX(Math.PI/2),fadeMaterial(new THREE.MeshBasicMaterial({map:gridTexture,color:'#ffffff',transparent:true,opacity:.3,depthWrite:false,side:THREE.DoubleSide}),.3));ground.position.y=-.05;ground.renderOrder=2;logical.add(ground);
- const coreHex=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.4,1.5,6),fadeMaterial(new THREE.MeshStandardMaterial({color:'#18485a',emissive:'#1d6578',emissiveIntensity:.6,metalness:.4,roughness:.45}),1,'core'));coreHex.position.set(0,.75,0);logical.add(coreHex);
- const coreHit=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,2,6),hitMaterial);coreHit.position.copy(coreHex.position);coreHit.userData.id='core';coreHit.userData.layerZone='core';logical.add(coreHit);pickables.logical.push(coreHit);
- const coreRim=new THREE.Mesh(new THREE.TorusGeometry(3.45,.09,8,6),fadeMaterial(basic(colors.core,.9),.9,'core'));coreRim.rotation.x=Math.PI/2;coreRim.rotation.z=Math.PI/6;coreRim.position.y=1.52;logical.add(coreRim);
- islandOrder.forEach((zid,i)=>{
-  const zone=vlans.find(v=>v.id===zid),a=THREE.MathUtils.degToRad(islandAngles[i]),center=new THREE.Vector3(31*Math.cos(a),0,21*Math.sin(a)),n=zone.ids.length,radius=n===1?3.6:3.2+n;
-  const disc=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.3,64),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.14,depthWrite:false}),.14,zid));disc.position.copy(center).setY(.12);logical.add(disc);
-  const ring=new THREE.Mesh(new THREE.RingGeometry(radius-.14,radius,72),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.7,depthWrite:false,side:THREE.DoubleSide}),.7,zid));ring.rotation.x=-Math.PI/2;ring.position.copy(center).setY(.3);logical.add(ring);
-  const islandHit=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,1.6,24),hitMaterial);islandHit.position.copy(center).setY(.6);islandHit.userData.id='vlan:'+zid;islandHit.userData.layerZone=zid;logical.add(islandHit);pickables.logical.push(islandHit);
-  // The VLAN's uplink to the core: the only way traffic leaves the segment.
-  const from=center.clone().add(center.clone().negate().setLength(radius)).setY(.3),to=center.clone().setLength(3.5).setY(.3);
-  const spoke=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(from,to),8,.11,6,false),fadeMaterial(new THREE.MeshBasicMaterial({color:zone.color,transparent:true,opacity:.5,depthWrite:false}),.5,zid));logical.add(spoke);
-  islands.set(zid,{zone,center,radius,ring,disc,spoke});
-  screenLabel(labelTexture(`VLAN ${zone.number} · ${zone.name}`,zone.subnet,zone.color,420),{kind:'island',zone:zid,px:150,color:zone.color,position:toWorld(center.clone().add(new THREE.Vector3(0,.4,radius+.6)))});
-  zone.ids.forEach((id,j)=>{const angle=-Math.PI/2+j*Math.PI*2/n+(n===2?Math.PI/2:0),r=n===1?0:n===2?2.3:2.9;objects.get(id).logical={position:center.clone().add(new THREE.Vector3(Math.cos(angle)*r,1.5,Math.sin(angle)*r))};});
- });
- // Offline area: no spoke, no uplink. People carry approved media in and out.
- const offlinePlaces={root:new THREE.Vector3(-7,1.5,31.5),media:new THREE.Vector3(0,1.5,31.5),backup:new THREE.Vector3(7,1.5,31.5)};
- for(const [id,position] of Object.entries(offlinePlaces))objects.get(id).logical={position};
- objects.get('core').logical={position:hubLogical.clone()};
- let offlineBoundary;
- {
-  const pts=[[-11,27.5],[11,27.5],[11,35.5],[-11,35.5],[-11,27.5]].map(([x,z])=>new THREE.Vector3(x,.06,z));offlineBoundary=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),fadeMaterial(new THREE.LineDashedMaterial({color:colors.offline,dashSize:.8,gapSize:.6,transparent:true,opacity:.85}),.85,'offline'));
-  offlineBoundary.computeLineDistances();logical.add(offlineBoundary);
-  screenLabel(labelTexture('OFFLINE AREA','No network link · media by hand',colors.offline),{kind:'lfacility',id:'offline',px:160,color:colors.offline,position:toWorld(new THREE.Vector3(0,.4,36.4))});
-  screenLabel(labelTexture('CORE SWITCH STACK','Every VLAN uplinks here',colors.core),{kind:'lfacility',id:'core',zone:'core',px:150,color:colors.core,position:toWorld(new THREE.Vector3(0,2.4,0))});
-  screenLabel(labelTexture('NETWORK TOPOLOGY','8 VLANs · default deny between them','#7fd8ec'),{kind:'lfacility',id:'topology',px:160,color:'#7fd8ec',position:toWorld(new THREE.Vector3(-30,.4,-30.2))});
+ const zoneState=new Map([...['core','offline'],...vlans.map(v=>v.id)].map(z=>[z,{value:0,target:0}])),zv=z=>z?zoneState.get(z)?.value??1:1;let relevant=new Set();
+ const systemNames=new Map(nodes.map(n=>[n.id,n.name])),facilityName=id=>facilities.find(f=>f.id===id)?.name||id;
+ const offlineIds=['root','media','backup'],offlineItems=offlineIds.map(id=>({id,name:id==='root'?systemNames.get('root'):facilityName(id)}));
+ function layerZoneOf(id){return id==='core'?'core':offlineIds.includes(id)?'offline':objects.get(id)?.vlan;}
+ // Every diagram material fades with the layer and with its own segment.
+ const diagramFade=[],diagramLines=new Set();
+ const fadePart=(material,base,zone)=>{material.transparent=true;diagramFade.push({material,base,zone});return material;};
+ const diagramGroup=new THREE.Group();logical.add(diagramGroup);
+ const stepGroup=new THREE.Group();logical.add(stepGroup);
+ const PX=40;// canvas pixels per diagram unit
+ function canvasPlane(w,h,zone,z,draw){
+  const canvas=document.createElement('canvas');canvas.width=Math.round(w*PX);canvas.height=Math.round(h*PX);const ctx=canvas.getContext('2d');
+  const texture=finishTexture(canvas);const material=fadePart(new THREE.MeshBasicMaterial({map:texture,transparent:true,toneMapped:false,fog:false,depthWrite:true}),1,zone);
+  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h),material);mesh.position.z=z;mesh.renderOrder=3;diagramGroup.add(mesh);
+  // Repaints only when what the face shows changes (a fresh part always paints once).
+  const part={mesh,key:null,paint(key,fn){if(key===part.key)return;part.key=key;fn(ctx);texture.needsUpdate=true;}};
+  if(draw)part.paint('init',draw);return part;
  }
- function layerZoneOf(id){return id==='core'?'core':offlinePlaces[id]?'offline':objects.get(id)?.vlan;}
- // One glyph per system, carrying the same role icon as its faceplate, and a tether down to its place in the building.
- const tetherGroup=new THREE.Group();scene.add(tetherGroup);
- for(const [id,o] of objects){
-  if(!o.logical||id==='core')continue;
-  const color=o.color,sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:equipment.iconTexture(equipment.roleOf(id)||'gear',color),transparent:true,opacity:0,depthWrite:false}));
-  sprite.scale.setScalar(id==='workstations'?3.1:2.5);sprite.renderOrder=12;sprite.position.copy(o.logical.position);logical.add(sprite);
-  const pad=new THREE.Mesh(new THREE.CylinderGeometry(1.25,1.4,.22,24),fadeMaterial(new THREE.MeshBasicMaterial({color,transparent:true,opacity:.5}),.5,layerZoneOf(id)));pad.position.copy(o.logical.position).setY(.32);logical.add(pad);
-  const hit=new THREE.Mesh(new THREE.BoxGeometry(3,3.2,3),hitMaterial);hit.position.copy(o.logical.position);hit.userData.id=id;hit.userData.layerZone=layerZoneOf(id);logical.add(hit);pickables.logical.push(hit);
-  o.logical.glyph=sprite;o.logical.world=toWorld(o.logical.position);
-  const top=o.logical.world.clone().add(new THREE.Vector3(0,-1.2,0)),bottom=o.group.position.clone().add(o.anchor);
-  const tether=new THREE.Line(new THREE.BufferGeometry().setFromPoints([top,bottom]),new THREE.LineDashedMaterial({color,dashSize:.7,gapSize:.5,transparent:true,opacity:0,depthWrite:false,depthTest:false}));
-  tether.computeLineDistances();tether.renderOrder=18;tether.visible=false;tetherGroup.add(tether);o.logical.tether=tether;
-  o.logical.label=screenLabel(o.text,{kind:o.facility?'lfacility':'lnode',id,zone:o.vlan,px:150,position:o.logical.world.clone().add(new THREE.Vector3(0,1.6,0))});
+ const V2=(p,z=0)=>new THREE.Vector3(p.x,p.y,z);
+ function roundedRectPoints(box,r,steps=6){
+  const x0=box.x-box.w/2,x1=box.x+box.w/2,y0=box.y-box.h/2,y1=box.y+box.h/2,pts=[];
+  const arc=(cx,cy,a0)=>{for(let i=0;i<=steps;i++){const a=a0+i/steps*Math.PI/2;pts.push(new THREE.Vector3(cx+Math.cos(a)*r,cy+Math.sin(a)*r,.08));}};
+  arc(x1-r,y1-r,0);arc(x0+r,y1-r,Math.PI/2);arc(x0+r,y0+r,Math.PI);arc(x1-r,y0+r,Math.PI*1.5);pts.push(pts[0].clone());return pts;
  }
- // The layer fades in and out as one piece; it never hides the room.
- let layerOn=true,layerAmount=0,layerTarget=0,logicalAmount=0,hoverVlan='';
- // Up close the layer steps back, so its glyphs never fill the screen while the camera works in a room.
- let layerNear=1;const layerBox=new THREE.Box3();for(const x of [-39,39])for(const z of [-30.2,37.8])for(const y of [-1,4])layerBox.expandByPoint(toWorld(new THREE.Vector3(x,y,z)));
+ // The diagram is rebuilt when its layout changes (the phone stack follows what is shown; desktop never moves).
+ let layout=null,layoutKey='',cardParts=new Map(),coreParts=null,offlinePart=null,uplinkLines=new Map(),gateParts=new Map();
+ const portraitView=()=>{const {w,h}=viewSize();return !!w&&!!h&&w/h<.8;};
+ function clearDiagram(){
+  for(const hit of pickables.logical.splice(0))hit.removeFromParent();
+  diagramFade.length=0;diagramLines.clear();
+  while(diagramGroup.children.length){const c=diagramGroup.children[0];diagramGroup.remove(c);c.traverse(o=>{o.geometry?.dispose();o.material?.map?.dispose();o.material?.dispose();});}
+  cardParts=new Map();coreParts=null;offlinePart=null;uplinkLines=new Map();gateParts=new Map();
+ }
+ function diagramHit(box,id,zone,z=.5){const hit=new THREE.Mesh(new THREE.PlaneGeometry(box.w,box.h),hitMaterial);hit.position.set(box.x,box.y,z);hit.userData.id=id;hit.userData.layerZone=zone;diagramGroup.add(hit);pickables.logical.push(hit);return hit;}
+ function ensureLayout(){
+  const phone=portraitView(),stepVlans=stepMode&&stepPair?[objects.get(stepPair[0])?.vlan,objects.get(stepPair[1])?.vlan]:[];
+  const shownVlans=vlans.map(v=>v.id).filter(z=>relevant.has(z));
+  const key=phone?`phone|${shownVlans.join()}|${stepVlans.join()}`:'desktop';
+  if(key===layoutKey&&layout)return layout;
+  layoutKey=key;clearDiagram();
+  layout=phone?phoneLayout(vlans,shownVlans,{source:stepVlans[0],destination:stepVlans[1]}):desktopLayout(vlans);
+  // The core router inside its dashed DEFAULT DENY ring.
+  const ringLine=screenLine(new Route(roundedRectPoints(layout.ring,layout.ring.r)),{color:colors.core,width:2.4,opacity:.95,dash:1.1,gap:.75,parent:diagramGroup,set:diagramLines});fadePart(ringLine.material,.95,'core');
+  coreParts={core:canvasPlane(layout.core.w,layout.core.h,'core',.3),label:layout.ringLabel?canvasPlane(14,2.2,'core',.3,ctx=>{ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);ctx.font=`700 ${Math.round(1.45*PX)}px Inter,Segoe UI,Arial,sans-serif`;ctx.fillStyle=colors.core;ctx.textBaseline='middle';ctx.textAlign=layout.ringLabel.align;ctx.fillText(RING_LABEL,layout.ringLabel.align==='left'?2:layout.ringLabel.align==='right'?ctx.canvas.width-2:ctx.canvas.width/2,ctx.canvas.height/2);}):null};
+  coreParts.core.mesh.position.set(layout.core.x,layout.core.y,.3);
+  if(coreParts.label){const l=layout.ringLabel,dx=l.align==='left'?7:l.align==='right'?-7:0;coreParts.label.mesh.position.set(l.x+dx,l.y,.3);}
+  diagramHit(layout.core,'core','core');
+  for(const [id,card] of layout.cards){
+   const vlan=vlans.find(v=>v.id===id),part=canvasPlane(card.w,card.h,id,.3);part.mesh.position.set(card.x,card.y,.3);cardParts.set(id,part);
+   const line=screenLine(new Route(card.uplink.points.map(p=>V2(p,.05))),{color:vlan.color,width:5,opacity:1,parent:diagramGroup,set:diagramLines});fadePart(line.material,1,id);uplinkLines.set(id,line);
+   const gate=canvasPlane(1.5,1.5,id,.42,ctx=>{const s=ctx.canvas.width;ctx.clearRect(0,0,s,s);ctx.save();ctx.translate(s/2,s/2);ctx.rotate(Math.PI/4);ctx.fillStyle='#0b1a27';ctx.strokeStyle='#d5eef7';ctx.lineWidth=s*.12;ctx.beginPath();ctx.rect(-s*.3,-s*.3,s*.6,s*.6);ctx.fill();ctx.stroke();ctx.restore();});
+   gate.mesh.position.set(card.uplink.gate.x,card.uplink.gate.y,.42);gateParts.set(id,gate);
+   // Click the header for the VLAN, a chip for its system.
+   diagramHit({x:card.x,y:card.y+card.h/2-1.7,w:card.w,h:3.4},'vlan:'+id,id);
+   const places=chipPlaces(card,vlan.ids);
+   for(const sid of vlan.ids){const p=places.get(sid);if(card.compact){diagramHit({x:card.x,y:card.y-1.5,w:card.w,h:card.h-3.4},'vlan:'+id,id);break;}diagramHit(p,sid,id,.55);}
+  }
+  offlinePart=canvasPlane(layout.offline.w,layout.offline.h,'offline',.3);offlinePart.mesh.position.set(layout.offline.x,layout.offline.y,.3);
+  const offlinePlacesMap=offlinePlaces(layout.offline,offlineIds);for(const id of offlineIds)diagramHit(offlinePlacesMap.get(id),id,'offline',.55);
+  // Where each system sits on the diagram, in diagram units and in the world.
+  for(const [id,o] of objects){
+   let place=null;const z=layerZoneOf(id);
+   if(id==='core')place={x:layout.core.x,y:layout.core.y};
+   else if(z==='offline')place=offlinePlacesMap.get(id);
+   else if(layout.cards.has(z)){const card=layout.cards.get(z);place=chipPlaces(card,vlans.find(v=>v.id===z).ids).get(id);}
+   o.logical=place?{place,world:toWorld(V2(place,.6)),zone:z}:null;
+  }
+  // The diagram sits above the building's far wall, leaning back to face the camera; the phone stack sits the same way.
+  placeDiagram();paintDiagram();
+  return layout;
+ }
+ const buildingCenter=new THREE.Vector3((roomBounds.min[0]+roomBounds.max[0])/2,0,(roomBounds.min[2]+roomBounds.max[2])/2);
+ function placeDiagram(){
+  let top=-Infinity;for(const x of [roomBounds.min[0],roomBounds.max[0]])for(const y of [roomBounds.min[1],roomBounds.max[1]])for(const z of [roomBounds.min[2],roomBounds.max[2]])top=Math.max(top,diagramUp.dot(new THREE.Vector3(x,y,z).sub(buildingCenter)));
+  // On a wide stage the building sits right of centre, clear of the step card at the bottom left.
+  const e=extent(layout,{offline:false}),aside=layout.kind==='desktop'?28:0;
+  logical.position.copy(buildingCenter).addScaledVector(diagramUp,top+3-e.y0*DIAGRAM_SCALE).addScaledVector(diagramDir,4);logical.position.x-=aside;logical.updateMatrixWorld(true);
+  for(const o of objects.values())if(o.logical)o.logical.world=toWorld(V2(o.logical.place,.6));
+ }
+ // Card faces: the systems of the current choice or step are highlighted on their chips.
+ function paintDiagram(){
+  if(!layout)return;
+  const lit=new Set([...activeIds,selection].filter(Boolean));
+  for(const [id,part] of cardParts){
+   const vlan=vlans.find(v=>v.id===id),card=layout.cards.get(id),on=vlan.ids.filter(s=>lit.has(s)),key=on.join();
+   part.paint(key,ctx=>drawCard(ctx,PX,card,vlan,systemNames,{highlight:new Set(on),active:on.length>0}));
+  }
+  coreParts?.core.paint(String(lit.has('core')||routedActive)+JSON.stringify(coreStatus),ctx=>drawCore(ctx,PX,layout.core,colors.core,{active:lit.has('core')||routedActive,status:coreStatus}));
+  offlinePart?.paint([...lit].filter(id=>offlineIds.includes(id)).join(),ctx=>drawOffline(ctx,PX,layout.offline,colors.offline,offlineItems,{highlight:lit}));
+ }
+ // The building dims to an outline while the diagram shows.
+ const buildingOutline=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(rooms.flatMap(r=>{const c=[[r.x0,r.z0],[r.x1,r.z0],[r.x1,r.z1],[r.x0,r.z1]];return c.flatMap((p,i)=>{const q=c[(i+1)%4];return [new THREE.Vector3(p[0],.08,p[1]),new THREE.Vector3(q[0],.08,q[1])];});})),new THREE.LineBasicMaterial({color:'#8fd3e6',transparent:true,opacity:0,depthWrite:false,fog:false}));
+ buildingOutline.visible=false;scene.add(buildingOutline);
+ // The layer fades in and out as one piece.
+ let layerOn=true,layerAmount=0,layerTarget=0,logicalAmount=0,hoverVlan='',stepPair=null,coreStatus=null;const layerNear=1;
  function applyLayer(amount){
-  layerAmount=amount;const shown=amount*layerNear;logical.visible=shown>.01;
-  for(const m of logicalFade){m.opacity=m.userData.base*shown*zv(m.userData.zone);m.depthWrite=false;}
-  for(const [id,o] of objects)if(o.logical?.glyph)o.logical.glyph.material.opacity=shown*(o.logical.dim??1)*zv(layerZoneOf(id));
+  layerAmount=amount;logical.visible=amount>.01;
+  for(const {material,base,zone} of diagramFade){const o=base*amount*zv(zone);if(material.uniforms)material.uniforms.opacity.value=o;else{material.opacity=o;material.depthWrite=o>.98;}material.visible=o>.01;}
+  for(const child of stepGroup.children)child.visible=amount>.5;
+  buildingOutline.visible=amount>.01;buildingOutline.material.opacity=.55*amount;
   updateTethers();
  }
+ // Dashed lines from a selected system (or a step's destination) on the diagram down to where it physically sits.
+ // The core router has none until the building shows where the router VM runs.
+ const tetherGroup=new THREE.Group();scene.add(tetherGroup);let tetherKey='',tetherLines=[];
  function updateTethers(){
-  const shown=new Set([...activeIds,selection,hoverId].filter(Boolean));
-  for(const [id,o] of objects){const t=o.logical?.tether;if(!t)continue;const on=layerAmount*layerNear>.05&&zv(layerZoneOf(id))>.5&&(shown.has(id)||!!hoverVlan&&o.vlan===hoverVlan);t.visible=on;t.material.opacity=on?.75*layerAmount*layerNear:0;}
+  const ids=new Set();
+  if(layerAmount>.05){
+   if(selection)ids.add(selection);
+   if(stepMode&&stepPair)ids.add(stepPair[1]);
+   if(hoverId)ids.add(hoverId);
+   if(hoverVlan)for(const id of vlans.find(v=>v.id===hoverVlan)?.ids||[])ids.add(id);
+  }
+  const list=[...ids].filter(id=>id!=='core'&&objects.get(id)?.logical&&zv(objects.get(id).logical.zone)>.5),key=list.join()+'|'+layoutKey+'|'+logical.position.toArray().map(n=>n.toFixed(2)).join();
+  if(key!==tetherKey){
+   tetherKey=key;for(const line of tetherLines){screenLines.delete(line.material);diagramLines.delete(line.material);line.removeFromParent();line.geometry.dispose();line.material.dispose();}tetherLines=[];
+   while(tetherGroup.children.length){const c=tetherGroup.children[0];tetherGroup.remove(c);c.material?.dispose();}
+   for(const id of list){const o=objects.get(id),bottom=o.group.position.clone().add(o.anchor);
+    // The line leaves from the chip's lower edge, so it never crosses the system's name.
+    const p=o.logical.place,top=toWorld(V2({x:p.x,y:p.y-(p.h||0)/2},.6));
+    tetherLines.push(screenLine(new Route([top,bottom]),{color:o.color,width:2,opacity:.85,dash:.9,gap:.6,through:true,parent:tetherGroup,set:diagramLines}));
+    const spot=new THREE.Sprite(new THREE.SpriteMaterial({map:ringTexture,color:o.color,transparent:true,depthWrite:false,depthTest:false,sizeAttenuation:false,fog:false}));spot.position.copy(bottom);spot.scale.setScalar(.035);spot.renderOrder=19;tetherGroup.add(spot);}
+  }
+  for(const line of tetherLines)line.material.uniforms.opacity.value=.85*layerAmount;
+  for(const c of tetherGroup.children)if(c.isSprite)c.material.opacity=.9*layerAmount;
  }
- // The layer appears only when something is chosen (a system, a VLAN, a group, or a walkthrough step), and then only with
- // the segments involved and the core they meet at. The overview shows the building alone. The core switch brings every segment.
+ // The diagram appears only when something is chosen (a system, a VLAN, a group, or a walkthrough step), with the segments
+ // involved and the core they meet at. The overview shows the building alone. The core router brings every segment.
  function refreshRelevance(){
   const zones=new Set();
   for(const id of [...activeIds,selection].filter(Boolean)){
-   if(id==='core'){zones.add('core');for(const z of islandOrder)zones.add(z);continue;}
+   if(id==='core'){zones.add('core');for(const v of vlans)zones.add(v.id);continue;}
    const z=layerZoneOf(id);if(z){zones.add(z);if(z!=='offline')zones.add('core');}
   }
   relevant=zones;layerTarget=layerOn&&zones.size?1:0;
+  if(layerTarget>0||layout)ensureLayout();
   for(const [z,state] of zoneState)if(zones.size)state.target=zones.has(z)?1:0;
   for(const hit of pickables.logical)hit.visible=layerOn&&zones.has(hit.userData.layerZone);
   if(!moving){for(const state of zoneState.values())state.value=state.target;layerAmount=layerTarget;}
+  paintDiagram();
  }
- // The chosen segments' footprint on the layer, so a framing can include them.
- function layerPoints(){
-  const points=[];
-  for(const z of relevant){
-   if(z==='core'){points.push(toWorld(hubLogical));continue;}
-   if(z==='offline'){for(const x of [-11,11])points.push(toWorld(new THREE.Vector3(x,1.5,31.5)));continue;}
-   const island=islands.get(z);if(!island)continue;
-   for(const [dx,dz] of [[-1,0],[1,0],[0,-1],[0,1]])points.push(toWorld(island.center.clone().add(new THREE.Vector3(dx*island.radius,1.5,dz*(island.radius+1.2)))));
-  }
+ // What the camera frames while the diagram shows: the diagram (fixed on desktop) and the building below it.
+ function diagramPoints(){
+  if(!layout)return [];
+  const e=extent(layout,{offline:relevant.has('offline'),onlyShown:relevant,core:relevant.has('core')}),points=[];
+  for(const x of [e.x0,e.x1])for(const y of [e.y0,e.y1])points.push(toWorld(new THREE.Vector3(x,y,0)));
+  for(const b of stepPlaces)for(const x of [b.x-b.w/2,b.x+b.w/2])for(const y of [b.y-b.h/2,b.y+b.h/2])points.push(toWorld(new THREE.Vector3(x,y,0)));
   return points;
  }
  const zonesSettling=()=>[...zoneState.values()].some(state=>state.value!==state.target);
- // Kept for the morphing code paths, which the floating layer no longer uses.
+ // Kept for the morphing code paths, which the diagram does not use.
  function applyLogical(amount){logicalAmount=amount;applyLayer(layerAmount);}
  // ---- Camera framing ----
  // Phone overlays cover the top and bottom of the stage; insets keep the framed equipment in the clear band.
  let insets={top:0,bottom:0},output=null,frameHook=null,onScreen=true,forceActive=false,running=false;
  const viewSize=()=>exportSize||(output?{w:output.w,h:output.h}:{w:container.clientWidth,h:container.clientHeight});
- function applyInsets(){const {w,h}=viewSize(),shift=insets.bottom-insets.top;if(w&&h&&Math.abs(shift)>.001)camera.setViewOffset(w,h,0,shift*h/2,w,h);else camera.clearViewOffset();camera.updateProjectionMatrix();}
- function resize(){refreshShadows();if(output)return;const {clientWidth:w,clientHeight:h}=container;if(!w||!h)return;camera.aspect=w/h;applyInsets();renderer.setSize(w,h);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);}}
+ // While the diagram shows, the stage heading also reserves the top of the frame, so no card sits under it.
+ function frameInsets(){
+  if(!(layerTarget>0&&layout)||output||exportSize)return insets;
+  const {w,h}=viewSize();let top=insets.top;
+  for(const r of reserved)if(h&&r.y<h*.3&&r.w<w*.75)top=Math.max(top,Math.min(.34,(r.y+r.h+10)/h));
+  return {top,bottom:insets.bottom};
+ }
+ function applyInsets(){const {w,h}=viewSize(),framed=frameInsets(),shift=framed.bottom-framed.top;if(w&&h&&Math.abs(shift)>.001)camera.setViewOffset(w,h,0,shift*h/2,w,h);else camera.clearViewOffset();camera.updateProjectionMatrix();}
+ function resize(){refreshShadows();if(output)return;const {clientWidth:w,clientHeight:h}=container;if(!w||!h)return;camera.aspect=w/h;applyInsets();renderer.setSize(w,h);if(composer){composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);}relayout();}
+ // A phone stage stacks the diagram; a wide one uses the fixed layout. A step in progress is redrawn on the new layout.
+ function relayout(){if(!layout||layerTarget<=0)return;const before=layoutKey;ensureLayout();if(layoutKey===before)return;applyLayer(layerAmount);if(lastCall.fn==='showStep')showStep(...lastCall.args);}
  function move(position,target,animate=true){if(!moving||!animate){camera.position.copy(position);orbit.target.copy(target);transition=null;orbit.update();}else transition={a:camera.position.clone(),b:position,c:orbit.target.clone(),d:target,t:0};drift=stepMode?null:{target:target.clone(),offset:position.clone().sub(target),start:time+2.2,until:performance.now()+22000};dirty=true;}
  let framedExtra=null;
  function fit(ids=null,animate=true,extra){
   // Refits (resize, insets) keep the extra points of the current framing, such as segments on the layer.
   if(extra===undefined)extra=ids===framedIds?framedExtra:null;framedIds=ids;framedExtra=extra;
-  const bounds=new THREE.Box3(),logicalView=view==='logical';
-  if(!ids){
+  const bounds=new THREE.Box3(),logicalView=view==='logical',diagramView=layerTarget>0&&!!layout&&!logicalView;applyInsets();
+  // The diagram's chosen segments and the core, with the near edge of the server room just below them.
+  if(diagramView){for(const p of diagramPoints())bounds.expandByPoint(p);if(!portraitView())for(const x of [roomBounds.min[0],roomBounds.max[0]])bounds.expandByPoint(new THREE.Vector3(x,roomBounds.max[1],roomBounds.min[2]+12));}
+  else if(!ids){
    if(logicalView){bounds.expandByPoint(new THREE.Vector3(-38,0,-27));bounds.expandByPoint(new THREE.Vector3(38,3,37));}
-   else{bounds.expandByPoint(new THREE.Vector3(...roomBounds.min));bounds.expandByPoint(new THREE.Vector3(...roomBounds.max));if(layerTarget>0)for(const x of [-39,39])for(const z of [-30.2,37.8])bounds.expandByPoint(toWorld(new THREE.Vector3(x,2,z)));}
+   else{bounds.expandByPoint(new THREE.Vector3(...roomBounds.min));bounds.expandByPoint(new THREE.Vector3(...roomBounds.max));}
   }
   else for(const id of ids){const o=objects.get(id);if(!o)continue;
    if(logicalView){const p=o.logical?.position;if(!p)continue;const pad=id==='workstations'?6.5:5.5;bounds.expandByPoint(p.clone().add(new THREE.Vector3(-pad,-1.5,-pad)));bounds.expandByPoint(p.clone().add(new THREE.Vector3(pad,4,pad)));}
    else if(o.fitBox)bounds.union(o.fitBox);}
-  if(extra)for(const p of extra)bounds.expandByPoint(p);
+  if(extra&&!diagramView)for(const p of extra)bounds.expandByPoint(p);
   if(bounds.isEmpty())return;const target=bounds.getCenter(new THREE.Vector3());
   // Portrait screens look down more steeply, so the room fills the narrow frame. Landscape clips use a lower, cinematic angle.
   // The logical view looks down on the islands like a diagram.
-  const stacked=!ids&&!logicalView&&layerTarget>0,portrait=camera.aspect<.8,direction=(stacked?(portrait?new THREE.Vector3(.16,.95,1):new THREE.Vector3(.48,.58,1)):logicalView?(portrait?new THREE.Vector3(.08,1.9,1):new THREE.Vector3(.16,1.25,1)):portrait?new THREE.Vector3(.2,1.2,1):output&&camera.aspect>1.5?new THREE.Vector3(.5,.42,1):new THREE.Vector3(.46,.66,1)).normalize(),right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize(),tan=Math.tan(THREE.MathUtils.degToRad(19.5)),tanV=tan*Math.max(.35,1-insets.top-insets.bottom);let distance=24;
+  // The diagram is faced squarely.
+  const portrait=camera.aspect<.8,direction=(diagramView?diagramDir.clone():logicalView?(portrait?new THREE.Vector3(.08,1.9,1):new THREE.Vector3(.16,1.25,1)):portrait?new THREE.Vector3(.2,1.2,1):output&&camera.aspect>1.5?new THREE.Vector3(.5,.42,1):new THREE.Vector3(.46,.66,1)).normalize(),right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize(),tan=Math.tan(THREE.MathUtils.degToRad(19.5)),tanV=tan*Math.max(.35,1-frameInsets().top-frameInsets().bottom);let distance=24;
   for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){const p=new THREE.Vector3(x,y,z).sub(target);distance=Math.max(distance,Math.abs(p.dot(right))/(tan*camera.aspect)+p.dot(direction),Math.abs(p.dot(up))/tanV+p.dot(direction));}
-  const padding=output?1:portrait?1.08:camera.aspect<1?1.18:1.10,position=target.clone().addScaledVector(direction,Math.min(distance*padding,480));move(position,target,animate);
+  const padding=diagramView?(output?1.02:1.04):output?1:portrait?1.08:camera.aspect<1?1.18:1.10,position=target.clone().addScaledVector(direction,Math.min(distance*padding,480));move(position,target,animate);
   return {position:position.clone(),target:target.clone()};
  }
 
  // ---- Traffic routes: up into the overhead trays, along them to the core, a rule check, and back out ----
  // Requests ride the lower lane of the tray and the onward leg the upper lane, so the two never overlap.
  const hubPoint=new THREE.Vector3(...hubAt),laneIn=H-.2,laneOut=H+.4,V=(x,y,z)=>new THREE.Vector3(x,y,z);
- const anchorOf=id=>{const o=objects.get(id);return view==='logical'&&o.logical?o.logical.position.clone():o.group.position.clone().add(o.anchor);};
+ const anchorOf=id=>{const o=objects.get(id);return o.group.position.clone().add(o.anchor);};
  // Shortest tray path between two tray nodes (Dijkstra over a few nodes).
  const trayGraph=new Map(Object.keys(trayNodes).map(k=>[k,[]]));
  for(const [a,b] of trayEdges){const d=Math.hypot(trayNodes[a][0]-trayNodes[b][0],trayNodes[a][1]-trayNodes[b][1]);trayGraph.get(a).push([b,d]);trayGraph.get(b).push([a,d]);}
@@ -508,30 +578,52 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   if(!routed)return {route,hubT:null,gateT:1-Math.min(.06,2.5/route.total)};
   const hubT=route.nearest(hubPoint);return {route,hubT,gateT:hubT,facing:true};
  }
- function logicalPath(step){
-  const a=anchorOf(step.from),b=anchorOf(step.to),from=objects.get(step.from),to=objects.get(step.to);
-  if(step.from===step.to)return {route:sampled(new THREE.CubicBezierCurve3(a.clone().add(new THREE.Vector3(-1.4,0,.4)),a.clone().add(new THREE.Vector3(-4.5,5.5,1.5)),a.clone().add(new THREE.Vector3(4.5,5.5,1.5)),a.clone().add(new THREE.Vector3(1.4,0,.4)))),hubT:null,gateT:.84};
-  const ca=islands.get(from.vlan).center.clone().setY(1.2);
-  if(from.vlan===to.vlan){const mid=ca.clone().setY(3.4);return {route:sampled(new THREE.QuadraticBezierCurve3(a,mid,b)),hubT:null,gateT:.84};}
-  const cb=islands.get(to.vlan).center.clone().setY(1.2),hub=hubLogical.clone();
-  const route=new Route([...rounded([a,ca,hub],2.6,10),...rounded([hub,cb,b],2.6,10).slice(1)]);const hubT=route.nearest(hub);return {route,hubT,gateT:hubT,facing:true};
+ const flowPath=step=>physicalPath(step);
+ // The same step drawn on the diagram: the system, its uplink and gate, the core, the other gate and uplink, the destination.
+ function diagramRoute(step){
+  if(!layout)return null;
+  const from=objects.get(step.from),to=objects.get(step.to);if(!from?.logical||!to?.logical)return null;
+  const a=from.logical.place,b=to.logical.place;let local,r={gates:[],same:true};
+  if(step.from===step.to)local=[a,{x:a.x,y:a.y+2.4},{x:a.x+3.2,y:a.y+2.4},{x:a.x+3.2,y:a.y},a];
+  else{r=stepRoute(layout,{id:step.from,vlan:from.logical.zone,place:a},{id:step.to,vlan:to.logical.zone,place:b});if(!r)return null;local=r.points;}
+  const route=new Route(local.map(p=>toWorld(V2(p,.6)))),gateT=r.gates.map(g=>route.nearest(toWorld(V2(g,.6))));
+  return {route,local,gates:r.gates,gateT,same:r.same,hubT:r.same?null:(gateT[0]+gateT[1])/2,from:from.logical.zone,to:to.logical.zone};
  }
- const flowPath=step=>view==='logical'?logicalPath(step):physicalPath(step);
- // The same step drawn on the topology layer: segment, core, segment.
- function layerRoute(step){
-  const from=objects.get(step.from),to=objects.get(step.to),a=from.logical.world.clone(),b=to.logical.world.clone();
-  if(step.from===step.to)return {route:sampled(new THREE.CubicBezierCurve3(a.clone().add(V(-1.4,0,.4)),a.clone().add(V(-4.5,5.5,1.5)),a.clone().add(V(4.5,5.5,1.5)),a.clone().add(V(1.4,0,.4)))),hubT:null};
-  const ca=toWorld(islands.get(from.vlan).center).setY(LO.y+1.2);
-  if(from.vlan===to.vlan){const mid=ca.clone().setY(LO.y+3.4);return {route:sampled(new THREE.QuadraticBezierCurve3(a,mid,b)),hubT:null};}
-  const cb=toWorld(islands.get(to.vlan).center).setY(LO.y+1.2),hub=toWorld(hubLogical);
-  const route=new Route([...rounded([a,ca,hub],2.6,10),...rounded([hub,cb,b],2.6,10).slice(1)]);return {route,hubT:route.nearest(hub)};
+ // On the diagram, the uplinks a step uses brighten, glow and show their direction; the gates it passes show a check.
+ // Denied traffic stops at its gate with an ✕ and "Dropped · no exception".
+ function markTexture(symbol,color){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#071521';ctx.strokeStyle=color;ctx.lineWidth=10;ctx.beginPath();ctx.arc(64,64,54,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.lineWidth=14;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();if(symbol==='check'){ctx.moveTo(38,66);ctx.lineTo(57,85);ctx.lineTo(91,45);}else{ctx.moveTo(43,43);ctx.lineTo(85,85);ctx.moveTo(85,43);ctx.lineTo(43,85);}ctx.stroke();const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
+ function stepMark(symbol,color,at){const m=new THREE.Mesh(new THREE.PlaneGeometry(2.4,2.4),new THREE.MeshBasicMaterial({map:markTexture(symbol,color),transparent:true,toneMapped:false,fog:false,depthTest:false}));m.userData.ownMap=true;m.position.set(at.x,at.y,.7);m.renderOrder=25;stepGroup.add(m);return m;}
+ // Step tags join the frame, so a tag outside the cards is never cut off.
+ let stepPlaces=[];
+ function stepTag(place,text,color,colors){
+  if(!place)return null;stepPlaces.push(place);
+  const c=document.createElement('canvas');c.width=Math.round(place.w*PX);c.height=Math.round(place.h*PX);drawTag(c.getContext('2d'),PX,place,text,color,colors);
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(place.w,place.h),new THREE.MeshBasicMaterial({map:finishTexture(c),transparent:true,toneMapped:false,fog:false,depthTest:false}));m.userData.ownMap=true;m.position.set(place.x,place.y,.7);m.renderOrder=25;stepGroup.add(m);return m;
+ }
+ const chevronGeometry=new THREE.ShapeGeometry(new THREE.Shape([new THREE.Vector2(.55,0),new THREE.Vector2(-.45,.55),new THREE.Vector2(-.15,0),new THREE.Vector2(-.45,-.55)]));
+ function drawStep(tw,blocked,dropText,dropColor){
+  if(!tw||tw.same)return null;
+  const src=layout.cards.get(tw.from),dst=layout.cards.get(tw.to);if(!src||!dst)return null;
+  const legs=[[tw.from,src.uplink.points.slice(0,blocked?src.uplink.points.indexOf(src.uplink.gate)+1:undefined)]];
+  if(!blocked)legs.push([tw.to,[...dst.uplink.points].reverse()]);
+  for(const [zid,points] of legs){
+   const vlan=vlans.find(v=>v.id===zid),bright='#'+new THREE.Color(vlan.color).lerp(new THREE.Color('#ffffff'),.4).getHexString(),route=new Route(points.map(p=>V2(p,.14)));
+   screenLine(route,{color:vlan.color,width:18,opacity:.32,additive:true,parent:stepGroup});
+   screenLine(route,{color:bright,width:6.5,opacity:1,parent:stepGroup});
+   // Chevrons along the line show which way the traffic goes.
+   const material=new THREE.MeshBasicMaterial({color:'#ffffff',toneMapped:false,fog:false});
+   for(let d=1.6;d<route.total-.8;d+=3.2){const t=d/route.total,p=route.getPoint(t),dir=route.getTangent(t);const c=new THREE.Mesh(chevronGeometry,material);c.position.set(p.x,p.y,.18);c.rotation.z=Math.atan2(dir.y,dir.x);c.renderOrder=4;stepGroup.add(c);}
+  }
+  if(blocked){stepTag(dropTagPlace(layout,src.uplink.gate),dropText,dropColor);return {gate:stepMark('cross',dropColor,src.uplink.gate),at:toWorld(V2(src.uplink.gate,.7))};}
+  stepMark('check','#7fe0b7',src.uplink.gate);stepMark('check','#7fe0b7',dst.uplink.gate);
+  return null;
  }
  function subRoute(route,t0,t1){const points=[route.getPoint(t0)];route.points.forEach((p,i)=>{const t=route.lengths[i]/route.total;if(t>t0&&t<t1)points.push(p.clone());});points.push(route.getPoint(t1));return new Route(points.filter((p,i,a)=>i===0||p.distanceToSquared(a[i-1])>1e-8));}
 
  // ---- Looks: standard (default) and cinematic ----
  const looks={
-  standard:{bg:'#081522',fog:.0032,hemi:3.1,key:4.2,rim:2.2,fill:90,exposure:1.22,led:1,packet:1,glow:1,ground:'#0c2236'},
-  cinematic:{bg:'#03070d',fog:.0055,hemi:1.05,key:1.6,rim:1.3,fill:130,exposure:1.2,led:2.6,packet:2.6,glow:1.25,ground:'#06111c'}
+  standard:{bg:'#081522',fog:.0032,hemi:3.1,key:4.2,rim:2.2,fill:90,exposure:1.22,led:1,packet:1,glow:1},
+  cinematic:{bg:'#03070d',fog:.0055,hemi:1.05,key:1.6,rim:1.3,fill:130,exposure:1.2,led:2.6,packet:2.6,glow:1.25}
  };
  let look=looks.standard,composer=null,bloomPass=null,composerLoading=null;
  const tinted=new Set();
@@ -553,7 +645,9 @@ export function createNetworkScene(container,nodes,onSelect,onInteract=()=>{},ho
   flow=null;walker=null;setUsers([]);transient.length=0;for(const k of Object.keys(effects))delete effects[k];
   for(const e of labels.filter(e=>e.kind==='badge'))removeLabel(e);
   while(flowGroup.children.length){const c=flowGroup.children[0];flowGroup.remove(c);c.traverse(disposeObject);}
-  screenLines.clear();guide=null;
+  stepPlaces=[];
+  while(stepGroup.children.length){const c=stepGroup.children[0];stepGroup.remove(c);if(c.geometry!==chevronGeometry)c.geometry?.dispose();if(c.material){if(c.userData.ownMap)c.material.map?.dispose();c.material.dispose();}}
+  screenLines.clear();guide=null;if(coreStatus){coreStatus=null;paintDiagram();}
   pickRing.visible=false;
  }
  // Policy and transfer labels keep a constant, readable size on screen, anchored above their 3D point.
@@ -585,7 +679,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
 #include <fog_fragment>
 }`;
  const screenLines=new Set(),lineResolution=new THREE.Vector2(1,1);
- function screenLine(route,{color,width=3,opacity=.9,additive=false,dash=0,gap=0,through=false}){
+ function screenLine(route,{color,width=3,opacity=.9,additive=false,dash=0,gap=0,through=false,parent=flowGroup,set=screenLines}){
   const pts=route.points,n=pts.length,pos=[],prev=[],next=[],side=[],dist=[],index=[];
   const before=i=>i>0?pts[i-1]:pts[0].clone().multiplyScalar(2).sub(pts[1]),after=i=>i<n-1?pts[i+1]:pts[n-1].clone().multiplyScalar(2).sub(pts[n-2]);
   for(let i=0;i<n;i++)for(const s of [-1,1]){const p=pts[i],a=before(i),b=after(i);pos.push(p.x,p.y,p.z);prev.push(a.x,a.y,a.z);next.push(b.x,b.y,b.z);side.push(s);dist.push(route.lengths[i]);}
@@ -596,12 +690,12 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   const material=new THREE.ShaderMaterial({uniforms:THREE.UniformsUtils.merge([THREE.UniformsLib.fog,{color:{value:new THREE.Color(color)},opacity:{value:opacity},resolution:{value:lineResolution},width:{value:width},dash:{value:dash},gap:{value:gap}}]),
    vertexShader:screenLineVertex,fragmentShader:screenLineFragment,transparent:true,depthWrite:false,depthTest:!through,fog:true,side:THREE.DoubleSide,blending:additive?THREE.AdditiveBlending:THREE.NormalBlending});
   material.uniforms.resolution.value=lineResolution;material.userData.baseWidth=width;
-  const mesh=new THREE.Mesh(geometry,material);mesh.frustumCulled=false;mesh.renderOrder=6;flowGroup.add(mesh);screenLines.add(material);
+  const mesh=new THREE.Mesh(geometry,material);mesh.frustumCulled=false;mesh.renderOrder=6;parent.add(mesh);set.add(material);
   return mesh;
  }
  // Pixel sizes follow the output: the same line looks the same on screen, in a recorded clip, and in a 4K export.
  const pixelScale=()=>{const {h}=viewSize();return exportSize||output?h/800:1;};
- function updateScreenLines(){const {w,h}=viewSize();lineResolution.set(w||1,h||1);const k=pixelScale();for(const m of screenLines)m.uniforms.width.value=m.userData.baseWidth*k;}
+ function updateScreenLines(){const {w,h}=viewSize();lineResolution.set(w||1,h||1);const k=pixelScale();for(const set of [screenLines,diagramLines])for(const m of set)m.uniforms.width.value=m.userData.baseWidth*k;}
  // World units covered by one screen pixel at a point.
  const pixelAt=point=>{const {h}=viewSize();return camera.position.distanceTo(point)*2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(h,1);};
  function dashedLine(route,color){return screenLine(route,{color,width:2,opacity:.6,dash:.9,gap:.7});}
@@ -665,7 +759,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
      if(mode==='hold'&&effects.gate)effects.gate.flash=1;
      if(mode==='gone'&&p.mode==='travel'&&!f.blocked&&f.policy.kind!=='unreachable')ripple(f.path.route.getPoint(1),f.color);
      if(mode==='travel'&&p.mode==='gone')ripple(f.path.route.getPoint(0),f.color);
-     if(mode==='gone'&&p.mode==='hold'){burst(f.gate,effects.gate?.color||'#ee9294');if(effects.gate)effects.gate.flash=1;}
+     if(mode==='gone'&&p.mode==='hold'){burst(f.dropAt||f.gate,effects.gate?.color||'#ee9294');if(effects.gate)effects.gate.flash=1;}
     }
     p.mode=mode;p.s=s;placePacket(f,p,mode,s);
    }
@@ -724,28 +818,23 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  const hoverRing=new THREE.LineSegments(ringGeometry,new THREE.LineBasicMaterial({color:'#ffffff',transparent:true,opacity:.6,depthTest:false}));hoverRing.renderOrder=20;hoverRing.visible=false;scene.add(hoverRing);
  function placeRing(ring,id){
   const o=objects.get(id);if(!o)return false;
-  if(view==='logical'&&o.logical){ring.position.copy(o.logical.position);ring.scale.set(3.2,3.4,3.2);return true;}
   ring.position.copy(o.group.position).add(o.center||new THREE.Vector3());
   ring.scale.set(...o.dimensions).multiplyScalar(1.04);return true;
  }
  function updateOutlines(){
   const any=activeIds.length>0||!!selection,on=id=>activeIds.includes(id)||selection===id;
   for(const {zone,outline} of zoneOutlines){const active=zone.ids.some(on);outline.material.opacity=!any?.5:active?.92:.18;}
-  for(const island of islands.values()){const active=island.zone.ids.some(on);island.ring.material.userData.base=!any?.7:active?1:.25;island.disc.material.userData.base=!any?.14:active?.3:.05;island.spoke.material.userData.base=!any?.5:active?.95:.15;}
-  for(const o of objects.values())if(o.logical?.glyph)o.logical.dim=!any||on(o.node?.id)||o.facility&&on(o.node.id)?1:.35;
-  offlineBoundary.material.userData.base=['root','media','backup'].some(on)?1:any?.4:.85;
   refreshRelevance();applyLayer(layerAmount);
  }
  const followTarget=new THREE.Vector3();let followSnap=true;
  function showStep(step,color,allIds,policy={kind:step.manual?'manual':'traffic',rule:null},gate=null){
   lastCall={fn:'showStep',args:[step,color,allIds,policy,gate]};
   clearFlow();clearConnections();connectionState=null;releasePacket();followSnap=true;
-  selection='';selectionRing.visible=false;stepMode=true;
+  selection='';selectionRing.visible=false;stepMode=true;stepPair=[step.from,step.to];
   const ids=[...new Set([step.from,step.to,...(step.manual?step.walk||[]:[])].filter(id=>id&&objects.has(id)))];
   activeIds=ids;routedActive=false;updateOutlines();setUsers(ids,step);
   if(policy.kind==='manual'){if(step.walk)custodyWalk(step.walk);fit(ids,true);updateFlow(0);return;}
   if(step.from==='root'||step.to==='root')throw new Error('Offline root cannot have a live flow');
-  const from_=st=>objects.get(st.from)?.logical?.world;
   const path=flowPath(step),route=path.route,blocked=policy.kind==='pending'||policy.kind==='deny',routed=path.hubT!==null,style=step.stream||'tcp';
   routedActive=routed;
   // Packet speed adapts so the first packet completes its trip within the step.
@@ -761,44 +850,65 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   if(blocked)dashedLine(subRoute(route,path.gateT,1),color);
   const count=style==='tcp'?4:3;for(let k=0;k<count;k++)f.packets.push(makePacket(f,{offset:k*f.cycle/count}));
   if((policy.kind==='traffic'||policy.kind==='rejected')&&step.reply!==false)for(const k of [0,1])f.replies.push(makePacket(f,{reply:true,offset:(k+.3)*f.replyCycle/2}));
+  // While the diagram shows, the packet's twin travels it in step with the packet in the building, and the step's labels sit on the
+  // diagram: the rule check at the core, a drop at the ring gate, and the endpoints. Otherwise they sit on the route in the building.
+  const tw=layerOn&&layerTarget>0?diagramRoute(step):null,onDiagram=!!tw;
   const at=blocked?path.gateT:path.hubT??.5,enforcement=route.getPoint(at);
-  if(blocked)effects.gate=gateAt(enforcement,route.getTangent(Math.min(at,.999)),policy.kind==='pending'?'#e6bc82':'#ee9294',gate||['BLOCKED',''],path.facing);
-  else if(routed&&gate){badge(gate[0],gate[1],'#7fe0b7',enforcement.clone().add(new THREE.Vector3(0,2.1,0)),200);effects.hub={shine:glow(flowGroup,enforcement.x,enforcement.y,enforcement.z,'#7fe0b7',4,.15),flash:0};}
-  const logicalView=view==='logical';
-  if(policy.kind==='unreachable')effects.endpoint=endpointBadge(route.getPoint(1),'#ee9294',['NO RESPONSE',`${objects.get(step.to).node.name} is offline`],logicalView?2.4:3.4);
-  if(policy.kind==='rejected')effects.endpoint=endpointBadge(route.getPoint(0),'#ee9294',['CERTIFICATE REJECTED','The browser stops the connection'],logicalView?2.4:7.5);
-  const sealAt=route.getPoint(routed?path.hubT*.55:.3).add(new THREE.Vector3(0,1.6,0));
-  if(tls)lockBadge(color,'Encrypted session',sealAt);
-  if(step.protection==='signed'&&!blocked)badge('SIGNED · NOT ENCRYPTED','Signatures protect the payload',color,sealAt,210);
-  // The packet's twin travels the topology layer in step with it, so the segments and the core rule line up with the room.
-  if(layerOn&&from_(step)&&objects.get(step.to)?.logical?.world){
-   const tw=layerRoute(step),gateL=blocked?(tw.hubT??.9):1,shownL=blocked?subRoute(tw.route,0,gateL):tw.route;
-   screenLine(shownL,{color,width:9,opacity:.18,additive:true,through:true});screenLine(shownL,{color,width:2.5,opacity:.95,through:true});
-   if(blocked)screenLine(subRoute(tw.route,gateL,1),{color,width:1.6,opacity:.5,dash:.8,gap:.6,through:true});
-   const head=new THREE.Mesh(new THREE.SphereGeometry(.32,12,8),tint(new THREE.MeshBasicMaterial({depthTest:false,transparent:true}),'#eaffff'));head.renderOrder=21;flowGroup.add(head);
-   const shine=glow(flowGroup,0,0,0,color,2.4,.8);shine.material.depthTest=false;shine.renderOrder=20;
+  const join=g=>g?g.filter(Boolean).join(' · '):'';
+  if(onDiagram){
+   // On the diagram: the rule check is written on the core router, a drop beside its gate, and other results under their card.
+   const gateL=blocked?(tw.gateT[0]??.9):1,shownL=blocked?subRoute(tw.route,0,gateL):tw.route,red=policy.kind==='pending'?'#e6bc82':'#ee9294';
+   const tag=(zone,text,tone,colors)=>stepTag(cardTagPlace(layout,zone),text,tone,colors),ok={fill:'#0b2a33',ink:'#e8fbff'};
+   const drop=drawStep(tw,blocked,policy.kind==='pending'?join(gate)||'BLOCKED':DROP_LABEL,red);
+   if(tw.same)screenLine(shownL,{color,width:3,opacity:.95,through:true});
+   if(blocked){
+    const spot=drop?.at||tw.route.getPoint(gateL);
+    effects.gate={group:drop?.gate||new THREE.Group(),ring:drop?.gate||new THREE.Group(),shine:glow(flowGroup,spot.x,spot.y,spot.z,red,6,.4),flash:0,color:red};
+    f.dropAt=spot;
+    // Inside one VLAN the host firewall decides, so the step keeps its own wording.
+    if(tw.same)tag(tw.to,gate?.[0]||'BLOCKED',red);
+   }
+   else if(routed){
+    const core=tw.route.getPoint(tw.hubT);effects.hub={shine:glow(flowGroup,core.x,core.y,core.z,'#7fe0b7',6,.15),flash:0};
+    coreStatus={text:[join(gate)||'PERMIT',step.protection==='signed'?'signed':''].filter(Boolean).join(' · '),lock:tls};paintDiagram();
+   }
+   const pulse=at=>{const group=new THREE.Group();group.position.copy(at);flowGroup.add(group);return {group,shine:glow(group,0,0,0,'#ee9294',6,.5)};};
+   if(policy.kind==='unreachable'){effects.endpoint=pulse(tw.route.getPoint(1));tag(tw.to,`No response from ${objects.get(step.to).node.name}`,'#ee9294');}
+   if(policy.kind==='rejected'){effects.endpoint=pulse(tw.route.getPoint(0));tag(tw.from,'Certificate rejected','#ee9294');}
+   if(!routed&&!blocked){if(tls)tag(tw.to,'TLS · encrypted',color,ok);if(step.protection==='signed')tag(tw.to,'Signed · not encrypted',color,ok);}
+   const head=new THREE.Mesh(new THREE.SphereGeometry(.42,12,8),tint(new THREE.MeshBasicMaterial({depthTest:false,transparent:true}),'#eaffff'));head.renderOrder=21;flowGroup.add(head);
+   const shine=glow(flowGroup,0,0,0,color,2.6,.8);shine.material.depthTest=false;shine.renderOrder=20;
    f.twin={route:tw.route,hubT:tw.hubT,gateL,head,shine};
   }
-  // Shot plan: an establishing shot of the whole step, then the camera eases in to follow the packet,
-  // and returns to the establishing shot after the first trip.
-  const shot=fit(routed?[...ids,'core']:ids,true,layerOn&&!!f.twin?[f.twin.route.getPoint(0),f.twin.route.getPoint(1),f.twin.route.getPoint(f.twin.hubT??.5)]:null);
-  guide=shot?{wide:shot,t:0,w:0,user:false,target:null}:null;
+  else{
+   if(blocked)effects.gate=gateAt(enforcement,route.getTangent(Math.min(at,.999)),policy.kind==='pending'?'#e6bc82':'#ee9294',gate||['BLOCKED',''],path.facing);
+   else if(routed&&gate){badge(gate[0],gate[1],'#7fe0b7',enforcement.clone().add(new THREE.Vector3(0,2.1,0)),200);effects.hub={shine:glow(flowGroup,enforcement.x,enforcement.y,enforcement.z,'#7fe0b7',4,.15),flash:0};}
+   if(policy.kind==='unreachable')effects.endpoint=endpointBadge(route.getPoint(1),'#ee9294',['NO RESPONSE',`${objects.get(step.to).node.name} is offline`],3.4);
+   if(policy.kind==='rejected')effects.endpoint=endpointBadge(route.getPoint(0),'#ee9294',['CERTIFICATE REJECTED','The browser stops the connection'],7.5);
+   const sealAt=route.getPoint(routed?path.hubT*.55:.3).add(new THREE.Vector3(0,1.6,0));
+   if(tls)lockBadge(color,'Encrypted session',sealAt);
+   if(step.protection==='signed'&&!blocked)badge('SIGNED · NOT ENCRYPTED','Signatures protect the payload',color,sealAt,210);
+  }
+  // Shot plan: an establishing shot of the whole step. In the building, the camera then eases in to follow the packet and
+  // returns after the first trip; while the diagram shows, the camera stays on the diagram.
+  const shot=fit(routed?[...ids,'core']:ids,true);
+  guide=shot&&!onDiagram?{wide:shot,t:0,w:0,user:false,target:null}:null;
   updateFlow(0);
  }
  function select(id,focus=true,animate=false){
   lastCall={fn:'select',args:[id,focus]};
   clearFlow();clearConnections();connectionState=null;releasePacket();
-  selection=id;activeIds=[id];routedActive=false;stepMode=false;
+  selection=id;activeIds=[id];routedActive=false;stepMode=false;stepPair=null;
   if(!objects.has(id))return;
   placeRing(selectionRing,id);selectionRing.material.color.set(objects.get(id).color||'#8eeefa');selectionRing.visible=true;updateOutlines();
   if(focus)fit([id]);else fit(null,animate);
  }
  function highlight(ids=[]){
   lastCall={fn:'highlight',args:[ids]};
-  clearFlow();clearConnections();connectionState=null;releasePacket();stepMode=false;
+  clearFlow();clearConnections();connectionState=null;releasePacket();stepMode=false;stepPair=null;
   activeIds=ids.filter(id=>objects.has(id));selection='';selectionRing.visible=false;routedActive=false;updateOutlines();
-  // A highlighted group (a VLAN, a room, a control family) also frames its segments on the topology layer.
-  fit(activeIds.length?activeIds:null,true,activeIds.length&&layerTarget>0?layerPoints():null);
+  // A highlighted group (a VLAN, a room, a control family) shows its segments on the diagram, which the camera frames.
+  fit(activeIds.length?activeIds:null,true);
  }
  // ---- Connection map: every rule that names the selected system ----
  function clearConnections(){for(const e of labels.filter(e=>e.kind==='connection'))removeLabel(e);while(connectionGroup.children.length){const c=connectionGroup.children[0];connectionGroup.remove(c);c.traverse(disposeObject);}}
@@ -859,7 +969,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   else highlight(...call.args);
  }
  function finishMorph(){if(!morph)return;applyLogical(morph.to==='logical'?1:0);morph=null;flowGroup.visible=true;connectionGroup.visible=true;hooks.onView?.(view,false);}
- // The topology layer turns on and off; the room always stays. ('logical' means the layer is shown.)
+ // The topology diagram turns on and off; the room always stays. ('logical' means the diagram is on.)
  function setView(next){
   const on=next==='logical';if(on===layerOn)return;
   layerOn=on;refreshRelevance();applyLayer(layerAmount);
@@ -882,7 +992,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   theme=looks[name]?name:'standard';look=looks[theme];
   scene.background.set(look.bg);scene.fog.color.set(look.bg);scene.fog.density=look.fog;
   hemi.intensity=look.hemi;key.intensity=look.key;rim.intensity=look.rim;fill.intensity=look.fill;renderer.toneMappingExposure=look.exposure;
-  equipment.setTheme(theme);ground.material.color.set(look.ground);
+  equipment.setTheme(theme);
   for(const m of tinted)m.color.copy(m.userData.tint).multiplyScalar(look.packet);
   if(!moving||theme!=='cinematic')for(const l of lights)l.material.emissiveIntensity=.6*look.led;
   refreshShadows();
@@ -891,6 +1001,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  // ---- Follow-the-packet camera for clips ----
  function followPoint(){
   if(walker)return walker.carrier.position.clone().setY(walker.person?4:1.3);
+  if(flow?.twin&&layerAmount>.5)return flow.twin.head.visible?flow.twin.head.position.clone():flow.twin.route.getPoint(flow.blocked?flow.twin.gateL:1);
   if(!flow?.packets.length)return null;
   if(flow.clock>=flow.travel)return (flow.blocked?flow.gate:flow.path.route.getPoint(1)).clone();
   return flow.packets[0].head.position.clone();
@@ -899,8 +1010,8 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   if(cameraMode!=='follow'||morph)return;
   const p=followPoint();if(!p)return;
   if(followSnap){followTarget.copy(p);followSnap=false;}else followTarget.lerp(p,1-Math.exp(-dt*4.5));
-  const portrait=camera.aspect<.8,direction=(view==='logical'?new THREE.Vector3(.12,1.4,1):portrait?new THREE.Vector3(.25,.95,1):new THREE.Vector3(.55,.5,1)).normalize();
-  camera.position.copy(followTarget).addScaledVector(direction,view==='logical'?34:portrait?30:23);orbit.target.copy(followTarget);transition=null;drift=null;
+  const portrait=camera.aspect<.8,onDiagram=!!flow?.twin&&layerAmount>.5,direction=(onDiagram?diagramDir.clone():view==='logical'?new THREE.Vector3(.12,1.4,1):portrait?new THREE.Vector3(.25,.95,1):new THREE.Vector3(.55,.5,1)).normalize();
+  camera.position.copy(followTarget).addScaledVector(direction,onDiagram?(portrait?52:46):view==='logical'?34:portrait?30:23);orbit.target.copy(followTarget);transition=null;drift=null;
  }
  function updateGuided(dt){
   if(cameraMode!=='guided'||!guide||!flow||!moving||morph||frozen)return;
@@ -979,7 +1090,6 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
    if(theme==='cinematic')for(const l of lights)l.material.emissiveIntensity=(.35+1.1*Math.pow((Math.sin(time*1.6+l.phase)+1)/2,3))*look.led;
    updateFlow(Math.min(elapsed,.1));
   }
-  {const near=output&&!stepMode?1:THREE.MathUtils.clamp((layerBox.distanceToPoint(camera.position)-(camera.aspect<.8?18:10))/(camera.aspect<.8?34:26),0,1);if(Math.abs(near-layerNear)>.01){layerNear=near;applyLayer(layerAmount);}}
   if(zonesSettling()){const step=moving?elapsed/.5:1;for(const state of zoneState.values())state.value=state.target>state.value?Math.min(state.target,state.value+step):Math.max(state.target,state.value-step);applyLayer(layerAmount);}
   if(layerAmount!==layerTarget){const step=moving?elapsed/.6:1;applyLayer(layerTarget>layerAmount?Math.min(layerTarget,layerAmount+step):Math.max(layerTarget,layerAmount-step));}
   if(morph){morph.t=Math.min(1,morph.t+elapsed/morph.duration);const target=morph.to==='logical'?1:0;applyLogical(morph.from+(target-morph.from)*smooth(morph.t));if(morph.t>=1)finishMorph();}
@@ -1007,7 +1117,7 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
  function setInsets(next){if(output){output.insets=next;return;}if(Math.abs(next.top-insets.top)<.01&&Math.abs(next.bottom-insets.bottom)<.01)return;insets=next;applyInsets();fit(framedIds,true);}
  // Recording renders at a fixed output size; captions and cards are composited by the caller through the frame hook.
  function setOutput(size){
-  if(size){if(!output)output={ratio:renderer.getPixelRatio(),insets};output.w=size.w;output.h=size.h;insets=size.insets||{top:0,bottom:0};renderer.setPixelRatio(1);renderer.setSize(size.w,size.h,false);if(composer){composer.setPixelRatio(1);composer.setSize(size.w,size.h);}camera.aspect=size.w/size.h;applyInsets();fit(framedIds,false);followSnap=true;}
+  if(size){if(!output)output={ratio:renderer.getPixelRatio(),insets};output.w=size.w;output.h=size.h;insets=size.insets||{top:0,bottom:0};renderer.setPixelRatio(1);renderer.setSize(size.w,size.h,false);if(composer){composer.setPixelRatio(1);composer.setSize(size.w,size.h);}camera.aspect=size.w/size.h;applyInsets();relayout();fit(framedIds,false);followSnap=true;}
   else if(output){const saved=output;output=null;insets=saved.insets;renderer.setPixelRatio(saved.ratio);resize();fit(framedIds,false);}
  }
  function setMotion(on){moving=on;orbit.enableDamping=on&&!reduced;if(!on){if(transition){camera.position.copy(transition.b);orbit.target.copy(transition.d);}transition=null;drift=null;finishMorph();for(const state of zoneState.values())state.value=state.target;applyLayer(layerTarget);for(const l of lights)l.material.emissiveIntensity=.6*look.led;}dirty=true;}
@@ -1026,6 +1136,14 @@ void main(){if(dash>0.&&mod(vDist,dash+gap)>dash)discard;gl_FragColor=vec4(color
   debugProject(id){const o=objects.get(id);if(!o)return null;projected.copy(anchorOf(id)).project(camera);const r=renderer.domElement.getBoundingClientRect();return {x:(projected.x+1)/2*r.width+r.left,y:(1-projected.y)/2*r.height+r.top};},
   debugState(){return {flow:!!flow,walker:!!walker,transition:!!transition,drift:!!drift,morph:!!morph,fading,labelsSettling,dirty,theme,transient:transient.length,forceActive,output:!!output};},
   debugLabels(){return labels.map(e=>({kind:e.kind,id:e.id,zone:e.zone,priority:e.priority,show:e.show,rect:e.rect?.map(Math.round)}));},
+  // Test hook: the diagram's layout, the VLANs it shows, and where each shown card sits on screen.
+  debugDiagram(){
+   const r=renderer.domElement.getBoundingClientRect(),screen=p=>{projected.copy(toWorld(p)).project(camera);return {x:(projected.x+1)/2*r.width,y:(1-projected.y)/2*r.height};};
+   const box=b=>{const a=screen(new THREE.Vector3(b.x-b.w/2,b.y+b.h/2,0)),c=screen(new THREE.Vector3(b.x+b.w/2,b.y-b.h/2,0));return {x0:Math.min(a.x,c.x),y0:Math.min(a.y,c.y),x1:Math.max(a.x,c.x),y1:Math.max(a.y,c.y)};};
+   const shown=layout&&layerAmount>.5?vlans.map(v=>v.id).filter(z=>layout.cards.has(z)&&zv(z)>.5):[];
+   return {layout:layout?.kind||null,amount:layerAmount,shown,core:layout&&layerAmount>.5&&zv('core')>.5,offline:!!layout&&layerAmount>.5&&zv('offline')>.5,
+    cards:Object.fromEntries(shown.map(z=>[z,box(layout.cards.get(z))])),coreBox:layout?box(layout.core):null,width:r.width,height:r.height,tethers:tetherLines.length};
+  },
   // Test hook: screen positions of visible packets, used by the browser checks.
   debugPackets(){if(!flow)return [];const r=renderer.domElement.getBoundingClientRect();return [...flow.packets,...flow.replies].filter(p=>p.head.visible).map(p=>{projected.copy(p.head.position).project(camera);return {kind:p.kind,x:(projected.x+1)/2*r.width+r.left,y:(1-projected.y)/2*r.height+r.top};});}};
  // Any call that changes what the scene shows also schedules a frame (rendering is on demand).

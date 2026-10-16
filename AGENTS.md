@@ -744,3 +744,28 @@ Where this conflicts with the Planned entry from PR #78, this section wins. The 
 
 - The 3D building still shows a "Core switch stack" (two core switches) in rack R01. That doesn't match the virtual-router decision. No hypervisor host (SBD-HV01–07) runs the router VM today, and new hosts or systems aren't added without asking.
 - Until that's decided, the core router has no dashed line down to the building.
+
+### System Hub topology: diagram mode as built (October 16, 2026)
+
+This replaces the floating glass layer described in the October 8 and 9 notes. The decisions above still apply.
+
+- **Code.** `public/inside-network-model/topology-diagram.js` holds the layout (fixed desktop slots, the phone stack), the card, core and offline drawing, and the contrast helper. It needs no WebGL. The "Network topology: diagram mode" section of `scene.js` places the diagram in 3D. The diagram faces the camera at a low angle above the building's far wall, at 1.7 times the building's scale. On wide stages the building sits right of centre, clear of the step card. While the diagram shows, the building dims to about a third of its brightness and its room outlines show.
+- **Step results are written on the diagram.** The rule check goes on a strip at the bottom of the core router, with a lock when the session uses TLS. "Dropped · no exception" sits beside the gate. Other results go on a tag under their card: certificate rejected, no response, a host-firewall denial, and TLS within one VLAN. With Topology off, the floating labels in the building work as before.
+- **Phones.** Steps use the stack. With three or more VLANs (for example, when the core router is selected), compact cards show only the header and the VLAN name, in two columns. Their uplinks run down the outer edges into the sides of the ring.
+- **Labels.** In Focus mode, room, rack and equipment labels hide while the diagram shows. "Labels: All" still shows them.
+- **Checks.** `tests/topology-diagram.test.mjs` covers:
+  - header contrast
+  - the fixed slots
+  - orthogonal uplinks that don't cross
+  - the phone stack
+  - card text taken from the model
+  - the core router wording
+
+  `scripts/check-network-browser.mjs` uses `insideNetworkQA.diagram()` to check:
+  - the overview has no diagram
+  - `#vlan=30` shows only VLAN 30
+  - the core router shows all eight VLANs in place
+  - cards stay inside the stage (D11)
+  - a selected system has its dashed line and the core router has none
+  - the phone step stack
+  - Previous and Next are at least 44 px

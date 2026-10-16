@@ -14,7 +14,7 @@ export function createRelationshipView(root,{onSelect,onMotion,motion=true}){
  const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
  const pause=$('[data-relationship-motion]');if(pause)pause.onclick=()=>onMotion(!motion);
  const fallback=message=>{if(!viewport)return;$('[data-relationship-fallback]').hidden=false;$('[data-relationship-fallback]').textContent=message;viewport.classList.add('is-unavailable');};
- // The floating topology layer in the main scene replaced the 3D thumbnail; without a viewport this keeps only the list.
+ // The topology diagram in the main scene replaced the 3D thumbnail; without a viewport this keeps only the list.
  if(viewport)try{
   renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));

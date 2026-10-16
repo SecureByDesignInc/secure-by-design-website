@@ -315,7 +315,8 @@ body.look-cinematic .stage{background:#03070d}
 .stage-transport #stagePlay{min-width:64px}
 .stage-counter{font-size:11px;color:#8fb2c8;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
 .flow-caption:not(.is-step) .stage-transport,.flow-caption:not(.is-step) .stage-description{display:none}
-@media(max-width:780px){.stage-description{display:none}.stage-transport button{min-height:40px}.flow-caption{gap:10px}}
+/* Phones: Previous, Play and Next are at least 44 px tall (and the arrows 44 px wide) for touch. */
+@media(max-width:780px){.stage-description{display:none}.stage-transport button{min-height:44px}.stage-transport #stageBack,.stage-transport #stageNext{min-width:44px}.flow-caption{gap:10px}}
 @media(max-width:440px){.stage-counter{display:none}}
 body.cinema .stage-transport{opacity:.85}
 .flow-caption{max-width:min(520px,calc(100% - 56px));padding:12px 14px;gap:12px}

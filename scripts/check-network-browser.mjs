@@ -152,14 +152,31 @@ try {
     await page.mouse.move(pcs.x, pcs.y);
     assert.match(await page.locator('#hoverTip').textContent(), /50 Windows PCs/, 'Hover tooltip');
     await page.mouse.move(2, 2);
-    // The overview shows the building alone; the topology layer waits until something is chosen.
-    const islandLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).length);
-    assert.equal(islandLabels, 0, 'The overview hides the topology layer');
-    // Opening a VLAN raises only that segment (and the core) above the building.
-    await page.evaluate(() => { location.hash = 'vlan=30'; });
-    await page.waitForFunction(() => window.insideNetworkQA.labels().some(l => l.kind === 'island' && l.show), null, { timeout: 8000 }).catch(() => {});
-    const shownIslands = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).map(l => l.zone));
-    assert.deepEqual(shownIslands, ['v30'], `Only the chosen VLAN shows on the layer (${shownIslands.join(', ')})`);
+    // The overview shows the building alone; the topology diagram waits until something is chosen.
+    assert.deepEqual((await page.evaluate(() => window.insideNetworkQA.diagram())).shown, [], 'The overview hides the topology diagram');
+    // Opening a VLAN shows only that segment and the core router on the diagram, with the room labels out of the way.
+    const diagramShows = async (hash, expected, message) => {
+      await page.evaluate(h => { location.hash = h; }, hash);
+      await page.waitForFunction(n => { const d = window.insideNetworkQA.diagram(); return d && d.amount > .99 && d.shown.length === n; }, expected.length, { timeout: 8000 }).catch(() => {});
+      await page.waitForTimeout(2600);
+      const d = await page.evaluate(() => window.insideNetworkQA.diagram());
+      assert.deepEqual(d.shown, expected, `${message} (${d.shown.join(', ')})`);
+      assert.equal(d.core, true, `${message}: the core router shows`);
+      // Every card stays inside the frame (audit item D11).
+      for (const [id, b] of Object.entries(d.cards)) assert(b.x0 >= -1 && b.y0 >= -1 && b.x1 <= d.width + 1 && b.y1 <= d.height + 1, `${message}: VLAN card ${id} stays inside the stage`);
+      return d;
+    };
+    await diagramShows('vlan=30', ['v30'], 'Only the chosen VLAN shows on the diagram');
+    assert.equal(await page.evaluate(() => window.insideNetworkQA.labels().filter(l => ['zone', 'facility', 'node'].includes(l.kind) && l.show).length), 0, 'Room and rack labels hide while the diagram shows');
+    // The core router brings all eight VLANs, in their fixed places: 10, 20, 30 on top; 80 left, 40 right; 50, 60, 70 below.
+    const all = await diagramShows('facility=core', ['v10', 'v20', 'v30', 'v40', 'v50', 'v60', 'v70', 'v80'], 'The core router shows every VLAN');
+    const mid = id => ({ x: (all.cards[id].x0 + all.cards[id].x1) / 2, y: (all.cards[id].y0 + all.cards[id].y1) / 2 });
+    assert(mid('v10').x < mid('v20').x && mid('v20').x < mid('v30').x && Math.abs(mid('v10').y - mid('v30').y) < 2, 'VLANs 10, 20 and 30 form the top row');
+    assert(mid('v80').x < mid('v40').x && mid('v80').y > mid('v10').y && mid('v80').y < mid('v50').y, 'VLAN 80 sits left and VLAN 40 right of the core');
+    assert(mid('v50').x < mid('v60').x && mid('v60').x < mid('v70').x && mid('v50').y > mid('v80').y, 'VLANs 50, 60 and 70 form the bottom row');
+    assert.equal(all.tethers, 0, 'The core router has no line down to the building until its host is decided');
+    await diagramShows('system=sql', ['v40'], 'A selected system shows its VLAN');
+    assert.equal((await page.evaluate(() => window.insideNetworkQA.diagram())).tethers, 1, 'A selected system keeps its dashed line down to the building');
     await page.locator('#overview').click();
     await page.waitForTimeout(1200);
     // Connection map for one system.
@@ -229,6 +246,21 @@ try {
     assert.equal(await page.locator('#stageFullscreen').isVisible(), true, 'Phones get a full-screen button on the stage');
     await context.close();
   }
+  // Phones stack a step on the diagram: the source VLAN, the core and ring, the destination VLAN, then the step card.
+  {
+    const { context, page } = await open({ width: 390, height: 844 }, { hash: '#process=pc-to-sql&step=1' });
+    await page.waitForFunction(() => { const d = window.insideNetworkQA.diagram(); return d && d.amount > .99 && d.shown.length === 2; }, null, { timeout: 8000 }).catch(() => {});
+    await page.waitForTimeout(2600);
+    const d = await page.evaluate(() => window.insideNetworkQA.diagram());
+    assert.equal(d.layout, 'phone', 'Phones use the stacked diagram');
+    assert.deepEqual(d.shown, ['v40', 'v80'], 'The step shows its two VLANs');
+    assert(d.cards.v80.y1 < d.coreBox.y0 && d.coreBox.y1 < d.cards.v40.y0, 'Source above the core, destination below');
+    for (const [id, b] of Object.entries(d.cards)) assert(b.x0 >= -1 && b.x1 <= d.width + 1 && b.y0 >= -1, `Phone card ${id} stays inside the stage`);
+    const caption = await page.locator('.flow-caption').boundingBox(), canvas = await page.locator('#viewport canvas').boundingBox();
+    assert(canvas.y + d.cards.v40.y1 <= caption.y + 2, 'The destination VLAN sits above the step card');
+    for (const id of ['#stageBack', '#stageNext']) { const b = await page.locator(id).boundingBox(); assert(b.height >= 44 && b.width >= 44, `${id} is at least 44 px for touch`); }
+    await context.close();
+  }
   // Reduced-motion preference starts paused with motion off.
   {
     const { context, page } = await open({ width: 1280, height: 800 }, { reducedMotion: 'reduce' });
@@ -244,7 +276,7 @@ try {
     await context.close();
   }
   assert.deepEqual(problems, [], 'No runtime errors, warnings, or missing files');
-  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, only the chosen VLAN on the topology layer, connection map, topology toggle, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
+  console.log(`Browser checks passed: opens on the architecture explorer with optional walkthroughs, step diagram, pause-after-step, phone tools menu, ${scenarios.length} processes and ${whatIfs.length} what-ifs (with the attack drill), stage kept in view with on-stage controls, focused labels, policy-matched motion, packet inspection, hover tooltips, only the chosen VLAN on the topology diagram, the core router's eight VLANs in their fixed places, the phone step stack, connection map, topology toggle, cinematic look, every system and VLAN, knowledge checks, shareable links, protocol reference, 4K export, clip recording with cards, mobile layout, reduced motion, and WebGL fallback.`);
 } finally {
   await browser.close();
   server.close();
