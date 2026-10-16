@@ -30,9 +30,9 @@ body.site-editorial .account-page :is(a,button,input,summary):focus-visible{outl
 .account-page .reader-page .reader-error{border-color:#c8664a;background:#2a1613;color:#ffd6c9}
 .account-page .reader-loading{color:#a9bfce}
 
-/* Buttons. Membership and sign-in provider buttons keep their own styles. */
-.account-page .reader-page button:where(:not(.membership-button,.sso-button,[data-slot])){min-height:40px;padding:9px 15px;border:1px solid #3d6079;border-radius:10px;background:#112b3e;color:#e2f3fb;font-size:.875rem;font-weight:600;transition:background-color .15s,border-color .15s}
-.account-page .reader-page button:where(:not(.membership-button,.sso-button,[data-slot])):hover:not(:disabled){border-color:#8bdbeb;background:#173a52;color:#fff}
+/* Buttons. Sign-in provider buttons keep their own styles. */
+.account-page .reader-page button:where(:not(.sso-button,[data-slot])){min-height:40px;padding:9px 15px;border:1px solid #3d6079;border-radius:10px;background:#112b3e;color:#e2f3fb;font-size:.875rem;font-weight:600;transition:background-color .15s,border-color .15s}
+.account-page .reader-page button:where(:not(.sso-button,[data-slot])):hover:not(:disabled){border-color:#8bdbeb;background:#173a52;color:#fff}
 .account-page .reader-page button:disabled{opacity:.55}
 .account-page .reader-page .reader-auth-modes button{min-height:44px;padding:10px 16px;border-color:#35556b;border-radius:999px;background:#112b3e;color:#d2e7f2}
 .account-page .reader-page .reader-auth-modes button[aria-pressed=true]{border-color:#a7edf3;background:#a7edf3;color:#0c344b;font-weight:700}
@@ -99,24 +99,17 @@ body.site-editorial .account-page :is(a,button,input,summary):focus-visible{outl
 .reader-page :is(#saved-materials,#account-settings){scroll-margin-top:24px}
 @media(max-width:400px){.account-page .reader-summary section{padding:18px}}
 
-/* Membership */
-.reader-membership-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin:2.5rem 0 2rem;padding:1.4rem 1.6rem;border:1px solid #2f5470;border-radius:20px;background:linear-gradient(120deg,#10304a,#0b2131)}
-.reader-membership-summary>div{flex:1 1 320px;min-width:0}
-.reader-membership-summary h2{font-size:1.15rem;margin:0 0 .5rem;color:#f1f8ff;letter-spacing:-.02em}
-.reader-membership-summary p{margin:0;max-width:680px;font-size:1rem;line-height:1.6;color:#bfd0e1}
-.reader-membership-summary>a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;text-decoration:underline;text-underline-offset:4px}
-.reader-progress-section,.reader-memberships{scroll-margin-top:24px}
-.reader-memberships.membership-page{margin-top:3rem;padding:clamp(1.25rem,3vw,2rem);border:1px solid #35536c;border-radius:24px;background:linear-gradient(180deg,#0b1d2e,#081523 320px)}
-.reader-memberships .membership-heading>h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;letter-spacing:-.03em;margin:1rem 0;color:#eaf6ff}
-.reader-memberships .membership-card h3{font-size:1.6rem;margin:0 0 .6rem;line-height:1.2;color:#f3f8ff}
-.reader-memberships .membership-details h3{font-size:1.25rem;color:#edf7ff;margin:0 0 .75rem;line-height:1.4}
-.reader-memberships .membership-creator h3{font-size:1.1rem;color:#eaf6ff;margin:0 0 .6rem}
-.reader-memberships a{color:#99e4ff}
-.reader-memberships :is(a,button).membership-button{min-height:48px;padding:.8rem 1rem;border-radius:14px;border:1px solid #4d708c;background:#0b2031;color:#eaf7ff;font-size:.9375rem}
-.reader-memberships :is(a,button).membership-primary{background:linear-gradient(110deg,#adeaff,#74bdfa);color:#071d2d;border-color:transparent}
-.reader-memberships button.membership-button[aria-pressed=true]{border-color:#90e2ff;background:#24506c}
-.reader-memberships button[data-slot=radio-group-item]{padding:0;border-radius:50%;background:transparent;color:#9fe7ff;border-color:#9fe7ff}
-.reader-memberships :is(a,button,label):focus-visible{outline-color:#a2e7ff}
+/* Free Community account (owner request, 16 October 2026: every account is a free Community account) */
+.reader-progress-section,.reader-community{scroll-margin-top:24px}
+.account-page .reader-community{margin-top:3rem;padding:clamp(1.25rem,3vw,2rem);border:1px solid #35536c;border-radius:24px;background:linear-gradient(180deg,#0b1d2e,#081523 320px)}
+.account-page .reader-community h2{margin:0 0 .75rem;color:#eaf6ff;font-size:clamp(1.5rem,3.5vw,2.1rem);line-height:1.15;letter-spacing:-.03em}
+.account-page .reader-community>p{margin:0;max-width:640px;color:#c1d1e3;font-size:1.0625rem;line-height:1.65}
+.reader-community-note{display:flex;align-items:flex-start;gap:1rem;max-width:800px;margin:2rem 0 0}
+.reader-community-initials{display:grid;place-items:center;flex:0 0 44px;height:44px;border-radius:50%;background:#1b415b;color:#a3e8ff;font-weight:600}
+.account-page .reader-community-note h3{margin:0 0 .6rem;color:#eaf6ff;font-size:1.1rem}
+.account-page .reader-community-note p{margin:0 0 .75rem;color:#bfd0e1;font-size:1rem;line-height:1.8}
+.reader-community-note span{color:#a9c1d7;font-size:.875rem}
+@media(max-width:380px){.reader-community-note{gap:.7rem}}
 
 /* Printed pages use dark text on white. */
 @media print{body.site-editorial:has(.account-page),.account-page,.account-page .reader-page{background:#fff;color:#111}.account-page :is(h1,h2,h3,p,span,strong,label,li,a){color:#111!important}}

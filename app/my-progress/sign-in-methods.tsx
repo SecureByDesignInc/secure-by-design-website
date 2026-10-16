@@ -48,7 +48,7 @@ export function DeleteAccount(){
  const [open,setOpen]=useState(false),[typed,setTyped]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[reauth,setReauth]=useState(false);
  return <section id="delete-account" className="reader-privacy reader-delete" aria-labelledby="delete-account-title">
   <h2 id="delete-account-title">Delete your account</h2>
-  <p>This permanently deletes your account, sign-in methods, saved progress, saved materials, learning activity, Community membership, and email preferences. It can’t be undone.</p>
+  <p>This permanently deletes your account, sign-in methods, saved progress, saved materials, learning activity, Community record, and email preferences. It can’t be undone.</p>
   {open?<form onSubmit={async e=>{e.preventDefault();setBusy(true);setError('');try{const r=await fetch('/api/sign-in/delete-account',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({confirm:typed})});const d=await r.json();if(d.reauth){setReauth(true);setBusy(false);return;}if(!r.ok)throw new Error(d.error);location.assign('/?account=deleted');}catch(err){setError(err instanceof Error&&err.message?err.message:'Could not delete your account.');setBusy(false)}}}>
    <label htmlFor="delete-confirm">Type DELETE to confirm</label>
    <input id="delete-confirm" value={typed} onChange={e=>setTyped(e.target.value)} autoComplete="off" autoCapitalize="characters"/>

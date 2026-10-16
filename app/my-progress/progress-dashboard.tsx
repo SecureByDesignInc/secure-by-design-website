@@ -5,7 +5,6 @@ import {activeProgressCatalog,filterActiveProgressRecords} from '../../content/p
 import {useReaderProgress} from '../reader-progress';
 import {bookmarkCatalog} from '../../content/bookmark-catalog';
 import AccountForm from '../account/sign-in';
-import MembershipPlans from '../memberships/plans';
 import SignInMethods,{DeleteAccount,ReauthNotice} from './sign-in-methods';
 import {safeReturnPath} from '../account/safe-return';
 import {COURSE_STEP_MODULES} from '../../lib/authorization/model.mjs';
@@ -39,8 +38,8 @@ export default function ProgressDashboard(){
   const destination=safeReturnPath(returnTo);
   if(destination&&!['/account','/my-progress'].includes(new URL(destination,location.origin).pathname))location.assign(destination);
  }
- return <><header className="reader-heading"><p className="eyebrow">KEEP LEARNING</p><h1>My Account</h1><p>Your learning, account, and membership options in one place.</p></header>
- <nav className="reader-section-links" aria-label="My Account sections"><a href="#progress">Continue learning</a>{data?.user&&<><a href="#saved-materials">Saved materials</a><a href="#account-settings">Account settings</a></>}<a href="#memberships">Membership</a></nav>
+ return <><header className="reader-heading"><p className="eyebrow">KEEP LEARNING</p><h1>My Account</h1><p>Your learning and your free Community account in one place.</p></header>
+ <nav className="reader-section-links" aria-label="My Account sections"><a href="#progress">Continue learning</a>{data?.user&&<><a href="#saved-materials">Saved materials</a><a href="#account-settings">Account settings</a></>}<a href="#community-account">Community account</a></nav>
 
  <section id="progress" className="reader-progress-section" aria-label="Progress and account">
  {error&&<p className="reader-error" role="alert">{error} <button onClick={()=>void refresh()}>Try again</button></p>}
@@ -56,7 +55,12 @@ export default function ProgressDashboard(){
  <section id="account-settings" className="reader-account-settings" aria-labelledby="account-settings-title"><h2 id="account-settings-title">Account settings</h2><div className="reader-account"><span>Signed in as {data.user.email}</span><button disabled={busy} onClick={async()=>{try{const response=await fetch("/api/reader-auth/signout",{method:"POST"});if(response.ok)location.assign("/my-progress");else setSignOutError(true)}catch{setSignOutError(true)}}}>Sign out</button></div>
  {signOutError&&<p role="alert">Could not sign out. Please try again.</p>}<OwnerReauth/><SignInMethods/><section className="reader-privacy"><h2>Your progress, your choice.</h2><p>Completion is your own record of learning. It is not a certification or a record of lab assessment results.</p>{confirm?<><p>Clear all saved progress and your learning-path preferences? This cannot be undone.</p><div className="reader-actions"><button disabled={busy} onClick={async()=>{if(await clear())setConfirm(false)}}>Yes, clear my progress</button><button disabled={busy} onClick={()=>setConfirm(false)}>Cancel</button></div></>:<button onClick={()=>setConfirm(true)}>Clear my saved progress</button>}</section><DeleteAccount/></section></>}
  </section>
- <section id="memberships" className="reader-memberships membership-page" aria-labelledby="membership-options-title" tabIndex={-1}><MembershipPlans /></section>
+ {/* Owner request, 16 October 2026: no membership tiers anywhere. Every account is a free Community account. */}
+ <section id="community-account" className="reader-community" aria-labelledby="community-account-title" tabIndex={-1}>
+  <h2 id="community-account-title">Free Community account</h2>
+  <p>Every Secure By Design account is a free Community account. It saves your progress and materials on the website and in the Secure By Design app.</p>
+  <aside className="reader-community-note" aria-label="A note from Secure By Design"><div className="reader-community-initials" aria-hidden="true">SBD</div><div><h3>A note from Secure By Design</h3><p>Start learning with what’s here. If it helps you, pay us back by sharing our content.</p><span>Secure By Design</span></div></aside>
+ </section>
  </>;
 }
 
