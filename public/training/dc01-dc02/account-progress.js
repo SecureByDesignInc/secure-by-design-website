@@ -31,3 +31,9 @@
  async function save(path,body){busy=true;error='';render();try{const response=await fetch('/api/reader-progress'+path,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!response.ok)throw Error();await refresh()}catch{error='Could not save account progress. Please try again.'}finally{busy=false;render()}}
  window.addEventListener('hashchange',render);window.addEventListener('sbd-learning-unit',render);window.addEventListener('focus',refresh);render();refresh();
 })();
+// Cookieless analytics (server/analytics.js). Files in public/ don't pass through the Worker, so static
+// guides load the analytics script here. Skipped when the page already has it or is opened from disk.
+(() => {
+ if(location.protocol==='file:'||document.querySelector('script[src="/sbd-e/init.js"]'))return;
+ const s=document.createElement('script');s.src='/sbd-e/init.js';s.defer=true;document.head.appendChild(s);
+})();
