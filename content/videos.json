@@ -1605,9 +1605,10 @@
       "categoryId": "network-authorization",
       "categoryOrder": 1,
       "artLabels": [
-        "Prepare → Select",
-        "Implement → Assess",
-        "Authorize → Monitor"
+                "Prepare → Categorize",
+        "Select → Implement",
+        "Assess → Authorize",
+        "Monitor"
       ],
       "kind": "authorization",
       "moduleIds": [
