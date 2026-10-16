@@ -49,8 +49,17 @@ export default function Privacy() {
         </ul>
         <h3>Optional app analytics</h3>
         <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>
-        <h3>Website page counts</h3>
-        <p>The website uses Cloudflare Web Analytics to count page views and measure how quickly pages load. It doesn’t use cookies or local storage, doesn’t follow you across sites, and isn’t linked to your account.</p>
+        <h3>Website analytics</h3>
+        <p>The website uses Cloudflare Web Analytics to count page views and measure how quickly pages load. It also uses PostHog to see how the website is used:</p>
+        <ul>
+          <li>the pages you open, how long you stay, and how far you scroll;</li>
+          <li>the links and buttons you click, including links to our YouTube, TikTok, Instagram, LinkedIn, and Discord pages and to the app;</li>
+          <li>the files you download and the site that referred you;</li>
+          <li>your browser and device type;</li>
+          <li>your approximate location (country, region, and city), which Cloudflare works out from your IP address.</li>
+        </ul>
+        <p>Neither service uses cookies or local storage, follows you across sites, or is linked to your account. Web addresses are sent without their query strings, apart from campaign tags such as utm_source. PostHog counts visitors with an anonymous code that changes every day and doesn’t store your IP address. We don’t record your screen or what you type.</p>
+        <p>Account, sign-in, and app sign-in pages aren’t measured by PostHog. PostHog doesn’t run at all if your browser sends a Global Privacy Control or Do Not Track signal.</p>
       </section>
 
       <section id="use" aria-labelledby="use-title">
@@ -60,7 +69,7 @@ export default function Privacy() {
           <li>To send sign-in codes, account messages, and the emails you asked for.</li>
           <li>To read and answer what you send us.</li>
           <li>To keep the service secure and stop abuse.</li>
-          <li>To see which pages are visited and how quickly they load, from the website’s page counts.</li>
+          <li>To see which pages are visited, what people click and download, which of our channels bring visitors, and how quickly pages load, from the website’s analytics.</li>
           <li>With analytics turned on, to see which lessons help and where learners get stuck.</li>
         </ul>
       </section>
@@ -69,10 +78,10 @@ export default function Privacy() {
         <h2 id="providers-title">Who helps us run the service</h2>
         <p>We share information only with these providers, to run the service, or when the law requires it.</p>
         <ul>
-          <li><strong>Cloudflare</strong> hosts the website, its database, and the app’s connection to your account, and provides the website’s page counts (Cloudflare Web Analytics).</li>
+          <li><strong>Cloudflare</strong> hosts the website, its database, and the app’s connection to your account. It provides the website’s page counts (Cloudflare Web Analytics) and the approximate location used in website analytics.</li>
           <li><strong>Apple</strong>, <strong>Google</strong>, and <strong>Microsoft</strong> confirm who you are when you choose to sign in with them, under their own privacy policies.</li>
           <li><strong>Resend</strong> delivers our emails.</li>
-          <li><strong>PostHog</strong> (United States) receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
+          <li><strong>PostHog</strong> (United States) receives the website’s analytics, which use no cookies and aren’t linked to your account. It also receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
           <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
           <li><strong>Radware</strong> provides the live threat map on our homepage and in the app. The map loads from Radware when you open the homepage (as its Live Threat Map section comes into view) or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
           <li><strong>UserJot</strong> hosts our public idea board. It opens in your browser only if you choose to visit it, and posts there are public.</li>
@@ -96,6 +105,7 @@ export default function Privacy() {
           <li>Use the website and the app without an account.</li>
           <li>Clear your saved progress, add or remove sign-in methods, or delete your account from My Account at any time.</li>
           <li>Unsubscribe with the link in any email.</li>
+          <li>Turn on Global Privacy Control or Do Not Track in your browser to stop the website’s PostHog analytics. Cloudflare’s page counts still run; they don’t identify you.</li>
           <li>Turn app analytics on or off in the app, under My Account. Turning it off stops future events and removes the analytics ID from your device.</li>
           <li>Ask us for a copy of your information, to correct it, or to delete it, by emailing <a href={`mailto:${contact}`}>{contact}</a>.</li>
         </ul>
