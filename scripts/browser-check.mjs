@@ -159,9 +159,11 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
-// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance
-// Hub holds the RMF to ATO course and its two tools. Screenshots are kept for review.
-for (const [path, name, tiles, tools] of [['/technical-training', 'technical-library', 19, 0], ['/grc-rmf-training', 'grc-rmf-library', 1, 2]]) {
+// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance Hub holds the RMF to ATO
+// course and the ATO Template Library card, under the ATO Package Builder panel (owner direction, 15 October 2026: the builder is
+// the hub's centerpiece). The panel must list the seven RMF steps, and choosing Assess must show that step and its three lessons.
+// Screenshots are kept for review.
+for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 'technical-library', 19, 0, 0], ['/grc-rmf-training', 'grc-rmf-library', 1, 1, 7]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const page = await context.newPage();
     await page.setViewportSize(size);
@@ -169,9 +171,22 @@ for (const [path, name, tiles, tools] of [['/technical-training', 'technical-lib
       await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
       await page.locator('.vc-catalog-tile').first().waitFor({ timeout: 15000 });
       const shown = await page.locator('.vc-catalog-tile').count(), toolCards = await page.locator('.vc-tool-list li').count();
-      if (shown !== tiles || toolCards !== tools) throw new Error(`${shown} tiles and ${toolCards} tools, expected ${tiles} and ${tools}`);
+      const steps = await page.locator('#package-builder .ab-steps button').count();
+      if (shown !== tiles || toolCards !== tools || steps !== builderSteps) throw new Error(`${shown} tiles, ${toolCards} tools and ${steps} builder steps, expected ${tiles}, ${tools} and ${builderSteps}`);
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
-      guides.push(`${path} ${label} ok (${shown} tiles, ${toolCards} tools)`);
+      if (builderSteps) {
+        // The page may still be starting up when it first appears, so the click is retried until the panel answers.
+        const assess = page.locator('#package-builder .ab-steps button', { hasText: 'Assess' });
+        let heading = '';
+        for (let attempt = 0; attempt < 20 && heading !== 'Assess'; attempt++) {
+          await assess.click();
+          await page.waitForTimeout(300);
+          heading = ((await page.locator('#ab-step-detail h3').textContent()) || '').trim();
+        }
+        const lessons = await page.locator('#ab-step-detail .ab-column').first().locator('li a').count();
+        if (heading !== 'Assess' || (await assess.getAttribute('aria-pressed')) !== 'true' || lessons !== 3) throw new Error(`choosing Assess showed "${heading}" with ${lessons} lessons, expected Assess with 3`);
+      }
+      guides.push(`${path} ${label} ok (${shown} tiles, ${toolCards} tools${builderSteps ? `, ${steps} builder steps` : ''})`);
     } catch (error) {
       guides.push(`${path} ${label}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
       blocking++;
