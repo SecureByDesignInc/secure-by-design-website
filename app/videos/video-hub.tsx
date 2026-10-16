@@ -229,14 +229,21 @@ const RMF_STEPS = [
 const AUTHORIZE_NOTE = 'Assemble the authorization package, take it through review, and record the Authorizing Official’s decision and its termination date.';
 
 type RmfStage = { number: string; title: string; href: string };
+type RmfCourse = { id: string; stages?: RmfStage[]; training?: { guide?: string; pdf?: string; word?: string; package?: string } };
+// Course 2.1 "RMF to ATO" in content/videos.json: its modules and its downloads (the guide, the workbook and the learning package).
+const findRmfCourse = (library: Library) => ((library as unknown as { courses?: RmfCourse[] }).courses ?? []).find(entry => entry.id === 'rmf-boe-ato');
+const RMF_GUIDE = '/grc-rmf-training/rmf/index.html#catalog/01';
 
 // The ATO Package Builder at the top of the Compliance Hub (owner direction, 15 October 2026: the builder is the hub's centerpiece and uses
 // more of the page). Each RMF step shows its lessons from course 2.1, the same task in the builder, and its documents from the ATO Template Library.
+// Owner direction, 15 October 2026: the course tile and the library card no longer show on the hub, so the panel also carries the whole course
+// and its downloads. The course page (/grc-rmf-training/rmf/) and the library page (/grc-rmf-training/templates) are unchanged.
 function AtoBuilderPanel({ library }: { library: Library }) {
   const [active, setActive] = useState(0);
   const detail = useRef<HTMLDivElement>(null);
-  const course = ((library as unknown as { courses?: { id: string; stages?: RmfStage[] }[] }).courses ?? []).find(entry => entry.id === 'rmf-boe-ato');
+  const course = findRmfCourse(library);
   const stages = course?.stages ?? [];
+  const training = course?.training ?? {};
   const step = RMF_STEPS[active];
   const group = atoTemplates.groups.find(item => item.id === step.id);
   const official = atoTemplates.templates.filter(item => item.group === step.id);
@@ -319,6 +326,15 @@ function AtoBuilderPanel({ library }: { library: Library }) {
             {next ? <button type="button" onClick={() => choose(active + 1, true)}>Next: {next.title}<ArrowRight size={15} aria-hidden="true" /></button> : <span />}
           </div>
         </div>
+        <div className="ab-course">
+          <p><BookOpen size={16} aria-hidden="true" />The whole course: 2.1, RMF to ATO</p>
+          <ul aria-label="Course 2.1 from the start, and its downloads">
+            <li><a href={training.guide ?? RMF_GUIDE}>Start from module 01</a></li>
+            {training.pdf && <li><a href={training.pdf}>Workbook (PDF)</a></li>}
+            {training.word && <li><a href={training.word}>Workbook (Word)</a></li>}
+            {training.package && <li><a href={training.package}>Learning package (ZIP)</a></li>}
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -398,29 +414,30 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
           <p>{text.copy}</p>
           {grc ? <div className="vc-intro-actions">
             <Link className="vc-intro-primary" href="/grc-rmf-training/workspace">Open the package builder <ArrowRight size={16} /></Link>
-            <a href="#episode-library">Start the course <ArrowDown size={16} /></a>
+            <a href={findRmfCourse(fullLibrary)?.training?.guide ?? RMF_GUIDE}>Start course 2.1 <ArrowRight size={16} /></a>
           </div> : <a href="#episode-library">
             Explore the catalog <ArrowDown size={16} />
           </a>}
         </div>
       </section>
       {grc && <AtoBuilderPanel library={fullLibrary} />}
+      {/* On the Compliance Hub the builder panel above carries the course and the templates, so this section shows only its footer. */}
       <section
         id="episode-library"
         className="container vc-library"
-        aria-labelledby="episode-library-title"
+        aria-labelledby={grc ? undefined : 'episode-library-title'}
       >
+        {!grc && <>
         <div className="vc-library-heading">
           <div>
             <p className="vc-kicker">{text.heading}</p>
             <h2 id="episode-library-title">{text.choose}</h2>
           </div>
           <span>
-            {grc ? `${courseCount} course · 2 tools` : `${paths.length} learning path${paths.length === 1 ? '' : 's'} · ${courseCount} course${courseCount === 1 ? '' : 's'}`}
+            {`${paths.length} learning path${paths.length === 1 ? '' : 's'} · ${courseCount} course${courseCount === 1 ? '' : 's'}`}
             {referenceCount > 0 && ` · ${referenceCount} template librar${referenceCount === 1 ? 'y' : 'ies'}`}
           </span>
         </div>
-        {!grc && <>
         <div className="vc-category-filters" role="group" aria-label="Training category">
           {[{ id: '', title: 'All training' }, ...(library.categories ?? [])].map(item => <button
             type="button" key={item.id} aria-pressed={category === item.id}
@@ -497,7 +514,7 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
           )}
         </div>
         </>}
-        {groups.map((group, groupIndex) => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
+        {!grc && groups.map((group, groupIndex) => <section className="vc-category-group" key={group.id} aria-labelledby={`category-${group.id}`}>
           {groupIndex > 0 && (referenceGroups.has(group.id) ? <p className="vc-path-next">
             <FileText size={15} aria-hidden="true" />
             <span>Keep these beside you on any course</span>
@@ -523,7 +540,7 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
           ))}
           </CatalogSequenceGrid>
         </section>)}
-        {matches.length === 0 && (
+        {!grc && matches.length === 0 && (
           <div className="vc-catalog-empty">
             <Search size={28} />
             <h3>
@@ -543,7 +560,7 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
             )}
           </div>
         )}
-        {visible.length < matches.length && (
+        {!grc && visible.length < matches.length && (
           <div className="vc-catalog-more">
             <button
               type="button"
@@ -557,24 +574,6 @@ export default function VideoHub({ library: fullLibrary, edition = 'technical' }
             <span>{matches.length - visible.length} more to explore</span>
           </div>
         )}
-        {grc && <section className="vc-category-group vc-grc-tools" aria-labelledby="grc-tools-title">
-          <p className="vc-path-next">
-            <FileText size={15} aria-hidden="true" />
-            <span>Keep the templates beside you</span>
-          </p>
-          <div className="vc-category-heading"><div><h3 id="grc-tools-title">Templates for every step</h3><p>Every step of the course and the ATO Package Builder points to the ATO Template Library for the documents it produces.</p></div><span>1 library</span></div>
-          <ul className="vc-tool-list">
-            <li>
-              <FileText size={26} strokeWidth={1.4} aria-hidden="true" />
-              <div>
-                <p className="vc-kicker">REFERENCE LIBRARY</p>
-                <h4>ATO Template Library</h4>
-                <p>{atoTemplates.templates.length} official sources verified as publicly released, arranged by RMF step and linked to each publisher&apos;s copy, with {atoTemplates.samples.length} Secure By Design training samples for the documents that have no public DoD or JSIG version.</p>
-              </div>
-              <Link href="/grc-rmf-training/templates">Open the library <ArrowRight size={16} /></Link>
-            </li>
-          </ul>
-        </section>}
         <div className="vc-library-footer">
           {grc ? <>
             <p>

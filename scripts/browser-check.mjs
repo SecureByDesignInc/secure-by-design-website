@@ -159,20 +159,21 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
-// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance Hub holds the RMF to ATO
-// course and the ATO Template Library card, under the ATO Package Builder panel (owner direction, 15 October 2026: the builder is
-// the hub's centerpiece). The panel must list the seven RMF steps, and choosing Assess must show that step and its three lessons.
-// Screenshots are kept for review.
-for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 'technical-library', 19, 0, 0], ['/grc-rmf-training', 'grc-rmf-library', 1, 1, 7]]) {
+// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance Hub is the ATO Package Builder
+// panel, which carries course 2.1 and the ATO Template Library by step (owner direction, 15 October 2026: no course tile or library
+// card on the hub). The panel must list the seven RMF steps and the course's four links (start and three downloads), and choosing
+// Assess must show that step and its three lessons. Screenshots are kept for review.
+for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 'technical-library', 19, 0, 0], ['/grc-rmf-training', 'grc-rmf-library', 0, 0, 7]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const page = await context.newPage();
     await page.setViewportSize(size);
     try {
       await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
-      await page.locator('.vc-catalog-tile').first().waitFor({ timeout: 15000 });
+      await page.locator(builderSteps ? '#package-builder' : '.vc-catalog-tile').first().waitFor({ timeout: 15000 });
       const shown = await page.locator('.vc-catalog-tile').count(), toolCards = await page.locator('.vc-tool-list li').count();
       const steps = await page.locator('#package-builder .ab-steps button').count();
       if (shown !== tiles || toolCards !== tools || steps !== builderSteps) throw new Error(`${shown} tiles, ${toolCards} tools and ${steps} builder steps, expected ${tiles}, ${tools} and ${builderSteps}`);
+      if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 4) throw new Error('the course start link and its three downloads are not all in the builder panel');
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
       if (builderSteps) {
         // The page may still be starting up when it first appears, so the click is retried until the panel answers.

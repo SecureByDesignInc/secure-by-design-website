@@ -2306,3 +2306,11 @@
 @media (max-width:900px){.ab-columns{grid-template-columns:1fr}}
 @media (max-width:520px){.ab-shell{padding:18px 14px}.ab-steps{grid-template-columns:1fr}.ab-steps button{min-height:52px;flex-direction:row;align-items:center;gap:10px}.ab-step-meta{margin-left:auto}.ab-pager button{flex:1;justify-content:center}}
 @media (forced-colors:active){.ab-steps button[aria-pressed="true"]{outline:2px solid Highlight}.ab-open,.vc-intro-copy .vc-intro-primary{border:1px solid ButtonText}}
+
+/* The whole course and its downloads, at the foot of the builder panel (owner direction, 15 October 2026: the course tile no longer shows on the hub). */
+.ab-course{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-top:22px;padding-top:18px;border-top:1px solid #2b495e}
+.ab-course p{display:inline-flex;align-items:center;gap:8px;margin:0;color:#d7ecf6;font-size:14px;font-weight:600}
+.ab-course p svg{color:#7fd3ea}
+.ab-course ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 20px}
+.ab-course a{padding-bottom:3px;border-bottom:1px solid #42798c;color:#8ae5ef;font-size:13px;font-weight:650}
+.ab-course a:hover{color:#fff}
