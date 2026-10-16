@@ -704,3 +704,43 @@ The owner dislikes the current VLAN topology layer in the System Hub (`public/in
   - frame the camera so all eight VLANs fit, including on phones
   Keep shareable links (`#vlan=`, `#system=`, `topology=off`), the walkthrough twins on the layer, and the System Hub model checks (`scripts/check-network-*.mjs`) passing.
 - **Smaller alternative if the owner prefers to keep the floating layer:** raise it higher with less tilt so it clears the building, use solid VLAN colors, always show VLAN names and subnets, and remove the duplicate core label and the room labels while topology is on.
+
+### System Hub topology: diagram mode decisions (October 15, 2026)
+
+Where this conflicts with the Planned entry from PR #78, this section wins. The owner's reference mockup is the claude.ai canvas "System Hub · Topology diagram mode".
+
+**Decided**
+
+- **When it appears.** Keep the October 10 rule from PR #42. The diagram shows only when a system, VLAN, room, control family, connection map or walkthrough step is selected, and then only the VLANs involved. Selecting the core router shows all eight. The overview shows the building alone. The Topology button keeps its "show when relevant" and off states.
+- **The center is the core router.** The network core is the learner-built virtual L3 router VM. Label it "Core router" with "Learner-built virtual L3 router" underneath, not "core switch."
+
+**Layout (desktop)**
+
+- The camera faces a flat diagram. The building dims to an outline below it, and room labels hide while the diagram shows.
+- The core router sits in the center inside a dashed, rounded ring labeled "DEFAULT DENY". Each uplink crosses the ring at a small gate marker.
+- VLANs keep fixed positions so nothing jumps between selections. The top row is 10, 20 and 30. VLAN 80 is on the left and VLAN 40 on the right. The bottom row is 50, 60 and 70.
+- Each VLAN is an opaque card. A solid header band in the VLAN's color carries "VLAN nn" and the subnet in dark text. The VLAN name sits below it, and its systems are listed by name as chips. All of this comes from the model data, not hard-coded text.
+- Uplinks are bold, in the VLAN's color, and run only horizontally or vertically, with elbows, into the core.
+- The offline area (SBD-ROOTCA01, offline vault) sits below the diagram with a dashed border and no link.
+
+**Walkthrough steps**
+
+- Lines the step uses brighten, glow and show their direction. Gates the packet passes show a check.
+- Denied traffic stops at the ring gate with an ✕ and the label "Dropped · no exception."
+- The source and destination systems are highlighted. The step card sits at the bottom left with Previous and Next.
+- A selected system, or the step's destination, keeps its dashed line down to its physical spot in the building.
+
+**Phone**
+
+- One vertical stack: the source VLAN, the core and ring, the destination VLAN, the step card, then Previous and Next buttons at least 44 px tall.
+- Keep every label inside the frame (audit item D11).
+
+**Colors**
+
+- Use the model's existing VLAN colors. The mockup's colors are placeholders.
+- Text on each header band must meet 4.5:1 contrast.
+
+**Open: ask the owner before changing**
+
+- The 3D building still shows a "Core switch stack" (two core switches) in rack R01. That doesn't match the virtual-router decision. No hypervisor host (SBD-HV01–07) runs the router VM today, and new hosts or systems aren't added without asking.
+- Until that's decided, the core router has no dashed line down to the building.
