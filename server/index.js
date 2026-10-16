@@ -14,6 +14,7 @@ import {signInApi} from './sign-in-methods.js';
 import {federalJobsApi} from './federal-jobs.js';
 import {authorizationApi} from './authorization.js';
 import {hsts,protect} from './security-headers.js';
+import {handleAnalyticsRoute,injectAnalytics} from './analytics.js';
 import trainingProgress from '../content/training-progress.json' with {type:'json'};
 // Only the default export may leave this file: the Workers runtime treats every named export of the
 // entry module as an entrypoint and refuses to start if one isn't a handler.
@@ -116,5 +117,9 @@ export default {async fetch(incoming,env,ctx){
  if(url.protocol==='http:'&&!localHosts.has(url.hostname)){url.protocol='https:';return redirect(url.toString(),false);}
  // One canonical host keeps sign-in cookies, passkeys, and provider callbacks on securebydesigninc.com.
  if(url.hostname==='www.securebydesigninc.com'){url.hostname='securebydesigninc.com';return redirect(url.toString(),https);}
- return protect(await route(withoutPlatformIdentity(incoming),env,ctx),https);
+ const request=withoutPlatformIdentity(incoming);
+ // Cookieless PostHog (server/analytics.js): its proxy under /sbd-e/, then the script tag on public pages.
+ // Both do nothing until the POSTHOG_KEY secret is set in the Cloudflare dashboard.
+ const analytics=await handleAnalyticsRoute(request,env,ctx);if(analytics)return protect(analytics,https);
+ return protect(injectAnalytics(await route(request,env,ctx),request,env),https);
 }};
