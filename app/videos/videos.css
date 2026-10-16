@@ -2264,3 +2264,45 @@
 .vc-tool-list li>a{grid-column:2;justify-self:start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid #3d6a83;border-radius:10px;color:#e4f6fc;font-size:13px;font-weight:600}
 .vc-tool-list li>a:hover{border-color:#7fd3ea;color:#fff}
 @media (max-width:760px){.vc-tool-list{grid-template-columns:1fr}.vc-tool-list li{grid-template-columns:1fr}.vc-tool-list li>a{grid-column:1}}
+
+/* ATO Package Builder panel at the top of the Compliance Hub (video-hub.tsx, AtoBuilderPanel). Owner direction, 15 October 2026: the builder is
+   the hub's centerpiece, with each RMF step's lessons from course 2.1 and its documents from the ATO Template Library. */
+.vc-intro-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.vc-intro-copy .vc-intro-primary{min-height:46px;padding:0 18px;border:0;border-radius:11px;background:#8ae5ef;color:#0b2235;font-size:13px;font-weight:700}
+.vc-intro-copy .vc-intro-primary:hover{background:#b5f0f6}
+.ab-panel{padding-top:6px;scroll-margin-top:24px}
+.ab-shell{padding:28px;border:1px solid #365469;border-radius:20px;background:#0c1d2b;box-shadow:0 20px 70px #020c162a}
+.ab-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:18px 32px;margin-bottom:24px}
+.ab-head h2{margin:0 0 10px;color:#f0f8ff;font-size:clamp(24px,2.8vw,34px);font-weight:600;line-height:1.15;letter-spacing:-.04em}
+.ab-head p:not(.vc-kicker){margin:0;max-width:640px;color:#b2cad9;font-size:15px;line-height:1.7}
+.ab-open{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border-radius:11px;background:#8ae5ef;color:#0b2235;font-size:14px;font-weight:700;white-space:nowrap}
+.ab-open:hover{background:#b5f0f6}
+.ab-steps{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.ab-steps button{width:100%;min-height:78px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px;border:1px solid #2b495e;border-radius:12px;background:#0a1925;color:#d7ecf6;text-align:left}
+.ab-steps button:hover{border-color:#6594a9}
+.ab-steps button[aria-pressed="true"]{border-color:#8ae5ef;background:#123247;box-shadow:inset 0 -3px 0 #8ae5ef}
+.ab-step-num{color:#8bdbeb;font-size:11px;font-weight:700;letter-spacing:.12em}
+.ab-step-title{color:#effaff;font-size:15px;font-weight:650;letter-spacing:-.02em}
+.ab-step-meta{color:#9fb7c7;font-size:11.5px}
+.ab-detail{padding-top:22px;border-top:1px solid #2b495e;scroll-margin-top:16px}
+.ab-detail-head h3{margin:0 0 6px;color:#effaff;font-size:22px;letter-spacing:-.03em}
+.ab-detail-head p:not(.vc-kicker){margin:0;max-width:760px;color:#b2cad9;font-size:14px;line-height:1.6}
+.ab-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:20px}
+.ab-column{display:flex;flex-direction:column;gap:10px;padding:20px;border:1px solid #2b495e;border-radius:14px;background:#102737}
+.ab-column>svg{color:#7fd3ea}
+.ab-column h4{margin:0;color:#effaff;font-size:17px;letter-spacing:-.02em}
+.ab-column p{margin:0;color:#b2cad9;font-size:14px;line-height:1.6}
+.ab-column ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.ab-column li{color:#d7ecf6;font-size:13.5px;line-height:1.5}
+.ab-column li a{color:#d7ecf6;border-bottom:1px solid #3d6a83}
+.ab-column li a:hover{color:#fff;border-color:#8ae5ef}
+.ab-tag{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid #3d6a83;border-radius:999px;color:#a8cfde;font-size:10.5px;white-space:nowrap}
+.ab-link{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:auto;padding-bottom:4px;border-bottom:1px solid #42798c;color:#8ae5ef;font-size:13px;font-weight:650}
+.ab-link:hover{color:#fff}
+.ab-pager{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+.ab-pager button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #3d6a83;border-radius:10px;background:transparent;color:#e4f6fc;font-size:13px;font-weight:600}
+.ab-pager button:hover{border-color:#7fd3ea}
+@media (max-width:1100px){.ab-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:900px){.ab-columns{grid-template-columns:1fr}}
+@media (max-width:520px){.ab-shell{padding:18px 14px}.ab-steps{grid-template-columns:1fr}.ab-steps button{min-height:52px;flex-direction:row;align-items:center;gap:10px}.ab-step-meta{margin-left:auto}.ab-pager button{flex:1;justify-content:center}}
+@media (forced-colors:active){.ab-steps button[aria-pressed="true"]{outline:2px solid Highlight}.ab-open,.vc-intro-copy .vc-intro-primary{border:1px solid ButtonText}}
