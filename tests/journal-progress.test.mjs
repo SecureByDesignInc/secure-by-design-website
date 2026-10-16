@@ -69,8 +69,6 @@ function renderDashboard(records) {
       if (specifier === '../../content/progress-catalog') return catalog;
       if (specifier === '../reader-progress') return { useReaderProgress: () => ({ data: { user: { email: 'reader@example.invalid', needsPassword: false }, records }, error: '', busy: false }) };
       if (specifier === '../account/sign-in') return { default: () => null };
-      // Membership UI is independent of the progress collection under test.
-      if (specifier === '../memberships/plans') return { default: () => null };
       if (specifier === './sign-in-methods') return { default: () => null, DeleteAccount: () => null, ReauthNotice: () => null };
       if (specifier === '../account/safe-return') return { safeReturnPath: () => null };
       if (specifier === '../../lib/authorization/model.mjs') return authorizationModel;
