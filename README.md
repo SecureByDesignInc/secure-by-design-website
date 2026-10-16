@@ -76,7 +76,22 @@ Run `node scripts/check-rmf.mjs` against the retained local server to check acti
 
 ### Analytics
 
-The website uses Cloudflare Web Analytics (the owner's choice, 8 October 2026; Plausible was cancelled). Cloudflare injects its cookieless beacon at the edge, so there is no analytics code in this repository. Keep `https://static.cloudflareinsights.com` in the Content Security Policy's `script-src` and `https://cloudflareinsights.com` in `connect-src` (`server/security-headers.js` and `public/_headers`), and keep the privacy policy's “Website page counts” section accurate. App analytics are opt-in (PostHog).
+The website uses two analytics services.
+
+**Cloudflare Web Analytics** counts page views and page speed (the owner's choice, 8 October 2026; Plausible was cancelled). Cloudflare injects its cookieless beacon at the edge, so there is no Cloudflare analytics code in this repository. Keep `https://static.cloudflareinsights.com` in the Content Security Policy's `script-src` and `https://cloudflareinsights.com` in `connect-src` (`server/security-headers.js` and `public/_headers`).
+
+**PostHog**, cookieless and with no consent banner (the owner's choice, October 2026), records clicks, downloads, channel clicks (`channel_click`: YouTube, TikTok, Instagram, LinkedIn, Discord and the iOS app), time on page and scroll depth. It is set up as follows:
+
+- `server/analytics.js` holds all of it. It proxies PostHog under `/sbd-e/`, removes sign-in cookies before forwarding, and serves `/sbd-e/init.js` with Cloudflare's coarse location. It also adds that script to public pages the Worker renders, wired in `server/index.js`.
+- Static guides in `public/` load the same script from the end of `public/training/account-progress.js` and `public/training/dc01-dc02/account-progress.js`.
+- Everything is same-origin, so no Content Security Policy changes are needed.
+- Account, sign-in, `/app-auth/` and `/api/` pages are never tagged, and query strings (except `utm_*` and `ref`) are stripped before sending.
+- PostHog does not run for browsers that send Global Privacy Control or Do Not Track.
+- It is off until the Worker has a `POSTHOG_KEY` secret, set in the Cloudflare dashboard.
+- PostHog's project must have "Cookieless server hash mode" turned on.
+- Never call `identify()` or turn on session replay while there is no consent banner.
+
+Keep the privacy policy's "Website analytics" section accurate when either service changes. App analytics are opt-in (PostHog), separate from the website's.
 
 ### Conversational RMF chapters
 
