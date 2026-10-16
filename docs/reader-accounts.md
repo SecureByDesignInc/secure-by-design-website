@@ -40,9 +40,9 @@ Migration 0008 adds `reader_learning_activity` and its account/key primary index
 
 Validate with `node --test tests/native-activity.test.mjs tests/native-progress.test.mjs tests/native-account.test.mjs tests/reader-progress.test.mjs`.
 
-## Automatic Community membership
+## Automatic Community enrollment (the free Community account)
 
-Migration 0009 adds `community_memberships`, keyed by trimmed, lowercase email, with the original join time/source and a nullable reader-account reference. Community is the included tier; these records do not create a paid subscription, authentication session, lab entitlement, resource-email subscription, or getting-started email enrollment.
+Migration 0009 adds `community_memberships`, keyed by trimmed, lowercase email, with the original join time/source and a nullable reader-account reference. There are no membership tiers (owner request, 16 October 2026): every account is a free Community account. These records do not create an authentication session, lab entitlement, resource-email subscription, or getting-started email enrollment.
 
 Accepted account verification-code requests, successful website/native sign-in, resource signup, career requests, and community contributions enroll automatically. Forms disclose enrollment before submission. No enrollment runs on typing or blur. Repeated submissions preserve one membership and its join date. Career/contribution records, notification outboxes, and memberships commit atomically; validation and rate-limit rejections create no membership. Resource-email delivery can fail after a valid resource signup is stored: Community membership remains active and the error explains that only the resource confirmation failed.
 
