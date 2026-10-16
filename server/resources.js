@@ -17,7 +17,7 @@ async function body(request){
  const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
  try{const value=JSON.parse(new TextDecoder().decode(bytes));if(!value||typeof value!=='object'||Array.isArray(value))throw Error();return value;}catch{throw new RequestError('The form could not be read.');}
 }
-const acknowledgement=()=>json({membership:communityMembership,message:'Your Community membership is included. If this address needs confirmation for resource emails, check your inbox for a link from Secure By Design. Please allow a few minutes and check spam. Resource emails begin only after confirmation.'},202);
+const acknowledgement=()=>json({membership:communityMembership,message:'You’re part of the Secure By Design Community. If this address needs confirmation for resource emails, check your inbox for a link from Secure By Design. Please allow a few minutes and check spam. Resource emails begin only after confirmation.'},202);
 
 async function signup(request,env){
  const data=await body(request);
@@ -57,7 +57,7 @@ async function signup(request,env){
   await query(env,"UPDATE resource_subscribers SET email_state='accepted' WHERE email=? AND confirmation_hash=?",email,confirmHash).run();
  }catch{
   await query(env,"UPDATE resource_subscribers SET email_state='failed' WHERE email=? AND confirmation_hash=?",email,confirmHash).run();
-  throw new RequestError('Your Community membership is active, but we could not confirm that the resource verification email was sent. Please wait a minute, then try again. You have not been added to the resource email list.',502);
+  throw new RequestError('You’re part of the Secure By Design Community, but we could not confirm that the resource verification email was sent. Please wait a minute, then try again. You have not been added to the resource email list.',502);
  }
  return acknowledgement();
 }
@@ -72,7 +72,7 @@ async function preferences(request,env){
   if(!result.meta.changes){const row=await query(env,"SELECT status FROM resource_subscribers WHERE confirmation_hash=? AND status='active'",hash).first();if(!row)throw new RequestError('This confirmation link has expired or is no longer valid. Please sign up again.');}
   const subscriber=await query(env,"SELECT email FROM resource_subscribers WHERE confirmation_hash=? AND status='active'",hash).first();
   await enrollCommunity(env,subscriber.email,'resources',{verified:true});
-  return json({membership:communityMembership,message:'Your email is confirmed. Your Community membership is active, and you are on the Secure By Design cybersecurity resource list.'});
+  return json({membership:communityMembership,message:'Your email is confirmed. You’re part of the Secure By Design Community, and you are on the Secure By Design cybersecurity resource list.'});
  }
  const result=await query(env,"UPDATE resource_subscribers SET status='unsubscribed',unsubscribed_at=COALESCE(unsubscribed_at,?),confirmation_hash=NULL,confirmation_expires_at=NULL WHERE unsubscribe_token=?",now,data.token).run();
  if(!result.meta.changes)throw new RequestError('This unsubscribe link is invalid.');

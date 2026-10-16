@@ -1,5 +1,7 @@
-// Community enrollment is separate from authentication, paid subscriptions,
-// resource-email consent, and the optional getting-started email sequence.
+// Community enrollment is separate from authentication, resource-email consent, and the optional
+// getting-started email sequence. Owner request, 16 October 2026: there are no membership tiers; every account
+// is a free Community account. The table name and the {plan:'community'} response stay as they are because the
+// installed app reads them.
 export const communityMembership = Object.freeze({plan:'community',status:'active'});
 const sources=new Set(['account','app','resources','career','contribution']);
 
