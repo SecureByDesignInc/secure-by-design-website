@@ -6,4 +6,8 @@ Social links preserve native new-tab navigation, visible names, 44px targets, an
 
 ## Analytics
 
-None. The owner cancelled Plausible on October 8, 2026, and its tracker, event tagging, `public/social-analytics.js`, and Content-Security-Policy entries were removed. Social links are plain outbound links. If analytics return, add the provider deliberately and update the Content-Security-Policy in `server/career-pages.js` and `server/career-role-pages.js`.
+Plausible was cancelled on October 8, 2026, and its tracker, event tagging, `public/social-analytics.js` and Content-Security-Policy entries were removed.
+
+Analytics returned in October 2026 as cookieless PostHog, deliberately chosen and running alongside Cloudflare Web Analytics (`server/analytics.js`). Social links are still plain outbound links with no tagging in the markup. A single click listener in the analytics script records clicks to YouTube, TikTok, Instagram, LinkedIn, Discord, and TestFlight or the App Store as `channel_click` events.
+
+Everything loads from this site under `/sbd-e/`, so the policies in `server/security-headers.js` and `public/_headers` need no changes. `server/career-pages.js` and `server/career-role-pages.js` set their own policies. Those need to allow `script-src 'self'` and same-site connections (`connect-src`, or `default-src 'self'` when `connect-src` is absent).
