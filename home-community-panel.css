@@ -1,0 +1,57 @@
+/* Homepage community panel (17 October 2026): the only section after the Live Threat Map. */
+.sbd-support{padding:24px 0 90px;scroll-margin-top:24px}
+.sbd-support-panel{display:flex;flex-direction:column;gap:40px;padding:40px;background:radial-gradient(ellipse at 95% 0,#1789b120,transparent 60%),#102237;border:1px solid #3b648c;border-radius:18px;box-shadow:0 24px 60px #00000055}
+.sbd-support-top{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.sbd-support-intro{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:22px}
+.sbd-home .sbd-support h2{font-size:clamp(2.2rem,4.2vw,3rem);font-weight:730;letter-spacing:-.05em;line-height:1.04;max-width:15ch;text-wrap:balance}
+.sbd-home .sbd-support .sbd-support-lead{font-size:1.125rem;line-height:1.7;max-width:34em}
+.sbd-support-help{display:flex;flex-direction:column;gap:16px;margin-top:8px;scroll-margin-top:24px}
+.sbd-home .sbd-support-help h3{font-size:1.75rem;font-weight:700;letter-spacing:-.04em}
+.sbd-support-help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sbd-support-help-grid article{display:flex;flex-direction:column;gap:8px;padding:18px 20px;background:#0c1828;border:1px solid #3b648c;border-radius:16px}
+.sbd-home .sbd-support-help-grid h4{font-size:1rem;font-weight:650;letter-spacing:-.01em;line-height:1.35;color:var(--sbd-ink)}
+.sbd-home .sbd-support-help-grid p{font-size:.875rem;line-height:1.55}
+.sbd-support-help-grid a{display:inline-flex;align-items:center;gap:6px;margin-top:auto;min-height:32px;color:#a0dcff;font-size:.875rem;font-weight:600}
+.sbd-support-help-grid a:hover{text-decoration:underline!important;text-underline-offset:4px}
+.sbd-support-pass{display:flex;flex-wrap:wrap;align-items:center;gap:14px;border-top:1px solid #3a5673;padding-top:18px}
+.sbd-home .sbd-support-pass p{font-size:1rem;font-weight:600;color:var(--sbd-ink)}
+
+.sbd-support-form{flex:1 1 360px;max-width:440px;min-width:0;display:flex;flex-direction:column;gap:20px;padding:28px;background:#0c1828;border:1px solid #3b648c;border-radius:18px}
+.sbd-home .sbd-support-form h3{font-size:1.5rem;font-weight:670;letter-spacing:-.03em;margin-bottom:6px}
+.sbd-home .sbd-support-form p{font-size:.875rem;line-height:1.6}
+.sbd-support-frequency{display:flex;gap:4px;padding:4px;background:#050b14;border:1px solid #33455c;border-radius:30px}
+.sbd-support-frequency button{flex:1;min-height:44px;border-radius:30px;border:1px solid transparent;background:transparent;color:#b9c8db;font:inherit;font-size:.9375rem;cursor:pointer}
+.sbd-support-frequency button[aria-pressed=true]{border-color:#479fdd;background:#164b75;color:#f3f7ff;font-weight:600}
+.sbd-support-amounts{display:flex;flex-wrap:wrap;gap:10px}
+.sbd-support-amounts button{flex:1 1 70px;min-height:52px;border-radius:11px;border:1px solid #3b648c;background:transparent;color:#f3f7ff;font:inherit;font-size:1.125rem;cursor:pointer}
+.sbd-support-amounts button[aria-pressed=true]{border:2px solid #71deff;background:#164b75;font-weight:650}
+.sbd-support-field{display:flex;flex-direction:column;gap:6px}
+.sbd-support-field label{font-size:.8125rem;color:var(--sbd-muted)}
+.sbd-support-field>div{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 14px;background:#050b14;border:1px solid #33455c;border-radius:7px;color:var(--sbd-muted)}
+.sbd-support-field input{flex:1;min-width:0;padding:12px 0;background:transparent;border:0;color:#f3f7ff;font:inherit;font-size:1rem}
+.sbd-support-field>div:focus-within{outline:3px solid #71deff;outline-offset:3px}
+.sbd-support-field input:focus-visible{outline:none}
+.sbd-support-recognition{display:flex;flex-direction:column;gap:12px;margin:0;padding:14px 16px;border:1px solid #3a5673;border-radius:12px}
+.sbd-support-recognition legend{padding:0 6px;font-size:.8125rem;color:var(--sbd-muted)}
+.sbd-support-recognition>label{display:flex;gap:10px;align-items:flex-start;font-size:.875rem;line-height:1.5;color:var(--sbd-ink);cursor:pointer}
+.sbd-support-recognition input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:#479fdd;flex:none}
+.sbd-support-name{padding-left:28px}
+.sbd-support-form .gradient-button{width:100%;min-height:54px;font-size:1.0625rem}
+.sbd-home .sbd-support-form .sbd-support-note{font-size:.75rem}
+.sbd-home .sbd-support-form .sbd-support-thanks{padding:12px 14px;border:1px solid #479fdd;border-radius:10px;background:#164b75;color:#f3f7ff;font-weight:600}
+.sbd-home .sbd-support-form .sbd-support-error{color:#ffc9b8;font-weight:600}
+.sbd-support-form .sbd-inline-link{align-self:flex-start;font-size:.875rem}
+
+.sbd-support-wall-row{border-top:1px solid #3a5673;padding-top:36px}
+.sbd-support-wall{display:flex;flex-direction:column;gap:10px;padding:32px;background:#0a2135;border:1px solid #294658;border-radius:1.25rem}
+.sbd-home .sbd-support-wall .sbd-kicker{color:#a2edf5;margin-bottom:0}
+.sbd-home .sbd-support-wall h3{font-size:clamp(1.6rem,3vw,1.9rem);font-weight:730;letter-spacing:-.05em}
+.sbd-home .sbd-support-wall>p{font-size:.875rem;color:#ccdde8}
+.sbd-support-wall ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.sbd-support-wall li{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border:1px solid #3b647b;border-radius:30px;font-size:.875rem;color:#b2edf5}
+.sbd-support-wall li>span{width:26px;height:26px;border-radius:50%;background:#164b75;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#f3f7ff}
+.sbd-support-wall li small{padding-left:8px;border-left:1px solid #3b647b;font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:#ccdde8}
+.sbd-support .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media(max-width:700px){.sbd-support{padding:12px 0 60px}.sbd-support-panel{padding:24px 18px;gap:28px}.sbd-support-help-grid{grid-template-columns:1fr}.sbd-support-form{max-width:none;padding:22px 18px}.sbd-support-wall{padding:24px 18px}}
+@media(forced-colors:active){.sbd-support-frequency button[aria-pressed=true],.sbd-support-amounts button[aria-pressed=true]{border-color:Highlight;outline:2px solid Highlight}}
