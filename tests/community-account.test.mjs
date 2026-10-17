@@ -30,11 +30,15 @@ test('pages and messages people see describe one free Community account, with no
     assert.doesNotMatch(text, /membership/i, `${file} should not mention memberships`);
   }
   // The server keeps the internal field name `membership` because the installed app reads it; only the wording changes.
+  // The homepage community panel (17 October 2026) offers pay-what-you-can support, not memberships or plans,
+  // so it is held to the no-membership wording but keeps its suggested amounts.
+  assert.doesNotMatch(read('app/home-community-panel.tsx'), /membership|tier|plan\b/i);
   for (const file of ['server/resources.js', 'server/reader-auth.js']) {
     assert.doesNotMatch(read(file), /Community membership/, `${file} messages should not say "Community membership"`);
   }
   const published = pages.map(read).join('\n');
   assert.doesNotMatch(published, /\$\d|per month|\/month|annual plan|quarterly|(?<!Package )Builder plan|Guided (plan|tier)/i, 'no plan names, prices or billing');
-  assert.match(read('app/template-home.tsx'), /free Community account/);
+  // The homepage's "Choose your next step" section, which named the free Community account, was removed
+  // on 17 October 2026; My Account still describes it.
   assert.match(read('app/my-progress/progress-dashboard.tsx'), /Every Secure By Design account is a free Community account/);
 });
