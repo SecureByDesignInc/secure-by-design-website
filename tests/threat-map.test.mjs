@@ -56,14 +56,22 @@ test('the browser check ignores only Radware’s own frame, not this site’s er
   assert.match(check, /livethreatmap\\.radware\\.com/);
 });
 
-test('the homepage: hero, Live Threat Map, then More ways (the note, Start building and the live window are gone)', () => {
+test('the homepage: hero, Live Threat Map, then the community panel and nothing else', () => {
   // Owner's request (15 October 2026): the Threat Map replaced "A note from Secure By Design" and "Start building
   // your network"; the live threat window was removed so the map shows once.
+  // Owner's request (17 October 2026): the community panel is the only section after the map; "More ways to
+  // figure it out", "Choose your next step" and "There's always more to understand" were removed.
   const home = read('app/template-home.tsx');
-  const order = ['sbd-hero-title', '<HomeThreatMap/>', 'sbd-future container'].map(marker => home.indexOf(marker));
+  const order = ['sbd-hero-title', '<HomeThreatMap/>', '<HomeCommunityPanel/>'].map(marker => home.indexOf(marker));
   assert.ok(order.every(index => index >= 0), 'every homepage section is present');
   assert.deepEqual([...order].sort((a, b) => a - b), order);
   assert.doesNotMatch(home, /HomeThreatWindow|sbd-creator-note|sbd-start|Start building/);
+  assert.doesNotMatch(home, /sbd-future|sbd-next-step|sbd-about/);
+  assert.ok(home.indexOf('<HomeCommunityPanel/>') > home.lastIndexOf('</section>'), 'the panel is the last homepage section');
+  const panel = read('app/home-community-panel.tsx');
+  assert.match(panel, /useState<'once' \| 'monthly'>\('once'\)/, 'Just once is the default');
+  assert.ok(panel.indexOf('>Just once<') < panel.indexOf('>Monthly<'), 'Just once comes before Monthly');
+  assert.match(read('app/page.tsx'), /'\.\/home-community-panel\.css'/);
   assert.throws(() => read('app/home-threat-window.tsx'));
   assert.doesNotMatch(read('app/template-home.css'), /sbd-monitor|sbd-watch|sbd-creator|sbd-start/);
   const section = read('app/home-threat-map.tsx');
