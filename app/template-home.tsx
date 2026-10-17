@@ -1,8 +1,9 @@
 'use client';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { ArrowRight, ArrowUpRight, BookOpen, ClipboardCheck, Users, Network } from 'lucide-react';
+import { ArrowRight, Network } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
 import HomeThreatMap from './home-threat-map';
+import HomeCommunityPanel from './home-community-panel';
 
 // The decorative WebGL layer (three.js) loads only once the page is idle.
 const HeroShaderGradient = lazy(() => import('../components/saleshook/HeroShaderGradient').then(module => ({default: module.HeroShaderGradient})));
@@ -52,12 +53,6 @@ export default function TemplateHome() {
       <small>For the first question. The next challenge. And everything in between.</small>
     </div></section>
     <HomeThreatMap/>
-    <section className="sbd-future container" id="start-reading" aria-labelledby="sbd-future-title"><div><p className="sbd-kicker">Learn your way</p><h2 id="sbd-future-title">More ways<br/>to <span>figure it out.</span></h2><p>Read the training, watch the builds take shape, and keep building your understanding.</p></div><div className="sbd-future-list">
-      <a href="/technical-training"><BookOpen size={30} strokeWidth={1.2}/><div><h3>Configuration Hub</h3><p>Technical training: interactive guides and workbooks for building the complete network, one system at a time.</p></div><ArrowUpRight size={18}/></a>
-      <a href="/grc-rmf-training"><ClipboardCheck size={30} strokeWidth={1.2}/><div><h3>Compliance Hub</h3><p>GRC and RMF training: take the network through every RMF step to an Authorization to Operate, with the ATO Package Builder and the ATO Template Library.</p></div><ArrowUpRight size={18}/></a>
-      <a href="/inside-the-network"><Network size={30} strokeWidth={1.2}/><div><h3>System Hub</h3><p>Explore the complete training network in 3D and see how every course connects to the same build.</p></div><ArrowUpRight size={18}/></a>
-    </div></section>
-    <section className="sbd-future sbd-next-step container" id="community" aria-labelledby="sbd-next-step-title"><div><p className="sbd-kicker">Learn it. Share it. Pay it forward.</p><h2 id="sbd-next-step-title">Choose your<br/><span>next step.</span></h2></div><div className="sbd-future-list"><p>Create a free Community account to keep your progress and saved materials.</p><a href="/my-progress"><Users size={30} strokeWidth={1.2}/><div><h3>My Account</h3><p>Continue learning, find your saved materials, and manage your account.</p></div><ArrowUpRight size={18}/></a></div></section>
-    <section className="sbd-about" id="about" aria-labelledby="sbd-about-title"><div className="container"><div><p className="sbd-kicker">Built for curious minds</p><h2 id="sbd-about-title">There’s always<br/>more to understand.</h2></div><div><p>Secure By Design connects the dots between technology and compliance, with room to ask questions, share knowledge, and put ideas into practice.</p><p>Whether you’ve been in the field for years or you’re just getting curious, you’re welcome here.</p><a className="sbd-inline-link" href="/technical-training">Let’s get into it <ArrowRight size={17}/></a></div></div></section>
+    <HomeCommunityPanel/>
   </main>;
 }
