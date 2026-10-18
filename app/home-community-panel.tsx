@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
 import FooterShare from './footer-share';
@@ -8,12 +8,11 @@ import FooterShare from './footer-share';
 // Pay what you can, ways to help without paying, and the supporter wall. It replaced "More ways to figure it
 // out", "Choose your next step" and "There's always more to understand".
 
-// Online payments are not set up yet. Until a checkout link exists the Support button stays disabled and
-// says so; paste the provider's checkout address here when it is ready.
-const CHECKOUT_URL = '';
-
-// Supporters who chose to be listed, newest first. The wall stays hidden until the first name is added.
-const SUPPORTERS: { name: string; monthly: boolean }[] = [];
+// Payments go through Stripe Checkout (server/support.js). The Support button stays disabled until the
+// Stripe secrets are set in Cloudflare, and the supporter wall stays hidden until someone chooses to be listed.
+type Supporter = { name: string; monthly: boolean };
+type WallResponse = { enabled?: boolean; portal?: string | null; supporters?: Supporter[] };
+type CheckoutResponse = { url?: string; error?: string };
 
 const AMOUNTS = [3, 5, 10, 25];
 
@@ -30,11 +29,47 @@ export default function HomeCommunityPanel() {
   const [custom, setCustom] = useState('');
   const [listName, setListName] = useState(false);
   const [badge, setBadge] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [ready, setReady] = useState(false);
+  const [supporters, setSupporters] = useState<Supporter[]>([]);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+  const [thanked, setThanked] = useState(false);
+  const [portal, setPortal] = useState('');
+
+  useEffect(() => {
+    setThanked(new URLSearchParams(window.location.search).get('support') === 'thanks');
+    let live = true;
+    fetch('/api/support/wall').then(response => response.ok ? response.json() as Promise<WallResponse> : null).then(data => {
+      if (!live || !data) return;
+      setReady(data.enabled === true);
+      if (typeof data.portal === 'string' && data.portal.startsWith('https://billing.stripe.com/')) setPortal(data.portal);
+      if (Array.isArray(data.supporters)) setSupporters(data.supporters.filter((item: Supporter) => typeof item?.name === 'string'));
+    }).catch(() => {});
+    return () => { live = false; };
+  }, []);
+
+  async function startCheckout() {
+    if (!ready || sending) return;
+    setError('');
+    const chosen = custom !== '' ? typed : String(amount);
+    if (!chosen || Number(chosen) < 1) { setError('Enter an amount of at least $1.'); return; }
+    if (listName && !displayName.trim()) { setError('Enter the display name you’d like on the wall, or untick that option.'); return; }
+    setSending(true);
+    try {
+      const response = await fetch('/api/support/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ frequency, amount: chosen, listName, displayName, badge }) });
+      const data = await (response.json() as Promise<CheckoutResponse>).catch(() => null);
+      if (response.ok && typeof data?.url === 'string' && data.url.startsWith('https://checkout.stripe.com/')) { window.location.assign(data.url); return; }
+      setError(typeof data?.error === 'string' ? data.error : 'Checkout couldn’t start. Please try again.');
+    } catch {
+      setError('Checkout couldn’t start. Check your connection and try again.');
+    }
+    setSending(false);
+  }
 
   const typed = custom.replace(/[^0-9.]/g, '');
   const shown = custom !== '' ? (typed ? `$${typed}` : 'what you can') : `$${amount}`;
   const label = frequency === 'monthly' ? `Support ${shown} a month` : `Support ${shown} once`;
-  const ready = CHECKOUT_URL !== '';
 
   return <section id="community" className="sbd-support container" aria-labelledby="sbd-support-title">
     <div className="sbd-support-panel">
@@ -58,7 +93,8 @@ export default function HomeCommunityPanel() {
           </div>
         </div>
 
-        <form className="sbd-support-form" aria-labelledby="sbd-support-form-title" onSubmit={event => { event.preventDefault(); if (ready) window.location.assign(CHECKOUT_URL); }}>
+        <form className="sbd-support-form" aria-labelledby="sbd-support-form-title" onSubmit={event => { event.preventDefault(); void startCheckout(); }}>
+          {thanked && <p className="sbd-support-thanks" role="status">Thank you for your support. Stripe has emailed your receipt.</p>}
           <div>
             <h3 id="sbd-support-form-title">Pay what you can</h3>
             <p>Any amount helps. Change or cancel anytime.</p>
@@ -79,23 +115,25 @@ export default function HomeCommunityPanel() {
             <label><input type="checkbox" checked={listName} onChange={() => setListName(!listName)}/><span>List my display name on the supporter wall</span></label>
             {listName && <div className="sbd-support-field sbd-support-name">
               <label htmlFor="sbd-support-display-name">Display name</label>
-              <div><input id="sbd-support-display-name" type="text" autoComplete="nickname" placeholder="How you want to be thanked"/></div>
+              <div><input id="sbd-support-display-name" type="text" autoComplete="off" maxLength={40} placeholder="How you want to be thanked" value={displayName} onChange={event => setDisplayName(event.target.value)}/></div>
             </div>}
             <label><input type="checkbox" checked={badge} onChange={() => setBadge(!badge)}/><span>Show a Supporter badge on my portfolio and Discord profile</span></label>
           </fieldset>
-          <GradientButton type="submit" disabled={!ready}>{label}</GradientButton>
-          <p className="sbd-support-note">{ready ? 'You’ll finish on our payment provider’s secure checkout.' : 'Online payments open soon.'}</p>
+          <GradientButton type="submit" disabled={!ready || sending}>{sending ? 'Opening secure checkout…' : label}</GradientButton>
+          {error && <p className="sbd-support-error" role="alert">{error}</p>}
+          <p className="sbd-support-note">{ready ? 'Payments are handled securely by Stripe.' : 'Online payments open soon.'}</p>
+          {portal && <a className="sbd-inline-link" href={portal} target="_blank" rel="noopener noreferrer">Manage or cancel monthly support<span className="sr-only"> (opens in a new tab)</span></a>}
           <a className="sbd-inline-link" href="#help">Can’t chip in? Here’s how to help</a>
         </form>
       </div>
 
-      {SUPPORTERS.length > 0 && <div className="sbd-support-wall-row">
+      {supporters.length > 0 && <div className="sbd-support-wall-row">
         <div className="sbd-support-wall" aria-labelledby="sbd-support-wall-title">
           <p className="sbd-kicker">Supporter wall</p>
           <h3 id="sbd-support-wall-title">Thank you for keeping this going</h3>
           <p>Listed by choice, newest first</p>
           <ul>
-            {SUPPORTERS.map((supporter, index) => <li key={`${supporter.name}-${index}`}>
+            {supporters.map((supporter, index) => <li key={`${supporter.name}-${index}`}>
               <span aria-hidden="true">{supporter.name.trim().charAt(0).toUpperCase()}</span>
               {supporter.name}
               {supporter.monthly && <small>Monthly</small>}

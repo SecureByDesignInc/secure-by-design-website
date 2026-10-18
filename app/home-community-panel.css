@@ -38,6 +38,8 @@
 .sbd-support-name{padding-left:28px}
 .sbd-support-form .gradient-button{width:100%;min-height:54px;font-size:1.0625rem}
 .sbd-home .sbd-support-form .sbd-support-note{font-size:.75rem}
+.sbd-home .sbd-support-form .sbd-support-thanks{padding:12px 14px;border:1px solid #479fdd;border-radius:10px;background:#164b75;color:#f3f7ff;font-weight:600}
+.sbd-home .sbd-support-form .sbd-support-error{color:#ffc9b8;font-weight:600}
 .sbd-support-form .sbd-inline-link{align-self:flex-start;font-size:.875rem}
 
 .sbd-support-wall-row{border-top:1px solid #3a5673;padding-top:36px}

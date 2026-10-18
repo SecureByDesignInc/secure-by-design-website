@@ -77,6 +77,15 @@ test('payments stay off until both Stripe secrets are set', async () => {
   assert.equal(checkout.status, 503);
 });
 
+test('restricted keys and pasted spaces still turn payments on', async () => {
+  for (const key of ['rk_test_example', 'rk_live_example', 'sk_live_example', ' sk_test_example ']) {
+    const response = await supportApi(new Request('https://securebydesigninc.com/api/support/wall'), { DB: fakeDb(), STRIPE_SECRET_KEY: key, STRIPE_WEBHOOK_SECRET: ' whsec_example' });
+    assert.equal((await response.json()).enabled, true, key);
+  }
+  const wrong = await supportApi(new Request('https://securebydesigninc.com/api/support/wall'), { DB: fakeDb(), STRIPE_SECRET_KEY: 'whsec_swapped', STRIPE_WEBHOOK_SECRET: 'sk_test_swapped' });
+  assert.equal((await wrong.json()).enabled, false, 'swapped values stay off');
+});
+
 test('checkout rejects bad input before calling Stripe', async () => {
   const post = body => supportApi(new Request('https://securebydesigninc.com/api/support/checkout', { method: 'POST', body: JSON.stringify(body) }), env(fakeDb()));
   assert.equal((await post({ frequency: 'yearly', amount: 10 })).status, 400);

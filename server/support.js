@@ -1,7 +1,7 @@
 // Pay-what-you-can support on the homepage community panel (17 October 2026), through Stripe Checkout.
 //
 // Secrets, set in the Worker's settings in Cloudflare (never in the repository):
-//   STRIPE_SECRET_KEY      the Stripe secret key (sk_test_… while testing, sk_live_… when live)
+//   STRIPE_SECRET_KEY      the Stripe secret or restricted key (sk_/rk_test_… while testing, sk_/rk_live_… when live)
 //   STRIPE_WEBHOOK_SECRET  the signing secret of the webhook endpoint below (whsec_…)
 // Until both are set, /api/support/wall reports enabled:false and the Support button stays disabled.
 // Optional plain variable: STRIPE_PORTAL_LOGIN_URL, the customer portal login link from Stripe's
@@ -25,7 +25,10 @@ const SIGNATURE_TOLERANCE_SECONDS = 300;
 const CHECKOUTS_PER_HOUR = 20;
 
 const json = (body, status = 200, cache = 'no-store') => Response.json(body, { status, headers: { 'cache-control': cache } });
-const enabled = env => typeof env.STRIPE_SECRET_KEY === 'string' && env.STRIPE_SECRET_KEY.startsWith('sk_') && typeof env.STRIPE_WEBHOOK_SECRET === 'string' && env.STRIPE_WEBHOOK_SECRET.startsWith('whsec_');
+// A full secret key (sk_…) or a restricted key (rk_…, Stripe's default when a key is created with chosen permissions).
+const stripeKey = env => typeof env.STRIPE_SECRET_KEY === 'string' ? env.STRIPE_SECRET_KEY.trim() : '';
+const webhookSecret = env => typeof env.STRIPE_WEBHOOK_SECRET === 'string' ? env.STRIPE_WEBHOOK_SECRET.trim() : '';
+const enabled = env => /^(sk|rk)_(test|live)_/.test(stripeKey(env)) && webhookSecret(env).startsWith('whsec_');
 const hex = buffer => Array.from(new Uint8Array(buffer), n => n.toString(16).padStart(2, '0')).join('');
 const digest = async value => hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)));
 
@@ -114,7 +117,7 @@ async function startCheckout(request, env) {
   const origin = new URL(request.url).origin;
   const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
     method: 'POST',
-    headers: { authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'content-type': 'application/x-www-form-urlencoded' },
+    headers: { authorization: `Bearer ${stripeKey(env)}`, 'content-type': 'application/x-www-form-urlencoded' },
     body: checkoutForm({ origin, cents, monthly, listName, displayName, badge: body?.badge === true }),
   });
   const session = await response.json().catch(() => null);
@@ -128,7 +131,7 @@ async function startCheckout(request, env) {
 async function handleWebhook(request, env) {
   if (!enabled(env)) return json({ error: 'Not configured.' }, 503);
   const payload = await request.text();
-  if (!await verifyStripeSignature(payload, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET)) return json({ error: 'Invalid signature.' }, 400);
+  if (!await verifyStripeSignature(payload, request.headers.get('stripe-signature'), webhookSecret(env))) return json({ error: 'Invalid signature.' }, 400);
   let event;
   try { event = JSON.parse(payload); } catch { return json({ error: 'Invalid payload.' }, 400); }
   const object = event?.data?.object;

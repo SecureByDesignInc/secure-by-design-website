@@ -47,6 +47,12 @@ export default function Privacy() {
           <li>Optional getting-started emails from the app, only if you agree, with a record of that agreement.</li>
           <li>Forms: the career goals, community contribution, and resource sign-up forms are closed for now. We keep the name, email, and answers people sent before they closed, to read and reply to.</li>
         </ul>
+        <h3>When you choose to support Secure By Design</h3>
+        <ul>
+          <li>Support is optional. Stripe’s secure checkout collects your payment details, email address, and billing information; your card number never reaches our website.</li>
+          <li>If you ask to be listed on the supporter wall, we store the display name you chose, whether your support is monthly, and the Stripe reference for your payment. The name appears publicly on our homepage.</li>
+          <li>If you ask for a Supporter badge, that choice is saved with your payment in Stripe.</li>
+        </ul>
         <h3>Optional app analytics</h3>
         <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>
         <h3>Website analytics</h3>
@@ -81,6 +87,7 @@ export default function Privacy() {
           <li><strong>Cloudflare</strong> hosts the website, its database, and the app’s connection to your account. It provides the website’s page counts (Cloudflare Web Analytics) and the approximate location used in website analytics.</li>
           <li><strong>Apple</strong>, <strong>Google</strong>, and <strong>Microsoft</strong> confirm who you are when you choose to sign in with them, under their own privacy policies.</li>
           <li><strong>Resend</strong> delivers our emails.</li>
+          <li><strong>Stripe</strong> processes support payments, sends receipts, and lets monthly supporters change or cancel, under its own privacy policy.</li>
           <li><strong>PostHog</strong> (United States) receives the website’s analytics, which use no cookies and aren’t linked to your account. It also receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
           <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
           <li><strong>Radware</strong> provides the live threat map on our homepage and in the app. The map loads from Radware when you open the homepage (as its Live Threat Map section comes into view) or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
@@ -94,6 +101,7 @@ export default function Privacy() {
         <ul>
           <li>Account information, sign-in methods, and learning records: while your account exists. Deleting your account in My Account or the app removes them immediately; email requests are completed within 30 days.</li>
           <li>Sign-in codes, sessions, and rate-limit records expire automatically.</li>
+          <li>Supporter wall names: until you ask us to remove yours. Stripe keeps payment records as financial law requires.</li>
           <li>Email lists: until you unsubscribe. We keep a minimal record of an unsubscribe so we don’t email you again.</li>
           <li>Form submissions: until we have handled them and no longer need them, or until you ask us to delete them.</li>
         </ul>
