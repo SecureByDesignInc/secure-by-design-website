@@ -1,31 +1,35 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { bookingTile, platformTile, renderFollowAlong } from '../lib/follow-along.mjs';
+import { TILE_SIZES, bookingTile, platformTile, renderFollowAlong } from '../lib/follow-along.mjs';
 import { betaRequestLink, renderAppStores } from '../lib/app-stores.mjs';
 
 const read = (path) => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const publicFile = (path) => existsSync(new URL('../public' + path, import.meta.url));
+const tileFiles = (base) => TILE_SIZES.map(size => `${base}-${size}.png`);
+const tileImage = (base) => `<img class="header-social-icon" src="${base}-44.png" srcset="${TILE_SIZES.map(size => `${base}-${size}.png ${size}w`).join(', ')}" sizes="\\(max-width:620px\\) 20px, \\(max-width:1000px\\) and \\(max-height:540px\\) 20px, 22px" width="22" height="22" alt="" decoding="async">`;
 const platforms = JSON.parse(read('content/videos.json')).platforms;
 const appStores = JSON.parse(read('content/app-stores.json'));
 const booking = { url: 'https://calendar.app.google/AbC123', label: 'Book a call' };
 
-test('every platform with a channel gets a pill with its tile artwork', () => {
+test('every platform with a channel gets a pill with its tile artwork at every size', () => {
   const html = renderFollowAlong(platforms, { url: '' });
   const linked = platforms.filter(platform => platform.channelUrl);
   assert.ok(linked.length >= 5, 'YouTube, TikTok, Instagram, LinkedIn and Discord stay linked');
+  assert.deepEqual(TILE_SIZES, [22, 40, 44, 60, 66, 88], '1x–4x of the 22px desktop and 20px phone tiles');
   for (const platform of linked) {
-    assert.ok(publicFile(platformTile(platform)), `${platformTile(platform)} is missing from public/social`);
-    assert.match(html, new RegExp(`<a href="${platform.channelUrl.replaceAll('/', '\\/').replaceAll('.', '\\.').replaceAll('?', '\\?')}" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on ${platform.name} \\(opens in a new tab\\)"><img class="header-social-icon" src="${platformTile(platform)}" width="20" height="20" alt="" decoding="async"><span class="header-social-label">${platform.name}</span></a>`));
+    for (const file of tileFiles(platformTile(platform))) assert.ok(publicFile(file), `${file} is missing from public/social`);
+    const escaped = platform.channelUrl.replaceAll('/', '\\/').replaceAll('.', '\\.').replaceAll('?', '\\?');
+    assert.match(html, new RegExp(`<a href="${escaped}" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on ${platform.name} \\(opens in a new tab\\)">${tileImage(platformTile(platform))}<span class="header-social-label">${platform.name}</span></a>`));
   }
   assert.match(html, /^<nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along<\/span><div>/);
-  assert.doesNotMatch(html, /-sbd\.svg/, 'the cyan symbols were retired on 18 October 2026');
+  assert.doesNotMatch(html, /-sbd\.svg|-sbd\.png/, 'the cyan symbols and the first (labeled) tile set were retired on 18 October 2026');
 });
 
 test('the Book a call pill closes the row only while content/booking.json holds a Google booking page', () => {
   const html = renderFollowAlong(platforms, booking);
-  assert.ok(publicFile(bookingTile), bookingTile + ' is missing from public/social');
-  assert.match(html, /<a href="https:\/\/calendar\.app\.google\/AbC123" target="_blank" rel="noopener noreferrer" aria-label="Book a call with Secure By Design \(opens in a new tab\)" data-track="booking_click" data-placement="header"><img class="header-social-icon" src="\/social\/book-a-call-sbd\.png"[^>]*><span class="header-social-label">Book a call<\/span><\/a><\/div><\/nav>$/);
+  for (const file of tileFiles(bookingTile)) assert.ok(publicFile(file), file + ' is missing from public/social');
+  assert.match(html, new RegExp(`<a href="https:\\/\\/calendar\\.app\\.google\\/AbC123" target="_blank" rel="noopener noreferrer" aria-label="Book a call with Secure By Design \\(opens in a new tab\\)" data-track="booking_click" data-placement="header">${tileImage(bookingTile)}<span class="header-social-label">Book a call</span></a></div></nav>$`));
   for (const url of ['', 'https://calendly.com/sbd', 'http://calendar.app.google/AbC123']) {
     assert.doesNotMatch(renderFollowAlong(platforms, { url }), /Book a call|book-a-call/, url);
   }
