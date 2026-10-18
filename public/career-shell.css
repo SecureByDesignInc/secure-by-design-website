@@ -212,7 +212,8 @@ body.site-editorial .header-socials a{display:inline-flex;align-items:center;gap
 body.site-editorial .header-socials a:hover{background:linear-gradient(115deg,#174675,#102a47);border-color:#77cce6;color:#fff;transform:translateY(-2px);box-shadow:0 4px 16px #42c7ee18}
 body.site-editorial .header-socials a:active{transform:translateY(0)}
 body.site-editorial .header-socials a:focus-visible{outline:2px solid #8ed5e6;outline-offset:4px}
-body.site-editorial .header-social-icon{display:block;width:20px;height:20px;flex:none;object-fit:contain}
+/* Tile artwork (18 October 2026): feathered rims, so the tile melts into the pill; 22px fills the pill's 22px content box. */
+body.site-editorial .header-social-icon{display:block;width:22px;height:22px;flex:none;object-fit:contain}
 body.site-editorial .header-connect{--connect-label:7.5rem;display:grid;gap:10px;min-width:0;justify-self:end}
 body.site-editorial .header-app-stores{display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:4px 14px;min-width:0;text-align:left}
 body.site-editorial .app-store-heading{display:block;margin:0;font-size:16px;color:#f3f7ff}
@@ -254,9 +255,9 @@ body.site-editorial .sr-only{position:absolute;width:1px;height:1px;padding:0;ma
 /* Compact header on phones: store badges above the social row, each row headed in a shared label column,
    icon-only social buttons (names stay in the accessible name), and the navigation as one scrollable row. */
 @media(max-width:620px){body.site-editorial .site-header .site-header-identity{gap:10px}body.site-editorial .header-connect{--connect-label:6.25rem;gap:8px;width:100%;justify-self:stretch}body.site-editorial .header-socials>span,body.site-editorial .app-store-heading>strong{font-size:12px;line-height:1.35}body.site-editorial .app-store-badges{gap:2px 8px}body.site-editorial .app-store-item>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}body.site-editorial .site-header>nav{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}body.site-editorial .site-header>nav::-webkit-scrollbar{display:none}body.site-editorial .site-header>nav .nav-link{flex:none;white-space:nowrap}body.site-editorial .site-header>nav .nav-link:focus-visible{outline:2px solid #8ed5e6;outline-offset:-3px}}
-/* Six icon-only pills (Book a call added 18 October 2026) fit one row down to 360px: 18px tiles in 32px pills
+/* Six icon-only pills (Book a call added 18 October 2026) fit one row down to 360px: 20px tiles in 32px pills
    that grow to 40px when there is room, 4px apart, under a 6.25rem label column with 12px labels. */
-@media(max-width:620px),(max-width:1000px) and (max-height:540px){body.site-editorial .header-socials>div{gap:4px}body.site-editorial .header-socials a{flex:1 1 32px;max-width:40px;justify-content:center;gap:0;min-width:32px;min-height:36px;padding:0 6px}body.site-editorial .header-social-icon{width:18px;height:18px}body.site-editorial .header-social-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
+@media(max-width:620px),(max-width:1000px) and (max-height:540px){body.site-editorial .header-socials>div{gap:4px}body.site-editorial .header-socials a{flex:1 1 32px;max-width:40px;justify-content:center;gap:0;min-width:32px;min-height:36px;padding:0 5px}body.site-editorial .header-social-icon{width:20px;height:20px}body.site-editorial .header-social-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 @media(max-width:359px){body.site-editorial :is(.header-app-stores,.site-header nav.header-socials){grid-template-columns:minmax(0,1fr)}}
 /* Landscape phones: the 88px logo with the store and social rows beside it. */
 @media(min-width:621px) and (max-width:1000px) and (max-height:540px){body.site-editorial .site-header .site-header-identity{grid-template-columns:minmax(0,1fr) auto}body.site-editorial .site-header .brand{grid-column:auto;font-size:1.5rem}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .header-connect{justify-self:end}body.site-editorial .site-header.container{padding-block:12px;gap:10px}}
