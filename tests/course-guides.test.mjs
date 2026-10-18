@@ -14,6 +14,23 @@ test('the course guides share the course 1.1 guide stylesheet', () => {
   assert.ok(read('public/training/dc01-dc02/index.html').includes(read('scripts/course-guide/style.css')));
 });
 
+// Owner request, 18 October 2026: every expanded catalog tile draws its course's 3D lesson network, like the course 1.1
+// tile. The data comes from each guide's scene.json; app/videos/course-experience.tsx loads it and app/videos/guide-scene.ts
+// draws it, so the tile and the guide show the same systems, flows and lesson states.
+test('every configuration course publishes the scene its catalog tile draws', () => {
+  for (const course of configurations) {
+    const file = new URL(`../public/training/${course.id}/scene.json`, import.meta.url);
+    assert.ok(existsSync(file), `${course.id} scene.json`);
+    const data = JSON.parse(readFileSync(file, 'utf8'));
+    assert.deepEqual(data.chapters.map(chapter => chapter.id), course.lessons.map(lesson => lesson.id), `${course.id} scene chapters match its lessons`);
+    for (const chapter of data.chapters) assert.ok(chapter.tag && chapter.status && chapter.network, `${course.id} ${chapter.id} names its tag, status and network state`);
+    assert.ok(Array.isArray(data.scene.nodes) && data.scene.nodes.length > 0 && data.scene.nodes.every(node => node.id && node.name && node.title && node.description), `${course.id} scene nodes`);
+    assert.deepEqual(data.scene, lessonData(read(`public/training/${course.id}/index.html`)).scene, `${course.id} tile and guide draw the same scene`);
+  }
+  const tile = read('app/videos/course-experience.tsx');
+  for (const piece of ['/scene.json`', "import('./guide-scene')", 'INTERACTIVE BUILD EXPLORER', 'vc-system-buttons', 'Reset view', 'Pause motion']) assert.ok(tile.includes(piece), `course tile has ${piece}`);
+});
+
 test('every configuration course has a guide in the 1.1 design that carries its lessons unchanged', () => {
   const style = read('scripts/course-guide/style.css');
   const headers = read('public/_headers');

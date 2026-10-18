@@ -2,22 +2,26 @@
 
 // The expanded tile for a course. It mirrors the identity build's companion
 // (episode-experience.tsx): the same heading, materials panel and recording column,
-// then a lesson explorer in place of the 3D build explorer. Full lessons, knowledge
-// checks and saved progress stay in the course's own guide.
-import { useEffect, useState, type CSSProperties } from 'react';
+// then an interactive build explorer that draws the course's own systems in 3D (the
+// guide's lesson network, from public/training/<id>/scene.json) with the lesson
+// story beside it. Full lessons, knowledge checks and saved progress stay in the
+// course's own guide. Owner request, 18 October 2026: every tile matches course 1.1.
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
-  Check,
   Download,
   Maximize2,
+  Move,
   Network,
   Pause,
   Play,
+  RotateCcw,
 } from 'lucide-react';
 import type { TrainingCourse } from './catalog-types';
+import { nodeActive, type GuideScene, type GuideSceneSpec } from './guide-scene';
 import { CompanionHeading, CompanionMaterials, CompanionWatch, type CompanionLink } from './companion';
 import configurationCourses from '../../content/configuration-courses.json';
 
@@ -33,6 +37,17 @@ type Step = {
   open: { href: string; label: string };
   model?: { href: string; label: string; text: string };
 };
+
+type SceneFile = { scene: GuideSceneSpec; chapters: { id: string; tag: string; status: string; network: string }[] };
+
+const motionQuery = '(prefers-reduced-motion: reduce)';
+const subscribeMotion = (listener: () => void) => {
+  const preference = matchMedia(motionQuery);
+  preference.addEventListener('change', listener);
+  return () => preference.removeEventListener('change', listener);
+};
+const getMotionPreference = () => matchMedia(motionQuery).matches;
+const getServerMotionPreference = () => true;
 
 const pad = (value: number) => String(value).padStart(2, '0');
 // The poster names at most two systems, like the identity build's "DC01 + DC02".
@@ -75,13 +90,70 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
   const unit = configuration ? 'lesson' : 'module';
   const [active, setActive] = useState(0);
   const [tour, setTour] = useState(false);
+  // The 3D lesson network: its data loads with the tile, the drawing module when the data arrives.
+  const sceneUrl = configuration ? `${course.training.guide}/scene.json` : null;
+  const [file, setFile] = useState<SceneFile | null>(null);
+  const [fallback, setFallback] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [motionOverride, setMotionOverride] = useState<boolean | null>(null);
+  const reducedMotion = useSyncExternalStore(subscribeMotion, getMotionPreference, getServerMotionPreference);
+  const moving = motionOverride ?? !reducedMotion;
+  const host = useRef<HTMLDivElement>(null);
+  const scene = useRef<GuideScene | null>(null);
   useEffect(() => {
     if (!tour) return;
     const timer = setInterval(() => setActive(value => (value + 1) % steps.length), 4200);
     return () => clearInterval(timer);
   }, [tour, steps.length]);
+  useEffect(() => {
+    if (!sceneUrl) return;
+    let cancelled = false;
+    fetch(sceneUrl, { cache: 'force-cache' })
+      .then(response => (response.ok ? (response.json() as Promise<SceneFile>) : Promise.reject(new Error(String(response.status)))))
+      .then(data => {
+        if (!cancelled) setFile(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFallback(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [sceneUrl]);
+  useEffect(() => {
+    if (!file || fallback) return;
+    let cancelled = false;
+    import('./guide-scene')
+      .then(({ createGuideScene }) => {
+        if (cancelled || !host.current) return;
+        try {
+          scene.current = createGuideScene(host.current, file.scene, file.chapters.length - 1, id => setSelected(id), () => setFallback(true));
+          setReady(true);
+        } catch {
+          setFallback(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setFallback(true);
+      });
+    return () => {
+      cancelled = true;
+      scene.current?.dispose();
+      scene.current = null;
+      setReady(false);
+    };
+  }, [file, fallback]);
+  const nodes = file?.scene.nodes ?? [];
+  const selectedNode = nodes.find(node => node.id === selected) ?? nodes[0] ?? null;
+  const sceneState = { stages: [active], selected: selectedNode?.id ?? '', motion: moving, complete: false };
+  useEffect(() => {
+    scene.current?.update(sceneState);
+  }, [active, moving, selectedNode?.id, ready]); // eslint-disable-line react-hooks/exhaustive-deps
   const current = steps[active] ?? steps[0];
   if (!current) return null;
+  const chapter = file?.chapters[active];
+  const supportsScene = !!sceneUrl;
   const select = (index: number) => {
     setActive(index);
     setTour(false);
@@ -157,13 +229,32 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
       <section className="vc-explorer" aria-labelledby={`lesson-explorer-${course.id}`}>
         <div className="vc-explorer-heading">
           <div className="vc-stage-title">
-            <BookOpen size={21} />
+            <Network size={21} />
             <div>
-              <p className="vc-kicker">{configuration ? 'INTERACTIVE LESSON EXPLORER' : 'INTERACTIVE MODULE EXPLORER'}</p>
+              <p className="vc-kicker">{configuration ? 'INTERACTIVE BUILD EXPLORER' : 'INTERACTIVE MODULE EXPLORER'}</p>
               <h4 id={`lesson-explorer-${course.id}`}>{course.subtitle}</h4>
             </div>
           </div>
           <div className="vc-scene-tools">
+            {supportsScene && (
+              <>
+                <button
+                  type="button"
+                  aria-pressed={moving}
+                  onClick={() => {
+                    setMotionOverride(!moving);
+                    setTour(false);
+                  }}
+                >
+                  {moving ? <Pause size={14} /> : <Play size={14} />}
+                  {moving ? 'Pause motion' : 'Play motion'}
+                </button>
+                <button type="button" onClick={() => scene.current?.reset()} disabled={!ready || fallback}>
+                  <RotateCcw size={14} />
+                  Reset view
+                </button>
+              </>
+            )}
             <a href={training.guide}>
               <BookOpen size={15} />
               <span>Full guide</span>
@@ -186,12 +277,46 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
             </div>
             <h5>{current.label}</h5>
             <p>{current.summary}</p>
-            {current.note && (
+            {(chapter?.network || current.note) && (
               <div className="vc-network-note">
-                <span>{current.note.label}</span>
-                <p>{current.note.text}</p>
+                <span>{chapter?.network ? 'IN THE NETWORK' : current.note?.label}</span>
+                <p>{chapter?.network ?? current.note?.text}</p>
               </div>
             )}
+            {nodes.length > 0 && (
+              <div className="vc-check-targets vc-system-buttons" role="group" aria-label="Choose a system">
+                {nodes.map(node => (
+                  <button key={node.id} type="button" aria-pressed={selectedNode?.id === node.id} onClick={() => setSelected(node.id)}>
+                    {node.button ?? node.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {selectedNode && (
+              <div className="vc-node-details">
+                <small>
+                  {selectedNode.kind === 'viewpoint'
+                    ? 'ADMINISTRATION VIEWPOINT'
+                    : nodeActive(selectedNode, sceneState)
+                      ? selectedNode.existing ? 'BUILT IN AN EARLIER COURSE' : 'CONFIGURED IN THIS LESSON STATE'
+                      : 'PLANNED SYSTEM'}
+                </small>
+                <b>{selectedNode.title}</b>
+                <p>{selectedNode.description}</p>
+              </div>
+            )}
+            <div className="vc-inspector-links">
+              <a href={current.open.href}>
+                {current.open.label}
+                <ArrowUpRight size={14} />
+              </a>
+              {current.model && (
+                <a href={current.model.href}>
+                  See {current.model.label} inside the network
+                  <ArrowUpRight size={14} />
+                </a>
+              )}
+            </div>
             <button
               type="button"
               className="vc-story-button"
@@ -202,57 +327,34 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
               }}
             >
               {tour ? <Pause size={15} /> : <Play size={15} />}
-              {tour ? 'Pause the course story' : 'Play the course story'}
+              {tour ? 'Pause the build story' : 'Play the build story'}
             </button>
           </aside>
-          <div className="vc-scene-wrap vc-lesson-stage">
+          <div className="vc-scene-wrap">
             <div className="vc-scene-meta">
               <span>
                 <i />
                 {course.systems.length ? course.systems.join(' + ') : 'System Hub practice system'}
               </span>
-              <span>{course.networkLabel}</span>
+              <span>{chapter?.status ?? course.networkLabel}</span>
             </div>
-            <div className="vc-lesson-stage-body">
-              <span className="vc-lesson-stage-number" aria-hidden="true">{pad(active + 1)}</span>
-              <p className="vc-kicker">
-                {unit.toUpperCase()} {active + 1} OF {steps.length}
-                {current.duration ? ` · ${current.duration}` : ''}
-              </p>
-              {current.objectives.length > 0 ? (
-                <>
-                  <h5>{current.listHeading}</h5>
-                  <ul>
-                    {current.objectives.map(objective => (
-                      <li key={objective}>
-                        <Check size={15} aria-hidden="true" />
-                        {objective}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <h5>{current.label}</h5>
-              )}
-              <div className="vc-lesson-stage-actions">
-                <a href={current.open.href}>
-                  {current.open.label}
-                  <ArrowUpRight size={16} />
-                </a>
-                {current.model && (
-                  <a href={current.model.href}>
-                    <Network size={15} />
-                    See {current.model.label} inside the network
-                  </a>
-                )}
+            <div ref={host} className={`vc-canvas ${fallback ? 'vc-canvas-hidden' : ''}`} />
+            {(!supportsScene || !ready || fallback) && (
+              <div className="vc-scene-fallback">
+                <Network size={45} />
+                <h5>{!supportsScene || fallback ? `Explore through the ${unit}s` : 'Preparing your network'}</h5>
+                <p>
+                  {!supportsScene || fallback
+                    ? `Use the ${unit} controls to follow each system and its dependencies.`
+                    : `${course.systems.join(', ')}, and their connections.`}
+                </p>
               </div>
-            </div>
-            <div className="vc-orbit-hint">
-              <BookOpen size={13} />{' '}
-              {configuration
-                ? 'Full steps, verification commands, and knowledge checks are in the guide'
-                : 'Full lessons, practice tasks, and knowledge checks are in the training'}
-            </div>
+            )}
+            {supportsScene && !fallback && (
+              <div className="vc-orbit-hint">
+                <Move size={13} /> Drag to orbit · scroll to zoom · select a system
+              </div>
+            )}
           </div>
         </div>
         <nav

@@ -2314,3 +2314,59 @@
 .ab-course ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 20px}
 .ab-course a{padding-bottom:3px;border-bottom:1px solid #42798c;color:#8ae5ef;font-size:13px;font-weight:650}
 .ab-course a:hover{color:#fff}
+
+/* Course tiles 1.2–1.19 draw their guide's 3D lesson network (owner request, 18 October 2026): system
+   buttons, the chosen system's notes, and the lesson links sit in the inspector beside the scene. */
+.vc-system-buttons {
+  margin-top: 18px;
+}
+.vc-node-details {
+  margin-top: 14px;
+  padding: 12px 13px;
+  border: 1px solid #294253;
+  border-radius: 8px;
+  background: #0d2537;
+}
+.vc-node-details small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  color: #7fb6cf;
+}
+.vc-node-details b {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #e4f3fa;
+}
+.vc-node-details p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #a9c4d4;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.vc-inspector-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+}
+.vc-inspector-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  font-size: 11px;
+  font-weight: 650;
+  color: #8cdeea;
+  text-decoration: none;
+}
+.vc-inspector-links a:hover {
+  color: #c4f1f8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

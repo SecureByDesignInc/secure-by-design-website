@@ -175,6 +175,15 @@ for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 
       if (shown !== tiles || toolCards !== tools || steps !== builderSteps) throw new Error(`${shown} tiles, ${toolCards} tools and ${steps} builder steps, expected ${tiles}, ${tools} and ${builderSteps}`);
       if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 2) throw new Error('the course start link and its Word workbook are not both in the builder panel');
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
+      if (tiles && label === 'desktop') {
+        // Owner request, 18 October 2026: an expanded configuration tile draws its course's 3D lesson network, with
+        // system buttons and the build story, like the course 1.1 tile. Open the second tile (course 1.2) and check.
+        await page.locator('.vc-catalog-tile').nth(1).locator('button[aria-expanded]').first().click();
+        await page.locator('.vc-explorer canvas').first().waitFor({ timeout: 20000 });
+        const systems = await page.locator('.vc-explorer .vc-system-buttons button').count(), chapters = await page.locator('.vc-explorer .vc-chapters button').count();
+        if (systems < 1 || chapters < 1) throw new Error(`the expanded course tile shows ${systems} systems and ${chapters} lessons`);
+        await page.locator('.vc-explorer').first().screenshot({ path: `guide-screens/${name}-tile-explorer.png` });
+      }
       if (builderSteps) {
         // The page may still be starting up when it first appears, so the click is retried until the panel answers.
         const assess = page.locator('#package-builder .ab-steps button', { hasText: 'Assess' });

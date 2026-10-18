@@ -166,6 +166,8 @@ for (const configuration of configurations.filter(c => !process.env.ONLY || c.id
   const folder = new URL(`${course.id}/`, outDir);
   mkdirSync(folder, { recursive: true });
   writeFileSync(new URL('index.html', folder), page(course, configuration, guide, lesson));
+  // The expanded catalog tile draws the same lesson network (app/videos/guide-scene.ts) from this file.
+  writeFileSync(new URL('scene.json', folder), JSON.stringify({ scene: lesson.scene, chapters: lesson.chapters.map(c => ({ id: c.id, tag: c.tag, status: c.status, network: c.network })) }) + '\n');
   built += 1;
 }
 console.log(`Prepared ${built} course guides.`);
