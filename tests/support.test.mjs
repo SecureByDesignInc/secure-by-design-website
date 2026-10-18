@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { checkoutForm, supportApi, supportCents, verifyStripeSignature, wallName } from '../server/support.js';
+import { analyticsFor, checkoutForm, supportApi, supportCents, verifyStripeSignature, wallName } from '../server/support.js';
 
 const read = file => readFileSync(new URL('../' + file, import.meta.url), 'utf8');
 const hex = buffer => Array.from(new Uint8Array(buffer), n => n.toString(16).padStart(2, '0')).join('');
@@ -122,4 +122,45 @@ test('the panel uses Stripe checkout, keeps Just once first, and states Stripe i
   assert.match(panel, /checkout\.stripe\.com/);
   assert.ok(panel.indexOf('>Just once<') < panel.indexOf('>Monthly<'));
   assert.match(read('app/privacy/page.tsx'), /<strong>Stripe<\/strong> processes support payments/);
+});
+
+test('support analytics events carry amounts and choices, never names or Stripe IDs', () => {
+  const paid = analyticsFor({ type: 'checkout.session.completed', data: { object: { id: 'cs_1', mode: 'payment', payment_status: 'paid', amount_total: 1250, metadata: { list_name: 'yes', display_name: 'Ada', badge: 'no' } } } });
+  assert.equal(paid.event, 'support_payment_completed');
+  assert.deepEqual({ frequency: paid.properties.frequency, amount_usd: paid.properties.amount_usd, listed: paid.properties.listed, badge: paid.properties.badge }, { frequency: 'once', amount_usd: 12.5, listed: true, badge: false });
+  assert.doesNotMatch(JSON.stringify(paid.properties), /Ada|cs_1/);
+  assert.equal(analyticsFor({ type: 'checkout.session.completed', data: { object: { id: 'cs_2', payment_status: 'unpaid' } } }), null);
+  assert.equal(analyticsFor({ type: 'invoice.paid', data: { object: { billing_reason: 'subscription_create', amount_paid: 500 } } }), null, 'the first monthly payment is counted once, at checkout');
+  assert.equal(analyticsFor({ type: 'invoice.paid', data: { object: { billing_reason: 'subscription_cycle', amount_paid: 500, subscription: 'sub_1' } } }).properties.amount_usd, 5);
+  assert.equal(analyticsFor({ type: 'customer.subscription.deleted', data: { object: { id: 'sub_1' } } }).event, 'support_monthly_cancelled');
+  assert.equal(analyticsFor({ type: 'charge.refunded', data: { object: { amount_refunded: 1000 }, previous_attributes: { amount_refunded: 400 } } }).properties.amount_usd, 6);
+});
+
+test('a paid checkout is sent to PostHog when the key is set, and a PostHog failure changes nothing', async () => {
+  const sent = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => { sent.push({ url, body: JSON.parse(init.body) }); throw new Error('offline'); };
+  try {
+    const payload = JSON.stringify({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_9', mode: 'subscription', subscription: 'sub_9', payment_status: 'paid', amount_total: 500, metadata: { list_name: 'no', badge: 'yes' } } } });
+    const header = await sign(payload, 'whsec_example', Math.floor(Date.now() / 1000));
+    const response = await supportApi(new Request('https://securebydesigninc.com/api/support/webhook', { method: 'POST', body: payload, headers: { 'stripe-signature': header } }), { ...env(fakeDb()), POSTHOG_KEY: 'phc_example' });
+    assert.equal(response.status, 200);
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].body.event, 'support_payment_completed');
+    assert.equal(sent[0].body.properties.frequency, 'monthly');
+    assert.equal(sent[0].body.properties.$process_person_profile, false);
+    assert.match(sent[0].body.distinct_id, /^support_[0-9a-f]{24}$/);
+    assert.doesNotMatch(JSON.stringify(sent[0].body), /cs_test_9|sub_9/);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('the panel tags its help actions and checkout for the analytics dashboard', () => {
+  const panel = read('app/home-community-panel.tsx');
+  for (const action of ['share_lesson', 'linkedin_portfolio', 'discord_answer', 'report_error', 'pass_it_on']) assert.match(panel, new RegExp(action));
+  assert.match(panel, /data-track="support_help_click"/);
+  assert.match(panel, /track\('support_checkout_started'/);
+  assert.doesNotMatch(panel, /track\([^)]*displayName/, 'display names are never sent to analytics');
+  assert.match(read('app/privacy/page.tsx'), /counted in PostHog as an anonymous event/);
 });

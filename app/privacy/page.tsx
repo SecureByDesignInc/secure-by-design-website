@@ -52,6 +52,7 @@ export default function Privacy() {
           <li>Support is optional. Stripe’s secure checkout collects your payment details, email address, and billing information; your card number never reaches our website.</li>
           <li>If you ask to be listed on the supporter wall, we store the display name you chose, whether your support is monthly, and the Stripe reference for your payment. The name appears publicly on our homepage.</li>
           <li>If you ask for a Supporter badge, that choice is saved with your payment in Stripe.</li>
+          <li>So we can see how support is going, each completed payment, renewal, cancellation, and refund is also counted in PostHog as an anonymous event: the amount, whether it is one-time or monthly, and whether you chose a wall listing or badge. It never includes your name, email, card, or Stripe details, and it is sent by our server even if your browser blocks analytics.</li>
         </ul>
         <h3>Optional app analytics</h3>
         <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>

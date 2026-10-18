@@ -12,6 +12,13 @@
 //   POST /api/support/checkout  starts a Stripe Checkout session for the chosen amount, once or monthly
 //   POST /api/support/webhook   Stripe's events: adds a listed name once a payment succeeds
 //
+// Analytics: when the Worker has a POSTHOG_KEY, completed support payments, monthly renewals,
+// cancellations and refunds are also sent to PostHog as anonymous events (support_payment_completed,
+// support_monthly_renewed, support_monthly_cancelled, support_refunded) for the website analytics
+// dashboard. They carry the amount, once or monthly, and whether the supporter chose a wall listing or
+// badge; never a name, email, card or Stripe ID. Renewals and refunds need the invoice.paid and
+// charge.refunded events added to the Stripe webhook.
+//
 // Card details never touch this site: Stripe's hosted checkout collects them. The only supporter data
 // stored here is a display name someone chose to list, whether their support is monthly, and the Stripe
 // session and subscription IDs that tie the name to a completed payment.
@@ -23,6 +30,8 @@ const NAME_MAX = 40;
 const WALL_LIMIT = 60;
 const SIGNATURE_TOLERANCE_SECONDS = 300;
 const CHECKOUTS_PER_HOUR = 20;
+// PostHog's US ingestion endpoint, matching POSTHOG_REGION in server/analytics.js.
+const POSTHOG_CAPTURE = 'https://us.i.posthog.com/i/v0/e/';
 
 const json = (body, status = 200, cache = 'no-store') => Response.json(body, { status, headers: { 'cache-control': cache } });
 // A full secret key (sk_…) or a restricted key (rk_…, Stripe's default when a key is created with chosen permissions).
@@ -48,6 +57,53 @@ export function wallName(value) {
   if (!name || name.length > NAME_MAX) return null;
   if (/[<>{}[\]\\`]|https?:|www\.|\.(com|net|org|io|gg|ru|xyz)\b|@/i.test(name)) return null;
   return name;
+}
+
+// One anonymous support event for the analytics dashboard. Best effort: a PostHog problem never
+// affects the payment or the supporter wall.
+export function supportEvent(event, properties, distinctSeed) {
+  return { event, properties: { ...properties, source: 'stripe_webhook', $process_person_profile: false }, distinctSeed };
+}
+
+async function sendToPostHog(env, item) {
+  if (typeof env.POSTHOG_KEY !== 'string' || !env.POSTHOG_KEY || !item) return;
+  try {
+    await fetch(POSTHOG_CAPTURE, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ api_key: env.POSTHOG_KEY, event: item.event, distinct_id: `support_${(await digest(item.distinctSeed)).slice(0, 24)}`, properties: item.properties, timestamp: new Date().toISOString() }),
+      signal: AbortSignal.timeout(3000),
+    });
+  } catch (error) {
+    console.error('PostHog support event failed', error?.name);
+  }
+}
+
+// The analytics event for a Stripe event, or null. Amounts are in US dollars.
+export function analyticsFor(event) {
+  const object = event?.data?.object;
+  if (!object) return null;
+  const dollars = cents => Math.round(Number(cents || 0)) / 100;
+  if ((event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') && object.payment_status === 'paid') {
+    return supportEvent('support_payment_completed', {
+      frequency: object.mode === 'subscription' ? 'monthly' : 'once',
+      amount_usd: dollars(object.amount_total),
+      listed: object.metadata?.list_name === 'yes',
+      badge: object.metadata?.badge === 'yes',
+    }, String(object.id));
+  }
+  if (event.type === 'invoice.paid' && object.billing_reason === 'subscription_cycle') {
+    return supportEvent('support_monthly_renewed', { frequency: 'monthly', amount_usd: dollars(object.amount_paid) }, String(object.subscription || object.id));
+  }
+  if (event.type === 'customer.subscription.deleted') {
+    return supportEvent('support_monthly_cancelled', { frequency: 'monthly' }, String(object.id));
+  }
+  if (event.type === 'charge.refunded') {
+    const previous = Number(event.data?.previous_attributes?.amount_refunded || 0);
+    const refunded = Number(object.amount_refunded || 0) - previous;
+    return refunded > 0 ? supportEvent('support_refunded', { amount_usd: dollars(refunded) }, String(object.payment_intent || object.id)) : null;
+  }
+  return null;
 }
 
 // Stripe's webhook signature: header "t=<unix>,v1=<hex hmac>" over "<t>.<raw body>" with the endpoint secret.
@@ -146,6 +202,7 @@ async function handleWebhook(request, env) {
     // A cancelled monthly supporter stays thanked on the wall, without the Monthly label.
     await env.DB.prepare('UPDATE support_wall SET monthly=0 WHERE subscription_id=?').bind(object.id).run();
   }
+  await sendToPostHog(env, analyticsFor(event));
   return json({ received: true });
 }
 
