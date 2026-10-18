@@ -3,14 +3,16 @@ import {createRequire} from 'node:module';
 import {renderAppStores} from '../lib/app-stores.mjs';
 import {renderFooterShare} from '../public/footer-share.mjs';
 import {renderBookingLink} from '../lib/booking.mjs';
+import {renderFollowAlong} from '../lib/follow-along.mjs';
 const postcss=createRequire(import.meta.resolve('vite'))('postcss');
 const root=new URL('../',import.meta.url);
 const partners=JSON.parse(readFileSync(new URL('content/partners.json',root),'utf8'));
 const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-const bookingMarkup=renderBookingLink(JSON.parse(readFileSync(new URL('content/booking.json',root),'utf8')),'footer');
+const bookingConfig=JSON.parse(readFileSync(new URL('content/booking.json',root),'utf8'));
+const bookingMarkup=renderBookingLink(bookingConfig,'footer');
 const platforms=JSON.parse(readFileSync(new URL('content/videos.json',root),'utf8')).platforms;
 const appMarkup=renderAppStores(JSON.parse(readFileSync(new URL('content/app-stores.json',root),'utf8')));
-const socialMarkup='<nav class="header-socials" aria-label="Follow Secure By Design"><span>Follow along</span><div>'+platforms.filter(platform=>platform.channelUrl).map(platform=>`<a href="${escape(platform.channelUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Secure By Design on ${escape(platform.name)} (opens in a new tab)"><img class="header-social-icon" src="/social/${escape(platform.id)}-sbd.svg" width="22" height="22" alt=""><span class="header-social-label">${escape(platform.name)}</span></a>`).join('')+'</div></nav>';
+const socialMarkup=renderFollowAlong(platforms,bookingConfig);
 // Analytics were removed on October 8, 2026 (the Plausible subscription ended).
 const stripTracking=html=>html.replace('<script defer src="/social-analytics.js"></script><script defer src="https://plausible.io/js/pa-oaHacw7Jud9vPNgvEaoem.js"></script>','');
 const partnerMarkup='<div class="footer-partners" role="group" aria-label="Partner programs">'+partners.map(partner=>{
