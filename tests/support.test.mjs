@@ -164,3 +164,18 @@ test('the panel tags its help actions and checkout for the analytics dashboard',
   assert.doesNotMatch(panel, /track\([^)]*displayName/, 'display names are never sent to analytics');
   assert.match(read('app/privacy/page.tsx'), /counted in PostHog as an anonymous event/);
 });
+
+test('the panel has its own working Pass it on button, and the form has no extra help link', () => {
+  // Owner's report, 17 October 2026: the panel's Pass it on (the footer's share button reused) didn't work,
+  // and the "Can't chip in? Here's how to help" link under the Stripe line should go.
+  const panel = read('app/home-community-panel.tsx');
+  assert.doesNotMatch(panel, /FooterShare/, 'the panel no longer reuses the footer button');
+  assert.match(panel, /function PassItOn\(\)/);
+  assert.match(panel, /<PassItOn\/>/);
+  assert.match(panel, /onClick=\{\(\) => \{ void pass\(\); \}\}/);
+  assert.match(panel, /homepageShareUrl/, 'it always shares the homepage');
+  assert.match(panel, /\(pointer: coarse\)/, 'computers copy the link; phones open the share sheet');
+  assert.match(panel, /Link copied\. Ready to pass it on\./);
+  assert.doesNotMatch(panel, /<a className="sbd-inline-link" href="#help">/, 'the link under the Stripe line is gone');
+  assert.match(panel, /<h3>Can’t chip in\? Here’s how to help\.<\/h3>/, 'the heading above the help cards stays');
+});

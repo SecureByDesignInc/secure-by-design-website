@@ -7,6 +7,13 @@ export const RADWARE_H = 800;
 // small margin so it stays covered if Radware nudges it. If Radware moves it, update these numbers.
 export const SALES_BOX = { left: 762, top: 22, width: 150, height: 52 };
 
+// Radware's cookie notice is a bar across the bottom of the drawing, from about y = 656 to the bottom (measured
+// from the live site, 17 October 2026). The owner asked that it never appear, so the map is shown only down to
+// RADWARE_VISIBLE_H: the frame is cut off above the notice and nothing below that line can be seen or clicked.
+// Because nobody can reach "Accept all", Radware's optional cookies are never accepted. If Radware moves the
+// notice up, lower this number.
+export const RADWARE_VISIBLE_H = 648;
+
 const pct = (value: number, of: number) => `${(value / of) * 100}%`;
 
 // The frame comes from Radware's servers, so this site can't change anything inside it. Instead, a frosted

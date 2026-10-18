@@ -6,6 +6,8 @@ import partners from '../content/partners.json';
 import videoLibrary from '../content/videos.json';
 import appStores from '../content/app-stores.json';
 import { renderAppStores } from '../lib/app-stores.mjs';
+import bookingConfig from '../content/booking.json';
+import { bookingLink } from '../lib/booking.mjs';
 import { siteSharePreview } from './share-preview';
 import './globals.css';
 import './brand-glow.css';
@@ -15,6 +17,7 @@ import './reader-progress.css';
 const sans=Geist({variable:'--font-geist-sans',subsets:['latin']});
 const mono=Geist_Mono({variable:'--font-geist-mono',subsets:['latin']});
 export const metadata:Metadata={title:{default:'Secure By Design — Cybersecurity & System Administration',template:'%s | Secure By Design'},description:'Let’s work through cybersecurity, identity, and system administration with clear explanations and examples you can follow.',icons:{icon:[{url:'/favicon.svg',type:'image/svg+xml'}],apple:[{url:'/apple-touch-icon.png',sizes:'180x180'}]},metadataBase:new URL('https://securebydesigninc.com'),...siteSharePreview('Secure By Design — Cybersecurity & System Administration','Let’s work through cybersecurity, identity, and system administration with clear explanations and examples you can follow.')};
+const booking=bookingLink(bookingConfig);
 export default function RootLayout({children}:{children:React.ReactNode}){
   return <html lang="en">
     <head>
@@ -44,7 +47,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
             <span className="footer-partner-name">{partner.label}</span>
           </span>)}
         </div>
-        <div className="footer-actions"><a href="/#about">About Secure By Design</a><a href="/privacy">Privacy</a><FooterShare /></div>
+        <div className="footer-actions"><a href="/#about">About Secure By Design</a>{booking&&<a href={booking.href} target="_blank" rel="noopener noreferrer" data-track="booking_click" data-placement="footer">{booking.label}<span className="sr-only"> (opens in a new tab)</span></a>}<a href="/privacy">Privacy</a><FooterShare /></div>
       </footer>
     </body>
   </html>;

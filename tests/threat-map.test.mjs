@@ -93,11 +93,21 @@ test('Radware’s “Contact sales” button is blurred', () => {
   assert.match(cover, /export const SALES_BOX = \{ left: \d+, top: \d+, width: \d+, height: \d+ \};/);
   const frame = read('app/threat-map/threat-map-frame.tsx');
   assert.match(frame, /<div className="tm-canvas"[\s\S]*<iframe[\s\S]*<RadwareSalesCover show=\{ready\} \/>[\s\S]*<\/div>/, 'the cover sits in the same scaled box as the map');
-  assert.match(frame, /Math\.min\(width \/ RADWARE_W, height \/ RADWARE_H\)/);
+  assert.match(frame, /Math\.min\(width \/ RADWARE_W, height \/ RADWARE_VISIBLE_H\)/);
   assert.match(read('app/threat-map/threat-map.css'), /\.tm-canvas \{[\s\S]*width: 1240px;[\s\S]*height: 800px;/);
   const css = read('app/template-shared.css');
   assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
   assert.match(css, /\.sbd-sales-cover\.is-shown\{[^}]*pointer-events:auto/, 'the cover catches clicks meant for the button');
   // Owner's request (15 October 2026): the page doesn't mention the blur or call the map unchanged.
   assert.doesNotMatch(read('app/home-threat-map.tsx') + read('app/threat-map/threat-map-frame.tsx'), /blurred|unchanged/i);
+});
+
+test('Radware’s cookie notice never shows: the map is cut off above it', () => {
+  // Owner's request (17 October 2026). The notice is a bar across the bottom of Radware's 1240 × 800 page.
+  const cover = read('app/radware-sales-cover.tsx');
+  const visible = Number((cover.match(/export const RADWARE_VISIBLE_H = (\d+);/) || [])[1]);
+  assert.ok(visible > 600 && visible <= 652, 'the visible map stops above the notice, which starts near y = 656');
+  const frame = read('app/threat-map/threat-map-frame.tsx');
+  assert.match(frame, /clipPath: `inset\(0 0 \$\{RADWARE_H - RADWARE_VISIBLE_H\}px 0\)`/, 'nothing below the line can be seen or clicked');
+  assert.match(read('app/threat-map/threat-map.css'), /\.tm-stage \{[\s\S]*aspect-ratio: 1240 \/ 648;/);
 });

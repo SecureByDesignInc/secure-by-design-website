@@ -3,7 +3,7 @@
 .tm-page {
   background: #071521;
   color: #eef7fc;
-  padding-bottom: 72px;
+  padding-bottom: 48px;
   overflow: hidden;
 }
 .tm-page * {
@@ -40,7 +40,7 @@
   grid-template-columns: 1.25fr 0.75fr;
   gap: 56px;
   align-items: end;
-  padding-block: 52px 34px;
+  padding-block: 32px 26px;
 }
 .tm-page .tm-kicker {
   margin: 0 0 12px;
@@ -140,8 +140,9 @@
 .tm-stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 1240 / 800;
-  max-height: min(84vh, 800px);
+  /* Radware's 1240-wide map, shown down to RADWARE_VISIBLE_H (648) in app/radware-sales-cover.tsx. */
+  aspect-ratio: 1240 / 648;
+  max-height: min(84vh, 680px);
   overflow: hidden;
   background: #050f1899;
   -webkit-mask-image:
@@ -251,7 +252,7 @@
 
 /* How to read it */
 .tm-read {
-  padding-top: 56px;
+  padding-top: 40px;
 }
 .tm-read h2 {
   margin: 0 0 26px;
@@ -321,7 +322,7 @@
   .tm-intro {
     grid-template-columns: 1fr;
     gap: 18px;
-    padding-block: 34px 26px;
+    padding-block: 24px 20px;
   }
   .tm-intro .tm-title {
     font-size: 40px;
