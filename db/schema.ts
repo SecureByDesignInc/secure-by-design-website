@@ -116,3 +116,11 @@ export const authHistory=sqliteTable('auth_history',{
  id:integer('id').primaryKey({autoIncrement:true}),systemId:text('system_id').notNull().references(()=>authSystems.id,{onDelete:'cascade'}),
  at:text('at').notNull(),role:text('role').notNull(),action:text('action').notNull(),subject:text('subject').notNull().default(''),detail:text('detail').notNull().default('')
 },t=>[index('idx_auth_history_system').on(t.systemId,t.id)]);
+// Homepage community panel (17 October 2026): names supporters chose to list after a Stripe payment, and checkout rate limits.
+export const supportWall=sqliteTable('support_wall',{
+ sessionId:text('session_id').primaryKey(),subscriptionId:text('subscription_id'),displayName:text('display_name').notNull(),
+ monthly:integer('monthly').notNull().default(0),hidden:integer('hidden').notNull().default(0),createdAt:text('created_at').notNull()
+},t=>[index('support_wall_created_idx').on(t.createdAt),index('support_wall_subscription_idx').on(t.subscriptionId)]);
+export const supportCheckoutLimits=sqliteTable('support_checkout_limits',{
+ key:text('key').primaryKey(),count:integer('count').notNull(),expiresAt:text('expires_at').notNull()
+});
