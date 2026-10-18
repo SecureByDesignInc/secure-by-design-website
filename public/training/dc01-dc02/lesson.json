@@ -348,7 +348,7 @@
         ],
         [
           "Plan the next check",
-          "List remaining hardening, auditing, backup, recovery, and client-validation work. Assign an owner or next action. Revisit checks after relevant configuration changes. Export the evidence record before moving devices."
+          "List remaining hardening, auditing, backup, recovery, and client-validation work. Assign an owner or next action. Revisit checks after relevant configuration changes. Sign in so your notes and checks follow you to another device."
         ]
       ],
       "commandLabel": "Record the current role holders",
@@ -368,7 +368,7 @@
       "checklist": [
         "I linked configuration choices to dated observations.",
         "I recorded unresolved issues and the next review trigger.",
-        "I exported my evidence record for safekeeping."
+        "I recorded the final build and its evidence in my workbook for my portfolio."
       ],
       "quiz": {
         "prompt": "Which event is a useful reason to revisit the evidence?",

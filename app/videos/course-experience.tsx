@@ -90,13 +90,12 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
   const authorization = course.kind === 'authorization';
   const columns = steps.length <= 6 ? steps.length : Math.ceil(steps.length / 2);
 
-  // One download per tile: a course's workbook (PDF and Word) travels in its ZIP with a configuration course's
-  // checklist and verification commands (scripts/prepare-training-packages.py) or a Network Authorization
-  // course's evidence starters (scripts/prepare-rmf-workbooks.py).
-  const download: CompanionLink[] = training.package
-    ? [{ href: training.package, title: 'Download the training materials', detail: configuration
-        ? `ZIP · ${training.pages}-page workbook (PDF and Word), checklist, and verification commands`
-        : `ZIP · ${training.pages}-page workbook (PDF and Word) and evidence starters`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true }]
+  // One download per tile (owner request, 18 October 2026): the course's Word workbook. A Network Authorization
+  // workbook carries the course's evidence starters (scripts/prepare-rmf-workbooks.py).
+  const download: CompanionLink[] = training.word
+    ? [{ href: training.word, title: 'Download the workbook', detail: configuration
+        ? `Word · ${training.pages}-page workbook`
+        : `Word · ${training.pages}-page workbook with evidence starters`, icon: <Download size={19} />, trailing: <Download size={16} />, download: true }]
     : [];
   const links: CompanionLink[] = configuration
     ? download
@@ -111,8 +110,8 @@ export default function CourseExperience({ course }: { course: TrainingCourse })
         <CompanionHeading
           id={`course-resources-${course.id}`}
           intro={configuration
-            ? 'Start with the interactive guide, or download every training material in one file.'
-            : 'Start with the interactive course, or download its workbook and evidence starters in one file.'}
+            ? 'Start with the interactive guide, or download the workbook.'
+            : 'Start with the interactive course, or download its workbook with the evidence starters.'}
           action={{ href: training.guide, label: configuration ? 'Open the full guide' : 'Open the training', icon: <BookOpen size={16} /> }}
         />
         <div className="vc-episode-content">

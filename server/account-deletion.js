@@ -13,6 +13,7 @@ export async function deleteAccount(env,account,{fetcher=fetch}={}){
   env.DB.prepare('DELETE FROM auth_systems WHERE account_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_progress WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_bookmarks WHERE user_id=?').bind(account.id),
+  env.DB.prepare('DELETE FROM reader_guide_state WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_profiles WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_learning_activity WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM app_email_enrollments WHERE account_id=?').bind(account.id),

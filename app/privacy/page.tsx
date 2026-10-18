@@ -15,7 +15,7 @@ export default function Privacy() {
     <article className="privacy container">
       <p className="privacy-kicker">Secure By Design · Privacy</p>
       <h1>Privacy policy</h1>
-      <p className="privacy-meta">Effective 16 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
+      <p className="privacy-meta">Effective 18 October 2026 · Applies to securebydesigninc.com and the Secure By Design app for iPhone, iPad, and Android</p>
       <p className="privacy-lead">Secure By Design Team LLC (“Secure By Design”, “we”) runs this website and app to teach cybersecurity. You can learn without an account. We collect only what we need to run accounts, keep your progress, and send emails you ask for. We don’t sell personal information, show ads, or track you across other sites and apps.</p>
 
       <nav className="privacy-toc" aria-label="On this page">
@@ -27,7 +27,7 @@ export default function Privacy() {
         <h2 id="collect-title">What we collect</h2>
         <h3>When you browse or use the app without an account</h3>
         <ul>
-          <li>Course notes, checklists, and progress in the interactive guides and the app stay on your device unless you sign in.</li>
+          <li>Course notes, checks, knowledge-check answers, and progress in the interactive guides and the app stay on your device unless you sign in. When you sign in, the website saves them to your account so they follow you to another browser or device.</li>
           <li>Our hosting provider receives the technical information every website request carries, such as your IP address and browser type, to deliver pages and protect the service. We use IP addresses briefly to limit repeated sign-in attempts and form submissions.</li>
         </ul>
         <h3>When you create or use an account</h3>
@@ -36,7 +36,7 @@ export default function Privacy() {
           <li><strong>Password</strong>, if you set one, stored only as a salted scrypt hash. We can’t read it.</li>
           <li><strong>Apple, Google, or Microsoft sign-in</strong>, if you choose it: the account identifier that service gives us and the email address it shares. We never receive your password for that service. With Apple’s Hide My Email, we receive a private relay address. For Sign in with Apple we also keep the token Apple issues, so we can revoke our access when you remove Apple sign-in or delete your account.</li>
           <li><strong>Passkeys</strong>, if you add one: its public key and identifier, the kind of device you added it from, and when it was last used. Your fingerprint, face, or device PIN never leaves your device.</li>
-          <li><strong>Learning records</strong>: course and lesson progress, saved materials, daily learning activity in the app (such as streak days and completed reviews), and the learning-path choices you make.</li>
+          <li><strong>Learning records</strong>: course and lesson progress, saved materials, your interactive guide notes, checks, and knowledge-check answers (when you sign in on the website), daily learning activity in the app (such as streak days and completed reviews), and the learning-path choices you make.</li>
           <li><strong>ATO Package Builder</strong>, if you use it: the practice systems you record there and their history, such as system descriptions, role names you enter, control statements, assessment results, evidence descriptions and excerpts, and POA&amp;M items. They are private to your account. Enter practice or fictional details, not real organizations’ sensitive information.</li>
           <li><strong>Community record</strong>: when you sign in or verify your email, we record that you joined the free Community, with your email, the date, and where you joined.</li>
           <li><strong>Sessions</strong>: a sign-in cookie on the website (up to 30 days) and a sign-in token in the app (up to 12 hours).</li>

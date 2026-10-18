@@ -45,13 +45,11 @@
       ],
       "training": {
         "guide": "/training/dc01-dc02/index.html",
-        "pdf": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.pdf",
         "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
-        "package": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
         "cover": "/training/dc01-dc02/workbook-cover.webp",
         "pages": 13,
-        "materialsEdition": "0.7",
-        "updated": "14 October 2026",
+        "materialsEdition": "0.8",
+        "updated": "18 October 2026",
         "copyrightOwner": "Secure By Design Team LLC",
         "copyrightYear": 2026,
         "notices": "/training/dc01-dc02/notices.html"
@@ -172,13 +170,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/dns-configuration",
-        "checklist": "/training/dns-configuration/configuration-checklist.md",
         "materialsEdition": "2.0",
         "updated": "14 October 2026",
         "checklistPage": "/training/dns-configuration/checklist",
-        "pdf": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.pdf",
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
-        "package": "/training/dns-configuration/SecureByDesign-dns-configuration-Learning-Package.zip",
         "pages": 14,
         "cover": "/training/dns-configuration/workbook-cover.webp"
       }
@@ -245,11 +240,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/domain-time",
-        "checklist": "/training/domain-time/configuration-checklist.md",
         "checklistPage": "/training/domain-time/checklist",
-        "pdf": "/training/domain-time/SecureByDesign-domain-time-Workbook.pdf",
         "word": "/training/domain-time/SecureByDesign-domain-time-Workbook.docx",
-        "package": "/training/domain-time/SecureByDesign-domain-time-Learning-Package.zip",
         "pages": 18,
         "cover": "/training/domain-time/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -318,11 +310,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/stig-scap",
-        "checklist": "/training/stig-scap/configuration-checklist.md",
         "checklistPage": "/training/stig-scap/checklist",
-        "pdf": "/training/stig-scap/SecureByDesign-stig-scap-Workbook.pdf",
         "word": "/training/stig-scap/SecureByDesign-stig-scap-Workbook.docx",
-        "package": "/training/stig-scap/SecureByDesign-stig-scap-Learning-Package.zip",
         "pages": 14,
         "cover": "/training/stig-scap/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -391,13 +380,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/harden-baseline",
-        "checklist": "/training/harden-baseline/configuration-checklist.md",
         "materialsEdition": "2.0",
         "updated": "14 October 2026",
         "checklistPage": "/training/harden-baseline/checklist",
-        "pdf": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.pdf",
         "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
-        "package": "/training/harden-baseline/SecureByDesign-harden-baseline-Learning-Package.zip",
         "pages": 17,
         "cover": "/training/harden-baseline/workbook-cover.webp"
       }
@@ -487,13 +473,10 @@
       "lessonCount": 10,
       "training": {
         "guide": "/training/two-tier-pki",
-        "checklist": "/training/two-tier-pki/configuration-checklist.md",
         "materialsEdition": "2.2",
         "updated": "14 October 2026",
         "checklistPage": "/training/two-tier-pki/checklist",
-        "pdf": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.pdf",
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
-        "package": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Learning-Package.zip",
         "pages": 25,
         "cover": "/training/two-tier-pki/workbook-cover.webp"
       }
@@ -559,11 +542,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/dhcp",
-        "checklist": "/training/dhcp/configuration-checklist.md",
         "checklistPage": "/training/dhcp/checklist",
-        "pdf": "/training/dhcp/SecureByDesign-dhcp-Workbook.pdf",
         "word": "/training/dhcp/SecureByDesign-dhcp-Workbook.docx",
-        "package": "/training/dhcp/SecureByDesign-dhcp-Learning-Package.zip",
         "pages": 19,
         "cover": "/training/dhcp/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -632,13 +612,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/tiered-admin",
-        "checklist": "/training/tiered-admin/configuration-checklist.md",
         "materialsEdition": "2.0",
         "updated": "14 October 2026",
         "checklistPage": "/training/tiered-admin/checklist",
-        "pdf": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.pdf",
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
-        "package": "/training/tiered-admin/SecureByDesign-tiered-admin-Learning-Package.zip",
         "pages": 20,
         "cover": "/training/tiered-admin/workbook-cover.webp"
       }
@@ -704,11 +681,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/linux-repository",
-        "checklist": "/training/linux-repository/configuration-checklist.md",
         "checklistPage": "/training/linux-repository/checklist",
-        "pdf": "/training/linux-repository/SecureByDesign-linux-repository-Workbook.pdf",
         "word": "/training/linux-repository/SecureByDesign-linux-repository-Workbook.docx",
-        "package": "/training/linux-repository/SecureByDesign-linux-repository-Learning-Package.zip",
         "pages": 17,
         "cover": "/training/linux-repository/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -782,13 +756,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/logging-pipeline",
-        "checklist": "/training/logging-pipeline/configuration-checklist.md",
         "materialsEdition": "2.0",
         "updated": "14 October 2026",
         "checklistPage": "/training/logging-pipeline/checklist",
-        "pdf": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.pdf",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
-        "package": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Learning-Package.zip",
         "pages": 15,
         "cover": "/training/logging-pipeline/workbook-cover.webp"
       }
@@ -855,11 +826,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/audit-repository",
-        "checklist": "/training/audit-repository/configuration-checklist.md",
         "checklistPage": "/training/audit-repository/checklist",
-        "pdf": "/training/audit-repository/SecureByDesign-audit-repository-Workbook.pdf",
         "word": "/training/audit-repository/SecureByDesign-audit-repository-Workbook.docx",
-        "package": "/training/audit-repository/SecureByDesign-audit-repository-Learning-Package.zip",
         "pages": 18,
         "cover": "/training/audit-repository/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -934,11 +902,8 @@
       "lessonCount": 6,
       "training": {
         "guide": "/training/splunk-analysis",
-        "checklist": "/training/splunk-analysis/configuration-checklist.md",
         "checklistPage": "/training/splunk-analysis/checklist",
-        "pdf": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.pdf",
         "word": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.docx",
-        "package": "/training/splunk-analysis/SecureByDesign-splunk-analysis-Learning-Package.zip",
         "pages": 23,
         "cover": "/training/splunk-analysis/workbook-cover.webp",
         "materialsEdition": "2.0",
@@ -1017,13 +982,10 @@
       "lessonCount": 7,
       "training": {
         "guide": "/training/workstation-fleet",
-        "checklist": "/training/workstation-fleet/configuration-checklist.md",
         "materialsEdition": "1.5",
         "updated": "14 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
-        "pdf": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.pdf",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "package": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Learning-Package.zip",
         "pages": 20,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       }
@@ -1089,13 +1051,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/patch-protect",
-        "checklist": "/training/patch-protect/configuration-checklist.md",
         "materialsEdition": "2.0",
         "updated": "14 October 2026",
         "checklistPage": "/training/patch-protect/checklist",
-        "pdf": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.pdf",
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
-        "package": "/training/patch-protect/SecureByDesign-patch-protect-Learning-Package.zip",
         "pages": 18,
         "cover": "/training/patch-protect/workbook-cover.webp"
       }
@@ -1160,11 +1119,8 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/management-server",
-        "checklist": "/training/management-server/configuration-checklist.md",
         "checklistPage": "/training/management-server/checklist",
-        "pdf": "/training/management-server/SecureByDesign-management-server-Workbook.pdf",
         "word": "/training/management-server/SecureByDesign-management-server-Workbook.docx",
-        "package": "/training/management-server/SecureByDesign-management-server-Learning-Package.zip",
         "pages": 15,
         "cover": "/training/management-server/workbook-cover.webp",
         "materialsEdition": "1.0",
@@ -1309,13 +1265,10 @@
       "lessonCount": 5,
       "training": {
         "guide": "/training/business-services",
-        "checklist": "/training/business-services/configuration-checklist.md",
         "materialsEdition": "1.4",
         "updated": "14 October 2026",
         "checklistPage": "/training/business-services/checklist",
-        "pdf": "/training/business-services/SecureByDesign-business-services-Workbook.pdf",
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
-        "package": "/training/business-services/SecureByDesign-business-services-Learning-Package.zip",
         "pages": 15,
         "cover": "/training/business-services/workbook-cover.webp"
       }
@@ -1395,13 +1348,10 @@
       "lessonCount": 6,
       "training": {
         "guide": "/training/prove-recovery",
-        "checklist": "/training/prove-recovery/configuration-checklist.md",
         "materialsEdition": "1.4",
         "updated": "14 October 2026",
         "checklistPage": "/training/prove-recovery/checklist",
-        "pdf": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.pdf",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
-        "package": "/training/prove-recovery/SecureByDesign-prove-recovery-Learning-Package.zip",
         "pages": 19,
         "cover": "/training/prove-recovery/workbook-cover.webp"
       }
@@ -1578,11 +1528,9 @@
       "training": {
         "guide": "/grc-rmf-training/rmf/index.html#catalog/01",
         "word": "/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx",
-        "pdf": "/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.pdf",
-        "package": "/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip",
         "pages": 59,
-        "materialsEdition": "2.0",
-        "updated": "15 October 2026",
+        "materialsEdition": "2.1",
+        "updated": "18 October 2026",
         "relatedResources": [
           {
             "title": "Open the ATO Package Builder",
@@ -1596,7 +1544,7 @@
           },
           {
             "title": "Open the evidence workspace",
-            "detail": "Fourteen practice artifacts with editable Markdown and CSV starters",
+            "detail": "Fourteen practice artifacts, with blank starters in the workbook",
             "href": "/grc-rmf-training/rmf/index.html#evidence"
           }
         ],
@@ -1605,7 +1553,7 @@
       "categoryId": "network-authorization",
       "categoryOrder": 1,
       "artLabels": [
-                "Prepare → Categorize",
+        "Prepare → Categorize",
         "Select → Implement",
         "Assess → Authorize",
         "Monitor"

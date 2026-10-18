@@ -3,20 +3,18 @@
 
 Each course in public/grc-rmf-training/rmf/catalog-data.js (window.CATALOG_PARTS) gets, in public/grc-rmf-training/<folder>/:
 
-  SecureByDesign-<folder>-Workbook.docx          the companion workbook
-  SecureByDesign-<folder>-Workbook.pdf           (--all) a tagged PDF export of it
+  SecureByDesign-<folder>-Workbook.docx          the companion workbook: the course's one download
+                                                 (owner request, 18 October 2026: Word only, no ZIP or PDF)
   workbook-cover.webp                            (--all) page 1, for the Compliance Hub tile
-  SecureByDesign-<folder>-Learning-Package.zip   (--all) the PDF, the Word file, START-HERE.txt and the
-                                                 course's evidence starters (Markdown, plus CSV for tables)
 
 The workbooks use the Build the Network companion workbook design. scripts/rmf-workbook/template.docx is a
 copy of one (course 1.7's); every paragraph, list and table below is a copy of one of its building blocks, so
 fonts, colours, spacing, numbering, links and the footer carry over. The text comes from the same data the
-course pages use (public/grc-rmf-training/rmf/*.js) and from content/videos.json. With --all, training.pages in
-content/videos.json is updated from the PDF.
+course pages use (public/grc-rmf-training/rmf/*.js) and from content/videos.json. With --all, a PDF export made in a
+temporary folder (never published) checks the layout and gives the cover and training.pages in content/videos.json.
 
   python3 scripts/prepare-rmf-workbooks.py          Word workbooks only
-  python3 scripts/prepare-rmf-workbooks.py --all    workbooks, PDFs, covers, page counts and ZIPs
+  python3 scripts/prepare-rmf-workbooks.py --all    workbooks, layout check, covers and page counts
 
 Needs python-docx and lxml; --all also needs LibreOffice (soffice), poppler (pdftoppm, pdfinfo, pdftotext)
 and Pillow.
@@ -30,7 +28,6 @@ import re
 import subprocess
 import sys
 import tempfile
-import zipfile
 from pathlib import Path
 
 from docx import Document
@@ -43,7 +40,6 @@ TEMPLATE = ROOT / 'scripts/rmf-workbook/template.docx'
 COPYRIGHT = '© 2026 Secure By Design Team LLC.'
 SITE = 'https://securebydesigninc.com'
 # A fixed timestamp keeps the ZIPs identical when nothing changed.
-ZIP_TIME = (2026, 10, 15, 0, 0, 0)
 
 PREREQUISITES = {
     '2.1': [
@@ -439,7 +435,7 @@ def write_workbook(data: dict, course: dict, part: dict, path: Path):
     # Evidence starters.
     book.page(f'COURSE {n} / EVIDENCE STARTERS')
     book.heading('Evidence starters', 'starters')
-    book.para('lead', 'Blank starters for the practice artifacts this course produces. Fill them from your own system. The interactive course shows a completed fictional example of each, and the training materials download includes each one as Markdown (and CSV for tables).')
+    book.para('lead', 'Blank starters for the practice artifacts this course produces. Fill them from your own system. The interactive course shows a completed fictional example of each.')
     for a in ours:
         book.para('h2', a['title'])
         book.rich('body', [(a['kind'] + '  ', True), ('Owner: ' + a['owner'] + '. ' + a['purpose'], False)])
@@ -487,71 +483,24 @@ def write_workbook(data: dict, course: dict, part: dict, path: Path):
     book.finish(course, part, path)
 
 
-def starter_markdown(a: dict) -> str:
-    if a.get('fields'):
-        body = '\n\n'.join(f'## {name}\n\n{guidance}' for name, guidance, _ in a['fields'])
-    else:
-        pipe = lambda v: str(v).replace('|', '\\|').replace('\n', ' ')
-        rows = [a['columns'], ['---'] * len(a['columns']), a['template']]
-        body = '\n'.join('| ' + ' | '.join(pipe(c) for c in row) + ' |' for row in rows)
-    return f'# {a["title"]}\n\nSecure By Design — blank training starter\n\n{a["purpose"]}\n\nOwner: {a["owner"]}\n\n{body}\n\n---\n\n{a["note"]}\n'
-
-
-def starter_csv(a: dict) -> str:
-    quote = lambda v: '"' + str(v).replace('"', '""') + '"'
-    return '\ufeff' + '\r\n'.join(','.join(quote(c) for c in row) for row in (a['columns'], a['template']))
-
-
 def export(course: dict, part: dict, data: dict, docx: Path):
     folder = docx.parent
-    with tempfile.TemporaryDirectory() as home:
-        subprocess.run(['soffice', '--headless', '--convert-to', 'pdf:writer_pdf_Export:{"UseTaggedPDF":{"type":"boolean","value":"true"}}', '--outdir', str(folder), str(docx)],
+    with tempfile.TemporaryDirectory() as home, tempfile.TemporaryDirectory() as work:
+        subprocess.run(['soffice', '--headless', '--convert-to', 'pdf:writer_pdf_Export:{"UseTaggedPDF":{"type":"boolean","value":"true"}}', '--outdir', work, str(docx)],
                        check=True, capture_output=True, env={**os.environ, 'HOME': home})
-    pdf = docx.with_suffix('.pdf')
-    info = subprocess.run(['pdfinfo', str(pdf)], check=True, capture_output=True, text=True).stdout
-    pages = int(re.search(r'^Pages:\s+(\d+)', info, re.M).group(1))
-    # Layout check: no blank pages, and no heading stranded at the bottom of a page.
-    text = subprocess.run(['pdftotext', '-layout', str(pdf), '-'], check=True, capture_output=True, text=True).stdout
-    for number, page_text in enumerate(text.split('\f')[:-1], 1):
-        lines = [line.strip() for line in page_text.splitlines() if line.strip() and COPYRIGHT not in line]
-        if len(' '.join(lines)) < 60:
-            print(f'  ! {pdf.name}: page {number} is nearly blank')
-    with tempfile.TemporaryDirectory() as work:
+        pdf = Path(work) / docx.with_suffix('.pdf').name
+        info = subprocess.run(['pdfinfo', str(pdf)], check=True, capture_output=True, text=True).stdout
+        pages = int(re.search(r'^Pages:\s+(\d+)', info, re.M).group(1))
+        # Layout check: no blank pages, and no heading stranded at the bottom of a page.
+        text = subprocess.run(['pdftotext', '-layout', str(pdf), '-'], check=True, capture_output=True, text=True).stdout
+        for number, page_text in enumerate(text.split('\f')[:-1], 1):
+            lines = [line.strip() for line in page_text.splitlines() if line.strip() and COPYRIGHT not in line]
+            if len(' '.join(lines)) < 60:
+                print(f'  ! {pdf.name}: page {number} is nearly blank')
         subprocess.run(['pdftoppm', '-f', '1', '-l', '1', '-png', '-r', '150', str(pdf), f'{work}/cover'], check=True)
         from PIL import Image
         image = next(Path(work).glob('cover*.png'))
         Image.open(image).convert('RGB').resize((612, 792), Image.LANCZOS).save(folder / 'workbook-cover.webp', 'WEBP', quality=82)
-    # The package: workbook (PDF and Word), START-HERE and the evidence starters.
-    ids = []
-    learning = {m['id']: data['LEARNING'][i] for i, m in enumerate(data['CATALOG'])}
-    for module_id in part['modules']:
-        for artifact_id in learning[module_id]['artifacts']:
-            if artifact_id not in ids:
-                ids.append(artifact_id)
-    artifacts = {a['id']: a for a in data['ARTIFACTS']}
-    t = course['training']
-    start = (f'SECURE BY DESIGN\nCourse {course["number"]} · {course["title"]} — training materials\n'
-             f'Materials edition {t["materialsEdition"]} · Updated {t["updated"]}\n\n'
-             f'{docx.stem}.pdf  The companion workbook (also as Word: {docx.name})\n'
-             'Evidence starters/  Blank starters for this course’s practice artifacts (Markdown; CSV for tables)\n\n'
-             f'Open the interactive course: {SITE}/grc-rmf-training/{part["folder"]}/\n'
-             'The course follows the RMF steps of NIST SP 800-37 Revision 2 with the April 2016 JSIG mapped in.\n'
-             'Exercise records are fictional. They are not authorization decisions or assessment results.\n\n'
-             f'{COPYRIGHT}\n')
-    package = folder / Path(t['package']).name
-    with zipfile.ZipFile(package, 'w', zipfile.ZIP_DEFLATED) as archive:
-        def put(name, content):
-            info = zipfile.ZipInfo(name, ZIP_TIME)
-            info.compress_type = zipfile.ZIP_DEFLATED
-            archive.writestr(info, content)
-        put('START-HERE.txt', start)
-        put(pdf.name, pdf.read_bytes())
-        put(docx.name, docx.read_bytes())
-        for artifact_id in ids:
-            a = artifacts[artifact_id]
-            put(f'Evidence starters/{a["id"]}-starter.md', starter_markdown(a))
-            if a.get('columns'):
-                put(f'Evidence starters/{a["id"]}-starter.csv', starter_csv(a))
     return pages
 
 

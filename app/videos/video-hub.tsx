@@ -328,11 +328,9 @@ function AtoBuilderPanel({ library }: { library: Library }) {
         </div>
         <div className="ab-course">
           <p><BookOpen size={16} aria-hidden="true" />The whole course: 2.1, RMF to ATO</p>
-          <ul aria-label="Course 2.1 from the start, and its downloads">
+          <ul aria-label="Course 2.1 from the start, and its workbook">
             <li><a href={training.guide ?? RMF_GUIDE}>Start from module 01</a></li>
-            {training.pdf && <li><a href={training.pdf}>Workbook (PDF)</a></li>}
-            {training.word && <li><a href={training.word}>Workbook (Word)</a></li>}
-            {training.package && <li><a href={training.package}>Learning package (ZIP)</a></li>}
+            {training.word && <li><a href={training.word} download>Workbook (Word)</a></li>}
           </ul>
         </div>
       </div>

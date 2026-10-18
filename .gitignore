@@ -45,3 +45,4 @@ next-env.d.ts
 .dev.vars
 .dev.vars.*
 public/build-info.json
+__pycache__/

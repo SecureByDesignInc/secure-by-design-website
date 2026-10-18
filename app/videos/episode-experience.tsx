@@ -123,7 +123,7 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
             summary={`${episode.training.pages} pages of explanations, configuration steps, security reasoning, and evidence prompts.`}
             guide={{ href: episode.training.guide, title: 'Open the interactive guide', detail: '3D network · chapter checks · your notes', icon: <Network size={20} />, trailing: <ArrowUpRight size={19} /> }}
             links={[
-              { href: episode.training.package, title: 'Download the training materials', detail: `ZIP · offline guide, ${episode.training.pages}-page workbook (PDF and Word), and verification commands`, icon: <Download size={19} />, trailing: <ArrowDown size={16} />, download: true },
+              { href: episode.training.word, title: 'Download the workbook', detail: `Word · ${episode.training.pages}-page workbook`, icon: <Download size={19} />, trailing: <ArrowDown size={16} />, download: true },
             ]}
             edition={(episode.training.materialsEdition || episode.training.copyrightOwner || episode.training.notices) && <>
               {episode.training.materialsEdition && (
