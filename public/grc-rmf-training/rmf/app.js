@@ -223,9 +223,9 @@
     card.innerHTML = `${wideHead(`Course ${course.number} / Evidence workspace · ${ours.length} practice artifacts`, 'Evidence workspace', esc(course.workspace))}
       <div class="content"><div class="evidence-layout"><nav class="artifact-menu" aria-label="Practice artifacts">${ours.map(item => `<button type="button" data-artifact="${item.id}" aria-pressed="${item.id === id}"><span>${esc(item.short)}</span>${esc(item.title)}</button>`).join('')}</nav>
       <article class="artifact-sheet" aria-labelledby="artifact-title"><div class="artifact-sheet-head"><div><div class="eyebrow ink">${esc(a.kind)}</div><h3 id="artifact-title">${esc(a.title)}</h3><p>Owner: ${esc(a.owner)}</p></div><div class="toggle" role="group" aria-label="Artifact view"><button type="button" data-mode="example" aria-pressed="${example}">Example</button><button type="button" data-mode="template" aria-pressed="${!example}">Blank starter</button></div></div>
-      <div class="artifact-actions"><button type="button" class="btn primary" data-download="md">↓ ${example ? 'Example' : 'Starter'} · Markdown</button>${a.columns ? '<button type="button" class="btn" data-download="csv">↓ CSV</button>' : ''}<a class="btn" href="${moduleHref(a.module)}">Starts in module ${a.module} · step ${stepOf(a.module).number}</a></div>
+      <div class="artifact-actions"><a class="btn" href="${moduleHref(a.module)}">Starts in module ${a.module} · step ${stepOf(a.module).number}</a></div>
       <div class="artifact-preview"><h4>${example ? 'Fictional exercise excerpt' : 'Your starting structure'}</h4><p>${text(a.purpose)}</p>${preview}</div><div class="artifact-note">${text(a.note)}</div></article></div>
-      <p class="help workspace-note">These starters are editable text documents; the course's training materials download includes every one as Markdown (and CSV for tables). The exercise records describe technical evidence to collect; those exports are not included.</p></div>`;
+      <p class="help workspace-note">Fill the blank starters in the course workbook (Word), which includes every one. The exercise records describe technical evidence to collect; those exports are not included.</p></div>`;
   }
 
   function renderCapstone() {
@@ -251,24 +251,6 @@
       ['Control and procedure versions','The official NIST 800-53, 800-53A, and 800-53B pages identify Release 5.2.0 dated August 27, 2025. Record the version adopted by the responsible authority and map revisions explicitly.'],
       ['Fictional lab context','The optional lab is isolated, with manual, human-controlled transfers using approved removable media. Its Moderate/Low/Low planning input is a teaching assumption. General RMF lessons apply across system architectures.']
       ].map(([title, body]) => `<div class="guidance-item"><h4>${esc(title)}</h4><p>${esc(body)}</p></div>`).join('')}</section></div></div>`;
-  }
-
-  function artifactText(a, format) {
-    const example = state.mode === 'example', rows = a.columns ? (example ? a.rows : [a.template]) : [];
-    if (format === 'csv') return '﻿' + [a.columns, ...rows].map(row => row.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-    const pipe = value => String(value).replace(/\|/g,'\\|').replace(/\n/g,' ');
-    const body = a.fields ? a.fields.map(f => `## ${f[0]}\n\n${sampleDates(f[example ? 2 : 1])}`).join('\n\n') : [a.columns, a.columns.map(()=>'---'), ...rows].map(row => `| ${row.map(pipe).join(' | ')} |`).join('\n');
-    return `# ${a.title}\n\nSecure By Design — ${example ? 'fictional training example' : 'blank training starter'}\n\n${a.purpose}\n\nOwner: ${a.owner}\n\n${body}\n\n---\n\n${a.note}\n`;
-  }
-  function downloadArtifact(format) {
-    const a = artifacts.find(item => item.id === route().id);
-    if (!a || !['md','csv'].includes(format) || (format === 'csv' && !a.columns)) return;
-    const url = URL.createObjectURL(new Blob([artifactText(a, format)], {type:format === 'csv' ? 'text/csv;charset=utf-8' : 'text/markdown;charset=utf-8'}));
-    const link = document.createElement('a');
-    link.href = url; link.download = `SBD_${a.id}_${state.mode}.${format}`;
-    document.body.appendChild(link); link.click(); link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    status.textContent = `${a.title} ${state.mode} downloaded.`;
   }
 
   // Tabs: the module's five and, inside Learn, its three lessons. Arrow keys, Home and End move between them.
@@ -363,7 +345,7 @@
       state.mode = button.dataset.mode;
       renderEvidence(route().id);
       card.querySelector(`[data-mode="${state.mode}"]`).focus({preventScroll:true});
-    } else if (button.dataset.download) downloadArtifact(button.dataset.download);
+    }
   });
   card.addEventListener('keydown', event => {
     if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;

@@ -1,7 +1,6 @@
 import './prepare-career-shell.mjs';
 import './prepare-career-explorer.mjs';
 import './prepare-network-text.mjs';
-import './prepare-checklists.mjs';
 import './prepare-course-guides.mjs';
 import './prepare-rmf-courses.mjs';
 import './prepare-sitemap.mjs';

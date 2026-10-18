@@ -3,7 +3,7 @@
     "id": "dc-guide",
     "title": "Interactive build guide",
     "url": "https://securebydesigninc.com/training/dc01-dc02/index.html",
-    "description": "Explore the build and keep your evidence record.",
+    "description": "Explore the build and keep your notes in your account.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -30,9 +30,9 @@
   },
   {
     "id": "dc-package",
-    "title": "Training materials · ZIP",
-    "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Learning-Package.zip",
-    "description": "Offline guide, workbook (PDF and Word), and verification commands.",
+    "title": "Companion workbook · Word",
+    "url": "https://securebydesigninc.com/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
+    "description": "13-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -48,9 +48,9 @@
   },
   {
     "id": "dns-configuration-package",
-    "title": "Configure DNS · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Configure DNS · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
+    "description": "14-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -76,9 +76,9 @@
   },
   {
     "id": "two-tier-pki-package",
-    "title": "Configure the two-tier PKI · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Configure the two-tier PKI · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
+    "description": "25-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -104,9 +104,9 @@
   },
   {
     "id": "rmf-boe-ato-package",
-    "title": "RMF to ATO · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip",
-    "description": "Workbook (PDF and Word) and evidence starters.",
+    "title": "RMF to ATO · Workbook (Word)",
+    "url": "https://securebydesigninc.com/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx",
+    "description": "59-page companion workbook with evidence starters.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -115,7 +115,7 @@
     "id": "rmf-boe-ato-evidence",
     "title": "RMF to ATO · Evidence workspace",
     "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#evidence",
-    "description": "Course 2.1 · fourteen examples with editable Markdown and CSV starters.",
+    "description": "Course 2.1 · fourteen examples, with blank starters in the workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -174,7 +174,7 @@
     "id": "rmf-evidence",
     "title": "Body of Evidence examples and starters",
     "url": "https://securebydesigninc.com/grc-rmf-training/rmf/index.html#evidence/evidence",
-    "description": "Course 2.1 · Body of Evidence examples with editable Markdown and CSV starters.",
+    "description": "Course 2.1 · Body of Evidence examples, with blank starters in the workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -199,9 +199,9 @@
   },
   {
     "id": "harden-baseline-package",
-    "title": "Harden with Group Policy · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Harden with Group Policy · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
+    "description": "17-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -217,9 +217,9 @@
   },
   {
     "id": "tiered-admin-package",
-    "title": "Tiered administration · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Tiered administration · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
+    "description": "20-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -235,9 +235,9 @@
   },
   {
     "id": "logging-pipeline-package",
-    "title": "Collect the record on SBD-SYSLOG01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Collect the record on SBD-SYSLOG01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
+    "description": "15-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -253,9 +253,9 @@
   },
   {
     "id": "workstation-fleet-package",
-    "title": "Bring in the fleet · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Bring in the fleet · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
+    "description": "20-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -271,9 +271,9 @@
   },
   {
     "id": "patch-protect-package",
-    "title": "Deliver Windows updates from SBD-WSUS01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Deliver Windows updates from SBD-WSUS01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
+    "description": "18-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -289,9 +289,9 @@
   },
   {
     "id": "business-services-package",
-    "title": "Stand up the business services · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Stand up the business services · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/business-services/SecureByDesign-business-services-Workbook.docx",
+    "description": "15-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -307,9 +307,9 @@
   },
   {
     "id": "prove-recovery-package",
-    "title": "Prove you can recover · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Prove you can recover · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
+    "description": "19-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -674,9 +674,9 @@
   },
   {
     "id": "domain-time-package",
-    "title": "Configure domain time · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/domain-time/SecureByDesign-domain-time-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Configure domain time · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/domain-time/SecureByDesign-domain-time-Workbook.docx",
+    "description": "18-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -692,9 +692,9 @@
   },
   {
     "id": "stig-scap-package",
-    "title": "Measure against the STIG · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/stig-scap/SecureByDesign-stig-scap-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Measure against the STIG · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/stig-scap/SecureByDesign-stig-scap-Workbook.docx",
+    "description": "14-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -710,9 +710,9 @@
   },
   {
     "id": "dhcp-package",
-    "title": "Run DHCP on SBD-DHCP01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/dhcp/SecureByDesign-dhcp-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Run DHCP on SBD-DHCP01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/dhcp/SecureByDesign-dhcp-Workbook.docx",
+    "description": "19-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -728,9 +728,9 @@
   },
   {
     "id": "linux-repository-package",
-    "title": "Build the Linux repository on SBD-REPO01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/linux-repository/SecureByDesign-linux-repository-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Build the Linux repository on SBD-REPO01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/linux-repository/SecureByDesign-linux-repository-Workbook.docx",
+    "description": "17-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -746,9 +746,9 @@
   },
   {
     "id": "audit-repository-package",
-    "title": "Protect the record on SBD-AUDIT01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/audit-repository/SecureByDesign-audit-repository-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Protect the record on SBD-AUDIT01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/audit-repository/SecureByDesign-audit-repository-Workbook.docx",
+    "description": "18-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -764,9 +764,9 @@
   },
   {
     "id": "splunk-analysis-package",
-    "title": "Analyze the record in SBD-SPLUNK01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/splunk-analysis/SecureByDesign-splunk-analysis-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Analyze the record in SBD-SPLUNK01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/splunk-analysis/SecureByDesign-splunk-analysis-Workbook.docx",
+    "description": "23-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"
@@ -782,9 +782,9 @@
   },
   {
     "id": "management-server-package",
-    "title": "Keep the living inventory on SBD-MGMT01 · Training materials (ZIP)",
-    "url": "https://securebydesigninc.com/training/management-server/SecureByDesign-management-server-Learning-Package.zip",
-    "description": "Workbook (PDF and Word), checklist, and verification commands.",
+    "title": "Keep the living inventory on SBD-MGMT01 · Workbook (Word)",
+    "url": "https://securebydesigninc.com/training/management-server/SecureByDesign-management-server-Workbook.docx",
+    "description": "15-page companion workbook.",
     "category": "Training materials",
     "publisher": "Secure By Design",
     "icon": "directory"

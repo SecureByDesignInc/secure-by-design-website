@@ -141,11 +141,9 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
     assert.equal(course.kind, 'configuration');
     assert.equal(course.lessonCount, configuration.lessons.length);
     assert.equal(course.training.guide, `/training/${configuration.id}`);
-    const checklist = readFileSync(new URL('../public' + course.training.checklist, import.meta.url), 'utf8');
-    for (const key of ['pdf', 'word']) {
-      assert.match(course.training[key], new RegExp(`^/training/${configuration.id}/SecureByDesign-${configuration.id}-Workbook\\.(pdf|docx)$`));
-      assert.ok(existsSync(new URL('../public' + course.training[key], import.meta.url)), `${configuration.id} ${key} workbook exists`);
-    }
+    // Owner request, 18 October 2026: the Word workbook is the tile's one download.
+    assert.equal(course.training.word, `/training/${configuration.id}/SecureByDesign-${configuration.id}-Workbook.docx`);
+    assert.ok(existsSync(new URL('../public' + course.training.word, import.meta.url)), `${configuration.id} Word workbook exists`);
     assert.ok(Number.isInteger(course.training.pages) && course.training.pages > 0);
     assert.ok(resources.some(resource => resource.url === 'https://securebydesigninc.com' + course.training.guide));
     for (const lesson of configuration.lessons) {
@@ -161,7 +159,6 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
       }
       assert.ok(new Set(lesson.quizzes.map(quiz => quiz.correct)).size > 1, `${lesson.id} varies the correct answer position`);
       assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://help.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/', 'https://access.redhat.com/', 'https://dnf-plugins-core.readthedocs.io/', 'https://github.com/rpm-software-management/', 'https://manpages.debian.org/', 'https://httpd.apache.org/', 'https://man.openbsd.org/', 'https://chrony-project.org/', 'https://firewalld.org/', 'https://www.rfc-editor.org/'].some(origin => source.url.startsWith(origin)))));
-      assert.ok(checklist.includes(lesson.title));
       const entry = progress.find(item => item.id === `training:${course.id}:${lesson.id}`);
       assert.equal(entry?.href, `${course.training.guide}#${lesson.id}`);
       assert.equal(entry?.group, 'Network build');
@@ -328,7 +325,7 @@ test('every advertised training resource is present and remains on this site', (
     library.episodes.length,
   );
   for (const episode of library.episodes) {
-    for (const key of ['guide', 'pdf', 'word', 'package', 'cover']) {
+    for (const key of ['guide', 'word', 'cover']) {
       const path = episode.training[key];
       assert.match(path, /^\/training\/[a-z0-9-]+\/[A-Za-z0-9_.-]+$/);
       assert.ok(

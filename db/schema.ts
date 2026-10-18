@@ -54,6 +54,10 @@ export const communityContributionLimits=sqliteTable('community_contribution_lim
  key:text('key').primaryKey(),count:integer('count').notNull().default(0),expiresAt:text('expires_at').notNull()
 });
 
+// Course guide notes, checks, answers and completed lessons (migration 0018).
+export const readerGuideState=sqliteTable('reader_guide_state',{
+ userId:text('user_id').notNull(),guideId:text('guide_id').notNull(),state:text('state').notNull(),updatedAt:text('updated_at').notNull()
+},t=>[primaryKey({columns:[t.userId,t.guideId]})]);
 export const readerBookmarks=sqliteTable('reader_bookmarks',{
  userId:text('user_id').notNull(),itemId:text('item_id').notNull(),saved:integer('saved').notNull(),updatedAt:text('updated_at').notNull()
 },t=>[primaryKey({columns:[t.userId,t.itemId]})]);

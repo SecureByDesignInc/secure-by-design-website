@@ -161,7 +161,7 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
 
 // The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance Hub is the ATO Package Builder
 // panel, which carries course 2.1 and the ATO Template Library by step (owner direction, 15 October 2026: no course tile or library
-// card on the hub). The panel must list the seven RMF steps and the course's four links (start and three downloads), and choosing
+// card on the hub). The panel must list the seven RMF steps and the course's two links (start and the Word workbook), and choosing
 // Assess must show that step and its three lessons. Screenshots are kept for review.
 for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 'technical-library', 19, 0, 0], ['/grc-rmf-training', 'grc-rmf-library', 0, 0, 7]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
@@ -173,7 +173,7 @@ for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 
       const shown = await page.locator('.vc-catalog-tile').count(), toolCards = await page.locator('.vc-tool-list li').count();
       const steps = await page.locator('#package-builder .ab-steps button').count();
       if (shown !== tiles || toolCards !== tools || steps !== builderSteps) throw new Error(`${shown} tiles, ${toolCards} tools and ${steps} builder steps, expected ${tiles}, ${tools} and ${builderSteps}`);
-      if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 4) throw new Error('the course start link and its three downloads are not all in the builder panel');
+      if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 2) throw new Error('the course start link and its Word workbook are not both in the builder panel');
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
       if (builderSteps) {
         // The page may still be starting up when it first appears, so the click is retried until the panel answers.
@@ -287,14 +287,14 @@ await check('/.well-known/security.txt', { path: '/.well-known/security.txt' }, 
 await check('apple-app-site-association', { path: '/.well-known/apple-app-site-association' }, async r => r.status === 200 && (r.headers.get('content-type') || '').includes('application/json') && (await r.text()).includes('PZK2PZT6KP.com.securebydesigninc.secureByDesignApp'));
 await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAAAAAAAAAAAAAAAAAAAA' }, async r => r.status === 200 && (await r.text()).includes('securebydesign://auth?code=AAAAAAAAAAAAAAAAAAAAAAAA'));
 await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
-await check('old course 2.3 package moves to the course 2.1 package', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip'));
+await check('old course 2.3 package moves to the course 2.1 workbook', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
 // The two libraries (15 October 2026): old addresses land in the Configuration Hub or the Compliance Hub.
 await check('old Training Library address moves to the Configuration Hub', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
 await check('old Authorization Workspace address (now the ATO Package Builder) moves into the Compliance Hub', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
 await check('old ATO Template Library address moves into the Compliance Hub', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
 await check('old course 2.1 page moves into the Compliance Hub', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
-await check('old course 2.1 workbook moves with it', { path: '/training/rmf/SecureByDesign-rmf-Workbook.pdf' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.pdf'));
+await check('old course 2.1 workbook moves with it', { path: '/training/rmf/SecureByDesign-rmf-Workbook.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('old control catalog moves with the workspace', { path: '/authorization-workspace/controls-rev5.json' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace/controls-rev5.json'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);
 await check('share picture', { path: '/og/secure-by-design.jpg' }, r => r.status === 200 && (r.headers.get('content-type') || '').includes('image/jpeg'));

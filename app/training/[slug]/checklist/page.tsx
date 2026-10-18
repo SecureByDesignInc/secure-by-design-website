@@ -27,7 +27,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ slug
       <p>{configuration.labNote}</p>
       <div className="vc-checklist-actions">
         <PrintButton />
-        {course.training.package && <a href={course.training.package} download><Download size={15} />Download the training materials (ZIP)</a>}
+        {course.training.word && <a href={course.training.word} download><Download size={15} />Download the workbook (Word)</a>}
       </div>
     </header>
     <section className="vc-checklist-section" aria-labelledby="checklist-prerequisites">

@@ -71,8 +71,9 @@ function retiredCourse(url){
  // course 2.1 "RMF to ATO". Browsers keep the #catalog/NN or #evidence/<id> fragment, which the course page opens.
  const merged=/^\/training\/(rmf-body-of-evidence|rmf-authorization-to-operate)(?:\/(.*))?$/.exec(path);
  if(merged){
-  const file=merged[2]||'',ext=/-Workbook\.(docx|pdf)$/.exec(file)?.[1];
-  const target=ext?`/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.${ext}`:file.endsWith('-Learning-Package.zip')?'/grc-rmf-training/rmf/SecureByDesign-rmf-Learning-Package.zip':file==='workbook-cover.webp'?'/grc-rmf-training/rmf/workbook-cover.webp':'/grc-rmf-training/rmf/index.html';
+  // Their workbooks and ZIPs land on course 2.1's one download, the Word workbook (18 October 2026).
+  const file=merged[2]||'';
+  const target=/-Workbook\.(docx|pdf)$|-Learning-Package\.zip$/.test(file)?'/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx':file==='workbook-cover.webp'?'/grc-rmf-training/rmf/workbook-cover.webp':'/grc-rmf-training/rmf/index.html';
   return new URL(target,url).toString();
  }
  // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.

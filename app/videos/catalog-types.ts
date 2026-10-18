@@ -24,9 +24,8 @@ export type Episode = {
   chapters: Chapter[];
   training: {
     guide: string;
-    pdf: string;
+    /** The tile's one download (owner request, 18 October 2026): the Word workbook. */
     word: string;
-    package: string;
     cover: string;
     pages: number;
     materialsEdition?: string;
@@ -67,12 +66,9 @@ export type TrainingCourse = {
   stages: { title: string; detail: string; number?: string; href?: string; hours?: string; lessons?: string[] }[];
   training: {
     guide: string;
-    pdf?: string;
+    /** The tile's one download (owner request, 18 October 2026): the Word workbook. Coming-soon tiles have none. */
     word?: string;
-    checklist?: string;
     checklistPage?: string;
-    /** The tile's one download: the workbook (PDF and Word), checklist, and verification commands in a ZIP. */
-    package?: string;
     pages?: number;
     /** Workbook cover image (the first page of the workbook or catalog). */
     cover?: string;

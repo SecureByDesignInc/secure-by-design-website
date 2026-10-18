@@ -81,3 +81,20 @@ test('password guesses are rate limited and password hashes never leave the API'
  assert.equal((await readerAuthApi(authReq('signin',{email:'alice@example.invalid',password:'a wrong password'}),env)).status,429);
  assert.ok(!(await (await readerProgressApi(req('alice'),env)).text()).includes('password_hash'));
 });
+
+// Owner request, 18 October 2026: a course guide's notes, checks, answers and completed lessons live in the account.
+test('guide state is saved per reader and guide, bounded, and cleared with progress',async()=>{
+ const env=setup();
+ const state={chapter:1,notes:{dc01:'DC01 promoted; dcdiag clean.'},checks:{'dc01-0':true},answers:{dc01:2},completed:['prepare'],savedAt:1792300000000};
+ assert.equal((await readerProgressApi(req(null,'GET','/guide/sbd-dc01-dc02'),env)).status,401);
+ assert.deepEqual(await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json(),{state:null,updatedAt:null});
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dc01-dc02',{state}),env)).status,200);
+ assert.deepEqual((await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json()).state,state);
+ assert.equal((await(await readerProgressApi(req('bob','GET','/guide/sbd-dc01-dc02'),env)).json()).state,null);
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dhcp',{state}),env)).status,200,'each configuration course guide has its own row');
+ for(const [path,body] of [['/guide/sbd-unknown',{state}],['/guide/sbd-dc01-dc02',{state:{...state,notes:{dc01:'x'.repeat(30001)}}}],['/guide/sbd-dc01-dc02',{state:{...state,extra:true}}],['/guide/sbd-dc01-dc02',{state,userId:'bob'}],['/guide/sbd-dc01-dc02',{state:{...state,answers:{dc01:'B'}}}]])
+  assert.ok([400,404].includes((await readerProgressApi(req('alice','PUT',path,body),env)).status),path);
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dc01-dc02',{state},{origin:'https://evil.invalid'}),env)).status,403);
+ assert.equal((await readerProgressApi(req('alice','DELETE'),env)).status,200);
+ assert.equal((await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json()).state,null);
+});

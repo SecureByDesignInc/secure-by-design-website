@@ -65,7 +65,7 @@ test('the Network Authorization course has its page in the course guide design',
     const course = library.courses.find(item => item.id === part.id);
     const page = read(`public/grc-rmf-training/${part.folder}/index.html`);
     for (const piece of ['/training/guide/course-guide.css', 'src="/training/guide/scene.js"', '"three":"/training/guide/three.module.js"', 'src="/grc-rmf-training/rmf/app.js"', 'class="top"', 'class="hero"', 'class="kitcard"', 'class="chapters"', 'id="module-list"', 'id="lesson"', 'id="stage"', 'id="fallback"', 'class="media-card"', 'class="statusbar"', 'Back to the Compliance Hub', '/training/account-progress.js',
-      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/grc-rmf-training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.package}" download`])
+      `<body data-course="${part.number}">`, `<link rel="canonical" href="https://securebydesigninc.com/grc-rmf-training/${part.folder}/">`, `Network Authorization / Course ${part.number}`, `href="${course.training.word}" download`])
       assert.ok(page.includes(piece), `course ${part.number} has ${piece}`);
     // The account panel names the guide it saves; account-progress.js reads the module from #catalog/NN.
     const guide = /<section class="sbd-account-progress" aria-label="Account learning progress" data-guide="([a-z0-9-]+)">/.exec(page)?.[1];
