@@ -1,107 +1,30 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import Link from 'next/link';
-import {
-  ArrowDown,
-  ArrowRight,
-  ArrowUpRight,
-  BookOpen,
-  Download,
-  Maximize2,
-  Move,
-  Network,
-  Pause,
-  Play,
-  RotateCcw,
-} from 'lucide-react';
-import type { CatalogScene } from './catalog-scene';
+// The expanded tile for course 1.1, the identity build: heading, materials panel and
+// recording column, then the shared interactive build explorer (build-explorer.tsx),
+// which draws DC01 and DC02 from the guide's scene like every other course tile
+// (owner request, 18 October 2026). Choosing a chapter seeks the recording to it.
+import { useState } from 'react';
+import { ArrowDown, ArrowUpRight, BookOpen, Download, Network } from 'lucide-react';
 import { getYouTubeEmbedUrl, supportsIdentityScene } from './video-utils';
 
 import type { Episode } from './catalog-types';
 import { CompanionHeading, CompanionMaterials, CompanionWatch } from './companion';
-
-const motionQuery = '(prefers-reduced-motion: reduce)';
-const subscribeMotion = (listener: () => void) => {
-  const preference = matchMedia(motionQuery);
-  preference.addEventListener('change', listener);
-  return () => preference.removeEventListener('change', listener);
-};
-const getMotionPreference = () => matchMedia(motionQuery).matches;
-const getServerMotionPreference = () => true;
+import BuildExplorer, { type ExplorerStep } from './build-explorer';
 
 export default function EpisodeExperience({ episode }: { episode: Episode }) {
-  const [chapter, setChapter] = useState(
-    Math.min(2, episode.chapters.length - 1),
-  );
-  const [motionOverride, setMotionOverride] = useState<boolean | null>(null);
-  const reducedMotion = useSyncExternalStore(
-    subscribeMotion,
-    getMotionPreference,
-    getServerMotionPreference,
-  );
-  const moving = motionOverride ?? !reducedMotion;
-  const [tour, setTour] = useState(false);
-  const [fallback, setFallback] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [target, setTarget] = useState<'dc1' | 'dc2'>('dc1');
   const [videoStart, setVideoStart] = useState<number | null>(null);
-  const host = useRef<HTMLDivElement>(null);
-  const scene = useRef<CatalogScene | null>(null);
-  const current = episode.chapters[chapter] ?? episode.chapters[0];
   const supportsScene = supportsIdentityScene(episode);
-
-  useEffect(() => {
-    if (!supportsScene) return;
-    let cancelled = false;
-    import('./catalog-scene')
-      .then(({ createCatalogScene }) => {
-        if (cancelled || !host.current) return;
-        try {
-          scene.current = createCatalogScene(
-            host.current,
-            (next) => {
-              setChapter(next);
-              setTour(false);
-              setVideoStart(episode.chapters[next]?.timestamp ?? null);
-            },
-            () => setFallback(true),
-          );
-          setReady(true);
-        } catch {
-          setFallback(true);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setFallback(true);
-      });
-    return () => {
-      cancelled = true;
-      scene.current?.dispose();
-      scene.current = null;
-    };
-  }, [supportsScene, episode]);
-
-  useEffect(() => {
-    scene.current?.update(chapter, moving, target);
-  }, [chapter, moving, target, ready]);
-  useEffect(() => {
-    if (!tour || !episode) return;
-    const timer = setInterval(
-      () => setChapter((value) => (value + 1) % episode.chapters.length),
-      4200,
-    );
-    return () => clearInterval(timer);
-  }, [tour, episode]);
-
-  if (!current) return null;
-
-  const selectChapter = (value: number) => {
-    setChapter(value);
-    setTour(false);
-    setVideoStart(episode.chapters[value]?.timestamp ?? null);
-  };
   const embedUrl = getYouTubeEmbedUrl(episode.youtubeId, videoStart);
+  const steps: ExplorerStep[] = episode.chapters.map((chapter, index) => ({
+    id: chapter.id,
+    label: chapter.label,
+    title: chapter.title,
+    summary: chapter.description,
+    note: { label: 'IN THE NETWORK', text: chapter.network },
+    links: [{ href: `${episode.training.guide}#${chapter.id}`, label: `Open chapter ${index + 1} in the guide` }],
+  }));
+  if (!steps.length) return null;
 
   return (
     <div className="vc-experience">
@@ -155,153 +78,20 @@ export default function EpisodeExperience({ episode }: { episode: Episode }) {
         </div>
       </section>
 
-      <section
-        className="vc-explorer"
-        aria-labelledby={`build-explorer-${episode.id}`}
-      >
-        <div className="vc-explorer-heading">
-          <div className="vc-stage-title">
-            <Network size={21} />
-            <div>
-              <p className="vc-kicker">INTERACTIVE BUILD EXPLORER</p>
-              <h4 id={`build-explorer-${episode.id}`}>{episode.subtitle}</h4>
-            </div>
-          </div>
-          <div className="vc-scene-tools">
-            {supportsScene && (
-              <>
-                <button
-                  type="button"
-                  aria-pressed={moving}
-                  onClick={() => {
-                    setMotionOverride(!moving);
-                    setTour(false);
-                  }}
-                >
-                  {moving ? <Pause size={14} /> : <Play size={14} />}
-                  {moving ? 'Pause motion' : 'Play motion'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scene.current?.reset()}
-                  disabled={!ready || fallback}
-                >
-                  <RotateCcw size={14} />
-                  Reset view
-                </button>
-              </>
-            )}
-            <Link
-              href="/inside-the-network"
-              aria-label="Explore the complete network"
-            >
-              <Maximize2 size={15} />
-              <span>Full network</span>
-            </Link>
-          </div>
-        </div>
-        <div className="vc-scene-layout">
-          <aside className="vc-build-inspector" aria-live="polite">
-            <div className="vc-inspector-marker">
-              <span>{String(chapter + 1).padStart(2, '0')}</span>
-              <p>
-                THE BUILD STORY
-                <br />
-                <b>{episode.chapters.length} connected chapters</b>
-              </p>
-            </div>
-            <h5>{current.title}</h5>
-            <p>{current.description}</p>
-            <div className="vc-network-note">
-              <span>IN THE NETWORK</span>
-              <p>{current.network}</p>
-            </div>
-            {supportsScene && chapter >= 3 && (
-              <div
-                className="vc-check-targets"
-                role="group"
-                aria-label="Choose a controller to check"
-              >
-                {(['dc1', 'dc2'] as const).map((id) => (
-                  <button
-                    key={id}
-                    type="button"
-                    aria-pressed={target === id}
-                    onClick={() => setTarget(id)}
-                  >
-                    Check {id === 'dc1' ? 'DC01' : 'DC02'}
-                  </button>
-                ))}
-              </div>
-            )}
-            <button
-              type="button"
-              className="vc-story-button"
-              aria-pressed={tour}
-              onClick={() => {
-                setTour((value) => !value);
-                if (!tour) setChapter(0);
-              }}
-            >
-              {tour ? <Pause size={15} /> : <Play size={15} />}
-              {tour ? 'Pause the build story' : 'Play the build story'}
-            </button>
-          </aside>
-          <div className="vc-scene-wrap">
-            <div className="vc-scene-meta">
-              <span>
-                <i />
-                {episode.systems.join(' + ')}
-              </span>
-              <span>{episode.networkLabel}</span>
-            </div>
-            <div
-              ref={host}
-              className={`vc-canvas ${fallback ? 'vc-canvas-hidden' : ''}`}
-            />
-            {(!supportsScene || !ready || fallback) && (
-              <div className="vc-scene-fallback">
-                <Network size={45} />
-                <h5>
-                  {!supportsScene || fallback
-                    ? 'Explore through the chapters'
-                    : 'Preparing your network'}
-                </h5>
-                <p>
-                  {!supportsScene || fallback
-                    ? 'Use the chapter controls to follow each system and its dependencies.'
-                    : `${episode.systems.join(', ')}, and their connections.`}
-                </p>
-              </div>
-            )}
-            {supportsScene && !fallback && (
-              <div className="vc-orbit-hint">
-                <Move size={13} /> Drag to orbit · scroll to zoom · select a
-                system
-              </div>
-            )}
-          </div>
-        </div>
-        <nav className="vc-chapters" aria-label="Build chapters">
-          {episode.chapters.map((item, index) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-current={index === chapter ? 'step' : undefined}
-              onClick={() => selectChapter(index)}
-            >
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <b>{item.label}</b>
-                <small>
-                  {index === chapter ? 'Exploring now' : 'Explore chapter'}
-                </small>
-              </div>
-              <ArrowRight size={15} />
-            </button>
-          ))}
-        </nav>
-      </section>
+      <BuildExplorer
+        id={episode.id}
+        kicker="INTERACTIVE BUILD EXPLORER"
+        heading={episode.subtitle}
+        storyLabel="THE BUILD STORY"
+        unit="chapter"
+        steps={steps}
+        initial={Math.min(2, steps.length - 1)}
+        sceneUrl={supportsScene ? `${episode.training.guide.replace(/\/index\.html$/, '').replace(/\/$/, '')}/scene.json` : null}
+        systems={episode.systems.join(' + ')}
+        networkLabel={episode.networkLabel}
+        guideHref={episode.training.guide}
+        onStep={index => setVideoStart(episode.chapters[index]?.timestamp ?? null)}
+      />
     </div>
   );
 }
