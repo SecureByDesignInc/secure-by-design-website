@@ -14,13 +14,20 @@ type Supporter = { name: string; monthly: boolean };
 type WallResponse = { enabled?: boolean; portal?: string | null; supporters?: Supporter[] };
 type CheckoutResponse = { url?: string; error?: string };
 
+// Panel events for the website analytics dashboard, sent through the site's PostHog setup
+// (server/analytics.js) when it is on. Amounts and choices only; never a display name.
+function track(event: string, properties: Record<string, unknown>) {
+  const posthog = (window as unknown as { posthog?: { capture?: (name: string, props: Record<string, unknown>) => void } }).posthog;
+  try { posthog?.capture?.(event, { ...properties, page: window.location.pathname }); } catch { /* analytics never blocks support */ }
+}
+
 const AMOUNTS = [3, 5, 10, 25];
 
 const HELP = [
-  { title: 'Share a lesson', body: 'Send a guide or video to someone who’s just starting out.', cta: 'Copy a lesson link', href: '/technical-training' },
-  { title: 'Publish your newly earned professional portfolio on LinkedIn', body: 'Post your portfolio or the build you just finished, and tag Secure By Design so we can cheer you on and share it with the community.', cta: 'Share on LinkedIn', href: 'https://www.linkedin.com/company/secure-by-design-inc/', external: true },
-  { title: 'Answer a question in Discord', body: 'Help with the step you were stuck on last month.', cta: 'Join the Discord', href: 'https://discord.gg/MDrGbP4cAY', external: true },
-  { title: 'Report an error', body: 'Tell us when a step or screenshot is out of date.', cta: 'Report an error', href: `mailto:support@securebydesigninc.com?subject=${encodeURIComponent('Report an error')}` },
+  { action: 'share_lesson', title: 'Share a lesson', body: 'Send a guide or video to someone who’s just starting out.', cta: 'Copy a lesson link', href: '/technical-training' },
+  { action: 'linkedin_portfolio', title: 'Publish your newly earned professional portfolio on LinkedIn', body: 'Post your portfolio or the build you just finished, and tag Secure By Design so we can cheer you on and share it with the community.', cta: 'Share on LinkedIn', href: 'https://www.linkedin.com/company/secure-by-design-inc/', external: true },
+  { action: 'discord_answer', title: 'Answer a question in Discord', body: 'Help with the step you were stuck on last month.', cta: 'Join the Discord', href: 'https://discord.gg/MDrGbP4cAY', external: true },
+  { action: 'report_error', title: 'Report an error', body: 'Tell us when a step or screenshot is out of date.', cta: 'Report an error', href: `mailto:support@securebydesigninc.com?subject=${encodeURIComponent('Report an error')}` },
 ];
 
 export default function HomeCommunityPanel() {
@@ -38,7 +45,9 @@ export default function HomeCommunityPanel() {
   const [portal, setPortal] = useState('');
 
   useEffect(() => {
-    setThanked(new URLSearchParams(window.location.search).get('support') === 'thanks');
+    const returned = new URLSearchParams(window.location.search).get('support') === 'thanks';
+    setThanked(returned);
+    if (returned) track('support_thanks_seen', {});
     let live = true;
     fetch('/api/support/wall').then(response => response.ok ? response.json() as Promise<WallResponse> : null).then(data => {
       if (!live || !data) return;
@@ -56,12 +65,15 @@ export default function HomeCommunityPanel() {
     if (!chosen || Number(chosen) < 1) { setError('Enter an amount of at least $1.'); return; }
     if (listName && !displayName.trim()) { setError('Enter the display name you’d like on the wall, or untick that option.'); return; }
     setSending(true);
+    track('support_checkout_started', { frequency, amount_usd: Number(chosen), listed: listName, badge });
     try {
       const response = await fetch('/api/support/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ frequency, amount: chosen, listName, displayName, badge }) });
       const data = await (response.json() as Promise<CheckoutResponse>).catch(() => null);
       if (response.ok && typeof data?.url === 'string' && data.url.startsWith('https://checkout.stripe.com/')) { window.location.assign(data.url); return; }
       setError(typeof data?.error === 'string' ? data.error : 'Checkout couldn’t start. Please try again.');
+      track('support_checkout_error', { frequency, status: response.status });
     } catch {
+      track('support_checkout_error', { frequency, status: 0 });
       setError('Checkout couldn’t start. Check your connection and try again.');
     }
     setSending(false);
@@ -83,12 +95,12 @@ export default function HomeCommunityPanel() {
               {HELP.map(item => <article key={item.title}>
                 <h4>{item.title}</h4>
                 <p>{item.body}</p>
-                <a href={item.href} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.cta}<ArrowRight size={16} aria-hidden="true"/>{item.external && <span className="sr-only"> (opens in a new tab)</span>}</a>
+                <a href={item.href} data-placement="support_panel" data-action={item.action} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : { 'data-track': 'support_help_click' })}>{item.cta}<ArrowRight size={16} aria-hidden="true"/>{item.external && <span className="sr-only"> (opens in a new tab)</span>}</a>
               </article>)}
             </div>
             <div className="sbd-support-pass">
               <p>If this helped you, help someone else find it.</p>
-              <FooterShare/>
+              <div data-track="support_help_click" data-placement="support_panel" data-action="pass_it_on"><FooterShare/></div>
             </div>
           </div>
         </div>
