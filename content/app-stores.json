@@ -1,5 +1,10 @@
 {
   "enabled": false,
+  "heading": "App availability",
+  "betaRequest": {
+    "email": "support@securebydesigninc.com",
+    "label": "Join the beta test"
+  },
   "stores": [
     {
       "id": "app-store",
@@ -8,8 +13,10 @@
       "badge": "/app-stores/app-store.svg",
       "storeUrl": "https://apps.apple.com/",
       "listingUrl": "",
-      "availability": "iOS beta \u00b7 TestFlight",
-      "availabilityDetail": "Invitation-only testing; public App Store release coming soon"
+      "availability": "Join the beta test",
+      "availabilityDetail": "Beta testing by invitation through TestFlight; email support@securebydesigninc.com to join",
+      "betaSubject": "Join the beta test — iPhone & iPad app",
+      "betaBody": "Hi Secure By Design,\n\nI’d like to join the beta test for the iPhone & iPad app.\n\nApple ID email for the TestFlight invitation:\n\nThanks!"
     },
     {
       "id": "google-play",
@@ -18,9 +25,10 @@
       "badge": "/app-stores/google-play.png",
       "storeUrl": "https://play.google.com/store/apps",
       "listingUrl": "",
-      "availability": "Coming soon",
-      "availabilityDetail": "Public Google Play release coming soon"
+      "availability": "Join the beta test",
+      "availabilityDetail": "Beta testing by invitation; email support@securebydesigninc.com to join",
+      "betaSubject": "Join the beta test — Android app",
+      "betaBody": "Hi Secure By Design,\n\nI’d like to join the beta test for the Android app.\n\nGoogle account email for the invitation:\n\nThanks!"
     }
-  ],
-  "heading": "App availability"
+  ]
 }
