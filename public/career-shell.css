@@ -212,7 +212,7 @@ body.site-editorial .header-socials a{display:inline-flex;align-items:center;gap
 body.site-editorial .header-socials a:hover{background:linear-gradient(115deg,#174675,#102a47);border-color:#77cce6;color:#fff;transform:translateY(-2px);box-shadow:0 4px 16px #42c7ee18}
 body.site-editorial .header-socials a:active{transform:translateY(0)}
 body.site-editorial .header-socials a:focus-visible{outline:2px solid #8ed5e6;outline-offset:4px}
-/* Tile artwork (18 October 2026): feathered rims, so the tile melts into the pill; 22px fills the pill's 22px content box. */
+/* Logo artwork (18 October 2026): each logo is cut from its tile with the frame removed, so it sits on the pill's gradient; 22px fills the pill's 22px content box. */
 body.site-editorial .header-social-icon{display:block;width:22px;height:22px;flex:none;object-fit:contain}
 body.site-editorial .header-connect{--connect-label:7.5rem;display:grid;gap:10px;min-width:0;justify-self:end}
 body.site-editorial .header-app-stores{display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:4px 14px;min-width:0;text-align:left}
