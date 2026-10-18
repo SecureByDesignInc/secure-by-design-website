@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Share2 } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
-import FooterShare from './footer-share';
+import { copyPublicLink, homepageShareUrl } from '../public/footer-share.mjs';
 
 // The community panel: the only homepage section after the Live Threat Map (owner's request, 17 October 2026).
 // Pay what you can, ways to help without paying, and the supporter wall. It replaced "More ways to figure it
@@ -29,6 +29,47 @@ const HELP = [
   { action: 'discord_answer', title: 'Answer a question in Discord', body: 'Help with the step you were stuck on last month.', cta: 'Join the Discord', href: 'https://discord.gg/MDrGbP4cAY', external: true },
   { action: 'report_error', title: 'Report an error', body: 'Tell us when a step or screenshot is out of date.', cta: 'Report an error', href: `mailto:support@securebydesigninc.com?subject=${encodeURIComponent('Report an error')}` },
 ];
+
+// The panel's own Pass it on button (owner's report, 17 October 2026: the shared footer button didn't work
+// here). Phones and tablets open the share sheet; computers copy the homepage link and say so. If neither
+// works, the link appears in a box to copy by hand. It always shares the homepage, never the current address.
+type ShareState = 'idle' | 'busy' | 'copied' | 'opened' | 'manual';
+const SHARE_MESSAGES: Record<ShareState, string> = {
+  idle: '',
+  busy: 'Please wait…',
+  copied: 'Link copied. Ready to pass it on.',
+  opened: 'Share options opened.',
+  manual: 'Select and copy the link below.',
+};
+
+function PassItOn() {
+  const [state, setState] = useState<ShareState>('idle');
+  async function pass() {
+    if (state === 'busy') return;
+    setState('busy');
+    const touch = window.matchMedia('(pointer: coarse)').matches;
+    if (touch && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({ title: 'Secure By Design', url: homepageShareUrl });
+        setState('opened');
+        return;
+      } catch (error) {
+        if ((error as { name?: string })?.name === 'AbortError') { setState('idle'); return; }
+      }
+    }
+    setState(await copyPublicLink(navigator) === 'copied' ? 'copied' : 'manual');
+  }
+  return <div className="sbd-pass-share">
+    <button type="button" className="footer-share-button" data-track="support_help_click" data-placement="support_panel" data-action="pass_it_on" disabled={state === 'busy'} onClick={() => { void pass(); }}>
+      <Share2 size={16} aria-hidden="true"/>Pass it on
+    </button>
+    <output className="footer-share-status" aria-live="polite" aria-atomic="true">{SHARE_MESSAGES[state]}</output>
+    {state === 'manual' && <div className="footer-share-manual">
+      <label htmlFor="sbd-pass-link">Secure By Design homepage</label>
+      <input id="sbd-pass-link" type="text" readOnly value={homepageShareUrl} onFocus={event => event.currentTarget.select()}/>
+    </div>}
+  </div>;
+}
 
 export default function HomeCommunityPanel() {
   const [frequency, setFrequency] = useState<'once' | 'monthly'>('once');
@@ -100,7 +141,7 @@ export default function HomeCommunityPanel() {
             </div>
             <div className="sbd-support-pass">
               <p>If this helped you, help someone else find it.</p>
-              <div data-track="support_help_click" data-placement="support_panel" data-action="pass_it_on"><FooterShare/></div>
+              <PassItOn/>
             </div>
           </div>
         </div>
@@ -135,7 +176,6 @@ export default function HomeCommunityPanel() {
           {error && <p className="sbd-support-error" role="alert">{error}</p>}
           <p className="sbd-support-note">{ready ? 'Payments are handled securely by Stripe.' : 'Online payments open soon.'}</p>
           {portal && <a className="sbd-inline-link" href={portal} target="_blank" rel="noopener noreferrer">Manage or cancel monthly support<span className="sr-only"> (opens in a new tab)</span></a>}
-          <a className="sbd-inline-link" href="#help">Can’t chip in? Here’s how to help</a>
         </form>
       </div>
 

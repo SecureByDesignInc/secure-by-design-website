@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
-import RadwareSalesCover, { RADWARE_H, RADWARE_W } from '../radware-sales-cover';
+import RadwareSalesCover, { RADWARE_H, RADWARE_VISIBLE_H, RADWARE_W } from '../radware-sales-cover';
 
 const threatMapUrl = 'https://livethreatmap.radware.com/';
 
@@ -9,7 +9,8 @@ const threatMapUrl = 'https://livethreatmap.radware.com/';
 // browser (so its load event is never missed during hydration) and fades in over our own placeholder when Radware's
 // page has loaded. The direct link stays visible in case the frame can't load. The map is drawn at a fixed
 // 1240 × 800 and scaled to fit, so Radware always shows the same layout and the blur over its "Contact
-// sales" button lands in the right place on any screen (and in full screen).
+// sales" button lands in the right place on any screen (and in full screen). Only the top RADWARE_VISIBLE_H
+// pixels are shown, which keeps Radware's cookie notice at the bottom of its page out of sight.
 export default function ThreatMapFrame() {
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
@@ -36,14 +37,14 @@ export default function ThreatMapFrame() {
     return () => document.removeEventListener('fullscreenchange', sync);
   }, []);
 
-  // Scale the 1240 × 800 map to fit the stage, centered.
+  // Scale the visible part of the 1240 × 800 map to fit the stage, centered.
   useEffect(() => {
     const element = stage.current;
     if (!element) return;
     const measure = () => {
       const width = element.clientWidth, height = element.clientHeight;
-      const scale = Math.min(width / RADWARE_W, height / RADWARE_H);
-      setFit({ scale, x: (width - RADWARE_W * scale) / 2, y: (height - RADWARE_H * scale) / 2 });
+      const scale = Math.min(width / RADWARE_W, height / RADWARE_VISIBLE_H);
+      setFit({ scale, x: (width - RADWARE_W * scale) / 2, y: (height - RADWARE_VISIBLE_H * scale) / 2 });
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -93,7 +94,7 @@ export default function ThreatMapFrame() {
           {slow && <p>Taking a while? <a href={threatMapUrl} target="_blank" rel="noopener noreferrer">Open it on Radware</a>.</p>}
         </div>
       </div>
-      <div className="tm-canvas" style={{ transform: `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})` }}>
+      <div className="tm-canvas" style={{ transform: `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`, clipPath: `inset(0 0 ${RADWARE_H - RADWARE_VISIBLE_H}px 0)` }}>
         {mounted && <iframe
           className={ready ? 'is-ready' : undefined}
           src={threatMapUrl}

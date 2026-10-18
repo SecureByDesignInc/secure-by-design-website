@@ -1,5 +1,5 @@
 /* Homepage community panel (17 October 2026): the only section after the Live Threat Map. */
-.sbd-support{padding:24px 0 90px;scroll-margin-top:24px}
+.sbd-support{padding:8px 0 90px;scroll-margin-top:24px}
 .sbd-support-panel{display:flex;flex-direction:column;gap:40px;padding:40px;background:radial-gradient(ellipse at 95% 0,#1789b120,transparent 60%),#102237;border:1px solid #3b648c;border-radius:18px;box-shadow:0 24px 60px #00000055}
 .sbd-support-top{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
 .sbd-support-intro{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:22px}
@@ -41,6 +41,9 @@
 .sbd-home .sbd-support-form .sbd-support-thanks{padding:12px 14px;border:1px solid #479fdd;border-radius:10px;background:#164b75;color:#f3f7ff;font-weight:600}
 .sbd-home .sbd-support-form .sbd-support-error{color:#ffc9b8;font-weight:600}
 .sbd-support-form .sbd-inline-link{align-self:flex-start;font-size:.875rem}
+.sbd-pass-share{display:flex;flex-direction:column;align-items:flex-start;max-width:280px}
+.sbd-pass-share .footer-share-status{margin-top:8px}
+.sbd-pass-share .footer-share-status:empty{display:none}
 
 .sbd-support-wall-row{border-top:1px solid #3a5673;padding-top:36px}
 .sbd-support-wall{display:flex;flex-direction:column;gap:10px;padding:32px;background:#0a2135;border:1px solid #294658;border-radius:1.25rem}

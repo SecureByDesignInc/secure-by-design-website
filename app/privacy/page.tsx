@@ -55,7 +55,7 @@ export default function Privacy() {
           <li>So we can see how support is going, each completed payment, renewal, cancellation, and refund is also counted in PostHog as an anonymous event: the amount, whether it is one-time or monthly, and whether you chose a wall listing or badge. It never includes your name, email, card, or Stripe details, and it is sent by our server even if your browser blocks analytics.</li>
         </ul>
         <h3>Optional app analytics</h3>
-        <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>
+        <p>The app can share learning analytics only if you turn on <em>Share learning analytics</em>; it is off by default. When on, it sends app opens, lesson and resource actions, whether answers were correct, and feedback-board and booking-page opens, with a random device ID and your platform. It never sends your name, email, answer text, or screen recordings.</p>
         <h3>Website analytics</h3>
         <p>The website uses Cloudflare Web Analytics to count page views and measure how quickly pages load. It also uses PostHog to see how the website is used:</p>
         <ul>
@@ -92,6 +92,8 @@ export default function Privacy() {
           <li><strong>PostHog</strong> (United States) receives the website’s analytics, which use no cookies and aren’t linked to your account. It also receives app analytics, only if you turn them on. It anonymizes your IP address.</li>
           <li><strong>YouTube</strong> plays course videos in privacy-enhanced mode. The player loads from YouTube only when you open a course that has a published video.</li>
           <li><strong>Radware</strong> provides the live threat map on our homepage and in the app. The map loads from Radware when you open the homepage (as its Live Threat Map section comes into view) or open the map in the app; Radware then receives the technical information every web request carries, such as your IP address and browser type, and may set its own cookies and use its own analytics, under its own privacy policy.</li>
+          <li><strong>Google Calendar</strong> hosts our booking page. It opens on Google’s site only if you choose Book a call, and the details you enter there go to Google and to us, under Google’s privacy policy.</li>
+          <li><strong>SMS Reminder</strong> texts a reminder before a call you book, to the phone number you give when booking, under its own privacy policy.</li>
           <li><strong>UserJot</strong> hosts our public idea board. It opens in your browser only if you choose to visit it, and posts there are public.</li>
           <li><strong>Apple</strong> and <strong>Google</strong> distribute the app under their own privacy policies.</li>
         </ul>
