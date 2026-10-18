@@ -27,8 +27,21 @@ test('every configuration course publishes the scene its catalog tile draws', ()
     assert.ok(Array.isArray(data.scene.nodes) && data.scene.nodes.length > 0 && data.scene.nodes.every(node => node.id && node.name && node.title && node.description), `${course.id} scene nodes`);
     assert.deepEqual(data.scene, lessonData(read(`public/training/${course.id}/index.html`)).scene, `${course.id} tile and guide draw the same scene`);
   }
-  const tile = read('app/videos/course-experience.tsx');
-  for (const piece of ['/scene.json`', "import('./guide-scene')", 'INTERACTIVE BUILD EXPLORER', 'vc-system-buttons', 'Reset view', 'Pause motion']) assert.ok(tile.includes(piece), `course tile has ${piece}`);
+  // One explorer for every tile: courses 1.2–1.19 and course 1.1 both render build-explorer.tsx.
+  const explorer = read('app/videos/build-explorer.tsx');
+  for (const piece of ["import('./guide-scene')", 'vc-system-buttons', 'Reset view', 'Pause motion', 'Play the build story']) assert.ok(explorer.includes(piece), `build explorer has ${piece}`);
+  for (const tile of ['app/videos/course-experience.tsx', 'app/videos/episode-experience.tsx']) {
+    const source = read(tile);
+    assert.ok(source.includes("from './build-explorer'") && source.includes('<BuildExplorer') && source.includes('/scene.json`'), `${tile} uses the shared explorer`);
+    assert.ok(!source.includes('catalog-scene'), `${tile} has no bespoke scene`);
+  }
+  assert.equal(existsSync(new URL('../app/videos/catalog-scene.ts', import.meta.url)), false);
+  // Course 1.1's scene is hand-kept beside its hand-kept guide; its chapters are the episode's chapters.
+  const identity = JSON.parse(readFileSync(new URL('../public/training/dc01-dc02/scene.json', import.meta.url), 'utf8'));
+  const episode = JSON.parse(read('content/videos.json')).episodes.find(item => item.id === 'dc01-dc02');
+  assert.deepEqual(identity.chapters.map(chapter => chapter.id), episode.chapters.map(chapter => chapter.id));
+  assert.deepEqual(identity.scene.nodes.map(node => node.name), ['SBD-DC01', 'SBD-DC02']);
+  for (const chapter of identity.chapters) assert.ok(chapter.tag && chapter.status && chapter.network, `1.1 ${chapter.id} names its tag, status and network state`);
 });
 
 test('every configuration course has a guide in the 1.1 design that carries its lessons unchanged', () => {
