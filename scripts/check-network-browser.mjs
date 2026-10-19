@@ -152,14 +152,21 @@ try {
     await page.mouse.move(pcs.x, pcs.y);
     assert.match(await page.locator('#hoverTip').textContent(), /50 Windows PCs/, 'Hover tooltip');
     await page.mouse.move(2, 2);
-    // The overview shows the building alone; the topology layer waits until something is chosen.
-    const islandLabels = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).length);
-    assert.equal(islandLabels, 0, 'The overview hides the topology layer');
-    // Opening a VLAN raises only that segment (and the core) above the building.
+    // The 3D topology layer is gone (19 October 2026): no segment labels float over the building, and there is no Topology button.
+    assert.equal(await page.evaluate(() => window.insideNetworkQA.labels().filter(l => ['island', 'lnode', 'lfacility'].includes(l.kind)).length), 0, 'No topology layer labels in 3D');
+    assert.equal(await page.locator('#viewToggle').count(), 0, 'No Topology button');
+    // The network diagram is its own section between the model and Follow the traffic: every VLAN, the core and the offline area.
+    assert.equal(await page.evaluate(() => { const d = document.getElementById('networkDiagram'); return d.previousElementSibling?.classList.contains('explorer') && d.nextElementSibling?.id === 'trafficSection'; }), true, 'Diagram sits under the model, above Follow the traffic');
+    assert.equal(await page.locator('#networkDiagram .nd-vlan').count(), 8, 'Diagram shows all eight VLANs');
+    assert.match(await page.locator('#networkDiagram .nd-core').textContent(), /Core router/);
+    assert.match(await page.locator('#networkDiagram .nd-offline').textContent(), /SBD-ROOTCA01/);
+    assert.equal(await page.locator('#networkDiagram .nd-uplink').count(), 8, 'One uplink per VLAN');
+    // Opening a VLAN lights its card and dims the rest; a chip in the diagram selects that system in the model.
     await page.evaluate(() => { location.hash = 'vlan=30'; });
-    await page.waitForFunction(() => window.insideNetworkQA.labels().some(l => l.kind === 'island' && l.show), null, { timeout: 8000 }).catch(() => {});
-    const shownIslands = await page.evaluate(() => window.insideNetworkQA.labels().filter(l => l.kind === 'island' && l.show).map(l => l.zone));
-    assert.deepEqual(shownIslands, ['v30'], `Only the chosen VLAN shows on the layer (${shownIslands.join(', ')})`);
+    await page.waitForFunction(() => document.querySelector('#networkDiagram [data-vlan=v30]').classList.contains('is-on'));
+    assert.equal(await page.locator('#networkDiagram .nd-vlan.is-dim').count(), 7, 'Other VLANs dim');
+    await page.locator('#networkDiagram [data-diagram-system=sql]').click();
+    assert.equal(await page.locator('#systemSelect').inputValue(), 'sql', 'Diagram chips select the system');
     await page.locator('#overview').click();
     await page.waitForTimeout(1200);
     // Connection map for one system.
@@ -170,13 +177,7 @@ try {
     await page.locator('#connectionsToggle').click();
     await page.selectOption('#systemSelect', 'sql');
     assert.match(await page.locator('#systemContent .connections').textContent(), /Permitted[\s\S]*F22[\s\S]*Denied[\s\S]*F14/, 'SBD-SQL01 lists its one registered consumer and the web-to-SQL deny');
-    // The topology layer is on (shown when relevant) by default; turning it off travels with the link. Then the cinematic look.
-    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'true', 'Topology shows by default');
-    await page.locator('#viewToggle').click();
-    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'false');
-    await page.waitForFunction(() => location.hash.includes('topology=off'));
-    await page.waitForTimeout(1200);
-    await page.locator('#viewToggle').click();
+    // The cinematic look.
     await page.locator('#lookToggle').click();
     assert.equal(await page.locator('#lookToggle').getAttribute('aria-pressed'), 'true');
     await page.waitForTimeout(1500);
@@ -216,7 +217,11 @@ try {
     assert.equal(await page.locator('#stepCounter').textContent(), 'Step 2 of 4');
     assert.equal(await page.locator('#trafficSection').evaluate(el => el.open), true, 'Process links open the walkthroughs');
     assert.equal(await page.locator('#sequenceKicker').textContent(), '07 / USE A WEB APP');
-    assert.equal(await page.locator('#viewToggle').getAttribute('aria-pressed'), 'false', 'Links can hide the topology layer');
+    assert.equal(await page.evaluate(() => location.hash.includes('topology')), false, 'Old topology=off links open and drop the flag');
+    // The step's path shows in the diagram: workstation to the PKI host is permitted, so both uplinks light through the core.
+    assert.match(await page.locator('#networkDiagram .nd-status').textContent(), /Step 2 of 4/);
+    assert.equal(await page.locator('#networkDiagram .nd-gate.is-open').count() > 0, true, 'Permitted step opens the core gate');
+    assert.match(await page.locator('#networkDiagram .nd-core-status').textContent(), /Permitted/);
     await context.close();
   }
   // Mobile layout stays within the viewport.

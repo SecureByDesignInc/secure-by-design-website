@@ -398,3 +398,60 @@ body.cinema .stage-toolbar{display:none}
 @media(max-width:780px){.stage{height:600px}.stage-heading p{display:none}.stage-heading h2{font-size:21px;margin:6px 0 0}.flow-caption:not(.is-step){padding:9px 12px}.flow-caption:not(.is-step) small{display:none}.flow-caption:not(.is-step) strong{font-size:13px;margin:4px 0 0}}
 /* Explore: network segments carry their VLAN colour. */
 .segment-choice{border-left:3px solid var(--node-color,#6fd4ea)!important}
+/* October 19, 2026: the network diagram is its own section under the model, replacing the floating 3D topology layer. */
+.network-diagram{border-top:1px solid #294a60;background:#091525;padding:30px 28px 38px}
+.nd-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;max-width:1240px;margin:0 auto}
+.nd-head .eyebrow{font-size:12px;letter-spacing:1.5px;color:#9cdeeb}
+.nd-head h2{font-size:26px;line-height:1.2;font-weight:600;letter-spacing:-.5px;margin:6px 0 8px;color:#edfaff}
+.nd-head p{font-size:14px;line-height:1.55;margin:0;color:#b1cddd;max-width:720px}
+.nd-show3d{flex:none;min-height:40px}
+.nd-status{max-width:1240px;margin:16px auto 22px;padding:10px 14px;border:1px solid #29425a;border-radius:8px;background:#0c1b2b;font-size:13px;line-height:1.5;color:#cfe3f1}
+.nd-board{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"v10 v20 v30" "v80 core v40" "v50 v60 v70" ". offline .";column-gap:60px;row-gap:78px;max-width:1240px;margin:0 auto}
+.nd-links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:1;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.nd-uplink{transition:opacity .25s}.nd-uplink.is-quiet{opacity:.22}
+.nd-trunk{stroke:#5d7c95}
+.nd-gate{fill:#07111e;stroke:#7de2ee;stroke-width:2}.nd-gate.is-open{fill:#7de2ee;stroke:none}
+.nd-check{stroke:#07111e;stroke-width:2.2;fill:none}
+.nd-lit-glow{opacity:.22}.nd-lit.is-unreached{opacity:.3;stroke-dasharray:6 7}
+.nd-stop{fill:#ff6b6b;stroke:#3a1418;stroke-width:4;paint-order:stroke}.nd-stop-x{stroke:#07111e;stroke-width:2.4}
+.nd-packet{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
+.nd-core-wrap{grid-area:core;align-self:center;position:relative;border:2px dashed #4f9fbe;border-radius:26px;padding:28px 26px;background:#071423}
+.nd-deny{position:absolute;left:-14px;top:-13px;z-index:2;padding:4px 10px;border:1px solid #4f9fbe;border-radius:12px;background:#07111e;font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:1.2px;color:#7de2ee}
+.nd-core{position:relative;z-index:2;display:grid;gap:3px;justify-items:center;width:100%;padding:16px 14px;border:2px solid #3b6c8c;border-radius:16px;background:#0d2a40;text-align:center}
+.nd-core:hover,.nd-core.is-on{border-color:#7de2ee;background:#0f3150}
+.nd-core strong{font-size:19px;color:#f3faff}.nd-core-role{font-size:13px;font-weight:500;color:#c2d6e6}
+.nd-kicker{font:600 11px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:1.4px;color:#7de2ee}
+.nd-core-status{margin-top:6px;padding:4px 10px;border-radius:999px;background:#103e33;color:#bff3df;font-size:12px;font-weight:600}
+.nd-core-status[data-kind=deny],.nd-core-status[data-kind=pending]{background:#3a1820;color:#ffc9c9}
+.nd-core-status[data-kind=manual]{background:#3a2f1a;color:#f5dfb3}
+.nd-vlan{position:relative;z-index:2;align-self:center;display:flex;flex-direction:column;border:2px solid var(--vlan);border-radius:14px;background:#0e1d2e;overflow:hidden;transition:opacity .25s,box-shadow .25s}
+.nd-vlan.is-dim,.nd-offline.is-dim{opacity:.42}
+.nd-vlan.is-on{box-shadow:0 0 0 4px color-mix(in srgb,var(--vlan) 28%,transparent)}
+.nd-vlan-head{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:40px;padding:8px 14px;border:0;border-radius:0;background:var(--vlan);color:#07111e;text-align:left}
+.nd-vlan-head:hover{background:var(--vlan);filter:brightness(1.08)}
+.nd-vlan-head b{font-size:15px;letter-spacing:.3px}.nd-vlan-head code{font-size:13px;font-weight:700}
+.nd-vlan h3{margin:12px 14px 9px;font-size:17px;line-height:1.3;font-weight:600;color:#f3faff}
+.nd-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px}
+.nd-chip{min-height:30px;padding:5px 9px;border:1px solid #304b62;border-radius:6px;background:#091727;font:500 12px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dcecf8}
+.nd-chip:hover{border-color:#7de2ee;background:#12304a}
+.nd-chip.is-on{border-color:#7de2ee;color:#fff;background:#123a52}
+.nd-chip.is-source,.nd-chip.is-target{border-color:var(--vlan,#7de2ee);background:var(--vlan,#7de2ee);color:#07111e;font-weight:700}
+.nd-offline .nd-chip.is-source,.nd-offline .nd-chip.is-target{--vlan:#e5c58e}
+.nd-offline{grid-area:offline;position:relative;z-index:2;display:grid;gap:8px;padding:14px 0 0;border:2px dashed #6f8aa6;border-radius:14px;background:#08111c;transition:opacity .25s}
+.nd-offline .nd-kicker{padding:0 14px;color:#e5c58e}.nd-offline .nd-chips{padding-bottom:0}
+.nd-offline p{margin:0;padding:0 14px 14px;font-size:13px;line-height:1.45;color:#aebdd0}
+.nd-offline.is-on{border-color:#e5c58e}
+/* Narrow boards: the core on top, then each VLAN on a shared trunk, then the offline area with no link. */
+.nd-narrow.network-diagram{padding:24px 16px 30px}
+.nd-narrow .nd-head{display:block}.nd-narrow .nd-show3d{margin-top:12px}
+.nd-narrow .nd-head h2{font-size:24px}
+.nd-narrow .nd-board{display:flex;flex-direction:column;gap:14px;padding-left:30px}
+.nd-narrow .nd-core-wrap{padding:20px 16px;margin-bottom:10px}
+.nd-narrow .nd-deny{left:-10px}
+.nd-narrow .nd-vlan h3{font-size:16px;margin:10px 14px 8px}
+.nd-narrow .nd-offline{margin-top:16px}
+@media(max-width:780px){.network-diagram{order:3}}
+@media(prefers-reduced-motion:reduce){.nd-uplink,.nd-vlan,.nd-offline{transition:none}}
+.nd-vlan[data-vlan=v10],.nd-vlan[data-vlan=v20],.nd-vlan[data-vlan=v30]{align-self:end}
+.nd-vlan[data-vlan=v50],.nd-vlan[data-vlan=v60],.nd-vlan[data-vlan=v70]{align-self:start}
+.nd-narrow .nd-board>.nd-vlan,.nd-narrow .nd-core-wrap,.nd-narrow .nd-offline{align-self:stretch}
