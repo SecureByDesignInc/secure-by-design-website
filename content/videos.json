@@ -26,612 +26,70 @@
       "channelUrl": "https://discord.gg/MDrGbP4cAY"
     }
   ],
-  "episodes": [
+  "episodes": [],
+  "courses": [
     {
-      "id": "dc01-dc02",
+      "id": "identity-foundation",
+      "categoryOrder": 1,
+      "estimatedHours": 23.2,
       "number": "1.1",
-      "title": "Promote Primary & Secondary Domain Controller",
-      "subtitle": "DC01 + DC02 / Active Directory",
-      "description": "Promote the primary and secondary domain controllers on Windows Server, place them on their own network segment, verify the domain's health, and keep a record of the build.",
+      "title": "Build and harden the identity foundation",
+      "subtitle": "AD DS, DNS, time, STIG hardening, PKI, DHCP & tiered administration",
+      "description": "Design the identity foundation with the US design references, then build it end to end: promote SBD-DC01 and SBD-DC02, configure DNS and domain time, measure both controllers against the DISA STIG and harden them with Group Policy, build the two-tier PKI, stand up DHCP for VLAN 80 with secure DNS updates, and move administration onto tiered seats. Eight parts, each opening with its design decisions and closing with evidence for your portfolio.",
       "tags": [
         "Windows Server",
         "Active Directory",
-        "DNS"
-      ],
-      "youtubeId": null,
-      "systems": [
-        "DC01",
-        "DC02"
-      ],
-      "training": {
-        "guide": "/training/dc01-dc02/index.html",
-        "word": "/training/dc01-dc02/SecureByDesign-DC01-DC02-Workbook.docx",
-        "cover": "/training/dc01-dc02/workbook-cover.webp",
-        "pages": 13,
-        "materialsEdition": "0.8",
-        "updated": "18 October 2026",
-        "copyrightOwner": "Secure By Design Team LLC",
-        "copyrightYear": 2026,
-        "notices": "/training/dc01-dc02/notices.html"
-      },
-      "chapters": [
-        {
-          "id": "prepare",
-          "label": "Plan the build",
-          "title": "Give every system a purpose",
-          "description": "Understand Active Directory and where the controllers live before choosing names, addresses, and the starting configuration.",
-          "network": "DC01 and DC02 are planned on VLAN 10, their own segment. The connections show where identity services will take shape.",
-          "timestamp": null
-        },
-        {
-          "id": "dc01",
-          "label": "Configure DC01",
-          "title": "Create the first service point",
-          "description": "Create the forest and bring Active Directory Domain Services online on DC01.",
-          "network": "DC01 is configured. DC02 remains a planned system until it joins this same domain.",
-          "timestamp": null
-        },
-        {
-          "id": "dc02",
-          "label": "Bring in DC02",
-          "title": "Give the domain a second home",
-          "description": "Add a second writable controller and understand the availability it provides.",
-          "network": "Both controllers serve the domain. The moving connection follows directory replication.",
-          "timestamp": null
-        },
-        {
-          "id": "verify",
-          "label": "Verify the domain",
-          "title": "Check the domain's health",
-          "description": "Run DCDiag against each controller, confirm replication in both directions, and check each controller's roles and host firewall.",
-          "network": "Select either controller below to follow a health check from the administration viewpoint.",
-          "timestamp": null
-        },
-        {
-          "id": "evidence",
-          "label": "Keep evidence",
-          "title": "Leave a build you can explain",
-          "description": "Record the configuration, observed results, and follow-up work in your training companion.",
-          "network": "The directory now has two service points. Your build record connects choices with evidence.",
-          "timestamp": null
-        }
-      ],
-      "scene": "identity-dc",
-      "networkLabel": "VLAN 10 / IDENTITY",
-      "outcomeSummary": "One domain. Two writable controllers on their own segment. Replication and health checks you can explain and verify.",
-      "outcomes": [
-        "Understand Active Directory",
-        "Promote both controllers",
-        "Verify and keep evidence"
-      ],
-      "categoryId": "network-build",
-      "categoryOrder": 1,
-      "topic": "Active Directory"
-    }
-  ],
-  "courses": [
-    {
-      "id": "dns-configuration",
-      "categoryOrder": 2,
-      "number": "1.2",
-      "estimatedHours": 1.8,
-      "title": "Configure DNS",
-      "subtitle": "Service discovery, zones, records & troubleshooting",
-      "description": "Learn how DNS lets every domain member find its domain controllers, then build dependable internal name resolution on DC01 and DC02: set each controller's DNS order, configure forward and reverse zones, manage service records, and prove resolution, discovery and failover in the air-gapped training network.",
-      "tags": [
-        "Windows Server",
         "DNS",
-        "Name resolution",
-        "Service discovery"
-      ],
-      "platform": "Windows Server",
-      "systems": [
-        "SBD-DC01",
-        "SBD-DC02"
-      ],
-      "artLabels": [
-        "Discovery + zones",
-        "Records + aliases",
-        "Verify + troubleshoot"
-      ],
-      "outcomes": [
-        "Explain how DNS lets members find domain controllers, and plan internal DNS and client settings.",
-        "Configure secure AD-integrated zones and maintain records.",
-        "Test both resolvers, directory discovery, and client fallback.",
-        "Find a DNS fault one layer at a time and record the cause, the fix, and the rollback."
-      ],
-      "stages": [
-        {
-          "title": "Map names to the network",
-          "detail": "Domain Name System (DNS) turns names into addresses, and for Active Directory it does one more job: it tells every domain member where its domain controllers are. Start from the working directory build, learn what DNS answers and what it doesn't, set each controller's DNS client order, and record which server owns each name and how a client finds it."
-        },
-        {
-          "title": "Configure forward and reverse zones",
-          "detail": "A zone holds the records for one part of the namespace. Forward lookup answers where a name lives. Reverse lookup answers which name is assigned to an address. AD integration lets the directory replicate zone data between the selected DNS servers."
-        },
-        {
-          "title": "Create and maintain service records",
-          "detail": "Build a small, intentional record set. A host record identifies a machine; an alias provides a stable service name without making that alias a separate server."
-        },
-        {
-          "title": "Prove resolution and directory discovery",
-          "detail": "Test each server explicitly before testing client fallback. A successful cached answer does not prove that both DNS servers hold the right records, and a correct DNS answer proves neither a successful sign-in nor access to a protected resource."
-        },
-        {
-          "title": "Find the fault and record the fix",
-          "detail": "Troubleshoot one layer at a time: client settings, server reachability, authoritative data, replication, and finally the application that uses the name."
-        }
-      ],
-      "outcomeSummary": "Names that resolve from either controller. Discovery that survives one being down. Proven, not assumed.",
-      "networkLabel": "VLAN 10 / NAME RESOLUTION",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "training": {
-        "guide": "/training/dns-configuration",
-        "materialsEdition": "2.0",
-        "updated": "14 October 2026",
-        "checklistPage": "/training/dns-configuration/checklist",
-        "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
-        "pages": 14,
-        "cover": "/training/dns-configuration/workbook-cover.webp"
-      },
-      "topic": "DNS"
-    },
-    {
-      "id": "domain-time",
-      "categoryOrder": 3,
-      "number": "1.3",
-      "estimatedHours": 2.5,
-      "title": "Configure domain time",
-      "subtitle": "The Windows Time hierarchy, the PDC emulator & chrony",
-      "description": "Give the air-gapped domain one clock it can trust: make SBD-DC01, the PDC emulator, the reliable source serving its own clock and check it against an approved reference, keep SBD-DC02, Windows members and Linux servers on the hierarchy, and prove the chain with measured offsets.",
-      "tags": [
-        "Windows Server",
-        "Time service",
-        "NTP",
-        "chrony",
-        "Active Directory"
-      ],
-      "platform": "Windows Server",
-      "systems": [
-        "SBD-DC01",
-        "SBD-DC02"
-      ],
-      "artLabels": [
-        "Plan + PDC source",
-        "Members + chrony",
-        "Prove + troubleshoot"
-      ],
-      "outcomes": [
-        "Explain why Kerberos, logs and certificates need agreeing clocks, and plan the hierarchy, reference, fallback and service path.",
-        "Make SBD-DC01, the PDC emulator, the reliable source serving its own clock, with hypervisor time sync off on both controllers.",
-        "Keep every Windows member and Linux server on the hierarchy, with nothing from Group Policy or a hypervisor overriding it.",
-        "Prove the chain with sources, offsets and events, and fix time faults, a moved PDC emulator role included."
-      ],
-      "stages": [
-        {
-          "title": "Plan the domain's time",
-          "detail": "Every sign-in, log entry and certificate in this network depends on clocks that agree, and an air-gapped network has no internet time to lean on. Learn why time matters here and how the Windows Time hierarchy carries one clock from SBD-DC01 to every system, then write down the reference, the fallback and the service path you will hold the domain to."
-        },
-        {
-          "title": "Make SBD-DC01 the domain's time source",
-          "detail": "With no outside time to lean on, the domain's clock is whatever SBD-DC01 says, so make that a deliberate, checked configuration. Take the hypervisor out of both controllers' time, mark SBD-DC01 — the PDC emulator — as the reliable source serving its own clock with no external peer, and run the first check against the approved reference."
-        },
-        {
-          "title": "Bring every system onto the hierarchy",
-          "detail": "One source is only useful if every other clock follows it and nothing quietly overrides that. Leave SBD-DC02 and the Windows members on the domain hierarchy's defaults, keep Group Policy and hypervisors out of their time, and write the chrony configuration every Linux server in later courses uses to follow both controllers."
-        },
-        {
-          "title": "Prove the time chain",
-          "detail": "A source you configured is a claim until every link answers to it. Read each system's source and status, measure its offsets and confirm they are small and stable, and keep the events and readings that let an assessor see the time chain for themselves."
-        },
-        {
-          "title": "Find the time fault and record the fix",
-          "detail": "Time faults rarely look like time: a refused sign-in, a replication error, a certificate that is suddenly not yet valid. Measure the offset first, find where the hierarchy broke — a member off its source, a moved PDC emulator role, a restored or reverted VM — then fix the cause, resync safely and record what happened."
-        }
-      ],
-      "outcomeSummary": "One declared, checked clock on SBD-DC01. Every system following it. Offsets measured, not assumed.",
-      "networkLabel": "VLAN 10 / DOMAIN TIME",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "training": {
-        "guide": "/training/domain-time",
-        "checklistPage": "/training/domain-time/checklist",
-        "word": "/training/domain-time/SecureByDesign-domain-time-Workbook.docx",
-        "pages": 18,
-        "cover": "/training/domain-time/workbook-cover.webp",
-        "materialsEdition": "1.0",
-        "updated": "14 October 2026"
-      },
-      "topic": "Time"
-    },
-    {
-      "id": "stig-scap",
-      "categoryOrder": 4,
-      "number": "1.4",
-      "estimatedHours": 2.3,
-      "title": "Measure against the STIG",
-      "subtitle": "DISA STIGs, SCAP scans & STIG Viewer checklists",
-      "description": "Stage the DISA SCAP tools and content across the air gap, scan SBD-DC01 and SBD-DC02 against the Windows Server STIG with SCC, answer the manual checks in STIG Viewer checklists, and hand course 1.5 a classified findings record traced to NIST SP 800-53 controls.",
-      "tags": [
-        "Windows Server",
         "DISA STIG",
-        "SCAP",
-        "STIG Viewer",
-        "Active Directory"
-      ],
-      "platform": "Windows Server",
-      "systems": [
-        "SBD-DC01",
-        "SBD-DC02"
-      ],
-      "artLabels": [
-        "Hashed DISA staging",
-        "SCC baseline scans",
-        "Checklists → findings"
-      ],
-      "outcomes": [
-        "Explain STIGs, SRGs, SCAP benchmarks, severity categories and CCIs, and what a scan can and cannot prove.",
-        "Stage SCC, STIG Viewer, the STIGs and the DISA GPO package across the air gap with hashes verified on both sides.",
-        "Capture a hashed SCAP baseline of both controllers and complete STIG Viewer checklists with observed evidence.",
-        "Classify every open finding and hand course 1.5 a versioned findings record traced to NIST controls."
-      ],
-      "stages": [
-        {
-          "title": "Understand STIGs, SCAP and checklists",
-          "detail": "A Security Technical Implementation Guide (STIG) is DISA's configuration standard for one product, and every scan and checklist in this course measures against one. Learn how a rule is identified, rated and traced to NIST SP 800-53, which rules a scanner can read and which a person must answer, then record which STIGs apply to each controller."
-        },
-        {
-          "title": "Stage the DISA content across the air gap",
-          "detail": "Everything this course and the next one use is downloaded DISA content: the SCAP Compliance Checker (SCC), STIG Viewer, the SCAP benchmarks, the STIGs and the Group Policy object (GPO) package. It crosses the boundary the way everything does here — reviewed, hashed, and carried on approved removable media."
-        },
-        {
-          "title": "Capture the pre-hardening baseline",
-          "detail": "Measure before you change. A scan of the freshly built controllers shows the honest starting point, teaches what the operating system already secures by default, and becomes the before picture every later scan is compared against."
-        },
-        {
-          "title": "Build the checklists and answer the manual checks",
-          "detail": "A scan answers only what it can read. In STIG Viewer on SBD-DC01, build a checklist for each controller and one for the directory, let the SCC results fill the automated rules, and answer every remaining rule with what you observed."
-        },
-        {
-          "title": "Write the findings record for hardening",
-          "detail": "A checklist full of statuses is not yet a decision. Turn the open items from all three checklists into one findings record — counted by severity, classified, owned, and traced from rule to CCI to NIST control — that course 1.5 can harden against and prove."
-        }
-      ],
-      "outcomeSummary": "Both controllers measured against the STIG. Every open item counted, classified, and handed to course 1.5.",
-      "networkLabel": "VLAN 10 / DOMAIN CONTROLLERS",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "training": {
-        "guide": "/training/stig-scap",
-        "checklistPage": "/training/stig-scap/checklist",
-        "word": "/training/stig-scap/SecureByDesign-stig-scap-Workbook.docx",
-        "pages": 14,
-        "cover": "/training/stig-scap/workbook-cover.webp",
-        "materialsEdition": "1.0",
-        "updated": "14 October 2026"
-      },
-      "topic": "STIG"
-    },
-    {
-      "id": "harden-baseline",
-      "categoryOrder": 5,
-      "number": "1.5",
-      "estimatedHours": 2.5,
-      "title": "Harden with Group Policy",
-      "subtitle": "OU design, Group Policy processing & DISA GPOs proven by rescan",
-      "description": "Build the organizational units the hardening hangs on, learn exactly how Group Policy decides what applies, import the DISA STIG Group Policy objects course 1.4 staged and link them to SBD-DC01 and SBD-DC02 by OU, and prove the change with a rescan matched to course 1.4's baseline, updated checklists and an owned exception record.",
-      "tags": [
-        "Windows Server",
         "Group Policy",
-        "DISA STIG",
-        "Organizational units",
-        "Active Directory"
+        "PKI",
+        "DHCP",
+        "Tiered administration"
       ],
       "platform": "Windows Server",
       "systems": [
         "SBD-DC01",
-        "SBD-DC02"
-      ],
-      "artLabels": [
-        "OUs + redirects",
-        "DISA GPOs by OU",
-        "Rescan → exceptions"
-      ],
-      "outcomes": [
-        "Design OUs for delegation and policy targeting, and redirect the default containers.",
-        "Predict which GPO wins from processing order, link order, inheritance, filtering and loopback, and confirm it with gpresult.",
-        "Import the DISA GPO package through the central store and link it by OU, with account policies at the domain root.",
-        "Prove the hardening with a rescan matched to course 1.4's baseline, updated checklists and an owned exception record."
-      ],
-      "stages": [
-        {
-          "title": "Design and build the OU structure",
-          "detail": "Organizational units exist for delegation and Group Policy targeting, not to mirror an org chart. Build the structure the hardening policies will hang on before importing any of them."
-        },
-        {
-          "title": "Learn how Group Policy applies",
-          "detail": "Before the DISA settings arrive, learn how a computer decides which Group Policy objects (GPOs) apply and which setting wins. Map the order, build the central store the import will use, and record what both controllers apply today."
-        },
-        {
-          "title": "Import and link the DISA GPOs",
-          "detail": "Group Policy is how the STIG becomes configuration. Import the package course 1.4 staged, link each policy where its systems live so the findings marked fix by GPO can close, and keep the lab's deliberate deviations written down rather than silently skipped."
-        },
-        {
-          "title": "Rescan, reconcile, and record",
-          "detail": "The second scan is the verdict. Rescan with exactly the versions course 1.4 used, compare each controller with its own baseline, update copies of the course 1.4 checklists, and give every remaining open item an answer."
-        },
-        {
-          "title": "Set the rescan cadence and exception record",
-          "detail": "Hardening is a state you maintain, not a step you finish. Close the course with an owned exception record and a recorded policy state — reports and links, while course 1.19 backs the GPOs up — and decide who rescans, when, and which event forces an early look."
-        }
-      ],
-      "outcomeSummary": "OUs built for delegation, DISA policies applied where they belong, and a rescan that proves what changed.",
-      "networkLabel": "VLAN 10 / DOMAIN CONTROLLERS",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "training": {
-        "guide": "/training/harden-baseline",
-        "materialsEdition": "2.0",
-        "updated": "14 October 2026",
-        "checklistPage": "/training/harden-baseline/checklist",
-        "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
-        "pages": 17,
-        "cover": "/training/harden-baseline/workbook-cover.webp"
-      },
-      "topic": "Group Policy"
-    },
-    {
-      "id": "two-tier-pki",
-      "categoryOrder": 6,
-      "estimatedHours": 4.7,
-      "stages": [
-        {
-          "title": "Design the two-tier trust hierarchy",
-          "detail": "The root establishes trust. The subordinate, also called the issuing CA in this design, handles approved end-entity certificates. Keeping these roles separate protects the root from daily network exposure."
-        },
-        {
-          "title": "Configure the offline Root CA",
-          "detail": "Treat root installation as a controlled event. Its private key is the highest-value secret in the hierarchy, and its configuration shapes the subordinate certificate it will sign."
-        },
-        {
-          "title": "Create the issuing CA request",
-          "detail": "Prepare the online issuing server, but keep issuance paused until its CA certificate has been signed and installed. The request carries the public key; the private key stays protected on the issuing system or its approved key provider."
-        },
-        {
-          "title": "Sign through the offline ceremony",
-          "detail": "A signing ceremony connects an approved request to an approved CA identity. A matching filename alone is not proof that the root should trust the request."
-        },
-        {
-          "title": "Activate the issuing CA and distribute trust",
-          "detail": "A signed certificate is not yet a working CA. Install it, start Certificate Services, set the AIA and CDP locations every issued certificate will carry, and distribute the approved root through managed domain policy."
-        },
-        {
-          "title": "Build the pki.sbd.test publication site",
-          "detail": "Every certificate the issuing CA has signed carries the pki.sbd.test URLs inside it. This lesson gives those URLs a real home: a small web site on SBD-PKI-MGMT01 serving certificates and revocation lists to the whole network."
-        },
-        {
-          "title": "Publish the trust data at its advertised URLs",
-          "detail": "A publication site is only correct when the filenames it serves match the URLs the certificates already carry. Copy the current certificates and CRLs into place, wire the issuing CA to keep them fresh, and prove retrieval from a client that has never cached anything."
-        },
-        {
-          "title": "Separate template administration",
-          "detail": "Certificate templates are directory objects, and whoever edits them decides what the PKI will sign. Give that power its own seat — SBD-PKI-MGMT01 — with named administrators, instead of leaving it wherever a CA console happens to be open."
-        },
-        {
-          "title": "Publish the first working templates",
-          "detail": "The default template set is a menu, not a deployment. Duplicate the three templates this network actually needs — domain controller, computer and server authentication — set their cryptography deliberately, and publish only those."
-        },
-        {
-          "title": "Validate enrollment, revocation, and renewal",
-          "detail": "Finish the way relying systems see it: both domain controllers and a pilot machine enroll on their own, validate against the live publication site, and reject a certificate you revoke — then the closing scans record what this course changed and close course 1.4's domain controller certificate finding."
-        }
-      ],
-      "number": "1.6",
-      "title": "Configure the two-tier PKI",
-      "subtitle": "Offline root, issuing CA, pki.sbd.test publication & templates",
-      "description": "Build a complete two-tier public key infrastructure: an offline standalone Root CA and an enterprise issuing CA, signed through a controlled ceremony, with trust data served from pki.sbd.test at the exact embedded URLs, template administration on its own seat, certificates for both domain controllers, and enrollment and revocation proven end to end.",
-      "tags": [
-        "Windows Server",
-        "PKI",
-        "Root CA",
-        "Subordinate CA",
-        "AD CS",
-        "Certificate templates",
-        "AIA and CDP"
-      ],
-      "platform": "Windows Server",
-      "systems": [
+        "SBD-DC02",
         "SBD-ROOTCA01",
         "SBD-SUBCA01",
-        "SBD-PKI-MGMT01"
-      ],
-      "artLabels": [
-        "Offline Root CA",
-        "Issuing CA + pki.sbd.test",
-        "Templates + enrollment"
-      ],
-      "outcomes": [
-        "Design the CA hierarchy and its publication dependencies.",
-        "Configure the offline root and sign an issuing CA request through controlled media transfer.",
-        "Publish certificates and CRLs at the exact URLs issued certificates carry, from pki.sbd.test.",
-        "Move template administration to a delegated seat, give both domain controllers their certificates, and prove autoenrollment and revocation end to end."
-      ],
-      "outcomeSummary": "An offline root, a working issuing CA, and trust data served at exactly the URLs every certificate carries.",
-      "networkLabel": "OFFLINE + VLAN 30 / PKI",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 10,
-      "lessonCount": 10,
-      "training": {
-        "guide": "/training/two-tier-pki",
-        "materialsEdition": "2.2",
-        "updated": "14 October 2026",
-        "checklistPage": "/training/two-tier-pki/checklist",
-        "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
-        "pages": 25,
-        "cover": "/training/two-tier-pki/workbook-cover.webp"
-      },
-      "topic": "PKI"
-    },
-    {
-      "id": "dhcp",
-      "categoryOrder": 7,
-      "number": "1.7",
-      "estimatedHours": 2.4,
-      "title": "Run DHCP on SBD-DHCP01",
-      "subtitle": "Workstation leases, secure name registration & an audited lease trail",
-      "description": "Design and build the workstation VLAN's addressing service on SBD-DHCP01: a full-subnet scope with exclusions and the three options clients trust, directory authorization, the core's relay verified rather than built, client names registered under one dedicated low-privilege account with name protection, a lease history kept beyond Windows' weekly overwrite, the restore note course 1.19's backup relies on, and a proof that a name takeover fails.",
-      "tags": [
-        "Windows Server",
-        "DHCP",
-        "DNS",
-        "Name protection",
-        "Audit logging"
-      ],
-      "platform": "Windows Server · Windows client",
-      "systems": [
-        "SBD-DHCP01"
-      ],
-      "artLabels": [
-        "VLAN 80 scope",
-        "Secure name updates",
-        "Audited leases"
-      ],
-      "outcomes": [
-        "Design the VLAN 80 scope, its exclusions, lease length, and options, and confirm the core's relay under F04.",
-        "Build and authorize SBD-DHCP01 on a member server run by its own server-administration accounts.",
-        "Register client names under one dedicated account with name protection, never through DnsUpdateProxy.",
-        "Keep the lease history, write the restore note for course 1.19's backup, and prove the service, including a refused name takeover."
-      ],
-      "stages": [
-        {
-          "title": "Design the addressing service",
-          "detail": "DHCP decides the first things every workstation believes: its address, its gateway, and which servers answer its names. Design that service before building it — one scope for VLAN 80, the options clients will trust, and the identities that authorize, run, and register for it — and confirm the core already relays VLAN 80's requests."
-        },
-        {
-          "title": "Build SBD-DHCP01 and its scope",
-          "detail": "Addressing is the first service fifty machines will ask for. Build the DHCP server on a member server run by its own administration accounts, authorize it in the directory — the check that keeps unauthorized Windows DHCP servers from serving — and create the VLAN 80 scope, then pull a first lease through the core's relay."
-        },
-        {
-          "title": "Register client names securely",
-          "detail": "Course 1.2's zone accepts only secure updates, so the real question is who writes VLAN 80's records. Give that job to one dedicated, unprivileged account, turn on name protection so no device can take over another's name, and keep the DnsUpdateProxy group empty — it strips the protection off every record its members create."
-        },
-        {
-          "title": "Audit leases and write the restore note",
-          "detail": "A router's deny log names addresses, not machines; the DHCP audit log is how you turn an address at a moment in time into a workstation. Keep that log longer than the week Windows keeps it, review who holds leases, know what an unauthorized DHCP server can and can't do here, and write the restore note that course 1.19's backup of the server relies on."
-        },
-        {
-          "title": "Prove the service and hand off",
-          "detail": "Prove DHCP the way clients will meet it: the test client gets the right lease and its name registers securely, a device that tries to take that name is refused, and the evidence lands in the logs. Then take SBD-DHCP01's first SCAP baseline and hand the server to course 1.8, which moves its administration to the Tier 1 seat."
-        }
-      ],
-      "outcomeSummary": "Addresses handed out on purpose, with names no device can take over.",
-      "networkLabel": "VLAN 20 + 80 / ADDRESSING",
-      "afterEpisode": "dc01-dc02",
-      "categoryId": "network-build",
-      "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
-      "training": {
-        "guide": "/training/dhcp",
-        "checklistPage": "/training/dhcp/checklist",
-        "word": "/training/dhcp/SecureByDesign-dhcp-Workbook.docx",
-        "pages": 19,
-        "cover": "/training/dhcp/workbook-cover.webp",
-        "materialsEdition": "1.0",
-        "updated": "14 October 2026"
-      },
-      "topic": "DHCP"
-    },
-    {
-      "id": "tiered-admin",
-      "categoryOrder": 8,
-      "number": "1.8",
-      "estimatedHours": 2.8,
-      "title": "Tiered administration",
-      "subtitle": "Admin seats, the tier rules & where privilege may sign in",
-      "description": "Build the administration plane before the fleet: three administration seats on two machines in VLAN 60 (the endpoint seat runs as a virtual machine on the server seat), directory-enforced tier restrictions proven by both successful in-tier sessions and logged out-of-tier denials, and the move of earlier console work — SBD-DHCP01's administration and the assessment tools — onto the seats.",
-      "tags": [
-        "Windows Server",
-        "Tiered administration",
-        "Privileged access",
-        "Group Policy",
-        "Hyper-V"
-      ],
-      "platform": "Windows Server · Windows client",
-      "systems": [
+        "SBD-PKI-MGMT01",
+        "SBD-DHCP01",
         "AdminJumpBox01",
         "SBD-ADMIN-SRV01",
         "SBD-ADMIN-PC01"
       ],
       "artLabels": [
-        "Three seats, two machines",
-        "Tier rules enforced",
-        "Denials on record"
+        "AD DS · DNS · Time",
+        "STIG · Group Policy",
+        "PKI · DHCP · Tier 0"
       ],
       "outcomes": [
-        "Stand up single-purpose administration seats for each tier in the Admin OU, with the endpoint seat a virtual machine on the server seat.",
-        "Enforce and prove per-tier sign-in restrictions with captured denial evidence.",
-        "Move SBD-DHCP01's administration and the assessment tools onto the seats, each tier on its own."
+        "Design the forest, namespace, time hierarchy and PKI against US guidance",
+        "Build and verify SBD-DC01, SBD-DC02, DNS and domain time",
+        "Measure against the DISA STIG and harden with Group Policy",
+        "Build the two-tier PKI, DHCP and tiered administration"
       ],
-      "stages": [
-        {
-          "title": "Design the tiers and the admin seats",
-          "detail": "Tiering is one sentence with teeth: credentials that control a tier never touch a less-trusted one. Write that policy against the OU structure and give each tier its seat and its group — all before any host is built."
-        },
-        {
-          "title": "Build the administration systems",
-          "detail": "Privileged work gets dedicated, hardened seats: a Tier 0 jump host that runs no virtual machines, and a server-administration seat that also runs the endpoint seat as a virtual machine. Each seat sits in the Admin OU, does nothing but administer, and is maintained by its own group."
-        },
-        {
-          "title": "Restrict where privilege can sign in",
-          "detail": "The tier rule becomes real when the directory refuses the wrong sign-in. Give Tier 0 servers their own OU first, deny privileged logons on lower tiers by policy, protect the highest accounts, and make the refusal something you can show in a log."
-        },
-        {
-          "title": "Prove the tiers end to end",
-          "detail": "Run the matrix: every tier's administration works from its seat, every cross-tier attempt fails with an event, and course 1.7's addressing service still behaves exactly as registered."
-        },
-        {
-          "title": "Move the scan tools, rescan, and hand off",
-          "detail": "Three new seats joined, SBD-DHCP01 changed hands, and the directory's logon policy changed — the cadence fires again. Move the assessment tools off the domain controllers onto the seats, baseline the three seats, rescan what changed, and hand the next course a network administered only from somewhere safe."
-        }
-      ],
-      "outcomeSummary": "Privileged sessions that only ever start from the right seat.",
-      "networkLabel": "VLAN 60 / ADMINISTRATION",
-      "afterEpisode": "dc01-dc02",
+      "outcomeSummary": "One forest on two healthy domain controllers, with DNS, domain time, a measured and hardened baseline, a two-tier PKI, DHCP and tiered administration, each designed against US guidance and proven with evidence.",
+      "networkLabel": "Identity foundation · VLANs 10, 30, 60 and 80",
       "categoryId": "network-build",
       "kind": "configuration",
-      "moduleCount": 5,
-      "lessonCount": 5,
+      "moduleCount": 46,
+      "lessonCount": 46,
       "training": {
-        "guide": "/training/tiered-admin",
-        "materialsEdition": "2.0",
-        "updated": "14 October 2026",
-        "checklistPage": "/training/tiered-admin/checklist",
-        "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
-        "pages": 20,
-        "cover": "/training/tiered-admin/workbook-cover.webp"
+        "guide": "/training/identity-foundation",
+        "materialsEdition": "1.0",
+        "updated": "20 October 2026",
+        "checklistPage": "/training/identity-foundation/checklist",
+        "word": "/training/identity-foundation/SecureByDesign-identity-foundation-Workbook.docx",
+        "pages": 120,
+        "cover": "/training/identity-foundation/workbook-cover.webp"
       },
-      "topic": "Privileged access"
+      "topic": "Identity"
     },
     {
       "id": "linux-repository",
-      "categoryOrder": 9,
-      "number": "1.9",
+      "categoryOrder": 2,
+      "number": "1.2",
       "estimatedHours": 2.8,
       "title": "Build the Linux repository on SBD-REPO01",
       "subtitle": "Mirrored, signature-verified package snapshots for the Linux servers",
@@ -673,7 +131,7 @@
         },
         {
           "title": "Configure the Linux clients",
-          "detail": "Write the one client configuration every Linux server will use: a single source definition pointing at SBD-REPO01, the verified signing keys, and no other source. No consumer exists yet, so prove it on SBD-REPO01's own package manager and hand the files to courses 1.12 and 1.18."
+          "detail": "Write the one client configuration every Linux server will use: a single source definition pointing at SBD-REPO01, the verified signing keys, and no other source. No consumer exists yet, so prove it on SBD-REPO01's own package manager and hand the files to courses 1.5 and 1.11."
         },
         {
           "title": "Keep it current and prove it",
@@ -699,8 +157,8 @@
       "topic": "Linux"
     },
     {
-      "categoryOrder": 10,
-      "number": "1.10",
+      "categoryOrder": 3,
+      "number": "1.3",
       "estimatedHours": 2.3,
       "title": "Collect the record on SBD-SYSLOG01",
       "subtitle": "Design the logging pipeline and build its collector",
@@ -736,11 +194,11 @@
       "stages": [
         {
           "title": "Design collect, protect, analyze",
-          "detail": "Three systems, three distinct jobs: SBD-SYSLOG01 gathers, SBD-AUDIT01 preserves, SBD-SPLUNK01 answers questions. This course builds the first; courses 1.11 and 1.12 build the other two — so decide now, for all three, what is collected, how long it lives, who may touch it, and where each stream is picked up."
+          "detail": "Three systems, three distinct jobs: SBD-SYSLOG01 gathers, SBD-AUDIT01 preserves, SBD-SPLUNK01 answers questions. This course builds the first; courses 1.4 and 1.5 build the other two — so decide now, for all three, what is collected, how long it lives, who may touch it, and where each stream is picked up."
         },
         {
           "title": "Turn on the right auditing",
-          "detail": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written, at or above the STIG values course 1.4 measured."
+          "detail": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written, at or above the STIG values course 1.1, part 4 measured."
         },
         {
           "title": "Build the collector",
@@ -775,8 +233,8 @@
       "topic": "Logging"
     },
     {
-      "categoryOrder": 11,
-      "number": "1.11",
+      "categoryOrder": 4,
+      "number": "1.4",
       "estimatedHours": 2.7,
       "title": "Protect the record on SBD-AUDIT01",
       "subtitle": "Keep the audit record intact, even from its administrators",
@@ -847,8 +305,8 @@
     },
     {
       "id": "splunk-analysis",
-      "categoryOrder": 12,
-      "number": "1.12",
+      "categoryOrder": 5,
+      "number": "1.5",
       "estimatedHours": 3.7,
       "title": "Analyze the record in SBD-SPLUNK01",
       "subtitle": "Search a working copy, harden it, own the alerts, prove the chain",
@@ -923,8 +381,8 @@
       "topic": "Splunk"
     },
     {
-      "categoryOrder": 13,
-      "number": "1.13",
+      "categoryOrder": 6,
+      "number": "1.6",
       "estimatedHours": 3.3,
       "title": "Bring in the fleet",
       "subtitle": "50 Windows endpoints, managed from first boot",
@@ -970,7 +428,7 @@
         },
         {
           "title": "Autoenroll the fleet's certificates",
-          "detail": "Course 1.6 proved autoenrollment on both domain controllers and its pilot, SBD-PKI-MGMT01; this lesson turns it loose. Widen the template permission to a fleet computer group, let the autoenrollment GPO already linked at the domain root do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+          "detail": "Course 1.1, part 6 proved autoenrollment on both domain controllers and its pilot, SBD-PKI-MGMT01; this lesson turns it loose. Widen the template permission to a fleet computer group, let the autoenrollment GPO already linked at the domain root do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
         },
         {
           "title": "Admit only enrolled devices with 802.1X",
@@ -982,7 +440,7 @@
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark from SBD-ADMIN-PC01's own SCAP Compliance Checker (SCC) copy, installed in course 1.8, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.15."
+          "detail": "The cadence meets its first population: the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark from SBD-ADMIN-PC01's own SCAP Compliance Checker (SCC) copy, installed in course 1.1, part 8, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.8."
         }
       ],
       "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",
@@ -998,15 +456,15 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "pages": 20,
+        "pages": 19,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       },
       "topic": "Endpoints"
     },
     {
       "id": "patch-protect",
-      "categoryOrder": 14,
-      "number": "1.14",
+      "categoryOrder": 7,
+      "number": "1.7",
       "estimatedHours": 3,
       "title": "Deliver Windows updates from SBD-WSUS01",
       "subtitle": "Air-gapped WSUS: offline import, four rings & Group Policy targeting",
@@ -1075,12 +533,12 @@
     },
     {
       "id": "management-server",
-      "categoryOrder": 15,
-      "number": "1.15",
+      "categoryOrder": 8,
+      "number": "1.8",
       "estimatedHours": 2.7,
       "title": "Keep the living inventory on SBD-MGMT01",
       "subtitle": "Component inventory, discovery sources & monthly reconciliation",
-      "description": "Turn course 1.13's fleet snapshot into a living component inventory for the whole network: build SBD-MGMT01 on VLAN 70 as a keeper that reaches into nothing, record every component once with an accountable owner, check the record against what the directory, DHCP, WSUS and SBD-REPO01 already know, and reconcile it every month so drift becomes a finding.",
+      "description": "Turn course 1.6's fleet snapshot into a living component inventory for the whole network: build SBD-MGMT01 on VLAN 70 as a keeper that reaches into nothing, record every component once with an accountable owner, check the record against what the directory, DHCP, WSUS and SBD-REPO01 already know, and reconcile it every month so drift becomes a finding.",
       "tags": [
         "Windows Server",
         "Configuration management",
@@ -1113,7 +571,7 @@
         },
         {
           "title": "Build the living inventory",
-          "detail": "Course 1.13's fleet inventory was a snapshot of fifty PCs; SBD-MGMT01 makes the whole network's inventory a living record. Every component gets its place, ring, update source, baseline and owner, kept current by the procedures that change it."
+          "detail": "Course 1.6's fleet inventory was a snapshot of fifty PCs; SBD-MGMT01 makes the whole network's inventory a living record. Every component gets its place, ring, update source, baseline and owner, kept current by the procedures that change it."
         },
         {
           "title": "Feed it from what the network already knows",
@@ -1145,8 +603,8 @@
     {
       "id": "endpoint-protection",
       "comingSoon": true,
-      "number": "1.16",
-      "categoryOrder": 16,
+      "number": "1.9",
+      "categoryOrder": 9,
       "title": "Endpoint protection on SBD-EPO01",
       "subtitle": "Managed agents, protection policy & DLP from one console",
       "description": "Managed endpoint protection and data-loss prevention for every Windows system, run from the single Trellix ePolicy Orchestrator server, SBD-EPO01.",
@@ -1184,8 +642,8 @@
     {
       "id": "vulnerability-scanning",
       "comingSoon": true,
-      "number": "1.17",
-      "categoryOrder": 17,
+      "number": "1.10",
+      "categoryOrder": 10,
       "title": "Credentialed scanning with SBD-NESSUS01",
       "subtitle": "Scoped scan accounts, findings triage & the standing cadence",
       "description": "Credentialed vulnerability scanning of the approved target list from the single Nessus server, SBD-NESSUS01, on domain-joined Linux.",
@@ -1220,8 +678,8 @@
       "topic": "Scanning"
     },
     {
-      "categoryOrder": 18,
-      "number": "1.18",
+      "categoryOrder": 11,
+      "number": "1.11",
       "estimatedHours": 2.7,
       "title": "Stand up the business services",
       "subtitle": "Files, database, licensing & web — by documented paths",
@@ -1292,8 +750,8 @@
       "topic": "Services"
     },
     {
-      "categoryOrder": 19,
-      "number": "1.19",
+      "categoryOrder": 12,
+      "number": "1.12",
       "estimatedHours": 2.9,
       "title": "Prove you can recover",
       "subtitle": "Backups with custody, one rehearsed restore & the closing record",
@@ -1381,7 +839,7 @@
       "afterEpisode": "dc01-dc02",
       "title": "RMF to ATO",
       "subtitle": "Every RMF step: the lessons, the workspace and the templates",
-      "description": "Take the network the Build the Network courses (1.1–1.19) create, the system shown in the System Hub, through all seven steps of the Risk Management Framework (RMF) to an Authorization to Operate, following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Each step pairs its lessons with the same task in the ATO Package Builder and its templates from the ATO Template Library: prepare and categorize the system, select and implement its controls, build the Body of Evidence, assess it and plan the fixes in a POA&M, assemble the package for a decision, and keep the authorization current.",
+      "description": "Take the network the Build the Network courses (1.1–1.12) create, the system shown in the System Hub, through all seven steps of the Risk Management Framework (RMF) to an Authorization to Operate, following NIST SP 800-37 Revision 2 with the April 2016 Joint Special Access Program Implementation Guide (JSIG) mapped in. Each step pairs its lessons with the same task in the ATO Package Builder and its templates from the ATO Template Library: prepare and categorize the system, select and implement its controls, build the Body of Evidence, assess it and plan the fixes in a POA&M, assemble the package for a decision, and keep the authorization current.",
       "tags": [
         "Risk Management Framework",
         "RMF",
@@ -1706,19 +1164,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Promote Primary & Secondary Domain Controller",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/dc01-dc02"
-          },
-          {
-            "title": "Apply it in course 1.5, Harden with Group Policy",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/harden-baseline"
-          },
-          {
-            "title": "Apply it in course 1.8, Tiered administration",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/tiered-admin"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -1787,9 +1235,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.2, Configure DNS",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/dns-configuration"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -1866,9 +1314,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.3, Configure domain time",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/domain-time"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -1914,7 +1362,7 @@
       "categoryOrder": 4,
       "title": "PKI design",
       "subtitle": "CA hierarchy, cryptography, validity, revocation, templates and CA protection",
-      "description": "Ten design areas for the certificate services the lab builds in course 1.6: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
+      "description": "Ten design areas for the certificate services the lab builds in course 1.1, part 6: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
       "tags": [
         "Design reference",
         "PKI",
@@ -1945,9 +1393,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.6, Configure the two-tier PKI",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/two-tier-pki"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -2032,9 +1480,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.7, Run DHCP on SBD-DHCP01",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/dhcp"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -2080,7 +1528,7 @@
       "categoryOrder": 6,
       "title": "DISA STIGs and GPO packages",
       "subtitle": "DISA’s artifacts and tooling, and the US guidance around them",
-      "description": "The annotated catalog behind the hardening gate in courses 1.4 and 1.5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
+      "description": "The annotated catalog behind the hardening gate in course 1.1, parts 4 and 5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
       "tags": [
         "Design reference",
         "DISA STIG",
@@ -2111,14 +1559,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.4, Measure against the STIG",
+            "title": "Apply it in course 1.1, Build and harden the identity foundation",
             "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/stig-scap"
-          },
-          {
-            "title": "Apply it in course 1.5, Harden with Group Policy",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/harden-baseline"
+            "href": "/technical-training#course/identity-foundation"
           }
         ]
       },
@@ -2158,25 +1601,10 @@
     {
       "id": "identity",
       "parent": "network-build",
-      "title": "Identity & directory",
-      "description": "The domain controllers, DNS, domain time, the two-tier PKI and DHCP.",
+      "title": "Identity foundation",
+      "description": "Directory, DNS, time, STIG hardening, PKI, DHCP and tiered administration, in one course.",
       "entries": [
-        "dc01-dc02",
-        "dns-configuration",
-        "domain-time",
-        "two-tier-pki",
-        "dhcp"
-      ]
-    },
-    {
-      "id": "harden",
-      "parent": "network-build",
-      "title": "Hardening & access",
-      "description": "Measure against the STIG, harden with Group Policy, and decide where privilege may sign in.",
-      "entries": [
-        "stig-scap",
-        "harden-baseline",
-        "tiered-admin"
+        "identity-foundation"
       ]
     },
     {

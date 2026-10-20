@@ -1,272 +1,278 @@
 [
   {
-    "id": "training:dc01-dc02:prepare",
+    "id": "training:identity-foundation:dc-design",
+    "title": "Design the forest, domain and OUs",
+    "href": "/training/identity-foundation#dc-design",
+    "group": "Network build"
+  },
+  {
+    "id": "training:identity-foundation:dc-prepare",
     "title": "Give every system a purpose",
-    "href": "/training/dc01-dc02/index.html#prepare",
+    "href": "/training/identity-foundation#dc-prepare",
     "group": "Network build"
   },
   {
-    "id": "training:dc01-dc02:dc01",
+    "id": "training:identity-foundation:dc-dc01",
     "title": "Create the first domain controller",
-    "href": "/training/dc01-dc02/index.html#dc01",
+    "href": "/training/identity-foundation#dc-dc01",
     "group": "Network build"
   },
   {
-    "id": "training:dc01-dc02:dc02",
+    "id": "training:identity-foundation:dc-dc02",
     "title": "Give the domain a second service point",
-    "href": "/training/dc01-dc02/index.html#dc02",
+    "href": "/training/identity-foundation#dc-dc02",
     "group": "Network build"
   },
   {
-    "id": "training:dc01-dc02:verify",
+    "id": "training:identity-foundation:dc-verify",
     "title": "Ask the domain to prove it works",
-    "href": "/training/dc01-dc02/index.html#verify",
+    "href": "/training/identity-foundation#dc-verify",
     "group": "Network build"
   },
   {
-    "id": "training:dc01-dc02:evidence",
+    "id": "training:identity-foundation:dc-evidence",
     "title": "Leave a build someone else can understand",
-    "href": "/training/dc01-dc02/index.html#evidence",
+    "href": "/training/identity-foundation#dc-evidence",
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:plan",
+    "id": "training:identity-foundation:dns-plan",
     "title": "Map names to the network",
-    "href": "/training/dns-configuration#plan",
+    "href": "/training/identity-foundation#dns-plan",
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:zones",
+    "id": "training:identity-foundation:dns-zones",
     "title": "Configure forward and reverse zones",
-    "href": "/training/dns-configuration#zones",
+    "href": "/training/identity-foundation#dns-zones",
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:records",
+    "id": "training:identity-foundation:dns-records",
     "title": "Create and maintain service records",
-    "href": "/training/dns-configuration#records",
+    "href": "/training/identity-foundation#dns-records",
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:verify",
+    "id": "training:identity-foundation:dns-verify",
     "title": "Prove resolution and directory discovery",
-    "href": "/training/dns-configuration#verify",
+    "href": "/training/identity-foundation#dns-verify",
     "group": "Network build"
   },
   {
-    "id": "training:dns-configuration:troubleshoot",
+    "id": "training:identity-foundation:dns-troubleshoot",
     "title": "Find the fault and record the fix",
-    "href": "/training/dns-configuration#troubleshoot",
+    "href": "/training/identity-foundation#dns-troubleshoot",
     "group": "Network build"
   },
   {
-    "id": "training:domain-time:time-plan",
+    "id": "training:identity-foundation:time-plan",
     "title": "Plan the domain's time",
-    "href": "/training/domain-time#time-plan",
+    "href": "/training/identity-foundation#time-plan",
     "group": "Network build"
   },
   {
-    "id": "training:domain-time:time",
+    "id": "training:identity-foundation:time",
     "title": "Make SBD-DC01 the domain's time source",
-    "href": "/training/domain-time#time",
+    "href": "/training/identity-foundation#time",
     "group": "Network build"
   },
   {
-    "id": "training:domain-time:time-members",
+    "id": "training:identity-foundation:time-members",
     "title": "Bring every system onto the hierarchy",
-    "href": "/training/domain-time#time-members",
+    "href": "/training/identity-foundation#time-members",
     "group": "Network build"
   },
   {
-    "id": "training:domain-time:time-verify",
+    "id": "training:identity-foundation:time-verify",
     "title": "Prove the time chain",
-    "href": "/training/domain-time#time-verify",
+    "href": "/training/identity-foundation#time-verify",
     "group": "Network build"
   },
   {
-    "id": "training:domain-time:time-troubleshoot",
+    "id": "training:identity-foundation:time-troubleshoot",
     "title": "Find the time fault and record the fix",
-    "href": "/training/domain-time#time-troubleshoot",
+    "href": "/training/identity-foundation#time-troubleshoot",
     "group": "Network build"
   },
   {
-    "id": "training:stig-scap:stig-basics",
+    "id": "training:identity-foundation:stig-basics",
     "title": "Understand STIGs, SCAP and checklists",
-    "href": "/training/stig-scap#stig-basics",
+    "href": "/training/identity-foundation#stig-basics",
     "group": "Network build"
   },
   {
-    "id": "training:stig-scap:staging",
+    "id": "training:identity-foundation:stig-staging",
     "title": "Stage the DISA content across the air gap",
-    "href": "/training/stig-scap#staging",
+    "href": "/training/identity-foundation#stig-staging",
     "group": "Network build"
   },
   {
-    "id": "training:stig-scap:baseline",
+    "id": "training:identity-foundation:stig-baseline",
     "title": "Capture the pre-hardening baseline",
-    "href": "/training/stig-scap#baseline",
+    "href": "/training/identity-foundation#stig-baseline",
     "group": "Network build"
   },
   {
-    "id": "training:stig-scap:checklists",
+    "id": "training:identity-foundation:stig-checklists",
     "title": "Build the checklists and answer the manual checks",
-    "href": "/training/stig-scap#checklists",
+    "href": "/training/identity-foundation#stig-checklists",
     "group": "Network build"
   },
   {
-    "id": "training:stig-scap:findings",
+    "id": "training:identity-foundation:stig-findings",
     "title": "Write the findings record for hardening",
-    "href": "/training/stig-scap#findings",
+    "href": "/training/identity-foundation#stig-findings",
     "group": "Network build"
   },
   {
-    "id": "training:harden-baseline:ou-design",
+    "id": "training:identity-foundation:gpo-ou-design",
     "title": "Design and build the OU structure",
-    "href": "/training/harden-baseline#ou-design",
+    "href": "/training/identity-foundation#gpo-ou-design",
     "group": "Network build"
   },
   {
-    "id": "training:harden-baseline:gpo-basics",
+    "id": "training:identity-foundation:gpo-basics",
     "title": "Learn how Group Policy applies",
-    "href": "/training/harden-baseline#gpo-basics",
+    "href": "/training/identity-foundation#gpo-basics",
     "group": "Network build"
   },
   {
-    "id": "training:harden-baseline:apply",
+    "id": "training:identity-foundation:gpo-apply",
     "title": "Import and link the DISA GPOs",
-    "href": "/training/harden-baseline#apply",
+    "href": "/training/identity-foundation#gpo-apply",
     "group": "Network build"
   },
   {
-    "id": "training:harden-baseline:rescan",
+    "id": "training:identity-foundation:gpo-rescan",
     "title": "Rescan, reconcile, and record",
-    "href": "/training/harden-baseline#rescan",
+    "href": "/training/identity-foundation#gpo-rescan",
     "group": "Network build"
   },
   {
-    "id": "training:harden-baseline:maintain",
+    "id": "training:identity-foundation:gpo-maintain",
     "title": "Set the rescan cadence and exception record",
-    "href": "/training/harden-baseline#maintain",
+    "href": "/training/identity-foundation#gpo-maintain",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:design",
+    "id": "training:identity-foundation:pki-design",
     "title": "Design the two-tier trust hierarchy",
-    "href": "/training/two-tier-pki#design",
+    "href": "/training/identity-foundation#pki-design",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:root",
+    "id": "training:identity-foundation:pki-root",
     "title": "Configure the offline Root CA",
-    "href": "/training/two-tier-pki#root",
+    "href": "/training/identity-foundation#pki-root",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:request",
+    "id": "training:identity-foundation:pki-request",
     "title": "Create the issuing CA request",
-    "href": "/training/two-tier-pki#request",
+    "href": "/training/identity-foundation#pki-request",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:sign",
+    "id": "training:identity-foundation:pki-sign",
     "title": "Sign through the offline ceremony",
-    "href": "/training/two-tier-pki#sign",
+    "href": "/training/identity-foundation#pki-sign",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:publish",
+    "id": "training:identity-foundation:pki-publish",
     "title": "Activate the issuing CA and distribute trust",
-    "href": "/training/two-tier-pki#publish",
+    "href": "/training/identity-foundation#pki-publish",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:publication",
+    "id": "training:identity-foundation:pki-publication",
     "title": "Build the pki.sbd.test publication site",
-    "href": "/training/two-tier-pki#publication",
+    "href": "/training/identity-foundation#pki-publication",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:publish-trust",
+    "id": "training:identity-foundation:pki-publish-trust",
     "title": "Publish the trust data at its advertised URLs",
-    "href": "/training/two-tier-pki#publish-trust",
+    "href": "/training/identity-foundation#pki-publish-trust",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:template-admin",
+    "id": "training:identity-foundation:pki-template-admin",
     "title": "Separate template administration",
-    "href": "/training/two-tier-pki#template-admin",
+    "href": "/training/identity-foundation#pki-template-admin",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:first-templates",
+    "id": "training:identity-foundation:pki-first-templates",
     "title": "Publish the first working templates",
-    "href": "/training/two-tier-pki#first-templates",
+    "href": "/training/identity-foundation#pki-first-templates",
     "group": "Network build"
   },
   {
-    "id": "training:two-tier-pki:validate",
+    "id": "training:identity-foundation:pki-validate",
     "title": "Validate enrollment, revocation, and renewal",
-    "href": "/training/two-tier-pki#validate",
+    "href": "/training/identity-foundation#pki-validate",
     "group": "Network build"
   },
   {
-    "id": "training:dhcp:dhcp-design",
+    "id": "training:identity-foundation:dhcp-design",
     "title": "Design the addressing service",
-    "href": "/training/dhcp#dhcp-design",
+    "href": "/training/identity-foundation#dhcp-design",
     "group": "Network build"
   },
   {
-    "id": "training:dhcp:dhcp",
+    "id": "training:identity-foundation:dhcp",
     "title": "Build SBD-DHCP01 and its scope",
-    "href": "/training/dhcp#dhcp",
+    "href": "/training/identity-foundation#dhcp",
     "group": "Network build"
   },
   {
-    "id": "training:dhcp:dhcp-dns",
+    "id": "training:identity-foundation:dhcp-dns",
     "title": "Register client names securely",
-    "href": "/training/dhcp#dhcp-dns",
+    "href": "/training/identity-foundation#dhcp-dns",
     "group": "Network build"
   },
   {
-    "id": "training:dhcp:dhcp-audit",
+    "id": "training:identity-foundation:dhcp-audit",
     "title": "Audit leases and write the restore note",
-    "href": "/training/dhcp#dhcp-audit",
+    "href": "/training/identity-foundation#dhcp-audit",
     "group": "Network build"
   },
   {
-    "id": "training:dhcp:dhcp-prove",
+    "id": "training:identity-foundation:dhcp-prove",
     "title": "Prove the service and hand off",
-    "href": "/training/dhcp#dhcp-prove",
+    "href": "/training/identity-foundation#dhcp-prove",
     "group": "Network build"
   },
   {
-    "id": "training:tiered-admin:design",
+    "id": "training:identity-foundation:tier-design",
     "title": "Design the tiers and the admin seats",
-    "href": "/training/tiered-admin#design",
+    "href": "/training/identity-foundation#tier-design",
     "group": "Network build"
   },
   {
-    "id": "training:tiered-admin:admin-hosts",
+    "id": "training:identity-foundation:tier-admin-hosts",
     "title": "Build the administration systems",
-    "href": "/training/tiered-admin#admin-hosts",
+    "href": "/training/identity-foundation#tier-admin-hosts",
     "group": "Network build"
   },
   {
-    "id": "training:tiered-admin:logon-restrictions",
+    "id": "training:identity-foundation:tier-logon-restrictions",
     "title": "Restrict where privilege can sign in",
-    "href": "/training/tiered-admin#logon-restrictions",
+    "href": "/training/identity-foundation#tier-logon-restrictions",
     "group": "Network build"
   },
   {
-    "id": "training:tiered-admin:prove",
+    "id": "training:identity-foundation:tier-prove",
     "title": "Prove the tiers end to end",
-    "href": "/training/tiered-admin#prove",
+    "href": "/training/identity-foundation#tier-prove",
     "group": "Network build"
   },
   {
-    "id": "training:tiered-admin:scan",
+    "id": "training:identity-foundation:tier-scan",
     "title": "Move the scan tools, rescan, and hand off",
-    "href": "/training/tiered-admin#scan",
+    "href": "/training/identity-foundation#tier-scan",
     "group": "Network build"
   },
   {

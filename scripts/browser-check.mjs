@@ -16,7 +16,7 @@ const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const sitemap = existsSync('dist/client/sitemap.xml') ? readFileSync('dist/client/sitemap.xml', 'utf8') : '';
 const fromSitemap = [...sitemap.matchAll(/<loc>https?:\/\/[^/<]+([^<]*)<\/loc>/g)].map(match => match[1] || '/');
-const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo=%2Ftechnical-training', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/grc-rmf-training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
+const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo=%2Ftechnical-training', '/app-sign-in', '/privacy', '/training/identity-foundation/', '/grc-rmf-training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
@@ -90,7 +90,7 @@ for (const path of pages) {
 const backLinks = [];
 for (const [from, label, to] of [
   // The course guide is served at /training/<id>/ (the old address redirects there).
-  ['/training/dns-configuration/checklist', 'Back to', '/training/dns-configuration/'],
+  ['/training/identity-foundation/checklist', 'Back to', '/training/identity-foundation/'],
 ]) {
   const page = await context.newPage();
   try {
@@ -145,10 +145,11 @@ for (const [index, course] of configurations.entries()) {
   }
   await page.close();
 }
-for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/training/two-tier-pki/']) {
+// Course 1.1 (20 October 2026) is the long guide; check it on both sizes and two other guides on phones.
+for (const path of ['/training/identity-foundation/', '/training/linux-repository/', '/training/splunk-analysis/']) {
   const name = path.split('/')[2];
   for (const [label, ctx] of [['desktop', context], ['phone', phone]]) {
-    if (label === 'desktop' && name !== 'dc01-dc02') continue;
+    if (label === 'desktop' && name !== 'identity-foundation') continue;
     const page = await ctx.newPage();
     try {
       await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
@@ -174,22 +175,22 @@ for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'tra
       shown = await page.locator('.th-tile').count();
       steps = await page.locator('#package-builder .ab-steps button').count();
       if (shown < minTiles || (!minTiles && shown) || steps !== builderSteps) throw new Error(`${shown} tiles and ${steps} builder steps, expected ${minTiles ? `at least ${minTiles}` : 0} and ${builderSteps}`);
-      if (minTiles && (await page.locator('.th-side-list button').count()) !== 10) throw new Error('the sidebar does not list the Hub and the nine library groups');
+      if (minTiles && (await page.locator('.th-side-list button').count()) !== 9) throw new Error('the sidebar does not list the Hub and the eight library groups');
       if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 2) throw new Error('the course links are not both in the builder panel');
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
       if (minTiles && label === 'desktop') {
         // Owner request, 18 October 2026: an expanded configuration tile draws its course's 3D lesson network, with system
-        // buttons and the build story, like the course 1.1 tile. Open course 1.2 from the network-build row and check.
-        await page.locator('[data-hub-tile="dns-configuration"] .th-tile-open').first().click();
+        // buttons and the build story, like the course 1.1 tile. Open course 1.1, the identity foundation, from the network-build row and check.
+        await page.locator('[data-hub-tile="identity-foundation"] .th-tile-open').first().click();
         await page.locator('.th-open .vc-explorer canvas').first().waitFor({ timeout: 20000 });
         const systems = await page.locator('.th-open .vc-explorer .vc-system-buttons button').count(), chapters = await page.locator('.th-open .vc-explorer .vc-chapters button').count();
         if (systems < 1 || chapters < 1) throw new Error(`the expanded course tile shows ${systems} systems and ${chapters} lessons`);
         await page.locator('.th-open').first().screenshot({ path: `guide-screens/${name}-open-tile.png` });
-        // View all: the whole Build the Network path, 1.1 to 1.19.
-        await page.locator('.th-view-all', { hasText: 'View all 19' }).click();
+        // View all: the whole Build the Network path, 1.1 to 1.12 (renumbered 20 October 2026).
+        await page.locator('.th-view-all', { hasText: 'View all 12' }).click();
         await page.locator('#th-group-title').waitFor({ timeout: 10000 });
         const path19 = await page.locator('.th-tile').count();
-        if (path19 !== 19) throw new Error(`View all shows ${path19} tiles, expected 19`);
+        if (path19 !== 12) throw new Error(`View all shows ${path19} tiles, expected 12`);
         await page.screenshot({ path: `guide-screens/${name}-build-the-network.png`, fullPage: true });
       }
       if (builderSteps) {
@@ -275,7 +276,7 @@ for (const [agent, ua] of [
   ['facebookexternalhit', 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'],
   ['Slackbot', 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)'],
 ]) {
-  for (const path of ['/', '/training/dns-configuration', '/training/dns-configuration/checklist']) {
+  for (const path of ['/', '/training/identity-foundation', '/training/identity-foundation/checklist']) {
     const html = await (await fetch(base + path, { headers: { 'user-agent': ua } })).text();
     const head = html.slice(0, Math.max(0, html.indexOf('</head>')));
     const inHead = tag => head.includes(tag);

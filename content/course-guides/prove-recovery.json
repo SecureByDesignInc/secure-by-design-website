@@ -161,7 +161,7 @@
         "from": 0,
         "button": "SBD-ROOTCA01",
         "title": "SBD-ROOTCA01 · Offline, no network address",
-        "description": "Stays offline in the vault. Its protected backup from the course 1.6 ceremony is verified and its custody confirmed, never duplicated or copied onto the network."
+        "description": "Stays offline in the vault. Its protected backup from the course 1.1 ceremony is verified and its custody confirmed, never duplicated or copied onto the network."
       }
     ],
     "flows": [

@@ -31,12 +31,13 @@ const library = JSON.parse(
 
 test('related build courses stay together before authorization and materials remain available', () => {
   const catalog = getCatalogEntries(library);
-  const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
+  // Courses 1.1–1.8 became course 1.1, Build and harden the identity foundation (owner direction, 20 October 2026).
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates', 'design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['identity-foundation', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates', 'design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
-  assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
+  assert.equal(isTrainingCourse(catalog[0]), true);
+  assert.deepEqual(library.episodes, [], 'no hand-kept episode remains');
   // The Training Hub searches the ATO Template Library tile too (owner direction, 19 October 2026).
   assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'ato-templates']);
   assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-boe-ato', 'ato-templates']);
@@ -54,14 +55,14 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1], ['templates-references', 1], ['design-references', 6]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 12], ['network-authorization', 1], ['templates-references', 1], ['design-references', 6]]);
   assert.equal(groups[0].title, 'Build the Network');
-  assert.equal(groups[0].entries[0], library.episodes[0]);
-  const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
+  assert.equal(groups[0].entries[0].id, 'identity-foundation');
+  const dns = groupCatalogEntries(filterEpisodes(catalog, 'secure DNS updates', 'DNS'), library);
   assert.equal(dns.length, 1);
-  assert.deepEqual(dns[0].entries.map(entry => entry.id), ['dns-configuration']);
-  const pki = filterEpisodes(catalog, 'root issuing', 'PKI');
-  assert.deepEqual(pki.map(entry => entry.id), ['two-tier-pki']);
+  assert.deepEqual(dns[0].entries.map(entry => entry.id), ['identity-foundation']);
+  const pki = filterEpisodes(catalog, 'two-tier PKI', 'PKI');
+  assert.deepEqual(pki.map(entry => entry.id), ['identity-foundation']);
   assert.deepEqual(groupCatalogEntries([], library), []);
   const unknown = { ...catalog[0], id: 'future-course', categoryId: 'future' };
   assert.deepEqual(groupCatalogEntries([unknown], library)[0].entries, [unknown]);
@@ -133,9 +134,9 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
   const resources = JSON.parse(readFileSync(new URL('../content/training-resources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(progress.map(item => item.id)).size, progress.length);
   assert.equal(new Set(resources.map(item => item.id)).size, resources.length);
-  assert.deepEqual(configurations.map(course => course.lessons.length), [5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 6, 7, 5, 5, 5, 6]);
-  // Every Build the Network tile is numbered in path order, 1.1 to 1.19; coming-soon tiles hold their place without material.
-  assert.deepEqual(getCatalogEntries(library).filter(entry => entry.categoryId === 'network-build' || entry.id === 'dc01-dc02').map(entry => entry.number), Array.from({ length: 19 }, (_, i) => `1.${i + 1}`));
+  assert.deepEqual(configurations.map(course => course.lessons.length), [46, 5, 5, 5, 6, 7, 5, 5, 5, 6]);
+  // Every Build the Network tile is numbered in path order, 1.1 to 1.12 (renumbered 20 October 2026); coming-soon tiles hold their place without material.
+  assert.deepEqual(getCatalogEntries(library).filter(entry => entry.categoryId === 'network-build').map(entry => entry.number), Array.from({ length: 12 }, (_, i) => `1.${i + 1}`));
   assert.deepEqual(library.courses.filter(course => course.kind === 'coming-soon').map(course => course.id), ['endpoint-protection', 'vulnerability-scanning']);
   for (const configuration of configurations) {
     const course = library.courses.find(item => item.id === configuration.id);
@@ -159,7 +160,7 @@ test('configuration lessons have complete guides, checklists, quizzes and shared
         assert.ok(quiz.explanation, `${lesson.id} explains each answer`);
       }
       assert.ok(new Set(lesson.quizzes.map(quiz => quiz.correct)).size > 1, `${lesson.id} varies the correct answer position`);
-      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://help.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/', 'https://access.redhat.com/', 'https://dnf-plugins-core.readthedocs.io/', 'https://github.com/rpm-software-management/', 'https://manpages.debian.org/', 'https://httpd.apache.org/', 'https://man.openbsd.org/', 'https://chrony-project.org/', 'https://firewalld.org/', 'https://www.rfc-editor.org/'].some(origin => source.url.startsWith(origin)))));
+      assert.ok(lesson.sources.every(id => configuration.sources.some(source => source.id === id && ['https://learn.microsoft.com/', 'https://securebydesigninc.com/training/design/', 'https://www.cyber.mil/', 'https://public.cyber.mil/', 'https://csrc.nist.gov/', 'https://docs.splunk.com/', 'https://help.splunk.com/', 'https://docs.tenable.com/', 'https://docs.trellix.com/', 'https://docs.redhat.com/', 'https://access.redhat.com/', 'https://dnf-plugins-core.readthedocs.io/', 'https://github.com/rpm-software-management/', 'https://manpages.debian.org/', 'https://httpd.apache.org/', 'https://man.openbsd.org/', 'https://chrony-project.org/', 'https://firewalld.org/', 'https://www.rfc-editor.org/'].some(origin => source.url.startsWith(origin)))));
       const entry = progress.find(item => item.id === `training:${course.id}:${lesson.id}`);
       assert.equal(entry?.href, `${course.training.guide}#${lesson.id}`);
       assert.equal(entry?.group, 'Network build');
@@ -172,7 +173,6 @@ test('identity scene requires the supported model and its exact ordered chapter 
     (id) => ({ id }),
   );
   assert.equal(supportsIdentityScene({ scene: 'identity-dc', chapters }), true);
-  assert.equal(supportsIdentityScene(library.episodes[0]), true);
   assert.equal(
     supportsIdentityScene({ scene: 'other-build', chapters }),
     false,
@@ -320,33 +320,18 @@ test('published video IDs use the privacy-enhanced player and safe chapter offse
     );
 });
 test('every advertised training resource is present and remains on this site', () => {
-  assert.ok(library.episodes.length);
-  assert.equal(
-    new Set(library.episodes.map((e) => e.id)).size,
-    library.episodes.length,
-  );
-  for (const episode of library.episodes) {
-    for (const key of ['guide', 'word', 'cover']) {
+  // Since 20 October 2026 every build course is a configuration course; check each one with material.
+  const withMaterial = library.courses.filter(course => course.kind === 'configuration');
+  assert.ok(withMaterial.length);
+  assert.equal(new Set(withMaterial.map((e) => e.id)).size, withMaterial.length);
+  for (const episode of withMaterial) {
+    assert.equal(episode.training.guide, `/training/${episode.id}`);
+    for (const key of ['word', 'cover']) {
       const path = episode.training[key];
       assert.match(path, /^\/training\/[a-z0-9-]+\/[A-Za-z0-9_.-]+$/);
-      assert.ok(
-        existsSync(new URL('.' + path, new URL('../public/', import.meta.url))),
-        path,
-      );
+      assert.ok(existsSync(new URL('.' + path, new URL('../public/', import.meta.url))), path);
     }
-    assert.ok(episode.chapters.length > 0, `${episode.id} has chapters`);
-    assert.ok(
-      episode.chapters.every(
-        (chapter) =>
-          typeof chapter.id === 'string' && chapter.id.trim().length > 0,
-      ),
-      `${episode.id} has nonempty chapter IDs`,
-    );
-    assert.equal(
-      new Set(episode.chapters.map((chapter) => chapter.id)).size,
-      episode.chapters.length,
-      `${episode.id} has unique chapter IDs`,
-    );
+    assert.ok(existsSync(new URL(`../public/training/${episode.id}/index.html`, import.meta.url)), `${episode.id} guide`);
     assert.ok(
       Number.isInteger(episode.training.pages) && episode.training.pages > 0,
       `${episode.id} has a positive workbook page count`,
@@ -354,7 +339,8 @@ test('every advertised training resource is present and remains on this site', (
   }
 });
 test('the first recording remains unpublished and the retired formats are removed', () => {
-  assert.equal(library.episodes[0].youtubeId, null);
+  // No build course has a published recording yet.
+  assert.ok(library.courses.every(course => !course.youtubeId));
   for (const filename of [
     '../content/videos.json',
     '../app/videos/training-hub.tsx',
@@ -449,8 +435,9 @@ test('the ATO Template Library lists only verified public sources and is a Train
 test('the Training Hub groups every course, in course order, under its learning path', async () => {
   const { getHubGroups, getArtFamily, getRecentlyUpdated, catalogDate } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
   const groups = getHubGroups(library);
+  // Courses 1.1–1.8 merged into course 1.1, so Hardening & access folded into the identity foundation (20 October 2026).
   assert.deepEqual(groups.map(group => [group.id, group.parent ?? null, group.entries.length]), [
-    ['network-build', null, 19], ['identity', 'network-build', 5], ['harden', 'network-build', 3], ['logging', 'network-build', 3],
+    ['network-build', null, 12], ['identity', 'network-build', 1], ['logging', 'network-build', 3],
     ['endpoint', 'network-build', 4], ['ops', 'network-build', 4], ['network-authorization', null, 1], ['templates-references', null, 1],
     ['design-references', null, 6],
   ]);

@@ -11,7 +11,9 @@ const configurations = JSON.parse(read('content/configuration-courses.json'));
 const lessonData = html => JSON.parse(/window\.SBD_LESSON=(\{[\s\S]*?\});<\/script>/.exec(html)[1]);
 
 test('the course guides share the course 1.1 guide stylesheet', () => {
-  assert.ok(read('public/training/dc01-dc02/index.html').includes(read('scripts/course-guide/style.css')));
+  // Course 1.1 is a generated guide since 20 October 2026 (courses 1.1–1.8 merged), so every guide carries the same file.
+  assert.ok(read('public/training/identity-foundation/index.html').includes(read('scripts/course-guide/style.css')));
+  assert.equal(existsSync(new URL('../public/training/dc01-dc02', import.meta.url)), false, 'the hand-kept 1.1 guide is retired');
 });
 
 // Owner request, 18 October 2026: every expanded catalog tile draws its course's 3D lesson network, like the course 1.1
@@ -36,12 +38,10 @@ test('every configuration course publishes the scene its catalog tile draws', ()
     assert.ok(!source.includes('catalog-scene'), `${tile} has no bespoke scene`);
   }
   assert.equal(existsSync(new URL('../app/videos/catalog-scene.ts', import.meta.url)), false);
-  // Course 1.1's scene is hand-kept beside its hand-kept guide; its chapters are the episode's chapters.
-  const identity = JSON.parse(readFileSync(new URL('../public/training/dc01-dc02/scene.json', import.meta.url), 'utf8'));
-  const episode = JSON.parse(read('content/videos.json')).episodes.find(item => item.id === 'dc01-dc02');
-  assert.deepEqual(identity.chapters.map(chapter => chapter.id), episode.chapters.map(chapter => chapter.id));
-  assert.deepEqual(identity.scene.nodes.map(node => node.name), ['SBD-DC01', 'SBD-DC02']);
-  for (const chapter of identity.chapters) assert.ok(chapter.tag && chapter.status && chapter.network, `1.1 ${chapter.id} names its tag, status and network state`);
+  // Course 1.1 (20 October 2026) draws its eight parts' systems, at most five per row.
+  const foundation = JSON.parse(readFileSync(new URL('../public/training/identity-foundation/scene.json', import.meta.url), 'utf8'));
+  assert.deepEqual(foundation.scene.nodes.map(node => node.name), ['SBD-DC01', 'SBD-DC02', 'TEST CLIENT', 'SBD-ROOTCA01', 'SBD-SUBCA01', 'SBD-PKI-MGMT01', 'SBD-DHCP01', 'AdminJumpBox01', 'SBD-ADMIN-SRV01', 'SBD-ADMIN-PC01']);
+  for (const row of ['back', 'front']) assert.ok(foundation.scene.nodes.filter(node => (node.row ?? 'back') === row).length <= 5, `${row} row`);
 });
 
 test('every configuration course has a guide in the 1.1 design that carries its lessons unchanged', () => {

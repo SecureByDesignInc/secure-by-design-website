@@ -620,7 +620,7 @@ window.LEARNING = [
         ],
         [
           "Impact",
-          "New software and a changed flow: configuration (CM-6, a SCAP Compliance Checker rescan), the vendor’s update path (SI-2), its events (AU-2, AU-12), and the course 1.19 recovery set (CP-9)."
+          "New software and a changed flow: configuration (CM-6, a SCAP Compliance Checker rescan), the vendor’s update path (SI-2), its events (AU-2, AU-12), and the course 1.12 recovery set (CP-9)."
         ],
         [
           "Decide",
@@ -920,7 +920,7 @@ window.ARTIFACTS = [
         "Control monitoring and ongoing assessment (M-2 · Task 6-2)",
         "Control owners; the Security Control Assessor (SCA) for assessments",
         "Per control, as the strategy sets and the AO approves",
-        "Audit source coverage; SCAP Compliance Checker and Security Technical Implementation Guide (STIG) scan coverage and results, noting that credentialed scanning isn’t available yet; current provider evidence for inherited controls; the course 1.19 restore exercise. A failed check opens a finding."
+        "Audit source coverage; SCAP Compliance Checker and Security Technical Implementation Guide (STIG) scan coverage and results, noting that credentialed scanning isn’t available yet; current provider evidence for inherited controls; the course 1.12 restore exercise. A failed check opens a finding."
       ],
       [
         "Security impact analysis (M-1 · Task 6-1)",
@@ -1289,7 +1289,7 @@ window.ARTIFACTS = [
       [
         "Security impact",
         "Affected controls, implementations, and evidence, and the effect on each: better, worse, or unknown.",
-        "New software and a changed information flow. CM-6: SBD-APPS01’s configuration baseline and a SCAP Compliance Checker rescan. SI-2: how the vendor’s updates are brought in and approved; they don’t arrive through SBD-WSUS01. AU-2 and AU-12: which license events are recorded and forwarded (F17). CP-9: the course 1.19 recovery set adds the application’s configuration. RA-5: no credentialed scan covers it; record the limitation."
+        "New software and a changed information flow. CM-6: SBD-APPS01’s configuration baseline and a SCAP Compliance Checker rescan. SI-2: how the vendor’s updates are brought in and approved; they don’t arrive through SBD-WSUS01. AU-2 and AU-12: which license events are recorded and forwarded (F17). CP-9: the course 1.12 recovery set adds the application’s configuration. RA-5: no credentialed scan covers it; record the limitation."
       ],
       [
         "Determination",
@@ -1328,7 +1328,7 @@ window.CAPSTONE = {
   "scopeControls": "AC-2 · AU-2 · AU-3 · AU-6 · AU-12 · CM-6 · RA-5 · SI-2 · CP-9",
   "scopeText": [
     "Record the exact adopted requirements, parameters, and assessment objectives. This selection is a teaching subset; the actual system baseline follows its governing authority.",
-    "Use the logging trail in the Body of Evidence as the model: FND-001, SBD-MGMT01 missing from verified audit collection. Add a second finding from the rest of the scope. RA-5 is a good candidate: the SCAP Compliance Checker and Security Technical Implementation Guide (STIG) results cover configuration, but the network has no credentialed vulnerability scanning, so record that as a gap or limitation, never as a passed test. CM-6, SI-2 (SBD-WSUS01 and SBD-REPO01), and CP-9 (the course 1.19 restore record) offer others. Only the AO can accept risk (CA-6)."
+    "Use the logging trail in the Body of Evidence as the model: FND-001, SBD-MGMT01 missing from verified audit collection. Add a second finding from the rest of the scope. RA-5 is a good candidate: the SCAP Compliance Checker and Security Technical Implementation Guide (STIG) results cover configuration, but the network has no credentialed vulnerability scanning, so record that as a gap or limitation, never as a passed test. CM-6, SI-2 (SBD-WSUS01 and SBD-REPO01), and CP-9 (the course 1.12 restore record) offer others. Only the AO can accept risk (CA-6)."
   ],
   "rubric": [
     [

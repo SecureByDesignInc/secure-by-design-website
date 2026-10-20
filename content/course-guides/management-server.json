@@ -38,7 +38,7 @@
     ],
     [
       "Reconciliation (sample)",
-      "Monthly, after course 1.14’s update cycle closes"
+      "Monthly, after course 1.7’s update cycle closes"
     ]
   ],
   "scene": {
@@ -67,7 +67,7 @@
         "existing": true,
         "button": "SBD-REPO01",
         "title": "SBD-REPO01 · 10.0.70.20",
-        "description": "Built in course 1.9. Its snapshot catalog and web access log show which Linux servers actually take packages; they are copied over SSH from the Tier 1 seat, as course 1.9 does."
+        "description": "Built in course 1.2. Its snapshot catalog and web access log show which Linux servers actually take packages; they are copied over SSH from the Tier 1 seat, as course 1.2 does."
       },
       {
         "id": "wsus",
@@ -78,7 +78,7 @@
         "existing": true,
         "button": "SBD-WSUS01",
         "title": "SBD-WSUS01 · 10.0.20.30",
-        "description": "Built in course 1.14. Its computer list shows which Windows systems report for updates and in which ring; SBD-MGMT01 itself reports there in Ring 3."
+        "description": "Built in course 1.7. Its computer list shows which Windows systems report for updates and in which ring; SBD-MGMT01 itself reports there in Ring 3."
       },
       {
         "id": "dhcp",
@@ -305,7 +305,7 @@
         "id": "CM-8(3)",
         "name": "System Component Inventory | Automated Unauthorized Component Detection",
         "phase": "Assess → Monitor",
-        "body": "802.1X from course 1.13 already keeps unenrolled devices off VLAN 80. The monthly scripted comparison catches what is left — anything a source knows that the record doesn’t — and the system owner is told the day it is found.",
+        "body": "802.1X from course 1.6 already keeps unenrolled devices off VLAN 80. The monthly scripted comparison catches what is left — anything a source knows that the record doesn’t — and the system owner is told the day it is found.",
         "question": "How long could an unrecorded server with a static address run on VLAN 20 before this process noticed it?"
       },
       "checklist": [

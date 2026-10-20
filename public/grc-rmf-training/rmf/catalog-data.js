@@ -337,7 +337,7 @@ window.CATALOG = [
       "06.2 Security operations evidence",
       "06.3 The evidence index and the as-built plan"
     ],
-    "build": "Collect configuration exports, reviewed STIG checklists, SCAP Compliance Checker results with their coverage, log review records, and the course 1.19 restore record, or equivalent supplied training records. Start the master evidence index, and correct the SSP and SCTM wherever the evidence shows the system differs from the plan.",
+    "build": "Collect configuration exports, reviewed STIG checklists, SCAP Compliance Checker results with their coverage, log review records, and the course 1.12 restore record, or equivalent supplied training records. Start the master evidence index, and correct the SSP and SCTM wherever the evidence shows the system differs from the plan.",
     "prove": "Explain what each item proves and leaves untested. Identify a scan that missed an in-scope host, an unreviewed alert, and a configuration screenshot that lacks system or time context. Record credentialed vulnerability scanning (RA-5) as a limitation: the practice network does not run it yet.",
     "sources": "[1,2,3,8]",
     "rmf": {

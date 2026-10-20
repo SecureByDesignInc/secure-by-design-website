@@ -72,7 +72,7 @@
         "from": 1,
         "button": "SBD-SYSLOG01",
         "title": "SBD-SYSLOG01 · 10.0.20.20",
-        "description": "The collector from course 1.10. Lesson 2 adds a universal forwarder that reads its two streams — the ForwardedEvents log and the per-sender syslog files — and sends them to SBD-SPLUNK01 over TLS under rule F10."
+        "description": "The collector from course 1.3. Lesson 2 adds a universal forwarder that reads its two streams — the ForwardedEvents log and the per-sender syslog files — and sends them to SBD-SPLUNK01 over TLS under rule F10."
       },
       {
         "id": "audit",
@@ -83,7 +83,7 @@
         "existing": true,
         "button": "SBD-AUDIT01",
         "title": "SBD-AUDIT01 · 10.0.50.40",
-        "description": "The repository from course 1.11, kept out of the analysis flow. Its findings become alerts in lesson 5, and lesson 6 finds the traced event in its next-morning archive."
+        "description": "The repository from course 1.4, kept out of the analysis flow. Its findings become alerts in lesson 5, and lesson 6 finds the traced event in its next-morning archive."
       },
       {
         "id": "dc1",
@@ -105,7 +105,7 @@
         "existing": true,
         "button": "SBD-REPO01",
         "title": "SBD-REPO01 · 10.0.70.20",
-        "description": "The Linux repository from course 1.9: SBD-SPLUNK01’s only source of operating-system packages over rule F19, configured before its first update."
+        "description": "The Linux repository from course 1.2: SBD-SPLUNK01’s only source of operating-system packages over rule F19, configured before its first update."
       },
       {
         "id": "jump1",
@@ -127,7 +127,7 @@
         "existing": true,
         "button": "AdminJumpBox01",
         "title": "AdminJumpBox01 · 10.0.60.10",
-        "description": "The Tier 0 seat. The alerts that watch the domain controllers are changed from here (rule A01), and the tier-account lookup is exported here from course 1.8’s groups."
+        "description": "The Tier 0 seat. The alerts that watch the domain controllers are changed from here (rule A01), and the tier-account lookup is exported here from course 1.1’s groups."
       }
     ],
     "flows": [
@@ -203,7 +203,7 @@
         "Take domain time, then join sbd.test",
         "Close the firewall and send the host’s syslog"
       ],
-      "mistake": "Running the first update before applying course 1.9’s client package. The distribution’s default sources point at internet mirrors this network can’t reach, and an install-media entry can linger as a second, unapproved source. Apply the SBD-REPO01 configuration, confirm it is the only source, then update.",
+      "mistake": "Running the first update before applying course 1.2’s client package. The distribution’s default sources point at internet mirrors this network can’t reach, and an install-media entry can linger as a second, unapproved source. Apply the SBD-REPO01 configuration, confirm it is the only source, then update.",
       "network": "SBD-SPLUNK01 comes up on VLAN 50, patched from SBD-REPO01 over rule F19 and administered over SSH from SBD-ADMIN-SRV01. It takes its time from the domain controllers and joins sbd.test; nothing is indexed yet.",
       "control": {
         "id": "AC-6",
@@ -337,7 +337,7 @@
         "Trace a boundary deny on the analysis side",
         "Baseline SBD-SPLUNK01 and answer the Splunk STIG",
         "Write the upgrade procedure",
-        "File the trace and hand off to course 1.13"
+        "File the trace and hand off to course 1.6"
       ],
       "mistake": "Typing the wrong password again and again. One failed sign-in is the test; a burst of failures can reach the domain’s account lockout threshold, lock a tier admin account the lab still needs, and bury the test event among others. Generate one event, then trace it.",
       "network": "Every flow is shown: SBD-DC01’s test event reaches SBD-SYSLOG01, which forwards it to SBD-SPLUNK01 within seconds and archives it to SBD-AUDIT01 the next morning, while analysts watch from SBD-ADMIN-SRV01.",
@@ -351,7 +351,7 @@
       "checklist": [
         "I traced the test event from SBD-DC01’s Security log to ForwardedEvents, Splunk, and the next morning’s archive, with the same source time.",
         "I saw the privileged sign-in and boundary alerts fire for the test event and the probe.",
-        "I filed SBD-SPLUNK01’s baseline, the Splunk STIG checklist built on lesson 3’s record, the upgrade procedure, and the handoff note to course 1.13, with hashes."
+        "I filed SBD-SPLUNK01’s baseline, the Splunk STIG checklist built on lesson 3’s record, the upgrade procedure, and the handoff note to course 1.6, with hashes."
       ]
     }
   }
