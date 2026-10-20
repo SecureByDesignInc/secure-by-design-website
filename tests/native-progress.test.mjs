@@ -65,3 +65,27 @@ test('lessons that moved to another course keep their saved progress (October 20
  env.raw.exec(readFileSync('drizzle/0019_identity_foundation.sql','utf8'));
  assert.deepEqual(env.raw.prepare("SELECT item_id, status FROM reader_progress WHERE user_id='bob' ORDER BY item_id").all().map(r=>[r.item_id,r.status]),[['training:identity-foundation:time','completed']]);
 });
+// Lab mode in the app keeps a course guide's checks and notes in the same account rows as the website's guide.
+const guideReq=(method,id,data,token='a',headers={})=>new Request(origin+'/api/native-progress/guide/'+id,{method,headers:{'x-sbd-client':'native-v1','content-type':'application/json',authorization:'Bearer '+token.repeat(64),...headers},...(data===undefined?{}:{body:JSON.stringify(data)})});
+const guideState={chapter:0,notes:{'dc-design':'Forest sbd.test, one domain.'},checks:{'dc-design-0':true,'dc-design-1':false},answers:{'dc-design-0':1},completed:[]};
+test('native lab mode and the website course guide share checks and notes, isolated by account',async()=>{
+ const env=await setup();
+ const empty=await(await nativeProgressApi(guideReq('GET','sbd-identity-foundation'),env)).json();assert.equal(empty.state,null);
+ const saved=await nativeProgressApi(guideReq('PUT','sbd-identity-foundation',{state:guideState}),env);assert.equal(saved.status,200);
+ assert.deepEqual((await saved.json()).state,guideState);
+ const browser=await(await readerProgressApi(web('GET','/guide/sbd-identity-foundation'),env)).json();assert.deepEqual(browser.state,guideState);
+ const changed={...guideState,checks:{...guideState.checks,'dc-design-2':true}};
+ await readerProgressApi(web('PUT','/guide/sbd-identity-foundation',{state:changed}),env);
+ assert.deepEqual((await(await nativeProgressApi(guideReq('GET','sbd-identity-foundation'),env)).json()).state,changed);
+ assert.equal((await(await nativeProgressApi(guideReq('GET','sbd-identity-foundation',undefined,'b'),env)).json()).state,null);
+});
+test('native guide sync rejects browser credentials, unknown guides and malformed state',async()=>{
+ const env=await setup();
+ assert.equal((await nativeProgressApi(guideReq('GET','sbd-identity-foundation',undefined,'c'),env)).status,401);
+ assert.equal((await nativeProgressApi(guideReq('GET','sbd-identity-foundation',undefined,'a',{origin}),env)).status,403);
+ assert.equal((await nativeProgressApi(guideReq('GET','sbd-not-a-course'),env)).status,404);
+ assert.equal((await nativeProgressApi(guideReq('DELETE','sbd-identity-foundation'),env)).status,405);
+ for(const body of [{state:{...guideState,extra:1}},{state:guideState,accountId:'bob'},{state:{...guideState,checks:{'dc-design-0':'yes'}}},{state:{...guideState,notes:{'dc-design':'x'.repeat(30001)}}}])
+  assert.equal((await nativeProgressApi(guideReq('PUT','sbd-identity-foundation',body),env)).status,400);
+ assert.equal((await(await nativeProgressApi(guideReq('GET','sbd-identity-foundation'),env)).json()).state,null);
+});
