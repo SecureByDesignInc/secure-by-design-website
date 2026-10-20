@@ -241,8 +241,7 @@
 }
 .tm-poster-copy a {
   color: #8ae5ef;
-  border-bottom: 1px solid #42798c;
-}
+  }
 .tm-poster-copy p {
   margin: 16px 0 0;
   color: #9fb7c7;
@@ -295,8 +294,6 @@
   color: #8ae5ef;
   font-size: 13px;
   font-weight: 650;
-  border-bottom: 1px solid #42798c;
-  padding-bottom: 4px;
 }
 /* The Radware credit sits just under "Live · Radware" in the map's toolbar (owner's request, 15 October 2026). */
 .tm-toolbar > .tm-source {
