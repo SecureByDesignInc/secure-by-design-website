@@ -39,7 +39,7 @@
 .mission-future-item h3 { margin: 0; font-size: 1.125rem; font-weight: 600; line-height: 1.5; }
 .mission-future-status { padding: .2rem .6rem; border: 1px dashed #b9cbd6; border-radius: 2rem; color: #536579; font: .75rem/1.5 var(--font-geist-mono), monospace; }
 .mission-future-item p { max-width: 43ch; margin: 0; color: #536579; font-size: 1rem; line-height: 1.75; }
-.mission-future a { color: #1c5877; text-decoration: underline; text-underline-offset: 5px; text-decoration-color: #9ebfce; }
+.mission-future a { color: #1c5877;    }
 @media (max-width: 800px) {
   .mission-reading-layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .mission-hero-copy { grid-template-columns: 1fr; gap: 0; }
@@ -77,8 +77,8 @@
 .home-community-card { display: flex; flex-direction: column; min-width: 0; padding: 1.5rem; border: 1px solid #cedee8; border-radius: 1rem; background: #fff; }
 .home-community-card h3 { margin: 0 0 1rem; color: #0a2135; font-size: 1.4rem; line-height: 1.25; font-weight: 650; letter-spacing: -.03em; }
 .home-community-card p { margin: 0 0 1.75rem; color: #4a5d70; font-size: 1rem; line-height: 1.8; }
-.home-community-card a { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin-top: auto; min-height: 48px; padding-block: .6rem; border-top: 1px solid #d9e6ed; color: #165e7c; font-size: .9375rem; font-weight: 650; line-height: 1.5; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: #a2c1d0; }
-.home-community-card a:hover { color: #0a2135; text-decoration-color: currentColor; }
+.home-community-card a { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin-top: auto; min-height: 48px; padding-block: .6rem; border-top: 1px solid #d9e6ed; color: #165e7c; font-size: .9375rem; font-weight: 650; line-height: 1.5;    }
+.home-community-card a:hover { color: #0a2135;  }
 .home-community-card a:focus-visible { outline: 3px solid #287ba2; outline-offset: 5px; border-radius: 4px; }
 .home-community-card a span { flex-shrink: 0; }
 @media(max-width: 850px) { .home-community-cards { grid-template-columns: 1fr; } .home-community-card { padding: 1.5rem; } }

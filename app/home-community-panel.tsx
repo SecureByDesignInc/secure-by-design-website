@@ -1,4 +1,5 @@
 'use client';
+import LogoLink from './logo-link';
 import { useEffect, useState } from 'react';
 import { ArrowRight, Share2 } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
@@ -25,8 +26,8 @@ const AMOUNTS = [3, 5, 10, 25];
 
 const HELP = [
   { action: 'share_lesson', title: 'Share a lesson', body: 'Send a guide or video to someone who’s just starting out.', cta: 'Copy a lesson link', href: '/technical-training' },
-  { action: 'linkedin_portfolio', title: 'Publish your newly earned professional portfolio on LinkedIn', body: 'Post your portfolio or the build you just finished, and tag Secure By Design so we can cheer you on and share it with the community.', cta: 'Share on LinkedIn', href: 'https://www.linkedin.com/company/secure-by-design-inc/', external: true },
-  { action: 'discord_answer', title: 'Answer a question in Discord', body: 'Help with the step you were stuck on last month.', cta: 'Join the Discord', href: 'https://discord.gg/MDrGbP4cAY', external: true },
+  { action: 'linkedin_portfolio', tile: 'linkedin' as const, title: 'Publish your newly earned professional portfolio on LinkedIn', body: 'Post your portfolio or the build you just finished, and tag Secure By Design so we can cheer you on and share it with the community.', cta: 'Share on LinkedIn', href: 'https://www.linkedin.com/company/secure-by-design-inc/', external: true },
+  { action: 'discord_answer', tile: 'discord' as const, title: 'Answer a question in Discord', body: 'Help with the step you were stuck on last month.', cta: 'Join the Discord', href: 'https://discord.gg/MDrGbP4cAY', external: true },
   { action: 'report_error', title: 'Report an error', body: 'Tell us when a step or screenshot is out of date.', cta: 'Report an error', href: `mailto:support@securebydesigninc.com?subject=${encodeURIComponent('Report an error')}` },
 ];
 
@@ -136,7 +137,9 @@ export default function HomeCommunityPanel() {
               {HELP.map(item => <article key={item.title}>
                 <h4>{item.title}</h4>
                 <p>{item.body}</p>
-                <a href={item.href} data-placement="support_panel" data-action={item.action} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : { 'data-track': 'support_help_click' })}>{item.cta}<ArrowRight size={16} aria-hidden="true"/>{item.external && <span className="sr-only"> (opens in a new tab)</span>}</a>
+                {'tile' in item && item.tile
+                  ? <LogoLink tile={item.tile} href={item.href} data-placement="support_panel" data-action={item.action}>{item.cta}</LogoLink>
+                  : <a href={item.href} data-placement="support_panel" data-action={item.action} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : { 'data-track': 'support_help_click' })}>{item.cta}<ArrowRight size={16} aria-hidden="true"/>{item.external && <span className="sr-only"> (opens in a new tab)</span>}</a>}
               </article>)}
             </div>
             <div className="sbd-support-pass">

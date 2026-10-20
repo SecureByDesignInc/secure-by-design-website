@@ -85,7 +85,7 @@
 .th-top h1 { margin: 0; color: #f1f8ff; font-size: clamp(28px, 3vw, 36px); font-weight: 650; letter-spacing: -0.035em; line-height: 1.15; }
 .th-top > div > p { margin: 8px 0 0; max-width: 62ch; color: #a9bfce; font-size: 15px; line-height: 1.55; }
 .th-top .th-join { margin-top: 6px; font-size: 14px; }
-.th-join a { color: #8ae5ef; text-decoration: underline; text-underline-offset: 3px; }
+.th-join a { color: #8ae5ef;   }
 .th-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .th-search { position: relative; display: flex; align-items: center; }
 .th-search > svg { position: absolute; left: 14px; color: #8fa9ba; pointer-events: none; }

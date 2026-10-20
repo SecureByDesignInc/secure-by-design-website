@@ -20,8 +20,10 @@
 .cm-intro-copy { padding-bottom: 4px; max-width: 440px; }
 .cm-intro-copy p { font-size: 15px; line-height: 1.8; color: #adc3d2; margin: 0 0 19px; }
 .cm-intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
-.cm-intro-links a { display: inline-flex; align-items: center; gap: 10px; color: #e0f5ff; font-size: 12px; font-weight: 650; padding-bottom: 7px; border-bottom: 1px solid #4b6d82; }
-.cm-intro-links a:hover { color: #8ae5ef; border-color: #8ae5ef; }
+/* No underlines (owner direction, 20 October 2026); the Discord and Book a call links are logo pills (app/logo-link.tsx). */
+.cm-intro-links a { display: inline-flex; align-items: center; gap: 10px; color: #e0f5ff; font-size: 12px; font-weight: 650; }
+.cm-intro-links a:hover { color: #8ae5ef; }
+.cm-intro-links a.logo-pill { font-size: 14px; }
 .cm-back { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 22px; color: #b6dfeb; font-size: 12px; font-weight: 600; }
 .cm-back:hover { color: #8ae5ef; }
 
@@ -46,7 +48,7 @@
 .cm-tile p { margin: 0; color: #adc3d2; font-size: 14px; line-height: 1.6; }
 .cm-tile .cm-tile-link { margin-top: auto; padding-top: 8px; }
 .cm-link { display: inline-flex; align-items: center; gap: 8px; color: #8ae5ef; font-size: 13px; font-weight: 600; }
-.cm-link:hover { color: #c4f4f9; text-decoration: underline; text-underline-offset: 3px; }
+.cm-link:hover { color: #c4f4f9; }
 .cm-link svg { flex-shrink: 0; }
 
 /* State finder: the catalog toolbar and a grid of state tiles. */
@@ -75,11 +77,11 @@
 .cm-badge { align-self: flex-start; padding: 3px 9px; border-radius: 999px; border: 1px solid #35556b; color: #8bdbeb; font: 700 9px/1.5 var(--font-geist-sans), Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
 
 .cm-status { margin: 0; padding: 18px 20px; border: 1px solid #365469; border-radius: 17px; background: #0e2535; color: #adc3d2; font-size: 14px; line-height: 1.7; }
-.cm-status a { color: #8ae5ef; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.cm-status a { color: #8ae5ef; font-weight: 600; }
 .cm-jobs li { align-items: center; }
 .cm-job-main { flex: 999 1 300px; display: flex; flex-direction: column; gap: 3px; }
 .cm-job-main a { color: #f1f8ff; font-size: 15px; font-weight: 600; }
-.cm-job-main a:hover { color: #8ae5ef; text-decoration: underline; text-underline-offset: 3px; }
+.cm-job-main a:hover { color: #8ae5ef; }
 .cm-job-main span { color: #9fb8c8; font-size: 13px; }
 .cm-meta { color: #99b4c6; font: 500 11px/1.5 var(--font-geist-mono), monospace; letter-spacing: .03em; }
 .cm-more { margin: 14px 0 0; }

@@ -12,7 +12,7 @@
 .sbd-home .sbd-support-help-grid h4{font-size:1rem;font-weight:650;letter-spacing:-.01em;line-height:1.35;color:var(--sbd-ink)}
 .sbd-home .sbd-support-help-grid p{font-size:.875rem;line-height:1.55}
 .sbd-support-help-grid a{display:inline-flex;align-items:center;gap:6px;margin-top:auto;min-height:32px;color:#a0dcff;font-size:.875rem;font-weight:600}
-.sbd-support-help-grid a:hover{text-decoration:underline!important;text-underline-offset:4px}
+.sbd-support-help-grid a:hover{color:#dcf3ff}
 .sbd-support-pass{display:flex;flex-wrap:wrap;align-items:center;gap:14px;border-top:1px solid #3a5673;padding-top:18px}
 .sbd-home .sbd-support-pass p{font-size:1rem;font-weight:600;color:var(--sbd-ink)}
 

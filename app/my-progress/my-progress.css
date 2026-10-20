@@ -111,8 +111,7 @@ body.site-editorial .account-page :is(a,button,input,summary):focus-visible{outl
 .reader-community-note span{color:#a9c1d7;font-size:.875rem}
 @media(max-width:380px){.reader-community-note{gap:.7rem}}
 .account-page .reader-community-booking{margin:1.5rem 0 0;max-width:640px;color:#c1d1e3;font-size:1rem;line-height:1.65}
-.account-page .reader-community-booking a{display:inline-flex;align-items:center;min-height:44px;color:#a3e8ff;font-weight:600;text-decoration:underline;text-underline-offset:4px}
-.account-page .reader-community-booking a:hover{color:#dcecff}
+.account-page .reader-community-booking{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 
 /* Printed pages use dark text on white. */
 @media print{body.site-editorial:has(.account-page),.account-page,.account-page .reader-page{background:#fff;color:#111}.account-page :is(h1,h2,h3,p,span,strong,label,li,a){color:#111!important}}

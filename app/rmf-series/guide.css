@@ -11,7 +11,7 @@
 .rmf-guide-phase > header { border-bottom: 1px solid #d1e2ea; margin-bottom: 1.75rem; padding-bottom: 1.25rem; }
 .rmf-phase-topics { color: #526b7e; font-size: .8125rem; margin-bottom: 1rem; }
 .rmf-phase-contents { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
-.rmf-phase-contents a, .rmf-guide-next a, .rmf-guide-back { color: #1269a8; font-size: .875rem; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; line-height: 1.8; }
+.rmf-phase-contents a, .rmf-guide-next a, .rmf-guide-back { color: #1269a8; font-size: .875rem; font-weight: 600;   line-height: 1.8; }
 .rmf-guide-prose > p, .rmf-guide-prose > ul { max-width: 78ch; font-size: 1.0625rem; line-height: 1.9; color: #46566c; margin: 0 0 1.25rem; }
 .rmf-guide-prose > ul { list-style: disc; padding-left: 1.4rem; }
 .rmf-guide-prose > ul > li { padding: 0 0 .75rem .15rem; }

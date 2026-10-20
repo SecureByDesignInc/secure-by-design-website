@@ -2,7 +2,7 @@
 .evidence-intro h1 { margin: 0 0 1rem; font-family: var(--font-editorial); font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; letter-spacing: -.025em; }
 .evidence-intro > p { font-size: 1.125rem; line-height: 1.8; color: var(--muted-foreground); margin: 0; }
 .evidence-guide strong { font-weight: 600; }
-.evidence-content > section > p a { color: var(--primary); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--cyan-line); }
+.evidence-content > section > p a { color: var(--primary);    }
 .evidence-layout { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 3.5rem; align-items: start; }
 .evidence-jump { position: sticky; top: 1.5rem; display: flex; flex-direction: column; gap: .4rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
 .evidence-jump > p { font-size: .875rem; color: var(--muted-foreground); margin: 0 0 .75rem; }

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import LogoLink from '../../logo-link';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import '../community.css';
 import { sharePreview } from '../../share-preview';
@@ -37,7 +38,7 @@ export default async function StatePage({ params }: Params) {
       <div className="cm-intro-copy">
         <p>Where to look for cybersecurity work in {name}, who can help pay for your training, and where to meet people in the field.</p>
         <div className="cm-intro-links">
-          <a href={discordUrl} target="_blank" rel="noopener noreferrer">Join the Discord <ArrowUpRight size={16} aria-hidden="true" /><span className="cm-sr"> (opens in a new tab)</span></a>
+          <LogoLink tile="discord" href={discordUrl}>Join the Discord</LogoLink>
         </div>
       </div>
     </section>
