@@ -16,7 +16,7 @@ const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 
 const sitemap = existsSync('dist/client/sitemap.xml') ? readFileSync('dist/client/sitemap.xml', 'utf8') : '';
 const fromSitemap = [...sitemap.matchAll(/<loc>https?:\/\/[^/<]+([^<]*)<\/loc>/g)].map(match => match[1] || '/');
-const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo=%2Ftechnical-training', '/app-sign-in', '/privacy', '/training/dc01-dc02/', '/grc-rmf-training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
+const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo=%2Ftechnical-training', '/app-sign-in', '/privacy', '/training/identity-foundation/', '/grc-rmf-training/rmf/', '/inside-network-model/model.html', '/does-not-exist'];
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
@@ -90,7 +90,7 @@ for (const path of pages) {
 const backLinks = [];
 for (const [from, label, to] of [
   // The course guide is served at /training/<id>/ (the old address redirects there).
-  ['/training/dns-configuration/checklist', 'Back to', '/training/dns-configuration/'],
+  ['/training/identity-foundation/checklist', 'Back to', '/training/identity-foundation/'],
 ]) {
   const page = await context.newPage();
   try {
@@ -145,10 +145,11 @@ for (const [index, course] of configurations.entries()) {
   }
   await page.close();
 }
-for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/training/two-tier-pki/']) {
+// Course 1.1 (20 October 2026) is the long guide; check it on both sizes and two other guides on phones.
+for (const path of ['/training/identity-foundation/', '/training/linux-repository/', '/training/splunk-analysis/']) {
   const name = path.split('/')[2];
   for (const [label, ctx] of [['desktop', context], ['phone', phone]]) {
-    if (label === 'desktop' && name !== 'dc01-dc02') continue;
+    if (label === 'desktop' && name !== 'identity-foundation') continue;
     const page = await ctx.newPage();
     try {
       await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
@@ -275,7 +276,7 @@ for (const [agent, ua] of [
   ['facebookexternalhit', 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'],
   ['Slackbot', 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)'],
 ]) {
-  for (const path of ['/', '/training/dns-configuration', '/training/dns-configuration/checklist']) {
+  for (const path of ['/', '/training/identity-foundation', '/training/identity-foundation/checklist']) {
     const html = await (await fetch(base + path, { headers: { 'user-agent': ua } })).text();
     const head = html.slice(0, Math.max(0, html.indexOf('</head>')));
     const inHead = tag => head.includes(tag);
