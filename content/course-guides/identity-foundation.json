@@ -961,7 +961,7 @@
     "stig-findings": {
       "short": "Write the findings record",
       "tag": "21 / HAND OFF",
-      "status": "FINDINGS TO COURSE 1.5",
+      "status": "FINDINGS TO PART 5",
       "stepTitles": [
         "Export the open rules and count them by severity",
         "Classify every open item",

@@ -80,7 +80,7 @@ window.RMF_NETWORK = {
     },
     {
       "status": "Evidence from the systems",
-      "caption": "Proof comes from the systems themselves: SCAP Compliance Checker results and STIG checklists from the administration seats, log review records from SBD-SPLUNK01, and the course 1.19 restore record."
+      "caption": "Proof comes from the systems themselves: SCAP Compliance Checker results and STIG checklists from the administration seats, log review records from SBD-SPLUNK01, and the course 1.12 restore record."
     },
     {
       "status": "What the assessor receives",

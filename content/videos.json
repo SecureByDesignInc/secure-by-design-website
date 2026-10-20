@@ -1060,7 +1060,7 @@
     {
       "id": "network-build",
       "title": "Build the Network",
-      "description": "Build the complete air-gapped network, one system at a time: the domain controllers, DNS, domain time, STIG measurement and Group Policy hardening, the two-tier PKI, DHCP, tiered administration, the Linux repository, the logging pipeline (collector, protected archive, and analysis), the workstation fleet, Windows updates, the living inventory, business services, and proven recovery. Follow the courses in order, from 1.1 to 1.19."
+      "description": "Build the complete air-gapped network, one system at a time: the domain controllers, DNS, domain time, STIG measurement and Group Policy hardening, the two-tier PKI, DHCP, tiered administration, the Linux repository, the logging pipeline (collector, protected archive, and analysis), the workstation fleet, Windows updates, the living inventory, business services, and proven recovery. Follow the courses in order, from 1.1 to 1.12."
     },
     {
       "id": "network-authorization",

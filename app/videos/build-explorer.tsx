@@ -1,7 +1,7 @@
 'use client';
 
 // The interactive build explorer at the bottom of every expanded catalog tile (owner request,
-// 18 October 2026: one shared explorer for course 1.1 and courses 1.2–1.19). It draws the course
+// 18 October 2026: one shared explorer for course 1.1 and courses 1.2–1.12). It draws the course
 // guide's own 3D lesson network from public/training/<id>/scene.json with app/videos/guide-scene.ts,
 // and beside it the build story: the chosen lesson, its network state, system buttons, the chosen
 // system's notes and the lesson's guide link. Full lessons, knowledge checks and saved progress stay
