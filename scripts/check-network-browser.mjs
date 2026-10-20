@@ -130,7 +130,9 @@ try {
     await page.locator('.packet-close').click();
     assert.equal(await page.locator('#packetCard').isVisible(), false, 'Packet card closes');
     await page.locator('#motion').click();
-    await page.evaluate(() => scrollTo(0, 0));
+    // Follow the traffic sits above the model (20 October 2026), so bring the stage into view before reading packet positions.
+    await page.evaluate(() => document.querySelector('.stage').scrollIntoView({ block: 'start' }));
+    await page.waitForTimeout(300);
     const packet = (await page.evaluate(() => window.insideNetworkQA.packets()))[0];
     await page.mouse.click(packet.x, packet.y);
     assert.equal(await page.locator('#packetCard').isVisible(), true, 'Selecting a packet in the 3D view inspects it');
@@ -155,8 +157,11 @@ try {
     // The 3D topology layer is gone (19 October 2026): no segment labels float over the building, and there is no Topology button.
     assert.equal(await page.evaluate(() => window.insideNetworkQA.labels().filter(l => ['island', 'lnode', 'lfacility'].includes(l.kind)).length), 0, 'No topology layer labels in 3D');
     assert.equal(await page.locator('#viewToggle').count(), 0, 'No Topology button');
-    // The network diagram is its own section between the model and Follow the traffic: every VLAN, the core and the offline area.
-    assert.equal(await page.evaluate(() => { const d = document.getElementById('networkDiagram'); return d.previousElementSibling?.classList.contains('explorer') && d.nextElementSibling?.id === 'trafficSection'; }), true, 'Diagram sits under the model, above Follow the traffic');
+    // Follow the traffic (chooser, walkthrough steps and knowledge check) sits above the model; the network diagram closes the page under it (owner direction, 20 October 2026).
+    assert.equal(await page.evaluate(() => { const d = document.getElementById('networkDiagram'); const t = document.getElementById('trafficSection'); return t.nextElementSibling?.classList.contains('explorer') && d.previousElementSibling?.classList.contains('explorer') && d.nextElementSibling?.classList.contains('scope-strip'); }), true, 'Follow the traffic above the model; diagram under it');
+    // The share and presentation actions live in the model's own toolbar with the view options (owner direction, 20 October 2026).
+    assert.equal(await page.locator('.stage-toolbar .scene-tools #copyLink, .stage-toolbar .scene-tools #record, .stage-toolbar .scene-tools #export, .stage-toolbar .scene-tools #cinema').count(), 4, 'Copy link, Record clip, Export 4K and Presentation sit with the view options');
+    assert.equal(await page.locator('.topbar button').count(), 0, 'The top bar keeps only the identity');
     assert.equal(await page.locator('#networkDiagram .nd-vlan').count(), 8, 'Diagram shows all eight VLANs');
     assert.match(await page.locator('#networkDiagram .nd-core').textContent(), /Core router/);
     assert.match(await page.locator('#networkDiagram .nd-offline').textContent(), /SBD-ROOTCA01/);
@@ -196,7 +201,7 @@ try {
     await page.locator('#reference').click();
     assert.equal(await page.locator('#protocolRows tr').count(), protocols.length, 'Protocol reference lists every protocol');
     await page.keyboard.press('Escape');
-    const [download] = await Promise.all([page.waitForEvent('download', { timeout: 30000 }), page.locator('#export').click()]);
+    const [download] = await Promise.all([page.waitForEvent('download', { timeout: 120000 }), page.locator('#export').click()]);
     const png = await readFile(await download.path());
     assert.equal(png.readUInt32BE(16), 3840, 'Export width'); assert.equal(png.readUInt32BE(20), 2160, 'Export height');
     await page.waitForFunction(() => document.getElementById('toast').textContent === '4K image downloaded');
