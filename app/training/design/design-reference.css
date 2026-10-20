@@ -1,4 +1,4 @@
-/* US design reference pages (/training/design/<service>, app/training/design/design-reference.tsx). Builds on
+/* Design reference pages (Government & Vendor Guidelines) (/training/design/<service>, app/training/design/design-reference.tsx). Builds on
    app/videos/videos.css (loaded first): the Training Hub's navy ground with a readable, lighter reading column. */
 .dr-page .container.dr-layout {
   width: min(1360px, calc(100% - 48px));

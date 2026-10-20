@@ -3,7 +3,7 @@
   "hero": {
     "title": "Build and harden",
     "accent": "the identity foundation.",
-    "text": "Design the directory, then build it: SBD-DC01 and SBD-DC02 with DNS and domain time, measured against the STIG and hardened with Group Policy, a two-tier PKI, DHCP, and tiered administration. Each part opens with its design decisions from the US design references. Follow the build, explore the dependencies, and keep the evidence."
+    "text": "Design the directory, then build it: SBD-DC01 and SBD-DC02 with DNS and domain time, measured against the STIG and hardened with Group Policy, a two-tier PKI, DHCP, and tiered administration. Each part opens with its design decisions from the government and vendor design references. Follow the build, explore the dependencies, and keep the evidence."
   },
   "book": [
     "WINDOWS",
@@ -605,7 +605,7 @@
         "Set each controller's DNS client order",
         "Confirm the register permits DNS",
         "Decide forwarding and recursion",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Listing a public resolver as an alternate DNS server. It has no sbd.test zone and no locator records, so a member that falls back to it can't find a domain controller, and on an air-gapped network the query goes nowhere.",
       "network": "Both controllers run DNS on VLAN 10. The paths from the domain member to each controller are rule F01, TCP and UDP 53: a member has to find a controller before any Kerberos, LDAP, or Group Policy traffic can start.",
@@ -733,7 +733,7 @@
         "Name the reference and the fallback",
         "Decide what verification will show",
         "Confirm the time row and firewall rules",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Treating Kerberos's five minutes as the target. By the time clocks are minutes apart, sign-ins are already failing and log timelines no longer line up; watching for offsets that stay small and stable tells you about drift while there is still time to correct it.",
       "network": "Both controllers are live on VLAN 10. The paths from a domain member to each controller are rule F09, UDP 123, which this plan confirms; SBD-DC02's own time requests to SBD-DC01 stay inside VLAN 10.",
@@ -866,7 +866,7 @@
         "Separate scanner checks from manual checks",
         "Trace rules to controls and know a scan’s limits",
         "Record which STIGs apply to each controller",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Treating a high SCAP score as compliance. The benchmark covers only the rules a scanner can read: the manual rules and the Active Directory STIGs are still unanswered, and a scan never proves procedures or authorization.",
       "network": "Both controllers are live on VLAN 10 and unchanged. From each VM console you read the operating system, roles and forest to record which STIGs apply; nothing is installed yet.",
@@ -992,7 +992,7 @@
         "Create protected OUs with a recorded purpose",
         "Redirect the default containers and join servers by OU",
         "Keep privileged accounts and systems separate",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Shaping the OUs like the org chart produces a tree that no policy or delegation follows. Leaving the default Computers container in place is the quieter mistake: a newly joined machine gets only domain-level policy and never sees the OU-linked hardening.",
       "network": "Both controllers are live on VLAN 10. The new OUs are directory objects, so they replicate between SBD-DC01 and SBD-DC02; the controllers themselves stay in the built-in Domain Controllers OU.",
@@ -1123,7 +1123,7 @@
         "Map each value to the setting that applies it",
         "Plan the pki.sbd.test publication name",
         "Choose the publication host, paths, and schedule",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Leaving the issuing CA’s lifetime to the issuing CA. A subordinate CA’s certificate lifetime comes from the root that signs it, so if CA\\ValidityPeriod and CA\\ValidityPeriodUnits are not set on the root before the ceremony, the issuing CA gets the root’s existing setting instead of the planned 10 years.",
       "network": "Nothing is built yet. SBD-ROOTCA01 is planned with no network connection, and SBD-SUBCA01 and SBD-PKI-MGMT01 are planned on VLAN 30. SBD-DC01 already provides the domain and DNS the issuing CA will depend on.",
@@ -1378,7 +1378,7 @@
         "Set the lease length and the three options",
         "Assign the three identities",
         "Confirm F04 and the core’s relay",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Adding options because they might be useful — a boot server, a proxy auto-discovery address, an outside resolver as a spare. Every option is configuration every client trusts, and an outside resolver in option 6 would also break the domain’s own lookups.",
       "network": "Nothing is built yet. SBD-DC01 and SBD-DC02 run from part 1; SBD-DHCP01 and the VLAN 80 test client exist only in the plan, and the core’s relay is already part of the network.",
@@ -1508,7 +1508,7 @@
         "Assign the admin seats under the PAW STIG",
         "Write the credential rule; create the role groups",
         "Add the permit and deny rows to the register",
-        "Check the design against US guidance"
+        "Check the design against government & vendor guidelines"
       ],
       "mistake": "Placing a system in Tier 1 because it is a member server. SBD-WSUS01 sits in a member-server VLAN, but the part of it that approves the domain controllers’ updates can control Tier 0. Map tiers by what a system controls, not by where it lives.",
       "network": "Nothing new is built yet. SBD-DC01, SBD-SUBCA01, and part 7’s SBD-DHCP01 run from earlier courses; the three VLAN 60 seats exist only in the plan.",

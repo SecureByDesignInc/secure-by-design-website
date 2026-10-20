@@ -43,7 +43,7 @@ const videoLabel = (entry: CatalogEntry) => !isReferenceLibrary(entry) && !isTra
 function entryMeta(entry: CatalogEntry): string {
   if (isReferenceLibrary(entry)) {
     const stats = (entry as { stats?: { areas: number; sources: number } }).stats;
-    if (stats) return `${stats.areas ? `${stats.areas} design areas · ` : ''}${stats.sources} sources · US only`;
+    if (stats) return `${stats.areas ? `${stats.areas} design areas · ` : ''}${stats.sources} sources · government & vendor guidelines`;
     return 'Official sources · Training samples';
   }
   if (comingSoon(entry)) return 'Training materials in preparation';
@@ -218,7 +218,7 @@ export default function TrainingHub({ library }: { library: Library }) {
   const countLabel = (item: HubGroup) => {
     const later = item.entries.filter(comingSoon).length;
     if (item.id === 'templates-references') return `${item.entries.length} ${item.entries.length === 1 ? 'library' : 'libraries'}`;
-    if (item.id === 'design-references') return `${item.entries.length} design references · US sources only`;
+    if (item.id === 'design-references') return `${item.entries.length} design references`;
     const courses = `${item.entries.length} course${item.entries.length === 1 ? '' : 's'}`;
     return item.id === 'network-build' ? `${courses} · take them in order` : later ? `${courses} · ${later} coming soon` : item.parent ? `${courses} · in course order` : courses;
   };

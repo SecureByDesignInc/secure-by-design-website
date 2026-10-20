@@ -97,21 +97,21 @@ def walk(obj, fn):
     if isinstance(obj, dict): return {k: (v if k in ('id', 'url', 'href', 'guide', 'word', 'cover', 'checklistPage', 'youtubeId', 'from', 'to') else walk(v, fn)) for k, v in obj.items()}
     return obj
 
-# ---------- design material (from the US design references, docs/design-references/) ----------
+# ---------- design material (from the government and vendor design references, docs/design-references/) ----------
 DESIGN_SOURCES = {
-    'design-ad': ('Secure By Design · US design reference: Active Directory design', f'{SITE}/training/design/active-directory'),
-    'design-dns': ('Secure By Design · US design reference: DNS design', f'{SITE}/training/design/dns'),
-    'design-time': ('Secure By Design · US design reference: Time synchronization design', f'{SITE}/training/design/time'),
-    'design-stig': ('Secure By Design · US design reference: DISA STIGs and GPO packages', f'{SITE}/training/design/disa-stigs'),
-    'design-pki': ('Secure By Design · US design reference: PKI design', f'{SITE}/training/design/pki'),
-    'design-dhcp': ('Secure By Design · US design reference: DHCP design', f'{SITE}/training/design/dhcp'),
+    'design-ad': ('Secure By Design · Government & Vendor Guidelines: Active Directory design', f'{SITE}/training/design/active-directory'),
+    'design-dns': ('Secure By Design · Government & Vendor Guidelines: DNS design', f'{SITE}/training/design/dns'),
+    'design-time': ('Secure By Design · Government & Vendor Guidelines: Time synchronization design', f'{SITE}/training/design/time'),
+    'design-stig': ('Secure By Design · Government & Vendor Guidelines: DISA STIGs and GPO packages', f'{SITE}/training/design/disa-stigs'),
+    'design-pki': ('Secure By Design · Government & Vendor Guidelines: PKI design', f'{SITE}/training/design/pki'),
+    'design-dhcp': ('Secure By Design · Government & Vendor Guidelines: DHCP design', f'{SITE}/training/design/dhcp'),
 }
-CHECK = 'Check the design against US guidance'
+CHECK = 'Check the design against government & vendor guidelines'  # 'US guidance' until 20 October 2026
 ENRICH = {  # the first lesson of each part after the first: one design step, one question, the source
     'dns-configuration': ('design-dns',
         "The DNS design reference sets the baseline this part follows. Name the forest as a subdomain of a domain you have registered, or use ICANN's reserved .internal; never use .local or a single-label name. sbd.test uses a name reserved for testing, which suits a practice network only. Store the zones in Active Directory with secure-only updates, run at least two DNS servers on different hosts, and forward only to an approved upstream; this air-gapped network forwards nothing. The authorities differ in places: NIST SP 800-81r3 prefers dedicated DNS servers and advises against signing internal zones unless a policy requires it, while Microsoft runs DNS on domain controllers and the DISA DNS STIG requires DNSSEC, with NSEC3 on internal zones. Record which rule your build follows, and why.",
         {'question': 'Which forest name does the DNS design reference rule out?', 'answers': ['A subdomain of a domain you have registered', "ICANN's reserved .internal", '.local or a single-label name'], 'correct': 2, 'explanation': 'The reference recommends a name you control or .internal, and rules out .local and single-label names.'},
-        'The DNS design follows the US design reference; record each deviation, such as the test-only sbd.test name.'),
+        'The DNS design follows the government and vendor guidelines; record each deviation, such as the test-only sbd.test name.'),
     'domain-time': ('design-time',
         "The time design reference keeps the default Active Directory hierarchy: the forest-root PDC emulator, SBD-DC01, is the reliable source, and every other member follows the domain. Upstream counts differ by authority: CIS, NSA and CISA say at least two sources, Microsoft three or more, and RFC 8633 four or more; DoD systems must use USNO or another approved DoD source. This network is air-gapped and has no upstream, so record that as an accepted gap. Keep the Kerberos clock tolerance at 5 minutes, the default and the DISA requirement, and never let a virtualized domain controller take time from its host.",
         {'question': "Which system is the domain's time source?", 'answers': ['The forest-root PDC emulator, SBD-DC01', "Each member's hypervisor host", 'Whichever controller answers first'], 'correct': 0, 'explanation': 'The forest-root PDC emulator is the reliable source; everything else follows the domain hierarchy, and no domain controller takes time from its host.'},
@@ -313,7 +313,7 @@ def main():
 
     guide = {
         'id': NEW,
-        'hero': {'title': 'Build and harden', 'accent': 'the identity foundation.', 'text': 'Design the directory, then build it: SBD-DC01 and SBD-DC02 with DNS and domain time, measured against the STIG and hardened with Group Policy, a two-tier PKI, DHCP, and tiered administration. Each part opens with its design decisions from the US design references. Follow the build, explore the dependencies, and keep the evidence.'},
+        'hero': {'title': 'Build and harden', 'accent': 'the identity foundation.', 'text': 'Design the directory, then build it: SBD-DC01 and SBD-DC02 with DNS and domain time, measured against the STIG and hardened with Group Policy, a two-tier PKI, DHCP, and tiered administration. Each part opens with its design decisions from the government and vendor design references. Follow the build, explore the dependencies, and keep the evidence.'},
         'book': ['WINDOWS', 'SERVER', '', 'IDENTITY'],
         'sample': [['Domain', 'sbd.test'], ['SBD-DC01', '10.0.10.10 / 24 · PDC emulator'], ['SBD-DC02', '10.0.10.11 / 24'], ['PKI', 'SBD-ROOTCA01 (offline) · SBD-SUBCA01 · pki.sbd.test'], ['DHCP', 'SBD-DHCP01 · VLAN 80'], ['Admin seats', 'AdminJumpBox01 · SBD-ADMIN-SRV01 · VLAN 60'], ['Parts', '8 parts · ' + str(len(lessons)) + ' lessons']],
         'scene': scene, 'lessons': extras,

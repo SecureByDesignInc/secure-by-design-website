@@ -11,32 +11,32 @@
     "sources": [
       {
         "id": "design-ad",
-        "title": "Secure By Design · US design reference: Active Directory design",
+        "title": "Secure By Design · Government & Vendor Guidelines: Active Directory design",
         "url": "https://securebydesigninc.com/training/design/active-directory"
       },
       {
         "id": "design-dns",
-        "title": "Secure By Design · US design reference: DNS design",
+        "title": "Secure By Design · Government & Vendor Guidelines: DNS design",
         "url": "https://securebydesigninc.com/training/design/dns"
       },
       {
         "id": "design-time",
-        "title": "Secure By Design · US design reference: Time synchronization design",
+        "title": "Secure By Design · Government & Vendor Guidelines: Time synchronization design",
         "url": "https://securebydesigninc.com/training/design/time"
       },
       {
         "id": "design-stig",
-        "title": "Secure By Design · US design reference: DISA STIGs and GPO packages",
+        "title": "Secure By Design · Government & Vendor Guidelines: DISA STIGs and GPO packages",
         "url": "https://securebydesigninc.com/training/design/disa-stigs"
       },
       {
         "id": "design-pki",
-        "title": "Secure By Design · US design reference: PKI design",
+        "title": "Secure By Design · Government & Vendor Guidelines: PKI design",
         "url": "https://securebydesigninc.com/training/design/pki"
       },
       {
         "id": "design-dhcp",
-        "title": "Secure By Design · US design reference: DHCP design",
+        "title": "Secure By Design · Government & Vendor Guidelines: DHCP design",
         "url": "https://securebydesigninc.com/training/design/dhcp"
       },
       {
@@ -1024,7 +1024,7 @@
           "Each controller lists its partner, then itself; members list both controllers only.",
           "The AD zones are inventoried, not recreated, and the delegation warning is expected.",
           "The forwarding and recursion decision is written down first.",
-          "The DNS design follows the US design reference; record each deviation, such as the test-only sbd.test name."
+          "The DNS design follows the government and vendor guidelines; record each deviation, such as the test-only sbd.test name."
         ],
         "next": "Lesson 8 turns this plan into AD-integrated forward and reverse zones.",
         "part": "Part 2 · DNS"
@@ -2516,7 +2516,7 @@
           "Trust, issuance, publication, and administration are separated in writing.",
           "Cryptography, names, lifetimes, and CRL periods are approved before installation, starting from this lab's example values.",
           "CRL renewal has a named owner and a date.",
-          "The two-tier design matches the US guidance; AD CS is Tier 0 and its publication URLs are fixed first."
+          "The two-tier design matches the government and vendor guidelines; AD CS is Tier 0 and its publication URLs are fixed first."
         ],
         "next": "Lesson 28 performs the controlled offline root installation.",
         "part": "Part 6 · Two-tier PKI"

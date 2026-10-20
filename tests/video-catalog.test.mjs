@@ -482,9 +482,9 @@ test('the ATO Package Builder describes itself as an original practice tool', ()
   assert.match(readFileSync(new URL('../app/grc-rmf-training/workspace/workspace.tsx', import.meta.url), 'utf8'), /the way authorization teams do it: register/);
 });
 
-// Owner direction, 19 October 2026: one US design reference tile per infrastructure service, built from the owner's
+// Owner direction, 19 October 2026: one design reference tile per infrastructure service (Government & Vendor Guidelines since 20 October 2026), built from the owner's
 // compendium (docs/design-references/, parsed by scripts/prepare-design-references.py into content/design-references.json).
-test('each US design reference tile matches its compendium content', () => {
+test('each design reference tile matches its compendium content', () => {
   const refs = JSON.parse(readFileSync(new URL('../content/design-references.json', import.meta.url), 'utf8'));
   const tiles = library.references.filter(item => item.kind === 'design-reference');
   assert.deepEqual(tiles.map(item => item.id), ['design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
@@ -514,4 +514,17 @@ test('each US design reference tile matches its compendium content', () => {
     assert.ok(text.length > 20000, `${tile.id} has substantive content`);
   }
   assert.ok(existsSync(new URL('../docs/design-references/SBD-US-Infrastructure-Design-Reference-Compendium.pdf', import.meta.url)));
+});
+
+// Owner direction, 20 October 2026: the guidance is framed as "Government & Vendor Guidelines", not as US sources.
+test('the design references and course 1.1 frame their guidance as Government & Vendor Guidelines', () => {
+  const framing = /\bUS (design reference|sources only|only|guidance|authorities|Reference Collection)|What US authorities|US-Only|US-Source|\b(NIST|CISA|OMB|DISA) \(US/;
+  assert.equal(library.categories.find(item => item.id === 'design-references').title, 'Government & Vendor Guidelines');
+  const texts = [JSON.stringify(library), readFileSync(new URL('../content/configuration-courses.json', import.meta.url), 'utf8'), readFileSync(new URL('../content/course-guides/identity-foundation.json', import.meta.url), 'utf8')];
+  const refs = JSON.parse(readFileSync(new URL('../content/design-references.json', import.meta.url), 'utf8'));
+  texts.push(JSON.stringify(refs.services.map(service => [service.design, service.catalog])), JSON.stringify(refs.overview));
+  for (const file of ['app/videos/episode-tile.tsx', 'app/videos/design-reference-experience.tsx', 'app/videos/training-hub.tsx', 'app/training/design/design-reference.tsx', 'app/training/design/[service]/page.tsx']) {
+    texts.push(readFileSync(new URL('../' + file, import.meta.url), 'utf8'));
+  }
+  for (const text of texts) assert.doesNotMatch(text, framing);
 });

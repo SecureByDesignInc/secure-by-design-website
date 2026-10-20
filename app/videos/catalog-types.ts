@@ -82,7 +82,7 @@ export type TrainingCourse = {
   };
 };
 /**
- * A reference tile (kind 'library' for the ATO Template Library, 'design-reference' for a US design reference):
+ * A reference tile (kind 'library' for the ATO Template Library, 'design-reference' for a design reference (Government & Vendor Guidelines)):
  * a collection of outside sources rather than a course.
  * Its contents come from its own data file (the ATO Template Library reads content/ato-templates.json),
  * so the tile carries only its catalog details, artwork and page.

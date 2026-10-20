@@ -18,7 +18,7 @@ import { getYouTubeEmbedUrl, isReferenceLibrary, isTrainingCourse, supportsIdent
 const ART_SERIES: Record<string, string> = {
   'network-authorization': 'FROM BUILD TO AUTHORIZATION',
   'templates-references': 'TEMPLATES & REFERENCES',
-  'design-references': 'US DESIGN REFERENCES',
+  'design-references': 'GOVERNMENT & VENDOR GUIDELINES',
 };
 
 export default function EpisodeTile({
@@ -34,7 +34,7 @@ export default function EpisodeTile({
   const course = isTrainingCourse(episode);
   // Reference tiles (the ATO Template Library) share the course tile's layout: labels beside a cover, no recording.
   const reference = isReferenceLibrary(episode);
-  // A US design reference (owner's compendium, 19 October 2026): design areas and sources instead of template counts.
+  // A design reference (owner's compendium, 19 October 2026; framed as Government & Vendor Guidelines since 20 October): design areas and sources instead of template counts.
   const design = reference && episode.kind === 'design-reference';
   const stats = design ? (episode as { stats?: { areas: number; sources: number } }).stats : undefined;
   // Coming-soon tiles hold their place in the path but have no material yet: no cover, no download, no opening.
@@ -134,7 +134,7 @@ export default function EpisodeTile({
             {design ? <div className="vc-tile-status">
               <span>
                 <Check size={13} />
-                US sources only
+                Government & vendor guidelines
               </span>
               <span className="vc-tile-course-size"><FileText size={13} />{stats?.sources ?? 0} sources{stats?.areas ? ` · ${stats.areas} design areas` : ''}</span>
               <span>

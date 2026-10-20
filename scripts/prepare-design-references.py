@@ -396,16 +396,16 @@ def outline(secs):
 # ---------- services ----------
 SERVICES = [
   {'id': 'active-directory', 'title': 'Active Directory design', 'subtitle': 'Forest, domain, OU, trust, Group Policy and tiering design', 'topic': 'Active Directory',
-   'design': 'Part I', 'catalog': 'US-Only Reference Collection: Active Directory', 'courses': ['dc01-dc02', 'harden-baseline', 'tiered-admin']},
+   'design': 'Part I', 'catalog': 'Reference Collection: Active Directory', 'courses': ['dc01-dc02', 'harden-baseline', 'tiered-admin']},
   {'id': 'dns', 'title': 'DNS design', 'subtitle': 'Namespace, zones, resolution, dynamic update, DNSSEC and logging design', 'topic': 'DNS',
-   'design': 'Part II', 'catalog': 'US Reference Collection: DNS', 'courses': ['dns-configuration']},
+   'design': 'Part II', 'catalog': 'Reference Collection: DNS', 'courses': ['dns-configuration']},
   {'id': 'time', 'title': 'Time synchronization design', 'subtitle': 'The time hierarchy, upstream sources, Kerberos skew and virtualized controllers', 'topic': 'Time',
-   'design': 'Part III', 'catalog': 'US Reference Collection: NTP', 'courses': ['domain-time']},
+   'design': 'Part III', 'catalog': 'Reference Collection: NTP', 'courses': ['domain-time']},
   {'id': 'pki', 'title': 'PKI design', 'subtitle': 'CA hierarchy, cryptography, validity, revocation, templates and CA protection', 'topic': 'PKI',
-   'design': 'Part IV', 'catalog': 'US Reference Collection: Certificate Authority', 'courses': ['two-tier-pki']},
+   'design': 'Part IV', 'catalog': 'Reference Collection: Certificate Authority', 'courses': ['two-tier-pki']},
   {'id': 'dhcp', 'title': 'DHCP design', 'subtitle': 'Placement, availability, scopes, options, DNS integration, hardening and logging', 'topic': 'DHCP',
    'design': 'Part V', 'catalog': 'DHCP for Windows/Enterprise Environments', 'courses': ['dhcp']},
-  {'id': 'disa-stigs', 'title': 'DISA STIGs and GPO packages', 'subtitle': 'DISA’s artifacts and tooling, and the US guidance around them', 'topic': 'STIGs',
+  {'id': 'disa-stigs', 'title': 'DISA STIGs and GPO packages', 'subtitle': 'DISA’s artifacts and tooling, and the guidance around them', 'topic': 'STIGs',
    'design': None, 'catalog': 'DISA STIGs and DISA STIG GPO Packages', 'courses': ['stig-scap', 'harden-baseline']},
 ]
 
@@ -441,9 +441,116 @@ def add_ids(blocks):
             seen.add(s); b['id'] = s
     return blocks
 
+# ---------- wording (owner direction, 20 October 2026) ----------
+# The design references are framed as "Government & Vendor Guidelines", not as US sources. These rewrite the
+# compendium's framing (titles, scope labels, "what the US authorities say") and keep the factual statements where
+# "US" is a legal or provenance detail: the copyright status of US government works, where a document is hosted,
+# a co-author's nationality.
+WORDING = [
+    (r'What the US authorities say:', 'What the government and vendor guidelines say:'),
+    (r'What US authorities say\.', 'What the government and vendor guidelines say.'),
+    (r'Where the US authorities consistently agree:', 'Where the authorities consistently agree:'),
+    (r'\bThe US authorities agree', 'The authorities agree'),
+    (r'\bUS authorities agree', 'The authorities agree'),
+    (r'None of the US authorities endorse', 'None of the authorities reviewed endorse'),
+    (r'\bwhat each US authority recommends', 'what each authority recommends'),
+    (r'\bNo US authority reviewed', 'No authority reviewed'),
+    (r'\bNo US authority', 'No authority reviewed'),
+    (r'\bNo US source recommends', 'No source reviewed recommends'),
+    (r'\bno US-government body', 'no government body reviewed'),
+    (r'\bThere is no US-government mandate', 'There is no government mandate'),
+    (r'\bno US-government source', 'no government source reviewed'),
+    (r'\bNo US-government guidance yet', 'No government guidance yet'),
+    (r'\bNo US government source verified here', 'No government source verified here'),
+    (r'\bThe US guidance baseline', 'The guidance baseline'),
+    (r'\bthe US guidance baseline', 'the guidance baseline'),
+    (r'\bUS guidance on ', 'Government and vendor guidance on '),
+    (r'\bUS government guidance agrees', 'Government guidance agrees'),
+    (r'Part (I{1,3}|IV|V) — US Design Reference:', r'Part \1 — Design Reference:'),
+    (r'US-Only Reference Collection:', 'Reference Collection:'),
+    (r'US Reference Collection:', 'Reference Collection:'),
+    (r'US-Source Design Reference', 'Government & Vendor Guidelines Design Reference'),
+    (r'Consolidated US-source landscape', 'Consolidated source landscape'),
+    (r'Section B — US government and standards guidance', 'Section B — Government and standards guidance'),
+    (r'organized by design area, US sources only,', 'organized by design area, government and vendor guidelines only,'),
+    (r'^US sources only\.\s*$', 'Government and vendor guidelines only.'),
+    (r'^US sources only:\s*$', 'Government and vendor guidelines only:'),
+    (r'scoped to US sources', 'scoped to government and vendor guidelines'),
+    (r'plus US government guidance', 'plus government guidance'),
+    (r'the US-based IETF and ICANN', 'the IETF and ICANN'),
+    (r'Non-US government source sections', "Other governments' source sections"),
+    (r'\bnon-US government guidance', "other governments' guidance"),
+    (r'A separate standalone US DNS source document', 'A separate standalone DNS source document'),
+    (r'the two US documents that', 'the two government documents that'),
+    (r', US federal mandates,', ', federal mandates,'),
+    (r'Clearly-labeled US-company practitioner research', 'Clearly labeled practitioner research'),
+    (r'US-company practitioner research', 'Practitioner research'),
+    (r'^US practitioner \(', 'Practitioner ('),
+    (r'practitioner, non- ?governmental, US company\)', 'practitioner, non-governmental)'),
+    (r'\(non-governmental, US-origin\)', '(non-governmental)'),
+    (r'Treated here as a US \(CISA/NSA\) source', 'Treated here as a CISA/NSA source'),
+    (r'as a CISA/NSA \(US\) source', 'as a CISA/NSA source'),
+    (r'co- ?authorship counts as the US source', 'co-authorship counts as the source'),
+    (r'co- ?authorship is treated as the US source', 'co-authorship is treated as the source'),
+    (r'^Publisher \(US\)$', 'Publisher'),
+    (r'\b(NIST|CISA|OMB|NSA|CIS) \(US\)', r'\1'),
+    (r'\(Center for Internet Security, US nonprofit\)', '(Center for Internet Security, nonprofit)'),
+    (r'\bDISA \(US DoD\)', 'DISA (DoD)'),
+    (r'B2\. CISA / OMB / NSA \(US\)', 'B2. CISA / OMB / NSA'),
+    (r'US-Only Verified Reference Collection', 'Verified Reference Collection'),
+    (r'A US-Only Reference Collection', 'A Reference Collection'),
+    (r'edge of the US-only scope', 'edge of this scope'),
+    (r'\bThe defensible US-source baseline', 'The defensible baseline'),
+    (r'\bThe US government baseline', 'The government baseline'),
+    (r'\bThe US design baseline', 'The design baseline'),
+    (r'\bThe US baseline', 'The baseline'),
+    (r'^Government baseline \(US\):', 'Government baseline:'),
+    (r'\bNone among US authorities', 'None among the authorities reviewed'),
+    (r'\bnone among US authorities', 'none among the authorities reviewed'),
+    (r'\bno US authority', 'no authority reviewed'),
+    (r'\bNo US government source reviewed', 'No government source reviewed'),
+    (r'\bNo US government body', 'No government body'),
+    (r'\bNo US-government DHCP standard', 'No government DHCP standard'),
+    (r'\bno dedicated US-government', 'no dedicated government'),
+    (r'\bNo US-gov DHCP baseline', 'No government DHCP baseline'),
+    (r'Microsoft or US-gov page', 'Microsoft or government page'),
+    (r'\bB7\. US practitioner \(non-governmental\) research', 'B7. Practitioner (non-governmental) research'),
+    (r'\bUS practitioner sources', 'Practitioner sources'),
+    (r'\bUS practitioner research', 'practitioner research'),
+    (r'\(US practitioner\)', '(practitioner)'),
+    (r'\(US company; non-governmental research\)', '(non-governmental research)'),
+    (r'— US company, practitioner research', '— practitioner research'),
+    (r'\(US company; NON- ?GOVERNMENTAL\)', '(NON-GOVERNMENTAL)'),
+    (r'\bCIS \(US nonprofit\)', 'CIS (nonprofit)'),
+    (r'Section B: US government and standards guidance', 'Section B: Government and standards guidance'),
+    (r'\(US standards anchor: ', '(standards anchor: '),
+    (r'in IETF and US government guidance', 'in IETF and government guidance'),
+    (r'The authenticated US government options', 'The authenticated government options'),
+    (r'only US- ?government-documented answer', 'only government-documented answer'),
+    (r'\bUS-government authenticated options', 'Government authenticated options'),
+    (r'no US- ?government standing', 'no government standing'),
+    (r'not a US-government source', 'not a government source'),
+    (r'not US government\.', 'not a government source.'),
+    (r'Current \(US- ?government context\)', 'Current (government context)'),
+    (r'no non-US government sources were used', "no other governments' sources were used"),
+    (r'Section B — Related US government and standards guidance', 'Section B — Related government and standards guidance'),
+    (r'These are free US government publications and', 'These are free government publications and'),
+]
+def reword(text):
+    for pattern, repl in WORDING:
+        text = re.sub(pattern, repl, text)
+    return text
+def reword_blocks(blocks):
+    for b in blocks:
+        if 'text' in b: b['text'] = reword(b['text'])
+        for sp in b.get('spans', []): sp['t'] = reword(sp['t'])
+        if b['type'] == 'table': b['rows'] = [[reword(c) for c in r] for r in b['rows']]
+    return blocks
+
 if __name__ == '__main__':
-    blocks = tidy(merge_tables(split_dash_lists(parse(6, 186))))
+    blocks = reword_blocks(tidy(merge_tables(split_dash_lists(parse(6, 186)))))
     secs = sections(blocks)
+    for sec in secs: sec['title'] = reword(sec['title'])
     out = {'source': 'SBD-US-Infrastructure-Design-Reference-Compendium.pdf', 'assembled': '19 October 2026', 'overview': add_ids(secs[0]['blocks']), 'services': []}
     for svc in SERVICES:
         design = find(secs, svc['design']) if svc['design'] else None

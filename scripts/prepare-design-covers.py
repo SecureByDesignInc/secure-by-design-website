@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Draw a cover for each US design reference tile (public/training/library/design-<id>-cover.webp).
+"""Draw a cover for each design reference tile (public/training/library/design-<id>-cover.webp).
 
 The Training Hub shows a cover on every tile. The design references have no workbook, so this draws a matching
 first page from content/design-references.json and content/videos.json: the same 612 x 792 page, logo, type and
@@ -36,7 +36,7 @@ for service in refs['services']:
     page.paste(logo, (52, 52))
     draw.text((54, 99), 'Secure By Design', font=bold(17), fill=NAVY)
     draw.text((54, 122), 'EDUCATE. EMPOWER. SECURE THE FUTURE.', font=regular(7), fill=MUTED)
-    draw.text((54, 175), 'US DESIGN REFERENCES   /   DESIGN REFERENCE', font=bold(8), fill=TEAL)
+    draw.text((54, 175), 'GOVERNMENT & VENDOR GUIDELINES   /   DESIGN REFERENCE', font=bold(8), fill=TEAL)
     y = 197
     for line in wrap(draw, tile['title'], bold(30), 500):
         draw.text((52, y), line, font=bold(30), fill=NAVY); y += 38
@@ -53,7 +53,7 @@ for service in refs['services']:
         draw.text((54, y), f'{index + 1:02d}', font=bold(8), fill=TEAL)
         draw.text((72, y), area, font=regular(9), fill=BODY)
         y += 17
-    draw.text((54, 744), f"© 2026 Secure By Design Team LLC.   US design reference · Compendium assembled {refs['assembled']}", font=regular(7), fill=MUTED)
+    draw.text((54, 744), f"© 2026 Secure By Design Team LLC.   Design reference · Compendium assembled {refs['assembled']}", font=regular(7), fill=MUTED)
     out = ROOT / 'public' / tile['training']['cover'].lstrip('/')
     out.parent.mkdir(parents=True, exist_ok=True)
     page.save(out, 'WEBP', quality=90)

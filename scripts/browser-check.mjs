@@ -161,7 +161,7 @@ for (const path of ['/training/identity-foundation/', '/training/linux-repositor
 }
 
 // The Training Hub and the ATO Package Builder Hub (owner direction, 19 October 2026). The Training Hub is one library: a sidebar
-// of the catalog's groups (Hub plus 9, with the US design references group since 20 October 2026), rows of tiles, and a View all page per group; a tile opens the shared expanded tile beneath
+// of the catalog's groups (Hub plus 9, with the Government & Vendor Guidelines group since 20 October 2026), rows of tiles, and a View all page per group; a tile opens the shared expanded tile beneath
 // its row. The ATO Package Builder Hub is the seven-step builder panel with the course's two links (course 2.1 in the Training Hub
 // and module 01), and choosing Assess must show that step and its three lessons. Screenshots are kept for review.
 for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'training-hub', 12, 0], ['/grc-rmf-training', 'ato-package-builder-hub', 0, 7]]) {
