@@ -455,3 +455,5 @@ body.cinema .stage-toolbar{display:none}
 .nd-vlan[data-vlan=v10],.nd-vlan[data-vlan=v20],.nd-vlan[data-vlan=v30]{align-self:end}
 .nd-vlan[data-vlan=v50],.nd-vlan[data-vlan=v60],.nd-vlan[data-vlan=v70]{align-self:start}
 .nd-narrow .nd-board>.nd-vlan,.nd-narrow .nd-core-wrap,.nd-narrow .nd-offline{align-self:stretch}
+/* No underlines anywhere on the site (owner direction, 20 October 2026): the model is its own document, so the site rule does not reach it. */
+a,a:hover,a:focus,a:active,a:visited{text-decoration:none!important}

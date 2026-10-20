@@ -35,3 +35,4 @@
 #sbd-explorer .sbd-empty .sbd-action{margin-top:18px}
 @media(max-width:650px){#sbd-explorer .sbd-main{padding:22px 20px 40px}#sbd-explorer .sbd-skill-controls{display:grid;grid-template-columns:1fr 1fr}#sbd-explorer .sbd-skill-search{grid-column:1/-1}#sbd-explorer .sbd-skill-controls label{min-width:0}#sbd-explorer .sbd-level{min-width:0;flex:1}#sbd-explorer .sbd-qual-selects{width:100%}#sbd-explorer .sbd-pagination{gap:12px}}
 @media print{.site-header,.site-footer,#sbd-explorer .sbd-local-nav,#sbd-explorer .sbd-sections,#sbd-explorer .sbd-back{display:none!important}#sbd-explorer{--sbd-bg:#fff;--sbd-surface:#fff;--sbd-ink:#000;--sbd-muted:#333;--sbd-accent:#123e60;--sbd-border:#bbb;color-scheme:light}#sbd-explorer .sbd-main{padding:0}}
+a,a:hover,a:focus,a:active,a:visited{text-decoration:none!important}
