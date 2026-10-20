@@ -5,7 +5,7 @@ export function isTrainingCourse(entry: CatalogEntry): entry is TrainingCourse {
 }
 
 export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibrary {
-  return 'kind' in entry && entry.kind === 'library';
+  return 'kind' in entry && (entry.kind === 'library' || entry.kind === 'design-reference');
 }
 
 // One Training Hub (owner direction, 19 October 2026): the network build, Network Authorization and the ATO Template

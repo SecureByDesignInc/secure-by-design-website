@@ -1614,6 +1614,12 @@
       "title": "Templates & References",
       "kind": "reference",
       "description": "Free, publicly released references to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
+    },
+    {
+      "id": "design-references",
+      "title": "US design references",
+      "kind": "reference",
+      "description": "How to design each infrastructure service before you build it, from official Microsoft documentation and US government and standards guidance only: NIST, CISA, NSA, DISA, CIS, the IETF and ICANN. Each reference walks the design decisions, what each authority says, the trade-offs, and where the authorities agree, differ or conflict, with an annotated catalog of the sources behind it."
     }
   ],
   "references": [
@@ -1661,6 +1667,491 @@
         ]
       },
       "topic": "Templates"
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-active-directory",
+      "categoryId": "design-references",
+      "categoryOrder": 1,
+      "title": "Active Directory design",
+      "subtitle": "Forest, domain, OU, trust, Group Policy and tiering design",
+      "description": "Six design areas for the identity foundation: forest, domain, trusts, OU, Group Policy and administrative tiering. Microsoft supplies the structural logic; CISA/NSA, DISA and NIST supply the security overlay. Each area walks the decision at stake, the realistic options, what the US authorities say, the trade-offs and the conflicts, with the annotated catalog of the Microsoft, NIST, CISA/NSA, DISA, CIS and IETF sources behind it.",
+      "tags": [
+        "Design reference",
+        "Active Directory",
+        "Group Policy",
+        "Tiered administration"
+      ],
+      "systems": [],
+      "artLabels": [
+        "Forest → Domain → OU",
+        "Trusts · Group Policy",
+        "Tier 0 isolation"
+      ],
+      "outcomeSummary": "The forest is the security boundary; design the forest, domain and OU structure for delegation and policy, then isolate the directory’s control plane as Tier 0.",
+      "outcomes": [
+        "Decide how many forests and domains, and why the forest is the boundary",
+        "Design OUs for delegation and Group Policy, not replication",
+        "Keep Group Policy few and well-scoped, and deliver the baselines through it",
+        "Treat the directory’s control plane as Tier 0 with privileged access workstations"
+      ],
+      "topic": "Active Directory",
+      "stats": {
+        "areas": 6,
+        "sources": 26
+      },
+      "training": {
+        "guide": "/training/design/active-directory",
+        "cover": "/training/library/design-active-directory-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.1, Promote Primary & Secondary Domain Controller",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/dc01-dc02"
+          },
+          {
+            "title": "Apply it in course 1.5, Harden with Group Policy",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/harden-baseline"
+          },
+          {
+            "title": "Apply it in course 1.8, Tiered administration",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/tiered-admin"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "Forest design",
+          "anchor": "1-forest-design"
+        },
+        {
+          "title": "Domain design",
+          "anchor": "2-domain-design"
+        },
+        {
+          "title": "Trust design",
+          "anchor": "3-trust-design"
+        },
+        {
+          "title": "OU design",
+          "anchor": "4-ou-design"
+        },
+        {
+          "title": "Group Policy design (coupled to OU design)",
+          "anchor": "5-group-policy-design-coupled-to-ou-design"
+        },
+        {
+          "title": "Administrative tiering design",
+          "anchor": "6-administrative-tiering-design"
+        }
+      ]
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-dns",
+      "categoryId": "design-references",
+      "categoryOrder": 2,
+      "title": "DNS design",
+      "subtitle": "Namespace, zones, resolution, dynamic update, DNSSEC and logging design",
+      "description": "Eight design areas for the name service Active Directory depends on: namespace, zones, resolution and forwarding, dynamic update, DNSSEC and integrity, availability and placement, hardening by design, and logging. Microsoft documents the Windows implementation; NIST SP 800-81r3, the DISA STIG, CISA and NSA set the security expectations, and the IETF and ICANN define the protocol. The annotated source catalog follows.",
+      "tags": [
+        "Design reference",
+        "DNS",
+        "DNSSEC",
+        "Name resolution"
+      ],
+      "systems": [],
+      "artLabels": [
+        "Namespace · Zones",
+        "Resolution · Updates",
+        "DNSSEC · Logging"
+      ],
+      "outcomeSummary": "Name the forest under a domain you control, store zones in the directory with secure updates only, run two servers on different hosts, and decide DNSSEC, forwarding and logging by policy.",
+      "outcomes": [
+        "Choose the namespace: a registered subdomain or ICANN’s reserved .internal, never .local",
+        "Store zones in the directory with secure dynamic updates only",
+        "Decide forwarding, root hints, protective DNS and encrypted DNS deliberately",
+        "Know where NIST, DISA and Microsoft disagree on dedicated servers, split DNS and DNSSEC"
+      ],
+      "topic": "DNS",
+      "stats": {
+        "areas": 8,
+        "sources": 18
+      },
+      "training": {
+        "guide": "/training/design/dns",
+        "cover": "/training/library/design-dns-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.2, Configure DNS",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/dns-configuration"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "Namespace design",
+          "anchor": "1-namespace-design"
+        },
+        {
+          "title": "Zone design",
+          "anchor": "2-zone-design"
+        },
+        {
+          "title": "Resolution and forwarding design",
+          "anchor": "3-resolution-and-forwarding-design"
+        },
+        {
+          "title": "Dynamic update and record-management design",
+          "anchor": "4-dynamic-update-and-record-management-design"
+        },
+        {
+          "title": "DNSSEC and integrity design",
+          "anchor": "5-dnssec-and-integrity-design"
+        },
+        {
+          "title": "Availability and placement design",
+          "anchor": "6-availability-and-placement-design"
+        },
+        {
+          "title": "Hardening-by-design (architectural security choices)",
+          "anchor": "7-hardening-by-design-architectural-security-choices"
+        },
+        {
+          "title": "Logging and monitoring design",
+          "anchor": "8-logging-and-monitoring-design"
+        }
+      ]
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-time",
+      "categoryId": "design-references",
+      "categoryOrder": 3,
+      "title": "Time synchronization design",
+      "subtitle": "The time hierarchy, upstream sources, Kerberos skew and virtualized controllers",
+      "description": "Eight design areas for the service Kerberos, certificates and log correlation all depend on: the time hierarchy, upstream source selection, accuracy and performance, Kerberos skew, virtualized domain controllers, time authentication, Secure Time Seeding, and monitoring and leap seconds. Microsoft, NIST, NSA, CISA, DISA, CIS and the IETF are compared, with the annotated source catalog behind them.",
+      "tags": [
+        "Design reference",
+        "Time service",
+        "NTP",
+        "Kerberos"
+      ],
+      "systems": [],
+      "artLabels": [
+        "PDC emulator → domain",
+        "Upstream sources",
+        "5-minute skew"
+      ],
+      "outcomeSummary": "Keep the domain time hierarchy: the forest-root PDC emulator is the reliable source, everything else follows the domain, virtual controllers never take time from the host, and Kerberos keeps its five-minute tolerance.",
+      "outcomes": [
+        "Keep the default hierarchy with the PDC emulator as the one reliable source",
+        "Pick upstream sources by the authority you answer to: USNO or NIST, two to four of them",
+        "Hold the Kerberos skew at five minutes and plan accuracy around it",
+        "Stop virtualized controllers from taking time from their host"
+      ],
+      "topic": "Time",
+      "stats": {
+        "areas": 8,
+        "sources": 39
+      },
+      "training": {
+        "guide": "/training/design/time",
+        "cover": "/training/library/design-time-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.3, Configure domain time",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/domain-time"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "Time hierarchy design",
+          "anchor": "1-time-hierarchy-design"
+        },
+        {
+          "title": "External upstream source selection design",
+          "anchor": "2-external-upstream-source-selection-design"
+        },
+        {
+          "title": "Accuracy and performance design",
+          "anchor": "3-accuracy-and-performance-design"
+        },
+        {
+          "title": "Kerberos skew dependency design",
+          "anchor": "4-kerberos-skew-dependency-design"
+        },
+        {
+          "title": "Virtualized domain controller time design",
+          "anchor": "5-virtualized-domain-controller-time-design"
+        },
+        {
+          "title": "Time authentication design",
+          "anchor": "6-time-authentication-design"
+        },
+        {
+          "title": "Secure Time Seeding design",
+          "anchor": "7-secure-time-seeding-design"
+        },
+        {
+          "title": "Monitoring, logging, and leap-second design",
+          "anchor": "8-monitoring-logging-and-leap-second-design"
+        }
+      ]
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-pki",
+      "categoryId": "design-references",
+      "categoryOrder": 4,
+      "title": "PKI design",
+      "subtitle": "CA hierarchy, cryptography, validity, revocation, templates and CA protection",
+      "description": "Ten design areas for the certificate services the lab builds in course 1.6: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
+      "tags": [
+        "Design reference",
+        "PKI",
+        "AD CS",
+        "Certificate templates"
+      ],
+      "systems": [],
+      "artLabels": [
+        "Offline root → issuing CA",
+        "CDP/AIA · Validity",
+        "Templates · Tier 0"
+      ],
+      "outcomeSummary": "An offline standalone root with online enterprise issuing CAs, publication URLs fixed before the first certificate, renewal at half-life, and the whole PKI treated as Tier 0.",
+      "outcomes": [
+        "Choose a two-tier hierarchy and add a policy tier only for a concrete need",
+        "Set key sizes, algorithms and validity periods from NIST SP 800-57",
+        "Fix CDP and AIA publication before the first certificate is issued",
+        "Design templates, enrollment and CA protection as Tier 0"
+      ],
+      "topic": "PKI",
+      "stats": {
+        "areas": 10,
+        "sources": 31
+      },
+      "training": {
+        "guide": "/training/design/pki",
+        "cover": "/training/library/design-pki-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.6, Configure the two-tier PKI",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/two-tier-pki"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "CA hierarchy design",
+          "anchor": "1-ca-hierarchy-design"
+        },
+        {
+          "title": "CA type and role design",
+          "anchor": "2-ca-type-and-role-design"
+        },
+        {
+          "title": "Cryptographic design",
+          "anchor": "3-cryptographic-design"
+        },
+        {
+          "title": "Validity and renewal design",
+          "anchor": "4-validity-and-renewal-design"
+        },
+        {
+          "title": "Revocation and publication design (CDP/AIA)",
+          "anchor": "5-revocation-and-publication-design-cdp-aia"
+        },
+        {
+          "title": "Certificate template design",
+          "anchor": "6-certificate-template-design"
+        },
+        {
+          "title": "Enrollment and endpoint design",
+          "anchor": "7-enrollment-and-endpoint-design"
+        },
+        {
+          "title": "Identity binding and authentication design",
+          "anchor": "8-identity-binding-and-authentication-design"
+        },
+        {
+          "title": "CA protection, role separation, auditing and key-backup design",
+          "anchor": "9-ca-protection-role-separation-auditing-and-key-backup-desi"
+        },
+        {
+          "title": "Logging and monitoring design",
+          "anchor": "10-logging-and-monitoring-design"
+        }
+      ]
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-dhcp",
+      "categoryId": "design-references",
+      "categoryOrder": 5,
+      "title": "DHCP design",
+      "subtitle": "Placement, availability, scopes, options, DNS integration, hardening and logging",
+      "description": "Eight design areas for the addressing service: server placement and authorization, high availability, scopes and the address plan, options, DNS dynamic-update integration, security and hardening, DHCPv6 and dual stack, and logging and the database. Microsoft documents the Windows service; NIST, DISA, CIS and the IETF set the security and protocol expectations. The annotated source catalog follows.",
+      "tags": [
+        "Design reference",
+        "DHCP",
+        "Name protection",
+        "DHCP snooping"
+      ],
+      "systems": [],
+      "artLabels": [
+        "Placement · Failover",
+        "Scopes · Options",
+        "DNS updates · Hardening"
+      ],
+      "outcomeSummary": "Run DHCP on dedicated, directory-authorized servers, plan scopes and failover, register names securely with one non-privileged credential, and leave spoofing protection to the switch and hypervisor.",
+      "outcomes": [
+        "Place the service on dedicated domain members authorized in the directory",
+        "Design scopes, options and high availability for the address plan",
+        "Integrate with DNS through Name Protection and one dedicated credential",
+        "Protect against rogue servers at the switch and hypervisor, and keep the audit trail"
+      ],
+      "topic": "DHCP",
+      "stats": {
+        "areas": 8,
+        "sources": 33
+      },
+      "training": {
+        "guide": "/training/design/dhcp",
+        "cover": "/training/library/design-dhcp-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.7, Run DHCP on SBD-DHCP01",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/dhcp"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "Server placement and authorization design",
+          "anchor": "3-1-server-placement-and-authorization-design"
+        },
+        {
+          "title": "High-availability design",
+          "anchor": "3-2-high-availability-design"
+        },
+        {
+          "title": "Scope and address-plan design",
+          "anchor": "3-3-scope-and-address-plan-design"
+        },
+        {
+          "title": "DHCP options design",
+          "anchor": "3-4-dhcp-options-design"
+        },
+        {
+          "title": "DHCP–DNS dynamic update integration design",
+          "anchor": "3-5-dhcp-dns-dynamic-update-integration-design"
+        },
+        {
+          "title": "Security and hardening design",
+          "anchor": "3-6-security-and-hardening-design"
+        },
+        {
+          "title": "DHCPv6 and dual-stack design",
+          "anchor": "3-7-dhcpv6-and-dual-stack-design"
+        },
+        {
+          "title": "Logging, monitoring, and database design",
+          "anchor": "3-8-logging-monitoring-and-database-design"
+        }
+      ]
+    },
+    {
+      "kind": "design-reference",
+      "id": "design-disa-stigs",
+      "categoryId": "design-references",
+      "categoryOrder": 6,
+      "title": "DISA STIGs and GPO packages",
+      "subtitle": "DISA’s artifacts and tooling, and the US guidance around them",
+      "description": "The annotated catalog behind the hardening gate in courses 1.4 and 1.5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
+      "tags": [
+        "Design reference",
+        "DISA STIG",
+        "SCAP",
+        "Group Policy"
+      ],
+      "systems": [],
+      "artLabels": [
+        "STIGs · SRGs · CCIs",
+        "SCAP · SCC · STIG Viewer",
+        "GPO package"
+      ],
+      "outcomeSummary": "What STIGs, SRGs and CCIs are, how they map to NIST SP 800-53, how the GPO package, SCAP content and the tools are obtained and used, and where the US authorities agree and differ.",
+      "outcomes": [
+        "Understand STIGs, SRGs and CCIs and how they tie to SP 800-53 controls",
+        "Get the public STIGs, SCAP benchmarks, GPO package and tools from cyber.mil",
+        "Apply the GPO package the way DISA says to, test first and rescan",
+        "Know how NIST’s National Checklist Program re-lists DISA content"
+      ],
+      "topic": "STIGs",
+      "stats": {
+        "areas": 0,
+        "sources": 21
+      },
+      "training": {
+        "guide": "/training/design/disa-stigs",
+        "cover": "/training/library/design-disa-stigs-cover.webp",
+        "updated": "19 October 2026",
+        "relatedResources": [
+          {
+            "title": "Apply it in course 1.4, Measure against the STIG",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/stig-scap"
+          },
+          {
+            "title": "Apply it in course 1.5, Harden with Group Policy",
+            "detail": "The build course this design reference supports",
+            "href": "/technical-training#course/harden-baseline"
+          }
+        ]
+      },
+      "areas": [
+        {
+          "title": "TL;DR — the US guidance baseline",
+          "anchor": "1-tl-dr-the-us-guidance-baseline"
+        },
+        {
+          "title": "Guidance landscape overview",
+          "anchor": "2-guidance-landscape-overview"
+        },
+        {
+          "title": "Section A — DISA’s own artifacts and tooling",
+          "anchor": "3-section-a-disa-s-own-artifacts-and-tooling"
+        },
+        {
+          "title": "Section B — Related US government and standards guidance",
+          "anchor": "4-section-b-related-us-government-and-standards-guidance"
+        },
+        {
+          "title": "Topic crosswalk",
+          "anchor": "5-topic-crosswalk"
+        },
+        {
+          "title": "Where authorities agree, differ, or conflict",
+          "anchor": "6-where-authorities-agree-differ-or-conflict"
+        },
+        {
+          "title": "Caveats and items that could not be verified",
+          "anchor": "7-caveats-and-items-that-could-not-be-verified"
+        }
+      ]
     }
   ],
   "collections": [

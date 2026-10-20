@@ -33,7 +33,7 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates', 'design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
@@ -54,7 +54,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1], ['templates-references', 1]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1], ['templates-references', 1], ['design-references', 6]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -387,7 +387,7 @@ test('every course tile carries the companion details the expanded tile shows', 
 test('the ATO Template Library lists only verified public sources and is a Training Hub tile', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
   const reference = library.references[0];
-  assert.deepEqual(library.references.map(item => [item.id, item.kind, item.categoryId, item.training.guide]), [['ato-templates', 'library', 'templates-references', '/grc-rmf-training/templates']]);
+  assert.deepEqual(library.references.filter(item => item.kind === 'library').map(item => [item.id, item.kind, item.categoryId, item.training.guide]), [['ato-templates', 'library', 'templates-references', '/grc-rmf-training/templates']]);
   assert.equal(library.categories.find(item => item.id === 'templates-references')?.kind, 'reference');
   assert.ok(existsSync(new URL('../public' + library.references[0].training.cover, import.meta.url)), 'library cover');
   const course = library.courses.find(item => item.id === 'rmf-boe-ato');
@@ -452,6 +452,7 @@ test('the Training Hub groups every course, in course order, under its learning 
   assert.deepEqual(groups.map(group => [group.id, group.parent ?? null, group.entries.length]), [
     ['network-build', null, 19], ['identity', 'network-build', 5], ['harden', 'network-build', 3], ['logging', 'network-build', 3],
     ['endpoint', 'network-build', 4], ['ops', 'network-build', 4], ['network-authorization', null, 1], ['templates-references', null, 1],
+    ['design-references', null, 6],
   ]);
   const build = groups[0].entries.map(entry => entry.id);
   const topics = groups.filter(group => group.parent === 'network-build');
@@ -471,7 +472,7 @@ test('the Training Hub groups every course, in course order, under its learning 
   const recent = getRecentlyUpdated(library, 4);
   assert.equal(recent.length, 4);
   for (let i = 1; i < recent.length; i++) assert.ok(catalogDate(recent[i - 1].training.updated) >= catalogDate(recent[i].training.updated));
-  assert.ok(recent.every(entry => entry.kind !== 'coming-soon' && entry.kind !== 'library'));
+  assert.ok(recent.every(entry => entry.kind !== 'coming-soon' && entry.kind !== 'library' && entry.kind !== 'design-reference'));
 });
 
 test('the Training Hub and the ATO Package Builder Hub pages', () => {
@@ -492,4 +493,38 @@ test('the ATO Package Builder describes itself as an original practice tool', ()
   assert.ok(view.includes('How this workspace follows a real authorization'));
   assert.ok(view.includes('This is an original Secure By Design practice tool, not an official system of record.'));
   assert.match(readFileSync(new URL('../app/grc-rmf-training/workspace/workspace.tsx', import.meta.url), 'utf8'), /the way authorization teams do it: register/);
+});
+
+// Owner direction, 19 October 2026: one US design reference tile per infrastructure service, built from the owner's
+// compendium (docs/design-references/, parsed by scripts/prepare-design-references.py into content/design-references.json).
+test('each US design reference tile matches its compendium content', () => {
+  const refs = JSON.parse(readFileSync(new URL('../content/design-references.json', import.meta.url), 'utf8'));
+  const tiles = library.references.filter(item => item.kind === 'design-reference');
+  assert.deepEqual(tiles.map(item => item.id), ['design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
+  assert.equal(library.categories.find(item => item.id === 'design-references')?.kind, 'reference');
+  const courseIds = new Set([...library.episodes, ...library.courses].map(item => item.id));
+  for (const tile of tiles) {
+    const entry = refs.services.find(item => `design-${item.id}` === tile.id);
+    assert.ok(entry, `${tile.id} has compendium content`);
+    assert.equal(tile.training.guide, `/training/design/${entry.id}`);
+    assert.ok(existsSync(new URL('../public' + tile.training.cover, import.meta.url)), `${tile.id} cover`);
+    assert.deepEqual(tile.stats, entry.stats);
+    assert.ok(tile.areas.length > 0 && tile.stats.sources > 0, `${tile.id} areas and sources`);
+    const ids = new Set([...(entry.design?.blocks ?? []), ...entry.catalog.blocks].filter(block => block.id).map(block => block.id));
+    for (const area of tile.areas) assert.ok(ids.has(area.anchor), `${tile.id}: ${area.title} anchor`);
+    if (entry.design) assert.equal(tile.areas.length, entry.design.areas.length);
+    assert.ok(tile.topic && tile.outcomeSummary && tile.outcomes.length === 4 && tile.artLabels.length === 3, `${tile.id} tile text`);
+    for (const resource of tile.training.relatedResources) {
+      const course = /#course\/([a-z0-9-]+)$/.exec(resource.href)?.[1];
+      assert.ok(course && courseIds.has(course), `${tile.id} links course ${course}`);
+    }
+    // The compendium is US-source only (owner direction, 18 October 2026): no non-US government sources.
+    const text = JSON.stringify(entry);
+    for (const banned of ['ANSSI', 'BSI (Germany)', 'NCSC UK', 'ASD/ACSC', 'CCCS']) {
+      // The scope notes name what was removed; the design areas and catalogs must not cite them.
+      assert.ok(!entry.catalog.blocks.some(block => block.type === 'table' && JSON.stringify(block.rows).includes(banned)), `${tile.id} catalog table cites ${banned}`);
+    }
+    assert.ok(text.length > 20000, `${tile.id} has substantive content`);
+  }
+  assert.ok(existsSync(new URL('../docs/design-references/SBD-US-Infrastructure-Design-Reference-Compendium.pdf', import.meta.url)));
 });
