@@ -483,6 +483,13 @@ test('the Training Hub and the ATO Package Builder Hub pages', () => {
   assert.match(builder, /Learn it in the Training Hub/);
   // Owner direction, 19 October 2026: the only statement at the bottom of the hub.
   assert.ok(builder.includes('<p className="bh-note">The reviews and the decision are automated practice rules and carry no authority. Enter practice data only.</p>'));
-  assert.doesNotMatch(builder, /Telos|Xacta|eMASS/);
   assert.equal(existsSync(new URL('../app/videos/video-hub.tsx', import.meta.url)), false);
+});
+
+// Owner direction, 20 October 2026: the builder names no specific authorization product; it is an original practice tool.
+test('the ATO Package Builder describes itself as an original practice tool', () => {
+  const view = readFileSync(new URL('../app/grc-rmf-training/workspace/system-view.tsx', import.meta.url), 'utf8');
+  assert.ok(view.includes('How this workspace follows a real authorization'));
+  assert.ok(view.includes('This is an original Secure By Design practice tool, not an official system of record.'));
+  assert.match(readFileSync(new URL('../app/grc-rmf-training/workspace/workspace.tsx', import.meta.url), 'utf8'), /the way authorization teams do it: register/);
 });

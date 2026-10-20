@@ -72,14 +72,14 @@ function Overview({state,go}:{state:State;go:(tab:string)=>void}){
   <section className="awx-section"><h2>{checks.length?'What the reviewers will look for next':'Ready for review'}</h2>
    {checks.length?<><p className="awx-lead">These are the checks the ISSM and the assessor run when you submit the package. Work through them in any order.</p><Checklist checks={checks.slice(0,6)} go={go}/>{checks.length>6&&<p className="reader-note">{checks.length-6} more on the Package tab.</p>}</>:<p className="awx-lead">Every ISSM and assessor check passes. Submit the package on the Package tab for the Authorizing Official’s decision.</p>}
   </section>
-  <details className="awx-explainer"><summary>How this workspace maps to eMASS and Xacta</summary>
-   <div><p><strong>System record.</strong> Like registering a system in eMASS or creating a project in Xacta 360: identity, boundary, roles, information types and categorization.</p>
+  <details className="awx-explainer"><summary>How this workspace follows a real authorization</summary>
+   <div><p><strong>System record.</strong> The system’s registration: identity, boundary, roles, information types and categorization.</p>
    <p><strong>Control approval chain.</strong> The ISSO writes the implementation and submits each control; the assessor records a result for every SP 800-53A objective and validates it or returns it for rework. Changing a submitted control sends it back through the chain.</p>
    <p><strong>Body of Evidence.</strong> Artifacts are linked to the controls they prove and reviewed before they count. The authorization boundary diagram, inventory, and ports, protocols and services list are required package documents.</p>
    <p><strong>POA&amp;M.</strong> Every non-compliant control needs an item with a severity, residual risk, point of contact, resources, milestones and a scheduled completion date. Only the Authorizing Official can accept risk.</p>
    <p><strong>Package approval chain.</strong> The package moves from the ISSM’s completeness review to the assessor’s review to the AO’s decision, and comes back with comments whenever a check fails. In this practice workspace the ISSM, assessor review and AO steps are automated with transparent rules; you play the ISSO and the assessor.</p>
    <p><strong>Continuous monitoring.</strong> After the decision: the termination date, conditions, annual review, overdue milestones, reassessment schedules, changes, and reauthorization.</p>
-   <p className="reader-note">This is an original Secure By Design practice tool modeled on how these platforms organize the work. It is not affiliated with DISA or Telos and does not copy either product.</p></div>
+   <p className="reader-note">This is an original Secure By Design practice tool, not an official system of record.</p></div>
   </details>
  </>;
 }

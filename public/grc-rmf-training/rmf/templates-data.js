@@ -232,7 +232,7 @@ window.RMF_TEMPLATES = {
    "framework": "FedRAMP",
    "status": "official",
    "rmf": "A-6, M-3",
-   "note": "A POA&M workbook with open and closed items: weakness, source, affected asset, remediation plan, dates, original and adjusted risk ratings and deviations. A format reference, not the eMASS POA&M. FedRAMP has kept it for reference only since June 2026.",
+   "note": "A POA&M workbook with open and closed items: weakness, source, affected asset, remediation plan, dates, original and adjusted risk ratings and deviations. A format reference, not a DoD system-of-record POA&M. FedRAMP has kept it for reference only since June 2026.",
    "links": [
     {
      "label": "POA&M template",
@@ -277,7 +277,7 @@ window.RMF_TEMPLATES = {
    "format": "XLSX",
    "href": "/training/library/training-samples/SBD-Training-POAM.xlsx",
    "basis": "JSIG Task 5-1; CDSE POA&M Job Aid field names; NIST SP 800-30 risk scale",
-   "note": "eMASS-style columns, one row per milestone, with the JSIG minimum (tasks, resources, milestones with percentage complete, scheduled dates) and a summary sheet."
+   "note": "Standard POA&M columns, one row per milestone, with the JSIG minimum (tasks, resources, milestones with percentage complete, scheduled dates) and a summary sheet."
   },
   {
    "group": "prepare",

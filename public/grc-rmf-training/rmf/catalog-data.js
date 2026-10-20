@@ -540,7 +540,7 @@ window.CATALOG = [
       "10.3 Submission workflow"
     ],
     "build": "Assemble the practice system’s package: an executive summary, the SSP with its SCTM, continuous monitoring strategy, and RAR, the SAR, the POA&M, and a privacy applicability record. List each in a versioned manifest with its basis (JSIG 5-2 or NIST R-1), owner, and review check.",
-    "prove": "Reconcile control identifiers, asset counts, findings, dates, and status across the SSP, SCTM, RAR, SAR, and POA&M, and explain each difference you keep. Walk the package through a generic eMASS-style submission using training data.",
+    "prove": "Reconcile control identifiers, asset counts, findings, dates, and status across the SSP, SCTM, RAR, SAR, and POA&M, and explain each difference you keep. Walk the package through a generic submission workflow using training data.",
     "sources": "[1,5,6,7,8]",
     "rmf": {
       "step": "Authorize",

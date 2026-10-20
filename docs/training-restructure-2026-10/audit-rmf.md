@@ -6,7 +6,7 @@ The module ids (01–12), the lesson ids, the hours (6 / 9 / 5 + 4 capstone = 9)
 
 1. catalog-data.js module 06 `build`: "Use Splunk, Tenable, and Trellix examples" → the practice network's SCC results, STIG Viewer checklists, Splunk review records and the course 1.19 restore record (SBD-NESSUS01/SBD-EPO01 are coming soon, decisions rule 1).
 2. catalog-data.js module 06 `prove`: "a failed authenticated scan" → "a scan that missed an in-scope host". The practice system has no credentialed scanner yet.
-3. catalog-data.js module 10 `sources`: [1,7] → [1,5,7]. DoDI 8510.01 is the source for the eMASS workflow the module practises.
+3. catalog-data.js module 10 `sources`: [1,7] → [1,5,7]. DoDI 8510.01 is the source for the submission workflow the module practises.
 4. learning-data.js module 02 learn[2]: removed "In the Inside the Network practice system, transfers across the air gap remain manual…" from the general chapter (AGENTS.md network-neutral chapters). It now reads "Record how information crosses the boundary and who is responsible for each transfer". The practice detail stays in the scope record.
 5. learning-data.js module 03 learn[2]: the categorization authority is now explicit. Federal systems use FIPS 199 with the SP 800-60 information types; national security systems follow CNSSI 1253 (exact title given); a SAP adds program direction. This follows the AGENTS.md CNSSI 1253 framing.
 6. learning-data.js module 04 learn[0]: "also requires the applicable CNSS and program direction" → a national security system selects controls under CNSSI 1253 and its overlays, and a SAP adds the JSIG and AO-approved program direction. 800-53B is no longer implied to be the NSS baseline.

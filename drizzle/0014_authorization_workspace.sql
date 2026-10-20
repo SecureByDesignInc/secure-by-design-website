@@ -1,5 +1,5 @@
--- Authorization Workspace, 15 October 2026: each learner's practice systems, modeled on how eMASS and
--- Xacta 360 manage an authorization. A system record (profile and categorization as JSON), the selected
+-- Authorization Workspace, 15 October 2026: each learner's practice systems, modeled on how authorization
+-- teams manage an authorization. A system record (profile and categorization as JSON), the selected
 -- controls with implementation and assessment results, the Body of Evidence, the POA&M, authorization
 -- packages with their review and decision, and an audit trail. Account deletion removes all of it
 -- (server/account-deletion.js); the foreign keys cascade as a second line of defense.
