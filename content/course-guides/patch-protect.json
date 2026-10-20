@@ -230,7 +230,7 @@
         "Hold its administration to the tier model"
       ],
       "mistake": "Requiring TLS on the whole WSUS Administration site. Microsoft lists the five services that should require it; Content must not, and once it does, clients can no longer fetch update files over HTTP 8530 as rule F06 registers.",
-      "network": "SBD-WSUS01 is live on VLAN 20 and administered from SBD-ADMIN-SRV01. It has no route out and no clients yet; its metadata port, 8531, now answers only over TLS with a certificate from the course 1.6 issuing CA.",
+      "network": "SBD-WSUS01 is live on VLAN 20 and administered from SBD-ADMIN-SRV01. It has no route out and no clients yet; its metadata port, 8531, now answers only over TLS with a certificate from the course 1.1 issuing CA.",
       "control": {
         "id": "SC-8",
         "name": "Transmission Confidentiality and Integrity",
@@ -306,7 +306,7 @@
         "Check Ring 4’s approvals, then install by hand",
         "Report compliance and spot-check the systems",
         "Clean up, then baseline SBD-WSUS01",
-        "Hand the records to course 1.15"
+        "Hand the records to course 1.8"
       ],
       "mistake": "Approving the month’s updates for every group at once to save a week. The domain controllers then install something no ring has proven; approve for Ring 1 only, and promote once it has installed, reported and still works.",
       "network": "The month’s approved updates flow ring by ring: the pilot first, then the workstations and member servers on their deadlines, SBD-AUDIT01 when its custodian installs, then the controllers by hand from AdminJumpBox01 — SBD-DC02, then SBD-DC01.",

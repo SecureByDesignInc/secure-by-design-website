@@ -48,7 +48,7 @@ test('guides keep notes in the account, with no export, import or readable-notes
     assert.match(page, /<nav class="topnav"[^>]*>.*<a class="btn" href="\/">Home<\/a><a class="btn" href="\/my-progress">My Account<\/a>/s, `${path} header links stay on the site`);
   }
   // The lesson guides hand their state to the account sync.
-  for (const path of ['scripts/course-guide/renderer.js', 'public/training/dc01-dc02/index.html']) {
+  for (const path of ['scripts/course-guide/renderer.js', 'public/training/identity-foundation/index.html']) {
     const text = read(path).toString();
     assert.ok(text.includes('window.SBD_GUIDE={id:lesson.id') && text.includes("new Event('sbd-guide-saved')"), path);
   }
@@ -80,18 +80,16 @@ test('training content names Windows releases without version numbers', () => {
     'content/configuration-courses.json': JSON.parse(read('content/configuration-courses.json')),
     'content/videos.json': library,
     'content/training-resources.json': JSON.parse(read('content/training-resources.json')).filter(item => !item.retired),
-    'public/training/dc01-dc02/lesson.json': JSON.parse(read('public/training/dc01-dc02/lesson.json')),
   };
   for (const [name, data] of Object.entries(sources)) {
     for (const text of strings(data)) assert.doesNotMatch(text, release, `${name}: ${text.slice(0, 80)}`);
   }
   const files = [
-    'public/training/dc01-dc02/notices.html',
     'public/grc-rmf-training/rmf/catalog-data.js', 'public/grc-rmf-training/rmf/learning-data.js', 'public/grc-rmf-training/rmf/network-data.js',
     'public/grc-rmf-training/rmf/index.html', 'public/grc-rmf-training/rmf/templates-data.js',
     ...readdirSync(new URL('../public/inside-network-model/', import.meta.url)).filter(name => /\.(js|html|csv|md)$/.test(name)).map(name => `public/inside-network-model/${name}`),
   ];
   for (const file of files) assert.doesNotMatch(read(file).toString(), release, file);
-  const guide = read('public/training/dc01-dc02/index.html').toString();
-  assert.doesNotMatch(guide.slice(0, guide.indexOf('<script type="importmap">')), release, '1.1 guide');
+  // Course 1.1 is a generated guide since 20 October 2026; its text comes from content/configuration-courses.json, checked above.
+  assert.doesNotMatch(read('public/training/identity-foundation/index.html').toString(), release, '1.1 guide');
 });

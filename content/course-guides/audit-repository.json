@@ -68,7 +68,7 @@
         "from": 1,
         "button": "SBD-SYSLOG01",
         "title": "SBD-SYSLOG01 · 10.0.20.20",
-        "description": "The collector from course 1.10. Its daily archive task runs as SBD-Archive$, exports ForwardedEvents and zips the syslog files, hashes each archive, and writes it to SBD-AUDIT01. From lesson 3 it also receives the repository’s own access events."
+        "description": "The collector from course 1.3. Its daily archive task runs as SBD-Archive$, exports ForwardedEvents and zips the syslog files, hashes each archive, and writes it to SBD-AUDIT01. From lesson 3 it also receives the repository’s own access events."
       },
       {
         "id": "dc1",
@@ -171,7 +171,7 @@
         "name": "Audit Log Storage Capacity",
         "phase": "Prepare → Implement",
         "body": "Capacity comes from measurement, not a guess: a real day of both streams times the retention period, plus headroom and a warning threshold. A full repository refuses the next archive, and once the collector’s buffer rolls over, that record is gone.",
-        "question": "When the fifty workstations join in course 1.13, how will you know the volume still holds the whole retention period?"
+        "question": "When the fifty workstations join in course 1.6, how will you know the volume still holds the whole retention period?"
       },
       "checklist": [
         "I wrote the repository’s single write path, identity table, and the retention periods I chose for each stage, with who approved them.",
@@ -267,7 +267,7 @@
         "Find the refusal on both systems",
         "Tamper with a copy and catch it",
         "Take SBD-AUDIT01’s first baseline",
-        "Write the handoff to course 1.12"
+        "Write the handoff to course 1.5"
       ],
       "mistake": "Running the tamper test on the real archive to make it convincing. You would destroy the record you are proving you protect, and the finding would be your own. Copy it first; the catalog catches a changed copy exactly as it would a changed record.",
       "network": "Every flow is shown: archives arrive from SBD-SYSLOG01 over F11, and the refused delete travels back to the collector as event 4656 over F17. The custodian runs the tests and the baseline from SBD-ADMIN-SRV01.",
@@ -281,7 +281,7 @@
       "checklist": [
         "I tried to delete an archive from a custodian session, saw it refused, and found event 4656 on SBD-AUDIT01 and on the collector.",
         "I tampered with a copy and saw it fail against the catalog while the record still matched.",
-        "I filed SBD-AUDIT01’s first baseline with hashes and the handoff note to course 1.12."
+        "I filed SBD-AUDIT01’s first baseline with hashes and the handoff note to course 1.5."
       ]
     }
   }

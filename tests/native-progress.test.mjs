@@ -5,7 +5,7 @@ import {readFileSync,readdirSync} from 'node:fs';
 import {digest} from '../server/reader-auth.js';
 import {nativeProgressApi} from '../server/native-progress.js';
 import {readerProgressApi} from '../server/reader-progress.js';
-const origin='https://securebydesigninc.com',id='training:dc01-dc02:prepare';
+const origin='https://securebydesigninc.com',id='training:identity-foundation:dc-prepare';
 async function setup(){
  const raw=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())raw.exec(readFileSync('drizzle/'+file,'utf8'));
  const DB={prepare(sql){let args=[];return {bind(...values){args=values;return this},async first(){return raw.prepare(sql).get(...args)||null},async all(){return {results:raw.prepare(sql).all(...args)}},async run(){return raw.prepare(sql).run(...args)}}},async batch(statements){raw.exec('BEGIN');try{for(const statement of statements)await statement.run();raw.exec('COMMIT')}catch(error){raw.exec('ROLLBACK');throw error}}};
@@ -53,12 +53,15 @@ test('sync leaves archived reading and bookmark records intact',async()=>{
 test('lessons that moved to another course keep their saved progress (October 2026 restructure)',async()=>{
  // Older app builds still send a moved lesson's old identifier: it is translated and merged with the new one.
  const env=await setup();
- const result=await nativeProgressApi(native({records:[{id:'training:harden-baseline:staging',status:'completed'},{id:'training:stig-scap:staging',status:'in_progress'},{id:'training:patch-protect:epo',status:'completed'}],bookmarks:[]}),env);
+ const result=await nativeProgressApi(native({records:[{id:'training:harden-baseline:staging',status:'completed'},{id:'training:identity-foundation:stig-staging',status:'in_progress'},{id:'training:patch-protect:epo',status:'completed'}],bookmarks:[]}),env);
  assert.equal(result.status,200);
- assert.deepEqual((await result.json()).records.map(r=>[r.id,r.status]),[['training:stig-scap:staging','completed']]);
+ assert.deepEqual((await result.json()).records.map(r=>[r.id,r.status]),[['training:identity-foundation:stig-staging','completed']]);
  // The migration carries records saved under the old identifiers; a completed record wins.
  env.raw.prepare('INSERT INTO reader_progress (user_id,item_id,status,updated_at) VALUES (?,?,?,?)').run('bob','training:dns-configuration:time','completed','2026-10-01T00:00:00.000Z');
  env.raw.prepare('INSERT INTO reader_progress (user_id,item_id,status,updated_at) VALUES (?,?,?,?)').run('bob','training:domain-time:time','in_progress','2026-10-02T00:00:00.000Z');
  env.raw.exec(readFileSync('drizzle/0013_course_split.sql','utf8'));
  assert.deepEqual(env.raw.prepare("SELECT item_id, status FROM reader_progress WHERE user_id='bob' ORDER BY item_id").all().map(r=>[r.item_id,r.status]),[['training:domain-time:time','completed']]);
+ // 20 October 2026: courses 1.1–1.8 merged into course 1.1; 0019 carries their records, activity and guide state.
+ env.raw.exec(readFileSync('drizzle/0019_identity_foundation.sql','utf8'));
+ assert.deepEqual(env.raw.prepare("SELECT item_id, status FROM reader_progress WHERE user_id='bob' ORDER BY item_id").all().map(r=>[r.item_id,r.status]),[['training:identity-foundation:time','completed']]);
 });

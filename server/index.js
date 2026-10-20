@@ -76,6 +76,18 @@ function retiredCourse(url){
   const target=/-Workbook\.(docx|pdf)$|-Learning-Package\.zip$/.test(file)?'/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx':file==='workbook-cover.webp'?'/grc-rmf-training/rmf/workbook-cover.webp':'/grc-rmf-training/rmf/index.html';
   return new URL(target,url).toString();
  }
+ // Courses 1.1–1.8 became course 1.1, "Build and harden the identity foundation" (20 October 2026). Old guide links land
+ // on it with ?part=<prefix>, so the old #lesson fragment opens the same lesson (<prefix>-<lesson>); downloads land on
+ // its workbook and checklist.
+ const foundation=/^\/training\/(dc01-dc02|dns-configuration|domain-time|stig-scap|harden-baseline|two-tier-pki|dhcp|tiered-admin)(?:\/(.*))?$/.exec(path);
+ if(foundation){
+  const part={'dc01-dc02':'dc','dns-configuration':'dns','domain-time':'time','stig-scap':'stig','harden-baseline':'gpo','two-tier-pki':'pki',dhcp:'dhcp','tiered-admin':'tier'}[foundation[1]];
+  const file=foundation[2]||'';
+  if(/-Workbook\.(docx|pdf)$|-Learning-Package\.zip$/.test(file))return new URL('/training/identity-foundation/SecureByDesign-identity-foundation-Workbook.docx',url).toString();
+  if(file==='workbook-cover.webp')return new URL('/training/identity-foundation/workbook-cover.webp',url).toString();
+  if(/^checklist\/?$/.test(file))return new URL('/training/identity-foundation/checklist',url).toString();
+  return new URL(`/training/identity-foundation/?part=${part}`,url).toString();
+ }
  // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.
  if(path==='/threat-map'||path==='/threat-map/')return new URL('/#threat-map',url).toString();
  return null;

@@ -48,7 +48,7 @@ test('dashboard filtering preserves stored objects while excluding offline Journ
     { id: 'path:orientation', status: 'completed', updatedAt: '2026-10-04T09:00:00Z' },
   ];
   const snapshot = JSON.stringify(records);
-  const withTraining = [...records, { id: 'training:dns-configuration:zones', status: 'completed', updatedAt: '2026-10-08T09:00:00Z' }];
+  const withTraining = [...records, { id: 'training:identity-foundation:dns-zones', status: 'completed', updatedAt: '2026-10-08T09:00:00Z' }];
   assert.deepEqual(catalog.filterActiveProgressRecords(records), []);
   assert.equal(catalog.filterActiveProgressRecords(withTraining)[0], withTraining[4]);
   assert.equal(catalog.filterActiveProgressRecords(withTraining).length, 1);
@@ -90,7 +90,7 @@ test('rendered dashboard counts only active training; offline Journal and Cyber 
     { id: 'rmf:prepare', status: 'completed' },
     { id: 'path:domain', status: 'in_progress' },
     { id: 'path:orientation', status: 'completed' },
-    { id: 'training:dns-configuration:zones', status: 'completed' },
+    { id: 'training:identity-foundation:dns-zones', status: 'completed' },
   ]);
   assert.match(html, /<span>Completed<\/span><strong>1<\/strong>/);
   assert.match(html, /<span>In progress<\/span><strong>0<\/strong>/);
@@ -109,10 +109,10 @@ test('journal-only accounts get zero active counts and Training Hub discovery wi
 
 test('new configuration progress resumes its exact lesson and counts in Network build', () => {
   const html = renderDashboard([
-    { id: 'training:dns-configuration:zones', status: 'completed' },
-    { id: 'training:two-tier-pki:sign', status: 'in_progress' },
+    { id: 'training:identity-foundation:dns-zones', status: 'completed' },
+    { id: 'training:identity-foundation:pki-sign', status: 'in_progress' },
   ]);
-  assert.match(html, /href="\/training\/two-tier-pki#sign">Continue/);
+  assert.match(html, /href="\/training\/identity-foundation#pki-sign">Continue/);
   const total = group => catalog.activeProgressCatalog.filter(item => item.group === group).length;
   assert.match(html, new RegExp(`Network build: 1 of ${total('Network build')} complete`));
   assert.match(html, new RegExp(`Network authorization: 0 of ${total('Network authorization')} complete`));

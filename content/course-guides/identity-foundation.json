@@ -1,0 +1,1635 @@
+{
+  "id": "identity-foundation",
+  "hero": {
+    "title": "Build and harden",
+    "accent": "the identity foundation.",
+    "text": "Design the directory, then build it: SBD-DC01 and SBD-DC02 with DNS and domain time, measured against the STIG and hardened with Group Policy, a two-tier PKI, DHCP, and tiered administration. Each part opens with its design decisions from the US design references. Follow the build, explore the dependencies, and keep the evidence."
+  },
+  "book": [
+    "WINDOWS",
+    "SERVER",
+    "",
+    "IDENTITY"
+  ],
+  "sample": [
+    [
+      "Domain",
+      "sbd.test"
+    ],
+    [
+      "SBD-DC01",
+      "10.0.10.10 / 24 · PDC emulator"
+    ],
+    [
+      "SBD-DC02",
+      "10.0.10.11 / 24"
+    ],
+    [
+      "PKI",
+      "SBD-ROOTCA01 (offline) · SBD-SUBCA01 · pki.sbd.test"
+    ],
+    [
+      "DHCP",
+      "SBD-DHCP01 · VLAN 80"
+    ],
+    [
+      "Admin seats",
+      "AdminJumpBox01 · SBD-ADMIN-SRV01 · VLAN 60"
+    ],
+    [
+      "Parts",
+      "8 parts · 46 lessons"
+    ]
+  ],
+  "scene": {
+    "tag": "IDENTITY FOUNDATION · VLANS 10, 30, 60, 80",
+    "label": "Interactive 3D lesson network for the identity foundation: SBD-DC01 and SBD-DC02 on VLAN 10, the offline root CA, the issuing CA and publication host on VLAN 30, the DHCP server for VLAN 80, and the administration seats on VLAN 60, joined through the core.",
+    "completeStatus": "FOUNDATION IN SERVICE",
+    "completeCaption": "Both domain controllers hold the sbd.test directory and DNS and keep the domain on time; they are measured against the STIG and hardened with Group Policy. The two-tier PKI issues their certificates, DHCP serves VLAN 80 with secure DNS updates, and Tier 0 is administered only from its own seats. Every later course builds on this foundation.",
+    "nodes": [
+      {
+        "id": "dc1",
+        "name": "SBD-DC01",
+        "sub": "10.0.10.10",
+        "kind": "server",
+        "row": "back",
+        "from": 2,
+        "button": "SBD-DC01",
+        "title": "SBD-DC01 · 10.0.10.10",
+        "description": "The first domain controller, promoted in chapter 2 to create the sbd.test forest. It holds the directory, DNS and the five operations master roles; as PDC emulator it is the time source for the whole network. Its default gateway is the core's VLAN 10 address, 10.0.10.1.",
+        "existing": false
+      },
+      {
+        "id": "dc2",
+        "name": "SBD-DC02",
+        "sub": "10.0.10.11",
+        "kind": "server",
+        "row": "back",
+        "from": 3,
+        "button": "SBD-DC02",
+        "title": "SBD-DC02 · 10.0.10.11",
+        "description": "The second writable domain controller, added in chapter 3 so the directory has two service points. It holds its own copy of the directory and DNS, replicates with SBD-DC01 in both directions, and keeps the domain available while either controller is down.",
+        "existing": false
+      },
+      {
+        "id": "member",
+        "name": "TEST CLIENT",
+        "sub": "Lookups · VLAN 80 leases",
+        "kind": "viewpoint",
+        "row": "front",
+        "from": 6,
+        "button": "Test client",
+        "title": "Test client · where lookups and leases are proven",
+        "description": "Where the build is tested from. In parts 2 and 3 it stands for any domain member that lists both controllers for DNS and follows the domain time; part 7 makes it the disposable VLAN 80 client, outside the domain, that proves the DHCP relay, the options and secure name registration.",
+        "existing": false
+      },
+      {
+        "id": "root",
+        "name": "SBD-ROOTCA01",
+        "sub": "Offline · no network",
+        "kind": "offline",
+        "row": "back",
+        "from": 27,
+        "button": "SBD-ROOTCA01",
+        "title": "SBD-ROOTCA01 · offline, no network address",
+        "description": "The trust anchor: a standalone root CA in a workgroup with no network path, configured in lesson 2. It signs the issuing CA’s certificate at the ceremony and publishes a base CRL every 26 weeks; everything crossing its boundary travels on approved removable media.",
+        "existing": false
+      },
+      {
+        "id": "subca",
+        "name": "SBD-SUBCA01",
+        "sub": "10.0.30.20",
+        "kind": "server",
+        "row": "back",
+        "from": 28,
+        "button": "SBD-SUBCA01",
+        "title": "SBD-SUBCA01 · 10.0.30.20",
+        "description": "The enterprise issuing CA, joined to sbd.test on VLAN 30. It creates its request in lesson 29, starts with its signed certificate in lesson 31, writes its CRLs to pki.sbd.test, and publishes only the three templates from lesson 9.",
+        "existing": false
+      },
+      {
+        "id": "pkimgmt",
+        "name": "SBD-PKI-MGMT01",
+        "sub": "10.0.30.30",
+        "kind": "server",
+        "row": "back",
+        "from": 31,
+        "button": "SBD-PKI-MGMT01",
+        "title": "SBD-PKI-MGMT01 · 10.0.30.30",
+        "description": "A hardened member server on VLAN 30 with two jobs in this part: from lesson 32 it hosts the pki.sbd.test publication site over plain HTTP, and from lesson 34 it is the only seat for certificate template administration. In lesson 36 it is also the pilot that autoenrolls a computer certificate.",
+        "existing": false
+      },
+      {
+        "id": "dhcp",
+        "name": "SBD-DHCP01",
+        "sub": "10.0.20.10",
+        "kind": "server",
+        "row": "front",
+        "from": 37,
+        "button": "SBD-DHCP01",
+        "title": "SBD-DHCP01 · 10.0.20.10",
+        "description": "Built in lesson 38 on VLAN 20 as a member server in the Servers OU, run at its console by SBD Tier 1 Admins. It leases the VLAN 80 pool through the core’s relay (F04), registers client names as svc-dhcp-dns with name protection, and keeps its audit-log copies on its second volume; course 1.12 backs it up.",
+        "existing": false
+      },
+      {
+        "id": "jump",
+        "name": "AdminJumpBox01",
+        "sub": "10.0.60.10",
+        "kind": "workstation",
+        "row": "front",
+        "from": 42,
+        "button": "AdminJumpBox01",
+        "title": "AdminJumpBox01 · 10.0.60.10",
+        "description": "The Tier 0 seat in the Admin Servers OU. Tier 0 accounts manage the domain controllers, SBD-SUBCA01, and SBD-PKI-MGMT01 from here (rule A01), and it is the only seat allowed to reach the core router’s management on VLAN 100. From lesson 46 it also holds SCC, STIG Viewer, and the Tier 0 evidence.",
+        "existing": false
+      },
+      {
+        "id": "srv",
+        "name": "SBD-ADMIN-SRV01",
+        "sub": "10.0.60.20",
+        "kind": "workstation",
+        "row": "front",
+        "from": 42,
+        "button": "SBD-ADMIN-SRV01",
+        "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
+        "description": "The Tier 1 seat in the Admin Servers OU, for member-server administration such as SBD-DHCP01 (rule A02). It also hosts the SBD-ADMIN-PC01 virtual machine, so three seats run on two machines, and the audit custodian’s separate accounts and sessions start here too. From lesson 46 it holds the Tier 1 copy of the assessment tools.",
+        "existing": false
+      },
+      {
+        "id": "pc",
+        "name": "SBD-ADMIN-PC01",
+        "sub": "VM on SBD-ADMIN-SRV01",
+        "kind": "workstation",
+        "row": "front",
+        "from": 42,
+        "button": "SBD-ADMIN-PC01",
+        "title": "SBD-ADMIN-PC01 · 10.0.60.30",
+        "description": "The Tier 2 seat: a Windows client virtual machine on SBD-ADMIN-SRV01, in the Admin Workstations OU, for endpoint administration (rule A03). Tier 2 accounts sign in only inside it, never on its host, and Tier 0, Tier 1, and audit custodian accounts are refused there. In this part it manages the VLAN 80 test client and, from lesson 46, holds its own SCC copy and first baseline; the fleet arrives in course 1.6.",
+        "existing": false
+      }
+    ],
+    "flows": [
+      {
+        "from": "dc1",
+        "to": "core",
+        "lessons": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "label": "Directory, DNS and domain time served to the network"
+      },
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          3,
+          4,
+          5
+        ],
+        "label": "Directory replication",
+        "twoWay": true
+      },
+      {
+        "from": "dc2",
+        "to": "core",
+        "lessons": [
+          3,
+          4,
+          5
+        ],
+        "label": "A second service point for the segment"
+      },
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          7,
+          8,
+          9,
+          10
+        ],
+        "label": "Zone replication",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc1",
+        "lessons": [
+          6,
+          9,
+          10
+        ],
+        "label": "DNS · TCP/UDP 53",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc2",
+        "lessons": [
+          6,
+          9,
+          10
+        ],
+        "label": "DNS · TCP/UDP 53",
+        "twoWay": true
+      },
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "label": "Time from the PDC emulator · UDP 123",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc1",
+        "lessons": [
+          11,
+          13,
+          14,
+          15
+        ],
+        "label": "Domain time · UDP 123 (F09)",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dc2",
+        "lessons": [
+          11,
+          13,
+          14,
+          15
+        ],
+        "label": "Domain time · UDP 123 (F09)",
+        "twoWay": true
+      },
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          18
+        ],
+        "label": "Hashed results to the evidence folder · SMB 445"
+      },
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          21,
+          22,
+          23,
+          25
+        ],
+        "label": "OU, GPO and SYSVOL replication",
+        "twoWay": true
+      },
+      {
+        "from": "dc2",
+        "to": "dc1",
+        "lessons": [
+          22,
+          23,
+          24
+        ],
+        "label": "Reports and rescan results to SBD-DC01’s evidence folder · SMB 445"
+      },
+      {
+        "from": "subca",
+        "to": "root",
+        "lessons": [
+          29
+        ],
+        "label": "Ceremony media · request in, public artifacts out",
+        "twoWay": true,
+        "offline": true
+      },
+      {
+        "from": "dc1",
+        "to": "pkimgmt",
+        "lessons": [
+          31,
+          32,
+          35
+        ],
+        "label": "AIA / CDP retrieval · HTTP TCP 80 (F18)",
+        "twoWay": true
+      },
+      {
+        "from": "subca",
+        "to": "pkimgmt",
+        "lessons": [
+          32,
+          35
+        ],
+        "label": "Issuing CA CRL publication · on schedule"
+      },
+      {
+        "from": "root",
+        "to": "pkimgmt",
+        "lessons": [
+          32,
+          35
+        ],
+        "label": "Root certificate and CRL · hand-carried media",
+        "offline": true
+      },
+      {
+        "from": "pkimgmt",
+        "to": "dc1",
+        "lessons": [
+          33,
+          34
+        ],
+        "label": "Template administration · directory objects"
+      },
+      {
+        "from": "dc1",
+        "to": "subca",
+        "lessons": [
+          35
+        ],
+        "label": "Domain controller autoenrollment · RPC",
+        "twoWay": true
+      },
+      {
+        "from": "member",
+        "to": "dhcp",
+        "lessons": [
+          37,
+          38,
+          39,
+          40,
+          44
+        ],
+        "label": "DHCP lease through the core relay (F04)",
+        "twoWay": true
+      },
+      {
+        "from": "dhcp",
+        "to": "dc1",
+        "lessons": [
+          37
+        ],
+        "label": "Authorization check in the directory (F03)"
+      },
+      {
+        "from": "dhcp",
+        "to": "dc1",
+        "lessons": [
+          38,
+          40
+        ],
+        "label": "Secure dynamic DNS update as svc-dhcp-dns (F01)"
+      },
+      {
+        "from": "dc1",
+        "to": "dc2",
+        "lessons": [
+          38,
+          40
+        ],
+        "label": "Zone replication of the client records",
+        "twoWay": true
+      },
+      {
+        "from": "jump",
+        "to": "dc1",
+        "lessons": [
+          42,
+          44,
+          45
+        ],
+        "label": "Tier 0 management (A01)"
+      },
+      {
+        "from": "jump",
+        "to": "subca",
+        "lessons": [
+          43,
+          44,
+          45
+        ],
+        "label": "Tier 0 management (A01)"
+      },
+      {
+        "from": "srv",
+        "to": "dhcp",
+        "lessons": [
+          42,
+          44,
+          45
+        ],
+        "label": "Tier 1 management (A02)"
+      },
+      {
+        "from": "pc",
+        "to": "member",
+        "lessons": [
+          44,
+          45
+        ],
+        "label": "Tier 2 management (A03)"
+      }
+    ]
+  },
+  "lessons": {
+    "dc-design": {
+      "short": "Design the forest",
+      "tag": "01 / DESIGN",
+      "status": "DESIGN RECORDED",
+      "stepTitles": [
+        "Know what the directory is",
+        "Choose one forest",
+        "Keep one domain",
+        "Plan OUs for delegation and policy",
+        "Mark the Tier 0 boundary"
+      ],
+      "mistake": "Adding a domain or a forest to separate teams that need no isolation. A domain is not a security boundary, and every extra forest or domain adds trusts, replication and administration to defend.",
+      "network": "Nothing is built yet. VLAN 10 is reserved for the two domain controllers, and the design record decides what they will hold.",
+      "control": {
+        "id": "PL-8",
+        "name": "Security and Privacy Architectures",
+        "phase": "Prepare",
+        "body": "Document the architecture before building it: its boundaries, its structure and its protections, and how they meet the organization's security requirements. The design record is that document for the identity foundation.",
+        "question": "Where does your design record show the forest boundary, the OU plan and the Tier 0 boundary, with the source behind each?"
+      },
+      "checklist": [
+        "I recorded one forest and one domain, with the reason for each.",
+        "I sketched the OU plan for delegation and Group Policy.",
+        "I listed the Tier 0 systems, accounts and seats."
+      ]
+    },
+    "dc-prepare": {
+      "short": "Plan the build",
+      "tag": "02 / PREPARE",
+      "status": "SEGMENT PLANNED",
+      "stepTitles": [
+        "Prepare two separate VMs",
+        "Record names and addresses",
+        "Point DC02 at DC01 and check the clocks"
+      ],
+      "mistake": "Renaming a domain controller later is a separate procedure with its own steps and checks. Set each server's final name and static address before you promote it.",
+      "network": "Both controllers are planned on VLAN 10, the domain controllers' own segment. The platform and network exist, but domain services have not been built yet.",
+      "control": {
+        "id": "CM-2",
+        "name": "Baseline Configuration",
+        "phase": "Prepare → Implement",
+        "body": "Start with a record of the intended components and settings. As the build changes, keep that record aligned with what actually exists.",
+        "question": "Which values are design decisions, and which observations show the actual starting state?",
+        "evidence": "A dated build sheet containing hostnames, addresses, segment and gateway, OS builds, and the chosen domain name."
+      },
+      "checklist": [
+        "I recorded the two distinct hostnames and static addresses.",
+        "I pointed SBD-DC02 at SBD-DC01 and confirmed the isolated network.",
+        "I documented the time source and remaining prerequisites."
+      ]
+    },
+    "dc-dc01": {
+      "short": "Build DC01",
+      "tag": "03 / CONFIGURE",
+      "status": "FOREST ROOT ONLINE",
+      "stepTitles": [
+        "Add the server role",
+        "Create the forest",
+        "Review and promote"
+      ],
+      "mistake": "Installing the AD DS role is only the first part. The promotion wizard creates the domain controller; a completed role installation alone is not a completed forest.",
+      "network": "DC01 now hosts the sbd.test domain. DC02 is still planned; no replication relationship is shown yet.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Record the settings you selected and why. An installation result is useful evidence, but a defensible configuration record also identifies the applicable requirement and any approved exception.",
+        "question": "Why were these domain and functional-level settings chosen?",
+        "evidence": "Promotion settings, prerequisite results, and post-restart domain and service checks. Keep recovery passwords out of the evidence."
+      },
+      "checklist": [
+        "I checked the domain name after restart.",
+        "I verified NTDS, Netlogon, SYSVOL, and NETLOGON.",
+        "I documented configuration choices without recording credentials."
+      ]
+    },
+    "dc-dc02": {
+      "short": "Add DC02",
+      "tag": "04 / EXTEND",
+      "status": "TWO SERVICE POINTS",
+      "stepTitles": [
+        "Reach the existing directory",
+        "Add a controller to this domain",
+        "Finish and inspect"
+      ],
+      "mistake": "Choosing Add a new forest creates a different directory. For this chapter, DC02 joins the domain established by DC01.",
+      "network": "Both controllers serve the sbd.test domain. The animated relationship represents directory replication, not a measured packet capture.",
+      "control": {
+        "id": "CP-9",
+        "name": "System Backup",
+        "phase": "Implement → Assess",
+        "body": "Use the second controller to discuss the difference between service availability and recoverability. Replication carries current changes, including damaging ones. Protected backups and a tested recovery process remain separate requirements.",
+        "question": "What would happen if an unwanted directory change replicated to both controllers?",
+        "evidence": "Replication results plus a separate record of the backup and recovery requirements still to implement and test."
+      },
+      "checklist": [
+        "I confirmed DC02 belongs to the same domain.",
+        "I inspected recent replication attempts and unresolved errors.",
+        "I can explain why replication does not replace a backup."
+      ]
+    },
+    "dc-verify": {
+      "short": "Verify the domain",
+      "tag": "05 / VERIFY",
+      "status": "HEALTH VERIFIED",
+      "stepTitles": [
+        "Test each controller",
+        "Check replication both ways",
+        "Confirm both controllers' roles",
+        "Confirm the second layer"
+      ],
+      "mistake": "A successful ping proves only that an address answers. It doesn't show that the directory replicates, that SYSVOL is shared, or that a controller can authenticate anyone.",
+      "network": "Follow a health check from the administration viewpoint to either controller, and switch the target to check the other. The arc between the controllers is the replication you confirm in both directions.",
+      "control": {
+        "id": "IA-2",
+        "name": "Identification and Authentication (Organizational Users)",
+        "phase": "Assess",
+        "body": "Healthy, replicating controllers are a precondition for organizational users signing in to the domain. These checks show the identity service is in place on both servers; they do not demonstrate every authentication requirement, such as multifactor authentication or account policy.",
+        "question": "What do these checks establish, and what authentication behavior still needs its own test?",
+        "evidence": "DCDiag output for each controller, replication results in both directions, the role list, and a short statement of what was and was not tested."
+      },
+      "checklist": [
+        "I ran DCDiag against SBD-DC01 and SBD-DC02 separately.",
+        "I confirmed replication succeeds in both directions.",
+        "I recorded each controller's roles and the limits of these checks."
+      ]
+    },
+    "dc-evidence": {
+      "short": "Keep the evidence",
+      "tag": "06 / DOCUMENT",
+      "status": "BUILD RECORDED",
+      "stepTitles": [
+        "Describe the final state",
+        "Keep a small evidence set",
+        "Plan the next check"
+      ],
+      "mistake": "A diagram becoming complete does not establish that your VM passed a check. The model tells the lesson story; your observations establish what happened in your environment.",
+      "network": "Both controllers are built and verified for this part. Continue into the full network to see the services that later lessons can add.",
+      "control": {
+        "id": "CM-2",
+        "name": "Baseline Configuration / Configuration Settings",
+        "phase": "Assess → Monitor",
+        "body": "Risk Management Framework (RMF) assessment evaluates selected controls using evidence. Monitoring revisits the security state as the system changes. These learning examples must be tailored to the applicable requirements; selected control labels do not establish compliance or authorization.",
+        "question": "What change would make you rerun a replication or health check?",
+        "evidence": "The build record, dated verification output, unresolved issues, and the next review trigger."
+      },
+      "checklist": [
+        "I linked configuration choices to dated observations.",
+        "I recorded unresolved issues and the next review trigger.",
+        "I recorded the final build and its evidence in my workbook for my portfolio."
+      ]
+    },
+    "dns-plan": {
+      "short": "Map names to the network",
+      "tag": "07 / PLAN",
+      "status": "DNS MAPPED",
+      "stepTitles": [
+        "Learn what DNS answers and what it doesn't",
+        "Record names, subnets, and service owners",
+        "Confirm the DNS service and review the zones",
+        "Set each controller's DNS client order",
+        "Confirm the register permits DNS",
+        "Decide forwarding and recursion",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Listing a public resolver as an alternate DNS server. It has no sbd.test zone and no locator records, so a member that falls back to it can't find a domain controller, and on an air-gapped network the query goes nowhere.",
+      "network": "Both controllers run DNS on VLAN 10. The paths from the domain member to each controller are rule F01, TCP and UDP 53: a member has to find a controller before any Kerberos, LDAP, or Group Policy traffic can start.",
+      "control": {
+        "id": "CM-2",
+        "name": "Baseline Configuration",
+        "phase": "Prepare → Implement",
+        "body": "The address worksheet, each controller's DNS client order, and the initial zone inventory are the starting record for name resolution. Capture them before changing anything else, so later lessons can show what changed.",
+        "question": "Which of these values did you choose, and which did promotion set for you?"
+      },
+      "checklist": [
+        "I confirmed the DNS Server service runs on both controllers and recorded the zones promotion created.",
+        "I set each controller's DNS client order after replication succeeded both ways: partner first, loopback second.",
+        "I recorded the no-recursion decision and the register rows that permit DNS on TCP and UDP 53."
+      ]
+    },
+    "dns-zones": {
+      "short": "Forward and reverse zones",
+      "tag": "08 / CONFIGURE",
+      "status": "ZONES REPLICATING",
+      "stepTitles": [
+        "Check the forward zone's integration and scope",
+        "Require secure dynamic updates",
+        "Create the reverse lookup zone",
+        "Restrict zone transfers"
+      ],
+      "mistake": "Allowing zone transfers to any server to help the second controller. AD-integrated zones already reach it through directory replication; open transfers only hand a copy of every record to whoever asks.",
+      "network": "The arc between the controllers is Active Directory replication carrying the sbd.test and 10.0.10.in-addr.arpa zone data, not a zone transfer. No member traffic is shown while the zones are configured.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Zone type, update policy, replication scope, and transfer policy are configuration settings. Record each value with the reason for it, so a later reviewer can tell a decision from a default.",
+        "question": "Which zone settings, if left open, would let an unauthenticated system change or copy your records?"
+      },
+      "checklist": [
+        "I confirmed sbd.test is AD-integrated with secure dynamic updates and recorded its replication scope.",
+        "I created or confirmed the 10.0.10.in-addr.arpa reverse zone and saw it on both controllers.",
+        "I recorded each zone's transfer policy and why transfers stay restricted."
+      ]
+    },
+    "dns-records": {
+      "short": "Service records",
+      "tag": "09 / MAINTAIN",
+      "status": "RECORDS IN PLACE",
+      "stepTitles": [
+        "Review the controllers' A and PTR records",
+        "Create a host record with its PTR",
+        "Add a service alias for the intended host",
+        "Set lifetimes and record ownership"
+      ],
+      "mistake": "Adding a second A record with the same name to fix a wrong answer. DNS then hands out both addresses, so clients reach the wrong host some of the time and troubleshooting gets harder. Correct the record through its owning host and the DNS administration process.",
+      "network": "Records created on one controller reach the other through directory replication. The animation represents that relationship, not a measured packet capture.",
+      "control": {
+        "id": "CM-3",
+        "name": "Configuration Change Control",
+        "phase": "Implement",
+        "body": "Each record added, corrected, or removed is a change. A record table with owner and reason, and removing only records confirmed obsolete, keeps those changes reviewable instead of letting unexplained entries pile up.",
+        "question": "Who owns each record you created, and what would have to happen before it could be removed?"
+      },
+      "checklist": [
+        "I checked that both controllers' A and PTR records agree with the address plan.",
+        "I created a host record with its PTR, and pointed any service alias at the intended host.",
+        "I kept a record table with owner, type, target, time to live, and reason for each change."
+      ]
+    },
+    "dns-verify": {
+      "short": "Prove resolution",
+      "tag": "10 / VERIFY",
+      "status": "RESOLUTION PROVEN",
+      "stepTitles": [
+        "Query each server for both host records",
+        "Query the locator records on both servers",
+        "Run DNS diagnostics and the replication summary",
+        "Test failover in each direction",
+        "Optional: capture a locator query on the wire"
+      ],
+      "mistake": "Testing only through the client's normal resolver. A cached answer or a single working server can pass every lookup while the other server holds stale or missing records, so name the server in each query.",
+      "network": "Follow lookups from the domain member to each controller, and to the remaining one during the failover test. Replication between the controllers stays in view because DCDiag and the replication summary check it.",
+      "control": {
+        "id": "SC-22",
+        "name": "Architecture and Provisioning for Name/Address Resolution Service",
+        "phase": "Assess",
+        "body": "SC-22 asks that the systems providing name resolution be fault tolerant and keep internal and external roles separate. Paired queries, a failover test in each direction, and the documented no-recursion design are evidence for that; they show nothing about authentication.",
+        "question": "What would your results look like if only one of the two DNS servers held the locator records?"
+      },
+      "checklist": [
+        "I queried each DNS server by address for both host records and the locator records.",
+        "I ran dcdiag /test:DNS /e /v and explained the root-hint, forwarder, and delegation findings.",
+        "I tested failover in each direction and recorded start, restore, and final verification times."
+      ]
+    },
+    "dns-troubleshoot": {
+      "short": "Find and record the fix",
+      "tag": "11 / TROUBLESHOOT",
+      "status": "FAULT RECORDED",
+      "stepTitles": [
+        "Record the exact failure",
+        "Query both servers directly",
+        "Tell a missing name from a failure",
+        "Retest and record the change"
+      ],
+      "mistake": "Clearing the client cache first. If the authoritative data is still wrong, the fault returns on the next lookup and the evidence of what you saw is gone. Fix the owning configuration, then clear what is stale.",
+      "network": "Every path the course built is shown: lookups to both controllers and replication between them. Work through them one layer at a time when a name fails to resolve.",
+      "control": {
+        "id": "CM-4",
+        "name": "Impact Analyses",
+        "phase": "Assess → Monitor",
+        "body": "Before a fix goes in, think through what else it touches and how to undo it. Recording the rollback, and reviewing aging and scavenging against DHCP, static records, and backups before enabling automatic deletion, is impact analysis in practice.",
+        "question": "Which records could automatic scavenging remove that a service still depends on?"
+      },
+      "checklist": [
+        "I recorded the failing name, record type, client, resolver, timestamp, and error.",
+        "I queried both servers directly and identified which layer held the fault.",
+        "I recorded the cause, the fix, the rollback method, and the repeated test."
+      ]
+    },
+    "time-plan": {
+      "short": "Plan the domain's time",
+      "tag": "12 / PLAN",
+      "status": "TIME PLANNED",
+      "stepTitles": [
+        "Learn why the clocks must agree",
+        "Trace the Windows Time hierarchy",
+        "Name the reference and the fallback",
+        "Decide what verification will show",
+        "Confirm the time row and firewall rules",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Treating Kerberos's five minutes as the target. By the time clocks are minutes apart, sign-ins are already failing and log timelines no longer line up; watching for offsets that stay small and stable tells you about drift while there is still time to correct it.",
+      "network": "Both controllers are live on VLAN 10. The paths from a domain member to each controller are rule F09, UDP 123, which this plan confirms; SBD-DC02's own time requests to SBD-DC01 stay inside VLAN 10.",
+      "control": {
+        "id": "SC-45(1)",
+        "name": "System Time Synchronization | Synchronization with Authoritative Time Source",
+        "phase": "Prepare → Implement",
+        "body": "SC-45(1) asks you to compare system clocks with an authoritative time source at a set frequency and to synchronize them when the difference passes a set limit. Here the authoritative source is SBD-DC01 by declaration, so this plan records how SBD-DC01 is compared with the approved reference and how a difference is corrected, while every other clock synchronizes with SBD-DC01 through the hierarchy. The frequency and the limit are assignments your environment and policy set; record the values you chose.",
+        "question": "Who checks SBD-DC01 against the reference, and how is a difference corrected and recorded?"
+      },
+      "checklist": [
+        "I recorded the forest root, its PDC emulator and the hierarchy every system follows.",
+        "I named the approved reference, who checks it and when, and the fallback if SBD-DC01 is lost.",
+        "I recorded the Kerberos tolerance, what verification must show, and rule F09 with each controller's UDP 123 firewall rule."
+      ]
+    },
+    "time": {
+      "short": "Make DC01 the time source",
+      "tag": "13 / CONFIGURE",
+      "status": "TIME FROM SBD-DC01",
+      "stepTitles": [
+        "Confirm SBD-DC01 holds the PDC emulator role",
+        "Turn off hypervisor time sync for both DCs",
+        "Mark SBD-DC01 as the reliable time source",
+        "Read what SBD-DC01 now advertises",
+        "Run the first reference check"
+      ],
+      "mistake": "Leaving hypervisor time synchronization on for the domain controller VMs. The host clock then silently overrides the PDC emulator, and the domain's time can change with nothing changed on SBD-DC01.",
+      "network": "SBD-DC01 serves time from its own clock, with nothing above it, and SBD-DC02 takes its time from it over UDP 123 inside VLAN 10. The configuration and the reference check happen at the controllers' consoles; no member path is shown in this lesson.",
+      "control": {
+        "id": "SC-45",
+        "name": "System Time Synchronization",
+        "phase": "Implement",
+        "body": "SC-45 asks that clocks be synchronized within and between systems and system components. SBD-DC01 is the reference by declaration, so the evidence needs how its clock is checked and corrected, not only the w32tm output. The AU-8 time stamps on every audit record are only as good as this clock.",
+        "question": "How would you know if SBD-DC01's clock had drifted, and who corrects it?"
+      },
+      "checklist": [
+        "I confirmed SBD-DC01 holds the PDC emulator role and reports Local CMOS Clock as its source.",
+        "I turned off hypervisor time synchronization for both domain controller VMs.",
+        "I ran and recorded the first reference check, with any correction made by the measured difference."
+      ]
+    },
+    "time-members": {
+      "short": "Every system follows",
+      "tag": "14 / MEMBERS",
+      "status": "EVERY SYSTEM FOLLOWS",
+      "stepTitles": [
+        "Leave SBD-DC02 and Windows members on defaults",
+        "Keep time out of Group Policy",
+        "Keep hypervisors out of every VM's time",
+        "Write the chrony file for Linux servers",
+        "Record why maxdistance is 16",
+        "Cover the systems outside the hierarchy"
+      ],
+      "mistake": "Fixing a member's time with a GPO that names SBD-DC01 as its NTP server. The member leaves the domain hierarchy for an unauthenticated manual peer, the policy overrides any local fix, and if the GPO also reaches SBD-DC01 it overrides the settings that make it the source.",
+      "network": "SBD-DC02 takes time from the PDC emulator, and the domain member from either controller, all on UDP 123 under rule F09. The member stands for every Windows member and for the Linux servers later courses build with this chrony file.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "CM-6 asks for documented configuration settings, with any departures identified and approved. Most of the time settings here are defaults kept on purpose — NT5DS, nothing from policy, no hypervisor source — and one is a recorded departure: chrony's maxdistance 16, with the reason it exists.",
+        "question": "Which time setting on a member would you treat as a finding, and how would you find where it came from?"
+      },
+      "checklist": [
+        "I confirmed SBD-DC02 and a Windows member use NT5DS with no value marked (Policy).",
+        "I recorded that every VM takes its time from the domain, never from its hypervisor host.",
+        "I filed the chrony configuration for the Linux servers, with the reason for maxdistance 16."
+      ]
+    },
+    "time-verify": {
+      "short": "Prove the time chain",
+      "tag": "15 / VERIFY",
+      "status": "CHAIN MEASURED",
+      "stepTitles": [
+        "Read each link's source and status",
+        "Measure the controllers with w32tm /monitor",
+        "Measure a member against SBD-DC01",
+        "Keep the Time-Service events",
+        "Write the dated evidence record"
+      ],
+      "mistake": "Taking a correct source as proof of correct time. A member can name SBD-DC01 and still be seconds off right after a large correction, and SBD-DC01 can agree with itself and be wrong; only measured offsets and the reference log show the chain holds.",
+      "network": "Checks run from the controllers' consoles and from the member: w32tm /monitor queries both controllers, and the member samples its offset from SBD-DC01. The whole hierarchy stays in view because every measurement is taken along it.",
+      "control": {
+        "id": "AU-8",
+        "name": "Time Stamps",
+        "phase": "Assess",
+        "body": "AU-8 asks that audit records carry time stamps from internal system clocks, in Coordinated Universal Time or with a fixed or recorded offset from it. The offsets and time zones you record here are the evidence that a time stamp on one system means the same moment on every other.",
+        "question": "If two systems' records of the same event disagree by three seconds, which of your records shows which clock was wrong?"
+      },
+      "checklist": [
+        "I recorded each link's source and stratum, from Local CMOS Clock on SBD-DC01 down to a member.",
+        "I measured SBD-DC02 and a member, confirmed their offsets are small and stable, and kept the dated files.",
+        "I exported the Time-Service and 4616 events and kept them with the reference check log."
+      ]
+    },
+    "time-troubleshoot": {
+      "short": "Find and fix time faults",
+      "tag": "16 / TROUBLESHOOT",
+      "status": "FAULT RECORDED",
+      "stepTitles": [
+        "Recognize skew and measure it first",
+        "Find out why a member left its source",
+        "Move the source with the PDC emulator role",
+        "Check a restored or reverted VM's clock",
+        "Resync safely",
+        "Record the fix and its rollback"
+      ],
+      "mistake": "Pointing a failing system at an outside or manual time source to make the error go away. It now disagrees with the domain in a new way, its time is unauthenticated, and the real cause — a GPO, a hypervisor, a moved role — is still there.",
+      "network": "Every time path the course built is shown: SBD-DC02 from the PDC emulator, the member from either controller, and the checks at the consoles. Work along them from the symptom to the clock that broke.",
+      "control": {
+        "id": "CM-3",
+        "name": "Configuration Change Control",
+        "phase": "Assess → Monitor",
+        "body": "Most time faults are unrecorded changes: a GPO, a hand configuration, a moved role, a restored VM. Fixing each as a recorded change — cause, change, evidence and rollback — and updating the time plan when the role moves is change control in practice.",
+        "question": "Which change in your lab could move the domain's time source without anyone touching Windows Time?"
+      },
+      "checklist": [
+        "I measured the practice fault's offset, source and configuration before changing anything.",
+        "I returned the system to NT5DS and confirmed it names a controller again.",
+        "I wrote down the PDC emulator move procedure and recorded the fix with its cause and rollback."
+      ]
+    },
+    "stig-basics": {
+      "short": "STIGs, SCAP and CCIs",
+      "tag": "17 / UNDERSTAND",
+      "status": "APPLICABLE STIGS RECORDED",
+      "stepTitles": [
+        "Tell an SRG from a STIG",
+        "Read a rule’s identifiers and severity",
+        "Separate scanner checks from manual checks",
+        "Trace rules to controls and know a scan’s limits",
+        "Record which STIGs apply to each controller",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Treating a high SCAP score as compliance. The benchmark covers only the rules a scanner can read: the manual rules and the Active Directory STIGs are still unanswered, and a scan never proves procedures or authorization.",
+      "network": "Both controllers are live on VLAN 10 and unchanged. From each VM console you read the operating system, roles and forest to record which STIGs apply; nothing is installed yet.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Prepare",
+        "body": "CM-6 asks for configuration settings drawn from common secure configurations, documented and monitored. The STIGs are those settings for these controllers, and the applicability record states which ones you are held to before anything is measured.",
+        "question": "Which STIGs apply to these controllers, and which did you defer — with what owner and review date?"
+      },
+      "checklist": [
+        "I recorded each controller’s operating system, domain role and installed roles.",
+        "I listed the STIGs that apply — Windows Server, Active Directory Domain and Forest — with the release I will measure.",
+        "I recorded the later-scope STIGs, such as DNS and the firewall, with an owner and a review date."
+      ]
+    },
+    "stig-staging": {
+      "short": "Stage the DISA content",
+      "tag": "18 / STAGE",
+      "status": "CONTENT STAGED",
+      "stepTitles": [
+        "Download the tools, content and GPO package",
+        "Check published checksums and hash every file",
+        "Compare every hash on both controllers",
+        "Install the tools and record every version"
+      ],
+      "mistake": "Hashing only on the lab side proves nothing: without the list recorded on the connected side there is nothing to compare against. Staging a GPO package from a different quarter than the STIGs is quieter: part 5 would then apply policies written for one release and measure them against another.",
+      "network": "Nothing crosses the network in this lesson: the content arrives on approved removable media at each controller’s console. SCC is installed on both controllers and STIG Viewer on SBD-DC01; the GPO package and the Windows client content wait, hashed, in C:\\Staging\\DISA.",
+      "control": {
+        "id": "SI-7",
+        "name": "Software, Firmware, and Information Integrity",
+        "phase": "Implement",
+        "body": "Hashes recorded on both sides of the boundary, checked against DISA’s published checksums, are the integrity check for the software and content entering the lab. Verifying before anything is opened means the tools that will judge the controllers are the ones that were reviewed.",
+        "question": "If a hash did not match, what would your record need to show about the media, the file and the repeated transfer?"
+      },
+      "checklist": [
+        "I compared the connected-side SHA-256 hashes with the lab copies on both controllers before opening anything.",
+        "I recorded the SCC, STIG Viewer, benchmark, STIG and GPO package versions and releases, the Windows client content included.",
+        "I installed SCC on both controllers and STIG Viewer on SBD-DC01, and left the GPO package and the Windows client content hashed in C:\\Staging\\DISA."
+      ]
+    },
+    "stig-baseline": {
+      "short": "Capture the baseline",
+      "tag": "19 / MEASURE",
+      "status": "BASELINE SCAN",
+      "stepTitles": [
+        "Scan each controller locally with the same profile",
+        "Read the results and note the OS defaults",
+        "Separate automated results from manual checks",
+        "Store the raw results with hashes"
+      ],
+      "mistake": "Skipping the baseline, or keeping only a tidied summary of it, leaves part 5’s rescan with nothing honest to compare against. Scanning the two controllers with different profiles or benchmark releases has the same effect: the before picture no longer agrees with itself.",
+      "network": "SCC scans each controller locally from its console. SBD-DC02’s hashed results are copied to the evidence folder on SBD-DC01 over SMB inside VLAN 10, and no DISA policy has been imported yet: this is the before picture.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess",
+        "body": "The baseline uses SCAP tooling to measure each controller against a published benchmark. Keeping the raw, hashed results with the tool, benchmark and profile versions makes the scan repeatable and its results comparable when part 5 rescans.",
+        "question": "Which passing checks come from the operating system’s defaults, and how will your record keep them apart from what your policies change?"
+      },
+      "checklist": [
+        "I saved a dated baseline session for each controller with the same SCC version, benchmark release and profile.",
+        "I noted which checks already passed because of operating system defaults.",
+        "I stored both raw result sets in C:\\Evidence\\baseline with hashes and confirmed SBD-DC02’s still matched after the copy."
+      ]
+    },
+    "stig-checklists": {
+      "short": "Build the checklists",
+      "tag": "20 / REVIEW",
+      "status": "CHECKLISTS ANSWERED",
+      "stepTitles": [
+        "Create checklists for both controllers and the domain",
+        "Import the SCC results by exact revision",
+        "Answer every rule still Not Reviewed",
+        "Keep overrides honest and save the CKLB files"
+      ],
+      "mistake": "Marking a manual rule Not A Finding with nothing in Finding Details. The status looks finished, but no one can repeat the check, and an assessor will treat it as unanswered. Including loosely matched results to clear a revision mismatch is the same shortcut in bulk.",
+      "network": "STIG Viewer runs at SBD-DC01’s console, with both controllers’ results already in its evidence folder. The manual checks are answered by examining each controller and the sbd.test directory they share.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The checklists are assessment results: each rule’s status rests on the scan or on a recorded observation. Finding details that say what was examined and what it showed let another reviewer reach the same answer.",
+        "question": "Could someone else reproduce each manual answer from what you wrote in Finding Details?"
+      },
+      "checklist": [
+        "I created checklists for SBD-DC01, SBD-DC02 and sbd.test and imported each controller’s results by exact revision.",
+        "I answered every remaining rule and recorded what I observed in Finding Details.",
+        "I saved the three .cklb files in C:\\Evidence\\baseline\\checklists and recorded their hashes."
+      ]
+    },
+    "stig-findings": {
+      "short": "Write the findings record",
+      "tag": "21 / HAND OFF",
+      "status": "FINDINGS TO COURSE 1.5",
+      "stepTitles": [
+        "Export the open rules and count them by severity",
+        "Classify every open item",
+        "Trace each finding to its controls through its CCIs",
+        "Write the handoff and seal the baseline"
+      ],
+      "mistake": "Leaving an open item unclassified, or calling everything fix by GPO without checking the package. Part 5’s rescan then shows items that were never going to close, and the record cannot say which are decisions and which are plans.",
+      "network": "The findings record and the handoff are written at SBD-DC01’s console into C:\\Evidence\\baseline. Both controllers wait unchanged for part 5, which imports the staged GPOs and rescans with the same versions.",
+      "control": {
+        "id": "CA-5",
+        "name": "Plan of Action and Milestones",
+        "phase": "Assess → Authorize",
+        "body": "CA-5 asks for a plan that documents the planned remediation of weaknesses found during assessment, updated as the work proceeds. The POA&M candidates, each with an owner and a planned date, start that plan; part 5 closes what policy can fix and records the rest.",
+        "question": "For each POA&M candidate, who owns it, by when, and what evidence will show it closed?"
+      },
+      "checklist": [
+        "I counted the open findings per checklist by CAT I, II and III.",
+        "I classified every open item as fix by GPO, deviation candidate or POA&M candidate, with an owner.",
+        "I wrote handoff.txt with every version and path, and hashed the baseline into C:\\Evidence\\baseline-manifest.csv."
+      ]
+    },
+    "gpo-ou-design": {
+      "short": "Design the OUs",
+      "tag": "22 / DESIGN",
+      "status": "OU STRUCTURE",
+      "stepTitles": [
+        "Design the OUs around administration",
+        "Create protected OUs with a recorded purpose",
+        "Redirect the default containers and join servers by OU",
+        "Keep privileged accounts and systems separate",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Shaping the OUs like the org chart produces a tree that no policy or delegation follows. Leaving the default Computers container in place is the quieter mistake: a newly joined machine gets only domain-level policy and never sees the OU-linked hardening.",
+      "network": "Both controllers are live on VLAN 10. The new OUs are directory objects, so they replicate between SBD-DC01 and SBD-DC02; the controllers themselves stay in the built-in Domain Controllers OU.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Prepare → Implement",
+        "body": "OUs are the boundaries delegation is granted on. Designing them around who administers what lets later courses give each administrator only the OUs they need, and keeps the Admin OU’s privileged identities apart from everything else.",
+        "question": "For each OU, who administers its contents, and what could they change if the delegation were drawn one level higher?"
+      },
+      "checklist": [
+        "I created the planned OUs with accidental-deletion protection and recorded each one’s purpose and administrator.",
+        "I redirected new computers to the Workstations OU and new users to the Users OU, and confirmed both with Get-ADDomain.",
+        "I confirmed both domain controllers are still in the built-in Domain Controllers OU."
+      ]
+    },
+    "gpo-basics": {
+      "short": "How Group Policy applies",
+      "tag": "23 / UNDERSTAND",
+      "status": "POLICY ORDER MAPPED",
+      "stepTitles": [
+        "Know where a GPO lives and how it replicates",
+        "Learn the order: the closest link applies last",
+        "Treat Enforced and Block Inheritance as exceptions",
+        "Read what narrows a GPO: filters and loopback",
+        "Know when policy arrives; build the central store",
+        "Record each controller’s starting policy"
+      ],
+      "mistake": "Reading the link list in Group Policy Management and assuming it is the result. Security filtering, a WMI filter, a disabled link or a closer GPO can each change what a controller actually applies; only gpresult on the controller shows the winning GPO for each setting.",
+      "network": "Both controllers on VLAN 10 still apply only the two default policies. The central store created on SBD-DC01 is a SYSVOL folder, so DFS Replication carries it to SBD-DC02, just as directory replication carries each GPO’s Active Directory half.",
+      "control": {
+        "id": "CM-2",
+        "name": "Baseline Configuration",
+        "phase": "Prepare → Implement",
+        "body": "Before the import changes anything, record the policy configuration both controllers start from: which GPOs link where, in what order, and what gpresult shows applying. That record is the starting point every later policy change is compared against.",
+        "question": "If a setting changed on a controller tomorrow, which record would tell you whether a GPO or a person changed it?"
+      },
+      "checklist": [
+        "I listed the GPOs linked at the domain and the Domain Controllers OU in precedence order and confirmed none is Enforced or blocked.",
+        "I created the central store from SBD-DC01’s templates and confirmed every GPO’s AD and SYSVOL versions agree.",
+        "I saved each controller’s starting gpresult report and read its applied and filtered-out lists."
+      ]
+    },
+    "gpo-apply": {
+      "short": "Import the DISA GPOs",
+      "tag": "24 / APPLY",
+      "status": "STIG POLICIES LINKED",
+      "stepTitles": [
+        "Verify the package and extend the central store",
+        "Import DISA’s policies with a migration table",
+        "Link by OU, with account policies at the domain root",
+        "Apply the user policy with loopback where people sign in",
+        "Record deviations and confirm application"
+      ],
+      "mistake": "Leaving account policies in a GPO linked to the Domain Controllers OU and expecting domain passwords to change. Domain controllers read password, lockout and Kerberos policy only from GPOs linked at the domain root, so the rescan shows those rules still open. Setting a link to Enforced to make a policy win is the other trap: it hides a precedence problem instead of solving it.",
+      "network": "The central store and the imported GPOs live in SYSVOL and replicate between SBD-DC01 and SBD-DC02. The domain controller policy links to the Domain Controllers OU, so both controllers apply it; the member-server policy waits on the Servers OU for the systems later courses build.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "The DISA package supplies the common secure configuration, and Group Policy applies it to the systems in each OU. Recording every deviation with its rationale documents the exception instead of hiding it in a silent edit.",
+        "question": "For each deviation, which setting does it depart from, why, and who owns that decision?"
+      },
+      "checklist": [
+        "I confirmed the package matched its connected-side hash and that the central store serves its ADMX and ADML templates.",
+        "I linked the imported GPOs by OU with the domain controller policy at link order 1; gpresult on both controllers shows them applied, and no time setting comes from policy.",
+        "I recorded every deviation with its rationale and owner instead of deleting the setting."
+      ]
+    },
+    "gpo-rescan": {
+      "short": "Rescan and reconcile",
+      "tag": "25 / VERIFY",
+      "status": "RESCAN · RECONCILE",
+      "stepTitles": [
+        "Check the baseline and rescan with its versions",
+        "Compare each controller with its own baseline",
+        "Update copies of the part 4 checklists",
+        "Resolve every item in the findings record"
+      ],
+      "mistake": "Upgrading SCC or the benchmark between scans makes the comparison meaningless, because the checks themselves changed. Editing the part 4 checklists in place is the other trap: the baseline loses its hashes, and nothing shows any more what the controllers looked like before.",
+      "network": "The scans return to both controllers on VLAN 10, now with the DISA policies applied. Each controller is rescanned locally at its console and compared with its own baseline; SBD-DC02’s hashed results are carried to SBD-DC01.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The matched rescan, the updated checklists and the manual answers with observed evidence are assessment results. Resolving every item in the findings record shows the authorization path what is satisfied, what is a documented deviation and what needs a plan.",
+        "question": "Could an assessor reproduce each manual-check answer from the evidence you recorded with it?"
+      },
+      "checklist": [
+        "I rescanned both controllers with the SCC version, benchmark release and profile in handoff.txt, after the manifest hash matched.",
+        "I attributed each change from the baseline to the GPO that caused it and checked for regressions.",
+        "I updated copies of the three checklists and gave every findings-record item a resolution."
+      ]
+    },
+    "gpo-maintain": {
+      "short": "Set the rescan cadence",
+      "tag": "26 / MAINTAIN",
+      "status": "STANDING CADENCE",
+      "stepTitles": [
+        "Consolidate deviations into one exception record",
+        "Set the quarterly and change-driven rescan cadence",
+        "Export the GPO reports and links; course 1.12 backs up",
+        "Write the handoff and seal the evidence"
+      ],
+      "mistake": "Treating the rescan as the finish line lets drift and new DISA releases go unnoticed. An exception record without owners and review dates becomes permanent by default.",
+      "network": "The hardened controllers stay on VLAN 10. The GPO reports and link export are hashed into the evidence folder on SBD-DC01, course 1.12 backs the GPOs up, and the next scan waits for the DISA quarter or part 6’s change.",
+      "control": {
+        "id": "CA-7",
+        "name": "Continuous Monitoring",
+        "phase": "Monitor",
+        "body": "A set rescan frequency, event-driven triggers and named owners turn a one-time hardening into ongoing monitoring. The exported reports and link records preserve the applied state for each review.",
+        "question": "Which change in part 6 should trigger the first change-driven scan, and who owns it?"
+      },
+      "checklist": [
+        "I consolidated the deviations into one exception record with owners, risk notes and review dates, and filed a dated copy.",
+        "I exported the GPO reports and links, and hashed C:\\Evidence\\hardened into the manifest.",
+        "I wrote down the quarterly and change-driven rescan triggers and the owner of the next review."
+      ]
+    },
+    "pki-design": {
+      "short": "Design the hierarchy",
+      "tag": "27 / DESIGN",
+      "status": "PLANNED",
+      "stepTitles": [
+        "Draw the offline root and issuing CA hierarchy",
+        "Record names, cryptography, lifetimes, and owners",
+        "Start from this lab’s example values",
+        "Map each value to the setting that applies it",
+        "Plan the pki.sbd.test publication name",
+        "Choose the publication host, paths, and schedule",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Leaving the issuing CA’s lifetime to the issuing CA. A subordinate CA’s certificate lifetime comes from the root that signs it, so if CA\\ValidityPeriod and CA\\ValidityPeriodUnits are not set on the root before the ceremony, the issuing CA gets the root’s existing setting instead of the planned 10 years.",
+      "network": "Nothing is built yet. SBD-ROOTCA01 is planned with no network connection, and SBD-SUBCA01 and SBD-PKI-MGMT01 are planned on VLAN 30. SBD-DC01 already provides the domain and DNS the issuing CA will depend on.",
+      "control": {
+        "id": "SC-12",
+        "name": "Cryptographic Key Establishment and Management",
+        "phase": "Prepare → Implement",
+        "body": "Key management starts before any key exists. Recording each CA’s algorithm, key size, hash, lifetime, and CRL period, with the setting that applies it and a named renewal owner, gives you the plan to follow now and to show later.",
+        "question": "Which of this lab’s example values would your own policy change, and who approves that change?"
+      },
+      "checklist": [
+        "I drew the hierarchy with no network path to the root.",
+        "I recorded each CA’s key, hash, lifetime, and CRL period with the setting that applies it.",
+        "I mapped every planned AIA and CDP URL to its publisher and a file on pki.sbd.test."
+      ]
+    },
+    "pki-root": {
+      "short": "Configure the offline root",
+      "tag": "28 / ROOT CA",
+      "status": "ROOT CA · OFFLINE",
+      "stepTitles": [
+        "Verify the disconnected workgroup host",
+        "Place the root’s CAPolicy.inf in %SystemRoot%",
+        "Install a standalone root CA with approved settings",
+        "Set subordinate policy, CRL schedule, and backup"
+      ],
+      "mistake": "Placing CAPolicy.inf after the role is configured. Setup reads it only during configuration, so the root starts with default CRL settings instead of the planned 26-week base CRL with no delta CRL.",
+      "network": "SBD-ROOTCA01 is now a standalone root CA in the offline vault, drawn in amber with no cable to the core. Nothing travels to or from it yet; SBD-SUBCA01 and SBD-PKI-MGMT01 are still planned.",
+      "control": {
+        "id": "CP-9",
+        "name": "System Backup",
+        "phase": "Implement",
+        "body": "The root’s protected backup is captured before it signs anything, so the trust anchor can be recovered without rebuilding the hierarchy. That backup holds the private key: store and record it with the same care as the root itself.",
+        "question": "Where is the root backup kept, who can reach it, and how would you show that it restores?"
+      },
+      "checklist": [
+        "I confirmed SBD-ROOTCA01 is in a workgroup with no network path and set its clock from the approved reference.",
+        "I checked the publication URLs, 10-year subordinate validity, and 26-week CRL period with certutil -getreg before signing anything.",
+        "I captured a protected root backup and recorded where it is stored."
+      ]
+    },
+    "pki-request": {
+      "short": "Create the CA request",
+      "tag": "29 / REQUEST",
+      "status": "ISSUING CA WAITING",
+      "stepTitles": [
+        "Confirm the issuing host’s final identity",
+        "Prepare the issuing CA’s CAPolicy.inf",
+        "Install an enterprise subordinate CA",
+        "Save, inspect, and hash the request"
+      ],
+      "mistake": "Treating the waiting CA as a failed install and reinstalling the role. A subordinate CA cannot start before its certificate is signed, and a reinstall can create a new key pair, leaving the original request matching nothing.",
+      "network": "SBD-SUBCA01 joins VLAN 30 at 10.0.30.20 as an enterprise subordinate CA, waiting for its certificate. Its request file carries only the public key and goes to the media custodian, not across the network.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "The issuing CA’s CAPolicy.inf fixes its settings before setup reads them: a weekly base CRL, a daily delta CRL, and no default templates. Keep the file and the reviewed request fields as the record of what was configured and why.",
+        "question": "Why is LoadDefaultTemplates=0 a configuration decision rather than a convenience?"
+      },
+      "checklist": [
+        "I confirmed SBD-SUBCA01’s name, domain membership, address, DNS, and time before installing the role.",
+        "I inspected the request’s subject and public key and recorded its SHA-256 hash.",
+        "I left the CA in its waiting state and kept private keys out of the transfer package."
+      ]
+    },
+    "pki-sign": {
+      "short": "Sign at the ceremony",
+      "tag": "30 / CEREMONY",
+      "status": "SIGNING CEREMONY",
+      "stepTitles": [
+        "Check the clock, carry the request in, verify its hash",
+        "Check root policy, then submit and approve",
+        "Export and verify the public artifacts",
+        "Carry public artifacts back and secure the root"
+      ],
+      "mistake": "Checking the request’s filename instead of its hash. A matching name proves nothing; only a recalculated SHA-256 that matches the independently recorded value shows the approved request is the one being signed.",
+      "network": "The request travels to SBD-ROOTCA01 on approved removable media, and the signed subordinate certificate, root certificate, and current root CRL travel back the same way. The amber path is carried by hand; there is no network link to the root.",
+      "control": {
+        "id": "MP-5",
+        "name": "Media Transport",
+        "phase": "Implement → Assess",
+        "body": "Removable media is the only path across the root boundary. Custody records, hashes checked on both sides, and a list of exactly what moved show that only the reviewed request went in and only public artifacts came out.",
+        "question": "If the custody record had a gap, what would you repeat before trusting the artifacts?"
+      },
+      "checklist": [
+        "I set the root’s clock against the approved reference, and the recalculated request hash matched the recorded value.",
+        "I checked the issued certificate’s identity, validity, and URLs and recorded the request ID and artifact hashes.",
+        "I carried back only public artifacts and recorded the root’s shutdown."
+      ]
+    },
+    "pki-publish": {
+      "short": "Activate the issuing CA",
+      "tag": "31 / ACTIVATE",
+      "status": "ISSUING CA ONLINE",
+      "stepTitles": [
+        "Install the signed certificate and start the CA",
+        "Set the AIA and CDP URLs before issuing",
+        "Distribute root trust through domain policy",
+        "Hold templates for lessons 34 and 35"
+      ],
+      "mistake": "Issuing a test certificate before the AIA and CDP settings point at pki.sbd.test. That certificate carries the old locations for its whole life, and clients will keep looking for files nobody publishes.",
+      "network": "SBD-SUBCA01 is now a running issuing CA on VLAN 30, and SBD-DC01 carries the Group Policy that delivers the approved root to domain clients. SBD-PKI-MGMT01 is still planned, so the pki.sbd.test URLs have nowhere to answer yet.",
+      "control": {
+        "id": "SC-17",
+        "name": "Public Key Infrastructure Certificates",
+        "phase": "Implement",
+        "body": "This control asks for certificates issued under an approved policy and trust stores that hold only approved trust anchors. Installing the signed certificate completes the approved hierarchy, and managed domain policy keeps the root trust decision deliberate and reversible.",
+        "question": "Which systems should trust this root, and how would you remove that trust if you had to?"
+      },
+      "checklist": [
+        "I added the root certificate and CRL to the issuing CA’s stores and confirmed Certificate Services is running with the signed certificate installed.",
+        "I checked that the AIA and CDP settings carry the planned pki.sbd.test URLs.",
+        "I found the approved root in a domain client’s trusted root store, delivered by policy."
+      ]
+    },
+    "pki-publication": {
+      "short": "Build the publication site",
+      "tag": "32 / PUBLICATION",
+      "status": "PKI.SBD.TEST ONLINE",
+      "stepTitles": [
+        "Install the web server and publication folder",
+        "Confirm the alias and the register row",
+        "Keep the site on plain HTTP",
+        "Limit who can write to the folder"
+      ],
+      "mistake": "Moving the site to HTTPS because it looks more secure. Clients would have to validate the site’s certificate before they could fetch the CRL that validation depends on. The files are public and signed, so integrity comes from the signatures, not the transport.",
+      "network": "SBD-PKI-MGMT01 comes online at 10.0.30.30 and answers for pki.sbd.test on HTTP TCP 80. SBD-DC01, outside VLAN 30, resolves the name and reaches the site across the core under rule F18.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Implement",
+        "body": "Clients read from the publication folder; only the CA’s publishing process and the PKI administrators write to it. Granting no more access than publication needs keeps a reader from ever becoming a publisher of trust data.",
+        "question": "Which accounts can write to the publication folder today, and does each one need to?"
+      },
+      "checklist": [
+        "I confirmed pki.sbd.test resolves to 10.0.30.30 from SBD-DC01, outside VLAN 30.",
+        "I confirmed the site answers on port 80, allows double escaping for delta CRL names, and holds only certificates and CRLs.",
+        "I recorded the folder permissions that separate writers from readers."
+      ]
+    },
+    "pki-publish-trust": {
+      "short": "Publish the trust data",
+      "tag": "33 / PUBLISH",
+      "status": "TRUST DATA LIVE",
+      "stepTitles": [
+        "Map every embedded URL to a file",
+        "Copy the current certificates and CRLs into place",
+        "Point the issuing CA’s CRL publication at the site",
+        "Verify live retrieval from outside VLAN 30"
+      ],
+      "mistake": "Renaming published files to something tidier. Certificates already carry the exact URLs, so a renamed file is a missing file, and chain building and revocation checks fail for every certificate issued so far.",
+      "network": "Trust data now reaches pki.sbd.test: the issuing CA writes its CRLs to the site on schedule, and the root’s certificate and CRL arrive by hand-carried media. SBD-DC01 fetches each AIA and CDP URL over HTTP TCP 80.",
+      "control": {
+        "id": "IA-5(2)",
+        "name": "Authenticator Management | Public Key-based Authentication",
+        "phase": "Implement → Assess",
+        "body": "When PKI is used, this enhancement expects certificates to be validated by building a path to an accepted trust anchor, including status information. certutil -verify -urlfetch from a cache-cleared system outside VLAN 30 is that validation, run against the live site rather than a cache.",
+        "question": "What happens to every client if the root CRL on the site expires before the next ceremony?"
+      },
+      "checklist": [
+        "I mapped each embedded AIA and CDP URL to a real file on the site.",
+        "I confirmed the issuing CA’s next CRL landed on the site at the same filename.",
+        "I ran certutil -verify -urlfetch from SBD-DC01, outside VLAN 30, with its URL cache cleared, and the chain built."
+      ]
+    },
+    "pki-template-admin": {
+      "short": "Separate template admin",
+      "tag": "34 / DELEGATE",
+      "status": "TEMPLATE SEAT READY",
+      "stepTitles": [
+        "Install the template tools on SBD-PKI-MGMT01",
+        "Delegate template rights to a PKI administrators group",
+        "Remove routine template editing elsewhere",
+        "Write the template change process"
+      ],
+      "mistake": "Delegating template permissions to individual accounts. Group membership is meant to be the record of who may change what the CA signs; scattered individual permissions leave no single list to review.",
+      "network": "SBD-PKI-MGMT01 is now also the template administration seat. Template work goes from it to the directory on SBD-DC01, where templates live as objects; the issuing CA’s console stays for CA operations.",
+      "control": {
+        "id": "AC-5",
+        "name": "Separation of Duties",
+        "phase": "Implement",
+        "body": "Deciding what the PKI may sign is separated from running the CA. A named group on a dedicated seat holds template rights, and no Domain Admins or Enterprise Admins account edits templates as routine work.",
+        "question": "Who could change a template today without going through the change process?"
+      },
+      "checklist": [
+        "I opened the Certificate Templates console from SBD-PKI-MGMT01.",
+        "I delegated template permissions to the PKI administrators group under the Admin OU.",
+        "I wrote a change process that names the requester, reviewer, and versioning action."
+      ]
+    },
+    "pki-first-templates": {
+      "short": "Publish first templates",
+      "tag": "35 / TEMPLATES",
+      "status": "THREE TEMPLATES PUBLISHED",
+      "stepTitles": [
+        "Duplicate Kerberos Authentication for the controllers",
+        "Duplicate Computer as SBD Computer Authentication",
+        "Duplicate Web Server as SBD Server Authentication",
+        "Record each template through the change process",
+        "Publish only the three planned templates"
+      ],
+      "mistake": "Editing the built-in Kerberos Authentication, Computer or Web Server template directly. The original is lost as a baseline, and the change has no name or version of its own to record or roll back.",
+      "network": "Templates are configured from SBD-PKI-MGMT01 and stored in the directory on SBD-DC01, and SBD-SUBCA01 now publishes exactly the three planned templates. Nothing has enrolled yet.",
+      "control": {
+        "id": "CM-7",
+        "name": "Least Functionality",
+        "phase": "Implement",
+        "body": "The CA publishes only the templates the plan calls for. Removing the defaults it does not need means fewer certificate types can be requested at all, because an unpublished template cannot be mis-enrolled.",
+        "question": "Which default template would you be most tempted to keep, and what would it let someone request?"
+      },
+      "checklist": [
+        "I duplicated Kerberos Authentication, Computer and Web Server with the approved key size and validity.",
+        "I left autoenrollment to the domain controllers on SBD Domain Controller Authentication and to the pilot group on SBD Computer Authentication.",
+        "I confirmed the CA publishes exactly the three planned templates, each with a change record."
+      ]
+    },
+    "pki-validate": {
+      "short": "Validate the PKI",
+      "tag": "36 / VALIDATE",
+      "status": "PKI PROVEN",
+      "stepTitles": [
+        "Autoenroll the controllers and the pilot",
+        "Verify the chain with live retrieval",
+        "Revoke a disposable test certificate",
+        "Assign renewal owners; list the backups for course 1.12",
+        "Baseline the PKI servers and rescan the controllers",
+        "Close the controller finding and file the evidence"
+      ],
+      "mistake": "Turning off revocation checking when a CRL cannot be retrieved. The certificate may be valid, but the bypass hides a broken publication path that every relying system depends on. Fix the retrieval or the stale file and retest.",
+      "network": "Both domain controllers autoenroll from SBD-SUBCA01 across the core, and the pilot, SBD-PKI-MGMT01, inside VLAN 30. SBD-DC01 validates against pki.sbd.test over HTTP TCP 80, the issuing CA publishes its updated CRL to the site, and the root’s replacement CRLs keep arriving through scheduled, hand-carried ceremonies.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The closing tests assess the PKI the way relying systems see it: hands-free enrollment, live chain and revocation checks, and a revoked certificate rejected for the expected reason. The scans, the answered domain controller rule and the filed evidence keep those results reviewable later.",
+        "question": "Which of these results would you rerun after the next root ceremony, and why?"
+      },
+      "checklist": [
+        "I watched both domain controllers and the pilot receive their certificates without touching a request.",
+        "I revoked the test certificate, published a new CRL, and saw a fresh evaluation reject it.",
+        "I recorded CRL and renewal owners, listed the PKI items course 1.12 backs up, filed the PKI servers’ baselines and the controllers’ rescans, and answered the controller certificate rule."
+      ]
+    },
+    "dhcp-design": {
+      "short": "Design addressing",
+      "tag": "37 / DESIGN",
+      "status": "SCOPE PLANNED",
+      "stepTitles": [
+        "Decide where DHCP runs and for whom",
+        "Define the scope, its exclusions, and no reservations",
+        "Set the lease length and the three options",
+        "Assign the three identities",
+        "Confirm F04 and the core’s relay",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Adding options because they might be useful — a boot server, a proxy auto-discovery address, an outside resolver as a spare. Every option is configuration every client trusts, and an outside resolver in option 6 would also break the domain’s own lookups.",
+      "network": "Nothing is built yet. SBD-DC01 and SBD-DC02 run from part 1; SBD-DHCP01 and the VLAN 80 test client exist only in the plan, and the core’s relay is already part of the network.",
+      "control": {
+        "id": "CM-7",
+        "name": "Least Functionality",
+        "phase": "Prepare → Implement",
+        "body": "Least functionality starts with the service’s reach: leases on one VLAN only, and three options with nothing added. Each option is configuration every client accepts without question, so the design records why each one exists.",
+        "question": "If someone asked you to add one more option, what would it let a misconfigured or compromised DHCP server tell every client?"
+      },
+      "checklist": [
+        "I recorded VLAN 80 as the only leased segment and its full-subnet scope with two exclusion ranges and no reservations.",
+        "I wrote down the lease length, the three options, and the reason for each.",
+        "I confirmed from the network’s record that the core relays VLAN 80 to 10.0.20.10 under F04, without changing the router."
+      ]
+    },
+    "dhcp": {
+      "short": "Build SBD-DHCP01",
+      "tag": "38 / BUILD",
+      "status": "DHCP SERVING VLAN 80",
+      "stepTitles": [
+        "Create SBD Tier 1 Admins and its one delegation",
+        "Build SBD-DHCP01 and join it into the Servers OU",
+        "Install the role and authorize the server",
+        "Create the scope, with DNS updates off for now",
+        "Pull a first lease through the core relay"
+      ],
+      "mistake": "Skipping directory authorization, or checking only that the cmdlet ran. An unauthorized Windows DHCP server in the domain refuses to lease, so no address arrives and the relay gets blamed. Confirm Get-DhcpServerInDC lists SBD-DHCP01 and event 1044 says it is servicing clients before you troubleshoot the path.",
+      "network": "SBD-DHCP01 on VLAN 20 checks its authorization in the directory and leases an address to the VLAN 80 test client through the core relay (F04). No client name is registered yet.",
+      "control": {
+        "id": "CM-6",
+        "name": "Configuration Settings",
+        "phase": "Implement",
+        "body": "Record the scope, exclusions, options, lease length, and authorization as configuration decisions tied to the lesson 37 design. Authorization and the delegated join are settings with a security reason; write the reason down beside the value.",
+        "question": "If someone started an unauthorized Windows DHCP server in the domain, what would stop it from serving, and how would your records show that?"
+      },
+      "checklist": [
+        "I confirmed SBD-DHCP01 sits in the Servers OU with SBD Tier 1 Admins as the only domain group in its local Administrators.",
+        "I confirmed Get-DhcpServerInDC lists SBD-DHCP01 and found event 1044 after the restart.",
+        "I pulled a test lease through the core relay and checked its gateway, DNS servers, and suffix against the design."
+      ]
+    },
+    "dhcp-dns": {
+      "short": "Register names securely",
+      "tag": "39 / REGISTER",
+      "status": "NAMES REGISTERED",
+      "stepTitles": [
+        "Create the 10.0.80 reverse zone",
+        "Create the update account; keep DnsUpdateProxy empty",
+        "Give the server its credential and name protection",
+        "Renew and check the records and their owner",
+        "Record the update identity and its rules"
+      ],
+      "mistake": "Adding SBD-DHCP01 or its update account to DnsUpdateProxy to make registration work. Records created by the group’s members are left unsecured, so the next device to update a name takes it over — the very hijack name protection is meant to stop.",
+      "network": "SBD-DHCP01 now registers the test client’s A, PTR, and DHCID records with the domain controllers as svc-dhcp-dns, and the records replicate between SBD-DC01 and SBD-DC02.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Implement",
+        "body": "Client records are written by one dedicated account with no rights beyond Domain Users, never by a computer account or an unsecured proxy group. Its owner, its password handling, and what it may change belong in the record.",
+        "question": "If the update account’s password leaked, what could someone do with it, and how would you notice?"
+      },
+      "checklist": [
+        "I created the 10.0.80 reverse zone with secure updates and the svc-dhcp-dns account, and confirmed DnsUpdateProxy is empty.",
+        "I set the DNS credential and turned on registration for every client, cleanup when leases end, and name protection.",
+        "I found the test client’s A, PTR, and DHCID records on both controllers, owned by SBD\\svc-dhcp-dns."
+      ]
+    },
+    "dhcp-audit": {
+      "short": "Audit and restore note",
+      "tag": "40 / AUDIT",
+      "status": "LEASE TRAIL KEPT",
+      "stepTitles": [
+        "Read the audit log and its weekly reuse",
+        "Archive each day’s file with its hash",
+        "Review leases and configuration changes",
+        "Check for unauthorized DHCP servers",
+        "Write the restore note for course 1.12's backup"
+      ],
+      "mistake": "Relying on the audit log Windows keeps. Each weekday’s file is reused a week later, so an investigation that starts eight days after the fact finds no record of who held the address.",
+      "network": "The lease path from lesson 38 stays live while SBD-DHCP01 keeps its audit trail on its second volume. No new network path is added.",
+      "control": {
+        "id": "AU-11",
+        "name": "Audit Record Retention",
+        "phase": "Implement → Monitor",
+        "body": "Windows keeps about a week of DHCP audit history; your records requirement decides how long lease history must last, and that period depends on your environment and policy. Daily copies with hashes turn the weekly files into a retained record.",
+        "question": "How far back would you need lease history to trace an address in a router deny log, and does your archive reach that far?"
+      },
+      "checklist": [
+        "I confirmed audit logging is on and found yesterday’s file in the archive with its hash in the catalog.",
+        "I reviewed the leases and the authorized-server list and recorded anything I didn’t recognize as a finding.",
+        "I confirmed the automatic database copy sits on the same disk and wrote the restore note course 1.12 uses: the DNS credential must be set again after a restore."
+      ]
+    },
+    "dhcp-prove": {
+      "short": "Prove and hand off",
+      "tag": "41 / VERIFY",
+      "status": "SERVICE PROVEN",
+      "stepTitles": [
+        "Check every value the test client received",
+        "Try to take the test client’s name",
+        "Take SBD-DHCP01’s first SCAP baseline",
+        "Seal both halves of the record",
+        "Write the handoff for part 8"
+      ],
+      "mistake": "Proving only that a lease arrives. A lease with the wrong DNS servers, a record owned by the wrong account, or a name another device can take over all look like success until something depends on them.",
+      "network": "The test client renews through the core relay and its records answer from both controllers. The refused takeover shows up in SBD-DHCP01’s logs, not as a new path.",
+      "control": {
+        "id": "CA-2",
+        "name": "Control Assessments",
+        "phase": "Assess",
+        "body": "The proof tests the design rather than the settings: the values a client actually receives, the owner of the record it gets, and a deliberate takeover that must fail. The first SCAP baseline adds the server’s configuration to the same record.",
+        "question": "Which part of your proof would an assessor still have to take on trust, and what record would remove that?"
+      },
+      "checklist": [
+        "I checked the test client’s address, gateway, DNS servers, suffix, and lease length against the design.",
+        "I tried to take the test client’s name from a new MAC address and found event 1340, with the record unchanged.",
+        "I filed SBD-DHCP01’s first baseline with classified findings, sealed both manifests, and wrote the handoff to part 8."
+      ]
+    },
+    "tier-design": {
+      "short": "Design tiers and seats",
+      "tag": "42 / DESIGN",
+      "status": "TIERS PLANNED",
+      "stepTitles": [
+        "Define three tiers and map them to OUs",
+        "Assign the admin seats under the PAW STIG",
+        "Write the credential rule; create the role groups",
+        "Add the permit and deny rows to the register",
+        "Check the design against US guidance"
+      ],
+      "mistake": "Placing a system in Tier 1 because it is a member server. SBD-WSUS01 sits in a member-server VLAN, but the part of it that approves the domain controllers’ updates can control Tier 0. Map tiers by what a system controls, not by where it lives.",
+      "network": "Nothing new is built yet. SBD-DC01, SBD-SUBCA01, and part 7’s SBD-DHCP01 run from earlier courses; the three VLAN 60 seats exist only in the plan.",
+      "control": {
+        "id": "AC-6",
+        "name": "Least Privilege",
+        "phase": "Prepare → Implement",
+        "body": "Least privilege starts on paper: each tier gets its own accounts, its own administration seat, and its own OUs, and the daily account holds no admin rights anywhere. Writing the rule before any host exists gives every later setting a requirement to trace back to.",
+        "question": "Which systems did you place in Tier 0 because of what they control rather than where they sit, and how would you explain that choice to an assessor?"
+      },
+      "checklist": [
+        "I mapped each tier to its systems, OUs, admin seat, and accounts, with Tier 0 defined by what it controls.",
+        "I wrote the credential rule for each tier and created the role groups, with separate per-tier accounts for each administrator.",
+        "I recorded the new permit and deny rows, with owners, in the register."
+      ]
+    },
+    "tier-admin-hosts": {
+      "short": "Build the admin seats",
+      "tag": "43 / BUILD",
+      "status": "ADMIN SEATS ONLINE",
+      "stepTitles": [
+        "Create the Admin sub-OUs and link the STIG GPOs",
+        "Build the two server seats with their seat GPOs",
+        "Create SBD-ADMIN-PC01 as a Secure Boot, vTPM VM",
+        "Close host–guest channels; one console user at a time",
+        "Strip each seat to its tier; move the console work",
+        "Register and restrict the management paths"
+      ],
+      "mistake": "Adding a new, narrower allow rule for AdminJumpBox01 on the domain controllers instead of scoping the existing Remote Desktop, Windows Remote Management, and AD Web Services rules. Allow rules add up, so the broad rules keep accepting any address.",
+      "network": "The three administration seats are online in VLAN 60. Management reaches out from them, AdminJumpBox01 to the domain controllers (A01) and SBD-ADMIN-SRV01 to SBD-DHCP01 (A02), and nothing initiates toward them.",
+      "control": {
+        "id": "SC-7(15)",
+        "name": "Boundary Protection | Networked Privileged Accesses",
+        "phase": "Implement",
+        "body": "Privileged access now travels through dedicated, managed seats in VLAN 60, one per tier, so every management session starts somewhere controlled and auditable. Registering each path and refusing inbound management on the seats keeps that route the only one.",
+        "question": "Which management paths to the domain controllers were open before you scoped the existing firewall rules, and how did you confirm they are closed now?"
+      },
+      "checklist": [
+        "I linked the STIG GPOs to Admin Servers and Admin Workstations before joining the seats, and gpresult shows them applied.",
+        "I confirmed each tier’s management ports answer from that tier’s admin seat and that nothing in user space can open a session toward VLAN 60.",
+        "I scoped the existing Remote Desktop, Windows Remote Management, and AD Web Services rules on both domain controllers to AdminJumpBox01 and VLAN 10."
+      ]
+    },
+    "tier-logon-restrictions": {
+      "short": "Restrict privileged sign-in",
+      "tag": "44 / ENFORCE",
+      "status": "TIER RULES ENFORCED",
+      "stepTitles": [
+        "Move the Tier 0 servers into their own OU",
+        "Deny higher-tier logons on the Servers and Workstations OUs",
+        "Give the tier OUs their administrators; join the test client",
+        "Deny network logon and record the console exception",
+        "Let each seat admit only its own tier",
+        "Protect Tier 0, keep break-glass, record MFA"
+      ],
+      "mistake": "Setting a deny right in the tier logon GPO without repeating the entries part 5’s STIG GPO sets for that right. User rights don’t merge across GPOs: the highest-precedence GPO that sets a right wins, so the STIG’s entries for it, such as Domain Admins and Enterprise Admins, quietly drop out.",
+      "network": "The Tier 0 servers have their own OU. AdminJumpBox01 still manages SBD-SUBCA01 after the move, while the Servers and Workstations OUs now refuse Tier 0 sign-ins.",
+      "control": {
+        "id": "AC-3",
+        "name": "Access Enforcement",
+        "phase": "Implement → Assess",
+        "body": "The deny-logon rights make the directory enforce the tier rule: a Tier 0 credential presented on a lower tier is refused, whoever types it. The console network-logon exception and the break-glass account belong in the enforcement record because each is named, limited, and owned.",
+        "question": "For each exception you recorded, what limits it, who owns it, and what would tell you it was being used outside its purpose?"
+      },
+      "checklist": [
+        "I moved SBD-SUBCA01 and SBD-PKI-MGMT01 into the Tier 0 Servers OU and confirmed Tier 0 can still sign in to them.",
+        "I found the Tier 0, Tier 1, and audit custodian groups’ SIDs on the deny lines of the test machine’s user-rights export, and a refused Tier 0 sign-in logged as event 4625 with status 0xC000015B.",
+        "I recorded the console network-logon exception, the Protected Users membership, and the break-glass and MFA decisions."
+      ]
+    },
+    "tier-prove": {
+      "short": "Prove the tiers",
+      "tag": "45 / VERIFY",
+      "status": "TIER MATRIX PROVEN",
+      "stepTitles": [
+        "Manage each tier from its own seat",
+        "Attempt the forbidden combinations",
+        "Prove the VM and its host stay apart",
+        "Renew the test lease under the full rule set",
+        "Reconcile the tier matrix with the register"
+      ],
+      "mistake": "Keeping only the refusal the user sees. Without event 4625 (status 0xC000015B) on the test client and the router’s deny-log entry for the VLAN 80 session, nothing shows the boundary made the decision.",
+      "network": "Each tier’s path runs from its own seat: A01 to the domain controller and SBD-SUBCA01, A02 to SBD-DHCP01, A03 to the test client. Part 7’s lease runs again under the full rule set; the refused attempts show up in logs, not as paths.",
+      "control": {
+        "id": "AU-12",
+        "name": "Audit Record Generation",
+        "phase": "Assess",
+        "body": "The proof rests on records the systems write themselves: events 4624 and 4672 for the permitted sessions, 4625 with status 0xC000015B for the refused sign-in, and the router’s deny log for the blocked VLAN 80 session. Pair each record with what the user saw.",
+        "question": "Which rows of your tier matrix rest on a record the infrastructure wrote, and which still rest only on what you observed?"
+      },
+      "checklist": [
+        "I managed each tier from its own seat with its own account and recorded the target’s 4624 and 4672 events.",
+        "I captured the user-visible refusal and the matching 4625 event or router deny-log entry for each forbidden attempt.",
+        "I renewed the test lease under the full rule set and reconciled the tier matrix with the register."
+      ]
+    },
+    "tier-scan": {
+      "short": "Move tools, scan, hand off",
+      "tag": "46 / HAND OFF",
+      "status": "BASELINED · HANDED OFF",
+      "stepTitles": [
+        "Move SCC, STIG Viewer, and the evidence to the seats",
+        "Baseline the seats and rescan what changed",
+        "Add this part’s rows to the living records",
+        "Put the admin seats first in the quarterly cadence",
+        "Write the handoff for course 1.2"
+      ],
+      "mistake": "Treating SBD-SUBCA01 and SBD-PKI-MGMT01 as new hosts. They changed OU, not identity: a rescan compared with their earlier baseline is what shows the move kept their hardening intact.",
+      "network": "All three seats are baselined and the changed systems rescanned, with the assessment tools now on the seats. The finished management plane stays in view: each seat reaches only its own tier, ready for course 1.2.",
+      "control": {
+        "id": "RA-5",
+        "name": "Vulnerability Monitoring and Scanning",
+        "phase": "Assess → Monitor",
+        "body": "New hosts get a first baseline, and changed hosts are rescanned when they change, so an OU move is checked rather than assumed. The privileged seats then move to the front of the quarterly cadence, because drift on the systems that hold Tier 0 sessions costs the most.",
+        "question": "What change to the administration plane would call for a rescan before the next quarter, and who decides?"
+      },
+      "checklist": [
+        "I moved SCC, STIG Viewer, and the evidence onto the seats, matched every set to its manifest, and removed the tools from the controllers.",
+        "I filed first baselines for the three seats, SBD-ADMIN-PC01’s from its own SCC copy, and rescans of the changed systems, with attributed deltas.",
+        "I added this part’s rows to the records and wrote the handoff telling course 1.2 that its servers are managed only from VLAN 60."
+      ]
+    }
+  }
+}

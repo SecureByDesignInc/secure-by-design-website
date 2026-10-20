@@ -86,15 +86,34 @@ test('password guesses are rate limited and password hashes never leave the API'
 test('guide state is saved per reader and guide, bounded, and cleared with progress',async()=>{
  const env=setup();
  const state={chapter:1,notes:{dc01:'DC01 promoted; dcdiag clean.'},checks:{'dc01-0':true},answers:{dc01:2},completed:['prepare'],savedAt:1792300000000};
- assert.equal((await readerProgressApi(req(null,'GET','/guide/sbd-dc01-dc02'),env)).status,401);
- assert.deepEqual(await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json(),{state:null,updatedAt:null});
- assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dc01-dc02',{state}),env)).status,200);
- assert.deepEqual((await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json()).state,state);
- assert.equal((await(await readerProgressApi(req('bob','GET','/guide/sbd-dc01-dc02'),env)).json()).state,null);
- assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dhcp',{state}),env)).status,200,'each configuration course guide has its own row');
- for(const [path,body] of [['/guide/sbd-unknown',{state}],['/guide/sbd-dc01-dc02',{state:{...state,notes:{dc01:'x'.repeat(30001)}}}],['/guide/sbd-dc01-dc02',{state:{...state,extra:true}}],['/guide/sbd-dc01-dc02',{state,userId:'bob'}],['/guide/sbd-dc01-dc02',{state:{...state,answers:{dc01:'B'}}}]])
+ assert.equal((await readerProgressApi(req(null,'GET','/guide/sbd-identity-foundation'),env)).status,401);
+ assert.deepEqual(await(await readerProgressApi(req('alice','GET','/guide/sbd-identity-foundation'),env)).json(),{state:null,updatedAt:null});
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-identity-foundation',{state}),env)).status,200);
+ assert.deepEqual((await(await readerProgressApi(req('alice','GET','/guide/sbd-identity-foundation'),env)).json()).state,state);
+ assert.equal((await(await readerProgressApi(req('bob','GET','/guide/sbd-identity-foundation'),env)).json()).state,null);
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-linux-repository',{state}),env)).status,200,'each configuration course guide has its own row');
+ for(const [path,body] of [['/guide/sbd-unknown',{state}],['/guide/sbd-identity-foundation',{state:{...state,notes:{dc01:'x'.repeat(30001)}}}],['/guide/sbd-identity-foundation',{state:{...state,extra:true}}],['/guide/sbd-identity-foundation',{state,userId:'bob'}],['/guide/sbd-identity-foundation',{state:{...state,answers:{dc01:'B'}}}]])
   assert.ok([400,404].includes((await readerProgressApi(req('alice','PUT',path,body),env)).status),path);
- assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-dc01-dc02',{state},{origin:'https://evil.invalid'}),env)).status,403);
+ assert.equal((await readerProgressApi(req('alice','PUT','/guide/sbd-identity-foundation',{state},{origin:'https://evil.invalid'}),env)).status,403);
  assert.equal((await readerProgressApi(req('alice','DELETE'),env)).status,200);
- assert.equal((await(await readerProgressApi(req('alice','GET','/guide/sbd-dc01-dc02'),env)).json()).state,null);
+ assert.equal((await(await readerProgressApi(req('alice','GET','/guide/sbd-identity-foundation'),env)).json()).state,null);
+});
+
+// 20 October 2026: courses 1.1–1.8 merged into course 1.1. The migration merges each learner's eight guide states into
+// the one new guide and renames every key to the new lesson ids (prefix-lesson, or the old id when it already has the prefix).
+test('the identity foundation migration merges the old guides into one, renaming their keys',()=>{
+ const raw=new DatabaseSync(':memory:');for(const file of fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')&&f<'0019').sort())raw.exec(fs.readFileSync('drizzle/'+file,'utf8'));
+ const put=(guide,state)=>raw.prepare('INSERT INTO reader_guide_state (user_id,guide_id,state,updated_at) VALUES (?,?,?,?)').run('alice',guide,JSON.stringify(state),'2026-10-19T00:00:00.000Z');
+ put('sbd-dc01-dc02',{chapter:2,notes:{dc01:'promoted'},checks:{'dc01-0':true,'dc01-1':false},answers:{dc01:1},completed:['prepare','dc01']});
+ put('sbd-dns-configuration',{chapter:1,notes:{plan:'worksheet'},checks:{'zones-2':true},answers:{plan:2},completed:['plan']});
+ put('sbd-dhcp',{chapter:0,notes:{},checks:{},answers:{},completed:['dhcp-design']});
+ raw.exec(fs.readFileSync('drizzle/0019_identity_foundation.sql','utf8'));
+ const rows=raw.prepare('SELECT guide_id,state FROM reader_guide_state WHERE user_id=?').all('alice');
+ assert.deepEqual(rows.map(r=>r.guide_id),['sbd-identity-foundation']);
+ const state=JSON.parse(rows[0].state);
+ assert.deepEqual(state.notes,{'dc-dc01':'promoted','dns-plan':'worksheet'});
+ assert.deepEqual(state.checks,{'dc-dc01-0':true,'dc-dc01-1':false,'dns-zones-2':true});
+ assert.deepEqual(state.answers,{'dc-dc01':1,'dns-plan':2});
+ assert.deepEqual([...state.completed].sort(),['dc-dc01','dc-prepare','dhcp-design','dns-plan']);
+ assert.equal(state.chapter,0);
 });

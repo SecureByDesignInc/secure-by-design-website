@@ -6,14 +6,7 @@
   <url><loc>https://securebydesigninc.com/grc-rmf-training</loc></url>
   <url><loc>https://securebydesigninc.com/community</loc></url>
   <url><loc>https://securebydesigninc.com/privacy</loc></url>
-  <url><loc>https://securebydesigninc.com/training/dc01-dc02/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/dns-configuration/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/domain-time/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/stig-scap/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/harden-baseline/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/two-tier-pki/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/dhcp/</loc></url>
-  <url><loc>https://securebydesigninc.com/training/tiered-admin/</loc></url>
+  <url><loc>https://securebydesigninc.com/training/identity-foundation/</loc></url>
   <url><loc>https://securebydesigninc.com/training/linux-repository/</loc></url>
   <url><loc>https://securebydesigninc.com/training/logging-pipeline/</loc></url>
   <url><loc>https://securebydesigninc.com/training/audit-repository/</loc></url>
@@ -31,13 +24,7 @@
   <url><loc>https://securebydesigninc.com/training/design/pki</loc></url>
   <url><loc>https://securebydesigninc.com/training/design/dhcp</loc></url>
   <url><loc>https://securebydesigninc.com/training/design/disa-stigs</loc></url>
-  <url><loc>https://securebydesigninc.com/training/dns-configuration/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/domain-time/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/stig-scap/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/harden-baseline/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/two-tier-pki/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/dhcp/checklist</loc></url>
-  <url><loc>https://securebydesigninc.com/training/tiered-admin/checklist</loc></url>
+  <url><loc>https://securebydesigninc.com/training/identity-foundation/checklist</loc></url>
   <url><loc>https://securebydesigninc.com/training/linux-repository/checklist</loc></url>
   <url><loc>https://securebydesigninc.com/training/logging-pipeline/checklist</loc></url>
   <url><loc>https://securebydesigninc.com/training/audit-repository/checklist</loc></url>

@@ -93,6 +93,8 @@ function buildLesson(course, configuration, guide) {
       next: item.next,
       sources: item.sources,
       ...(item.model ? { model: item.model } : {}),
+      // Courses in parts (course 1.1, 20 October 2026) show a heading before each part's first lesson.
+      ...(item.part ? { part: item.part } : {}),
       index,
     };
   });

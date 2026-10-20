@@ -163,7 +163,7 @@ export default function TrainingHub({ library }: { library: Library }) {
 
   // The featured courses: where to start (or continue), the most recently updated build course, and course 2.1.
   const features = useMemo(() => {
-    const start = upNext ?? byId.get('dc01-dc02') ?? entries[0];
+    const start = upNext ?? byId.get('identity-foundation') ?? entries[0];
     const list: { entry: CatalogEntry; kicker: string; primary: string }[] = [
       { entry: start, kicker: upNext ? 'UP NEXT FOR YOU' : 'START HERE', primary: upNext && progressOf(upNext).started ? 'Continue the course' : 'Open the course' },
     ];

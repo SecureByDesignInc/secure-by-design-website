@@ -60,7 +60,7 @@ export default function LabAccess() {
           <li>Apply Group Policy and connect security tools.</li>
         </ul>
         <p className="lab-preview-note">Live labs are coming soon. This preview doesn’t start any systems.</p>
-        <a className="text-link" href="/training/dc01-dc02/index.html">Review the domain concepts →</a>
+        <a className="text-link" href="/training/identity-foundation">Review the domain concepts →</a>
       </div>
       <Button type="button" variant="outline" className="lab-secondary-button" onClick={signOut}>Log out of preview</Button>
     </> : <>
