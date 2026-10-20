@@ -22,7 +22,7 @@ export default function Workspace(){
  },[route.system,list?.user,state?.system.id]);
  const go=(system:string|null,tab='overview')=>{const hash=system?`#system=${system}&tab=${tab}`:'#systems';if(location.hash!==hash)history.pushState(null,'',hash);setRoute({system,tab});window.scrollTo({top:0});};
 
- const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">COMPLIANCE HUB</a> · PRACTICE</p><h1>ATO Package Builder</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
+ const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">ATO PACKAGE BUILDER HUB</a> · PRACTICE</p><h1>ATO Package Builder</h1><p>Take a system through an Authorization to Operate the way authorization teams do it in tools like eMASS and Xacta: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
  if(error&&!list)return <>{intro}<p className="reader-error" role="alert">{error} <button type="button" onClick={()=>void refreshList()}>Try again</button></p></>;
  if(!list)return <>{intro}<p className="reader-loading"><output>Loading the ATO Package Builder…</output></p></>;
  if(!list.user)return <>{intro}<Landing/></>;

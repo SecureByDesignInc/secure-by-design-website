@@ -105,7 +105,8 @@
         "Verify and keep evidence"
       ],
       "categoryId": "network-build",
-      "categoryOrder": 1
+      "categoryOrder": 1,
+      "topic": "Active Directory"
     }
   ],
   "courses": [
@@ -176,7 +177,8 @@
         "word": "/training/dns-configuration/SecureByDesign-dns-configuration-Workbook.docx",
         "pages": 14,
         "cover": "/training/dns-configuration/workbook-cover.webp"
-      }
+      },
+      "topic": "DNS"
     },
     {
       "id": "domain-time",
@@ -246,7 +248,8 @@
         "cover": "/training/domain-time/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "Time"
     },
     {
       "id": "stig-scap",
@@ -316,7 +319,8 @@
         "cover": "/training/stig-scap/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "STIG"
     },
     {
       "id": "harden-baseline",
@@ -386,7 +390,8 @@
         "word": "/training/harden-baseline/SecureByDesign-harden-baseline-Workbook.docx",
         "pages": 17,
         "cover": "/training/harden-baseline/workbook-cover.webp"
-      }
+      },
+      "topic": "Group Policy"
     },
     {
       "id": "two-tier-pki",
@@ -479,7 +484,8 @@
         "word": "/training/two-tier-pki/SecureByDesign-two-tier-pki-Workbook.docx",
         "pages": 25,
         "cover": "/training/two-tier-pki/workbook-cover.webp"
-      }
+      },
+      "topic": "PKI"
     },
     {
       "id": "dhcp",
@@ -548,7 +554,8 @@
         "cover": "/training/dhcp/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "DHCP"
     },
     {
       "id": "tiered-admin",
@@ -618,7 +625,8 @@
         "word": "/training/tiered-admin/SecureByDesign-tiered-admin-Workbook.docx",
         "pages": 20,
         "cover": "/training/tiered-admin/workbook-cover.webp"
-      }
+      },
+      "topic": "Privileged access"
     },
     {
       "id": "linux-repository",
@@ -687,7 +695,8 @@
         "cover": "/training/linux-repository/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "Linux"
     },
     {
       "categoryOrder": 10,
@@ -762,7 +771,8 @@
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
         "pages": 15,
         "cover": "/training/logging-pipeline/workbook-cover.webp"
-      }
+      },
+      "topic": "Logging"
     },
     {
       "categoryOrder": 11,
@@ -832,7 +842,8 @@
         "cover": "/training/audit-repository/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "Logging"
     },
     {
       "id": "splunk-analysis",
@@ -908,7 +919,8 @@
         "cover": "/training/splunk-analysis/workbook-cover.webp",
         "materialsEdition": "2.0",
         "updated": "15 October 2026"
-      }
+      },
+      "topic": "Splunk"
     },
     {
       "categoryOrder": 13,
@@ -988,7 +1000,8 @@
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
         "pages": 20,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
-      }
+      },
+      "topic": "Endpoints"
     },
     {
       "id": "patch-protect",
@@ -1057,7 +1070,8 @@
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
         "pages": 18,
         "cover": "/training/patch-protect/workbook-cover.webp"
-      }
+      },
+      "topic": "Patching"
     },
     {
       "id": "management-server",
@@ -1125,7 +1139,8 @@
         "cover": "/training/management-server/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
-      }
+      },
+      "topic": "Inventory"
     },
     {
       "id": "endpoint-protection",
@@ -1163,7 +1178,8 @@
         "guide": "",
         "materialsEdition": "",
         "updated": ""
-      }
+      },
+      "topic": "Endpoint protection"
     },
     {
       "id": "vulnerability-scanning",
@@ -1200,7 +1216,8 @@
         "guide": "",
         "materialsEdition": "",
         "updated": ""
-      }
+      },
+      "topic": "Scanning"
     },
     {
       "categoryOrder": 18,
@@ -1271,7 +1288,8 @@
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
         "pages": 15,
         "cover": "/training/business-services/workbook-cover.webp"
-      }
+      },
+      "topic": "Services"
     },
     {
       "categoryOrder": 19,
@@ -1354,7 +1372,8 @@
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
         "pages": 19,
         "cover": "/training/prove-recovery/workbook-cover.webp"
-      }
+      },
+      "topic": "Recovery"
     },
     {
       "id": "rmf-boe-ato",
@@ -1533,9 +1552,9 @@
         "updated": "18 October 2026",
         "relatedResources": [
           {
-            "title": "Open the ATO Package Builder",
+            "title": "Open the ATO Package Builder Hub",
             "detail": "Do each step on your Secure By Design enclave: register, categorize, implement, assess, authorize and monitor",
-            "href": "/grc-rmf-training/workspace"
+            "href": "/grc-rmf-training"
           },
           {
             "title": "Open the ATO Template Library",
@@ -1575,7 +1594,8 @@
       ],
       "outcomeSummary": "One system, taken from registration to a current Authorization to Operate: the lessons for each RMF step, the same work done in the ATO Package Builder, and the templates each step uses.",
       "networkLabel": "THE WHOLE NETWORK / AUTHORIZATION",
-      "capstoneHours": 4
+      "capstoneHours": 4,
+      "topic": "RMF"
     }
   ],
   "categories": [
@@ -1586,10 +1606,122 @@
     },
     {
       "id": "network-authorization",
-      "library": "grc",
       "title": "Network Authorization",
       "description": "Take the network through all seven Risk Management Framework steps of NIST SP 800-37, with the JSIG mapped in, to an Authorization to Operate. One course: each step's lessons, the same task in the ATO Package Builder, and the templates it uses. Start after the network build."
+    },
+    {
+      "id": "templates-references",
+      "title": "Templates & References",
+      "kind": "reference",
+      "description": "Free, publicly released references to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
     }
   ],
-  "references": []
+  "references": [
+    {
+      "kind": "library",
+      "id": "ato-templates",
+      "categoryId": "templates-references",
+      "categoryOrder": 1,
+      "title": "ATO Template Library",
+      "subtitle": "Verified public sources and training samples, by RMF step",
+      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253 and the Privacy Overlay; NIST's control baselines, SSP outline and configuration management guide; DCSA's ISSM appointment letter and RAR templates; CDSE's POA&M job aid; and FedRAMP formats for the traceability matrix, POA&M, inventory and continuous monitoring. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. Secure By Design training samples cover the documents that have no public version. For instruction and practice.",
+      "tags": [
+        "Templates",
+        "Body of Evidence",
+        "RMF"
+      ],
+      "systems": [],
+      "artLabels": [
+        "SSP · SCTM · POA&M",
+        "RAR · ConMon · CM plan",
+        "Verified public sources"
+      ],
+      "outcomeSummary": "Open the official, publicly released sources behind each part of the package, with training samples for the documents that have no public version.",
+      "outcomes": [
+        "Categorize and select controls with CNSSI 1253 and NIST's baselines",
+        "Start an SSP from NIST's outline",
+        "Track findings with POA&M guidance and formats",
+        "Plan ConMon and configuration management from official guides"
+      ],
+      "training": {
+        "guide": "/grc-rmf-training/templates",
+        "cover": "/training/library/ato-templates-cover.webp",
+        "updated": "15 October 2026",
+        "relatedResources": [
+          {
+            "title": "Open course 2.1, RMF to ATO",
+            "detail": "Each RMF step's lessons, with the templates it uses",
+            "href": "/grc-rmf-training/rmf/index.html#step/prepare"
+          },
+          {
+            "title": "Open the ATO Package Builder Hub",
+            "detail": "Do each step on your Secure By Design enclave",
+            "href": "/grc-rmf-training"
+          }
+        ]
+      },
+      "topic": "Templates"
+    }
+  ],
+  "collections": [
+    {
+      "id": "identity",
+      "parent": "network-build",
+      "title": "Identity & directory",
+      "description": "The domain controllers, DNS, domain time, the two-tier PKI and DHCP.",
+      "entries": [
+        "dc01-dc02",
+        "dns-configuration",
+        "domain-time",
+        "two-tier-pki",
+        "dhcp"
+      ]
+    },
+    {
+      "id": "harden",
+      "parent": "network-build",
+      "title": "Hardening & access",
+      "description": "Measure against the STIG, harden with Group Policy, and decide where privilege may sign in.",
+      "entries": [
+        "stig-scap",
+        "harden-baseline",
+        "tiered-admin"
+      ]
+    },
+    {
+      "id": "logging",
+      "parent": "network-build",
+      "title": "Logging & monitoring",
+      "description": "Collect, protect and analyze the record: SBD-SYSLOG01, SBD-AUDIT01 and SBD-SPLUNK01.",
+      "entries": [
+        "logging-pipeline",
+        "audit-repository",
+        "splunk-analysis"
+      ]
+    },
+    {
+      "id": "endpoint",
+      "parent": "network-build",
+      "title": "Endpoints & patching",
+      "description": "The Linux repository, the workstation fleet, Windows updates and endpoint protection.",
+      "entries": [
+        "linux-repository",
+        "workstation-fleet",
+        "patch-protect",
+        "endpoint-protection"
+      ]
+    },
+    {
+      "id": "ops",
+      "parent": "network-build",
+      "title": "Operations & recovery",
+      "description": "The living inventory, credentialed scanning, the business services and proven recovery.",
+      "entries": [
+        "management-server",
+        "vulnerability-scanning",
+        "business-services",
+        "prove-recovery"
+      ]
+    }
+  ]
 }

@@ -159,30 +159,38 @@ for (const path of ['/training/dc01-dc02/', '/training/dns-configuration/', '/tr
   }
 }
 
-// The two libraries (15 October 2026): the Configuration Hub holds the network build; the Compliance Hub is the ATO Package Builder
-// panel, which carries course 2.1 and the ATO Template Library by step (owner direction, 15 October 2026: no course tile or library
-// card on the hub). The panel must list the seven RMF steps and the course's two links (start and the Word workbook), and choosing
-// Assess must show that step and its three lessons. Screenshots are kept for review.
-for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 'technical-library', 19, 0, 0], ['/grc-rmf-training', 'grc-rmf-library', 0, 0, 7]]) {
+// The Training Hub and the ATO Package Builder Hub (owner direction, 19 October 2026). The Training Hub is one library: a sidebar
+// of the catalog's groups (Hub plus 8), rows of tiles, and a View all page per group; a tile opens the shared expanded tile beneath
+// its row. The ATO Package Builder Hub is the seven-step builder panel with the course's two links (course 2.1 in the Training Hub
+// and module 01), and choosing Assess must show that step and its three lessons. Screenshots are kept for review.
+for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'training-hub', 12, 0], ['/grc-rmf-training', 'ato-package-builder-hub', 0, 7]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const page = await context.newPage();
     await page.setViewportSize(size);
+    let shown = 0, steps = 0;
     try {
       await page.goto(base + path, { waitUntil: 'load', timeout: 60000 });
-      await page.locator(builderSteps ? '#package-builder' : '.vc-catalog-tile').first().waitFor({ timeout: 15000 });
-      const shown = await page.locator('.vc-catalog-tile').count(), toolCards = await page.locator('.vc-tool-list li').count();
-      const steps = await page.locator('#package-builder .ab-steps button').count();
-      if (shown !== tiles || toolCards !== tools || steps !== builderSteps) throw new Error(`${shown} tiles, ${toolCards} tools and ${steps} builder steps, expected ${tiles}, ${tools} and ${builderSteps}`);
-      if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 2) throw new Error('the course start link and its Word workbook are not both in the builder panel');
+      await page.locator(builderSteps ? '#package-builder' : '.th-tile').first().waitFor({ timeout: 15000 });
+      shown = await page.locator('.th-tile').count();
+      steps = await page.locator('#package-builder .ab-steps button').count();
+      if (shown < minTiles || (!minTiles && shown) || steps !== builderSteps) throw new Error(`${shown} tiles and ${steps} builder steps, expected ${minTiles ? `at least ${minTiles}` : 0} and ${builderSteps}`);
+      if (minTiles && (await page.locator('.th-side-list button').count()) !== 9) throw new Error('the sidebar does not list the Hub and the eight library groups');
+      if (builderSteps && (await page.locator('#package-builder .ab-course a').count()) !== 2) throw new Error('the course links are not both in the builder panel');
       await page.screenshot({ path: `guide-screens/${name}-${label}.png`, fullPage: true });
-      if (tiles && label === 'desktop') {
-        // Owner request, 18 October 2026: an expanded configuration tile draws its course's 3D lesson network, with
-        // system buttons and the build story, like the course 1.1 tile. Open the second tile (course 1.2) and check.
-        await page.locator('.vc-catalog-tile').nth(1).locator('button[aria-expanded]').first().click();
-        await page.locator('.vc-explorer canvas').first().waitFor({ timeout: 20000 });
-        const systems = await page.locator('.vc-explorer .vc-system-buttons button').count(), chapters = await page.locator('.vc-explorer .vc-chapters button').count();
+      if (minTiles && label === 'desktop') {
+        // Owner request, 18 October 2026: an expanded configuration tile draws its course's 3D lesson network, with system
+        // buttons and the build story, like the course 1.1 tile. Open course 1.2 from the network-build row and check.
+        await page.locator('[data-hub-tile="dns-configuration"] .th-tile-open').first().click();
+        await page.locator('.th-open .vc-explorer canvas').first().waitFor({ timeout: 20000 });
+        const systems = await page.locator('.th-open .vc-explorer .vc-system-buttons button').count(), chapters = await page.locator('.th-open .vc-explorer .vc-chapters button').count();
         if (systems < 1 || chapters < 1) throw new Error(`the expanded course tile shows ${systems} systems and ${chapters} lessons`);
-        await page.locator('.vc-explorer').first().screenshot({ path: `guide-screens/${name}-tile-explorer.png` });
+        await page.locator('.th-open').first().screenshot({ path: `guide-screens/${name}-open-tile.png` });
+        // View all: the whole Build the Network path, 1.1 to 1.19.
+        await page.locator('.th-view-all', { hasText: 'View all 19' }).click();
+        await page.locator('#th-group-title').waitFor({ timeout: 10000 });
+        const path19 = await page.locator('.th-tile').count();
+        if (path19 !== 19) throw new Error(`View all shows ${path19} tiles, expected 19`);
+        await page.screenshot({ path: `guide-screens/${name}-build-the-network.png`, fullPage: true });
       }
       if (builderSteps) {
         // The page may still be starting up when it first appears, so the click is retried until the panel answers.
@@ -196,7 +204,7 @@ for (const [path, name, tiles, tools, builderSteps] of [['/technical-training', 
         const lessons = await page.locator('#ab-step-detail .ab-column').first().locator('li a').count();
         if (heading !== 'Assess' || (await assess.getAttribute('aria-pressed')) !== 'true' || lessons !== 3) throw new Error(`choosing Assess showed "${heading}" with ${lessons} lessons, expected Assess with 3`);
       }
-      guides.push(`${path} ${label} ok (${shown} tiles, ${toolCards} tools${builderSteps ? `, ${steps} builder steps` : ''})`);
+      guides.push(`${path} ${label} ok (${shown} tiles${builderSteps ? `, ${steps} builder steps` : ''})`);
     } catch (error) {
       guides.push(`${path} ${label}: ${String(error.message || error).split('\n')[0].slice(0, 200)}`);
       blocking++;
@@ -298,11 +306,11 @@ await check('app sign-in callback page', { path: '/app-auth/callback?code=AAAAAA
 await check('old course 2.2 page moves to course 2.1', { path: '/training/rmf-body-of-evidence/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
 await check('old course 2.3 package moves to the course 2.1 workbook', { path: '/training/rmf-authorization-to-operate/SecureByDesign-rmf-authorization-to-operate-Learning-Package.zip' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('old RMF catalog download moves to the course 2.1 workbook', { path: '/training/rmf/Secure_By_Design_RMF_Training_Catalog.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
-// The two libraries (15 October 2026): old addresses land in the Configuration Hub or the Compliance Hub.
-await check('old Training Library address moves to the Configuration Hub', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
-await check('old Authorization Workspace address (now the ATO Package Builder) moves into the Compliance Hub', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
-await check('old ATO Template Library address moves into the Compliance Hub', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
-await check('old course 2.1 page moves into the Compliance Hub', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
+// Old addresses (15 October 2026) land in the Training Hub or under /grc-rmf-training.
+await check('old Training Library address moves to the Training Hub', { path: '/training' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/technical-training'));
+await check('old Authorization Workspace address (now the ATO Package Builder) moves under /grc-rmf-training', { path: '/authorization-workspace' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace'));
+await check('old ATO Template Library address moves under /grc-rmf-training', { path: '/training/ato-templates' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/templates'));
+await check('old course 2.1 page moves under /grc-rmf-training', { path: '/training/rmf/index.html' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/index.html'));
 await check('old course 2.1 workbook moves with it', { path: '/training/rmf/SecureByDesign-rmf-Workbook.docx' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/rmf/SecureByDesign-rmf-Workbook.docx'));
 await check('old control catalog moves with the workspace', { path: '/authorization-workspace/controls-rev5.json' }, r => r.status === 301 && (r.headers.get('location') || '').endsWith('/grc-rmf-training/workspace/controls-rev5.json'));
 await check('favicon.ico', { path: '/favicon.ico' }, r => r.status === 200);

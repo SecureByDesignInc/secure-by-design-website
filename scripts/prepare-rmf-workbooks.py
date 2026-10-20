@@ -5,7 +5,7 @@ Each course in public/grc-rmf-training/rmf/catalog-data.js (window.CATALOG_PARTS
 
   SecureByDesign-<folder>-Workbook.docx          the companion workbook: the course's one download
                                                  (owner request, 18 October 2026: Word only, no ZIP or PDF)
-  workbook-cover.webp                            (--all) page 1, for the Compliance Hub tile
+  workbook-cover.webp                            (--all) page 1, for the Training Hub tile
 
 The workbooks use the Build the Network companion workbook design. scripts/rmf-workbook/template.docx is a
 copy of one (course 1.7's); every paragraph, list and table below is a copy of one of its building blocks, so

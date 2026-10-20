@@ -29,12 +29,12 @@ Cyber Range (`/cyber-range`, with `/how-to` and `/guides-and-labs`) and the Comm
 - `app/cyber-range/page.tsx` and `app/cyber-range/lab-access.tsx`: Cyber Range description and local login preview.
 - `app/rmf-series/` and `content/rmf.ts`: RMF chapters and the system profile.
 - `app/rmf-series/phases-and-evidence/` and `content/rmf-evidence.ts`: consolidated phase, artifact, responsibility, authorization-package, and evidence-maintenance guide.
-- `app/technical-training/page.tsx` and `content/videos.json`: Configuration Hub at `/technical-training` (the old `/training` and `/videos` addresses redirect) and the editable training/channel catalog.
-- `app/grc-rmf-training/`: Compliance Hub at `/grc-rmf-training` (the catalog's categories marked `"library": "grc"`), with the ATO Package Builder at `/grc-rmf-training/workspace`, the ATO Template Library at `/grc-rmf-training/templates`, and course 2.1's static page in `public/grc-rmf-training/rmf/`.
+- `app/technical-training/page.tsx`, `app/videos/training-hub.tsx` and `content/videos.json`: the Training Hub at `/technical-training` (the old `/training` and `/videos` addresses redirect), one library for every course, and the editable training/channel catalog.
+- `app/grc-rmf-training/`: the ATO Package Builder Hub at `/grc-rmf-training`, with the ATO Package Builder at `/grc-rmf-training/workspace`. The ATO Template Library (`/grc-rmf-training/templates`) and course 2.1's static page (`public/grc-rmf-training/rmf/`) keep their addresses but belong to the Training Hub.
 
 ## Adding videos
 
-The catalog in `content/videos.json` pairs each episode with its interactive training guide, PDF, editable workbook, and complete download package. Channel links stay in `platforms` for the shared header. The Configuration Hub uses the `episodes` and `courses` arrays; see `docs/video-catalog.md` for its fields and publishing checklist.
+The catalog in `content/videos.json` pairs each episode with its interactive training guide, PDF, editable workbook, and complete download package. Channel links stay in `platforms` for the shared header. The Training Hub uses the `episodes`, `courses`, `references` and `collections` arrays; see `docs/video-catalog.md` for its fields and publishing checklist.
 
 The DC01/DC02 episode has training available and a recording marked coming soon. Set its `youtubeId` to the actual published video's 11-character ID to show the inline YouTube player. Leave it null until then. Add verified chapter timestamps in seconds to enable chapter-start playback. No video ID, duration, or recording is fabricated.
 

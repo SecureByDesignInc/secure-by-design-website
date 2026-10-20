@@ -9,6 +9,8 @@ type Chapter = {
 export type Episode = {
   categoryId?: string;
   categoryOrder?: number;
+  /** Short topic shown on the Training Hub tile, e.g. "PKI". */
+  topic?: string;
   id: string;
   number: string;
   title: string;
@@ -38,6 +40,8 @@ export type Episode = {
 export type TrainingCourse = {
   categoryId?: string;
   categoryOrder?: number;
+  /** Short topic shown on the Training Hub tile, e.g. "PKI". */
+  topic?: string;
   /** 'configuration', 'authorization', or 'coming-soon' (a placeholder tile with no material yet). */
   kind?: string;
   artLabels?: string[];
@@ -85,6 +89,8 @@ export type TrainingCourse = {
 export type ReferenceLibrary = {
   categoryId?: string;
   categoryOrder?: number;
+  /** Short topic shown on the Training Hub tile, e.g. "PKI". */
+  topic?: string;
   /** Always 'library' (typed as a string because the catalog is read from JSON). */
   kind: string;
   id: string;
@@ -108,4 +114,6 @@ export type ReferenceLibrary = {
 export type CatalogEntry = Episode | TrainingCourse | ReferenceLibrary;
 /** kind 'reference' marks a group of reference tiles: it is not a learning path and has no course order. */
 export type CatalogCategory = { id: string; title: string; description: string; kind?: string; library?: string };
-export type Library = { episodes: Episode[]; courses?: TrainingCourse[]; references?: ReferenceLibrary[]; categories?: CatalogCategory[] };
+/** A topic group inside a learning path (the Training Hub sidebar, owner direction 19 October 2026): its entries in course order. */
+export type CatalogCollection = { id: string; parent: string; title: string; description: string; entries: string[] };
+export type Library = { episodes: Episode[]; courses?: TrainingCourse[]; references?: ReferenceLibrary[]; categories?: CatalogCategory[]; collections?: CatalogCollection[] };

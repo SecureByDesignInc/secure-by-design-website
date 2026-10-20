@@ -33,12 +33,13 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   const windowsIndex = catalog.findIndex(entry => entry.id === 'dc01-dc02');
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['dc01-dc02', 'dns-configuration', 'domain-time', 'stig-scap', 'harden-baseline', 'two-tier-pki', 'dhcp', 'tiered-admin', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates']);
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[windowsIndex]), false);
-  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato']);
-  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-boe-ato']);
+  // The Training Hub searches the ATO Template Library tile too (owner direction, 19 October 2026).
+  assert.deepEqual(filterEpisodes(catalog, 'rmf evidence', '').map(entry => entry.id), ['rmf-boe-ato', 'ato-templates']);
+  assert.deepEqual(filterEpisodes(catalog, 'poa&m', '').map(entry => entry.id), ['rmf-boe-ato', 'ato-templates']);
   assert.deepEqual(filterEpisodes(catalog, '', 'Authorization to Operate').map(entry => entry.id), ['rmf-boe-ato']);
   for (const part of catalog.filter(entry => entry.kind === 'authorization')) {
     for (const resource of Object.values(part.training).filter(value => typeof value === 'string' && value.startsWith('/'))) {
@@ -46,14 +47,14 @@ test('related build courses stay together before authorization and materials rem
     }
     const page = readFileSync(new URL('../public' + part.training.guide.replace(/#.*$/, ''), import.meta.url), 'utf8');
     assert.doesNotMatch(page, /PRIVATE REVIEW|noindex/);
-    assert.match(page, /Back to the Compliance Hub/);
+    assert.match(page, /Back to the Training Hub/);
   }
 });
 
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 19], ['network-authorization', 1], ['templates-references', 1]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0], library.episodes[0]);
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'dependable', 'DNS'), library);
@@ -95,7 +96,7 @@ test('Network Authorization is one course of seven RMF steps that keeps every mo
   }
   for (const resource of part.training.relatedResources) {
     const url = new URL(resource.href, 'https://securebydesigninc.com');
-    if (['/grc-rmf-training/workspace', '/grc-rmf-training/templates'].includes(url.pathname)) continue;
+    if (['/grc-rmf-training', '/grc-rmf-training/workspace', '/grc-rmf-training/templates'].includes(url.pathname)) continue;
     assert.equal(url.pathname, page);
     assert(['#evidence', '#evidence/manifest', '#capstone'].includes(url.hash));
   }
@@ -356,7 +357,8 @@ test('the first recording remains unpublished and the retired formats are remove
   assert.equal(library.episodes[0].youtubeId, null);
   for (const filename of [
     '../content/videos.json',
-    '../app/videos/video-hub.tsx',
+    '../app/videos/training-hub.tsx',
+    '../app/videos/episode-tile.tsx',
     '../app/blog-sidebar.tsx',
     '../README.md',
   ])
@@ -379,13 +381,15 @@ test('every course tile carries the companion details the expanded tile shows', 
 
 
 // Owner request, 15 October 2026: an ATO Template Library, listing only documents verified as publicly released by an
-// official publisher, each linked to the publisher's own copy. Owner direction the same day: its catalog tile merged into
-// course 2.1, whose step pages show each step's sources; the full page stays at /grc-rmf-training/templates.
-test('the ATO Template Library lists only verified public sources and is part of course 2.1', () => {
+// official publisher, each linked to the publisher's own copy. Owner direction the same day: course 2.1's step pages show each
+// step's sources; the full page stays at /grc-rmf-training/templates. Owner direction, 19 October 2026: the library is a tile
+// in the Training Hub again, under Templates & References.
+test('the ATO Template Library lists only verified public sources and is a Training Hub tile', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
-  const reference = { training: { relatedResources: [] } };
-  assert.deepEqual(library.references ?? [], [], 'no separate library tile');
-  assert.ok(!library.categories.some(item => item.id === 'templates-references'));
+  const reference = library.references[0];
+  assert.deepEqual(library.references.map(item => [item.id, item.kind, item.categoryId, item.training.guide]), [['ato-templates', 'library', 'templates-references', '/grc-rmf-training/templates']]);
+  assert.equal(library.categories.find(item => item.id === 'templates-references')?.kind, 'reference');
+  assert.ok(existsSync(new URL('../public' + library.references[0].training.cover, import.meta.url)), 'library cover');
   const course = library.courses.find(item => item.id === 'rmf-boe-ato');
   assert.ok(course.training.relatedResources.some(item => item.href === '/grc-rmf-training/templates'), 'the course links the library');
   assert.ok(existsSync(new URL('../app/grc-rmf-training/templates/page.tsx', import.meta.url)), 'library page');
@@ -437,5 +441,48 @@ test('the ATO Template Library lists only verified public sources and is part of
     assert.ok(item.title && item.artifact && item.rmf && item.basis && item.note && item.format, `${item.title} details`);
   }
   for (const resource of reference.training.relatedResources) assert.match(resource.href, /^\//);
-  assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['rmf-boe-ato']);
+  assert.deepEqual(filterEpisodes(getCatalogEntries(library), 'template library', '').map(entry => entry.id), ['rmf-boe-ato', 'ato-templates']);
+});
+
+// Owner direction, 19 October 2026: the Configuration Hub and the Compliance Hub's training became one Training Hub library,
+// with a sidebar of the catalog's groups and the Build the Network topic groups under it, and a short topic on every tile.
+test('the Training Hub groups every course, in course order, under its learning path', async () => {
+  const { getHubGroups, getArtFamily, getRecentlyUpdated, catalogDate } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
+  const groups = getHubGroups(library);
+  assert.deepEqual(groups.map(group => [group.id, group.parent ?? null, group.entries.length]), [
+    ['network-build', null, 19], ['identity', 'network-build', 5], ['harden', 'network-build', 3], ['logging', 'network-build', 3],
+    ['endpoint', 'network-build', 4], ['ops', 'network-build', 4], ['network-authorization', null, 1], ['templates-references', null, 1],
+  ]);
+  const build = groups[0].entries.map(entry => entry.id);
+  const topics = groups.filter(group => group.parent === 'network-build');
+  // Every Build the Network course sits in exactly one topic group, and each group keeps course order.
+  assert.deepEqual(topics.flatMap(group => group.entries.map(entry => entry.id)).sort(), [...build].sort());
+  for (const group of topics) {
+    const order = group.entries.map(entry => build.indexOf(entry.id));
+    assert.deepEqual(order, [...order].sort((a, b) => a - b), `${group.id} in course order`);
+    assert.ok(group.title && group.description, group.id);
+  }
+  for (const entry of getCatalogEntries(library)) {
+    assert.ok(entry.topic && entry.topic.length <= 20, `${entry.id} has a short topic`);
+    assert.ok(['identity', 'harden', 'logging', 'endpoint', 'ops', 'authorize', 'reference'].includes(getArtFamily(entry, library)), entry.id);
+  }
+  assert.equal(catalogDate('14 October 2026'), Date.UTC(2026, 9, 14));
+  assert.equal(catalogDate(''), 0);
+  const recent = getRecentlyUpdated(library, 4);
+  assert.equal(recent.length, 4);
+  for (let i = 1; i < recent.length; i++) assert.ok(catalogDate(recent[i - 1].training.updated) >= catalogDate(recent[i].training.updated));
+  assert.ok(recent.every(entry => entry.kind !== 'coming-soon' && entry.kind !== 'library'));
+});
+
+test('the Training Hub and the ATO Package Builder Hub pages', () => {
+  const hub = readFileSync(new URL('../app/videos/training-hub.tsx', import.meta.url), 'utf8');
+  for (const piece of ['Continue where you left off', 'Recently updated', 'The network build, in order', 'Authorize the network', 'Coming soon', 'data-hub-entries', 'data-hub-tile', '<EpisodeTile', 'Saved materials', 'Create a free Community account']) assert.ok(hub.includes(piece), piece);
+  assert.match(readFileSync(new URL('../app/technical-training/page.tsx', import.meta.url), 'utf8'), /title: 'Training Hub'/);
+  const builder = readFileSync(new URL('../app/grc-rmf-training/package-builder-hub.tsx', import.meta.url), 'utf8');
+  assert.match(builder, /ATO PACKAGE BUILDER HUB · PRACTICE TOOL/);
+  assert.match(builder, /Learn it in the Training Hub/);
+  // Owner direction, 19 October 2026: the only statement at the bottom of the hub.
+  assert.ok(builder.includes('<p className="bh-note">The reviews and the decision are automated practice rules and carry no authority. Enter practice data only.</p>'));
+  assert.doesNotMatch(builder, /Telos|Xacta|eMASS/);
+  assert.equal(existsSync(new URL('../app/videos/video-hub.tsx', import.meta.url)), false);
 });

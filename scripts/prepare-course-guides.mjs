@@ -130,7 +130,7 @@ function page(course, configuration, guide, lesson) {
 <style>${style}${extraStyle}</style>
 </head><body>
 <a class="skip" href="#lesson">Skip to lesson</a>
-<header class="top"><a class="brand" href="/"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="/">Home</a><a class="btn" href="/my-progress">My Account</a><a class="btn" href="/technical-training">Configuration Hub</a></nav></header>
+<header class="top"><a class="brand" href="/"><img src="/training/guide/brand.png" alt=""><div><b>Secure By Design</b><small>Educate. Empower. Secure the future.</small></div></a><nav class="topnav" aria-label="Site and course materials"><span class="pill">Course ${esc(course.number)} · Materials edition ${esc(t.materialsEdition)}</span><a class="btn" href="/">Home</a><a class="btn" href="/my-progress">My Account</a><a class="btn" href="/technical-training">Training Hub</a></nav></header>
 <section class="hero"><div><div class="eyebrow">THE NETWORK BUILD SERIES / COURSE ${esc(course.number)}</div><h1>${esc(guide.hero.title)} <span>${esc(guide.hero.accent)}</span></h1><p>${esc(guide.hero.text)}</p></div><div class="kitcard"><div class="book"><img src="/training/guide/brand.png" alt=""><span>${guide.book.map(esc).join('<br>')}</span></div><div><b>Your course companion</b><p>Interactive lesson · 3D network<br>Workbook · Notes saved to your account</p><a href="${esc(t.word)}" download>Download the workbook (Word) →</a></div></div></section>
 <section class="sbd-account-progress" aria-label="Account learning progress" data-course="${esc(id)}" data-guide="${esc(bookmark ?? `${id}-guide`)}" data-unit="${esc(configuration.lessons[0].id)}"><strong>Continue across the website and app</strong><p>Sign in to save your notes, checks, answers, and completed lessons to your account, on the website and in the app.</p><button type="button" disabled>Load account progress</button></section>
 <main class="workspace"><aside class="chapters"><div class="eyebrow">YOUR LEARNING PATH</div><nav id="chapter-list" aria-label="Lesson chapters"></nav><div class="progressbox"><b id="progress-label">0 of ${n} lessons complete</b><progress id="progress" max="${n}" value="0" aria-label="Lesson completion"></progress><div class="local" id="storage-note">Progress saves in this browser. Sign in to keep it in your account.</div></div><div class="chapter-notice">One course. ${Count(n)} lessons.<br><br>Explore freely. Complete a lesson after recording your checks and answering its questions.</div><div class="mobile-tools" id="mobile-progress"></div></aside>
@@ -157,7 +157,7 @@ let built = 0;
 // ONLY=<course id> builds one guide (handy while writing its content).
 for (const configuration of configurations.filter(c => !process.env.ONLY || c.id === process.env.ONLY)) {
   const course = library.courses.find(c => c.id === configuration.id);
-  if (!course) throw new Error(`No Configuration Hub entry for ${configuration.id}`);
+  if (!course) throw new Error(`No Training Hub entry for ${configuration.id}`);
   const file = new URL(`${course.id}.json`, guidesDir);
   if (!existsSync(file)) throw new Error(`Missing content/course-guides/${course.id}.json`);
   const guide = JSON.parse(readFileSync(file, 'utf8'));

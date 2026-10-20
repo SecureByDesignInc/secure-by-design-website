@@ -8,15 +8,50 @@ export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibra
   return 'kind' in entry && entry.kind === 'library';
 }
 
-// Two libraries share one catalog (owner direction, 15 October 2026): the Configuration Hub (/technical-training)
-// holds the network build; the Compliance Hub (/grc-rmf-training) holds the categories marked
-// "library": "grc" in content/videos.json (Network Authorization). Categories without the field are technical.
-export type LibraryEdition = 'technical' | 'grc';
-export function libraryFor(library: Library, edition: LibraryEdition): Library {
-  const categories = (library.categories ?? []).filter(category => (category.library ?? 'technical') === edition);
-  const ids = new Set(categories.map(category => category.id));
-  const keep = (entry: { categoryId?: string }) => ids.has(entry.categoryId ?? '');
-  return { ...library, categories, episodes: library.episodes.filter(keep), courses: (library.courses ?? []).filter(keep), references: (library.references ?? []).filter(keep) };
+// One Training Hub (owner direction, 19 October 2026): the network build, Network Authorization and the ATO Template
+// Library share one library page at /technical-training. The ATO Package Builder Hub (/grc-rmf-training) is the tool.
+// The sidebar lists each category, with the Build the Network topic groups (content/videos.json, `collections`) under it.
+export type HubGroup = { id: string; title: string; description: string; parent?: string; entries: CatalogEntry[] };
+export function getHubGroups(library: Library): HubGroup[] {
+  const entries = getCatalogEntries(library);
+  const byId = new Map(entries.map(entry => [entry.id, entry]));
+  const groups: HubGroup[] = [];
+  for (const category of library.categories ?? []) {
+    groups.push({ id: category.id, title: category.title, description: category.description, entries: entries.filter(entry => entry.categoryId === category.id) });
+    for (const collection of (library.collections ?? []).filter(item => item.parent === category.id)) {
+      groups.push({
+        id: collection.id, parent: category.id, title: collection.title, description: collection.description,
+        entries: collection.entries.map(id => byId.get(id)).filter((entry): entry is CatalogEntry => Boolean(entry)),
+      });
+    }
+  }
+  return groups;
+}
+
+// The artwork family for a tile: its topic group inside Build the Network, otherwise its category.
+export function getArtFamily(entry: CatalogEntry, library: Library): string {
+  const collection = (library.collections ?? []).find(item => item.entries.includes(entry.id));
+  if (collection) return collection.id;
+  if (isReferenceLibrary(entry)) return 'reference';
+  return entry.categoryId === 'network-authorization' ? 'authorize' : 'identity';
+}
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// Catalog dates read like "14 October 2026".
+export function catalogDate(value: string | undefined): number {
+  const match = /^(\d{1,2}) ([A-Z][a-z]+) (\d{4})$/.exec((value ?? '').trim());
+  const month = match ? MONTHS.indexOf(match[2]) : -1;
+  return match && month >= 0 ? Date.UTC(Number(match[3]), month, Number(match[1])) : 0;
+}
+
+// The most recently updated courses with material, newest first; ties keep course order.
+export function getRecentlyUpdated(library: Library, count: number): CatalogEntry[] {
+  return getCatalogEntries(library)
+    .map((entry, index) => ({ entry, index, date: isReferenceLibrary(entry) || (entry as { kind?: string }).kind === 'coming-soon' ? 0 : catalogDate(entry.training.updated) }))
+    .filter(item => item.date > 0)
+    .sort((a, b) => b.date - a.date || a.index - b.index)
+    .slice(0, count)
+    .map(item => item.entry);
 }
 
 export function getCatalogEntries(library: Library): CatalogEntry[] {

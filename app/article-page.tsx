@@ -36,7 +36,7 @@ export default function ArticlePage({post}:{post:Post}) {
           {isSeriesParent?<ol className="series-article-list" start={2}>{seriesPosts.slice(1).map(part=><li key={part.slug}><a href={'/blog/'+part.slug}>{part.title}</a><span className="series-domain">{part.cisspDomainLabel}</span></li>)}</ol>:next?<a className="next-article" href={'/blog/'+next.slug}><span>Next · Part {next.number}</span><strong>{next.title}</strong><span className="text-link">Read the next post →</span></a>:post.seriesName?<p>Want to go back over something? Pick another post, or take a look at the guides and labs planned for the Cyber Range.</p>:<p>Want to revisit the directory, identities, and permissions behind this setup? Start with <a href="/blog/what-is-active-directory">Active Directory Foundations</a>.</p>}
           <div className="series-return">{previous&&<a href={'/blog/'+previous.slug}>← Previous article</a>}{position>0&&<a href={'/blog/'+seriesParent.slug+'#continue-learning'}>All parts in this series</a>}<a href="/blog">Back to Technical Blog</a></div>
         </nav>
-        <p className="range-note">Put these ideas into practice in the <a href="/technical-training">Configuration Hub</a>.</p>
+        <p className="range-note">Put these ideas into practice in the <a href="/technical-training">Training Hub</a>.</p>
       </article>
     </div>
   </main>;
