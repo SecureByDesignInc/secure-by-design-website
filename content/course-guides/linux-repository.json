@@ -63,7 +63,7 @@
         "existing": true,
         "button": "SBD-DC01",
         "title": "SBD-DC01 · 10.0.10.10",
-        "description": "The PDC emulator and the domain's time source from course 1.1. It answers SBD-REPO01's DNS queries (F01) and serves its time on UDP 123 through the row lesson 1 adds."
+        "description": "The PDC emulator and the domain's time source from course 1.1, part 3. It answers SBD-REPO01's DNS queries (F01) and serves its time on UDP 123 through the row lesson 1 adds."
       },
       {
         "id": "dc2",
@@ -85,7 +85,7 @@
         "existing": true,
         "button": "ADMIN-SRV01",
         "title": "SBD-ADMIN-SRV01 · 10.0.60.20",
-        "description": "The Tier 1 administration seat from course 1.1 (rule A02). The only place SSH to SBD-REPO01 comes from, and where the course's evidence folder lives."
+        "description": "The Tier 1 administration seat from course 1.1, part 8 (rule A02). The only place SSH to SBD-REPO01 comes from, and where the course's evidence folder lives."
       }
     ],
     "flows": [

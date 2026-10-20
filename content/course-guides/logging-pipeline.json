@@ -68,7 +68,7 @@
         "from": 1,
         "button": "SBD-DC01",
         "title": "SBD-DC01 · 10.0.10.10",
-        "description": "Built in course 1.1. Lesson 2 reconciles its audit policy with the course 1.1 STIG GPOs, lesson 3 enrolls it as a source, and lesson 5 traces a failed sign-in from it."
+        "description": "Built in course 1.1, part 1. Lesson 2 reconciles its audit policy with the part 5 STIG GPOs, lesson 3 enrolls it as a source, and lesson 5 traces a failed sign-in from it."
       },
       {
         "id": "dc2",
@@ -80,7 +80,7 @@
         "from": 1,
         "button": "SBD-DC02",
         "title": "SBD-DC02 · 10.0.10.11",
-        "description": "Built in course 1.1 and audited by the same GPOs as SBD-DC01. Its forwarded events keep the MachineName SBD-DC02, which is how the central copy shows where each record came from."
+        "description": "Built in course 1.1, part 1 and audited by the same GPOs as SBD-DC01. Its forwarded events keep the MachineName SBD-DC02, which is how the central copy shows where each record came from."
       },
       {
         "id": "repo",
@@ -104,7 +104,7 @@
         "from": 2,
         "button": "PKI + DHCP",
         "title": "SBD-SUBCA01 · SBD-PKI-MGMT01 · SBD-DHCP01",
-        "description": "SBD-SUBCA01 and SBD-PKI-MGMT01 from course 1.1 and SBD-DHCP01 from course 1.1. Lesson 3 adds them to SBD Event Sources, so their Security logs and time events reach the collector like the controllers'."
+        "description": "SBD-SUBCA01 and SBD-PKI-MGMT01 from course 1.1, part 6 and SBD-DHCP01 from part 7. Lesson 3 adds them to SBD Event Sources, so their Security logs and time events reach the collector like the controllers'."
       },
       {
         "id": "admin",
@@ -116,7 +116,7 @@
         "from": 1,
         "button": "Admin hosts",
         "title": "Admin hosts · 10.0.60.0/24",
-        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.1. Their sign-in events join the first collection scope, and SBD-ADMIN-SRV01 is where the collector is administered from."
+        "description": "AdminJumpBox01, SBD-ADMIN-SRV01, and SBD-ADMIN-PC01 from course 1.1, part 8. Their sign-in events join the first collection scope, and SBD-ADMIN-SRV01 is where the collector is administered from."
       }
     ],
     "flows": [

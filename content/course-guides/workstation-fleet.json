@@ -67,7 +67,7 @@
         "existing": true,
         "button": "SBD-ADMIN-PC01",
         "title": "SBD-ADMIN-PC01 · 10.0.60.30",
-        "description": "The endpoint administration seat on VLAN 60, a virtual machine on SBD-ADMIN-SRV01 built in course 1.1. The workstation firewall policy allows Remote Desktop and remote management only from here, only SBD Tier 2 Admins may read the fleet’s Windows LAPS passwords, and lesson 7 scans the fleet sample from the SCC copy course 1.1 installed there."
+        "description": "The endpoint administration seat on VLAN 60, a virtual machine on SBD-ADMIN-SRV01 built in course 1.1, part 8. The workstation firewall policy allows Remote Desktop and remote management only from here, only SBD Tier 2 Admins may read the fleet’s Windows LAPS passwords, and lesson 7 scans the fleet sample from the SCC copy part 8 installed there."
       },
       {
         "id": "dc1",
@@ -356,7 +356,7 @@
         "question": "Which inventory fields would reveal a PC that had been rebuilt from a different image?"
       },
       "checklist": [
-        "I checked the SCC installer course 1.1 kept on SBD-ADMIN-PC01 against its recorded hash before scanning the sample.",
+        "I checked the SCC installer course 1.1, part 8 kept on SBD-ADMIN-PC01 against its recorded hash before scanning the sample.",
         "I baselined the lesson 6 sample with the Windows client STIG benchmark, removed SCC afterwards, and rescanned the controllers, issuing CA and SBD-DHCP01.",
         "I filed the fleet inventory and a handoff note naming updates for course 1.7 and the inventory for course 1.8."
       ]

@@ -198,7 +198,7 @@
         },
         {
           "title": "Turn on the right auditing",
-          "detail": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written, at or above the STIG values course 1.1 measured."
+          "detail": "Forwarding garbage faster is not monitoring. Set the advanced audit policy so the events that tell the network's story — sign-ins, account changes, directory changes, policy changes — actually get written, at or above the STIG values course 1.1, part 4 measured."
         },
         {
           "title": "Build the collector",
@@ -428,7 +428,7 @@
         },
         {
           "title": "Autoenroll the fleet's certificates",
-          "detail": "Course 1.1 proved autoenrollment on both domain controllers and its pilot, SBD-PKI-MGMT01; this lesson turns it loose. Widen the template permission to a fleet computer group, let the autoenrollment GPO already linked at the domain root do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
+          "detail": "Course 1.1, part 6 proved autoenrollment on both domain controllers and its pilot, SBD-PKI-MGMT01; this lesson turns it loose. Widen the template permission to a fleet computer group, let the autoenrollment GPO already linked at the domain root do the enrolling, and verify a machine certificate chains and checks revocation across the boundary."
         },
         {
           "title": "Admit only enrolled devices with 802.1X",
@@ -440,7 +440,7 @@
         },
         {
           "title": "Delta scan the fleet and hand off",
-          "detail": "The cadence meets its first population: the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark from SBD-ADMIN-PC01's own SCAP Compliance Checker (SCC) copy, installed in course 1.1, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.8."
+          "detail": "The cadence meets its first population: the sampled endpoints get Security Content Automation Protocol (SCAP) baselines with the Windows client benchmark from SBD-ADMIN-PC01's own SCAP Compliance Checker (SCC) copy, installed in course 1.1, part 8, the infrastructure this course changed is rescanned, and the fleet inventory is handed to course 1.8."
         }
       ],
       "outcomeSummary": "Fifty endpoints that arrive hardened, certified, and watched from their very first sign-in.",
@@ -456,7 +456,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "pages": 20,
+        "pages": 19,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       },
       "topic": "Endpoints"
@@ -1362,7 +1362,7 @@
       "categoryOrder": 4,
       "title": "PKI design",
       "subtitle": "CA hierarchy, cryptography, validity, revocation, templates and CA protection",
-      "description": "Ten design areas for the certificate services the lab builds in course 1.1: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
+      "description": "Ten design areas for the certificate services the lab builds in course 1.1, part 6: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
       "tags": [
         "Design reference",
         "PKI",
@@ -1528,7 +1528,7 @@
       "categoryOrder": 6,
       "title": "DISA STIGs and GPO packages",
       "subtitle": "DISA’s artifacts and tooling, and the US guidance around them",
-      "description": "The annotated catalog behind the hardening gate in course 1.1: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
+      "description": "The annotated catalog behind the hardening gate in course 1.1, parts 4 and 5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
       "tags": [
         "Design reference",
         "DISA STIG",
