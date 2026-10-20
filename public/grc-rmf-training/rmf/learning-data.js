@@ -499,7 +499,7 @@ window.LEARNING = [
       ],
       [
         "Submit through the approved workflow.",
-        "Follow the authority’s system of record, required reviews, signatures, and submission steps. In the Enterprise Mission Assurance Support Service (eMASS) or another tool, the records still need the same substance.",
+        "Follow the authority’s system of record, required reviews, signatures, and submission steps. Whatever tool the authority uses, the records still need the same substance.",
         "Submitting hands the package to the AO; it decides nothing. This course uses a generic record workflow, and no live government submission is part of the training."
       ]
     ],

@@ -1,7 +1,7 @@
 // ATO Package Builder API: /api/authorization/...
 //
 // Each signed-in learner keeps up to five practice systems and takes them through an authorization the
-// way eMASS and Xacta 360 organize one: the system record, selected controls (implementation, then
+// way authorization teams organize one: the system record, selected controls (implementation, then
 // assessment), the Body of Evidence, the POA&M, a package that passes an ISSM review, an assessor review
 // and an Authorizing Official decision, then continuous monitoring. The review rules live in
 // lib/authorization/model.mjs and are shared with the page, so its readiness checks match this decision.
