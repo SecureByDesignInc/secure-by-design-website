@@ -41,7 +41,11 @@ const isRmf = (entry: CatalogEntry) => isTrainingCourse(entry) && entry.kind ===
 const videoLabel = (entry: CatalogEntry) => !isReferenceLibrary(entry) && !isTrainingCourse(entry) && getYouTubeEmbedUrl(entry.youtubeId) ? 'Video available' : 'Video coming soon';
 
 function entryMeta(entry: CatalogEntry): string {
-  if (isReferenceLibrary(entry)) return 'Official sources · Training samples';
+  if (isReferenceLibrary(entry)) {
+    const stats = (entry as { stats?: { areas: number; sources: number } }).stats;
+    if (stats) return `${stats.areas ? `${stats.areas} design areas · ` : ''}${stats.sources} sources · US only`;
+    return 'Official sources · Training samples';
+  }
   if (comingSoon(entry)) return 'Training materials in preparation';
   if (isTrainingCourse(entry)) {
     const course = entry as TrainingCourse;
@@ -50,7 +54,7 @@ function entryMeta(entry: CatalogEntry): string {
   }
   return `${entry.chapters.length} lessons · Self-paced · ${videoLabel(entry)}`;
 }
-const chipFor = (entry: CatalogEntry) => isReferenceLibrary(entry) ? 'REFERENCE LIBRARY' : `COURSE ${entry.number} · ${(entry.topic ?? entry.tags[0] ?? '').toUpperCase()}`;
+const chipFor = (entry: CatalogEntry) => isReferenceLibrary(entry) ? ((entry as { kind?: string }).kind === 'design-reference' ? `DESIGN REFERENCE · ${(entry.topic ?? '').toUpperCase()}` : 'REFERENCE LIBRARY') : `COURSE ${entry.number} · ${(entry.topic ?? entry.tags[0] ?? '').toUpperCase()}`;
 const openLabel = (entry: CatalogEntry) => isReferenceLibrary(entry) ? 'the library' : `course ${entry.number}`;
 
 function HubTile({ entry, family, meta, place, active, onOpen }: { entry: CatalogEntry; family: string; meta: string; place: string; active: boolean; onOpen: () => void }) {
@@ -182,13 +186,15 @@ export default function TrainingHub({ library }: { library: Library }) {
   if (logging) shelves.push({ id: 'logging', title: logging.title, entries: logging.entries, view: logging.id, viewLabel: 'View all' });
   const authorize = [...(group('network-authorization')?.entries ?? []), ...(group('templates-references')?.entries ?? [])];
   if (authorize.length) shelves.push({ id: 'authorize', title: 'Authorize the network', entries: authorize, view: 'network-authorization', viewLabel: 'View all', tool: true });
+  const designs = group('design-references');
+  if (designs?.entries.length) shelves.push({ id: 'design', title: designs.title, entries: designs.entries.slice(0, 4), view: designs.id, viewLabel: `View all ${designs.entries.length}` });
   const soon = entries.filter(comingSoon);
   if (soon.length) shelves.push({ id: 'soon', title: 'Coming soon', entries: soon });
 
   const searching = query.trim().length > 0;
   const results = searching ? filterEpisodes(entries, query, '') : [];
   const selected = !searching && view !== 'hub' ? group(view) : undefined;
-  const groupFamily = (item: HubGroup) => item.parent ? item.id : item.id === 'network-authorization' ? 'authorize' : item.id === 'templates-references' ? 'reference' : 'build';
+  const groupFamily = (item: HubGroup) => item.parent ? item.id : item.id === 'network-authorization' ? 'authorize' : item.id === 'templates-references' || item.id === 'design-references' ? 'reference' : 'build';
 
   const opened = (entry: CatalogEntry, place: string) => open?.id === entry.id && open.place === place;
   const expanded = (entry: CatalogEntry, place: string) => opened(entry, place) && (
@@ -212,11 +218,12 @@ export default function TrainingHub({ library }: { library: Library }) {
   const countLabel = (item: HubGroup) => {
     const later = item.entries.filter(comingSoon).length;
     if (item.id === 'templates-references') return `${item.entries.length} ${item.entries.length === 1 ? 'library' : 'libraries'}`;
+    if (item.id === 'design-references') return `${item.entries.length} design references · US sources only`;
     const courses = `${item.entries.length} course${item.entries.length === 1 ? '' : 's'}`;
     return item.id === 'network-build' ? `${courses} · take them in order` : later ? `${courses} · ${later} coming soon` : item.parent ? `${courses} · in course order` : courses;
   };
   const numberOf = (entry?: CatalogEntry) => entry && 'number' in entry ? entry.number : '';
-  const kickerFor = (item: HubGroup) => item.parent ? `${group(item.parent)?.title ?? ''} · Topic` : item.id === 'templates-references' ? 'Reference' : `Learning path · ${item.entries.length > 1 ? `Courses ${numberOf(item.entries[0])}–${numberOf(item.entries[item.entries.length - 1])}` : `Course ${numberOf(item.entries[0])}`}`;
+  const kickerFor = (item: HubGroup) => item.parent ? `${group(item.parent)?.title ?? ''} · Topic` : item.id === 'templates-references' || item.id === 'design-references' ? 'Reference' : `Learning path · ${item.entries.length > 1 ? `Courses ${numberOf(item.entries[0])}–${numberOf(item.entries[item.entries.length - 1])}` : `Course ${numberOf(item.entries[0])}`}`;
 
   return (
     <main id="main" className="vc-page th-page">

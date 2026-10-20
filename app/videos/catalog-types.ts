@@ -82,7 +82,8 @@ export type TrainingCourse = {
   };
 };
 /**
- * A reference tile (kind 'library'): a collection of outside templates rather than a course.
+ * A reference tile (kind 'library' for the ATO Template Library, 'design-reference' for a US design reference):
+ * a collection of outside sources rather than a course.
  * Its contents come from its own data file (the ATO Template Library reads content/ato-templates.json),
  * so the tile carries only its catalog details, artwork and page.
  */
@@ -91,8 +92,12 @@ export type ReferenceLibrary = {
   categoryOrder?: number;
   /** Short topic shown on the Training Hub tile, e.g. "PKI". */
   topic?: string;
-  /** Always 'library' (typed as a string because the catalog is read from JSON). */
+  /** 'library' or 'design-reference' (typed as a string because the catalog is read from JSON). */
   kind: string;
+  /** Design references: how many design areas and sources the reference covers (content/design-references.json). */
+  stats?: { areas: number; sources: number };
+  /** Design references: the design areas (or catalog sections) with their anchors on the full page. */
+  areas?: { title: string; anchor: string }[];
   id: string;
   title: string;
   subtitle: string;

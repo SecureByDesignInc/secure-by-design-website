@@ -10,6 +10,7 @@ import { BookOpen, Check, ChevronUp, Clock, FileText, Link2, Network, Video } fr
 import EpisodeExperience from './episode-experience';
 import CourseExperience from './course-experience';
 import LibraryExperience from './library-experience';
+import DesignReferenceExperience from './design-reference-experience';
 import type { CatalogEntry } from './catalog-types';
 import atoTemplates from '../../content/ato-templates.json';
 import { getYouTubeEmbedUrl, isReferenceLibrary, isTrainingCourse, supportsIdentityScene } from './video-utils';
@@ -17,6 +18,7 @@ import { getYouTubeEmbedUrl, isReferenceLibrary, isTrainingCourse, supportsIdent
 const ART_SERIES: Record<string, string> = {
   'network-authorization': 'FROM BUILD TO AUTHORIZATION',
   'templates-references': 'TEMPLATES & REFERENCES',
+  'design-references': 'US DESIGN REFERENCES',
 };
 
 export default function EpisodeTile({
@@ -32,6 +34,9 @@ export default function EpisodeTile({
   const course = isTrainingCourse(episode);
   // Reference tiles (the ATO Template Library) share the course tile's layout: labels beside a cover, no recording.
   const reference = isReferenceLibrary(episode);
+  // A US design reference (owner's compendium, 19 October 2026): design areas and sources instead of template counts.
+  const design = reference && episode.kind === 'design-reference';
+  const stats = design ? (episode as { stats?: { areas: number; sources: number } }).stats : undefined;
   // Coming-soon tiles hold their place in the path but have no material yet: no cover, no download, no opening.
   const comingSoon = course && episode.kind === 'coming-soon';
   const available = !course && !reference && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
@@ -39,7 +44,7 @@ export default function EpisodeTile({
   // The ATO Template Library counts its official sources and the RMF steps they are arranged by.
   const sourceCount = atoTemplates.templates.length;
   const sectionCount = atoTemplates.groups.length;
-  const openLabel = reference ? 'library' : 'training';
+  const openLabel = design ? 'reference' : reference ? 'library' : 'training';
   const close = () => {
     onToggle();
     opener.current?.focus();
@@ -98,20 +103,20 @@ export default function EpisodeTile({
           <div className="vc-tile-art-bottom">
             <span>
               {course || reference ? <BookOpen size={13} /> : <Network size={13} />}
-              {reference ? 'TEMPLATE LIBRARY' : comingSoon ? 'IN PREPARATION' : course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
+              {design ? 'DESIGN REFERENCE' : reference ? 'TEMPLATE LIBRARY' : comingSoon ? 'IN PREPARATION' : course ? (episode.kind === 'configuration' ? 'CONFIGURATION GUIDE' : 'AUTHORIZATION TRAINING') : supportsIdentityScene(episode)
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{reference ? `${sourceCount} SOURCES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{design ? (stats?.areas ? `${stats.areas} DESIGN AREAS` : `${stats?.sources ?? 0} SOURCES`) : reference ? `${sourceCount} SOURCES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
           <div className="vc-tile-description">
             <p className="vc-kicker">
               {episode.categoryId === 'network-build' && episode.categoryOrder === 1 && <span className="vc-start-here">START HERE</span>}
-              {reference ? 'REFERENCE LIBRARY' : `COURSE ${episode.number}`}
+              {design ? 'DESIGN REFERENCE' : reference ? 'REFERENCE LIBRARY' : `COURSE ${episode.number}`}
               {/* Compact tiles hide the topic visually so the kicker fits one line; it stays in the DOM and shows when expanded. */}
-              <span className="vc-kicker-topic">{` / ${reference ? 'TEMPLATES' : episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}</span>
+              <span className="vc-kicker-topic">{` / ${design ? (episode.topic ?? 'DESIGN').toUpperCase() : reference ? 'TEMPLATES' : episode.categoryId === 'network-authorization' ? 'NETWORK AUTHORIZATION' : episode.tags[0]}`}</span>
             </p>
             <h3 id={`tile-title-${episode.id}`} title={episode.title}>{episode.title}</h3>
             <p className="vc-tile-subtitle" title={episode.subtitle}>{episode.subtitle}</p>
@@ -126,7 +131,17 @@ export default function EpisodeTile({
             <p className="vc-tile-soon-badge"><Clock size={15} aria-hidden="true" />Coming soon</p>
             <p className="vc-tile-included">Training materials are in preparation.</p>
           </div> : <div className="vc-tile-actions">
-            {reference ? <div className="vc-tile-status">
+            {design ? <div className="vc-tile-status">
+              <span>
+                <Check size={13} />
+                US sources only
+              </span>
+              <span className="vc-tile-course-size"><FileText size={13} />{stats?.sources ?? 0} sources{stats?.areas ? ` · ${stats.areas} design areas` : ''}</span>
+              <span>
+                <Link2 size={13} />
+                Compendium {episode.training.updated}
+              </span>
+            </div> : reference ? <div className="vc-tile-status">
               <span>
                 <Check size={13} />
                 Verified public sources
@@ -162,7 +177,7 @@ export default function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {reference ? <>Reference library<span>·</span>Official links</> : <>Interactive guide<span>·</span>One download</>}
+              {design ? <>Design reference<span>·</span>Source catalog</> : reference ? <>Reference library<span>·</span>Official links</> : <>Interactive guide<span>·</span>One download</>}
             </p>
           </div>}
         </div>
@@ -170,9 +185,9 @@ export default function EpisodeTile({
       <div id={`episode-content-${episode.id}`} hidden={!expanded}>
         {expanded && (
           <>
-            {reference ? <LibraryExperience library={episode} /> : course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
+            {design ? <DesignReferenceExperience reference={episode} /> : reference ? <LibraryExperience library={episode} /> : course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
             <div className="vc-tile-close-row">
-              <span>{reference ? 'Your official sources, in one place.' : 'Your course materials, in one place.'}</span>
+              <span>{design ? 'Design it before you build it.' : reference ? 'Your official sources, in one place.' : 'Your course materials, in one place.'}</span>
               <button type="button" onClick={close}>
                 <ChevronUp size={16} />
                 {`Close ${openLabel}`}
