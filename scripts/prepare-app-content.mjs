@@ -149,14 +149,20 @@ export function buildAppCatalog(site) {
   return {schema: APP_CONTENT_SCHEMA, categories, courses, comingSoon, unknownLessons: unknown, materials: [...materials.values()]};
 }
 
-// The published files: catalog.json is what the app parses; manifest.json is the small file it polls.
-export function writeAppContent(site, out = path.join(site, 'public/app-content/v1')) {
+// The published files: catalog.json is what the app parses; manifest.json is the small file it polls. The app's
+// importer uses the same body and version for the catalog it ships, so a fresh install knows it is current.
+export function appContent(site) {
   const {unknownLessons, materials, ...content} = buildAppCatalog(site);
   if (unknownLessons.length) throw new Error(`App content: lessons missing from content/training-progress.json: ${unknownLessons.join(', ')}`);
   const body = JSON.stringify(content);
   const sha256 = createHash('sha256').update(body).digest('hex');
   const lessons = content.courses.reduce((n, c) => n + c.lessons.length, 0);
   const manifest = {schema: APP_CONTENT_SCHEMA, version: sha256.slice(0, 16), sha256, bytes: Buffer.byteLength(body), courses: content.courses.length, lessons, url: '/app-content/v1/catalog.json'};
+  return {content, materials, body, manifest};
+}
+
+export function writeAppContent(site, out = path.join(site, 'public/app-content/v1')) {
+  const {body, manifest} = appContent(site);
   fs.mkdirSync(out, {recursive: true});
   fs.writeFileSync(path.join(out, 'catalog.json'), body);
   fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
