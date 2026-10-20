@@ -8,9 +8,7 @@ import AccountForm from '../account/sign-in';
 import SignInMethods,{DeleteAccount,ReauthNotice} from './sign-in-methods';
 import {safeReturnPath} from '../account/safe-return';
 import {COURSE_STEP_MODULES} from '../../lib/authorization/model.mjs';
-import bookingConfig from '../../content/booking.json';
-import {bookingLink} from '../../lib/booking.mjs';
-const booking=bookingLink(bookingConfig);
+import BookingLink from '../booking-link';
 
 // Course 2.1 "RMF to ATO" by RMF step: module completions plus the ATO Package Builder check for the learner's
 // Secure By Design enclave (/api/authorization/progress). Owner direction, 15 October 2026: one progress record.
@@ -63,7 +61,7 @@ export default function ProgressDashboard(){
   <h2 id="community-account-title">Free Community account</h2>
   <p>Every Secure By Design account is a free Community account. It saves your progress and materials on the website and in the Secure By Design app.</p>
   <aside className="reader-community-note" aria-label="A note from Secure By Design"><div className="reader-community-initials" aria-hidden="true">SBD</div><div><h3>A note from Secure By Design</h3><p>Start learning with what’s here. If it helps you, pay us back by sharing our content.</p><span>Secure By Design</span></div></aside>
-  {booking&&<p className="reader-community-booking">Want to talk with Secure By Design? <a href={booking.href} target="_blank" rel="noopener noreferrer" data-track="booking_click" data-placement="my_account">{booking.label}<span className="sr-only"> (opens in a new tab)</span></a></p>}
+  <p className="reader-community-booking">Want to talk with Secure By Design? <BookingLink placement="my_account" /></p>
  </section>
  </>;
 }

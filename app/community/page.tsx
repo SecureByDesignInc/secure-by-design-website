@@ -1,12 +1,11 @@
 import './community.css';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { sharePreview } from '../share-preview';
 import StateFinder from './state-finder';
 import { communityStates, discordUrl, suggestMail } from './community-data';
-import bookingConfig from '../../content/booking.json';
-import { bookingLink } from '../../lib/booking.mjs';
+import BookingLink from '../booking-link';
+import LogoLink from '../logo-link';
 
-const booking = bookingLink(bookingConfig);
 
 const description = 'Job leads, training funding and local networking for cybersecurity careers, organized for all 50 states and Washington, DC.';
 
@@ -43,8 +42,8 @@ export default function Community() {
         <p>Job openings, programs that can pay for your training, and places to meet people in the field, organized by state. Built for everyone learning with Secure By Design.</p>
         <div className="cm-intro-links">
           <a href="#states">Find your state <ArrowDown size={16} aria-hidden="true" /></a>
-          <a href={discordUrl} target="_blank" rel="noopener noreferrer">Join the Discord <ArrowUpRight size={16} aria-hidden="true" /><span className="cm-sr"> (opens in a new tab)</span></a>
-          {booking && <a href={booking.href} target="_blank" rel="noopener noreferrer" data-track="booking_click" data-placement="community_hub">{booking.label} <ArrowUpRight size={16} aria-hidden="true" /><span className="cm-sr"> (opens in a new tab)</span></a>}
+          <LogoLink tile="discord" href={discordUrl}>Join the Discord</LogoLink>
+          <BookingLink placement="community_hub" />
         </div>
       </div>
     </section>

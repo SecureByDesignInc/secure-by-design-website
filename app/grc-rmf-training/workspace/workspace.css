@@ -11,7 +11,7 @@ body.site-editorial:has(.awx-page){background:#071521}
 .awx-heading{max-width:820px}
 .awx-heading h1{margin:0 0 16px;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:600;line-height:1.05;letter-spacing:-.05em}
 .awx-heading>p:last-child{margin:0;color:#adc3d2;font-size:1.0625rem;line-height:1.7}
-.awx-heading .eyebrow a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.awx-heading .eyebrow a{color:inherit;}
 .awx-page .reader-note{color:#a3bbcb;font-size:.875rem;line-height:1.6}
 .awx-page .reader-loading{color:#a9bfce;padding:24px 0}
 .awx-page .reader-error{border:1px solid #c8664a;background:#2a1613;color:#ffd6c9;border-radius:10px;padding:12px 16px;margin:12px 0}
@@ -20,7 +20,7 @@ body.site-editorial:has(.awx-page){background:#071521}
 .awx-page button:disabled{opacity:.5;cursor:not-allowed}
 .awx-page .reader-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 20px;border:1px solid #a4eaf3;border-radius:10px;background:#91dfeb;color:#06283c!important;font-weight:700;text-decoration:none}
 .awx-page .reader-primary:hover:not(:disabled){border-color:#c3f4f8;background:#b8f0f6;color:#06283c}
-.awx-page .awx-link{min-height:auto;padding:4px 2px;border:0;background:none;color:#9fe3f1;text-decoration:underline;text-underline-offset:3px}
+.awx-page .awx-link{min-height:auto;padding:4px 2px;border:0;background:none;color:#9fe3f1;}
 .awx-page .awx-link:hover:not(:disabled){background:none;color:#c8f3fa}
 .awx-page .awx-remove{color:#f3b3a2}
 .awx-page :is(input:not([type=checkbox]):not([type=radio]),select,textarea){width:100%;min-height:42px;padding:9px 12px;border:1px solid #365469;border-radius:9px;background:#081c2b;color:#eef7fc;font:400 .95rem/1.5 var(--font-geist-sans),Arial,sans-serif}

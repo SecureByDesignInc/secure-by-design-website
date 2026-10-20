@@ -27,7 +27,7 @@
 .dr-side-label { margin: 16px 0 6px; color: #8fa9ba; font: 600 11px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
 .dr-side ol { margin: 0; padding: 0 0 0 20px; display: grid; gap: 4px; color: #8fa9ba; font-size: 12px; }
 .dr-side ol a { color: #c3d4df; font-size: 13px; line-height: 1.4; }
-.dr-side ol a:hover { color: #ffffff; text-decoration: underline; text-underline-offset: 3px; }
+.dr-side ol a:hover { color: #ffffff;   }
 .dr-side-courses { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .dr-side-courses a { display: inline-flex; gap: 8px; align-items: flex-start; color: #c3d4df; font-size: 13px; line-height: 1.4; }
 .dr-side-courses svg { flex: none; margin-top: 2px; color: #8ae5ef; }

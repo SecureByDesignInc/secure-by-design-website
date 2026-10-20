@@ -78,8 +78,6 @@
   color: #e0f5ff;
   font-size: 12px;
   font-weight: 650;
-  border-bottom: 1px solid #42798c;
-  padding-bottom: 7px;
 }
 .vc-explorer {
   border: 1px solid #2d4b61;
@@ -863,10 +861,7 @@
   margin-top: 4px;
   display: block;
 }
-.vc-download-list > a:hover b {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
+.vc-download-list > a:hover b {}
 .vc-training-edition {
   border-top: 1px solid #dbe5ec;
   margin-top: 20px;
@@ -884,8 +879,8 @@
   min-height: 32px;
   color: #216985;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  
+  
 }
 .vc-library-footer {
   display: flex;
@@ -2088,7 +2083,7 @@
 .vc-config-paging{display:flex;justify-content:space-between;gap:12px;margin:24px 0}
 .vc-config-sources{margin:26px 0;color:#375f75}
 .vc-config-sources ul{padding-left:20px}
-.vc-config-sources a{color:#12617e;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.vc-config-sources a{color:#12617e;overflow-wrap:anywhere}
 .vc-configuration .vc-config-edition{font-size:12px;color:#567486;margin:22px 0 0}
 .vc-guide-page{padding-top:30px;max-width:1320px;margin:0 auto}
 .vc-guide-back{display:inline-flex;color:#b6e8f1;min-height:44px;align-items:center;margin:0 0 16px;font-size:14px}
@@ -2294,10 +2289,10 @@
 .ab-column p{margin:0;color:#b2cad9;font-size:14px;line-height:1.6}
 .ab-column ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
 .ab-column li{color:#d7ecf6;font-size:13.5px;line-height:1.5}
-.ab-column li a{color:#d7ecf6;border-bottom:1px solid #3d6a83}
+.ab-column li a{color:#d7ecf6}
 .ab-column li a:hover{color:#fff;border-color:#8ae5ef}
 .ab-tag{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid #3d6a83;border-radius:999px;color:#a8cfde;font-size:10.5px;white-space:nowrap}
-.ab-link{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:auto;padding-bottom:4px;border-bottom:1px solid #42798c;color:#8ae5ef;font-size:13px;font-weight:650}
+.ab-link{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:auto;color:#8ae5ef;font-size:13px;font-weight:650}
 .ab-link:hover{color:#fff}
 .ab-pager{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
 .ab-pager button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #3d6a83;border-radius:10px;background:transparent;color:#e4f6fc;font-size:13px;font-weight:600}
@@ -2312,7 +2307,7 @@
 .ab-course p{display:inline-flex;align-items:center;gap:8px;margin:0;color:#d7ecf6;font-size:14px;font-weight:600}
 .ab-course p svg{color:#7fd3ea}
 .ab-course ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 20px}
-.ab-course a{padding-bottom:3px;border-bottom:1px solid #42798c;color:#8ae5ef;font-size:13px;font-weight:650}
+.ab-course a{color:#8ae5ef;font-size:13px;font-weight:650}
 .ab-course a:hover{color:#fff}
 
 /* Course tiles 1.2–1.19 draw their guide's 3D lesson network (owner request, 18 October 2026): system
@@ -2367,8 +2362,8 @@
 }
 .vc-inspector-links a:hover {
   color: #c4f1f8;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  
+  
 }
 
 /* US design reference tiles (owner's compendium, 19 October 2026): the expanded tile's right-hand column lists the
@@ -2377,6 +2372,6 @@
 .vc-design-areas .vc-kicker { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
 .vc-design-areas ol { margin: 0; padding: 0 0 0 22px; display: grid; gap: 7px; color: #8bdbeb; font-size: 12px; }
 .vc-design-areas ol a { color: #e4f3fa; font-size: 14px; line-height: 1.45; text-decoration: none; }
-.vc-design-areas ol a:hover { color: #ffffff; text-decoration: underline; text-underline-offset: 3px; }
+.vc-design-areas ol a:hover { color: #ffffff;   }
 .vc-design-note { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0 0; color: #a9c4d4; font-size: 13px; line-height: 1.55; }
 .vc-design-note svg { flex: none; margin-top: 3px; color: #7fd3ea; }

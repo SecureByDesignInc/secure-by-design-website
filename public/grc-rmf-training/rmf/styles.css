@@ -3,15 +3,15 @@
 .sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 main:focus,.lesson:focus{outline:none}
 .no-script{max-width:900px;margin:30px auto;padding:24px;background:var(--paper);color:var(--body);border-radius:12px;font-size:14px;line-height:1.6}
-.no-script a{color:#0d5f86;text-decoration:underline}
+.no-script a{color:#0d5f86;}
 
 /* Hero */
 .hero h1{max-width:780px}
-.hero p a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+.hero p a{color:var(--cyan);}
 .hero-facts{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0}
 .hero-facts li{border:1px solid var(--line);border-radius:99px;padding:7px 13px;font-size:11px;color:var(--muted);background:#0c1f31}
 .hero-facts b{color:var(--cyan);font-size:13px;margin-right:3px}
-.statusbar a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:8px 0}
+.statusbar a{color:inherit;display:inline-block;padding:8px 0}
 
 /* Workspace and learning path */
 .rmf-workspace{grid-template-columns:225px minmax(380px,1.1fr) minmax(360px,1fr)}
@@ -38,7 +38,7 @@ a.chapter{text-decoration:none}
 .lesson-head .module-facts{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
 .module-facts span{border:1px solid #c9dbe7;background:#fff;border-radius:99px;padding:5px 10px;font-size:10px;color:#3e6077;font-weight:bold}
 .panel-title{font-size:17px;line-height:1.3;letter-spacing:-.3px;margin:8px 0 12px;color:#17344b}
-.text-link{color:#0d5f86;text-decoration:underline;text-underline-offset:3px}
+.text-link{color:#0d5f86;}
 .lesson-picks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 18px}
 .lesson-picks button{border:1px solid #c7d8e4;border-radius:8px;background:#fff;color:#324f65;padding:10px 11px;text-align:left;font-size:11.5px;line-height:1.4;font-weight:bold}
 .lesson-picks button small{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#5b788e;font-weight:normal;margin-bottom:3px}
@@ -138,7 +138,7 @@ a.chapter{text-decoration:none}
 .reference-list li{border-bottom:1px solid #d8e3eb;padding:12px 0}
 .reference-list li:first-child{padding-top:0}
 .reference-list li:last-child{border:0;padding-bottom:0}
-.reference-list a{font-weight:bold;font-size:12.5px;color:#0d5f86;text-decoration:underline;text-underline-offset:3px}
+.reference-list a{font-weight:bold;font-size:12.5px;color:#0d5f86;}
 .content .reference-list p{color:#567084;font-size:11.5px;line-height:1.55;margin:4px 0 0}
 .guidance-item{border-bottom:1px solid #d5e3eb;padding:12px 0}
 .guidance-item:last-child{border:0;padding-bottom:0}
@@ -159,7 +159,7 @@ a.chapter{text-decoration:none}
 .rmf-workspace .step-chapter.is-complete .num,.rmf-workspace .module-chapter.is-complete .num{background:#1f6b52;border-color:#3fbf8f;color:#eafff6}
 .rmf-workspace .module-chapter{padding-left:22px}
 .rmf-workspace .module-chapter .num{width:24px;height:24px;font-size:9px}
-.eyebrow-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.eyebrow-link{color:inherit;}
 .step-page{display:grid;gap:18px}
 .step-section{border:1px solid #d6e3ea;border-radius:12px;padding:16px 18px;background:#fbfdfe}
 .step-section>p{font-size:13px;line-height:1.6;margin:8px 0}
@@ -191,3 +191,6 @@ a.chapter{text-decoration:none}
 .tpl-links a:hover{background:#e7f2f7}
 .tpl-links small{font-size:9px;letter-spacing:.5px;color:#56707f}
 @media (max-width:700px){.tpl-list li{flex-direction:column;align-items:flex-start}.tpl-links{justify-content:flex-start}.rmf-workspace .module-chapter{padding-left:8px}}
+
+/* No underlines anywhere on the site (owner direction, 20 October 2026): links keep their color and weight. */
+a,a:hover,a:focus,a:active,a:visited{text-decoration:none!important}

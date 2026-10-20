@@ -75,6 +75,8 @@ function renderDashboard(records) {
       if (specifier === '../../lib/authorization/model.mjs') return authorizationModel;
       if (specifier === '../../content/booking.json') return { default: { url: '', label: 'Book a call' } };
       if (specifier === '../../lib/booking.mjs') return { bookingLink };
+      // The Book a call pill (owner direction, 20 October 2026); nothing renders without a booking address.
+      if (specifier === '../booking-link') return { default: () => null };
       if (specifier === 'next/link') return { default: props => React.createElement('a', props) };
       return require(specifier);
     },
