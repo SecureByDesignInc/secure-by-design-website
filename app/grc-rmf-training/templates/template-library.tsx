@@ -1,4 +1,4 @@
-// The full ATO Template Library page (/grc-rmf-training/templates), part of the Compliance Hub. Since 15 October 2026 it is part of course 2.1
+// The full ATO Template Library page (/grc-rmf-training/templates), in the Training Hub (owner direction, 19 October 2026). Since 15 October 2026 it is part of course 2.1
 // "RMF to ATO" (/grc-rmf-training/rmf/): each step page there lists its own sources and samples and links here by #<step>. Owner direction, 15 October 2026: the
 // library lists only documents verified as publicly released by an official publisher, arranged by RMF step and
 // linked to the publisher's own copy.
@@ -20,7 +20,7 @@ export default function TemplateLibrary() {
     <main id="main" className="vc-page tl-page">
       <section className="container vc-intro">
         <div>
-          <p className="vc-kicker"><Link href="/grc-rmf-training">COMPLIANCE HUB</Link> · TEMPLATES</p>
+          <p className="vc-kicker"><Link href="/technical-training#templates-references">TRAINING HUB</Link> · TEMPLATES</p>
           <h1>
             ATO Template Library.
             <br />
@@ -99,8 +99,8 @@ export default function TemplateLibrary() {
 
         <div className="vc-library-footer">
           <p>Official documents belong to their publishers. Training samples © 2026 Secure By Design Team LLC. Links checked {checked}.</p>
-          <Link href="/grc-rmf-training">
-            <ArrowLeft size={17} /> Back to the Compliance Hub
+          <Link href="/technical-training#templates-references">
+            <ArrowLeft size={17} /> Back to the Training Hub
           </Link>
         </div>
       </section>

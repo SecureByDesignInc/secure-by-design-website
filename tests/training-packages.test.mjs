@@ -40,7 +40,7 @@ test('guides keep notes in the account, with no export, import or readable-notes
   const pages = entries.filter(entry => entry.kind !== 'coming-soon').map(guidePage);
   for (const path of pages) {
     const page = readFileSync(publicFile(path), 'utf8');
-    for (const control of ['export-json', 'export-text', 'import-record', 'import-file', 'export-side', 'Readable notes', 'Export my record', 'Import record', 'Training materials</a>', 'target="_blank" rel="noopener">Configuration Hub', 'evidence exports'])
+    for (const control of ['export-json', 'export-text', 'import-record', 'import-file', 'export-side', 'Readable notes', 'Export my record', 'Import record', 'Training materials</a>', 'target="_blank" rel="noopener">Training Hub', 'evidence exports'])
       assert.ok(!page.includes(control), `${path} still has ${control}`);
     const downloads = [...page.matchAll(/<a [^>]*href="([^"]+)"[^>]*\bdownload\b/g)].map(match => match[1]);
     assert.ok(downloads.length > 0 && downloads.every(href => href.endsWith('-Workbook.docx')), `${path} offers only the Word workbook`);
@@ -58,7 +58,7 @@ test('guides keep notes in the account, with no export, import or readable-notes
 
 test('the training has no share controls', () => {
   assert.equal(existsSync(new URL('../app/videos/training-share.tsx', import.meta.url)), false);
-  for (const file of ['companion.tsx', 'video-hub.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
+  for (const file of ['companion.tsx', 'training-hub.tsx', 'episode-tile.tsx', 'course-experience.tsx', 'episode-experience.tsx']) {
     assert.doesNotMatch(read(`app/videos/${file}`).toString(), /TrainingShare|training-share|Share2/, file);
   }
   for (const entry of entries.filter(item => item.kind !== 'coming-soon')) {

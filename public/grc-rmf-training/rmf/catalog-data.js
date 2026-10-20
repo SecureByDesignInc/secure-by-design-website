@@ -722,7 +722,7 @@ window.CATALOG = [
   }
 ];
 
-// The course as the Compliance Hub presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
+// The course as the Training Hub presents it (content/videos.json; tests keep them equal). Owner direction, 15 October
 // 2026: courses 2.1, 2.2 and 2.3, the ATO Template Library and the ATO Package Builder became one learning process,
 // course 2.1 "RMF to ATO" at /grc-rmf-training/rmf/, built by scripts/prepare-rmf-courses.mjs. Module IDs and the
 // training:rmf-boe-ato:NN progress IDs are unchanged.

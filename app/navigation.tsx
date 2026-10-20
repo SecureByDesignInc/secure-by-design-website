@@ -14,7 +14,14 @@ export default function Navigation() {
     const offset = current.getBoundingClientRect().left - row.getBoundingClientRect().left + row.scrollLeft;
     row.scrollLeft = Math.max(0, offset - (row.clientWidth - current.offsetWidth) / 2);
   }, [path]);
+  // The ATO Template Library (/grc-rmf-training/templates) belongs to the Training Hub, though its address sits under the
+  // ATO Package Builder Hub's (owner direction, 19 October 2026).
+  const inTrainingHub = path.startsWith('/technical-training') || path.startsWith('/videos') || path.startsWith('/grc-rmf-training/templates');
+  const current = (href: string) => href === '/' ? path === '/'
+    : href === '/technical-training' ? inTrainingHub
+    : href === '/grc-rmf-training' ? path.startsWith(href) && !inTrainingHub
+    : path.startsWith(href);
   return <nav ref={nav} aria-label="Main navigation">{links.map(([href, label]) =>
-    <a key={href} href={href} className="nav-link" aria-current={(href === '/' ? path === '/' : path.startsWith(href)||(href==='/technical-training'&&path.startsWith('/videos'))) ? 'page' : undefined}>{label}</a>
+    <a key={href} href={href} className="nav-link" aria-current={current(href) ? 'page' : undefined}>{label}</a>
   )}</nav>;
 }

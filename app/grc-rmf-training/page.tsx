@@ -1,17 +1,19 @@
-import VideoHub from '../videos/video-hub';
+import PackageBuilderHub from './package-builder-hub';
 import library from '../../content/videos.json';
 import '../videos/videos.css';
+import './builder-hub.css';
 import { sharePreview } from '../share-preview';
+import type { Library } from '../videos/catalog-types';
 
-// Compliance Hub (owner direction, 15 October 2026): the Network Authorization course, the Authorization
-// Workspace (/grc-rmf-training/workspace) and the ATO Template Library (/grc-rmf-training/templates) in one section.
-const description = 'Governance, risk and compliance training from Secure By Design: take a system through every RMF step to an Authorization to Operate with the RMF to ATO course, the ATO Package Builder, and the ATO Template Library.';
+// The ATO Package Builder Hub (owner direction, 19 October 2026): the ATO Package Builder as its own section. Course 2.1
+// and the ATO Template Library are in the Training Hub; their addresses under /grc-rmf-training are unchanged.
+const description = 'Practice taking a system to an Authorization to Operate: register the Secure By Design enclave in the ATO Package Builder and work through all seven RMF steps, with each step\'s lessons and templates in the Training Hub.';
 export const metadata = {
-  title: 'Compliance Hub: GRC & RMF Training',
+  title: 'ATO Package Builder Hub',
   description,
-  ...sharePreview('Compliance Hub: GRC & RMF Training | Secure By Design', description, '/grc-rmf-training'),
+  ...sharePreview('ATO Package Builder Hub | Secure By Design', description, '/grc-rmf-training'),
 };
 
-export default function GrcRmfTrainingPage() {
-  return <VideoHub library={library} edition="grc" />;
+export default function AtoPackageBuilderHubPage() {
+  return <PackageBuilderHub library={library as unknown as Library} />;
 }

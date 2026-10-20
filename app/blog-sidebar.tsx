@@ -15,7 +15,7 @@ export default function BlogSidebar() {
       <h2>Keep learning</h2>
       <ul className="sidebar-plans">
         <li><a href="/inside-the-network">System Hub</a><p>Explore the complete training network in 3D and see how each build connects.</p></li>
-        <li><a href="/technical-training">Configuration Hub</a><p>Explore network builds with interactive 3D scenes, guides, and companion training materials.</p></li>
+        <li><a href="/technical-training">Training Hub</a><p>Explore network builds with interactive 3D scenes, guides, and companion training materials.</p></li>
       </ul>
       <p className="sidebar-status">Training materials are available now. Video walkthroughs are coming soon.</p>
     </section>

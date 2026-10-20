@@ -136,16 +136,18 @@ jobs:
             fi
             training=$(curl -sL -m 20 -o training.html -w '%{http_code}' "$site/technical-training")
             grc=$(curl -sL -m 20 -o grc.html -w '%{http_code}' "$site/grc-rmf-training")
-            # The Compliance Hub has no catalog tiles (its grid is hidden by design); check that its
-            # course, ATO Package Builder, and ATO Template Library links render instead.
+            # The ATO Package Builder Hub has no catalog tiles; check that its builder, course 2.1 and
+            # ATO Template Library links render instead (owner direction, 19 October 2026).
             grclinks=0
             for mark in 'grc-rmf-training/rmf/index.html#catalog/01' 'grc-rmf-training/workspace' 'grc-rmf-training/templates'; do grep -q "$mark" grc.html && grclinks=$((grclinks+1)); done
-            tiles=$(grep -o 'id="tile-title-' training.html | wc -l)
+            # The Training Hub lists every catalog entry (data-hub-entries) and draws its rows of tiles on the server.
+            tiles=$(grep -o 'data-hub-tile="' training.html | wc -l)
+            entries=$(grep -o 'data-hub-entries="[0-9]*"' training.html | grep -o '[0-9]*' | head -1)
             course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/two-tier-pki")
             itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
-            echo "::notice title=Domain check $site::build $served | /technical-training $training ($tiles tiles shown) | /grc-rmf-training $grc ($grclinks of 3 hub links) | /training/two-tier-pki $course | /inside-the-network $itn"
-            if [ "$training" != 200 ] || [ "$tiles" -lt 19 ] || [ "$grc" != 200 ] || [ "$grclinks" -lt 3 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
-              echo "::error title=Domain check $site::A key page is missing, the Configuration Hub shows fewer than 19 tiles, or the Compliance Hub is missing its course, builder, or template links."
+            echo "::notice title=Domain check $site::build $served | /technical-training $training ($tiles tiles shown, ${entries:-0} entries) | /grc-rmf-training $grc ($grclinks of 3 hub links) | /training/two-tier-pki $course | /inside-the-network $itn"
+            if [ "$training" != 200 ] || [ "$tiles" -lt 12 ] || [ "${entries:-0}" -lt 21 ] || [ "$grc" != 200 ] || [ "$grclinks" -lt 3 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing, the Training Hub shows fewer than 12 tiles or 21 entries, or the ATO Package Builder Hub is missing its course, builder, or template links."
               fail=1
             fi
           done

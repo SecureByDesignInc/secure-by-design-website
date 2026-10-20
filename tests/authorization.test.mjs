@@ -262,14 +262,15 @@ test('monitoring flags expiry, the annual review, overdue POA&M items, lapsed pr
  assert.deepEqual(phases({...state,controls:[]},now).map(p=>p.done),[false,false,false,false,false,true,false]);
 });
 
-test('the Compliance Hub follows the Configuration Hub in the main menu, including the Community shells',()=>{
+// Owner direction, 19 October 2026: the Training Hub and the ATO Package Builder Hub replace the Configuration Hub and the Compliance Hub.
+test('the ATO Package Builder Hub follows the Training Hub in the main menu, including the Community shells',()=>{
  const nav=JSON.parse(fs.readFileSync('content/navigation.json','utf8'));
  const at=href=>nav.findIndex(([path])=>path===href);
- assert.deepEqual(nav[at('/technical-training')],['/technical-training','Configuration Hub']);
- assert.deepEqual(nav[at('/grc-rmf-training')],['/grc-rmf-training','Compliance Hub']);
+ assert.deepEqual(nav[at('/technical-training')],['/technical-training','Training Hub']);
+ assert.deepEqual(nav[at('/grc-rmf-training')],['/grc-rmf-training','ATO Package Builder Hub']);
  assert.equal(at('/grc-rmf-training'),at('/technical-training')+1);
  assert.ok(!nav.some(([path])=>path==='/training'||path==='/authorization-workspace'));
- for(const name of ['careers','career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/technical-training"[^>]*>Configuration Hub<\/a><a href="\/grc-rmf-training"[^>]*>Compliance Hub</,name);
+ for(const name of ['careers','career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/technical-training"[^>]*>Training Hub<\/a><a href="\/grc-rmf-training"[^>]*>ATO Package Builder Hub</,name);
 });
 
 test('deleting a system or the account removes every record',async()=>{
