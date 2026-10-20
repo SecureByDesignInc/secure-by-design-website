@@ -35,7 +35,7 @@
       "number": "1.1",
       "title": "Build and harden the identity foundation",
       "subtitle": "AD DS, DNS, time, STIG hardening, PKI, DHCP & tiered administration",
-      "description": "Design the identity foundation with the US design references, then build it end to end: promote SBD-DC01 and SBD-DC02, configure DNS and domain time, measure both controllers against the DISA STIG and harden them with Group Policy, build the two-tier PKI, stand up DHCP for VLAN 80 with secure DNS updates, and move administration onto tiered seats. Eight parts, each opening with its design decisions and closing with evidence for your portfolio.",
+      "description": "Design the identity foundation with the government and vendor design references, then build it end to end: promote SBD-DC01 and SBD-DC02, configure DNS and domain time, measure both controllers against the DISA STIG and harden them with Group Policy, build the two-tier PKI, stand up DHCP for VLAN 80 with secure DNS updates, and move administration onto tiered seats. Eight parts, each opening with its design decisions and closing with evidence for your portfolio.",
       "tags": [
         "Windows Server",
         "Active Directory",
@@ -64,12 +64,12 @@
         "PKI · DHCP · Tier 0"
       ],
       "outcomes": [
-        "Design the forest, namespace, time hierarchy and PKI against US guidance",
+        "Design the forest, namespace, time hierarchy and PKI against government and vendor guidelines",
         "Build and verify SBD-DC01, SBD-DC02, DNS and domain time",
         "Measure against the DISA STIG and harden with Group Policy",
         "Build the two-tier PKI, DHCP and tiered administration"
       ],
-      "outcomeSummary": "One forest on two healthy domain controllers, with DNS, domain time, a measured and hardened baseline, a two-tier PKI, DHCP and tiered administration, each designed against US guidance and proven with evidence.",
+      "outcomeSummary": "One forest on two healthy domain controllers, with DNS, domain time, a measured and hardened baseline, a two-tier PKI, DHCP and tiered administration, each designed against government and vendor guidelines and proven with evidence.",
       "networkLabel": "Identity foundation · VLANs 10, 30, 60 and 80",
       "categoryId": "network-build",
       "kind": "configuration",
@@ -1075,9 +1075,9 @@
     },
     {
       "id": "design-references",
-      "title": "US design references",
+      "title": "Government & Vendor Guidelines",
       "kind": "reference",
-      "description": "How to design each infrastructure service before you build it, from official Microsoft documentation and US government and standards guidance only: NIST, CISA, NSA, DISA, CIS, the IETF and ICANN. Each reference walks the design decisions, what each authority says, the trade-offs, and where the authorities agree, differ or conflict, with an annotated catalog of the sources behind it."
+      "description": "How to design each infrastructure service before you build it, from official vendor documentation and government and standards guidance: Microsoft, NIST, CISA, NSA, DISA, CIS, the IETF and ICANN. Each reference walks the design decisions, what each authority says, the trade-offs, and where the authorities agree, differ or conflict, with an annotated catalog of the sources behind it."
     }
   ],
   "references": [
@@ -1133,7 +1133,7 @@
       "categoryOrder": 1,
       "title": "Active Directory design",
       "subtitle": "Forest, domain, OU, trust, Group Policy and tiering design",
-      "description": "Six design areas for the identity foundation: forest, domain, trusts, OU, Group Policy and administrative tiering. Microsoft supplies the structural logic; CISA/NSA, DISA and NIST supply the security overlay. Each area walks the decision at stake, the realistic options, what the US authorities say, the trade-offs and the conflicts, with the annotated catalog of the Microsoft, NIST, CISA/NSA, DISA, CIS and IETF sources behind it.",
+      "description": "Six design areas for the identity foundation: forest, domain, trusts, OU, Group Policy and administrative tiering. Microsoft supplies the structural logic; CISA/NSA, DISA and NIST supply the security overlay. Each area walks the decision at stake, the realistic options, what the government and vendor guidelines say, the trade-offs and the conflicts, with the annotated catalog of the Microsoft, NIST, CISA/NSA, DISA, CIS and IETF sources behind it.",
       "tags": [
         "Design reference",
         "Active Directory",
@@ -1527,8 +1527,8 @@
       "categoryId": "design-references",
       "categoryOrder": 6,
       "title": "DISA STIGs and GPO packages",
-      "subtitle": "DISA’s artifacts and tooling, and the US guidance around them",
-      "description": "The annotated catalog behind the hardening gate in course 1.1, parts 4 and 5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the US government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
+      "subtitle": "DISA’s artifacts and tooling, and the guidance around them",
+      "description": "The annotated catalog behind the hardening gate in course 1.1, parts 4 and 5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
       "tags": [
         "Design reference",
         "DISA STIG",
@@ -1541,7 +1541,7 @@
         "SCAP · SCC · STIG Viewer",
         "GPO package"
       ],
-      "outcomeSummary": "What STIGs, SRGs and CCIs are, how they map to NIST SP 800-53, how the GPO package, SCAP content and the tools are obtained and used, and where the US authorities agree and differ.",
+      "outcomeSummary": "What STIGs, SRGs and CCIs are, how they map to NIST SP 800-53, how the GPO package, SCAP content and the tools are obtained and used, and where the authorities agree and differ.",
       "outcomes": [
         "Understand STIGs, SRGs and CCIs and how they tie to SP 800-53 controls",
         "Get the public STIGs, SCAP benchmarks, GPO package and tools from cyber.mil",
@@ -1567,8 +1567,8 @@
       },
       "areas": [
         {
-          "title": "TL;DR — the US guidance baseline",
-          "anchor": "1-tl-dr-the-us-guidance-baseline"
+          "title": "TL;DR — the guidance baseline",
+          "anchor": "1-tl-dr-the-guidance-baseline"
         },
         {
           "title": "Guidance landscape overview",
@@ -1579,8 +1579,8 @@
           "anchor": "3-section-a-disa-s-own-artifacts-and-tooling"
         },
         {
-          "title": "Section B — Related US government and standards guidance",
-          "anchor": "4-section-b-related-us-government-and-standards-guidance"
+          "title": "Section B — Related government and standards guidance",
+          "anchor": "4-section-b-related-government-and-standards-guidance"
         },
         {
           "title": "Topic crosswalk",

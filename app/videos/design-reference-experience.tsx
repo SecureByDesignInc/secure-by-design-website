@@ -1,4 +1,4 @@
-// The expanded tile for a US design reference (owner's compendium, 19 October 2026). It keeps the companion layout
+// The expanded tile for a design reference (owner's compendium, 19 October 2026). It keeps the companion layout
 // every expanded tile shares (companion.tsx): the heading, the materials panel and a right-hand column, then the
 // design areas below. The full reference is its own page, /training/design/<service> (design-reference.tsx).
 import { ArrowUpRight, BookOpen, Compass, FileText, Scale } from 'lucide-react';
@@ -34,17 +34,17 @@ export default function DesignReferenceExperience({ reference }: { reference: Re
             cover={training.cover}
             coverAlt={`Cover of the Secure By Design ${reference.title} reference`}
             heading={['Design it first.', 'Then build it right.']}
-            summary={`${design ? `${stats.areas} design areas` : `${areas.length} sections`} and ${stats.sources} sources, from official Microsoft documentation and US government and standards guidance only.`}
+            summary={`${design ? `${stats.areas} design areas` : `${areas.length} sections`} and ${stats.sources} sources, from official vendor documentation and government and standards guidance.`}
             guide={{
               href: training.guide,
               title: `Open the ${reference.title} reference`,
-              detail: design ? 'Decision at stake · options · what the US authorities say · trade-offs · conflicts' : 'Guidance landscape · sources by publisher · crosswalk · agreements and conflicts',
+              detail: design ? 'Decision at stake · options · what the guidelines say · trade-offs · conflicts' : 'Guidance landscape · sources by publisher · crosswalk · agreements and conflicts',
               icon: <Compass size={20} />,
               trailing: <ArrowUpRight size={19} />,
             }}
             links={links}
             edition={<>
-              <p>US design reference · Compendium assembled {training.updated}</p>
+              <p>Government &amp; Vendor Guidelines · Compendium assembled {training.updated}</p>
               <p>Sources are named by publisher, title, date and status; open each at the publisher&apos;s own site.</p>
               <p>© 2026 Secure By Design Team LLC.</p>
             </>}

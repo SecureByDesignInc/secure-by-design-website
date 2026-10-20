@@ -1,4 +1,4 @@
-// A US design reference page (owner direction, 19 October 2026): the design reference for one infrastructure service
+// A design reference page (Government & Vendor Guidelines) (owner direction, 19 October 2026): the design reference for one infrastructure service
 // from the owner's compendium, then its annotated source catalog. Blocks come from content/design-references.json
 // (scripts/prepare-design-references.py rebuilds them from the compendium PDF): headings, paragraphs with
 // bold/italic/code runs, nested lists, and tables. Sources are named, not linked: the compendium names each by
@@ -100,13 +100,13 @@ export default function DesignReference({ entry, tile }: { entry: Service; tile:
 
         <article className="dr-content">
           <header className="dr-head">
-            <p className="vc-kicker">TRAINING HUB · US DESIGN REFERENCE · {entry.topic.toUpperCase()}</p>
+            <p className="vc-kicker">TRAINING HUB · GOVERNMENT &amp; VENDOR GUIDELINES · {entry.topic.toUpperCase()}</p>
             <h1>{tile.title}</h1>
             <p className="dr-subtitle">{tile.subtitle}</p>
             <p className="dr-summary">{tile.description}</p>
             <ul className="dr-facts" aria-label="About this reference">
               {entry.stats.areas > 0 && <li><Scale size={14} aria-hidden="true" /> {entry.stats.areas} design areas</li>}
-              <li><FileText size={14} aria-hidden="true" /> {entry.stats.sources} sources, US only</li>
+              <li><FileText size={14} aria-hidden="true" /> {entry.stats.sources} sources · government &amp; vendor guidelines</li>
               <li><BookOpen size={14} aria-hidden="true" /> Compendium assembled {assembled}</li>
             </ul>
             <p className="dr-method">Each source is named by publisher, title, date and status, and verified as of October 2026. Open it at the publisher&apos;s own site; nothing is hosted here. Sections headed &ldquo;Caveats&rdquo; list what could not be verified.</p>
