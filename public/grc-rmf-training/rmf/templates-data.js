@@ -318,6 +318,196 @@ window.RMF_TEMPLATES = {
    "href": "/training/library/training-samples/SBD-Training-CM-Plan.docx",
    "basis": "JSIG CM-2, CM-3, CM-4, CM-7, CM-8 and CM-9; NIST SP 800-53 Rev. 5 CM-9; NIST SP 800-128",
    "note": "Roles, configuration items, baselines, the CCB and the JSIG's site rules, a six-step change process with a worked change request, compliance monitoring and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Access control plan",
+   "artifact": "AC plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-AC-Plan.docx",
+   "basis": "JSIG AC family; NIST SP 800-53 Rev. 5 AC family (51 controls) and SP 800-53B; NIST SP 800-46 Rev. 2",
+   "note": "Roles, account types with a worked Tier 0 example, least-privilege and session settings, every AC control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Awareness and training plan",
+   "artifact": "AT plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-AT-Plan.docx",
+   "basis": "JSIG AT family; NIST SP 800-53 Rev. 5 AT family (7 controls) and SP 800-53B; NIST SP 800-50 Rev. 1",
+   "note": "Roles, training by audience with a worked all-users row, training records, every AT control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Audit and accountability plan",
+   "artifact": "AU plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-AU-Plan.docx",
+   "basis": "JSIG AU family; NIST SP 800-53 Rev. 5 AU family (28 controls) and SP 800-53B; NIST SP 800-92",
+   "note": "Roles, the event list with a worked sign-in example, review, retention and protection, every AU control with its baseline, and plan approval."
+  },
+  {
+   "group": "assess",
+   "title": "Assessment, authorization and monitoring plan",
+   "artifact": "CA plan",
+   "rmf": "A-1, A-2, A-3, A-6, M-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-CA-Plan.docx",
+   "basis": "JSIG CA family; NIST SP 800-53 Rev. 5 CA family (14 controls) and SP 800-53B; NIST SP 800-37 Rev. 2; NIST SP 800-53A Rev. 5",
+   "note": "Roles, the assessment schedule with a worked initial assessment, interconnection and POA&M decisions, every CA control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Contingency plan",
+   "artifact": "Contingency plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-CP-Plan.docx",
+   "basis": "JSIG CP family; NIST SP 800-53 Rev. 5 CP family (38 controls) and SP 800-53B; NIST SP 800-34 Rev. 1",
+   "note": "Roles, recovery objectives with a worked directory example, backups and restore testing, every CP control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Identification and authentication plan",
+   "artifact": "IA plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-IA-Plan.docx",
+   "basis": "JSIG IA family; NIST SP 800-53 Rev. 5 IA family (29 controls) and SP 800-53B; NIST SP 800-63-4",
+   "note": "Roles, identifiers and authenticators with a worked privileged-user row, device and service authentication, every IA control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Incident response plan",
+   "artifact": "IR plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-IR-Plan.docx",
+   "basis": "JSIG IR family; NIST SP 800-53 Rev. 5 IR family (19 controls) and SP 800-53B; NIST SP 800-61 Rev. 3",
+   "note": "Roles, incident categories and reporting with a worked spillage example, response steps and testing, every IR control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Maintenance plan",
+   "artifact": "MA plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-MA-Plan.docx",
+   "basis": "JSIG MA family; NIST SP 800-53 Rev. 5 MA family (13 controls) and SP 800-53B",
+   "note": "Roles, the maintenance schedule with a worked host example, tool and personnel rules, every MA control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Media protection plan",
+   "artifact": "MP plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-MP-Plan.docx",
+   "basis": "JSIG MP family; NIST SP 800-53 Rev. 5 MP family (11 controls) and SP 800-53B; NIST SP 800-88",
+   "note": "Roles, media handling with a worked transfer-media row, sanitization and destruction, every MP control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Physical and environmental protection plan",
+   "artifact": "PE plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-PE-Plan.docx",
+   "basis": "JSIG PE family; NIST SP 800-53 Rev. 5 PE family (30 controls) and SP 800-53B",
+   "note": "Roles, physical access by area with a worked server-room row, environmental protections, every PE control with its baseline, and plan approval."
+  },
+  {
+   "group": "select",
+   "title": "Security and privacy planning",
+   "artifact": "PL plan",
+   "rmf": "S-4, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-PL-Plan.docx",
+   "basis": "JSIG PL family; NIST SP 800-53 Rev. 5 PL family (9 controls) and SP 800-53B; NIST SP 800-18 Rev. 1",
+   "note": "Roles, the plans the package relies on with a worked SSP row, signed rules of behavior, every PL control with its baseline, and plan approval."
+  },
+  {
+   "group": "prepare",
+   "title": "Program management plan",
+   "artifact": "PM plan",
+   "rmf": "P-1, P-2, P-3",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-PM-Plan.docx",
+   "basis": "JSIG PM family; NIST SP 800-53 Rev. 5 PM family (32 controls) and SP 800-53B; NIST SP 800-39",
+   "note": "Organization-level roles and resources with a worked example, program measures, every PM control (SP 800-53B assigns them to the organization, not a baseline), and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Personnel security plan",
+   "artifact": "PS plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-PS-Plan.docx",
+   "basis": "JSIG PS family; NIST SP 800-53 Rev. 5 PS family (10 controls) and SP 800-53B",
+   "note": "Roles, position risk and screening with a worked administrator row, transfers and terminations, every PS control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "PII processing and transparency plan",
+   "artifact": "PT plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-PT-Plan.docx",
+   "basis": "JSIG PT family; NIST SP 800-53 Rev. 5 PT family (8 controls) and SP 800-53B; NIST SP 800-122; NIST Privacy Framework",
+   "note": "Roles, the PII inventory with a worked directory row, notice and consent, every PT control with a pointer to the SP 800-53B privacy baseline, and plan approval."
+  },
+  {
+   "group": "assess",
+   "title": "Risk assessment plan",
+   "artifact": "RA plan",
+   "rmf": "P-14, C-2, A-5, M-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-RA-Plan.docx",
+   "basis": "JSIG RA family; NIST SP 800-53 Rev. 5 RA family (14 controls) and SP 800-53B; NIST SP 800-30 Rev. 1",
+   "note": "Roles, categorization and risk assessment decisions, vulnerability monitoring with a worked scan row, every RA control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "System and services acquisition plan",
+   "artifact": "SA plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-SA-Plan.docx",
+   "basis": "JSIG SA family; NIST SP 800-53 Rev. 5 SA family (24 controls) and SP 800-53B; NIST SP 800-160 Vol. 1 Rev. 1",
+   "note": "Roles, acquisition requirements with a worked licensing row, supported components, every SA control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "System and communications protection plan",
+   "artifact": "SC plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-SC-Plan.docx",
+   "basis": "JSIG SC family; NIST SP 800-53 Rev. 5 SC family (57 controls) and SP 800-53B; NIST SP 800-41 Rev. 1; NIST SP 800-52 Rev. 2",
+   "note": "Roles, permitted paths with a worked VLAN example, transmission and key management, every SC control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "System and information integrity plan",
+   "artifact": "SI plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-SI-Plan.docx",
+   "basis": "JSIG SI family; NIST SP 800-53 Rev. 5 SI family (38 controls) and SP 800-53B; NIST SP 800-40 Rev. 4; NIST SP 800-83 Rev. 1",
+   "note": "Roles, flaw remediation and malicious code with a worked update row, monitoring and integrity checks, every SI control with its baseline, and plan approval."
+  },
+  {
+   "group": "implement",
+   "title": "Supply chain risk management plan",
+   "artifact": "SCRM plan",
+   "rmf": "S-4, I-1, I-2",
+   "format": "DOCX",
+   "href": "/training/library/training-samples/SBD-Training-SR-Plan.docx",
+   "basis": "JSIG SR family; NIST SP 800-53 Rev. 5 SR family (16 controls) and SP 800-53B; NIST SP 800-161 Rev. 1",
+   "note": "Roles, supply chain risks and controls with a worked hardware row, authenticity checks and disposal, every SR control with its baseline, and plan approval."
   }
  ]
 };

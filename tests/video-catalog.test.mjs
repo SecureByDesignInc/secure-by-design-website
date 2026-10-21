@@ -528,3 +528,29 @@ test('the design references and course 1.1 frame their guidance as Government & 
   }
   for (const text of texts) assert.doesNotMatch(text, framing);
 });
+
+// Owner direction, 20 October 2026: a Secure By Design practice plan for every NIST SP 800-53 Rev. 5 control family
+// (configuration management already had one), written from the JSIG and NIST only, in the practice-template design.
+test('every control family has an original practice plan in the practice-template design', async () => {
+  const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
+  const index = JSON.parse(readFileSync(new URL('../content/authorization/control-index.json', import.meta.url), 'utf8'));
+  const plans = templates.samples.filter(item => /SBD-Training-[A-Z]{2}-Plan\.docx$/.test(item.href));
+  assert.deepEqual(plans.map(item => item.href.match(/SBD-Training-([A-Z]{2})-Plan/)[1]).sort(), Object.keys(index.families).sort(), 'one plan per family');
+  const { execFileSync } = await import('node:child_process');
+  for (const plan of plans) {
+    const code = plan.href.match(/SBD-Training-([A-Z]{2})-Plan/)[1];
+    const file = new URL('../public' + plan.href, import.meta.url);
+    const xml = ['word/document.xml', 'word/header1.xml', 'word/footer1.xml'].map(part => { try { return execFileSync('unzip', ['-p', file.pathname, part]).toString(); } catch { return ''; } }).join(' ');
+    const text = xml.replace(/<\/w:p>|<\/w:tc>/g, ' ').replace(/<[^>]+>/g, '');
+    assert.match(text, /SECURE BY DESIGN TRAINING SAMPLE - NOT AN OFFICIAL FORM/, `${code} header notice`);
+    assert.match(text, /Written by Secure By Design for instruction\. This is not an official DoD, DCSA, PSO or AO form/, `${code} closing notice`);
+    if (code !== 'CM') assert.match(text, new RegExp(`${code}-1\\b`), `${code} lists its policy control`); // the CM plan is the CM-9 plan
+    assert.doesNotMatch(text, /i-assure|\beMASS\b|\bXacta\b|FOR OFFICIAL USE ONLY|800-53 ?v4|800-53 Rev(ision)?\.? 4\b/i, `${code} has no third-party or outdated text`);
+    if (code !== 'CM') {
+      const listed = Object.entries(index.controls).filter(([id, v]) => v[1] === code && (!id.includes('(') || v[2])).map(([id]) => id);
+      for (const id of listed) assert.ok(text.includes(id), `${code} plan lists ${id}`);
+      assert.match(plan.basis, new RegExp(`JSIG ${code} family; NIST SP 800-53 Rev\\. 5 ${code} family \\(${listed.length} controls\\)`), `${code} basis`);
+      assert.match(plan.rmf, /^[PCSIAM]-\d+(, [PCSIAM]-\d+)*$/, `${code} RMF tasks`);
+    }
+  }
+});
