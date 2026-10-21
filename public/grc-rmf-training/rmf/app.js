@@ -179,9 +179,15 @@
     const official = library.templates.filter(t => t.group === step.id), samples = library.samples.filter(t => t.group === step.id);
     const item = t => `<li><div><b>${esc(t.title)}</b><small>${esc(t.source)}</small></div><span class="tpl-links">${t.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} <small>${esc(l.format)}</small> ↗</a>`).join('')}</span></li>`;
     const sample = t => `<li class="is-sample"><div><b>${esc(t.title)}</b><small>Secure By Design training sample · not an official form</small></div><span class="tpl-links"><a href="${esc(t.href)}" download>↓ Download <small>${esc(t.format)}</small></a></span></li>`;
-    const body = official.length || samples.length
-      ? `${official.length ? `<p class="tpl-kicker">Official sources, verified public</p><ul class="tpl-list">${official.map(item).join('')}</ul>` : ''}${samples.length ? `<p class="tpl-kicker">Practice templates</p><ul class="tpl-list">${samples.map(sample).join('')}</ul>` : ''}`
-      : `<p>The package is assembled from the documents of the earlier steps: the SSP with its SCTM, the RAR, the assessment results and the POA&amp;M. Use the <a class="text-link" href="#evidence/manifest">package manifest</a> and the capstone to bring them together.</p>`;
+    // Owner direction, 21 October 2026: while the official sources are revised, a step with a library section and no
+    // official entries shows one Coming soon card in their place (no publisher, version, date or link).
+    const soon = !official.length && library.groups.some(g => g.id === step.id);
+    const soonCard = `<li class="is-soon"><div><b>Official sources for ${esc(step.title)}</b><small>In preparation</small></div><span class="tpl-soon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Coming soon</span></li>`;
+    // The Authorize step's package is assembled from the earlier steps' documents; it says so beneath its card.
+    const assembled = `<p>The package is assembled from the documents of the earlier steps: the SSP with its SCTM, the RAR, the assessment results and the POA&amp;M. Use the <a class="text-link" href="#evidence/manifest">package manifest</a> and the capstone to bring them together.</p>`;
+    const body = official.length || samples.length || soon
+      ? `${official.length ? `<p class="tpl-kicker">Official sources, verified public</p><ul class="tpl-list">${official.map(item).join('')}</ul>` : soon ? `<p class="tpl-kicker">Official sources</p><ul class="tpl-list">${soonCard}</ul>` : ''}${samples.length ? `<p class="tpl-kicker">Practice templates</p><ul class="tpl-list">${samples.map(sample).join('')}</ul>` : ''}${step.id === 'authorize' ? assembled : ''}`
+      : assembled;
     return `<section class="step-section" aria-labelledby="step-use"><h3 class="panel-title" id="step-use"><span class="step-num">3</span>Use the templates</h3>${body}<p class="help"><a class="text-link" href="/grc-rmf-training/templates#${step.id}">Open this step in the ATO Template Library →</a></p></section>`;
   }
   function renderStep(id) {
