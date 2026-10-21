@@ -44,7 +44,8 @@ function entryMeta(entry: CatalogEntry): string {
   if (isReferenceLibrary(entry)) {
     const stats = (entry as { stats?: { areas: number; sources: number } }).stats;
     if (stats) return `${stats.areas ? `${stats.areas} design areas · ` : ''}${stats.sources} sources · government & vendor guidelines`;
-    return 'Official sources · Training samples';
+    // Owner direction, 21 October 2026: the ATO Template Library's official sources are coming soon.
+    return 'Training samples · Official sources coming soon';
   }
   if (comingSoon(entry)) return 'Training materials in preparation';
   if (isTrainingCourse(entry)) {

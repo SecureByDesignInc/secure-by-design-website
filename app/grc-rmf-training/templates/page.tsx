@@ -1,10 +1,11 @@
 import TemplateLibrary from './template-library';
 import '../../videos/videos.css';
+import '../../videos/training-hub.css';
 import './templates.css';
 import { sharePreview } from '../../share-preview';
 
 // The ATO Template Library, in the Training Hub (owner direction, 19 October 2026; its address stays under /grc-rmf-training). Data: content/ato-templates.json.
-const description = 'Official sources for building an authorization package, arranged by RMF step and verified as publicly released by their publishers: CNSSI 1253, NIST control baselines and SSP outline, DCSA appointment letter and RAR templates, POA&M guidance, and FedRAMP formats for the traceability matrix, inventory and continuous monitoring.';
+const description = 'Templates for building an authorization package, arranged by RMF step. Official sources for each step are coming soon; Secure By Design training samples are available now.';
 export const metadata = {
   title: 'ATO Template Library',
   description,

@@ -2,15 +2,18 @@
 // expanded tile shares (companion.tsx): the heading, the materials panel and a right-hand column, then the entries
 // below. Owner direction, 15 October 2026: the library lists only documents verified as publicly released, each
 // linked to its publisher (content/ato-templates.json). The full page is /grc-rmf-training/templates.
+// Owner direction, 21 October 2026: while the official sources are revised, each RMF step is one coming-soon card, as on
+// the full page, with no publisher, version, date or link. The training samples are unchanged.
 import { ArrowUpRight, BookOpen, FileText, Maximize2 } from 'lucide-react';
 import type { ReferenceLibrary } from './catalog-types';
 import { CompanionHeading, CompanionMaterials, type CompanionLink } from './companion';
 import templates from '../../content/ato-templates.json';
-import TemplateEntry, { SampleEntry } from './template-entry';
-import { sourcesPhrase } from './template-labels';
+import TemplateEntry, { SampleEntry, StepSoonCard } from './template-entry';
+import { officialFor, officialTemplates, sourcesPhrase } from './template-labels';
 
 export default function LibraryExperience({ library }: { library: ReferenceLibrary }) {
-  const total = templates.templates.length;
+  const total = officialTemplates.length;
+  const soon = templates.groups.filter(group => officialFor(group.id).length === 0);
   const training = library.training;
   const links: CompanionLink[] = (training.relatedResources ?? []).map(resource => ({
     href: resource.href,
@@ -25,7 +28,7 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
       <section className="vc-episode" aria-labelledby={`library-resources-${library.id}`}>
         <CompanionHeading
           id={`library-resources-${library.id}`}
-          intro="Open each official source below, or the full library page."
+          intro={total ? 'Open each official source below, or the full library page.' : 'Official sources are coming soon. The training samples below are ready to use now.'}
           action={{ href: training.guide, label: 'Open the full library', icon: <BookOpen size={16} /> }}
         />
         <div className="vc-episode-content">
@@ -34,17 +37,17 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
             cover={training.cover}
             coverAlt={`Cover of the Secure By Design ${library.title}`}
             heading={['Keep the sources.', 'Build the Body of Evidence.']}
-            summary={`${sourcesPhrase(total)}, each verified as publicly released by its publisher and linked to the publisher's own copy.`}
+            summary={total ? `${sourcesPhrase(total)}, each verified as publicly released by its publisher and linked to the publisher's own copy.` : `Official sources for each RMF step are coming soon. ${templates.samples.length} Secure By Design training samples are ready now.`}
             guide={{
               href: training.guide,
               title: `Open the ${library.title}`,
-              detail: `${total} entries · arranged by RMF step`,
+              detail: total ? `${total} entries · arranged by RMF step` : 'Official sources coming soon · training samples',
               icon: <BookOpen size={20} />,
               trailing: <ArrowUpRight size={19} />,
             }}
             links={links}
             edition={<>
-              <p>For instruction and practice. Your AO&apos;s and PSO&apos;s current templates take precedence. Links checked {training.updated}.</p>
+              <p>For instruction and practice. Your AO&apos;s and PSO&apos;s current templates take precedence.</p>
               <p>© 2026 Secure By Design Team LLC.</p>
             </>}
           />
@@ -70,8 +73,8 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
           <div className="vc-stage-title">
             <FileText size={21} />
             <div>
-              <p className="vc-kicker">VERIFIED PUBLIC SOURCES</p>
-              <h4 id={`library-sources-${library.id}`}>Open each source from its publisher.</h4>
+              <p className="vc-kicker">{total ? 'VERIFIED PUBLIC SOURCES' : 'OFFICIAL SOURCES · COMING SOON'}</p>
+              <h4 id={`library-sources-${library.id}`}>{total ? 'Open each source from its publisher.' : 'Official sources by RMF step.'}</h4>
             </div>
           </div>
           <div className="vc-scene-tools">
@@ -86,9 +89,12 @@ export default function LibraryExperience({ library }: { library: ReferenceLibra
           </div>
         </div>
         <div className="vc-library-stage">
-          <ul className="vc-library-list">
-            {templates.templates.map(item => <TemplateEntry key={item.title} item={item} />)}
-          </ul>
+          {soon.length > 0 && <div className="th-grid vc-library-steps">
+            {soon.map(group => <StepSoonCard key={group.id} group={group} heading="h5" anchor={false} />)}
+          </div>}
+          {total > 0 && <ul className="vc-library-list">
+            {officialTemplates.map(item => <TemplateEntry key={item.title} item={item} />)}
+          </ul>}
           <p className="vc-kicker vc-library-samples-kicker">SECURE BY DESIGN TRAINING SAMPLES · NOT OFFICIAL FORMS · FICTIONAL DATA ONLY</p>
           <ul className="vc-library-list">
             {templates.samples.map(item => <SampleEntry key={item.href} item={item} />)}

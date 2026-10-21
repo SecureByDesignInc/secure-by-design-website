@@ -1,12 +1,36 @@
 // One ATO Template Library entry, shared by the expanded catalog tile and the full library page.
 // Owner direction, 15 October 2026: every entry is a publicly released document, linked to its publisher's own
 // copy (opens in a new tab). Nothing is hosted here.
-import { Download, ExternalLink } from 'lucide-react';
+// Owner direction, 21 October 2026: while the official sources are revised, each RMF step shows one StepSoonCard instead
+// of its entries, in the design of the coming-soon tiles in the Training Hub (SBD-EPO01, SBD-NESSUS01).
+import { Clock, Download, ExternalLink } from 'lucide-react';
 import type templates from '../../content/ato-templates.json';
-import { STATUSES, frameworkLabel } from './template-labels';
+import { TileArt } from './hub-art';
+import { STATUSES, frameworkLabel, type OfficialTemplate, type TemplateGroup } from './template-labels';
 
-type Template = (typeof templates.templates)[number];
+type Template = OfficialTemplate;
 type Sample = (typeof templates.samples)[number];
+
+/**
+ * One RMF step's official sources, coming soon: the Training Hub's coming-soon tile (training-hub.css, loaded by every
+ * page that shows it) with the step's name and nothing else, so no publisher, version, date or link. It carries the
+ * step's id so links to #<step> still land on it.
+ */
+export function StepSoonCard({ group, heading = 'h4', anchor = true }: { group: TemplateGroup; heading?: 'h4' | 'h5'; anchor?: boolean }) {
+  const Heading = heading;
+  const titleId = `${anchor ? '' : 'tile-'}${group.id}-soon-title`;
+  return (
+    <article id={anchor ? group.id : undefined} className="th-tile th-art-reference th-tile-soon tl-step-soon" data-step-soon={group.id} aria-labelledby={titleId}>
+      <div className="th-thumb">
+        <TileArt family="reference" />
+        <span className="th-chip">{`RMF · ${group.abbr.toUpperCase()}`}</span>
+        <span className="th-soon"><Clock size={11} aria-hidden="true" />Coming soon</span>
+        <Heading id={titleId} className="th-tile-title">{group.title}</Heading>
+      </div>
+      <p className="th-tile-meta">Official sources in preparation</p>
+    </article>
+  );
+}
 
 export default function TemplateEntry({ item, heading = 'h5' }: { item: Template; heading?: 'h4' | 'h5' }) {
   const Heading = heading;

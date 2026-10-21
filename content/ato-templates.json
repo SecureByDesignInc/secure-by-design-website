@@ -1,6 +1,5 @@
 {
-  "checked": "2026-10-15",
-  "description": "The ATO Template Library lists only documents verified as publicly released by an official publisher, each linked to the publisher's own copy. Nothing is hosted here. Re-check the links every six months.",
+  "description": "Official sources are coming soon for every RMF step, while they are revised. Until a step has entries, its section shows one Coming soon card with no publisher, version, date or link. When sources return, add an entry only when an official publisher posts the document publicly without sign-in, and link to the publisher's copy. The Secure By Design training samples are available now.",
   "groups": [
     {
       "id": "prepare",
@@ -33,12 +32,19 @@
       "note": "Record the test results, turn findings into risk the authorizing official can weigh, and plan the fixes."
     },
     {
+      "id": "authorize",
+      "title": "Authorize",
+      "abbr": "Package and decision",
+      "note": "Assemble the authorization package, take it through review, and record the Authorizing Official’s decision and its termination date."
+    },
+    {
       "id": "monitor",
       "title": "Monitor",
       "abbr": "ConMon",
       "note": "Keep the authorization current: watch the controls, review changes and report on schedule."
     }
   ],
+  "templates": [],
   "samples": [
     {
       "group": "select",
@@ -289,225 +295,6 @@
       "href": "/training/library/training-samples/SBD-Training-SR-Plan.docx",
       "basis": "JSIG SR family; NIST SP 800-53 Rev. 5 SR family (16 controls) and SP 800-53B; NIST SP 800-161 Rev. 1",
       "note": "Roles, supply chain risks and controls with a worked hardware row, authenticity checks and disposal, every SR control with its baseline, and plan approval."
-    }
-  ],
-  "templates": [
-    {
-      "group": "prepare",
-      "title": "ISSM appointment letter template",
-      "source": "Defense Counterintelligence and Security Agency (DCSA), February 2020",
-      "framework": "DoD",
-      "status": "official",
-      "rmf": "P-1",
-      "note": "DCSA's memorandum appointing an Information System Security Manager, with an acceptance block the ISSM signs. It cites the 2016 NISPOM (now 32 CFR Part 117) and DCSA's DAAPM v2.1; for SAP training, cite the JSIG and the program's PSO instead. No public template exists for ISSO, SCA, ISSE or AO appointments.",
-      "links": [
-        {
-          "label": "DCSA ISSM appointment letter",
-          "format": "PDF",
-          "href": "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/ISSM_Appointment_Letter_(February2020).pdf"
-        }
-      ]
-    },
-    {
-      "group": "categorize",
-      "title": "CNSSI 1253, Categorization and Control Selection for National Security Systems",
-      "source": "Committee on National Security Systems (CNSS), 1 August 2022",
-      "framework": "CNSS",
-      "status": "official",
-      "rmf": "C-2, S-1",
-      "note": "Categorize a national security system with separate confidentiality, integrity and availability values, then select its control baseline. Overlays such as the Privacy Overlay tailor that baseline. On the CNSS page, open \"CNSSI 1253\".",
-      "links": [
-        {
-          "label": "CNSS Instructions page",
-          "format": "WEB",
-          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
-        }
-      ]
-    },
-    {
-      "group": "select",
-      "title": "NIST SP 800-53 Rev. 5 controls and SP 800-53B baselines",
-      "source": "National Institute of Standards and Technology (NIST), SP 800-53 Release 5.2.0 (August 2025) and SP 800-53B",
-      "framework": "NIST",
-      "status": "official",
-      "rmf": "S-1, S-2",
-      "note": "The control catalog and the Low, Moderate, High and privacy baselines: the starting columns of an SCTM. The baselines come as a spreadsheet; the catalog is in NIST's Cybersecurity and Privacy Reference Tool. A SAP system takes its baseline from CNSSI 1253 and its overlays rather than these impact levels, so use the catalog for the control text.",
-      "links": [
-        {
-          "label": "SP 800-53B baselines spreadsheet",
-          "format": "XLSX",
-          "href": "https://csrc.nist.gov/files/pubs/sp/800/53/b/upd1/final/docs/sp800-53b-control-baselines.xlsx"
-        },
-        {
-          "label": "SP 800-53 Release 5.2.0 catalog",
-          "format": "WEB",
-          "href": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_2_0/home"
-        }
-      ]
-    },
-    {
-      "group": "select",
-      "title": "CNSS Privacy Overlay",
-      "source": "Committee on National Security Systems (CNSS), 31 October 2024",
-      "framework": "CNSS",
-      "status": "official",
-      "rmf": "S-2",
-      "note": "Tailors the CNSSI 1253 baseline for a system that handles personally identifiable information, adding the privacy controls its sensitivity calls for. On the CNSS page, open \"Privacy Overlay\".",
-      "links": [
-        {
-          "label": "CNSS Instructions page",
-          "format": "WEB",
-          "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
-        }
-      ]
-    },
-    {
-      "group": "implement",
-      "title": "System Security Plan (SSP) outline example",
-      "source": "National Institute of Standards and Technology (NIST), SP 800-18 Rev. 2, June 2026",
-      "framework": "NIST",
-      "status": "official",
-      "rmf": "S-4, S-6, I-2",
-      "note": "NIST's example outline for a system security plan, published with SP 800-18 Rev. 2, which supersedes the 2006 Rev. 1. Its 14 sections run from the system overview, categorization and authorization boundary to the component inventory and control implementation details, and NIST says organizations can adapt it to their own needs. For a SAP system, add the CNSSI 1253 categorization and overlays and the roles your AO and PSO require.",
-      "links": [
-        {
-          "label": "SSP outline example",
-          "format": "DOCX",
-          "href": "https://csrc.nist.gov/files/pubs/sp/800/18/r2/final/docs/sp800-18r2_system_security_plan_outline_example.docx"
-        },
-        {
-          "label": "SP 800-18 Rev. 2 page",
-          "format": "WEB",
-          "href": "https://csrc.nist.gov/pubs/sp/800/18/r2/final"
-        }
-      ]
-    },
-    {
-      "group": "implement",
-      "title": "Integrated Inventory Workbook (format reference)",
-      "source": "Federal Risk and Authorization Management Program (FedRAMP), legacy template, June 2026",
-      "framework": "FedRAMP",
-      "status": "official",
-      "rmf": "P-10, I-2",
-      "note": "A hardware and software inventory with one row per asset: identifier, address, operating system and software versions, baseline configuration, location, owner, scan coverage and end of life. A format reference for the hardware and software lists, not the DoD or JSIG form. FedRAMP has kept it for reference only since June 2026.",
-      "links": [
-        {
-          "label": "Inventory workbook",
-          "format": "XLSX",
-          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20SSP-Appendix-M-Integrated-Inventory-Workbook-Template.xlsx"
-        }
-      ]
-    },
-    {
-      "group": "implement",
-      "title": "NIST SP 800-128, Guide for Security-Focused Configuration Management",
-      "source": "National Institute of Standards and Technology (NIST), August 2011, updated October 2019",
-      "framework": "NIST",
-      "status": "official",
-      "rmf": "I-1, M-1",
-      "note": "The guide behind a configuration management plan. Appendix D is a sample outline for the plan, Appendix E a sample change request, Appendix H a sample configuration control board charter and Appendix I a security impact analysis template.",
-      "links": [
-        {
-          "label": "SP 800-128",
-          "format": "PDF",
-          "href": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-128.pdf"
-        },
-        {
-          "label": "Publication page",
-          "format": "WEB",
-          "href": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
-        }
-      ]
-    },
-    {
-      "group": "assess",
-      "title": "Security Requirements Traceability Matrix (format reference)",
-      "source": "Federal Risk and Authorization Management Program (FedRAMP), legacy template, June 2026",
-      "framework": "FedRAMP",
-      "status": "official",
-      "rmf": "A-3, A-4",
-      "note": "One tab per control family, tracing each control to its assessment procedure, test method, evidence, result and risk: the assessment side of an SCTM. A format reference built on FedRAMP's baselines, not CNSSI 1253 or the JSIG. FedRAMP has kept it for reference only since June 2026.",
-      "links": [
-        {
-          "label": "Low",
-          "format": "XLSX",
-          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-Low-Security-Requirements-Traceability-Matrix-Template.xlsx"
-        },
-        {
-          "label": "Moderate",
-          "format": "XLSX",
-          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-Moderate-Security-Requirements-Traceability-Matrix-Template.xlsx"
-        },
-        {
-          "label": "High",
-          "format": "XLSX",
-          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-High-Security-Requirements-Traceability-Matrix-Template.xlsx"
-        }
-      ]
-    },
-    {
-      "group": "assess",
-      "title": "Risk Assessment Report (RAR) template",
-      "source": "Defense Counterintelligence and Security Agency (DCSA), May 2019",
-      "framework": "DoD",
-      "status": "official",
-      "rmf": "P-14, R-2",
-      "note": "A Tier 3 risk assessment following NIST SP 800-30: system description, scope and purpose, the likelihood, impact and risk scales, and a results table that ties each threat to its mitigating controls. Update it after testing.",
-      "links": [
-        {
-          "label": "DCSA RAR template",
-          "format": "PDF",
-          "href": "https://www.dcsa.mil/portals/91/documents/ctp/tools/Risk_Assessment_Report_(May%202019).pdf"
-        }
-      ]
-    },
-    {
-      "group": "assess",
-      "title": "POA&M job aid",
-      "source": "Center for Development of Security Excellence (CDSE), DCSA",
-      "framework": "DoD",
-      "status": "official",
-      "rmf": "A-6, M-3",
-      "note": "DoD guidance on building and keeping a POA&M: the fields recorded for each weakness and milestone (status, scheduled and completion dates, source, resources, severity, likelihood, impact and residual risk) and how they are used. A job aid rather than a fill-in form.",
-      "links": [
-        {
-          "label": "CDSE POA&M job aid",
-          "format": "PDF",
-          "href": "https://www.cdse.edu/portals/124/documents/jobaids/cyber/CDSE_POAM_Final_Job_Aid.pdf"
-        }
-      ]
-    },
-    {
-      "group": "assess",
-      "title": "POA&M template (format reference)",
-      "source": "Federal Risk and Authorization Management Program (FedRAMP), legacy template, June 2026",
-      "framework": "FedRAMP",
-      "status": "official",
-      "rmf": "A-6, M-3",
-      "note": "A POA&M workbook with open and closed items: weakness, source, affected asset, remediation plan, dates, original and adjusted risk ratings and deviations. A format reference, not a DoD system-of-record POA&M. FedRAMP has kept it for reference only since June 2026.",
-      "links": [
-        {
-          "label": "POA&M template",
-          "format": "XLSX",
-          "href": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-POAM-Template.xlsx"
-        }
-      ]
-    },
-    {
-      "group": "monitor",
-      "title": "Continuous Monitoring Playbook",
-      "source": "Federal Risk and Authorization Management Program (FedRAMP), version 1.0, 17 November 2025",
-      "framework": "FedRAMP",
-      "status": "official",
-      "rmf": "S-5, M-2, M-5",
-      "note": "How a continuous monitoring program runs: monthly vulnerability scanning, annual assessments, significant changes, incident communications and performance management. Use it to shape a ConMon strategy; the JSIG and NIST SP 800-137 set what a SAP strategy must cover.",
-      "links": [
-        {
-          "label": "ConMon Playbook",
-          "format": "PDF",
-          "href": "https://www.fedramp.gov/resources/documents/Continuous_Monitoring_Playbook.pdf"
-        }
-      ]
     }
   ]
 }
