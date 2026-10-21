@@ -554,3 +554,15 @@ test('every control family has an original practice plan in the practice-templat
     }
   }
 });
+
+// Owner direction, 21 October 2026: no classification-marking instruction on any practice template.
+test('practice templates carry no classification-marking instruction', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const dir = new URL('../public/training/library/training-samples/', import.meta.url);
+  for (const name of readdirSync(dir)) {
+    const listing = execFileSync('unzip', ['-Z1', new URL(name, dir).pathname]).toString().split('\n').filter(part => part.endsWith('.xml') && !part.startsWith('['));
+    const text = listing.map(part => execFileSync('unzip', ['-p', new URL(name, dir).pathname, part], { maxBuffer: 128 * 1024 * 1024 }).toString()).join(' ');
+    assert.doesNotMatch(text, /CLASSIFICATION:|security classification guide and PSO direct/, name);
+    assert.match(text, /SECURE BY DESIGN TRAINING SAMPLE/, `${name} keeps its training-sample notice`);
+  }
+});
