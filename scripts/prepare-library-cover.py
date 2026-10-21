@@ -82,10 +82,22 @@ else:
     y += 14
     draw.text((54, y), 'SECURE BY DESIGN TRAINING SAMPLES', font=bold(8), fill=TEAL)
     y += 18
-    for index, item in enumerate(data['samples']):
+    # The control-family practice plans (20 October 2026) are one line, so the list fits the page.
+    import re as _re
+    family = [item for item in data['samples'] if _re.search(r'SBD-Training-(?!CM-)[A-Z]{2}-Plan\.docx$', item['href'])]
+    others = [item for item in data['samples'] if item not in family]
+    for index, item in enumerate(others):
         draw.text((54, y), f"{index + 1:02d}", font=bold(8), fill=TEAL)
         draw.text((72, y), f"{steps[item['group']]}  ·  {item['title']}", font=regular(8.5), fill=BODY)
         y += 18
+    if family:
+        codes = ', '.join(_re.search(r'SBD-Training-([A-Z]{2})-Plan', item['href']).group(1) for item in family)
+        draw.text((54, y), f"{len(others) + 1:02d}", font=bold(8), fill=TEAL)
+        draw.text((72, y), f"Control family plans  ·  {len(family)} plans, one per family", font=regular(8.5), fill=BODY)
+        y += 14
+        for line in wrap(codes, regular(8), 440):
+            draw.text((72, y), line, font=regular(8), fill=BODY); y += 12
+        y += 6
 
 if data.get('checked'):
     from datetime import date

@@ -53,7 +53,10 @@ function BuilderPanel({ library }: { library: Library }) {
   const step = RMF_STEPS[active];
   const group = atoTemplates.groups.find(item => item.id === step.id);
   const official = officialFor(step.id);
-  const samples = atoTemplates.samples.filter(item => item.group === step.id);
+  // The control-family practice plans (20 October 2026) show as one line per step, so the list stays short.
+  const familyPlan = (href: string) => /SBD-Training-(?!CM-)[A-Z]{2}-Plan\.docx$/.test(href);
+  const samples = atoTemplates.samples.filter(item => item.group === step.id && !familyPlan(item.href));
+  const plans = atoTemplates.samples.filter(item => item.group === step.id && familyPlan(item.href));
   const previous = RMF_STEPS[active - 1];
   const next = RMF_STEPS[active + 1];
   const range = (modules: string[]) => modules.length === 1 ? `Module ${modules[0]}` : `Modules ${modules[0]}–${modules[modules.length - 1]}`;
@@ -120,6 +123,7 @@ function BuilderPanel({ library }: { library: Library }) {
                   {/* Owner direction, 21 October 2026: official sources are coming soon while they are revised. */}
                   {official.length ? official.map(item => <li key={item.title}>{item.title}</li>) : <li>Official sources<span className="ab-tag ab-tag-soon">Coming soon</span></li>}
                   {samples.map(item => <li key={item.href}>{item.title}<span className="ab-tag">Training sample</span></li>)}
+                  {plans.length > 0 && <li key="family-plans">{plans.length === 1 ? plans[0].title : `${plans.length} control family plans (${plans.map(item => /SBD-Training-([A-Z]{2})-Plan/.exec(item.href)?.[1]).join(', ')})`}<span className="ab-tag">Training sample</span></li>}
                 </ul>
                 <Link className="ab-link" href={`${TEMPLATES}#${step.id}`}>Open the {step.title} templates in the Training Hub <ArrowRight size={15} /></Link>
               </> : <>
