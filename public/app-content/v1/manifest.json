@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "version": "fdb48bd03ce7f353",
+  "sha256": "fdb48bd03ce7f3535e6d3a2862a945cb663ac001f5b186713826343fccfcc18b",
+  "bytes": 958818,
+  "courses": 11,
+  "lessons": 107,
+  "url": "/app-content/v1/catalog.json"
+}

@@ -6,10 +6,10 @@ import moves from '../content/progress-moves.json' with {type:'json'};
 const bookmarkIds=new Set(bookmarkCatalog.map(item=>item.id));
 const ids=new Set(progressCatalog.map(item=>item.id));
 // Course guides that keep their state in the account: sbd-<course> for every training course with lessons.
-const guideIds=new Set(progressCatalog.filter(item=>/^training:[a-z0-9-]+:/.test(item.id)).map(item=>'sbd-'+item.id.split(':')[1]));
+export const guideIds=new Set(progressCatalog.filter(item=>/^training:[a-z0-9-]+:/.test(item.id)).map(item=>'sbd-'+item.id.split(':')[1]));
 const GUIDE_STATE_BYTES=262144;
 // The guide's own shape (scripts/course-guide/renderer.js and the course 1.1 page): bounded so one row stays small.
-function validGuideState(s){
+export function validGuideState(s){
  if(!s||typeof s!=='object'||Array.isArray(s))return false;
  const key=k=>typeof k==='string'&&/^[a-z0-9-]{1,80}$/.test(k);
  const map=(m,check,max)=>m&&typeof m==='object'&&!Array.isArray(m)&&Object.keys(m).length<=max&&Object.entries(m).every(([k,v])=>key(k)&&check(v));
@@ -21,7 +21,7 @@ function validGuideState(s){
   &&Array.isArray(s.completed)&&s.completed.length<=60&&s.completed.every(key)
   &&(s.savedAt===undefined||Number.isSafeInteger(s.savedAt)&&s.savedAt>=0);
 }
-async function readGuideBody(request){
+export async function readGuideBody(request){
  const reader=request.body?.getReader();if(!reader)throw new Error('empty');let bytes=0,text='';const decoder=new TextDecoder();
  while(true){const {value,done}=await reader.read();if(done)break;bytes+=value.length;if(bytes>GUIDE_STATE_BYTES){await reader.cancel();throw new Error('large')}text+=decoder.decode(value,{stream:true})}
  return JSON.parse(text+decoder.decode());

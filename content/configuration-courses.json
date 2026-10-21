@@ -2823,7 +2823,7 @@
             "answers": [
               "Nothing — it stands alone",
               "Part 1's domain controller promotion",
-              "The DNS alias reserved in 1.2 and the HTTP row in the service-path register"
+              "The DNS alias reserved in part 2 and the HTTP row in the service-path register"
             ],
             "correct": 2,
             "explanation": "pki.sbd.test was reserved in part 2 and the path through the boundary is already in the register — the sequence pays off here."
@@ -2987,7 +2987,7 @@
         "steps": [
           "From the administration seat, duplicate Kerberos Authentication, the template Microsoft designates for domain controllers, as SBD Domain Controller Authentication: subject name format None with the DNS name in the alternative name, a key storage provider with RSA keys of at least 2,048 bits and SHA-256, a validity within lesson 27's one-to-two-year example, and the Domain Controller, Domain Controller Authentication and Kerberos Authentication templates on its Superseded Templates tab. Confirm Domain Controllers and Enterprise Domain Controllers hold Read, Enroll and Autoenroll: this is the PKI server certificate the STIG expects on every domain controller, part 4's POA&M candidate.",
           "Duplicate the Computer template as SBD Computer Authentication. Set the approved key provider, a key size of at least 2,048 bits, a validity period within the same example, subject built from directory information, and autoenrollment permission for a pilot computer group only — SBD-PKI-MGMT01 for now, until the fleet arrives in course 1.6.",
-          "Duplicate the Web Server template as SBD Server Authentication for the TLS services later courses build — the collector (course 1.3), SBD-SPLUNK01 (1.12), SBD-WSUS01 (1.14) and the business services (1.18): the subject supplied in the request, Enroll for the server administrators (a Linux host's request is made on the host and submitted from their seat) and for an SBD TLS Servers computer group (a Windows server requesting into its own computer store is checked against its computer account, so each later course adds its server to that group first), no autoenrollment, and exportable keys only if the course 1.12 recovery plan explicitly says so.",
+          "Duplicate the Web Server template as SBD Server Authentication for the TLS services later courses build — the collector (course 1.3), SBD-SPLUNK01 (1.5), SBD-WSUS01 (1.7) and the business services (1.11): the subject supplied in the request, Enroll for the server administrators (a Linux host's request is made on the host and submitted from their seat) and for an SBD TLS Servers computer group (a Windows server requesting into its own computer store is checked against its computer account, so each later course adds its server to that group first), no autoenrollment, and exportable keys only if the course 1.12 recovery plan explicitly says so.",
           "Record each template's version, settings, and justification through the lesson 34 change process before publishing.",
           "Publish exactly these three templates on the issuing CA and remove any default template the plan does not call for — an unpublished template cannot be mis-enrolled."
         ],
@@ -4516,7 +4516,7 @@
           }
         ],
         "recap": [
-          "Collector gathers (1.10), repository preserves (1.11), analysis answers (1.12).",
+          "Collector gathers (1.3), repository preserves (1.4), analysis answers (1.5).",
           "Retention, readers, and the no-delete rule are written for every stage.",
           "Two named streams, their pickup folders, and five registered paths."
         ],

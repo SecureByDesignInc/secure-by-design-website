@@ -673,7 +673,7 @@ window.ARTIFACTS = [
       [
         "Assets and boundary",
         "Assets to protect (P-10); the authorization boundary the AO determines (P-11), with management paths, shared services, and external dependencies.",
-        "Eight VLANs, 21 named systems, and 50 Windows workstations: directory and DNS, an offline root and issuing CA, DHCP with 802.1X admission, time, file, database, licensing, web, logging, scanning, endpoint, update, and administration services. The core switch’s management, the hypervisor hosts and their console (named in text, not in the inventory), and common-control responsibilities must be resolved in the exercise. Endpoint protection (SBD-EPO01) and credentialed scanning (SBD-NESSUS01) are in the design, but their build courses, 1.16 and 1.17, are coming soon: record them as planned components until they exist."
+        "Eight VLANs, 21 named systems, and 50 Windows workstations: directory and DNS, an offline root and issuing CA, DHCP with 802.1X admission, time, file, database, licensing, web, logging, scanning, endpoint, update, and administration services. The core switch’s management, the hypervisor hosts and their console (named in text, not in the inventory), and common-control responsibilities must be resolved in the exercise. Endpoint protection (SBD-EPO01) and credentialed scanning (SBD-NESSUS01) are in the design, but their build courses, 1.9 and 1.10, are coming soon: record them as planned components until they exist."
       ],
       [
         "Information types and life cycle",

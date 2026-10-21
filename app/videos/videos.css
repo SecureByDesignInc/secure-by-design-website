@@ -2310,7 +2310,7 @@
 .ab-course a{color:#8ae5ef;font-size:13px;font-weight:650}
 .ab-course a:hover{color:#fff}
 
-/* Course tiles 1.2–1.19 draw their guide's 3D lesson network (owner request, 18 October 2026): system
+/* Course tiles 1.2–1.12 draw their guide's 3D lesson network (owner request, 18 October 2026): system
    buttons, the chosen system's notes, and the lesson links sit in the inspector beside the scene. */
 .vc-system-buttons {
   margin-top: 18px;

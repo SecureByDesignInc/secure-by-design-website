@@ -53,3 +53,9 @@
 # The ATO Package Builder control catalog (scripts/build-control-catalog.py); about 115 KB compressed.
 /grc-rmf-training/workspace/*
   Cache-Control: public, max-age=86400
+
+# The native app's training catalog (scripts/prepare-app-content.mjs). The app polls the small manifest and downloads
+# the catalog only when its SHA-256 changes, so a short cache keeps training updates prompt without serving stale lessons for long.
+/app-content/*
+  Cache-Control: public, max-age=300
+  Access-Control-Allow-Origin: *

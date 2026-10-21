@@ -4,6 +4,10 @@ import './prepare-network-text.mjs';
 import './prepare-course-guides.mjs';
 import './prepare-rmf-courses.mjs';
 import './prepare-sitemap.mjs';
+import { fileURLToPath } from 'node:url';
+import { writeAppContent } from './prepare-app-content.mjs';
+// The native app's training catalog (public/app-content/v1), so course changes reach the app without a new build.
+writeAppContent(fileURLToPath(new URL('..', import.meta.url)));
 import { readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../content/', import.meta.url);
 const series = JSON.parse(readFileSync(new URL('series.json', root), 'utf8'));
