@@ -41,8 +41,11 @@ export default function EpisodeTile({
   const comingSoon = course && episode.kind === 'coming-soon';
   const available = !course && !reference && Boolean(getYouTubeEmbedUrl(episode.youtubeId));
   const series = ART_SERIES[episode.categoryId ?? ''] ?? 'THE NETWORK BUILD SERIES';
-  // The ATO Template Library counts its official sources and the RMF steps they are arranged by.
+  // The ATO Template Library counts its official sources and the RMF steps they are arranged by. Owner direction,
+  // 21 October 2026: while the official sources are revised there are none, so the tile says they are coming soon and
+  // counts the training samples instead.
   const sourceCount = atoTemplates.templates.length;
+  const sampleCount = atoTemplates.samples.length;
   const sectionCount = atoTemplates.groups.length;
   const openLabel = design ? 'reference' : reference ? 'library' : 'training';
   const close = () => {
@@ -107,7 +110,7 @@ export default function EpisodeTile({
                 ? 'INTERACTIVE 3D BUILD'
                 : 'EXPLORE THE BUILD'}
             </span>
-            <span>{design ? (stats?.areas ? `${stats.areas} DESIGN AREAS` : `${stats?.sources ?? 0} SOURCES`) : reference ? `${sourceCount} SOURCES` : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
+            <span>{design ? (stats?.areas ? `${stats.areas} DESIGN AREAS` : `${stats?.sources ?? 0} SOURCES`) : reference ? (sourceCount ? `${sourceCount} SOURCES` : `${sampleCount} SAMPLES`) : comingSoon ? 'COMING SOON' : course ? `${episode.lessonCount ?? episode.moduleCount} LESSONS` : `${episode.chapters.length} LESSONS`}</span>
           </div>
         </div>
         <div className="vc-tile-body">
@@ -141,7 +144,7 @@ export default function EpisodeTile({
                 <Link2 size={13} />
                 Compendium {episode.training.updated}
               </span>
-            </div> : reference ? <div className="vc-tile-status">
+            </div> : reference ? (sourceCount ? <div className="vc-tile-status">
               <span>
                 <Check size={13} />
                 Verified public sources
@@ -152,6 +155,16 @@ export default function EpisodeTile({
                 Links checked {episode.training.updated}
               </span>
             </div> : <div className="vc-tile-status">
+              <span>
+                <Check size={13} />
+                Training samples available
+              </span>
+              <span className="vc-tile-course-size"><FileText size={13} />{sampleCount} training samples · {sectionCount} RMF steps</span>
+              <span>
+                <Clock size={13} />
+                Official sources coming soon
+              </span>
+            </div>) : <div className="vc-tile-status">
               <span>
                 <Check size={13} />
                 Written training available
@@ -177,7 +190,7 @@ export default function EpisodeTile({
             </button>
             <p className="vc-tile-included">
               <BookOpen size={12} />
-              {design ? <>Design reference<span>·</span>Source catalog</> : reference ? <>Reference library<span>·</span>Official links</> : <>Interactive guide<span>·</span>One download</>}
+              {design ? <>Design reference<span>·</span>Source catalog</> : reference ? <>Reference library<span>·</span>{sourceCount ? 'Official links' : 'Training samples'}</> : <>Interactive guide<span>·</span>One download</>}
             </p>
           </div>}
         </div>
@@ -187,7 +200,7 @@ export default function EpisodeTile({
           <>
             {design ? <DesignReferenceExperience reference={episode} /> : reference ? <LibraryExperience library={episode} /> : course ? <CourseExperience course={episode} /> : <EpisodeExperience episode={episode} />}
             <div className="vc-tile-close-row">
-              <span>{design ? 'Design it before you build it.' : reference ? 'Your official sources, in one place.' : 'Your course materials, in one place.'}</span>
+              <span>{design ? 'Design it before you build it.' : reference ? (sourceCount ? 'Your official sources, in one place.' : 'Your templates, in one place.') : 'Your course materials, in one place.'}</span>
               <button type="button" onClick={close}>
                 <ChevronUp size={16} />
                 {`Close ${openLabel}`}

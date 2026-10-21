@@ -2,6 +2,19 @@
 // (library-experience.tsx) and the full library page (app/grc-rmf-training/templates).
 // Owner direction, 15 October 2026: the library lists only documents verified as publicly released by an
 // official publisher, each linked to the publisher's own copy. Nothing is hosted here.
+// Owner direction, 21 October 2026: the official sources are being revised. Every RMF step's section is one
+// "Coming soon" card (officialFor(step) is empty) in the design of the coming-soon tiles in the Training Hub.
+import templates from '../../content/ato-templates.json';
+
+export type TemplateLink = { label: string; format: string; href: string };
+export type OfficialTemplate = { group: string; title: string; source: string; framework: string; status: string; rmf: string; note: string; links: TemplateLink[] };
+export type TemplateGroup = (typeof templates.groups)[number];
+
+/** The official entries (none while the sources are revised). */
+export const officialTemplates = templates.templates as OfficialTemplate[];
+/** One RMF step's official entries. */
+export const officialFor = (step: string) => officialTemplates.filter(item => item.group === step);
+
 export const FRAMEWORKS: { id: string; label: string }[] = [
   { id: 'JSIG', label: 'DoD SAP / JSIG' },
   { id: 'DAF', label: 'Air Force' },

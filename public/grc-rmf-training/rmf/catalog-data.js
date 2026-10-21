@@ -741,7 +741,8 @@ window.CATALOG_PARTS = [
 
 // The seven RMF steps of NIST SP 800-37 Rev. 2 that organize the course. Each step groups its modules, names the
 // ATO Package Builder tab and check that match it (lib/authorization/model.mjs phases(), same IDs), and the
-// ATO Template Library section with its sources (content/ato-templates.json groups, same IDs; Authorize has none).
+// ATO Template Library section with its sources (content/ato-templates.json groups, same IDs; Authorize has had one since
+// 21 October 2026).
 window.RMF_STEPS = [
   {"id": "prepare", "number": 1, "title": "Prepare", "modules": ["01", "02"], "tab": "system",
    "lead": "Learn who is accountable for the authorization, then define the system: its mission, boundary, assets and registration.",

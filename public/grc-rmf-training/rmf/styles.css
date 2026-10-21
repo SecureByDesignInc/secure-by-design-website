@@ -184,6 +184,10 @@ a.chapter{text-decoration:none}
 .tpl-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .tpl-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border:1px solid #d6e3ea;border-radius:10px;background:white}
 .tpl-list li.is-sample{border-style:dashed;border-color:#d9c08a;background:#fffaf0}
+/* Owner direction, 21 October 2026: official sources coming soon, in the amber of the site's Coming soon badges. */
+.tpl-list li.is-soon{background:#f6f9fb;color:#56707f}
+.tpl-list li.is-soon b{color:#3d5868}
+.tpl-soon{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;padding:4px 8px;border-radius:6px;background:#f7bd68;color:#2b1a02;font:600 10.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
 .tpl-list b{display:block;font-size:12.5px;color:#10324a}
 .tpl-list li>div small{display:block;font-size:11px;color:#56707f;margin-top:2px}
 .tpl-links{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;flex-shrink:0}

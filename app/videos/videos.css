@@ -2230,6 +2230,10 @@
 .vc-status-sample{background:#3a2e12;color:#f2cf7c;border:1px solid #6b5420}
 .vc-library-samples-kicker{margin:26px 0 10px;padding-top:18px;border-top:1px solid #35556b;font-size:9px;color:#f2cf7c}
 .vc-library-stage{background:radial-gradient(ellipse at 70% 30%,#123449,#081724 72%);padding:26px 30px 28px}
+/* Owner direction, 21 October 2026: one coming-soon card per RMF step (training-hub.css) while the official sources are revised. */
+.vc-library-stage .vc-library-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0}
+@media (max-width:900px){.vc-library-stage .vc-library-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.vc-library-stage .vc-library-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 .vc-library-list{list-style:none;margin:0;padding:0;display:grid}
 .vc-library-list li{padding:16px 0;border-top:1px solid #23404f;min-width:0}
 .vc-library-list li:first-child{border-top:0;padding-top:4px}
@@ -2292,6 +2296,7 @@
 .ab-column li a{color:#d7ecf6}
 .ab-column li a:hover{color:#fff;border-color:#8ae5ef}
 .ab-tag{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid #3d6a83;border-radius:999px;color:#a8cfde;font-size:10.5px;white-space:nowrap}
+.ab-tag-soon{border-color:#f7bd68;background:#f7bd68;color:#2b1a02;font-weight:600}
 .ab-link{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:auto;color:#8ae5ef;font-size:13px;font-weight:650}
 .ab-link:hover{color:#fff}
 .ab-pager{display:flex;justify-content:space-between;gap:12px;margin-top:18px}

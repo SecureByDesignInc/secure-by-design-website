@@ -1,6 +1,8 @@
 /* ATO Template Library page. Builds on app/videos/videos.css (the catalog design, loaded first):
    the same intro and category headings, with the entry styles from the expanded library tile (.vc-library-list).
-   Owner direction, 15 October 2026: a short list of official links, so no filters or search. */
+   Owner direction, 15 October 2026: a short list of official links, so no filters or search.
+   Owner direction, 21 October 2026: while the official sources are revised, each RMF step is one coming-soon card, the
+   Training Hub's coming-soon tile (training-hub.css, loaded before this file). */
 .tl-group{scroll-margin-top:24px}
 .tl-abbr{margin-left:8px;color:#8fd9e6;font-size:12px;font-weight:600;letter-spacing:.04em;vertical-align:middle}
 .tl-list{margin-bottom:12px;padding:6px 22px;border:1px solid #365469;border-radius:17px;background:#102737}
@@ -15,3 +17,12 @@
 .tl-samples .tl-abbr{color:#f2cf7c}
 @media (max-width:600px){.tl-list{padding:4px 16px}.tl-edition{padding:18px 16px}}
 .tl-page .vc-intro .vc-kicker a{color:inherit;}
+/* One coming-soon card per RMF step. Links to #<step> (course 2.1, the ATO Package Builder Hub, the app) land on and
+   outline the step's card, the way an opened Training Hub tile is outlined. */
+/* Seven steps: four across, then three, at about the Training Hub's tile size. */
+.tl-step-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0 6px}
+@media (max-width:900px){.tl-step-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.tl-step-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+.tl-step-soon{scroll-margin-top:24px}
+.tl-step-soon:target .th-thumb{border-color:#8ae5ef;box-shadow:0 0 0 3px rgba(138,229,239,.22)}
+.tl-page .vc-library-heading .tl-soon-note{display:inline-flex;align-items:center;gap:6px;color:#f2cf7c}

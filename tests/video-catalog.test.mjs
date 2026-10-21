@@ -109,7 +109,9 @@ test('Network Authorization is one course of seven RMF steps that keeps every mo
   // The old 2.2 and 2.3 pages are gone (server/index.js redirects them here).
   for (const folder of ['rmf-body-of-evidence', 'rmf-authorization-to-operate']) assert.ok(!existsSync(new URL(`../public/training/${folder}/`, import.meta.url)), folder);
   const templates = readFileSync(new URL('../public/grc-rmf-training/rmf/templates-data.js', import.meta.url), 'utf8');
-  assert.ok(templates.includes(JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8')).templates[0].title), 'templates-data.js is current; run scripts/prepare-rmf-courses.mjs');
+  const atoData = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
+  const generated = JSON.parse(templates.slice(templates.indexOf('{'), templates.lastIndexOf('}') + 1));
+  assert.deepEqual([generated.groups, generated.templates, generated.samples], [atoData.groups, atoData.templates, atoData.samples], 'templates-data.js is current; run scripts/prepare-rmf-courses.mjs');
 });
 
 test('the Network Authorization page matches the catalog course and shows its edition', () => {
@@ -369,8 +371,10 @@ test('every course tile carries the companion details the expanded tile shows', 
 // Owner request, 15 October 2026: an ATO Template Library, listing only documents verified as publicly released by an
 // official publisher, each linked to the publisher's own copy. Owner direction the same day: course 2.1's step pages show each
 // step's sources; the full page stays at /grc-rmf-training/templates. Owner direction, 19 October 2026: the library is a tile
-// in the Training Hub again, under Templates & References.
-test('the ATO Template Library lists only verified public sources and is a Training Hub tile', () => {
+// in the Training Hub again, under Templates & References. Owner direction, 21 October 2026: the official sources are being
+// revised, so there are none, and every RMF step shows one Coming soon card in the design of the Training Hub's
+// coming-soon tiles; the training samples are unchanged.
+test('the ATO Template Library shows one Coming soon card per RMF step, keeps its samples, and is a Training Hub tile', () => {
   const templates = JSON.parse(readFileSync(new URL('../content/ato-templates.json', import.meta.url), 'utf8'));
   const reference = library.references[0];
   assert.deepEqual(library.references.filter(item => item.kind === 'library').map(item => [item.id, item.kind, item.categoryId, item.training.guide]), [['ato-templates', 'library', 'templates-references', '/grc-rmf-training/templates']]);
@@ -380,34 +384,37 @@ test('the ATO Template Library lists only verified public sources and is a Train
   assert.ok(course.training.relatedResources.some(item => item.href === '/grc-rmf-training/templates'), 'the course links the library');
   assert.ok(existsSync(new URL('../app/grc-rmf-training/templates/page.tsx', import.meta.url)), 'library page');
   for (const sample of templates.samples) assert.ok(templates.groups.some(group => group.id === sample.group), `${sample.title} step`);
-  // The verified set: add an entry only when its publisher posts it publicly (see AGENTS.md).
-  assert.deepEqual(templates.groups.map(group => group.id), ['prepare', 'categorize', 'select', 'implement', 'assess', 'monitor']);
-  assert.deepEqual(templates.templates.map(item => item.title), [
-    'ISSM appointment letter template',
-    'CNSSI 1253, Categorization and Control Selection for National Security Systems',
-    'NIST SP 800-53 Rev. 5 controls and SP 800-53B baselines',
-    'CNSS Privacy Overlay',
-    'System Security Plan (SSP) outline example',
-    'Integrated Inventory Workbook (format reference)',
-    'NIST SP 800-128, Guide for Security-Focused Configuration Management',
-    'Security Requirements Traceability Matrix (format reference)',
-    'Risk Assessment Report (RAR) template',
-    'POA&M job aid',
-    'POA&M template (format reference)',
-    'Continuous Monitoring Playbook',
-  ]);
-  // FedRAMP templates are cloud formats, so each is labeled a format reference in its title.
-  for (const item of templates.templates.filter(entry => entry.framework === 'FedRAMP' && !entry.title.includes('Playbook'))) {
-    assert.match(item.title, /\(format reference\)$/, `${item.title} is labeled a format reference`);
+  // One section per RMF step, Authorize included since 21 October 2026. The ids stay, so #<step> links from course 2.1, the
+  // ATO Package Builder Hub and the app still land.
+  assert.deepEqual(templates.groups.map(group => group.id), ['prepare', 'categorize', 'select', 'implement', 'assess', 'authorize', 'monitor']);
+  // Coming soon: no official entries, and nothing specific about them anywhere the library is shown.
+  assert.deepEqual(templates.templates, [], 'official sources are coming soon');
+  assert.equal(templates.checked, undefined, 'no link-check date while there are no links');
+  const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+  const page = read('app/grc-rmf-training/templates/template-library.tsx');
+  assert.ok(page.includes('<StepSoonCard') && page.includes('Sources coming soon.'), 'the page shows a Coming soon card per step');
+  for (const gone of ['How these were chosen', 'format reference', 'Links checked', 'Verified public sources']) assert.ok(!page.includes(gone), `the page no longer says "${gone}"`);
+  const card = read('app/videos/template-entry.tsx');
+  assert.ok(card.includes('th-tile-soon') && card.includes('th-soon') && card.includes('Official sources in preparation'), 'the card is the Training Hub coming-soon tile');
+  assert.ok(read('app/grc-rmf-training/templates/page.tsx').includes("training-hub.css"), 'the page loads the coming-soon tile styles');
+  assert.ok(read('app/videos/library-experience.tsx').includes('<StepSoonCard'), 'the expanded tile shows the same cards');
+  assert.ok(read('public/grc-rmf-training/rmf/app.js').includes('Official sources for ${esc(step.title)}'), 'course 2.1 step pages show the card');
+  assert.ok(read('app/grc-rmf-training/package-builder-hub.tsx').includes('ab-tag-soon'), 'the ATO Package Builder Hub says Coming soon');
+  // The publishers and documents the old entries named stay out of the library's tile text, page description and course data.
+  const shown = [JSON.stringify(reference), read('app/grc-rmf-training/templates/page.tsx'), read('public/grc-rmf-training/rmf/templates-data.js').replace(/"samples": \[[\s\S]*$/, '')].join(' ');
+  for (const specific of ['DCSA', 'CDSE', 'FedRAMP', 'NISPOM', 'CNSSI', 'Privacy Overlay', 'SP 800-18', 'SP 800-128', 'Playbook', 'job aid', 'October 15']) {
+    assert.ok(!shown.includes(specific), `no "${specific}" outside the training samples`);
   }
+  // When official sources return: add an entry only when its publisher posts it publicly without sign-in, linked to the
+  // publisher's own copy on an official government site (see AGENTS.md). These checks apply to any entry added.
   const groupIds = templates.groups.map(group => group.id);
-  for (const group of templates.groups) assert.ok(templates.templates.some(item => item.group === group.id), `${group.id} has entries`);
   for (const item of templates.templates) {
     assert.ok(groupIds.includes(item.group), `${item.title} group`);
     assert.ok(['DoD', 'CNSS', 'NIST', 'FedRAMP'].includes(item.framework), `${item.title} publisher`);
     assert.equal(item.status, 'official', `${item.title} links to its publisher`);
     assert.ok(item.rmf && item.source && item.note, `${item.title} details`);
     assert.ok(item.links.length > 0, `${item.title} has a link`);
+    if (item.framework === 'FedRAMP' && !item.title.includes('Playbook')) assert.match(item.title, /\(format reference\)$/, `${item.title} is labeled a format reference`);
     for (const link of item.links) {
       assert.ok(link.label && link.format, `${item.title} link label`);
       assert.doesNotMatch(link.href, / /, `${item.title} link is encoded`);

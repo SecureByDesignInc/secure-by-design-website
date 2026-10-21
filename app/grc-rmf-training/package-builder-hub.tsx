@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, BookOpen, ClipboardCheck, FileText, Network } from 'lucide-react';
 import atoTemplates from '../../content/ato-templates.json';
+import { officialFor } from '../videos/template-labels';
 import type { Library } from '../videos/catalog-types';
 
 const BUILDER = '/grc-rmf-training/workspace';
@@ -27,7 +28,8 @@ const RMF_STEPS = [
   { id: 'authorize', title: 'Authorize', modules: ['10', '11'], task: 'Write the executive summary and route the package through the ISSM, the assessor and the Authorizing Official to a decision.' },
   { id: 'monitor', title: 'Monitor', modules: ['12'], task: 'Keep the authorization current: track the termination date, overdue POA&M milestones, changes, reassessments and the annual review.' },
 ];
-// The ATO Template Library has no Authorize section, so that step gets its own description.
+// Owner direction, 21 October 2026: every RMF step has a section in the ATO Template Library, Authorize included, so each
+// step's description comes from content/ato-templates.json. This stays as the fallback (it is the Authorize section's note).
 const AUTHORIZE_NOTE = 'Assemble the authorization package, take it through review, and record the Authorizing Official’s decision and its termination date.';
 
 // What the builder keeps for a learner's enclave (docs/authorization-workspace.md).
@@ -50,7 +52,7 @@ function BuilderPanel({ library }: { library: Library }) {
   const stages = course?.stages ?? [];
   const step = RMF_STEPS[active];
   const group = atoTemplates.groups.find(item => item.id === step.id);
-  const official = atoTemplates.templates.filter(item => item.group === step.id);
+  const official = officialFor(step.id);
   const samples = atoTemplates.samples.filter(item => item.group === step.id);
   const previous = RMF_STEPS[active - 1];
   const next = RMF_STEPS[active + 1];
@@ -115,12 +117,13 @@ function BuilderPanel({ library }: { library: Library }) {
               <h4 id="ab-use">Use its templates</h4>
               {group ? <>
                 <ul>
-                  {official.map(item => <li key={item.title}>{item.title}</li>)}
+                  {/* Owner direction, 21 October 2026: official sources are coming soon while they are revised. */}
+                  {official.length ? official.map(item => <li key={item.title}>{item.title}</li>) : <li>Official sources<span className="ab-tag ab-tag-soon">Coming soon</span></li>}
                   {samples.map(item => <li key={item.href}>{item.title}<span className="ab-tag">Training sample</span></li>)}
                 </ul>
                 <Link className="ab-link" href={`${TEMPLATES}#${step.id}`}>Open the {step.title} templates in the Training Hub <ArrowRight size={15} /></Link>
               </> : <>
-                <p>The library has no separate Authorize section. The package draws on the documents from the earlier steps: the SSP, the assessment results and the POA&amp;M.</p>
+                <p>The package draws on the documents from the earlier steps: the SSP, the assessment results and the POA&amp;M.</p>
                 <Link className="ab-link" href={TEMPLATES}>Open the ATO Template Library in the Training Hub <ArrowRight size={15} /></Link>
               </>}
             </section>

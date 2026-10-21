@@ -1071,7 +1071,7 @@
       "id": "templates-references",
       "title": "Templates & References",
       "kind": "reference",
-      "description": "Free, publicly released references to keep beside you while you build the Body of Evidence. Use them with any course, or on your own system."
+      "description": "Templates to keep beside you while you build the Body of Evidence: training samples now, with official sources coming soon. Use them with any course, or on your own system."
     },
     {
       "id": "design-references",
@@ -1087,8 +1087,8 @@
       "categoryId": "templates-references",
       "categoryOrder": 1,
       "title": "ATO Template Library",
-      "subtitle": "Verified public sources and training samples, by RMF step",
-      "description": "Official sources for building an authorization package, arranged by RMF step: CNSSI 1253 and the Privacy Overlay; NIST's control baselines, SSP outline and configuration management guide; DCSA's ISSM appointment letter and RAR templates; CDSE's POA&M job aid; and FedRAMP formats for the traceability matrix, POA&M, inventory and continuous monitoring. Each one is verified as publicly released by its publisher, and every link opens the publisher's own copy. Secure By Design training samples cover the documents that have no public version. For instruction and practice.",
+      "subtitle": "Training samples by RMF step, with official sources coming soon",
+      "description": "Templates for building an authorization package, arranged by RMF step. Official sources for each step are coming soon. Secure By Design training samples for the SCTM, POA&M, appointment letters, hardware and software lists, ConMon strategy and CM plan are ready now. For instruction and practice.",
       "tags": [
         "Templates",
         "Body of Evidence",
@@ -1096,21 +1096,21 @@
       ],
       "systems": [],
       "artLabels": [
-        "SSP · SCTM · POA&M",
-        "RAR · ConMon · CM plan",
-        "Verified public sources"
+        "SCTM · POA&M · Letters",
+        "Inventory · ConMon · CM plan",
+        "Official sources coming soon"
       ],
-      "outcomeSummary": "Open the official, publicly released sources behind each part of the package, with training samples for the documents that have no public version.",
+      "outcomeSummary": "Practice each part of the package with Secure By Design training samples. Official sources for each RMF step are coming soon.",
       "outcomes": [
-        "Categorize and select controls with CNSSI 1253 and NIST's baselines",
-        "Start an SSP from NIST's outline",
-        "Track findings with POA&M guidance and formats",
-        "Plan ConMon and configuration management from official guides"
+        "Practice the SCTM and POA&M in training workbooks",
+        "Draft ISSM, ISSO and ISSE appointment letters",
+        "Fill in hardware and software lists, a ConMon strategy and a CM plan",
+        "Find each RMF step's official sources here when they're ready"
       ],
       "training": {
         "guide": "/grc-rmf-training/templates",
         "cover": "/training/library/ato-templates-cover.webp",
-        "updated": "15 October 2026",
+        "updated": "21 October 2026",
         "relatedResources": [
           {
             "title": "Open course 2.1, RMF to ATO",
