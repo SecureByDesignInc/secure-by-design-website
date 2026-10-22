@@ -600,7 +600,23 @@
           "Tier 0 is the directory's control plane, administered only from the seats part 8 builds."
         ],
         "next": "Lesson 2 gives every system a purpose and places both controllers on VLAN 10.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Select Local Server.",
+              "Read Computer name, Workgroup, the Ethernet address and the operating system version."
+            ]
+          },
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "Right-click Ethernet > Status > Details.",
+              "Read the IPv4 address, subnet mask and default gateway."
+            ]
+          }
+        ]
       },
       {
         "id": "dc-prepare",
@@ -668,7 +684,28 @@
           "Renaming a domain controller later is a separate procedure with its own steps and checks."
         ],
         "next": "Lesson 3: Create the first domain controller.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Select Local Server and read Computer name (SBD-DC01 or SBD-DC02)."
+            ]
+          },
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "Right-click Ethernet > Status > Details.",
+              "Read the IPv4 address, default gateway 10.0.10.1 and, on SBD-DC02, DNS server 10.0.10.10."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          }
+        ]
       },
       {
         "id": "dc-dc01",
@@ -730,7 +767,30 @@
           "Installing the AD DS role is only the first part."
         ],
         "next": "Lesson 4: Give the domain a second service point.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Right-click sbd.test > Properties > General.",
+              "Read Domain name (pre-Windows 2000): SBD."
+            ]
+          },
+          {
+            "name": "Services (services.msc)",
+            "steps": [
+              "Find Active Directory Domain Services and Netlogon.",
+              "Status: Running; Startup type: Automatic."
+            ]
+          },
+          {
+            "name": "Computer Management (compmgmt.msc)",
+            "steps": [
+              "System Tools > Shared Folders > Shares.",
+              "SYSVOL and NETLOGON are listed."
+            ]
+          }
+        ]
       },
       {
         "id": "dc-dc02",
@@ -794,7 +854,23 @@
           "Choosing Add a new forest creates a different directory."
         ],
         "next": "Lesson 5: Ask the domain to prove it works.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Active Directory Sites and Services (dssite.msc)",
+            "steps": [
+              "Sites > Default-First-Site-Name > Servers: both SBD-DC01 and SBD-DC02 are listed.",
+              "Under each server, right-click NTDS Settings > Properties: Global Catalog is checked.",
+              "Select NTDS Settings under SBD-DC02, right-click its connection > Replicate Now: the confirmation reports success."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Applications and Services Logs > Directory Service: no replication errors since the promotion."
+            ]
+          }
+        ]
       },
       {
         "id": "dc-verify",
@@ -860,7 +936,42 @@
           "A successful ping proves only that an address answers."
         ],
         "next": "Lesson 6: Leave a build someone else can understand.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Select AD DS > Best Practices Analyzer > Tasks > Start BPA Scan.",
+              "Read each result; record the cause of anything that is not compliant."
+            ]
+          },
+          {
+            "name": "Active Directory Sites and Services (dssite.msc)",
+            "steps": [
+              "On each server, NTDS Settings > Properties: Global Catalog is checked.",
+              "Right-click each connection > Replicate Now: success in both directions."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Right-click sbd.test > Operations Masters: the RID, PDC and Infrastructure tabs name the role holder."
+            ]
+          },
+          {
+            "name": "Computer Management (compmgmt.msc)",
+            "steps": [
+              "Connect to SBD-DC02 (Action > Connect to another computer) > Shared Folders > Shares: SYSVOL and NETLOGON."
+            ]
+          },
+          {
+            "name": "Windows Defender Firewall with Advanced Security (wf.msc)",
+            "steps": [
+              "The overview reads \"Domain Profile is Active\"."
+            ]
+          }
+        ],
+        "consoleNote": "dcdiag and repadmin /replsummary: Windows has no console that runs the full DCDiag test set or summarizes replication for every partner; the Best Practices Analyzer and Replicate Now cover most of it."
       },
       {
         "id": "dc-evidence",
@@ -922,7 +1033,27 @@
           "A diagram becoming complete does not establish that your VM passed a check."
         ],
         "next": "Part 2 configures DNS on both controllers.",
-        "part": "Part 1 · Domain controllers"
+        "part": "Part 1 · Domain controllers",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Right-click sbd.test > Operations Masters: record the RID, PDC and Infrastructure masters."
+            ]
+          },
+          {
+            "name": "Active Directory Domains and Trusts (domain.msc)",
+            "steps": [
+              "Right-click Active Directory Domains and Trusts > Operations Master: record the domain naming master."
+            ]
+          },
+          {
+            "name": "Active Directory Schema",
+            "steps": [
+              "Register the snap-in once (regsvr32 schmmgmt.dll), add it to an MMC, right-click Active Directory Schema > Operations Master: record the schema master."
+            ]
+          }
+        ]
       },
       {
         "id": "dns-plan",
@@ -1027,7 +1158,29 @@
           "The DNS design follows the government and vendor guidelines; record each deviation, such as the test-only sbd.test name."
         ],
         "next": "Lesson 8 turns this plan into AD-integrated forward and reverse zones.",
-        "part": "Part 2 · DNS"
+        "part": "Part 2 · DNS",
+        "console": [
+          {
+            "name": "Services (services.msc)",
+            "steps": [
+              "On each controller (Action > Connect to another computer), DNS Server: Running."
+            ]
+          },
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "On each controller, Ethernet > Properties > Internet Protocol Version 4 > Properties.",
+              "Preferred DNS server is the partner controller; Alternate is 127.0.0.1."
+            ]
+          },
+          {
+            "name": "Active Directory Sites and Services (dssite.msc)",
+            "steps": [
+              "Right-click each connection > Replicate Now: success in both directions."
+            ]
+          }
+        ],
+        "consoleNote": "The lesson still sets the DNS server order with Set-DnsClientServerAddress; that is the change, not the check."
       },
       {
         "id": "dns-zones",
@@ -1090,7 +1243,17 @@
           "Zone transfers stay restricted; directory replication moves the data."
         ],
         "next": "Lesson 9 builds the record set your services will actually use.",
-        "part": "Part 2 · DNS"
+        "part": "Part 2 · DNS",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "Connect to SBD-DC01, then SBD-DC02 (right-click DNS > Connect to DNS Server).",
+              "Forward Lookup Zones > sbd.test > Properties > General: Type Active Directory-Integrated Primary; Dynamic updates Secure only; Replication All DNS servers in this domain.",
+              "Reverse Lookup Zones: 10.0.10.in-addr.arpa with the same settings."
+            ]
+          }
+        ]
       },
       {
         "id": "dns-records",
@@ -1157,7 +1320,18 @@
           "Every record carries an owner, a lifetime, and a reason."
         ],
         "next": "Lesson 10 proves that both resolvers and directory discovery actually work.",
-        "part": "Part 2 · DNS"
+        "part": "Part 2 · DNS",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "sbd.test: SBD-DC01 and SBD-DC02 host (A) records hold their addresses.",
+              "10.0.10.in-addr.arpa: each address has its pointer (PTR) record.",
+              "sbd.test: the pki alias (CNAME) points at SBD-PKI-MGMT01.sbd.test."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the alias stays Add-DnsServerResourceRecordCName (or New > Alias in DNS Manager); that is the change, not the check."
       },
       {
         "id": "dns-verify",
@@ -1249,7 +1423,23 @@
           "The failover test is documented with times, not just a passing screenshot."
         ],
         "next": "Lesson 11 practices finding and recording a DNS fault, one layer at a time.",
-        "part": "Part 2 · DNS"
+        "part": "Part 2 · DNS",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "On each server: Properties > Monitoring > A simple query against this DNS server > Test Now: Pass.",
+              "_msdcs.sbd.test > dc > _tcp: the _ldap SRV records list both controllers."
+            ]
+          },
+          {
+            "name": "Active Directory Sites and Services (dssite.msc)",
+            "steps": [
+              "Replicate Now on each connection: success."
+            ]
+          }
+        ],
+        "consoleNote": "Resolve-DnsName against each server from a client, and dcdiag /test:DNS: no console asks a chosen DNS server for a chosen name."
       },
       {
         "id": "dns-troubleshoot",
@@ -1317,7 +1507,22 @@
           "The change record explains the cause and the rollback."
         ],
         "next": "That completes Configure DNS. Part 3, Configure domain time, makes SBD-DC01 the domain's time source and proves every system follows it.",
-        "part": "Part 2 · DNS"
+        "part": "Part 2 · DNS",
+        "console": [
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "Ethernet > Properties > IPv4 > Properties: the DNS servers are the two controllers."
+            ]
+          },
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "Both servers hold the SBD-DC02 host record with the same address."
+            ]
+          }
+        ],
+        "consoleNote": "Get-DnsClientCache and Resolve-DnsName against each server: no console shows the client cache or queries one chosen server."
       },
       {
         "id": "time-plan",
@@ -1401,7 +1606,21 @@
           "label": "Sign in, step 3",
           "text": "The workstation's Kerberos request carries a timestamp, and the domain controller refuses it if the two clocks are too far apart."
         },
-        "part": "Part 3 · Domain time"
+        "part": "Part 3 · Domain time",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Right-click sbd.test > Operations Masters > PDC: SBD-DC01.sbd.test."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Default Domain Policy > Settings > Computer Configuration > Windows Settings > Security Settings > Account Policies > Kerberos Policy: Maximum tolerance for computer clock synchronization 5 minutes."
+            ]
+          }
+        ]
       },
       {
         "id": "time",
@@ -1495,7 +1714,22 @@
           "label": "SBD-DC01",
           "text": "The PDC emulator, its address, and the time rule every domain member follows."
         },
-        "part": "Part 3 · Domain time"
+        "part": "Part 3 · Domain time",
+        "console": [
+          {
+            "name": "The hypervisor console",
+            "steps": [
+              "Open SBD-DC01's virtual machine settings: time synchronization with the host is off (integration services or guest tools). Repeat for SBD-DC02."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System, source Time-Service: no warning that the system has no time source."
+            ]
+          }
+        ],
+        "consoleNote": "w32tm /query /configuration and /query /status: Microsoft documents w32tm as the way to read the time service's configuration, so these stay commands rather than registry reads. The same goes for stratum 1, reference LOCL and nltest's GTIMESERV flag."
       },
       {
         "id": "time-members",
@@ -1570,7 +1804,22 @@
           "label": "SBD-SPLUNK01",
           "text": "A domain-joined Linux server: its permitted connections include F09, the time row the chrony file in this lesson will use."
         },
-        "part": "Part 3 · Domain time"
+        "part": "Part 3 · Domain time",
+        "console": [
+          {
+            "name": "Resultant Set of Policy (rsop.msc)",
+            "steps": [
+              "Computer Configuration > Administrative Templates > System > Windows Time Service: no setting is applied."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          }
+        ],
+        "consoleNote": "w32tm /query /configuration and /query /status: Microsoft documents w32tm as the way to read the time service's configuration, so these stay commands rather than registry reads. The Linux chrony file and chronyc stay commands: those servers have no desktop."
       },
       {
         "id": "time-verify",
@@ -1643,7 +1892,16 @@
           "label": "Turn an event into evidence, step 1",
           "text": "Every event SBD-DC01 forwards to the collector carries a timestamp from the clock you verified here; course 1.3 builds this path."
         },
-        "part": "Part 3 · Domain time"
+        "part": "Part 3 · Domain time",
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses. Save the filtered view (Save Filtered Log File As) with the evidence."
+            ]
+          }
+        ],
+        "consoleNote": "w32tm /monitor and /stripchart measure the offset between systems; no console measures it. The event check above backs them up."
       },
       {
         "id": "time-troubleshoot",
@@ -1717,7 +1975,17 @@
           "label": "Use a web app, step 2",
           "text": "The browser checks the certificate's validity dates against its own clock, so a client with the wrong time can refuse a certificate that is perfectly valid."
         },
-        "part": "Part 3 · Domain time"
+        "part": "Part 3 · Domain time",
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter: source Time-Service, Event IDs 36 and 129.",
+              "After the fix: event 35 or 37 names a controller again."
+            ]
+          }
+        ],
+        "consoleNote": "w32tm /query /configuration and /query /status: Microsoft documents w32tm as the way to read the time service's configuration, so these stay commands rather than registry reads. w32tm /stripchart for the offset also stays: no console measures it."
       },
       {
         "id": "stig-basics",
@@ -1796,7 +2064,22 @@
           "STIG rules cite CCIs, and CCIs trace to SP 800-53 controls; decide the baseline set before scanning."
         ],
         "next": "Lesson 18 carries the DISA content across the air gap: the tools, the benchmarks, the STIGs and the GPO package part 5 will import.",
-        "part": "Part 4 · Measure against the STIG"
+        "part": "Part 4 · Measure against the STIG",
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Local Server: operating system and version.",
+              "Dashboard > Roles: AD DS and DNS installed."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Operations Masters > PDC: which controller is the PDC emulator."
+            ]
+          }
+        ]
       },
       {
         "id": "stig-staging",
@@ -1867,7 +2150,22 @@
           "Versions are evidence, and the GPO package and client content wait, verified, for later courses."
         ],
         "next": "Lesson 19 measures both controllers before anything is hardened.",
-        "part": "Part 4 · Measure against the STIG"
+        "part": "Part 4 · Measure against the STIG",
+        "console": [
+          {
+            "name": "SCAP Compliance Checker (SCC)",
+            "steps": [
+              "Open SCC on each controller: it starts and shows its version."
+            ]
+          },
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "Open STIG Viewer: it starts and shows its version."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Comparing each transferred file with its connected-side value stays Get-FileHash."
       },
       {
         "id": "stig-baseline",
@@ -1937,7 +2235,17 @@
           "Manual checks are queued for human review."
         ],
         "next": "Lesson 20 builds the STIG Viewer checklists and answers what the scanner could not.",
-        "part": "Part 4 · Measure against the STIG"
+        "part": "Part 4 · Measure against the STIG",
+        "console": [
+          {
+            "name": "SCAP Compliance Checker (SCC)",
+            "steps": [
+              "View Results: the newest session for this controller shows its date, SCC version, benchmark release and profile.",
+              "Open the HTML summary report: read the score and the open items."
+            ]
+          }
+        ],
+        "consoleNote": "Copying the session into C:\\Evidence and hashing it stay commands (evidence capture)."
       },
       {
         "id": "stig-checklists",
@@ -2000,7 +2308,17 @@
           "Every status carries its observation, and no rule is left Not Reviewed."
         ],
         "next": "Lesson 21 turns the three checklists into the findings record part 5 works from.",
-        "part": "Part 4 · Measure against the STIG"
+        "part": "Part 4 · Measure against the STIG",
+        "console": [
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "Open each checklist (SBD-DC01, SBD-DC02, sbd.test).",
+              "Read the STIG name, version and release for each.",
+              "The status totals show no rule Not Reviewed; every manual answer has its comment."
+            ]
+          }
+        ]
       },
       {
         "id": "stig-findings",
@@ -2063,7 +2381,17 @@
           "The record, the checklists, the versions and the manifest hand straight to part 5."
         ],
         "next": "That completes Measure against the STIG. Part 5, Harden with Group Policy, builds the organizational units, imports the DISA GPOs you staged, and rescans with the same versions to prove what changed.",
-        "part": "Part 4 · Measure against the STIG"
+        "part": "Part 4 · Measure against the STIG",
+        "console": [
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "In each checklist, filter by status Open.",
+              "Each open rule shows its severity and CCIs; compare with the findings record."
+            ]
+          }
+        ],
+        "consoleNote": "Building the findings CSV from the three checklists stays a command (it reads them together)."
       },
       {
         "id": "gpo-ou-design",
@@ -2139,7 +2467,19 @@
           "redirect",
           "design-ad"
         ],
-        "part": "Part 5 · Harden with Group Policy"
+        "part": "Part 5 · Harden with Group Policy",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "View > Advanced Features.",
+              "sbd.test > SBD: Servers, Workstations, Users, Groups and Admin exist; each OU > Properties > Object: Protect object from accidental deletion is checked.",
+              "Domain Controllers OU: both controllers are still there.",
+              "Right-click sbd.test > Properties > Attribute Editor > wellKnownObjects: the Computers and Users entries point at the Workstations and Users OUs."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the OUs and running redircmp and redirusr stay the lesson's changes."
       },
       {
         "id": "gpo-basics",
@@ -2215,7 +2555,17 @@
           "gpresult",
           "gp-results"
         ],
-        "part": "Part 5 · Harden with Group Policy"
+        "part": "Part 5 · Harden with Group Policy",
+        "console": [
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Select sbd.test > Group Policy Inheritance: the GPOs in precedence order; nothing Enforced or blocked.",
+              "Select sbd.test > Status tab > Detect Now: every GPO's Active Directory and SYSVOL versions agree.",
+              "Open any GPO's Settings report: \"Policy definitions (ADMX files) retrieved from the central store\"."
+            ]
+          }
+        ]
       },
       {
         "id": "gpo-apply",
@@ -2290,7 +2640,17 @@
           "gp-processing",
           "gpresult"
         ],
-        "part": "Part 5 · Harden with Group Policy"
+        "part": "Part 5 · Harden with Group Policy",
+        "console": [
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Each OU in the design: the DISA GPOs are linked in the planned link order, with the domain controller policy first on Domain Controllers.",
+              "Each GPO > Settings: placeholder groups now name the real groups."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Matching the package with its connected-side hash stays Get-FileHash."
       },
       {
         "id": "gpo-rescan",
@@ -2355,7 +2715,22 @@
           "gpresult",
           "ncp"
         ],
-        "part": "Part 5 · Harden with Group Policy"
+        "part": "Part 5 · Harden with Group Policy",
+        "console": [
+          {
+            "name": "SCAP Compliance Checker (SCC)",
+            "steps": [
+              "View Results: the rescans used the same SCC version, benchmark release and profile as the baseline."
+            ]
+          },
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "Each new checklist: compare the Open totals with the baseline."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Checking the baseline manifest stays Get-FileHash."
       },
       {
         "id": "gpo-maintain",
@@ -2425,7 +2800,17 @@
           "disa-gpo",
           "ncp"
         ],
-        "part": "Part 5 · Harden with Group Policy"
+        "part": "Part 5 · Harden with Group Policy",
+        "console": [
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Each DISA GPO > Save Report: the reports are filed.",
+              "Select each OU > Linked Group Policy Objects: the links match the export."
+            ]
+          }
+        ],
+        "consoleNote": "Building the exception record from the findings CSV stays a command."
       },
       {
         "id": "pki-design",
@@ -2519,7 +2904,21 @@
           "The two-tier design matches the government and vendor guidelines; AD CS is Tier 0 and its publication URLs are fixed first."
         ],
         "next": "Lesson 28 performs the controlled offline root installation.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Local Server on SBD-SUBCA01 and SBD-PKI-MGMT01: Domain sbd.test."
+            ]
+          },
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "sbd.test: SBD-DC01 and SBD-DC02 host records exist."
+            ]
+          }
+        ]
       },
       {
         "id": "pki-root",
@@ -2583,7 +2982,35 @@
           "Publication URLs, validity policy, the CRL schedule, and a protected backup exist before any signing."
         ],
         "next": "Lesson 29 prepares the online issuing CA and its certificate request.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Settings > Time & language > Date & time",
+            "steps": [
+              "Read the time and compare it with the approved reference; log both readings."
+            ]
+          },
+          {
+            "name": "Services (services.msc)",
+            "steps": [
+              "Active Directory Certificate Services: Running."
+            ]
+          },
+          {
+            "name": "Certification Authority (certsrv.msc)",
+            "steps": [
+              "The root CA shows a green check.",
+              "Right-click the CA > Properties > Extensions: the CDP and AIA locations are the planned pki.sbd.test URLs.",
+              "Policy Module > Properties: requests are set to pending (approval required)."
+            ]
+          },
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Local Server: the host stays in a workgroup with no network adapter connected."
+            ]
+          }
+        ]
       },
       {
         "id": "pki-request",
@@ -2646,7 +3073,22 @@
           "The request’s fields and hash are reviewed and recorded before transfer."
         ],
         "next": "Lesson 30 walks the request through the offline signing ceremony.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses. It names a controller."
+            ]
+          },
+          {
+            "name": "Certification Authority (certsrv.msc)",
+            "steps": [
+              "SBD-SUBCA01 shows as waiting for its CA certificate (the service will not start yet; that is expected)."
+            ]
+          }
+        ],
+        "consoleNote": "certutil -dump of the .req file and its hash: Windows has no console that opens a certificate request file."
       },
       {
         "id": "pki-sign",
@@ -2713,7 +3155,23 @@
           "The ceremony record, hashes, and root shutdown are all evidence."
         ],
         "next": "Lesson 31 brings the issuing CA online and publishes the trust data.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "The certificate and CRL viewers (double-click the file)",
+            "steps": [
+              "IssuingCA.cer > General and Details: issuer, subject, validity, key size; Certification Path ends at the root.",
+              "RootCA.crl > General: effective date and next update."
+            ]
+          },
+          {
+            "name": "Settings > Time & language > Date & time",
+            "steps": [
+              "Read the root's time against the approved reference."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash."
       },
       {
         "id": "pki-publish",
@@ -2776,7 +3234,29 @@
           "Root trust distributes through managed domain policy."
         ],
         "next": "Lesson 32 gives those embedded URLs a real home: the pki.sbd.test publication site.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Services (services.msc)",
+            "steps": [
+              "Active Directory Certificate Services: Running."
+            ]
+          },
+          {
+            "name": "Certification Authority (certsrv.msc)",
+            "steps": [
+              "Properties > Extensions: CDP and AIA carry the planned pki.sbd.test URLs."
+            ]
+          },
+          {
+            "name": "Certificates, Local Computer (certlm.msc)",
+            "steps": [
+              "Trusted Root Certification Authorities > Certificates: the root is present (delivered by policy).",
+              "Intermediate Certification Authorities > Certificates: the issuing CA is present."
+            ]
+          }
+        ],
+        "consoleNote": "Publishing the root with certutil -addstore stays the lesson's change."
       },
       {
         "id": "pki-publication",
@@ -2840,7 +3320,28 @@
           "certutil",
           "publish"
         ],
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "sbd.test: pki is an alias for SBD-PKI-MGMT01."
+            ]
+          },
+          {
+            "name": "Internet Information Services (IIS) Manager",
+            "steps": [
+              "Sites > the PKI site: Started, with its physical path.",
+              "The site > Request Filtering > Edit Feature Settings: Allow double escaping is checked here only."
+            ]
+          },
+          {
+            "name": "Microsoft Edge, from SBD-DC01",
+            "steps": [
+              "Open http://pki.sbd.test/ and a published file: it downloads."
+            ]
+          }
+        ]
       },
       {
         "id": "pki-publish-trust",
@@ -2909,7 +3410,22 @@
           "design",
           "publish"
         ],
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Enterprise PKI (pkiview.msc)",
+            "steps": [
+              "Enterprise PKI > the issuing CA: CA Certificate, every AIA Location and every CDP Location read OK, with their expiry dates."
+            ]
+          },
+          {
+            "name": "Microsoft Edge, from SBD-DC01",
+            "steps": [
+              "Open each CRL URL the certificate carries: each downloads the current file."
+            ]
+          }
+        ],
+        "consoleNote": "Clearing the URL cache (certutil -urlcache * delete) before the check stays a command; pkiview reads live."
       },
       {
         "id": "pki-template-admin",
@@ -2972,7 +3488,22 @@
           "templates",
           "design"
         ],
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "SBD PKI Admins > Members: the planned administrators only."
+            ]
+          },
+          {
+            "name": "Certificate Templates (certtmpl.msc)",
+            "steps": [
+              "Open the console on SBD-PKI-MGMT01: the templates list loads.",
+              "Each SBD template > Properties > Security: SBD PKI Admins holds the delegated permissions."
+            ]
+          }
+        ]
       },
       {
         "id": "pki-first-templates",
@@ -3048,7 +3579,21 @@
           "autoenroll",
           "whatsnew"
         ],
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Certification Authority (certsrv.msc)",
+            "steps": [
+              "Certificate Templates: exactly the three planned SBD templates are published."
+            ]
+          },
+          {
+            "name": "Certificate Templates (certtmpl.msc)",
+            "steps": [
+              "Each SBD template > Properties > Cryptography: the minimum key size; Security: the enroll and autoenroll permissions."
+            ]
+          }
+        ]
       },
       {
         "id": "pki-validate",
@@ -3132,7 +3677,28 @@
           "CRL publication and renewal each have an owner and a date, backup and recovery are handed to course 1.12, and the closing scans and the closed controller finding finish the PKI chapter."
         ],
         "next": "That completes Configure the two-tier PKI. Part 7, Run DHCP on SBD-DHCP01, builds the member server that leases VLAN 80 its addresses before any fleet exists.",
-        "part": "Part 6 · Two-tier PKI"
+        "part": "Part 6 · Two-tier PKI",
+        "console": [
+          {
+            "name": "Certificates, Local Computer (certlm.msc)",
+            "steps": [
+              "Personal > Certificates on each controller and the pilot: the certificate from the planned template, with its expiry; double-click > Certification Path: OK."
+            ]
+          },
+          {
+            "name": "Certification Authority (certsrv.msc)",
+            "steps": [
+              "Issued Certificates: each enrollment. After the test revocation: Revoked Certificates holds it, and after publishing, the CRL lists it."
+            ]
+          },
+          {
+            "name": "Enterprise PKI (pkiview.msc)",
+            "steps": [
+              "Every location reads OK after the new CRL publishes."
+            ]
+          }
+        ],
+        "consoleNote": "gpupdate /force and certutil -pulse to trigger enrollment stay commands; they start the change rather than check it."
       },
       {
         "id": "dhcp-design",
@@ -3217,7 +3783,21 @@
           "controls",
           "design-dhcp"
         ],
-        "part": "Part 7 · DHCP"
+        "part": "Part 7 · DHCP",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "Both controllers resolve each other (host records present on both)."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "OU=Servers exists; Enterprise Admins holds only the planned accounts."
+            ]
+          }
+        ]
       },
       {
         "id": "dhcp",
@@ -3290,7 +3870,24 @@
           "dhcp-events",
           "dhcp-troubleshoot"
         ],
-        "part": "Part 7 · DHCP"
+        "part": "Part 7 · DHCP",
+        "console": [
+          {
+            "name": "DHCP (dhcpmgmt.msc)",
+            "steps": [
+              "Right-click DHCP > Manage authorized servers: SBD-DHCP01 at 10.0.20.10.",
+              "IPv4 > the VLAN 80 scope > Address Pool: 10.0.80.1–10.0.80.254 with the two exclusion ranges.",
+              "Scope Options: router, DNS servers and DNS domain name as planned."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Applications and Services Logs > Microsoft > Windows > DHCP-Server > Operational: event 1044 shows the server servicing clients."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the group and the delegation (New-ADGroup, dsacls) stay the lesson's changes."
       },
       {
         "id": "dhcp-dns",
@@ -3357,7 +3954,29 @@
           "dns-zone",
           "dhcp-deploy"
         ],
-        "part": "Part 7 · DHCP"
+        "part": "Part 7 · DHCP",
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "Reverse Lookup Zones: 80.0.10.in-addr.arpa, Dynamic updates Secure only."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "svc-dhcp-dns > Member Of: Domain Users only.",
+              "DnsUpdateProxy > Members: empty."
+            ]
+          },
+          {
+            "name": "DHCP (dhcpmgmt.msc)",
+            "steps": [
+              "IPv4 > Properties > Advanced > Credentials: SBD\\svc-dhcp-dns.",
+              "IPv4 > Properties > DNS: Name Protection is enabled."
+            ]
+          }
+        ]
       },
       {
         "id": "dhcp-audit",
@@ -3424,7 +4043,22 @@
           "dynamic-update",
           "filehash"
         ],
-        "part": "Part 7 · DHCP"
+        "part": "Part 7 · DHCP",
+        "console": [
+          {
+            "name": "DHCP (dhcpmgmt.msc)",
+            "steps": [
+              "IPv4 > Properties > General: Enable DHCP audit logging is checked; Advanced: the audit log path."
+            ]
+          },
+          {
+            "name": "File Explorer",
+            "steps": [
+              "C:\\Windows\\System32\\dhcp: today's DhcpSrvLog file is growing; yesterday's sits in the archive under its date."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash."
       },
       {
         "id": "dhcp-prove",
@@ -3491,7 +4125,33 @@
           "filehash",
           "controls"
         ],
-        "part": "Part 7 · DHCP"
+        "part": "Part 7 · DHCP",
+        "console": [
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "On the test client, Ethernet > Status > Details: DHCP Enabled Yes, the leased address, lease times, router and DNS servers."
+            ]
+          },
+          {
+            "name": "DHCP (dhcpmgmt.msc)",
+            "steps": [
+              "The scope > Address Leases: the test client with its address and expiry."
+            ]
+          },
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "sbd.test and 80.0.10.in-addr.arpa: the client's A and PTR records; with View > Advanced, the DHCID record. Each record > Properties > Security: owned by svc-dhcp-dns."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "DHCP-Server operational log: event 1340 is absent (no DNS update failures)."
+            ]
+          }
+        ]
       },
       {
         "id": "tier-design",
@@ -3589,7 +4249,18 @@
           "controls",
           "design-ad"
         ],
-        "part": "Part 8 · Tiered administration"
+        "part": "Part 8 · Tiered administration",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "The SBD OUs match the tier map.",
+              "Domain Admins > Members: the planned accounts only.",
+              "SBD Tier 0 Admins, SBD Tier 2 Admins and SBD Audit Custodians exist in Admin."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the groups stays New-ADGroup (or New > Group); that is the change."
       },
       {
         "id": "tier-admin-hosts",
@@ -3692,7 +4363,21 @@
           "credential-guard",
           "hyperv-troubleshoot"
         ],
-        "part": "Part 8 · Tiered administration"
+        "part": "Part 8 · Tiered administration",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Admin > Admin Servers: AdminJumpBox01 and SBD-ADMIN-SRV01; Admin Workstations: SBD-ADMIN-PC01."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Admin Servers and Admin Workstations > Group Policy Inheritance: the STIG and seat GPOs apply."
+            ]
+          }
+        ]
       },
       {
         "id": "tier-logon-restrictions",
@@ -3800,7 +4485,29 @@
           "event-4625",
           "whatsnew"
         ],
-        "part": "Part 8 · Tiered administration"
+        "part": "Part 8 · Tiered administration",
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Tier 0 Servers: SBD-SUBCA01 and SBD-PKI-MGMT01.",
+              "Protected Users > Members: every Tier 0 account."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "The Servers OU administrators GPO > Settings > Restricted Groups: SBD Tier 1 Admins.",
+              "The tier GPOs > Settings > User Rights Assignment: the Deny log on rights name the other tiers."
+            ]
+          },
+          {
+            "name": "Computer Management (compmgmt.msc)",
+            "steps": [
+              "From SBD-ADMIN-SRV01, connect to SBD-DHCP01 > Local Users and Groups > Groups > Administrators: SBD Tier 1 Admins, not Tier 0."
+            ]
+          }
+        ]
       },
       {
         "id": "tier-prove",
@@ -3883,7 +4590,17 @@
           "event-4625",
           "get-winevent"
         ],
-        "part": "Part 8 · Tiered administration"
+        "part": "Part 8 · Tiered administration",
+        "console": [
+          {
+            "name": "Remote Desktop Connection or the console sign-in",
+            "steps": [
+              "Sign in to an in-tier seat: it succeeds.",
+              "Sign in to an out-of-tier system with the same account: Windows refuses with \"The sign-in method you are trying to use isn't allowed\". Capture both screens."
+            ]
+          }
+        ],
+        "consoleNote": "Port tests across the seat VM boundary (Test-NetConnection) stay commands: no console tests a single port."
       },
       {
         "id": "tier-scan",
@@ -3958,7 +4675,22 @@
           "disa-tools",
           "controls"
         ],
-        "part": "Part 8 · Tiered administration"
+        "part": "Part 8 · Tiered administration",
+        "console": [
+          {
+            "name": "SCAP Compliance Checker (SCC)",
+            "steps": [
+              "On AdminJumpBox01, SCC opens and runs; on the controllers it is no longer listed in Apps."
+            ]
+          },
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "On AdminJumpBox01, STIG Viewer opens the moved checklists."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Checking each moved evidence set against its manifest stays Get-FileHash."
       }
     ]
   },
@@ -4119,7 +4851,16 @@
           "redhat-keys",
           "redhat-dnf",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "DNS Manager (dnsmgmt.msc)",
+            "steps": [
+              "sbd.test: no SBD-REPO01 record exists yet."
+            ]
+          }
+        ],
+        "consoleNote": "gpg --show-keys for the upstream key fingerprints: no console shows them."
       },
       {
         "id": "repo-build",
@@ -4188,7 +4929,8 @@
           "controls",
           "redhat-trust",
           "export-cert"
-        ]
+        ],
+        "consoleNote": "SBD-REPO01 is a Linux server with no desktop: hostnamectl, chrony and the firewall are checked at its shell."
       },
       {
         "id": "repo",
@@ -4258,7 +5000,8 @@
           "createrepo",
           "redhat-keys",
           "filehash"
-        ]
+        ],
+        "consoleNote": "Linux, no desktop: reposync, the manifest and the signature checks run at the shell."
       },
       {
         "id": "repo-consumers",
@@ -4322,7 +5065,8 @@
           "redhat-dnf",
           "redhat-keys",
           "controls"
-        ]
+        ],
+        "consoleNote": "Linux, no desktop: dnf repolist and the trusted keys are checked at the shell."
       },
       {
         "id": "repo-prove",
@@ -4388,7 +5132,8 @@
           "disa-tools",
           "filehash",
           "controls"
-        ]
+        ],
+        "consoleNote": "Linux, no desktop: the promotion and rollback are symbolic-link changes at the shell."
       }
     ]
   },
@@ -4524,6 +5269,20 @@
         "sources": [
           "controls",
           "wef"
+        ],
+        "console": [
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Group Policy Results for SBD-DC01 and SBD-DC02 > Settings > Advanced Audit Policy Configuration: the current audit subcategories."
+            ]
+          },
+          {
+            "name": "Services (services.msc)",
+            "steps": [
+              "On SBD-SYSLOG01: Windows Event Collector, its status and startup type."
+            ]
+          }
         ]
       },
       {
@@ -4588,6 +5347,14 @@
           "audit-faq",
           "audit-policy",
           "wef"
+        ],
+        "console": [
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Group Policy Results for each controller and admin host > Settings > Advanced Audit Policy Configuration: every designed subcategory at or above the STIG value, from the expected GPO."
+            ]
+          }
         ]
       },
       {
@@ -4658,6 +5425,21 @@
           "wecutil",
           "wef",
           "rfc5425"
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On SBD-SYSLOG01: Subscriptions > SBD-ForwardedSecurity: Status Active; right-click > Runtime Status: every source member listed.",
+              "Windows Logs > Forwarded Events: recent Security and Time-Service events from each source."
+            ]
+          },
+          {
+            "name": "Resource Monitor (resmon.exe)",
+            "steps": [
+              "Network > Listening Ports: UDP 514 and TCP 6514 are listening, with Windows Defender Firewall allowing them."
+            ]
+          }
         ]
       },
       {
@@ -4727,7 +5509,17 @@
           "wevtutil",
           "wef",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Subscriptions > SBD-ForwardedSecurity > Runtime Status: every source Active with a recent heartbeat.",
+              "Forwarded Events > Properties: the maximum size for your buffer and \"Overwrite events as needed (oldest events first)\"."
+            ]
+          }
+        ],
+        "consoleNote": "Setting the log size (wevtutil sl) stays the lesson's change, or set it in the Properties dialog."
       },
       {
         "id": "collector-prove",
@@ -4798,6 +5590,20 @@
           "rfc5425",
           "disa-tools",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Forwarded Events > Filter Current Log: Event ID 4625, the last hour: the failed sign-in from its source."
+            ]
+          },
+          {
+            "name": "File Explorer and Notepad",
+            "steps": [
+              "D:\\Logs\\Syslog: open today's router and SBD-REPO01 files and find the deny and the test message."
+            ]
+          }
         ]
       }
     ]
@@ -4951,7 +5757,8 @@
           "kds",
           "wevtutil",
           "controls"
-        ]
+        ],
+        "consoleNote": "Measuring a day of events (wevtutil epl and file sizes) is arithmetic over exported files; no console does it."
       },
       {
         "id": "protect",
@@ -5027,7 +5834,28 @@
           "wevtutil",
           "get-filehash",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Server Manager",
+            "steps": [
+              "File and Storage Services > Shares > LogArchive > Properties > Settings: Encrypt data access is checked; Permissions: the planned groups."
+            ]
+          },
+          {
+            "name": "File Explorer",
+            "steps": [
+              "D:\\LogArchive > Properties > Security > Advanced: the owner and permissions match the design."
+            ]
+          },
+          {
+            "name": "Server Manager",
+            "steps": [
+              "Manage > Remove Roles and Features: SMB 1.0/CIFS File Sharing Support is not installed."
+            ]
+          }
+        ],
+        "consoleNote": "Get-SmbServerConfiguration for RejectUnencryptedAccess: no console shows the server-wide setting."
       },
       {
         "id": "integrity",
@@ -5093,6 +5921,20 @@
           "wef",
           "gmsa",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > Application > Filter: the verification source, Event IDs 1100 and 1101: today's result is 1100."
+            ]
+          },
+          {
+            "name": "Notepad",
+            "steps": [
+              "D:\\LogArchive\\Catalog: open today's verify report and confirm every line reads OK."
+            ]
+          }
         ]
       },
       {
@@ -5158,6 +6000,16 @@
           "get-filehash",
           "get-winevent",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Task Scheduler (taskschd.msc)",
+            "steps": [
+              "SBD Repository Retention > Triggers: none.",
+              "General: runs as SBD-Retention$.",
+              "History: the approved test run, which refused the young archive."
+            ]
+          }
         ]
       },
       {
@@ -5229,6 +6081,21 @@
           "get-filehash",
           "disa-tools",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "File Explorer",
+            "steps": [
+              "Try to delete the newest ForwardedEvents archive: access is denied."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On SBD-AUDIT01, Windows Logs > Security > Filter: Event ID 4656 in the last hour.",
+              "On SBD-SYSLOG01, Forwarded Events: the same event from SBD-AUDIT01."
+            ]
+          }
         ]
       }
     ]
@@ -6041,7 +6908,16 @@
           "controls",
           "dns-client-policy",
           "dns-dynamic-update"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Workstations OU > Properties > Security > Advanced: svc-fleet-join holds only Create Computer objects; SBD Tier 2 Admins holds its planned rights."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Recording the reference image hash stays Get-FileHash."
       },
       {
         "id": "pilot",
@@ -6109,6 +6985,26 @@
           "wef",
           "disa-gpo",
           "firewall"
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Workstations: the three pilot PCs."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Group Policy Results for each pilot: the STIG GPOs applied."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On each pilot: Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          }
         ]
       },
       {
@@ -6171,6 +7067,21 @@
         "sources": [
           "laps",
           "laps-ad"
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Each pilot > Properties > LAPS: the managed account, the password (visible only to SBD Tier 2 Admins and Domain Admins) and its expiration.",
+              "Workstations OU > Properties > Security > Advanced: only SBD Tier 2 Admins (beside the defaults) can read the LAPS password."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Group Policy Results for a pilot > Settings > LAPS: the policy applied."
+            ]
+          }
         ]
       },
       {
@@ -6233,7 +7144,22 @@
         "sources": [
           "autoenroll",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Certificates, Local Computer (certlm.msc)",
+            "steps": [
+              "On each pilot, Personal > Certificates: the workstation certificate with Client Authentication and its expiry; Certification Path: OK."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "SBD Fleet Computers > Members: the pilots."
+            ]
+          }
+        ],
+        "consoleNote": "gpupdate /force and certutil -pulse to start enrollment stay commands."
       },
       {
         "id": "nac",
@@ -6311,6 +7237,26 @@
           "nps",
           "nps-clients",
           "eap-tls"
+        ],
+        "console": [
+          {
+            "name": "Network Connections (ncpa.cpl)",
+            "steps": [
+              "On a pilot, Ethernet > Properties > Authentication: IEEE 802.1X enabled, Microsoft Smart Card or other certificate (EAP-TLS)."
+            ]
+          },
+          {
+            "name": "Network Policy Server (nps.msc)",
+            "steps": [
+              "Policies > Network Policies: the policy admits Domain Computers with EAP-TLS."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On the NPS server, Windows Logs > Security > Filter: Event IDs 6272 (granted) and 6273 (denied) for the pilots."
+            ]
+          }
         ]
       },
       {
@@ -6387,6 +7333,21 @@
           "autoenroll",
           "nps",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Workstations: 50 computer objects (View > Description Bar shows the count).",
+              "SBD Fleet Computers > Members: 50."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On SBD-SYSLOG01, Forwarded Events: events from the fleet."
+            ]
+          }
         ]
       },
       {
@@ -6450,7 +7411,22 @@
           "disa-gpo",
           "disa-scap",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "SCAP Compliance Checker (SCC)",
+            "steps": [
+              "On SBD-ADMIN-PC01: the scan of the sampled endpoints finished with the expected benchmark."
+            ]
+          },
+          {
+            "name": "STIG Viewer",
+            "steps": [
+              "The sampled endpoints' checklists: Open totals recorded."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash."
       }
     ]
   },
@@ -6624,7 +7600,16 @@
           "wsus-plan",
           "wsus-rings",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Find > Computers, Operating system Windows*: every Windows computer object, by OU, matches the ring table."
+            ]
+          }
+        ],
+        "consoleNote": "Building the ring table file stays a command."
       },
       {
         "id": "wsus",
@@ -6697,7 +7682,29 @@
           "wsus-configure",
           "wsus-plan",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          },
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Servers: SBD-WSUS01."
+            ]
+          },
+          {
+            "name": "Update Services (WSUS console)",
+            "steps": [
+              "Options > Update Files and Languages: store files locally; Products and Classifications: the planned products.",
+              "The server node: the database is the Windows Internal Database."
+            ]
+          }
+        ],
+        "consoleNote": "Installing the role and running wsusutil postinstall stay the lesson's changes."
       },
       {
         "id": "wsus-offline",
@@ -6768,7 +7775,8 @@
           "wsus-plan",
           "filehash",
           "controls"
-        ]
+        ],
+        "consoleNote": "WSUS has no console for export and import; wsusutil export and import, and the hash comparison, stay commands."
       },
       {
         "id": "wsus-targeting",
@@ -6841,6 +7849,21 @@
           "gp-scope",
           "get-wsuscomputer",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Update Services (WSUS console)",
+            "steps": [
+              "Computers > All Computers: the four ring groups and Ring 3 - Audit archive.",
+              "Options > Computers: Use Group Policy or registry settings on computers."
+            ]
+          },
+          {
+            "name": "Group Policy Management (gpmc.msc)",
+            "steps": [
+              "Each ring's GPO > Settings > Windows Update: the client-side targeting group name and the WSUS address."
+            ]
+          }
         ]
       },
       {
@@ -6911,6 +7934,21 @@
           "disa-scap",
           "disa-tools",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Update Services (WSUS console)",
+            "steps": [
+              "Updates > All Updates: this month's approvals per ring, in the written order.",
+              "Reports > Computer Status Summary per ring: installed or not applicable."
+            ]
+          },
+          {
+            "name": "Settings > Windows Update, on a ring member",
+            "steps": [
+              "Update history: the month's updates installed."
+            ]
+          }
         ]
       }
     ]
@@ -7055,7 +8093,8 @@
         "next": "Lesson 2 builds SBD-MGMT01 and locks it down.",
         "sources": [
           "controls"
-        ]
+        ],
+        "consoleNote": "Creating the inventory file with its columns is a file operation."
       },
       {
         "id": "mgmt-build",
@@ -7119,6 +8158,26 @@
           "firewall",
           "icacls",
           "controls"
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Servers: SBD-MGMT01."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          },
+          {
+            "name": "The hypervisor console",
+            "steps": [
+              "SBD-MGMT01's virtual machine settings: time synchronization with the host is off."
+            ]
+          }
         ]
       },
       {
@@ -7181,7 +8240,8 @@
         "sources": [
           "controls",
           "filehash"
-        ]
+        ],
+        "consoleNote": "Counting and grouping the inventory rows needs a query over the file; no console does it without a spreadsheet program, which the enclave does not have."
       },
       {
         "id": "inventory-sources",
@@ -7251,7 +8311,8 @@
           "copy-item",
           "filehash",
           "controls"
-        ]
+        ],
+        "consoleNote": "The source exports (directory, repository, update and scan data) are scripted queries; the hash list stays Get-FileHash."
       },
       {
         "id": "mgmt-prove",
@@ -7316,7 +8377,8 @@
           "disa-scap",
           "disa-tools",
           "filehash"
-        ]
+        ],
+        "consoleNote": "Comparing the record with the sources is a scripted comparison."
       }
     ]
   },
@@ -7499,7 +8561,16 @@
           "kds",
           "dmsa",
           "controls"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "View > Advanced Features > Managed Service Accounts: the existing gMSAs."
+            ]
+          }
+        ],
+        "consoleNote": "Get-KdsRootKey: no console shows the KDS root key."
       },
       {
         "id": "fileserver",
@@ -7571,6 +8642,26 @@
           "smbconnection-class",
           "whatsnew",
           "audit-policy"
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Servers: SBD-FS01."
+            ]
+          },
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "Windows Logs > System > Filter Current Log: Event sources Time-Service. Read the newest event 35 or 37: it names the time source this system uses."
+            ]
+          },
+          {
+            "name": "Server Manager",
+            "steps": [
+              "File and Storage Services > Shares > each share > Properties: Permissions grant to role groups only; Settings: Encrypt data access."
+            ]
+          }
         ]
       },
       {
@@ -7650,7 +8741,23 @@
           "sql-encrypt",
           "gmsa",
           "firewall"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Active Directory Users and Computers (dsa.msc)",
+            "steps": [
+              "Managed Service Accounts: SBD-SQL and SBD-Apps."
+            ]
+          },
+          {
+            "name": "SQL Server Configuration Manager",
+            "steps": [
+              "SQL Server Services > SQL Server: Log On As SBD\\SBD-SQL$.",
+              "SQL Server Network Configuration > Protocols > Properties > Flags: Force Encryption Yes; Certificate: the issued certificate."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the gMSAs stays New-ADServiceAccount; that is the change."
       },
       {
         "id": "apps-web",
@@ -7734,7 +8841,8 @@
           "firewalld",
           "apache",
           "controls"
-        ]
+        ],
+        "consoleNote": "SBD-WEB01 is Linux with no desktop: chrony, the repositories and the domain join are checked at the shell."
       },
       {
         "id": "prove-scan",
@@ -7799,7 +8907,16 @@
           "disa-scap",
           "disa-tools",
           "filehash"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Event Viewer (eventvwr.msc)",
+            "steps": [
+              "On SBD-SYSLOG01: Subscriptions > Runtime Status: SBD-FS01, SBD-SQL01 and SBD-APPS01 Active; Forwarded Events: their events in the last hour."
+            ]
+          }
+        ],
+        "consoleNote": "SBD-WEB01's syslog arrival is checked in its file on SBD-SYSLOG01 (open it in Notepad)."
       }
     ]
   },
@@ -7982,7 +9099,22 @@
         "sources": [
           "controls",
           "forest"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Windows Server Backup (wbadmin.msc)",
+            "steps": [
+              "Local Backup: the schedule, the last backup and its status; View details for the versions."
+            ]
+          },
+          {
+            "name": "File Explorer",
+            "steps": [
+              "This PC: the protected backup volume E: and its free space."
+            ]
+          }
+        ],
+        "consoleNote": "The tombstone lifetime (from the directory configuration) stays a command, or read it in ADSI Edit."
       },
       {
         "id": "directory",
@@ -8074,7 +9206,16 @@
           "recycle-bin",
           "full-server",
           "forest"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Windows Server Backup (wbadmin.msc)",
+            "steps": [
+              "On SBD-DC01, SBD-DC02 and SBD-SUBCA01: Local Backup shows the 21:00 schedule with system state and critical volumes, and the last backup Successful."
+            ]
+          }
+        ],
+        "consoleNote": "Creating the schedule stays wbadmin enable backup, or the Backup Schedule wizard; that is the change."
       },
       {
         "id": "trust-state",
@@ -8155,7 +9296,16 @@
           "sql-backup",
           "sql-system-db",
           "register-task"
-        ]
+        ],
+        "console": [
+          {
+            "name": "DHCP (dhcpmgmt.msc)",
+            "steps": [
+              "Right-click the server > Backup: the backup folder holds today's set."
+            ]
+          }
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash."
       },
       {
         "id": "offline-copies",
@@ -8222,7 +9372,8 @@
         "sources": [
           "controls",
           "wbadmin"
-        ]
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. The offline copy is proven by matching hashes on the volume and the media."
       },
       {
         "id": "rehearse",
@@ -8298,7 +9449,16 @@
           "full-server",
           "w32tm",
           "forest"
-        ]
+        ],
+        "console": [
+          {
+            "name": "Windows Server Backup (wbadmin.msc)",
+            "steps": [
+              "After the isolated restore: the Recovery wizard's result, and Event Viewer > Directory Service shows the database opened without errors."
+            ]
+          }
+        ],
+        "consoleNote": "Booting to DSRM (bcdedit) and the system-state restore run from the command line in DSRM."
       },
       {
         "id": "record",
@@ -8360,7 +9520,8 @@
         "sources": [
           "controls",
           "forest"
-        ]
+        ],
+        "consoleNote": "File hashes (Get-FileHash / sha256sum): Windows has no built-in console that computes a file hash. Sealing the record is a hash manifest."
       }
     ]
   }

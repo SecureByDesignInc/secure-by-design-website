@@ -133,3 +133,27 @@ test('the authorization view covers every module with real parts of the network'
   const systems = new Set(network.systems.map(system => system.name));
   for (const name of JSON.stringify(view).match(/SBD-[A-Z0-9-]*\d{2}|AdminJumpBox01/g)) assert.ok(systems.has(name), `${name} is in the System Hub`);
 });
+
+// Owner direction, 22 October 2026: checks lead with the console (GUI) where one exists, the command stays as an
+// optional route, the Splunk course is left as it is for now, and the time service is read with w32tm (Microsoft's
+// supported tool), not the registry.
+test('console checks lead where a console exists, with the command kept as an optional route', () => {
+  const courses = JSON.parse(read('content/configuration-courses.json'));
+  const lessons = courses.flatMap(course => course.lessons.map(lesson => ({ course: course.id, ...lesson })));
+  const withConsole = lessons.filter(lesson => lesson.console);
+  assert.ok(withConsole.length >= 70, `${withConsole.length} lessons have console checks`);
+  for (const lesson of withConsole) {
+    assert.ok(lesson.command.trim(), `${lesson.id} keeps its command as the optional route`);
+    for (const console of lesson.console) {
+      assert.ok(console.name && console.steps.length && console.steps.every(step => step.trim().length > 8), `${lesson.id} ${console.name}`);
+      assert.doesNotMatch(console.name, /Registry Editor/, `${lesson.id} reads the time service with w32tm, not the registry`);
+    }
+  }
+  assert.equal(lessons.filter(lesson => lesson.course === 'splunk-analysis' && (lesson.console || lesson.consoleNote)).length, 0, 'Splunk is left as it is');
+  for (const id of ['time', 'time-members', 'time-troubleshoot']) assert.match(lessons.find(lesson => lesson.course === 'identity-foundation' && lesson.id === id).consoleNote, /w32tm/, id);
+  const guide = read('public/training/identity-foundation/index.html');
+  assert.match(guide, /Check it in the console/);
+  assert.match(guide, /Command-line route \(optional\)/);
+  const app = read('public/app-content/v1/catalog.json');
+  assert.match(app, /"heading":"Check it in the console"/);
+});

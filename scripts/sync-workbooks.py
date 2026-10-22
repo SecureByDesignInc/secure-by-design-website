@@ -251,6 +251,39 @@ def sync_paragraphs(paras: list, texts: list, what: str) -> None:
         set_text(p, text)
 
 
+
+def sync_console(lesson: dict, success, plain) -> None:
+    """Console checks ahead of the command lines (owner direction, 22 October 2026). Callouts are copies of the
+    success callout (label + text); console steps and the route label are copies of the evidence line."""
+    def callout(label: str, text: str):
+        el = copy.deepcopy(success)
+        runs = text_runs(el)
+        set_run_text(runs[0], label + "  ")  # the success callout separates label and text with two spaces
+        set_run_text(runs[1], text)
+        for extra in runs[2:]:
+            extra.getparent().remove(extra)
+        return el
+    def line(text: str):
+        el = copy.deepcopy(plain)
+        set_text(el, text)
+        return el
+    first_code = success.getprevious()
+    while first_code is not None and first_code.getprevious() is not None and is_code(first_code.getprevious()):
+        first_code = first_code.getprevious()
+    note = lesson.get("consoleNote")
+    if lesson.get("console"):
+        made = []
+        for i, console in enumerate(lesson["console"]):
+            made.append(callout("CHECK IT IN THE CONSOLE" if i == 0 else "THEN, IN", console["name"]))
+            made += [line("%d. %s" % (k + 1, step)) for k, step in enumerate(console["steps"])]
+        if note:
+            made.append(callout("STAYS A COMMAND", note))
+        made.append(line("Command-line route (optional):"))
+        for el in made:
+            first_code.addprevious(el)
+    elif note:
+        success.addprevious(callout("WHY THIS STAYS A COMMAND", note))
+
 def sync_code(paras: list, lines: list) -> None:
     """Command lines: one shaded paragraph per line. The last line carries the space
     after the block, so lines are added or removed in front of it."""
@@ -424,7 +457,9 @@ def map_lesson(wb: Workbook, section: list, n: int, lesson: dict, course: dict) 
 
     expect(all(is_list_item(p) for p in objectives), "%s: objectives are not a list" % where)
     expect(all(is_list_item(p) for p in steps), "%s: steps are not a list" % where)
-    expect(len(check) >= 2 and all(is_code(p) for p in check[:-1]), "%s: command lines not found" % where)
+    # Owner direction, 22 October 2026: console (GUI) checks lead, the command lines follow as an optional route. Every
+    # non-code paragraph in this block is generated below, so it is removed and rebuilt on each sync.
+    expect(len(check) >= 2 and any(is_code(p) for p in check[:-1]), "%s: command lines not found" % where)
     expect(callout_label(check[-1]) == "WHAT SUCCESS LOOKS LIKE", "%s: success callout not found" % where)
     expect(len(record) == 2 and record[1].tag == w("tbl"), "%s: evidence and record table not found" % where)
     expect(para_text(record[0]).startswith("Evidence to keep: "), "%s: evidence line not found" % where)
@@ -444,8 +479,12 @@ def map_lesson(wb: Workbook, section: list, n: int, lesson: dict, course: dict) 
     set_labelled(why, "WHY THIS MATTERS", lesson["summary"])
     sync_paragraphs(objectives, lesson["objectives"], "%s objectives" % where)
     sync_paragraphs(steps, lesson["steps"], "%s steps" % where)
-    sync_code(check[:-1], lesson["command"].split("\n"))
+    for el in check[:-1]:
+        if not is_code(el):
+            el.getparent().remove(el)
+    sync_code([el for el in check[:-1] if is_code(el)], lesson["command"].split("\n"))
     set_labelled(check[-1], "WHAT SUCCESS LOOKS LIKE", lesson["check"])
+    sync_console(lesson, check[-1], record[0])
     set_text(record[0], "Evidence to keep: " + lesson["evidence"])
     set_text(question, lesson["quizzes"][0]["question"])
     set_labelled(think[remember[0]], "REMEMBER", "  ".join(lesson["recap"]))

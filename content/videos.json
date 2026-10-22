@@ -81,7 +81,7 @@
         "updated": "20 October 2026",
         "checklistPage": "/training/identity-foundation/checklist",
         "word": "/training/identity-foundation/SecureByDesign-identity-foundation-Workbook.docx",
-        "pages": 120,
+        "pages": 131,
         "cover": "/training/identity-foundation/workbook-cover.webp"
       },
       "topic": "Identity"
@@ -227,7 +227,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/logging-pipeline/checklist",
         "word": "/training/logging-pipeline/SecureByDesign-logging-pipeline-Workbook.docx",
-        "pages": 15,
+        "pages": 17,
         "cover": "/training/logging-pipeline/workbook-cover.webp"
       },
       "topic": "Logging"
@@ -296,7 +296,7 @@
         "guide": "/training/audit-repository",
         "checklistPage": "/training/audit-repository/checklist",
         "word": "/training/audit-repository/SecureByDesign-audit-repository-Workbook.docx",
-        "pages": 18,
+        "pages": 19,
         "cover": "/training/audit-repository/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
@@ -456,7 +456,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/workstation-fleet/checklist",
         "word": "/training/workstation-fleet/SecureByDesign-workstation-fleet-Workbook.docx",
-        "pages": 19,
+        "pages": 22,
         "cover": "/training/workstation-fleet/workbook-cover.webp"
       },
       "topic": "Endpoints"
@@ -526,7 +526,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/patch-protect/checklist",
         "word": "/training/patch-protect/SecureByDesign-patch-protect-Workbook.docx",
-        "pages": 18,
+        "pages": 19,
         "cover": "/training/patch-protect/workbook-cover.webp"
       },
       "topic": "Patching"
@@ -593,7 +593,7 @@
         "guide": "/training/management-server",
         "checklistPage": "/training/management-server/checklist",
         "word": "/training/management-server/SecureByDesign-management-server-Workbook.docx",
-        "pages": 15,
+        "pages": 17,
         "cover": "/training/management-server/workbook-cover.webp",
         "materialsEdition": "1.0",
         "updated": "14 October 2026"
@@ -744,7 +744,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/business-services/checklist",
         "word": "/training/business-services/SecureByDesign-business-services-Workbook.docx",
-        "pages": 15,
+        "pages": 19,
         "cover": "/training/business-services/workbook-cover.webp"
       },
       "topic": "Services"
@@ -828,7 +828,7 @@
         "updated": "14 October 2026",
         "checklistPage": "/training/prove-recovery/checklist",
         "word": "/training/prove-recovery/SecureByDesign-prove-recovery-Workbook.docx",
-        "pages": 19,
+        "pages": 21,
         "cover": "/training/prove-recovery/workbook-cover.webp"
       },
       "topic": "Recovery"
