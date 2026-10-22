@@ -112,7 +112,10 @@ export function buildAppCatalog(site) {
           sections: [
             section('Before you start', config.prerequisites.join('\n\n')), section('The lab plan', config.labNote),
             ...l.steps.map((s, i) => section(`Step ${i + 1}`, s)),
-            section('Inspect your configuration', l.command), section('What success looks like', l.check), section('Keep your evidence', l.evidence),
+            // Owner direction, 22 October 2026: the console (GUI) check leads where one exists; the command stays as an optional
+            // route (the app's lab mode reads 'Inspect your configuration' for its copy-per-line commands page).
+            ...(l.console ? [section('Check it in the console', l.console.map(c => [c.name, ...c.steps.map((st, i) => `${i + 1}. ${st}`)].join('\n')).join('\n\n') + (l.consoleNote ? `\n\nStays a command: ${l.consoleNote}` : ''))] : []),
+            section('Inspect your configuration', l.command), ...(!l.console && l.consoleNote ? [section('Why this stays a command', l.consoleNote)] : []), section('What success looks like', l.check), section('Keep your evidence', l.evidence),
             section('Source documentation', config.sources.filter(s => l.sources.includes(s.id)).map(s => `${s.title}\n${s.url}`).join('\n\n')),
           ],
           quizzes: l.quizzes.map(x => quiz(x.question, x.answers, x.correct, x.explanation)),

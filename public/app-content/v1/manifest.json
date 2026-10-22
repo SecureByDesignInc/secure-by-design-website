@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": "fdb48bd03ce7f353",
-  "sha256": "fdb48bd03ce7f3535e6d3a2862a945cb663ac001f5b186713826343fccfcc18b",
-  "bytes": 958818,
+  "version": "725972d47a457c6a",
+  "sha256": "725972d47a457c6acb5d95e858cdc92aef26b838bb34c03c312ea6f7848c1f07",
+  "bytes": 995057,
   "courses": 11,
   "lessons": 107,
   "url": "/app-content/v1/catalog.json"

@@ -64,6 +64,7 @@ function buildLesson(course, configuration, guide) {
     if (!Array.isArray(extra.stepTitles) || extra.stepTitles.length !== item.steps.length) fail(id, `lesson ${item.id} needs ${item.steps.length} step titles`);
     extra.stepTitles.forEach((t, i) => text(id, `lesson ${item.id} step title ${i + 1}`, t, 70));
     if (!Array.isArray(extra.checklist) || extra.checklist.length !== 3) fail(id, `lesson ${item.id} needs three checklist items`);
+    if (item.console !== undefined && (!Array.isArray(item.console) || !item.console.length || item.console.some(c => !c.name || !Array.isArray(c.steps) || !c.steps.length || c.steps.some(st => typeof st !== 'string' || !st.trim())))) fail(id, `lesson ${item.id} console checks need a console name and steps`);
     extra.checklist.forEach((t, i) => text(id, `lesson ${item.id} checklist ${i + 1}`, t, 240));
     for (const key of ['short', 'tag', 'status', 'mistake', 'network']) text(id, `lesson ${item.id} ${key}`, extra[key], key === 'short' ? 28 : key === 'tag' || key === 'status' ? 40 : 700);
     for (const key of ['id', 'name', 'phase', 'body', 'question']) text(id, `lesson ${item.id} control ${key}`, extra.control?.[key], 700);
@@ -79,8 +80,14 @@ function buildLesson(course, configuration, guide) {
       minutes: item.minutes,
       objectives: item.objectives,
       steps: item.steps.map((step, i) => [extra.stepTitles[i], step]),
-      commandLabel: 'Inspect your configuration',
-      commandNote: 'Run the relevant checks in an elevated PowerShell session — or a shell, on the Linux servers — on the host identified in the lesson. Adapt the example names and paths to your lab.',
+      // Owner direction, 22 October 2026: checks lead with the console (GUI) where one exists; the command stays as an
+      // optional route. consoleNote names what has no console and stays a command.
+      ...(item.console ? { console: item.console } : {}),
+      ...(item.consoleNote ? { consoleNote: item.consoleNote } : {}),
+      commandLabel: item.console ? 'Command-line route (optional)' : 'Inspect your configuration',
+      commandNote: item.console
+        ? 'The same check from an elevated PowerShell session, if you prefer it. Adapt the example names and paths to your lab.'
+        : 'Run the relevant checks in an elevated PowerShell session — or a shell, on the Linux servers — on the host identified in the lesson. Adapt the example names and paths to your lab.',
       command: item.command,
       expected: item.check,
       mistake: extra.mistake,
