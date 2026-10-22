@@ -162,7 +162,7 @@ export default function PackageBuilderHub({ library }: { library: Library }) {
           </h1>
         </div>
         <div className="vc-intro-copy">
-          <p>Register the Secure By Design enclave in the ATO Package Builder and take it through all seven RMF steps, from naming its roles to the Authorizing Official’s decision and continuous monitoring. Each step links to its lessons and templates in the Training Hub. Your work is saved privately to your account.</p>
+          <p>Register the Secure By Design enclave in the ATO Package Builder and take it through all seven RMF steps, from naming its roles to the Authorizing Official’s decision and continuous monitoring. Each step links to its lessons and templates in the Training Hub. No account needed: sign in to save your work to your account, or use it without one for a single visit.</p>
           <div className="vc-intro-actions">
             <Link className="vc-intro-primary" href={BUILDER}>Open the package builder <ArrowRight size={16} /></Link>
             <Link href={COURSE_IN_HUB}>Learn each step in the Training Hub <ArrowRight size={16} /></Link>

@@ -71,6 +71,9 @@ importers:
       shadcn:
         specifier: 4.18.0
         version: 4.18.0(typescript@5.9.3)
+      sql.js:
+        specifier: 1.14.2
+        version: 1.14.2
       tailwind-merge:
         specifier: 3.6.0
         version: 3.6.0
@@ -119,7 +122,7 @@ importers:
         version: 0.31.10
       drizzle-orm:
         specifier: 0.45.2
-        version: 0.45.2(@cloudflare/workers-types@4.20260515.1)
+        version: 0.45.2(@cloudflare/workers-types@4.20260515.1)(sql.js@1.14.2)
       oxfmt:
         specifier: 0.61.0
         version: 0.61.0
@@ -3781,6 +3784,9 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
+  sql.js@1.14.2:
+    resolution: {integrity: sha512-3ZGPovObMFrdw79zrUHbfdE/DLIsy8jdNdssmMSQuRAymedU6q84asPt0kgiqrdMYlPegDItiIMfmIXzZnYFcw==}
+
   srvx@0.11.22:
     resolution: {integrity: sha512-LqZxxBDMKuMAZzFzJnDCkFOrs9MZQZr0LvHiO/SuSZVdQaXD7xQ5UWTUxheJrQPve1qk9MG2B/yttUvJxw8egQ==}
     engines: {node: '>=20.16.0'}
@@ -5898,9 +5904,10 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.13
 
-  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260515.1):
+  drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260515.1)(sql.js@1.14.2):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20260515.1
+      sql.js: 1.14.2
 
   dunder-proto@1.0.1:
     dependencies:
@@ -7188,6 +7195,8 @@ snapshots:
       source-map: 0.6.1
 
   source-map@0.6.1: {}
+
+  sql.js@1.14.2: {}
 
   srvx@0.11.22: {}
 

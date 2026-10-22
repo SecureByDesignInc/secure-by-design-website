@@ -17,6 +17,11 @@ export const contentSecurityPolicy=[
  "form-action 'self'",
  "frame-ancestors 'self'",
 ].join('; ');
+// The ATO Package Builder runs its API in the page for visitors without an account (owner direction, 21 October 2026),
+// on SQLite compiled to WebAssembly. 'wasm-unsafe-eval' allows compiling WebAssembly only (not JavaScript eval), and
+// only on the builder's page.
+export const builderContentSecurityPolicy=contentSecurityPolicy.replace("script-src 'self' 'unsafe-inline'","script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'");
+const usesWasm=pathname=>/^\/grc-rmf-training\/workspace\/?$/.test(pathname||'');
 export const securityHeaders={
  'x-content-type-options':'nosniff',
  'referrer-policy':'strict-origin-when-cross-origin',
@@ -26,11 +31,11 @@ export const securityHeaders={
 };
 export const hsts='max-age=31536000; includeSubDomains';
 // Adds the protections a response doesn't already carry; HSTS only over HTTPS.
-export function protect(response,https){
+export function protect(response,https,pathname){
  const headers=new Headers(response.headers);
  if(https)headers.set('strict-transport-security',hsts);
  for(const [name,value] of Object.entries(securityHeaders))if(!headers.has(name))headers.set(name,value);
  // Pages that already set a stricter policy (the email-preference and owner pages) keep it.
- if((headers.get('content-type')||'').includes('text/html')&&!headers.has('content-security-policy'))headers.set('content-security-policy',contentSecurityPolicy);
+ if((headers.get('content-type')||'').includes('text/html')&&!headers.has('content-security-policy'))headers.set('content-security-policy',usesWasm(pathname)?builderContentSecurityPolicy:contentSecurityPolicy);
  return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
 }

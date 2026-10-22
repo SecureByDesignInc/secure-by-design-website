@@ -39,3 +39,12 @@ test('the policy keeps other sites from framing pages and blocks plugins', () =>
   assert.match(contentSecurityPolicy, /base-uri 'self'/);
   assert.match(hsts, /includeSubDomains/);
 });
+
+// Owner direction, 21 October 2026: the ATO Package Builder page compiles SQLite to WebAssembly for visitors without an
+// account, so only that page allows 'wasm-unsafe-eval' (WebAssembly only, never JavaScript eval).
+test('only the ATO Package Builder page may compile WebAssembly', () => {
+  const page = (path) => protect(new Response('<p>x</p>', { headers: { 'content-type': 'text/html' } }), true, path).headers.get('content-security-policy');
+  assert.match(page('/grc-rmf-training/workspace'), /script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https:\/\/static\.cloudflareinsights\.com/);
+  for (const path of ['/', '/grc-rmf-training', '/technical-training', '/grc-rmf-training/workspace/other', undefined]) assert.doesNotMatch(page(path), /wasm-unsafe-eval/, String(path));
+  assert.doesNotMatch(page('/grc-rmf-training/workspace'), /'unsafe-eval'/);
+});

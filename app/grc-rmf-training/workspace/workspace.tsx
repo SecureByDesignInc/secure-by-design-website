@@ -1,18 +1,28 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {TEMPLATES,DECISION_SHORT,authorizationStatus} from '../../../lib/authorization/model.mjs';
-import {api,Badge,decisionTone,formatDate,type State,type System} from './shared';
+import {api,Badge,decisionTone,formatDate,isVisitor,setVisitor,type State,type System} from './shared';
 import SystemView from './system-view';
 
 type Summary=System&{controls:number;openPoam:number};
-type List={user:{email:string}|null;systems:Summary[];limit?:number};
+type List={user:{email:string|null}|null;systems:Summary[];limit?:number};
 const readHash=()=>{const params=new URLSearchParams(typeof location==='undefined'?'':location.hash.slice(1));return {system:params.get('system'),tab:params.get('tab')||'overview'};};
 
 export default function Workspace(){
  const [list,setList]=useState<List|null>(null);const [error,setError]=useState('');
  const [route,setRoute]=useState<{system:string|null;tab:string}>({system:null,tab:'overview'});
  const [state,setState]=useState<State|null>(null);const [loadingSystem,setLoadingSystem]=useState(false);
- const refreshList=useCallback(async()=>{try{setList(await api('GET',''));setError('')}catch(e){setError((e as Error).message)}},[]);
+ const refreshList=useCallback(async()=>{try{
+  let next=await api('GET','');
+  // Owner direction, 21 October 2026: a visitor without an account uses every feature, in this page only.
+  if(!next.user&&!isVisitor()){setVisitor(true);next=await api('GET','');}
+  setList(next);setError('');
+ }catch(e){setError((e as Error).message)}},[]);
+ // Visitor work lasts for this visit only, so ask before the page closes on registered systems.
+ useEffect(()=>{
+  const warn=(e:BeforeUnloadEvent)=>{if(isVisitor()&&list?.systems.length){e.preventDefault();e.returnValue='';}};
+  window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);
+ },[list?.systems.length]);
  useEffect(()=>{setRoute(readHash());void refreshList();const onHash=()=>setRoute(readHash());window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash);},[refreshList]);
  useEffect(()=>{
   if(!route.system||!list?.user){setState(null);return;}
@@ -25,31 +35,11 @@ export default function Workspace(){
  const intro=<header className="reader-heading awx-heading"><p className="eyebrow"><a href="/grc-rmf-training">ATO PACKAGE BUILDER HUB</a> · PRACTICE</p><h1>ATO Package Builder</h1><p>Take a system through an Authorization to Operate the way authorization teams do it: register and categorize it, implement and assess its controls, build the Body of Evidence, track weaknesses in a POA&amp;M, and route the package through review to a decision.</p></header>;
  if(error&&!list)return <>{intro}<p className="reader-error" role="alert">{error} <button type="button" onClick={()=>void refreshList()}>Try again</button></p></>;
  if(!list)return <>{intro}<p className="reader-loading"><output>Loading the ATO Package Builder…</output></p></>;
- if(!list.user)return <>{intro}<Landing/></>;
  if(route.system){
   if(state&&state.system.id===route.system)return <SystemView state={state} setState={setState} tab={route.tab} go={tab=>go(route.system,tab)} back={()=>{go(null);void refreshList();}} onDeleted={()=>{setState(null);go(null);void refreshList();}}/>;
   return <>{intro}{error?<p className="reader-error" role="alert">{error} <button type="button" onClick={()=>go(null)}>Back to your systems</button></p>:<p className="reader-loading"><output>{loadingSystem?'Opening the system…':'Loading…'}</output></p>}</>;
  }
  return <>{intro}<Systems list={list} open={id=>go(id)} created={s=>{setState(s);go(s.system.id,'overview');void refreshList();}}/></>;
-}
-
-function Landing(){
- const steps=[
-  ['Register','Describe the system and its boundary, assign the roles, and categorize it from its information types.'],
-  ['Implement','Select controls from NIST SP 800-53 Rev. 5, write implementation statements, and link the evidence that proves them.'],
-  ['Assess','Switch to the assessor’s seat: record a result for every SP 800-53A objective and validate or return each control.'],
-  ['Authorize','Plan every weakness in the POA&M, then route the package through the ISSM, the assessor, and the Authorizing Official.'],
-  ['Monitor','Track the termination date, overdue milestones, changes, and reassessments. Export your SSP, SAR, and POA&M for your portfolio.'],
- ];
- return <section className="awx-landing" aria-label="What you will do">
-  <ol className="awx-steps">{steps.map(([title,text],i)=><li key={title}><span>{String(i+1).padStart(2,'0')}</span><h2>{title}</h2><p>{text}</p></li>)}</ol>
-  <div className="reader-welcome awx-signin">
-   <h2>Sign in to start</h2>
-   <p>Your systems are saved privately to your Secure By Design account, so you can pick up the package on any device. Nothing you enter is shared or published. Use practice or fictional details: never enter a real organization’s sensitive, controlled, or classified information.</p>
-   <a className="reader-primary" href="/my-progress?returnTo=%2Fgrc-rmf-training%2Fworkspace#account">Create account or sign in</a>
-   <p className="reader-note">New to authorization? Start with <a href="/grc-rmf-training/rmf/index.html#step/prepare">course 2.1, RMF to ATO</a>: each of its seven steps has the lessons, the same task here, and the templates it uses.</p>
-  </div>
- </section>;
 }
 
 function Systems({list,open,created}:{list:List;open:(id:string)=>void;created:(s:State)=>void}){
@@ -88,6 +78,8 @@ function Systems({list,open,created}:{list:List;open:(id:string)=>void;created:(
     <button className="reader-primary" disabled={busy||!available(template)}>{busy?'Registering…':'Register the system'}</button>
    </form>}
   </section>
-  <p className="reader-note awx-signed-in">Signed in as {list.user?.email}. <a href="/my-progress">My Account</a></p>
+  {isVisitor()
+   ?<p className="reader-note awx-signed-in awx-visitor">You’re using the builder without an account, so your work lasts until you leave or reload this page. To keep it, <a href="/my-progress?returnTo=%2Fgrc-rmf-training%2Fworkspace#account">sign in or create a free account</a> first.</p>
+   :<p className="reader-note awx-signed-in">Signed in as {list.user?.email}. Your systems are saved to your account. <a href="/my-progress">My Account</a></p>}
  </>;
 }
