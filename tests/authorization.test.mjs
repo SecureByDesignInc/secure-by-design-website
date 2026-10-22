@@ -284,3 +284,34 @@ test('deleting a system or the account removes every record',async()=>{
  for(const table of ['auth_systems','auth_controls','auth_history'])assert.equal(env.raw.prepare(`SELECT count(*) n FROM ${table} WHERE ${table==='auth_systems'?'account_id':'system_id'}=?`).get(table==='auth_systems'?'alice':second.system.id).n,0);
  assert.equal(env.raw.prepare("SELECT count(*) n FROM auth_systems WHERE account_id='bob'").get().n,1);
 });
+
+// Owner direction, 21 October 2026: the builder works without an account. The page runs the same API code
+// (lib/authorization/api.mjs) against sql.js in memory through the D1-shaped binding; nothing reaches the server.
+test('without an account, the shared API runs in the page against sql.js with every feature', async () => {
+ const {authorizationHandler} = await import('../lib/authorization/api.mjs');
+ const {d1, createSchema} = await import('../lib/authorization/sqljs-d1.mjs');
+ const initSqlJs = (await import('sql.js')).default;
+ const SQL = await initSqlJs();
+ const db = new SQL.Database();
+ createSchema(db, ['0014_authorization_workspace.sql', '0015_auth_one_enclave.sql'].map(f => fs.readFileSync('drizzle/' + f, 'utf8')));
+ const env = {DB: d1(db), LOCAL: true}, visitor = {id: 'visitor', email: null};
+ // A browser-built Request carries no Origin header; the page copy needs none.
+ const local = async (method, path = '', body) => {
+  const response = await authorizationHandler(new Request('https://securebydesigninc.com/api/authorization' + path, {method, headers: body === undefined ? {} : {'content-type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body)}), env, visitor);
+  return {status: response.status, data: await response.json()};
+ };
+ assert.deepEqual((await local('GET')).data, {user: {email: null}, limit: 5, systems: []});
+ const created = await local('POST', '/systems', {template: 'sbd-enclave'});
+ assert.equal(created.status, 201, JSON.stringify(created.data));
+ const id = created.data.system.id, first = created.data.controls[0].controlId;
+ assert.ok(created.data.controls.length > 0, 'the enclave template selects its controls');
+ const updated = await local('PATCH', `/systems/${id}/controls/${first}`, {implementationStatus: 'implemented', narrative: 'Implemented on every component in the boundary.'});
+ assert.equal(updated.status, 200, JSON.stringify(updated.data));
+ assert.equal(updated.data.controls.find(c => c.controlId === first).implementationStatus, 'implemented');
+ const listed = (await local('GET')).data;
+ assert.equal(listed.systems.length, 1);
+ assert.equal((await local('POST', '/systems', {template: 'sbd-enclave'})).status, 409, 'the same one-enclave rule');
+ // The server still requires a signed-in reader and this site's origin for writes.
+ assert.equal((await authorizationHandler(new Request('https://securebydesigninc.com/api/authorization/systems', {method: 'POST', headers: {'content-type': 'application/json'}, body: '{}'}), {DB: env.DB}, visitor)).status, 403);
+ assert.equal((await authorizationHandler(new Request('https://securebydesigninc.com/api/authorization/systems', {method: 'POST', headers: {'content-type': 'application/json'}, body: '{}'}), {DB: env.DB}, null)).status, 401);
+});

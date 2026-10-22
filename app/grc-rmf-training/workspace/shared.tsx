@@ -15,7 +15,18 @@ export type State={system:System;controls:Control[];artifacts:Artifact[];poam:Po
 // Runs a workspace call and returns the new state (null when it failed; the page shows the error).
 export type Act=(method:string,path:string,body?:unknown,options?:{quiet?:boolean;ok?:string|((next:State)=>string)})=>Promise<State|null>;
 
+// Signed-in readers use the server; visitors without an account use the same API in the page (local-api.ts), so every
+// feature works either way (owner direction, 21 October 2026).
+let visitor=false;
+export const setVisitor=(value:boolean)=>{visitor=value;};
+export const isVisitor=()=>visitor;
 export async function api(method:string,path:string,body?:unknown){
+ if(visitor){
+  const {localApi}=await import('./local-api');
+  const result=await localApi(method,path,body);
+  if(!result.ok)throw new Error(result.data?.error||'That could not be saved. Please try again.');
+  return result.data;
+ }
  const response=await fetch('/api/authorization'+path,{method,credentials:'same-origin',headers:body===undefined?{}:{'content-type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});
  let data:any=null;try{data=await response.json()}catch{}
  if(!response.ok)throw new Error(data?.error||'That could not be saved. Please try again.');

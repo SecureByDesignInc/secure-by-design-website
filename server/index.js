@@ -136,5 +136,5 @@ export default {async fetch(incoming,env,ctx){
  // Cookieless PostHog (server/analytics.js): its proxy under /sbd-e/, then the script tag on public pages.
  // Both do nothing until the POSTHOG_KEY secret is set in the Cloudflare dashboard.
  const analytics=await handleAnalyticsRoute(request,env,ctx);if(analytics)return protect(analytics,https);
- return protect(injectAnalytics(await route(request,env,ctx),request,env),https);
+ return protect(injectAnalytics(await route(request,env,ctx),request,env),https,new URL(request.url).pathname);
 }};
