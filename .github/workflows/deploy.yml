@@ -24,7 +24,7 @@ jobs:
       CLOUDFLARE_D1_DATABASE_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
       CLOUDFLARE_D1_DATABASE_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v4
         with:
           version: 10
@@ -82,7 +82,7 @@ jobs:
           [ -n "$WORKER" ] || missing="$missing CLOUDFLARE_WORKER_NAME(variable)"
           [ -n "$D1" ] || missing="$missing CLOUDFLARE_D1_DATABASE_ID(variable)"
           if [ -n "$missing" ]; then echo "::error::Missing repository settings:$missing"; exit 1; fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v4
         with:
           version: 10
