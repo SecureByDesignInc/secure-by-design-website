@@ -24,6 +24,15 @@ const sceneModule = read('scripts/course-guide/scene.js');
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const Count = n => { const w = words[n] ?? String(n); return w[0].toUpperCase() + w.slice(1); };
+// Owner direction, 22 October 2026: the Government & Vendor Guidelines references are no longer catalog tiles; each lesson lists the
+// reference for its part as an additional source in "About this sample and its sources". A reference supports the parts its course
+// links name in `guidelines` (content/videos.json: /training/<course>/?part=<prefix>, the prefix of the part's lesson ids), and the
+// course's sources hold it under the same address (the design-* sources).
+const site = 'https://securebydesigninc.com';
+const guidelineUrls = (courseId, lessonId) => (library.guidelines ?? []).filter(item => (item.training.relatedResources ?? []).some(resource => {
+  const match = /^\/training\/([a-z0-9-]+)\/\?part=([a-z0-9]+)$/.exec(resource.href);
+  return match && match[1] === courseId && (lessonId === match[2] || lessonId.startsWith(`${match[2]}-`));
+})).map(item => site + item.training.guide);
 const sharedSources = [
   { id: 'rmf', title: 'NIST · Risk Management Framework SP 800-37 Rev. 2', url: 'https://csrc.nist.gov/pubs/sp/800/37/r2/final' },
   { id: 'controls', title: 'NIST · Security controls SP 800-53 Rev. 5', url: 'https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final' },
@@ -59,6 +68,7 @@ function buildLesson(course, configuration, guide) {
   }
   const sourceIds = new Set(configuration.sources.map(s => s.id));
   const chapters = configuration.lessons.map((item, index) => {
+    const additional = guidelineUrls(id, item.id).map(url => configuration.sources.find(s => s.url === url)?.id ?? fail(id, `no source for ${url}`)).filter(sid => !item.sources.includes(sid));
     const extra = guide.lessons[item.id];
     if (!extra) fail(id, `missing guide content for lesson ${item.id}`);
     if (!Array.isArray(extra.stepTitles) || extra.stepTitles.length !== item.steps.length) fail(id, `lesson ${item.id} needs ${item.steps.length} step titles`);
@@ -98,7 +108,7 @@ function buildLesson(course, configuration, guide) {
       quizzes: item.quizzes.map(q => ({ prompt: q.question, answers: q.answers, correct: q.correct, feedback: q.explanation })),
       recap: item.recap,
       next: item.next,
-      sources: item.sources,
+      sources: [...item.sources, ...additional],
       ...(item.model ? { model: item.model } : {}),
       // Courses in parts (course 1.1, 20 October 2026) show a heading before each part's first lesson.
       ...(item.part ? { part: item.part } : {}),

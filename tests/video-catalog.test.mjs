@@ -33,7 +33,9 @@ test('related build courses stay together before authorization and materials rem
   const catalog = getCatalogEntries(library);
   // Courses 1.1–1.8 became course 1.1, Build and harden the identity foundation (owner direction, 20 October 2026).
   const course = catalog.find(entry => entry.id === 'rmf-boe-ato');
-  assert.deepEqual(catalog.map(entry => entry.id), ['identity-foundation', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates', 'design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
+  assert.deepEqual(catalog.map(entry => entry.id), ['identity-foundation', 'linux-repository', 'logging-pipeline', 'audit-repository', 'splunk-analysis', 'workstation-fleet', 'patch-protect', 'management-server', 'endpoint-protection', 'vulnerability-scanning', 'business-services', 'prove-recovery', 'rmf-boe-ato', 'ato-templates']);
+  // The Government & Vendor Guidelines references left the catalog for course 1.1's lessons (owner direction, 22 October 2026).
+  assert.ok(catalog.every(entry => entry.kind !== 'design-reference'));
   assert.equal(course.id, 'rmf-boe-ato');
   assert.equal(isTrainingCourse(course), true);
   assert.equal(isTrainingCourse(catalog[0]), true);
@@ -55,7 +57,7 @@ test('related build courses stay together before authorization and materials rem
 test('category groups preserve course identity and omit groups with no matches', () => {
   const catalog = getCatalogEntries(library);
   const groups = groupCatalogEntries(catalog, library);
-  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 12], ['network-authorization', 1], ['templates-references', 1], ['design-references', 6]]);
+  assert.deepEqual(groups.map(group => [group.id, group.entries.length]), [['network-build', 12], ['network-authorization', 1], ['templates-references', 1]]);
   assert.equal(groups[0].title, 'Build the Network');
   assert.equal(groups[0].entries[0].id, 'identity-foundation');
   const dns = groupCatalogEntries(filterEpisodes(catalog, 'secure DNS updates', 'DNS'), library);
@@ -446,7 +448,6 @@ test('the Training Hub groups every course, in course order, under its learning 
   assert.deepEqual(groups.map(group => [group.id, group.parent ?? null, group.entries.length]), [
     ['network-build', null, 12], ['identity', 'network-build', 1], ['logging', 'network-build', 3],
     ['endpoint', 'network-build', 4], ['ops', 'network-build', 4], ['network-authorization', null, 1], ['templates-references', null, 1],
-    ['design-references', null, 6],
   ]);
   const build = groups[0].entries.map(entry => entry.id);
   const topics = groups.filter(group => group.parent === 'network-build');
@@ -489,14 +490,19 @@ test('the ATO Package Builder describes itself as an original practice tool', ()
   assert.match(readFileSync(new URL('../app/grc-rmf-training/workspace/workspace.tsx', import.meta.url), 'utf8'), /the way authorization teams do it: register/);
 });
 
-// Owner direction, 19 October 2026: one design reference tile per infrastructure service (Government & Vendor Guidelines since 20 October 2026), built from the owner's
-// compendium (docs/design-references/, parsed by scripts/prepare-design-references.py into content/design-references.json).
-test('each design reference tile matches its compendium content', () => {
+// Owner direction, 19 October 2026: one design reference per infrastructure service (Government & Vendor Guidelines since 20 October 2026), built from the owner's
+// compendium (docs/design-references/, parsed by scripts/prepare-design-references.py into content/design-references.json). Owner direction,
+// 22 October 2026: the Government & Vendor Guidelines category is gone from the catalog; `guidelines` in content/videos.json carries each
+// page's details and the course 1.1 parts it supports, and every lesson in those parts lists it as an additional source.
+test('each Government & Vendor Guidelines reference matches its compendium and sits in its course 1.1 parts', () => {
   const refs = JSON.parse(readFileSync(new URL('../content/design-references.json', import.meta.url), 'utf8'));
-  const tiles = library.references.filter(item => item.kind === 'design-reference');
+  const tiles = library.guidelines;
   assert.deepEqual(tiles.map(item => item.id), ['design-active-directory', 'design-dns', 'design-time', 'design-pki', 'design-dhcp', 'design-disa-stigs']);
-  assert.equal(library.categories.find(item => item.id === 'design-references')?.kind, 'reference');
-  const courseIds = new Set([...library.episodes, ...library.courses].map(item => item.id));
+  assert.equal(library.categories.find(item => item.id === 'design-references'), undefined, 'no Government & Vendor Guidelines group in the catalog');
+  assert.ok(library.references.every(item => item.kind !== 'design-reference'), 'no design reference tile in the catalog');
+  const course = JSON.parse(readFileSync(new URL('../content/configuration-courses.json', import.meta.url), 'utf8')).find(item => item.id === 'identity-foundation');
+  const prefixes = new Set(course.lessons.map(lesson => lesson.id.split('-')[0]));
+  const parts = {};
   for (const tile of tiles) {
     const entry = refs.services.find(item => `design-${item.id}` === tile.id);
     assert.ok(entry, `${tile.id} has compendium content`);
@@ -507,10 +513,12 @@ test('each design reference tile matches its compendium content', () => {
     const ids = new Set([...(entry.design?.blocks ?? []), ...entry.catalog.blocks].filter(block => block.id).map(block => block.id));
     for (const area of tile.areas) assert.ok(ids.has(area.anchor), `${tile.id}: ${area.title} anchor`);
     if (entry.design) assert.equal(tile.areas.length, entry.design.areas.length);
-    assert.ok(tile.topic && tile.outcomeSummary && tile.outcomes.length === 4 && tile.artLabels.length === 3, `${tile.id} tile text`);
+    assert.ok(tile.topic && tile.outcomeSummary && tile.outcomes.length === 4 && tile.artLabels.length === 3, `${tile.id} text`);
+    assert.ok(tile.training.relatedResources.length > 0, `${tile.id} names its parts`);
     for (const resource of tile.training.relatedResources) {
-      const course = /#course\/([a-z0-9-]+)$/.exec(resource.href)?.[1];
-      assert.ok(course && courseIds.has(course), `${tile.id} links course ${course}`);
+      const part = /^\/training\/identity-foundation\/\?part=([a-z]+)$/.exec(resource.href)?.[1];
+      assert.ok(part && prefixes.has(part), `${tile.id} links a course 1.1 part (${resource.href})`);
+      (parts[part] ??= []).push(tile.title);
     }
     // The compendium is US-source only (owner direction, 18 October 2026): no non-US government sources.
     const text = JSON.stringify(entry);
@@ -520,13 +528,36 @@ test('each design reference tile matches its compendium content', () => {
     }
     assert.ok(text.length > 20000, `${tile.id} has substantive content`);
   }
+  // Every part of course 1.1 has its reference, and every lesson lists its part's references among the sources in "About this sample
+  // and its sources" (the guide) and "Source documentation" (the app feed).
+  assert.deepEqual(Object.keys(parts).sort(), [...prefixes].sort());
+  const titleOf = url => course.sources.find(source => source.url === url)?.title;
+  const html = readFileSync(new URL('../public/training/identity-foundation/index.html', import.meta.url), 'utf8');
+  const guide = JSON.parse(/window\.SBD_LESSON=(\{.*?\});<\/script>/s.exec(html)[1]);
+  for (const chapter of guide.chapters) {
+    const urls = chapter.sources.map(id => guide.sources.find(source => source.id === id)?.url ?? '');
+    for (const title of parts[chapter.id.split('-')[0]]) {
+      const tile = tiles.find(item => item.title === title);
+      assert.ok(urls.includes(`https://securebydesigninc.com${tile.training.guide}`), `${chapter.id} lists ${title}`);
+    }
+    assert.equal(new Set(chapter.sources).size, chapter.sources.length, `${chapter.id} lists each source once`);
+  }
+  const feed = JSON.parse(readFileSync(new URL('../public/app-content/v1/catalog.json', import.meta.url), 'utf8'));
+  const appCourse = feed.courses.find(item => item.id === 'identity-foundation');
+  for (const lesson of appCourse.lessons) {
+    const body = lesson.sections.find(item => item.heading === 'Source documentation').body;
+    for (const title of parts[lesson.id.split(':').pop().split('-')[0]]) {
+      const tile = tiles.find(item => item.title === title);
+      assert.ok(body.includes(`${titleOf(`https://securebydesigninc.com${tile.training.guide}`)}\nhttps://securebydesigninc.com${tile.training.guide}`), `${lesson.id} app sources name ${title}`);
+    }
+  }
   assert.ok(existsSync(new URL('../docs/design-references/SBD-US-Infrastructure-Design-Reference-Compendium.pdf', import.meta.url)));
 });
 
 // Owner direction, 20 October 2026: the guidance is framed as "Government & Vendor Guidelines", not as US sources.
 test('the design references and course 1.1 frame their guidance as Government & Vendor Guidelines', () => {
   const framing = /\bUS (design reference|sources only|only|guidance|authorities|Reference Collection)|What US authorities|US-Only|US-Source|\b(NIST|CISA|OMB|DISA) \(US/;
-  assert.equal(library.categories.find(item => item.id === 'design-references').title, 'Government & Vendor Guidelines');
+  assert.ok(library.guidelines.every(item => item.subtitle && !/\bUS\b/.test(item.title)));
   const texts = [JSON.stringify(library), readFileSync(new URL('../content/configuration-courses.json', import.meta.url), 'utf8'), readFileSync(new URL('../content/course-guides/identity-foundation.json', import.meta.url), 'utf8')];
   const refs = JSON.parse(readFileSync(new URL('../content/design-references.json', import.meta.url), 'utf8'));
   texts.push(JSON.stringify(refs.services.map(service => [service.design, service.catalog])), JSON.stringify(refs.overview));
