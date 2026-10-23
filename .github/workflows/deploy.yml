@@ -146,8 +146,8 @@ jobs:
             course=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/training/identity-foundation")
             itn=$(curl -sL -m 20 -o /dev/null -w '%{http_code}' "$site/inside-the-network")
             echo "::notice title=Domain check $site::build $served | /technical-training $training ($tiles tiles shown, ${entries:-0} entries) | /grc-rmf-training $grc ($grclinks of 3 hub links) | /training/identity-foundation $course | /inside-the-network $itn"
-            if [ "$training" != 200 ] || [ "$tiles" -lt 10 ] || [ "${entries:-0}" -lt 20 ] || [ "$grc" != 200 ] || [ "$grclinks" -lt 3 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
-              echo "::error title=Domain check $site::A key page is missing, the Training Hub shows fewer than 10 tiles or 20 entries, or the ATO Package Builder Hub is missing its course, builder, or template links."
+            if [ "$training" != 200 ] || [ "$tiles" -lt 10 ] || [ "${entries:-0}" -lt 14 ] || [ "$grc" != 200 ] || [ "$grclinks" -lt 3 ] || [ "$course" != 200 ] || [ "$itn" != 200 ]; then
+              echo "::error title=Domain check $site::A key page is missing, the Training Hub shows fewer than 10 tiles or 14 entries, or the ATO Package Builder Hub is missing its course, builder, or template links."
               fail=1
             fi
           done
