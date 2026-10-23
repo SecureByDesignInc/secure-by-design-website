@@ -1072,12 +1072,6 @@
       "title": "Templates & References",
       "kind": "reference",
       "description": "Templates to keep beside you while you build the Body of Evidence: training samples now, with official sources coming soon. Use them with any course, or on your own system."
-    },
-    {
-      "id": "design-references",
-      "title": "Government & Vendor Guidelines",
-      "kind": "reference",
-      "description": "How to design each infrastructure service before you build it, from official vendor documentation and government and standards guidance: Microsoft, NIST, CISA, NSA, DISA, CIS, the IETF and ICANN. Each reference walks the design decisions, what each authority says, the trade-offs, and where the authorities agree, differ or conflict, with an annotated catalog of the sources behind it."
     }
   ],
   "references": [
@@ -1125,12 +1119,12 @@
         ]
       },
       "topic": "Templates"
-    },
+    }
+  ],
+  "guidelines": [
     {
       "kind": "design-reference",
       "id": "design-active-directory",
-      "categoryId": "design-references",
-      "categoryOrder": 1,
       "title": "Active Directory design",
       "subtitle": "Forest, domain, OU, trust, Group Policy and tiering design",
       "description": "Six design areas for the identity foundation: forest, domain, trusts, OU, Group Policy and administrative tiering. Microsoft supplies the structural logic; CISA/NSA, DISA and NIST supply the security overlay. Each area walks the decision at stake, the realistic options, what the government and vendor guidelines say, the trade-offs and the conflicts, with the annotated catalog of the Microsoft, NIST, CISA/NSA, DISA, CIS and IETF sources behind it.",
@@ -1164,9 +1158,19 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 1 · Domain controllers",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=dc"
+          },
+          {
+            "title": "Course 1.1, part 5 · Harden with Group Policy",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=gpo"
+          },
+          {
+            "title": "Course 1.1, part 8 · Tiered administration",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=tier"
           }
         ]
       },
@@ -1200,8 +1204,6 @@
     {
       "kind": "design-reference",
       "id": "design-dns",
-      "categoryId": "design-references",
-      "categoryOrder": 2,
       "title": "DNS design",
       "subtitle": "Namespace, zones, resolution, dynamic update, DNSSEC and logging design",
       "description": "Eight design areas for the name service Active Directory depends on: namespace, zones, resolution and forwarding, dynamic update, DNSSEC and integrity, availability and placement, hardening by design, and logging. Microsoft documents the Windows implementation; NIST SP 800-81r3, the DISA STIG, CISA and NSA set the security expectations, and the IETF and ICANN define the protocol. The annotated source catalog follows.",
@@ -1235,9 +1237,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 2 · DNS",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=dns"
           }
         ]
       },
@@ -1279,8 +1281,6 @@
     {
       "kind": "design-reference",
       "id": "design-time",
-      "categoryId": "design-references",
-      "categoryOrder": 3,
       "title": "Time synchronization design",
       "subtitle": "The time hierarchy, upstream sources, Kerberos skew and virtualized controllers",
       "description": "Eight design areas for the service Kerberos, certificates and log correlation all depend on: the time hierarchy, upstream source selection, accuracy and performance, Kerberos skew, virtualized domain controllers, time authentication, Secure Time Seeding, and monitoring and leap seconds. Microsoft, NIST, NSA, CISA, DISA, CIS and the IETF are compared, with the annotated source catalog behind them.",
@@ -1314,9 +1314,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 3 · Domain time",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=time"
           }
         ]
       },
@@ -1358,8 +1358,6 @@
     {
       "kind": "design-reference",
       "id": "design-pki",
-      "categoryId": "design-references",
-      "categoryOrder": 4,
       "title": "PKI design",
       "subtitle": "CA hierarchy, cryptography, validity, revocation, templates and CA protection",
       "description": "Ten design areas for the certificate services the lab builds in course 1.1, part 6: CA hierarchy, CA type and role, cryptography, validity and renewal, revocation and publication, certificate templates, enrollment, identity binding, CA protection and auditing, and logging. Microsoft, NIST, CISA/NSA and DISA are compared area by area, with the annotated source catalog behind them.",
@@ -1393,9 +1391,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 6 · Two-tier PKI",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=pki"
           }
         ]
       },
@@ -1445,8 +1443,6 @@
     {
       "kind": "design-reference",
       "id": "design-dhcp",
-      "categoryId": "design-references",
-      "categoryOrder": 5,
       "title": "DHCP design",
       "subtitle": "Placement, availability, scopes, options, DNS integration, hardening and logging",
       "description": "Eight design areas for the addressing service: server placement and authorization, high availability, scopes and the address plan, options, DNS dynamic-update integration, security and hardening, DHCPv6 and dual stack, and logging and the database. Microsoft documents the Windows service; NIST, DISA, CIS and the IETF set the security and protocol expectations. The annotated source catalog follows.",
@@ -1480,9 +1476,9 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 7 · DHCP",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=dhcp"
           }
         ]
       },
@@ -1524,8 +1520,6 @@
     {
       "kind": "design-reference",
       "id": "design-disa-stigs",
-      "categoryId": "design-references",
-      "categoryOrder": 6,
       "title": "DISA STIGs and GPO packages",
       "subtitle": "DISA’s artifacts and tooling, and the guidance around them",
       "description": "The annotated catalog behind the hardening gate in course 1.1, parts 4 and 5: DISA’s own artifacts and tooling (STIGs, SRGs, SCAP benchmarks, the GPO package, STIG Viewer, SCC), the government and standards guidance around them (NIST SP 800-53, SP 800-70 and the National Checklist Program, CIS), a topic crosswalk, and the places where the authorities agree or differ.",
@@ -1559,9 +1553,14 @@
         "updated": "19 October 2026",
         "relatedResources": [
           {
-            "title": "Apply it in course 1.1, Build and harden the identity foundation",
-            "detail": "The build course this design reference supports",
-            "href": "/technical-training#course/identity-foundation"
+            "title": "Course 1.1, part 4 · Measure against the STIG",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=stig"
+          },
+          {
+            "title": "Course 1.1, part 5 · Harden with Group Policy",
+            "detail": "The part of the build course this reference supports",
+            "href": "/training/identity-foundation/?part=gpo"
           }
         ]
       },

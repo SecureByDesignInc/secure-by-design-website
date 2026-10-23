@@ -568,7 +568,8 @@ if __name__ == '__main__':
     vpath = ROOT / 'content/videos.json'
     library = json.loads(vpath.read_text(encoding='utf-8'))
     for entry in out['services']:
-        tile = next((item for item in library.get('references', []) if item['id'] == f"design-{entry['id']}"), None)
+        # Owner direction, 22 October 2026: the references left the catalog; their entries live in `guidelines`.
+        tile = next((item for item in library.get('guidelines', []) if item['id'] == f"design-{entry['id']}"), None)
         if not tile: continue
         tile['stats'] = entry['stats']
         if entry['design']:

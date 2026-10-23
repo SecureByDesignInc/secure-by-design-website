@@ -116,7 +116,17 @@ export function buildAppCatalog(site) {
             // route (the app's lab mode reads 'Inspect your configuration' for its copy-per-line commands page).
             ...(l.console ? [section('Check it in the console', l.console.map(c => [c.name, ...c.steps.map((st, i) => `${i + 1}. ${st}`)].join('\n')).join('\n\n') + (l.consoleNote ? `\n\nStays a command: ${l.consoleNote}` : ''))] : []),
             section('Inspect your configuration', l.command), ...(!l.console && l.consoleNote ? [section('Why this stays a command', l.consoleNote)] : []), section('What success looks like', l.check), section('Keep your evidence', l.evidence),
-            section('Source documentation', config.sources.filter(s => l.sources.includes(s.id)).map(s => `${s.title}\n${s.url}`).join('\n\n')),
+            // Owner direction, 22 October 2026: the Government & Vendor Guidelines reference for the lesson's part is listed as an
+            // additional source (the website guide does the same in "About this sample and its sources").
+            section('Source documentation', (() => {
+              const extra = (catalog.guidelines ?? []).filter(g => (g.training.relatedResources ?? []).some(r => {
+                const m = /^\/training\/([a-z0-9-]+)\/\?part=([a-z0-9]+)$/.exec(r.href);
+                return m && m[1] === config.id && (l.id === m[2] || l.id.startsWith(`${m[2]}-`));
+              })).map(g => base + g.training.guide);
+              const listed = config.sources.filter(s => l.sources.includes(s.id));
+              const added = config.sources.filter(s => extra.includes(s.url) && !l.sources.includes(s.id));
+              return [...listed, ...added].map(s => `${s.title}\n${s.url}`).join('\n\n');
+            })()),
           ],
           quizzes: l.quizzes.map(x => quiz(x.question, x.answers, x.correct, x.explanation)),
           source: base + t.guide + '#' + l.id,

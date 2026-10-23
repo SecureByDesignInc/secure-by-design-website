@@ -5,9 +5,11 @@ import '../../../videos/videos.css';
 import '../design-reference.css';
 import { sharePreview } from '../../../share-preview';
 
-// The full design reference for one infrastructure service (owner's compendium, 19 October 2026), in the Training Hub.
-// Content: content/design-references.json, written by scripts/prepare-design-references.py from the compendium PDF.
-const tileFor = (service: string) => library.references.find(item => item.id === `design-${service}`);
+// The full design reference for one infrastructure service (owner's compendium, 19 October 2026). Owner direction, 22 October
+// 2026: the references are no longer catalog tiles; course 1.1's lessons open them from "About this sample and its sources".
+// Content: content/design-references.json, written by scripts/prepare-design-references.py from the compendium PDF; the page's
+// title, counts and course links come from `guidelines` in content/videos.json.
+const tileFor = (service: string) => library.guidelines.find(item => item.id === `design-${service}`);
 
 export async function generateMetadata({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params;

@@ -4,7 +4,6 @@
 // bold/italic/code runs, nested lists, and tables. Sources are named, not linked: the compendium names each by
 // publisher, title, date and status, and readers open it at the publisher's own site.
 import type { ReactNode } from 'react';
-import Link from 'next/link';
 import { ArrowLeft, ArrowRight, BookOpen, Compass, FileText, Scale } from 'lucide-react';
 import references from '../../../content/design-references.json';
 
@@ -88,19 +87,20 @@ export default function DesignReference({ entry, tile }: { entry: Service; tile:
     <main id="main" className="vc-page dr-page">
       <div className="container dr-layout">
         <aside className="dr-side" aria-label="Contents">
-          <Link className="dr-back" href="/technical-training#design-references"><ArrowLeft size={15} aria-hidden="true" /> Training Hub</Link>
+          {/* Owner direction, 22 October 2026: reached from course 1.1's lessons, so the way back is the course. */}
+          <a className="dr-back" href={(tile.training.relatedResources ?? [])[0]?.href ?? '/training/identity-foundation/'}><ArrowLeft size={15} aria-hidden="true" /> Course 1.1</a>
           <p className="dr-side-title"><Compass size={16} aria-hidden="true" /> {tile.title}</p>
           {sections.map(section => <nav key={section.id} aria-label={section.label}>
             <p className="dr-side-label">{section.label}</p>
             <ol>{section.headings.map(heading => <li key={heading.id}><a href={`#${heading.id}`}>{heading.text}</a></li>)}</ol>
           </nav>)}
           <p className="dr-side-label">Apply it</p>
-          <ul className="dr-side-courses">{(tile.training.relatedResources ?? []).map(resource => <li key={resource.href}><Link href={resource.href}><BookOpen size={14} aria-hidden="true" /> {resource.title}</Link></li>)}</ul>
+          <ul className="dr-side-courses">{(tile.training.relatedResources ?? []).map(resource => <li key={resource.href}><a href={resource.href}><BookOpen size={14} aria-hidden="true" /> {resource.title}</a></li>)}</ul>
         </aside>
 
         <article className="dr-content">
           <header className="dr-head">
-            <p className="vc-kicker">TRAINING HUB · GOVERNMENT &amp; VENDOR GUIDELINES · {entry.topic.toUpperCase()}</p>
+            <p className="vc-kicker">COURSE 1.1 · GOVERNMENT &amp; VENDOR GUIDELINES · {entry.topic.toUpperCase()}</p>
             <h1>{tile.title}</h1>
             <p className="dr-subtitle">{tile.subtitle}</p>
             <p className="dr-summary">{tile.description}</p>
@@ -126,7 +126,7 @@ export default function DesignReference({ entry, tile }: { entry: Service; tile:
 
           <div className="vc-library-footer dr-footer">
             <p>Design it first. Then build it right.</p>
-            <Link href={(tile.training.relatedResources ?? [])[0]?.href ?? '/technical-training'}>Apply it in the build course <ArrowRight size={17} aria-hidden="true" /></Link>
+            <a href={(tile.training.relatedResources ?? [])[0]?.href ?? '/training/identity-foundation/'}>Apply it in course 1.1 <ArrowRight size={17} aria-hidden="true" /></a>
           </div>
         </article>
       </div>

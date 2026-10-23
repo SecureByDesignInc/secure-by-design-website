@@ -18,6 +18,8 @@ for (const entry of [...library.episodes, ...library.courses]) {
 }
 // Reference tiles (the ATO Template Library) are app pages, served without a trailing slash.
 for (const reference of library.references ?? []) paths.push(reference.training.guide);
+// Government & Vendor Guidelines pages: out of the catalog since 22 October 2026, opened from course 1.1's lessons.
+for (const guideline of library.guidelines ?? []) paths.push(guideline.training.guide);
 // The ATO Template Library page (in the Training Hub; address under /grc-rmf-training), linked from each step of course 2.1.
 if (!paths.includes('/grc-rmf-training/templates')) paths.push('/grc-rmf-training/templates');
 for (const course of configuration) paths.push(`/training/${course.id}/checklist`);

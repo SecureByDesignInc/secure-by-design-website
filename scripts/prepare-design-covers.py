@@ -30,7 +30,7 @@ def wrap(draw, text, font, width):
     return lines + [line]
 
 for service in refs['services']:
-    tile = next(item for item in library['references'] if item['id'] == f"design-{service['id']}")
+    tile = next(item for item in library['guidelines'] if item['id'] == f"design-{service['id']}")
     page = Image.new('RGB', (612, 792), 'white')
     draw = ImageDraw.Draw(page)
     page.paste(logo, (52, 52))
