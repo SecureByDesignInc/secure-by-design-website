@@ -57,7 +57,7 @@ jobs:
             awk '/^ *not ok /{name=$0} /^ *(error|expected|actual|location):/{if(name!=""){print name" | "$0}}' test-results.tap | head -40 | while IFS= read -r line; do echo "::error title=Test failure::$line"; done
           fi
           exit $status
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
