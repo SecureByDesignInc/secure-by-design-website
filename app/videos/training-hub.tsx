@@ -4,12 +4,13 @@
 // in one library, modeled on the owner's reference: a sidebar library, a greeting with search, a featured course and
 // rows of tiles with "View all". Every network-build topic or server keeps its own tile; a tile opens the same expanded
 // tile as before (episode-tile.tsx), beneath the row it came from, one at a time. The ATO Package Builder is its own
-// section, the ATO Package Builder Hub (/grc-rmf-training).
+// section, now part of this page (27 October 2026).
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Bookmark, BookOpen, ChartNoAxesColumn, ClipboardCheck, Clock, House, Network, Search, X } from 'lucide-react';
 import EpisodeTile from './episode-tile';
 import { FeatureArt, TileArt } from './hub-art';
+import { BUILDER, HubTools, RmfStepsPanel } from './hub-tools';
 import type { CatalogEntry, Library, TrainingCourse } from './catalog-types';
 import {
   filterEpisodes,
@@ -28,7 +29,9 @@ import trainingProgress from '../../content/training-progress.json';
 type Open = { id: string; place: string } | null;
 type Shelf = { id: string; title: string; entries: CatalogEntry[]; view?: string; viewLabel?: string; meta?: (entry: CatalogEntry) => string; tool?: boolean };
 
-const BUILDER_HUB = '/grc-rmf-training';
+// The ATO Package Builder Hub page is retired (27 October 2026): the builder is a Tools entry here, with the seven-step
+// panel (hub-tools.tsx); /grc-rmf-training redirects to #ato-package-builder.
+const BUILDER_HUB = BUILDER;
 // Each course's saved progress IDs (training:<course>:<lesson or module>).
 const LESSONS = trainingProgress.reduce<Record<string, string[]>>((all, item) => {
   const course = item.id.split(':')[1];
@@ -212,8 +215,8 @@ export default function TrainingHub({ library }: { library: Library }) {
   const toolCard = (
     <Link className="th-tool-card" href={BUILDER_HUB} key="builder-hub">
       <span className="th-tool-kicker">PRACTICE TOOL</span>
-      <span><strong>ATO Package Builder Hub</strong><span>Do each RMF step on the network you built.</span></span>
-      <span className="th-tool-go">Open the hub <ArrowRight size={14} aria-hidden="true" /></span>
+      <span><strong>ATO Package Builder</strong><span>Do each RMF step on the network you built.</span></span>
+      <span className="th-tool-go">Open the builder <ArrowRight size={14} aria-hidden="true" /></span>
     </Link>
   );
   const countLabel = (item: HubGroup) => {
@@ -244,7 +247,7 @@ export default function TrainingHub({ library }: { library: Library }) {
           </nav>
           <div className="th-side-extra">
             <p className="th-side-label">Tools</p>
-            <Link className="th-side-link" href={BUILDER_HUB}><ClipboardCheck size={16} aria-hidden="true" /><span>ATO Package Builder Hub</span></Link>
+            <Link className="th-side-link" href={BUILDER_HUB}><ClipboardCheck size={16} aria-hidden="true" /><span>ATO Package Builder</span></Link>
             <Link className="th-side-link" href="/inside-the-network"><Network size={16} aria-hidden="true" /><span>System Hub</span></Link>
             <p className="th-side-label">Your account</p>
             <Link className="th-side-link" href="/my-progress#saved-materials"><Bookmark size={16} aria-hidden="true" /><span>Saved materials</span></Link>
@@ -291,6 +294,9 @@ export default function TrainingHub({ library }: { library: Library }) {
               {selected.id === 'network-authorization' && toolCard}
             </div>
           </section> : <>
+            {/* Owner direction, 27 October 2026 (the calmer Training Hub): the featured course shows only to a signed-in
+                learner with a course in progress; everyone gets the Tools and the seven RMF steps. */}
+            {upNext && <>
             <section className={`th-feature th-art-${currentFamily}`} aria-roledescription="carousel" aria-label="Featured courses">
               <div className="th-feature-body" aria-live="polite">
                 <div className="th-feature-copy">
@@ -303,7 +309,7 @@ export default function TrainingHub({ library }: { library: Library }) {
                       {opened(current.entry, 'featured') ? 'Close the course' : current.primary}
                     </button>
                     {isRmf(current.entry)
-                      ? <Link className="th-secondary" href={BUILDER_HUB}>Open the ATO Package Builder Hub</Link>
+                      ? <Link className="th-secondary" href={BUILDER_HUB}>Open the ATO Package Builder</Link>
                       : <a className="th-secondary" href={current.entry.training.guide}>Open the interactive guide</a>}
                   </div>
                 </div>
@@ -323,6 +329,9 @@ export default function TrainingHub({ library }: { library: Library }) {
               </div>}
             </section>
             {expanded(current.entry, 'featured')}
+            </>}
+            <HubTools />
+            <RmfStepsPanel library={library} />
 
             {shelves.map(shelf => <section className="th-shelf" key={shelf.id} aria-labelledby={`th-shelf-${shelf.id}`}>
               <div className="th-shelf-head">
@@ -337,7 +346,7 @@ export default function TrainingHub({ library }: { library: Library }) {
           </>}
 
           <section className="th-mobile-tools" aria-label="Tools">
-            <Link href={BUILDER_HUB}><ClipboardCheck size={16} aria-hidden="true" />ATO Package Builder Hub</Link>
+            <Link href={BUILDER_HUB}><ClipboardCheck size={16} aria-hidden="true" />ATO Package Builder</Link>
             <Link href="/inside-the-network"><Network size={16} aria-hidden="true" />System Hub</Link>
           </section>
           <div className="th-footer">

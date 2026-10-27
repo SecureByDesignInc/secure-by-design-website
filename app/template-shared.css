@@ -107,3 +107,30 @@ body.site-editorial .logo-pill-icon{display:block;width:22px;height:22px;flex:no
 
 /* No underlines anywhere on the site (owner direction, 20 October 2026): links keep their color and weight. */
 body.site-editorial a,body.site-editorial a:hover,body.site-editorial a:focus,body.site-editorial a:active,body.site-editorial a:visited{text-decoration:none!important}
+
+/* The calmer header (owner direction, 27 October 2026): the brand at the left; four menu items and the My Account
+   button in one row at the right; on phones and narrow windows, a menu button opens them as a list. */
+body.site-editorial .site-header.container{flex-direction:row;align-items:center;justify-content:space-between;gap:24px;padding:14px max(24px,calc((100% - 1180px)/2))}
+body.site-editorial .site-header .brand-logo{width:64px;height:64px}
+body.site-editorial .site-header .brand{font-size:1.85rem;gap:14px}
+body.site-editorial .site-header .site-header-identity{width:auto;flex:0 1 auto}
+body.site-editorial .site-menu{display:flex;align-items:center;flex:0 0 auto}
+body.site-editorial .site-menu-list{display:flex;align-items:center;gap:12px}
+body.site-editorial .site-header nav{flex-wrap:nowrap}
+body.site-editorial .menu-toggle{display:none}
+body.site-editorial a.nav-account{display:inline-flex;align-items:center;min-height:40px;padding:9px 16px;border:1px solid #4386b9;border-radius:10px;background:#0f2238;color:#eff8ff;font-size:.875rem;font-weight:600;white-space:nowrap}
+body.site-editorial a.nav-account:hover{background:#152b45;border-color:#5d9fd0}
+body.site-editorial a.nav-account[aria-current=page]{background:linear-gradient(115deg,#174675,#102a47);color:#fff}
+@media(max-width:1180px){body.site-editorial .site-header .brand small{display:none}body.site-editorial .site-header .brand{font-size:1.6rem}}
+@media(max-width:960px){
+ body.site-editorial .site-header.container{flex-wrap:wrap;gap:12px;padding:12px 18px}
+ body.site-editorial .site-header .brand-logo{width:44px;height:44px}
+ body.site-editorial .site-header .brand{font-size:1.25rem;gap:10px}
+ body.site-editorial .site-menu{display:contents}
+ body.site-editorial .menu-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #2b5672;border-radius:12px;background:#0d2234;color:#e8f3fa;cursor:pointer}
+ body.site-editorial .site-menu-list{display:none;order:3;width:100%;flex-direction:column;align-items:stretch;gap:10px;padding:6px 0 4px}
+ body.site-editorial .site-menu[data-open=true] .site-menu-list{display:flex}
+ body.site-editorial .site-header nav{flex-direction:column;align-items:stretch;gap:2px;padding:4px;border-radius:12px}
+ body.site-editorial .site-header nav .nav-link{padding:14px 16px;font-size:1rem}
+ body.site-editorial a.nav-account{justify-content:center;min-height:48px;font-size:1rem}
+}

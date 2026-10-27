@@ -458,3 +458,35 @@
   .th-side-link[aria-current='page'], .th-dots button[aria-pressed='true'] { outline: 2px solid Highlight; }
   .th-tile-active .th-thumb { outline: 2px solid Highlight; }
 }
+
+/* Tools and the seven RMF steps (owner direction, 27 October 2026): the ATO Package Builder lives in the Training Hub. */
+.th-tools { margin-top: 24px; scroll-margin-top: 20px; }
+.th-tools-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; margin-top: 14px; }
+.th-tools-card { display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid #1f4157; border-radius: 20px; background: #0b1d2c; }
+.th-tools-builder { background: radial-gradient(ellipse at 85% 10%, #1c5371 0%, transparent 55%), linear-gradient(130deg, #0b1a2b, #0b2f49); }
+.th-tools-card h3 { margin: 0; color: #ffffff; font-size: clamp(22px, 2.4vw, 28px); font-weight: 700; letter-spacing: -0.03em; }
+.th-tools-card > p:not(.th-tools-kicker) { margin: 0; max-width: 56ch; color: #c9d9e3; font-size: 15.5px; line-height: 1.55; }
+.th-tools-kicker { display: inline-flex; align-items: center; gap: 7px; margin: 0; color: #8ae5ef; font: 600 11.5px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.th-tools-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: auto; padding-top: 8px; }
+.th-text-link { display: inline-flex; align-items: center; gap: 6px; color: #8ae5ef; font-weight: 600; }
+.th-rmf { margin-top: 28px; padding: 24px; border: 1px solid #1f4157; border-radius: 20px; background: #0a1826; scroll-margin-top: 20px; }
+.th-rmf .th-shelf-title { margin-top: 8px; }
+.th-rmf-intro { margin: 8px 0 0; color: #a9bfce; font-size: 14.5px; line-height: 1.55; }
+.th-rmf-table { margin-top: 16px; border: 1px solid #1d3a4f; border-radius: 14px; overflow: hidden; }
+.th-rmf-row { display: grid; grid-template-columns: 150px minmax(0, 1.2fr) minmax(0, 1.6fr) 170px; gap: 16px; padding: 14px 16px; border-top: 1px solid #1d3a4f; color: #d4e4ee; font-size: 14px; line-height: 1.5; }
+.th-rmf-row:first-child { border-top: 0; }
+.th-rmf-head { background: #0e2638; color: #8fa9ba; font: 600 11px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.th-rmf-step { display: flex; align-items: center; gap: 10px; color: #ffffff; font-weight: 600; }
+.th-rmf-step b { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #123b52; color: #8ae5ef; font: 600 12px var(--font-geist-mono), monospace; }
+.th-rmf-learn { display: grid; gap: 4px; }
+.th-rmf-row a { color: #8ae5ef; }
+.th-rmf-note { margin: 14px 0 0; color: #a9bfce; font-size: 13.5px; }
+@media (max-width: 900px) {
+  .th-tools-grid { grid-template-columns: 1fr; }
+  .th-rmf { padding: 18px; }
+  .th-rmf-head { display: none; }
+  .th-rmf-row { grid-template-columns: 1fr; gap: 6px; }
+}
+.th-rmf-templates { display: grid; gap: 6px; align-content: start; }
+.th-tag-soon { justify-self: start; padding: 2px 8px; border: 1px solid #6b5326; border-radius: 999px; color: #f7bd68; font: 600 10.5px/1.6 var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
+.th-tools-actions .th-primary, .th-tools-actions .th-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; text-decoration: none; }

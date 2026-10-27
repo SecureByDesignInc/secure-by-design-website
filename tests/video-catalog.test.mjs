@@ -401,7 +401,7 @@ test('the ATO Template Library shows one Coming soon card per RMF step, keeps it
   assert.ok(read('app/grc-rmf-training/templates/page.tsx').includes("training-hub.css"), 'the page loads the coming-soon tile styles');
   assert.ok(read('app/videos/library-experience.tsx').includes('<StepSoonCard'), 'the expanded tile shows the same cards');
   assert.ok(read('public/grc-rmf-training/rmf/app.js').includes('Official sources for ${esc(step.title)}'), 'course 2.1 step pages show the card');
-  assert.ok(read('app/grc-rmf-training/package-builder-hub.tsx').includes('ab-tag-soon'), 'the ATO Package Builder Hub says Coming soon');
+  assert.ok(read('app/videos/hub-tools.tsx').includes('Official sources · Coming soon'), 'the seven RMF steps in the Training Hub say Coming soon (27 October 2026)');
   // The publishers and documents the old entries named stay out of the library's tile text, page description and course data.
   const shown = [JSON.stringify(reference), read('app/grc-rmf-training/templates/page.tsx'), read('public/grc-rmf-training/rmf/templates-data.js').replace(/"samples": \[[\s\S]*$/, '')].join(' ');
   for (const specific of ['DCSA', 'CDSE', 'FedRAMP', 'NISPOM', 'CNSSI', 'Privacy Overlay', 'SP 800-18', 'SP 800-128', 'Playbook', 'job aid', 'October 15']) {
@@ -470,15 +470,17 @@ test('the Training Hub groups every course, in course order, under its learning 
   assert.ok(recent.every(entry => entry.kind !== 'coming-soon' && entry.kind !== 'library' && entry.kind !== 'design-reference'));
 });
 
-test('the Training Hub and the ATO Package Builder Hub pages', () => {
+test('the Training Hub holds the ATO Package Builder and the seven RMF steps', () => {
   const hub = readFileSync(new URL('../app/videos/training-hub.tsx', import.meta.url), 'utf8');
   for (const piece of ['Continue where you left off', 'Recently updated', 'The network build, in order', 'Authorize the network', 'Coming soon', 'data-hub-entries', 'data-hub-tile', '<EpisodeTile', 'Saved materials', 'Create a free Community account']) assert.ok(hub.includes(piece), piece);
   assert.match(readFileSync(new URL('../app/technical-training/page.tsx', import.meta.url), 'utf8'), /title: 'Training Hub'/);
-  const builder = readFileSync(new URL('../app/grc-rmf-training/package-builder-hub.tsx', import.meta.url), 'utf8');
-  assert.match(builder, /ATO PACKAGE BUILDER HUB · PRACTICE TOOL/);
-  assert.match(builder, /Learn it in the Training Hub/);
-  // Owner direction, 19 October 2026: the only statement at the bottom of the hub.
-  assert.ok(builder.includes('<p className="bh-note">The reviews and the decision are automated practice rules and carry no authority. Enter practice data only.</p>'));
+  // Owner direction, 27 October 2026: the ATO Package Builder Hub page is retired into the Training Hub, as its Tools and
+  // the seven RMF steps; the statement from 19 October 2026 closes the steps panel.
+  assert.equal(existsSync(new URL('../app/grc-rmf-training/package-builder-hub.tsx', import.meta.url)), false);
+  const tools = readFileSync(new URL('../app/videos/hub-tools.tsx', import.meta.url), 'utf8');
+  for (const piece of ['id="ato-package-builder"', 'Tool · No account needed', 'Open the builder', 'Seven RMF steps: learn it, do it, use its templates', 'data-hub-rmf-steps']) assert.ok(tools.includes(piece), piece);
+  assert.ok(tools.includes('<p className="th-rmf-note">The reviews and the decision are automated practice rules and carry no authority. Enter practice data only.</p>'));
+  assert.match(hub, /<HubTools \/>[\s\S]*<RmfStepsPanel library=\{library\} \/>/);
   assert.equal(existsSync(new URL('../app/videos/video-hub.tsx', import.meta.url)), false);
 });
 

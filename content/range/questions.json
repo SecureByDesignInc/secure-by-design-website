@@ -1275,7 +1275,7 @@
     "NIST SP 800-171"
    ],
    "explanation": "SP 800-37 Rev. 2 is the RMF itself. SP 800-53 supplies the controls it selects from.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "A"
   },
@@ -1293,7 +1293,7 @@
     "FIPS 200"
    ],
    "explanation": "SP 800-53 Rev. 5 is the catalog; SP 800-53B holds the federal baselines.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "C"
   },
@@ -1311,7 +1311,7 @@
     "Monitor"
    ],
    "explanation": "Prepare was added at the organization and system level. The public 2016 JSIG predates it and describes six steps.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "A"
   },
@@ -1329,7 +1329,7 @@
     "Assess"
    ],
    "explanation": "Categorize, Select, Implement, Assess, Authorize, Monitor, with Prepare ahead of them in Rev. 2.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "A"
   },
@@ -1347,7 +1347,7 @@
     "Low impact overall"
    ],
    "explanation": "The three values are the CIA impact levels. The owner’s categorization is planning input, not a completed assessment.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1365,7 +1365,7 @@
     "The system administrator"
    ],
    "explanation": "The AO accepts the risk and signs the decision. Everyone else prepares, implements, assesses or recommends.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1383,7 +1383,7 @@
     "The system security plan"
    ],
    "explanation": "Each open weakness gets a planned fix, resources, milestones and a date, and the AO sees it with the package.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "C"
   },
@@ -1401,7 +1401,7 @@
     "How the system implements its selected controls"
    ],
    "explanation": "The SSP describes the system, its boundary and each control’s implementation. It is the heart of the package.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "D"
   },
@@ -1419,7 +1419,7 @@
     "A security assessment report"
    ],
    "explanation": "The SAR records what was tested, how, and what was found. Its findings feed the POA&M.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "D"
   },
@@ -1437,7 +1437,7 @@
     "A replacement for NIST"
    ],
    "explanation": "NIST is the foundation; the JSIG says how special access programs apply it, together with CNSSI 1253 and AO direction.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1455,7 +1455,7 @@
     "CNSSI 1253"
    ],
    "explanation": "CNSSI 1253 supplies the national security system overlays and selection; it is not a Moderate baseline from SP 800-53B.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "D"
   },
@@ -1473,7 +1473,7 @@
     "Replacing the assessment"
    ],
    "explanation": "Monitor is the step that never ends: ongoing assessments, change tracking and reporting keep the risk picture current.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1491,7 +1491,7 @@
     "Access Control"
    ],
    "explanation": "AC is Access Control. AU is Audit and Accountability; AT is Awareness and Training; CA is Assessment, Authorization and Monitoring.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "D"
   },
@@ -1509,7 +1509,7 @@
     "Access Control"
    ],
    "explanation": "AU covers audit records, logging and review, the family Splunk evidence maps to.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "C"
   },
@@ -1527,7 +1527,7 @@
     "Contingency Planning"
    ],
    "explanation": "CM is Configuration Management: baselines, change control and the settings STIGs enforce. CP is Contingency Planning.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "A"
   },
@@ -1545,7 +1545,7 @@
     "A test environment"
    ],
    "explanation": "The AO accepts the risk for now and the conditions, usually POA&M items with dates, stay on the record.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "A"
   },
@@ -1563,7 +1563,7 @@
     "A list of users"
    ],
    "explanation": "Policies, procedures, configurations, scan results, screenshots and logs: whatever proves a control, kept and maintained.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1581,7 +1581,7 @@
     "The AO"
    ],
    "explanation": "The Information System Security Officer runs the system’s security operations; the ISSM manages the program; the SCA assesses.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1599,7 +1599,7 @@
     "A new printer"
    ],
    "explanation": "Significant changes, such as a new boundary, new interconnections or a changed categorization, send the system back through the relevant steps.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "B"
   },
@@ -1617,7 +1617,7 @@
     "Email"
    ],
    "explanation": "The lab’s baseline: no physical connection or automated path crosses the air gap.",
-   "lesson": "/grc-rmf-training",
+   "lesson": "/technical-training#ato-package-builder",
    "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
    "answer": "C"
   }

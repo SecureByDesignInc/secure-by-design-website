@@ -1,9 +1,5 @@
 [
   [
-    "/",
-    "Home"
-  ],
-  [
     "/inside-the-network",
     "System Hub"
   ],
@@ -12,19 +8,11 @@
     "Training Hub"
   ],
   [
-    "/grc-rmf-training",
-    "ATO Package Builder Hub"
-  ],
-  [
     "/community",
     "Community & Careers Hub"
   ],
   [
     "/cyber-range",
     "Cyber Range"
-  ],
-  [
-    "/my-progress",
-    "My Account"
   ]
 ]

@@ -17,7 +17,7 @@ test('the Range page is published: route, menu, sitemap, Community shells and th
  const nav=JSON.parse(read('content/navigation.json'));
  const at=href=>nav.findIndex(([path])=>path===href);
  assert.deepEqual(nav[at('/cyber-range')],['/cyber-range','Cyber Range']);
- assert.equal(at('/cyber-range'),at('/my-progress')-1,'Cyber Range sits before My Account');
+ assert.equal(at('/cyber-range'),nav.length-1,'Cyber Range is the last menu item, before the My Account button (27 October 2026)');
  assert.match(read('public/sitemap.xml'),/securebydesigninc\.com\/cyber-range</);
  for(const name of ['careers','career-records','resource-preferences','community-contributions'])assert.match(read(`server/career-pages/${name}.html`),/href="\/cyber-range"[^>]*>Cyber Range<\/a>/,name);
  for(const file of ['index.html','range.css','range-core.js','avatars.js','engine.mjs'])assert.ok(fs.existsSync('public/range-app/'+file),file);

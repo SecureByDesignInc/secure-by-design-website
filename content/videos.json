@@ -1010,9 +1010,9 @@
         "updated": "20 October 2026",
         "relatedResources": [
           {
-            "title": "Open the ATO Package Builder Hub",
+            "title": "Open the ATO Package Builder",
             "detail": "Do each step on your Secure By Design enclave: register, categorize, implement, assess, authorize and monitor",
-            "href": "/grc-rmf-training"
+            "href": "/grc-rmf-training/workspace"
           },
           {
             "title": "Open the ATO Template Library",
@@ -1112,9 +1112,9 @@
             "href": "/grc-rmf-training/rmf/index.html#step/prepare"
           },
           {
-            "title": "Open the ATO Package Builder Hub",
+            "title": "Open the ATO Package Builder",
             "detail": "Do each step on your Secure By Design enclave",
-            "href": "/grc-rmf-training"
+            "href": "/grc-rmf-training/workspace"
           }
         ]
       },

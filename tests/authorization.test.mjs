@@ -263,14 +263,21 @@ test('monitoring flags expiry, the annual review, overdue POA&M items, lapsed pr
 });
 
 // Owner direction, 19 October 2026: the Training Hub and the ATO Package Builder Hub replace the Configuration Hub and the Compliance Hub.
-test('the ATO Package Builder Hub follows the Training Hub in the main menu, including the Community shells',()=>{
+// Owner direction, 27 October 2026 (the calmer header): four menu items and a My Account button; the ATO Package Builder
+// Hub page is retired into the Training Hub, and its address lands on the builder's place there.
+test('the main menu has four items and an account button, the same on the Community shells',()=>{
  const nav=JSON.parse(fs.readFileSync('content/navigation.json','utf8'));
- const at=href=>nav.findIndex(([path])=>path===href);
- assert.deepEqual(nav[at('/technical-training')],['/technical-training','Training Hub']);
- assert.deepEqual(nav[at('/grc-rmf-training')],['/grc-rmf-training','ATO Package Builder Hub']);
- assert.equal(at('/grc-rmf-training'),at('/technical-training')+1);
- assert.ok(!nav.some(([path])=>path==='/training'||path==='/authorization-workspace'));
- for(const name of ['careers','career-records','resource-preferences','community-contributions'])assert.match(fs.readFileSync(`server/career-pages/${name}.html`,'utf8'),/<nav aria-label="Main navigation">(?:(?!<\/nav>)[\s\S])*href="\/technical-training"[^>]*>Training Hub<\/a><a href="\/grc-rmf-training"[^>]*>ATO Package Builder Hub</,name);
+ assert.deepEqual(nav,[['/inside-the-network','System Hub'],['/technical-training','Training Hub'],['/community','Community & Careers Hub'],['/cyber-range','Cyber Range']]);
+ const menu=fs.readFileSync('app/navigation.tsx','utf8');
+ assert.match(menu,/className="nav-account"/);assert.match(menu,/className="menu-toggle"/);
+ for(const name of ['careers','career-records','resource-preferences','community-contributions']){
+  const html=fs.readFileSync(`server/career-pages/${name}.html`,'utf8');
+  assert.match(html,/<div class="site-menu" data-open="false"><button type="button" class="menu-toggle"[^>]*>[\s\S]*?<nav aria-label="Main navigation">[\s\S]*?<\/nav><a href="\/my-progress" class="nav-account">My Account<\/a><\/div><\/div>/,name);
+  assert.doesNotMatch(html,/>Home<\/a><a href="\/inside-the-network"/,name);
+  assert.match(html,/src="\/site-menu\.mjs"/,name);
+ }
+ assert.match(fs.readFileSync('server/index.js','utf8'),/path==='\/grc-rmf-training'\|\|path==='\/grc-rmf-training\/'\)return new URL\('\/technical-training#ato-package-builder'/);
+ assert.equal(fs.existsSync('app/grc-rmf-training/page.tsx'),false);
 });
 
 test('deleting a system or the account removes every record',async()=>{
