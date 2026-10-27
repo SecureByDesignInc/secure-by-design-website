@@ -14,6 +14,7 @@ import {signInApi} from './sign-in-methods.js';
 import {federalJobsApi} from './federal-jobs.js';
 import {authorizationApi} from './authorization.js';
 import {supportApi} from './support.js';
+import {rangeApi} from './range.js';
 import {hsts,protect} from './security-headers.js';
 import {handleAnalyticsRoute,injectAnalytics} from './analytics.js';
 import trainingProgress from '../content/training-progress.json' with {type:'json'};
@@ -119,6 +120,7 @@ async function route(request,env,ctx){
  if(/^\/api\/reader-progress(\/|$)/.test(path))return readerProgressApi(request,env);
  if(/^\/api\/authorization(\/|$)/.test(path))return authorizationApi(request,env);
  if(/^\/api\/support(\/|$)/.test(path))return supportApi(request,env);
+ if(/^\/api\/range(\/|$)/.test(path))return rangeApi(request,env);
  if(/^\/api\/community-contributions(\/|$)/.test(path))return contributionsApi(request,env,ctx);
  if(/^\/api\/resource-(signups|subscribers|preferences)(\/|$)/.test(path))return resourcesApi(request,env);
  if(/^\/api\/career-(submissions|records|notifications)(\/|$)/.test(path))return api(request,env,ctx);

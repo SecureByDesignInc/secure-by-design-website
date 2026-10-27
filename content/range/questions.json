@@ -1,0 +1,1625 @@
+{
+ "_": "Cyber Range question bank seed (26 October 2026): 10 per system plus 20 RMF questions for signoff. Written by scripts/author-range-questions.py; edit that script, not this file.",
+ "questions": [
+  {
+   "id": "dc1-001",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "fsmo-check",
+   "prompt": "Which FSMO role makes SBD-DC01 the time source for the whole domain?",
+   "options": [
+    "Infrastructure master",
+    "RID master",
+    "PDC emulator",
+    "Schema master"
+   ],
+   "explanation": "The PDC emulator sits at the top of the domain time hierarchy. SBD-DC02 and every member sync from it; there is no separate time server in this lab.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc1-002",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "fsmo-check",
+   "prompt": "How many FSMO roles does a single-domain forest have?",
+   "options": [
+    "Five",
+    "Three",
+    "Seven",
+    "Two"
+   ],
+   "explanation": "Schema master, domain naming master, RID master, PDC emulator and infrastructure master. All five can sit on SBD-DC01.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "dc1-003",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "fsmo-check",
+   "prompt": "Where do you check which domain controller holds the PDC emulator role in a console?",
+   "options": [
+    "DNS Manager",
+    "Active Directory Users and Computers, Operations Masters",
+    "Group Policy Management",
+    "Server Manager, Roles"
+   ],
+   "explanation": "Right-click the domain in Active Directory Users and Computers and open Operations Masters; the PDC tab names the holder.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "dc1-004",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "replication-storm",
+   "prompt": "Replication between SBD-DC01 and SBD-DC02 fails with \"The target principal name is incorrect.\" What is the most likely cause?",
+   "options": [
+    "The two controllers are in different sites",
+    "DNS scavenging removed the zone",
+    "The RID pool ran out",
+    "A Kerberos problem, such as clock skew or a domain controller machine account password out of sync"
+   ],
+   "explanation": "That error is Kerberos failing to authenticate the replication partner. Check time on both controllers first, then the machine account password.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "dc1-005",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "replication-storm",
+   "prompt": "Which command summarizes replication failures across every domain controller at once?",
+   "options": [
+    "gpupdate /force",
+    "nltest /dsgetdc",
+    "repadmin /replsummary",
+    "ipconfig /flushdns"
+   ],
+   "explanation": "repadmin /replsummary lists each controller with its largest delta and failure count. Active Directory Sites and Services shows the same partners in the console.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc1-006",
+   "system": "sbd-dc01",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "replication-storm",
+   "prompt": "SBD-DC02 is restored from a backup older than the tombstone lifetime. What is the right outcome?",
+   "options": [
+    "Treat it as unsafe: demote or forcibly remove it and promote it again",
+    "It replicates normally once it boots",
+    "Replication catches up faster than usual",
+    "It becomes the PDC emulator"
+   ],
+   "explanation": "A controller that missed deletions older than the tombstone lifetime can reintroduce lingering objects. It is removed and promoted fresh rather than trusted.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "dc1-007",
+   "system": "sbd-dc01",
+   "type": "Trust",
+   "difficulty": "easy",
+   "move": "time-sync",
+   "prompt": "Where does SBD-DC02 get its time?",
+   "options": [
+    "From the L3 router",
+    "From its own hardware clock",
+    "From a separate time server",
+    "From SBD-DC01, the PDC emulator"
+   ],
+   "explanation": "The lab has no separate time server. The second controller and every domain member follow the domain hierarchy up to the PDC emulator.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "dc1-008",
+   "system": "sbd-dc01",
+   "type": "Trust",
+   "difficulty": "medium",
+   "move": "time-sync",
+   "prompt": "Which command shows the time source a domain member is actually using?",
+   "options": [
+    "w32tm /query /source",
+    "net time /set",
+    "tzutil /g",
+    "nslookup"
+   ],
+   "explanation": "w32tm is the supported tool for the Windows Time service. /query /source names the peer the member follows; /query /status shows the offset.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "dc1-009",
+   "system": "sbd-dc01",
+   "type": "Trust",
+   "difficulty": "medium",
+   "move": "time-sync",
+   "prompt": "How far apart can two clocks be before Kerberos stops working, by default?",
+   "options": [
+    "30 seconds",
+    "1 hour",
+    "24 hours",
+    "5 minutes"
+   ],
+   "explanation": "The default maximum tolerance is five minutes. Past that, tickets are rejected and sign-ins fail even though the password is right.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "dc1-010",
+   "system": "sbd-dc01",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "event-trail",
+   "prompt": "Which log on a domain controller records a successful domain sign-in?",
+   "options": [
+    "The Setup log",
+    "The Security log, event 4624",
+    "The System log",
+    "The Application log"
+   ],
+   "explanation": "Sign-ins, sign-outs and lockouts are Security log events. 4624 is a successful logon; 4625 a failed one; 4740 a lockout.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "dc2-001",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "site-link",
+   "prompt": "Why do the two domain controllers run on different hosts?",
+   "options": [
+    "So one host failing still leaves a domain controller and a DNS server running",
+    "Licensing requires it",
+    "DHCP needs two hosts",
+    "Replication only works between hosts"
+   ],
+   "explanation": "The lab places SBD-DC01 and SBD-DC02 on separate hosts so the directory and DNS survive a host outage.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "dc2-002",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "site-link",
+   "prompt": "What does SBD-DC02 add that SBD-DC01 alone does not?",
+   "options": [
+    "The PDC emulator role",
+    "A second copy of the directory and a second DNS server",
+    "The time source",
+    "The certification authority"
+   ],
+   "explanation": "SBD-DC02 is a replica. The PDC emulator, the time source and the CA stay where they are.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "dc2-003",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "easy",
+   "move": "site-link",
+   "prompt": "Within one site, how soon does a change on SBD-DC01 reach SBD-DC02 by default?",
+   "options": [
+    "Within seconds, after a change notification",
+    "Every 180 minutes",
+    "Once a day",
+    "Only when an administrator forces it"
+   ],
+   "explanation": "Intra-site replication is notification-based: a controller tells its partners shortly after a change and they pull it.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "dc2-004",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "tombstone",
+   "prompt": "What is the default tombstone lifetime for a forest created on current Windows Server versions?",
+   "options": [
+    "30 days",
+    "365 days",
+    "180 days",
+    "60 days"
+   ],
+   "explanation": "Forests created on Windows Server 2003 SP1 or later default to 180 days. Older forests may still carry 60.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc2-005",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "tombstone",
+   "prompt": "Why must a backup used to restore a domain controller be younger than the tombstone lifetime?",
+   "options": [
+    "Backups expire after that",
+    "Kerberos tickets in the backup expire",
+    "So deletions made since the backup are still known as tombstones and lingering objects cannot reappear",
+    "The RID pool resets"
+   ],
+   "explanation": "Once tombstones are garbage-collected, a restored controller has no record of those deletions and would replicate the objects back.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc2-006",
+   "system": "sbd-dc02",
+   "type": "Resolution",
+   "difficulty": "easy",
+   "move": "zone-transfer",
+   "prompt": "Where do the sbd.test DNS zones live in this lab?",
+   "options": [
+    "On Splunk",
+    "On the L3 router",
+    "On both domain controllers, as Active Directory-integrated zones",
+    "On SBD-PKI-MGMT01"
+   ],
+   "explanation": "DNS runs on the domain controllers. Integrated zones are stored in the directory and replicated with it.",
+   "lesson": "/training/identity-foundation/?part=dns",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc2-007",
+   "system": "sbd-dc02",
+   "type": "Resolution",
+   "difficulty": "easy",
+   "move": "zone-transfer",
+   "prompt": "How do Active Directory-integrated zones reach SBD-DC02?",
+   "options": [
+    "Through DHCP",
+    "They do not; each controller keeps its own zone",
+    "Through directory replication, not a classic zone transfer",
+    "Through AXFR on TCP 53 only"
+   ],
+   "explanation": "Integrated zones ride along with replication, so every controller running DNS holds a writable copy.",
+   "lesson": "/training/identity-foundation/?part=dns",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "dc2-008",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "medium",
+   "move": "sysvol-sync",
+   "prompt": "What does SYSVOL hold that every domain controller must agree on?",
+   "options": [
+    "The DNS zones",
+    "Issued certificates",
+    "User passwords",
+    "Group Policy templates and logon scripts"
+   ],
+   "explanation": "SYSVOL carries the Group Policy template files and scripts that clients read. If it differs between controllers, policy applies inconsistently.",
+   "lesson": "/training/identity-foundation/?part=gpo",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "dc2-009",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "medium",
+   "move": "sysvol-sync",
+   "prompt": "Which service replicates SYSVOL between domain controllers on current domains?",
+   "options": [
+    "Robocopy",
+    "File Replication Service",
+    "Windows Update",
+    "DFS Replication"
+   ],
+   "explanation": "Current domains use DFS Replication for SYSVOL; the older File Replication Service was retired.",
+   "lesson": "/training/identity-foundation/?part=gpo",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "dc2-010",
+   "system": "sbd-dc02",
+   "type": "Identity",
+   "difficulty": "medium",
+   "move": "sysvol-sync",
+   "prompt": "A GPO applies to clients talking to SBD-DC01 but not to those talking to SBD-DC02. Which console check comes first?",
+   "options": [
+    "DNS Manager",
+    "Certification Authority",
+    "Group Policy Management, the GPO Status tab, for SYSVOL and directory replication state",
+    "Services"
+   ],
+   "explanation": "The Status tab compares the GPO on every controller and shows which copy is behind.",
+   "lesson": "/training/identity-foundation/?part=gpo",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "rtr-001",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "easy",
+   "move": "dhcp-relay",
+   "prompt": "Why does the router need a DHCP relay for workstations on their own VLAN?",
+   "options": [
+    "DHCP needs TCP",
+    "The router is the DHCP server",
+    "Workstations need static addresses",
+    "A DHCP discover is a broadcast that does not cross VLANs; the relay forwards it to the DHCP server"
+   ],
+   "explanation": "Broadcasts stop at the VLAN boundary. The relay, often called an IP helper, turns the discover into a unicast to the server.",
+   "lesson": "/training/identity-foundation/?part=dhcp",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "rtr-002",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "easy",
+   "move": "dhcp-relay",
+   "prompt": "Which UDP ports does DHCP use?",
+   "options": [
+    "53",
+    "123",
+    "80 and 443",
+    "67 on the server and 68 on the client"
+   ],
+   "explanation": "DHCP servers listen on UDP 67; clients on UDP 68. The relay must be allowed to reach 67 on the server.",
+   "lesson": "/training/identity-foundation/?part=dhcp",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "rtr-003",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "easy",
+   "move": "dhcp-relay",
+   "prompt": "What does the DHCP \"router\" option hand a workstation?",
+   "options": [
+    "Its hostname",
+    "The certification authority",
+    "Its default gateway, the L3 router interface on its VLAN",
+    "Its DNS server"
+   ],
+   "explanation": "Option 3 is the default gateway. The DNS servers come from option 6, and both have to be right for the domain to work.",
+   "lesson": "/training/identity-foundation/?part=dhcp",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "rtr-004",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "inter-vlan-rule",
+   "prompt": "A workstation on VLAN 20 pings SBD-DC01, but certificate enrollment against pki.sbd.test on VLAN 30 times out. DNS resolves the name. Which rule fixes it?",
+   "options": [
+    "Permit everything from VLAN 30 to VLAN 20",
+    "Add a DHCP relay on VLAN 30",
+    "Permit TCP 80 and 443 from VLAN 20 to VLAN 30",
+    "Add a static route to VLAN 30"
+   ],
+   "explanation": "Enrollment and CRL checks use HTTP and HTTPS to the publication point. The router is the hop that has to allow them.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "rtr-005",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "inter-vlan-rule",
+   "prompt": "Which ports must a domain member reach on a domain controller for Kerberos and LDAP?",
+   "options": [
+    "TCP and UDP 88, and TCP 389",
+    "TCP 3389",
+    "TCP 80 and 443",
+    "UDP 123 only"
+   ],
+   "explanation": "Kerberos uses 88 over both TCP and UDP; LDAP uses TCP 389 (636 for LDAPS). Blocking either breaks sign-in.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "rtr-006",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "inter-vlan-rule",
+   "prompt": "Splunk forwarders stop delivering after a rule change. Which port does forwarder-to-indexer traffic use by default?",
+   "options": [
+    "TCP 443",
+    "TCP 8000",
+    "UDP 514",
+    "TCP 9997"
+   ],
+   "explanation": "Universal forwarders send to the indexer on TCP 9997 unless changed. 8000 is the web interface and 8089 the management port.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "rtr-007",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "route-table",
+   "prompt": "When a router has several routes to a destination, which one does it use?",
+   "options": [
+    "The one listed first",
+    "The one with the highest metric",
+    "Always the default route",
+    "The most specific match, the longest prefix"
+   ],
+   "explanation": "Longest prefix wins. Only when two routes match equally do administrative distance and metric decide.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "rtr-008",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "route-table",
+   "prompt": "What should the default route do in this air-gapped lab?",
+   "options": [
+    "Point at the certification authority",
+    "Point at SBD-DC01",
+    "Nothing should leave the enclave; there is no path out",
+    "Send traffic to the internet"
+   ],
+   "explanation": "The network is fully air-gapped. Transfers across the boundary are manual, on approved removable media.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "rtr-009",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "isolate",
+   "prompt": "Which action isolates a compromised VLAN while the rest of the network keeps working?",
+   "options": [
+    "Powering off SBD-DC01",
+    "A deny rule for that VLAN on the router’s inter-VLAN interfaces",
+    "Stopping DHCP",
+    "Deleting the DNS zone"
+   ],
+   "explanation": "The router is the only path between VLANs, so a deny rule there contains the segment without touching the servers.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "rtr-010",
+   "system": "l3-router",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "isolate",
+   "prompt": "If the router blocks a workstation VLAN from reaching the domain controllers, what fails first?",
+   "options": [
+    "Nothing",
+    "Printing",
+    "Time, because the clock stops",
+    "Sign-in, because Kerberos and LDAP cannot reach a controller"
+   ],
+   "explanation": "Cached credentials may still let a user in, but new sign-ins, Group Policy and DNS all depend on reaching a controller.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-001",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "easy",
+   "move": "autoenroll",
+   "prompt": "Where is certificate auto-enrollment turned on for domain computers?",
+   "options": [
+    "DNS Manager",
+    "Each workstation’s control panel",
+    "Group Policy: Computer Configuration, Policies, Windows Settings, Security Settings, Public Key Policies",
+    "The certification authority’s properties only"
+   ],
+   "explanation": "The Certificate Services Client, Auto-Enrollment policy under Public Key Policies enables it for every computer the GPO reaches.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "pki-002",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "easy",
+   "move": "autoenroll",
+   "prompt": "What must a certificate template grant domain computers for auto-enrollment to work?",
+   "options": [
+    "Full control",
+    "Read, Enroll and Autoenroll permissions",
+    "Read only",
+    "No permissions are needed"
+   ],
+   "explanation": "All three are checked on the template’s Security tab for the computers’ group. Missing Autoenroll is the most common gap.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "pki-003",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "easy",
+   "move": "autoenroll",
+   "prompt": "Which console shows the certificates a workstation itself has been issued?",
+   "options": [
+    "certmgr.msc, the current user store",
+    "certlm.msc, the local computer certificate store",
+    "Event Viewer",
+    "DNS Manager"
+   ],
+   "explanation": "The local computer store under Personal holds machine certificates. The user store holds the signed-in user’s.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "pki-004",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "hard",
+   "move": "chain-of-trust",
+   "prompt": "In a two-tier PKI, why is the root CA kept offline?",
+   "options": [
+    "Windows requires it",
+    "To save licenses",
+    "It is slower than the issuing CA",
+    "Its key signs the issuing CA; keeping it offline limits exposure of the trust anchor"
+   ],
+   "explanation": "If the root is compromised, every certificate below it is suspect. The issuing CA does the daily work; the root only signs it.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-005",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "hard",
+   "move": "chain-of-trust",
+   "prompt": "A workstation reports \"the certificate chain could not be built to a trusted root.\" What is most likely missing?",
+   "options": [
+    "A DHCP lease",
+    "The PDC emulator",
+    "Its hostname",
+    "The root or issuing CA certificate in its trust stores, usually published through the directory or Group Policy"
+   ],
+   "explanation": "Clients need the root in Trusted Root Certification Authorities and the issuing CA in Intermediate. Publishing to the directory places them automatically.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-006",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "hard",
+   "move": "chain-of-trust",
+   "prompt": "Why does certificate validation depend on the clock?",
+   "options": [
+    "Kerberos issues the certificates",
+    "Certificates are issued by the time service",
+    "It does not",
+    "Validity periods and the CRL’s next-update time are checked against the current time"
+   ],
+   "explanation": "A machine whose clock drifts past a certificate’s validity window, or past the CRL’s next update, fails validation even though nothing was revoked.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-007",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "medium",
+   "move": "crl-refresh",
+   "prompt": "What does a certificate revocation list contain?",
+   "options": [
+    "The CA’s private key",
+    "The certificate templates",
+    "Every certificate the CA issued",
+    "The serial numbers of revoked certificates, signed by the CA"
+   ],
+   "explanation": "Clients download the CRL from the publication point and refuse any certificate whose serial number appears on it.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-008",
+   "system": "sbd-pki-mgmt01",
+   "type": "Trust",
+   "difficulty": "medium",
+   "move": "crl-refresh",
+   "prompt": "Where is the CRL published in this lab?",
+   "options": [
+    "In SYSVOL on SBD-DC01",
+    "On the L3 router",
+    "On the offline root CA",
+    "As a web service at pki.sbd.test on VLAN 30, from SBD-PKI-MGMT01"
+   ],
+   "explanation": "PKI publication is a VLAN 30 web service on SBD-PKI-MGMT01. The issuing CA and the root stay on their own hosts.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "pki-009",
+   "system": "sbd-pki-mgmt01",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "publish",
+   "prompt": "What does the CDP extension in a certificate point to?",
+   "options": [
+    "The time source",
+    "Where to download the CRL, such as a URL under pki.sbd.test",
+    "The DNS server",
+    "The domain controller"
+   ],
+   "explanation": "The CRL distribution point tells the client where to fetch revocation data; the AIA extension points to the CA certificate.",
+   "lesson": "/training/identity-foundation/?part=pki",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "pki-010",
+   "system": "sbd-pki-mgmt01",
+   "type": "Network",
+   "difficulty": "medium",
+   "move": "publish",
+   "prompt": "What has to be true for a VLAN 20 workstation to check revocation?",
+   "options": [
+    "Nothing; revocation is checked on the CA",
+    "It runs the CA role",
+    "It is signed in as a domain admin",
+    "It can resolve pki.sbd.test and reach it over HTTP on VLAN 30"
+   ],
+   "explanation": "Revocation checking is a client-side download. Name resolution and the router rule are both in the path.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "spl-001",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "index-search",
+   "prompt": "Which Windows event shows an account lockout?",
+   "options": [
+    "System log event 6005",
+    "Security log event 4624",
+    "Application log event 1000",
+    "Security log event 4740"
+   ],
+   "explanation": "4740 is logged on the PDC emulator when an account is locked out. 4624 is a successful logon.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "spl-002",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "index-search",
+   "prompt": "What does an index do in Splunk?",
+   "options": [
+    "Issues certificates",
+    "Stores events so searches can find them by time and field",
+    "Assigns addresses",
+    "Blocks traffic"
+   ],
+   "explanation": "Events land in an index; searches run against it. Retention and access are set per index.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "spl-003",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "index-search",
+   "prompt": "Which event code finds failed Windows sign-ins?",
+   "options": [
+    "4625",
+    "4740",
+    "4688",
+    "4624"
+   ],
+   "explanation": "4625 is a failed logon. 4688 is process creation, useful for a different question.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "spl-004",
+   "system": "splunk",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "forwarder-down",
+   "prompt": "A domain controller stops appearing in Splunk after a VLAN rule change. Which port must its forwarder reach?",
+   "options": [
+    "TCP 8000",
+    "TCP 8089",
+    "UDP 514",
+    "TCP 9997 on the indexer"
+   ],
+   "explanation": "Receiving is on TCP 9997 by default. 8089 is the management port the deployment server uses; 8000 is the web interface.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "spl-005",
+   "system": "splunk",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "forwarder-down",
+   "prompt": "The forwarder runs as a domain account and the Security log stops arriving while other logs continue. What is the gap?",
+   "options": [
+    "The time zone is wrong",
+    "The account lacks rights to read the Security log, such as Event Log Readers membership",
+    "The disk is full",
+    "DHCP expired"
+   ],
+   "explanation": "The Security log needs explicit read rights. Event Log Readers, or the Manage auditing and security log right, grants them.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "spl-006",
+   "system": "splunk",
+   "type": "Network",
+   "difficulty": "hard",
+   "move": "forwarder-down",
+   "prompt": "Splunk runs on domain-joined Linux in this lab. What does joining the domain give it?",
+   "options": [
+    "A certificate automatically",
+    "Kerberos sign-in for administrators and a trusted hostname in DNS",
+    "A DHCP reservation",
+    "Faster indexing"
+   ],
+   "explanation": "Domain-joined Linux lets administrators use their directory accounts and gives the host a registered name the forwarders can trust.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "spl-007",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "retention",
+   "prompt": "What decides how long events stay searchable?",
+   "options": [
+    "The index’s retention settings: maximum size and maximum age",
+    "DNS",
+    "The domain controller",
+    "The forwarder"
+   ],
+   "explanation": "Each index has a size cap and an age limit. When either is hit, the oldest bucket is frozen, deleted or archived.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "A"
+  },
+  {
+   "id": "spl-008",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "retention",
+   "prompt": "Events are to stay searchable for 90 days, then be archived. Where is that configured?",
+   "options": [
+    "In Group Policy",
+    "On each forwarder",
+    "In DNS",
+    "In the index’s settings on the indexer"
+   ],
+   "explanation": "Retention is an index property on the indexer; forwarders only ship events.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "spl-009",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "alert",
+   "prompt": "Ten failed sign-ins against one account within five minutes should raise an alert. Which Splunk feature does that?",
+   "options": [
+    "A new index",
+    "A lookup table",
+    "A scheduled saved search with an alert condition",
+    "A dashboard panel"
+   ],
+   "explanation": "Alerts are saved searches on a schedule with a trigger condition, such as a count over a threshold per account.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "C"
+  },
+  {
+   "id": "spl-010",
+   "system": "splunk",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "alert",
+   "prompt": "Why forward the domain controllers’ Security log, not just the System log?",
+   "options": [
+    "The Application log holds sign-ins",
+    "There is no difference",
+    "The System log is larger",
+    "Sign-ins, lockouts and privilege use are recorded in the Security log"
+   ],
+   "explanation": "The System log covers services and drivers. Account activity, the thing a security team watches, is in the Security log.",
+   "lesson": "/training/identity-foundation/?part=dc",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "nes-001",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "scan-sweep",
+   "prompt": "What does a discovery scan find?",
+   "options": [
+    "User passwords",
+    "Group Policy objects",
+    "Live hosts and their open ports",
+    "Certificates"
+   ],
+   "explanation": "Discovery maps what is on the network before a vulnerability scan looks deeper at each host.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "C"
+  },
+  {
+   "id": "nes-002",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "scan-sweep",
+   "prompt": "Why does the scanner run inside the enclave rather than from outside?",
+   "options": [
+    "The network is air-gapped; there is no path in from outside",
+    "It is faster",
+    "Nessus only scans local hosts",
+    "Licensing requires it"
+   ],
+   "explanation": "Nothing crosses the air gap automatically, so the scanner lives on the network it assesses.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "nes-003",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "easy",
+   "move": "scan-sweep",
+   "prompt": "What does the CVSS score on a finding express?",
+   "options": [
+    "How old the finding is",
+    "How severe the vulnerability is, from 0 to 10",
+    "How long the scan took",
+    "The host’s uptime"
+   ],
+   "explanation": "CVSS rates severity. The plugin output says what was found; the score helps decide what to fix first.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "nes-004",
+   "system": "nessus",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "credentialed-scan",
+   "prompt": "Why does a credentialed scan find more than an unauthenticated one?",
+   "options": [
+    "It uses more bandwidth",
+    "It signs in and checks installed software, patches and settings directly",
+    "It runs longer",
+    "It scans more ports"
+   ],
+   "explanation": "Without credentials the scanner can only infer from the outside. With them it reads the host’s own state.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "nes-005",
+   "system": "nessus",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "credentialed-scan",
+   "prompt": "Which account design fits a Windows credentialed scan in a tiered administration model?",
+   "options": [
+    "The Guest account",
+    "The Domain Admin account",
+    "A dedicated scan account with local administrator rights on the hosts it scans, never a Domain Admin",
+    "The administrator’s own account"
+   ],
+   "explanation": "A scanning account touches every host, so it is kept out of the top tier and limited to what the scan needs.",
+   "lesson": "/training/identity-foundation/?part=tier",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "nes-006",
+   "system": "nessus",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "credentialed-scan",
+   "prompt": "A credentialed scan of the domain controllers reports a sign-in failure although the password is right. Which lab fact matters first?",
+   "options": [
+    "It sits on VLAN 30",
+    "Its DHCP lease expired",
+    "The CA has not issued it a certificate",
+    "Time: if the scanner’s clock drifts from the domain, Kerberos rejects it"
+   ],
+   "explanation": "Nessus is domain-joined Linux here, so it follows the domain time hierarchy. More than five minutes of skew and Kerberos refuses the login.",
+   "lesson": "/training/identity-foundation/?part=time",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "nes-007",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "plugin-update",
+   "prompt": "How do plugin updates reach an air-gapped scanner?",
+   "options": [
+    "Over the internet automatically",
+    "Through the domain controller",
+    "Downloaded outside, moved in on approved removable media, and applied offline",
+    "They never update"
+   ],
+   "explanation": "Every transfer across the boundary is manual and human-controlled. Plugins, content and patches all come in the same way.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "nes-008",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "plugin-update",
+   "prompt": "Why does plugin age matter?",
+   "options": [
+    "Scans fail outright",
+    "New vulnerabilities are not detected until the plugins that check for them arrive",
+    "The license expires",
+    "The host slows down"
+   ],
+   "explanation": "A scan is only as current as its plugins. The date of the last update is part of the evidence.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "nes-009",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "false-positive",
+   "prompt": "How is a confirmed false positive handled?",
+   "options": [
+    "Patched anyway",
+    "Documented and marked so later reports exclude it, with the evidence kept",
+    "Deleted quietly",
+    "Ignored"
+   ],
+   "explanation": "A finding can be wrong, but the decision to dismiss it is itself evidence. It stays on record with the reason.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "nes-010",
+   "system": "nessus",
+   "type": "Visibility",
+   "difficulty": "medium",
+   "move": "false-positive",
+   "prompt": "What does a compliance scan against a STIG give you?",
+   "options": [
+    "A Group Policy object",
+    "A pass or fail per check against the host’s configuration",
+    "A DNS record",
+    "A certificate"
+   ],
+   "explanation": "Compliance audits compare settings to the benchmark. Vulnerability plugins and compliance checks are different scan types.",
+   "lesson": "/training/identity-foundation/?part=stig",
+   "source": "System Hub",
+   "answer": "B"
+  },
+  {
+   "id": "epo-001",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "easy",
+   "move": "agent-push",
+   "prompt": "What does the management agent on an endpoint do?",
+   "options": [
+    "Resolves names",
+    "Issues certificates",
+    "Routes packets",
+    "Talks to ePO to pull policies and report status"
+   ],
+   "explanation": "The agent is the endpoint’s side of the conversation. No agent, no policy and no reporting.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "epo-002",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "easy",
+   "move": "agent-push",
+   "prompt": "How can the agent reach every domain-joined workstation at once?",
+   "options": [
+    "Hand it out through a DHCP option",
+    "Carry it on a USB drive to each machine",
+    "Email it to each user",
+    "Deploy it through Group Policy or an ePO push using domain credentials"
+   ],
+   "explanation": "Both routes lean on the directory: Group Policy software installation, or a push that signs in with a domain account.",
+   "lesson": "/training/identity-foundation/?part=gpo",
+   "source": "System Hub",
+   "answer": "D"
+  },
+  {
+   "id": "epo-003",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "easy",
+   "move": "agent-push",
+   "prompt": "Why is there one ePO instance in this lab?",
+   "options": [
+    "It only runs on Linux",
+    "Licensing allows only one",
+    "One enclave, one console: its policies and repository cover every endpoint",
+    "One per VLAN is not allowed"
+   ],
+   "explanation": "The lab keeps Splunk, Nessus and ePO as single instances. The System Hub shows where each one sits.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "C"
+  },
+  {
+   "id": "epo-004",
+   "system": "epo",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "policy-enforce",
+   "prompt": "An endpoint still shows the old policy after a change. Which agent action comes first?",
+   "options": [
+    "Re-image the endpoint",
+    "Remove it from the system tree",
+    "Reboot the endpoint",
+    "An agent wake-up: collect and send properties, then enforce policies"
+   ],
+   "explanation": "The agent polls on its interval. A wake-up forces the conversation now, and the policy enforcement follows.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "epo-005",
+   "system": "epo",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "policy-enforce",
+   "prompt": "Why synchronize the ePO system tree with Active Directory?",
+   "options": [
+    "So endpoints are grouped by organizational unit and policies follow the directory structure",
+    "For time",
+    "For DNS",
+    "For certificates"
+   ],
+   "explanation": "A tree that mirrors the OUs lets one policy assignment cover the right machines, the same way a GPO link does.",
+   "lesson": "/training/identity-foundation/?part=gpo",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "epo-006",
+   "system": "epo",
+   "type": "Identity",
+   "difficulty": "hard",
+   "move": "policy-enforce",
+   "prompt": "A policy assigned to a parent group never reaches a child group. Why?",
+   "options": [
+    "The VLAN rule blocks it",
+    "DNS is misconfigured",
+    "The agent is out of date",
+    "Inheritance was broken on the child group"
+   ],
+   "explanation": "Policies inherit down the tree unless a group breaks inheritance. Check the child group’s assigned policies for the override.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "D"
+  },
+  {
+   "id": "epo-007",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "medium",
+   "move": "repository-sync",
+   "prompt": "How does an air-gapped ePO get content and engine updates?",
+   "options": [
+    "Pulled outside, moved in on approved removable media, and checked into the master repository",
+    "From the domain controller",
+    "Over the internet",
+    "From Splunk"
+   ],
+   "explanation": "Same rule as plugins and patches: a human carries it across the boundary, then it is checked in.",
+   "lesson": "",
+   "source": "System Hub",
+   "answer": "A"
+  },
+  {
+   "id": "epo-008",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "medium",
+   "move": "repository-sync",
+   "prompt": "What does a distributed repository do?",
+   "options": [
+    "Stores logs",
+    "Serves content to endpoints nearer to them and takes load off the ePO server",
+    "Issues policies",
+    "Routes packets"
+   ],
+   "explanation": "Repositories hold content; the master is the source of truth and distributed copies serve it out.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "epo-009",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "medium",
+   "move": "quarantine",
+   "prompt": "What does a quarantine or isolation policy do to a suspect endpoint?",
+   "options": [
+    "Removes the agent",
+    "Blocks its traffic except to ePO so it can be investigated",
+    "Deletes its files",
+    "Reboots it"
+   ],
+   "explanation": "The host stays reachable by the management server and nothing else, which keeps the evidence and stops the spread.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "B"
+  },
+  {
+   "id": "epo-010",
+   "system": "epo",
+   "type": "Endpoint",
+   "difficulty": "medium",
+   "move": "quarantine",
+   "prompt": "Which evidence shows the agent on a host is current?",
+   "options": [
+    "Its last communication time and version in the system tree",
+    "Nothing shows it",
+    "A DNS record",
+    "A certificate"
+   ],
+   "explanation": "The system tree lists each managed host with the agent version and the last time it checked in.",
+   "lesson": "",
+   "source": "Vendor documentation",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-001",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "Which publication defines the Risk Management Framework steps?",
+   "options": [
+    "NIST SP 800-37 Revision 2",
+    "NIST SP 800-53",
+    "FIPS 199",
+    "NIST SP 800-171"
+   ],
+   "explanation": "SP 800-37 Rev. 2 is the RMF itself. SP 800-53 supplies the controls it selects from.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-002",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "Which publication supplies the control catalog this lab uses?",
+   "options": [
+    "NIST SP 800-37",
+    "NIST SP 800-30",
+    "NIST SP 800-53 Revision 5",
+    "FIPS 200"
+   ],
+   "explanation": "SP 800-53 Rev. 5 is the catalog; SP 800-53B holds the federal baselines.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "C"
+  },
+  {
+   "id": "rmf-003",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "Which step did SP 800-37 Revision 2 add?",
+   "options": [
+    "Prepare",
+    "Authorize",
+    "Assess",
+    "Monitor"
+   ],
+   "explanation": "Prepare was added at the organization and system level. The public 2016 JSIG predates it and describes six steps.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-004",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What follows Categorize in the RMF?",
+   "options": [
+    "Select",
+    "Implement",
+    "Authorize",
+    "Assess"
+   ],
+   "explanation": "Categorize, Select, Implement, Assess, Authorize, Monitor, with Prepare ahead of them in Rev. 2.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-005",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "This lab’s system is categorized Moderate, Low, Low. What does that mean?",
+   "options": [
+    "Moderate impact overall",
+    "Moderate confidentiality, low integrity, low availability",
+    "Three separate systems",
+    "Low impact overall"
+   ],
+   "explanation": "The three values are the CIA impact levels. The owner’s categorization is planning input, not a completed assessment.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-006",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "Who makes the authorization decision?",
+   "options": [
+    "The assessor",
+    "The Authorizing Official",
+    "The ISSO",
+    "The system administrator"
+   ],
+   "explanation": "The AO accepts the risk and signs the decision. Everyone else prepares, implements, assesses or recommends.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-007",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What is a POA&M?",
+   "options": [
+    "A contract",
+    "A scan report",
+    "A plan of action and milestones for weaknesses that are not yet corrected",
+    "The system security plan"
+   ],
+   "explanation": "Each open weakness gets a planned fix, resources, milestones and a date, and the AO sees it with the package.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "C"
+  },
+  {
+   "id": "rmf-008",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What does the system security plan document?",
+   "options": [
+    "The budget",
+    "The open POA&M items",
+    "The scan results",
+    "How the system implements its selected controls"
+   ],
+   "explanation": "The SSP describes the system, its boundary and each control’s implementation. It is the heart of the package.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "D"
+  },
+  {
+   "id": "rmf-009",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "What does the assessor produce?",
+   "options": [
+    "The system security plan",
+    "The POA&M",
+    "The authorization decision",
+    "A security assessment report"
+   ],
+   "explanation": "The SAR records what was tested, how, and what was found. Its findings feed the POA&M.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "D"
+  },
+  {
+   "id": "rmf-010",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "How is the JSIG framed in this lab?",
+   "options": [
+    "The control catalog",
+    "SAP-specific implementation direction for the NIST RMF, used with CNSSI 1253",
+    "A scanning tool",
+    "A replacement for NIST"
+   ],
+   "explanation": "NIST is the foundation; the JSIG says how special access programs apply it, together with CNSSI 1253 and AO direction.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-011",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "Which instruction provides categorization and control selection for national security systems?",
+   "options": [
+    "NIST SP 800-30",
+    "FIPS 140",
+    "CNSSI 4009",
+    "CNSSI 1253"
+   ],
+   "explanation": "CNSSI 1253 supplies the national security system overlays and selection; it is not a Moderate baseline from SP 800-53B.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "D"
+  },
+  {
+   "id": "rmf-012",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "What is continuous monitoring for?",
+   "options": [
+    "Scanning once a year",
+    "Keeping the authorization current by tracking control effectiveness and changes",
+    "Replacing the AO",
+    "Replacing the assessment"
+   ],
+   "explanation": "Monitor is the step that never ends: ongoing assessments, change tracking and reporting keep the risk picture current.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-013",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "Which control family is AC?",
+   "options": [
+    "Awareness and Training",
+    "Assessment, Authorization and Monitoring",
+    "Audit and Accountability",
+    "Access Control"
+   ],
+   "explanation": "AC is Access Control. AU is Audit and Accountability; AT is Awareness and Training; CA is Assessment, Authorization and Monitoring.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "D"
+  },
+  {
+   "id": "rmf-014",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "Which control family is AU?",
+   "options": [
+    "Authorization",
+    "Assessment",
+    "Audit and Accountability",
+    "Access Control"
+   ],
+   "explanation": "AU covers audit records, logging and review, the family Splunk evidence maps to.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "C"
+  },
+  {
+   "id": "rmf-015",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "Which control family is CM?",
+   "options": [
+    "Configuration Management",
+    "Continuous Monitoring",
+    "System and Communications Protection",
+    "Contingency Planning"
+   ],
+   "explanation": "CM is Configuration Management: baselines, change control and the settings STIGs enforce. CP is Contingency Planning.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-016",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What is an authorization with conditions?",
+   "options": [
+    "An authorization granted while specified weaknesses are tracked to completion",
+    "A denial",
+    "A permanent waiver",
+    "A test environment"
+   ],
+   "explanation": "The AO accepts the risk for now and the conditions, usually POA&M items with dates, stay on the record.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "A"
+  },
+  {
+   "id": "rmf-017",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What is the Body of Evidence?",
+   "options": [
+    "Only the network diagram",
+    "The collected artifacts that show controls are implemented and working",
+    "Only the hardware inventory",
+    "A list of users"
+   ],
+   "explanation": "Policies, procedures, configurations, scan results, screenshots and logs: whatever proves a control, kept and maintained.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-018",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "hard",
+   "move": "rmf",
+   "prompt": "Which role owns the system’s day-to-day security posture?",
+   "options": [
+    "The CIO",
+    "The ISSO",
+    "The SCA",
+    "The AO"
+   ],
+   "explanation": "The Information System Security Officer runs the system’s security operations; the ISSM manages the program; the SCA assesses.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-019",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "What triggers a review of an existing authorization?",
+   "options": [
+    "A new user account",
+    "A significant change to the system or its environment",
+    "Every reboot",
+    "A new printer"
+   ],
+   "explanation": "Significant changes, such as a new boundary, new interconnections or a changed categorization, send the system back through the relevant steps.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "B"
+  },
+  {
+   "id": "rmf-020",
+   "system": "rmf",
+   "type": "Authorization",
+   "difficulty": "medium",
+   "move": "rmf",
+   "prompt": "How do evidence artifacts leave this air-gapped enclave?",
+   "options": [
+    "A VPN",
+    "Cloud synchronization",
+    "By manual, human-controlled transfer on approved removable media",
+    "Email"
+   ],
+   "explanation": "The lab’s baseline: no physical connection or automated path crosses the air gap.",
+   "lesson": "/grc-rmf-training",
+   "source": "NIST SP 800-37 Rev. 2, SP 800-53 Rev. 5, the 2016 JSIG",
+   "answer": "C"
+  }
+ ]
+}
