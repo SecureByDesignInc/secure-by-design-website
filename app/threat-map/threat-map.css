@@ -154,6 +154,13 @@
     linear-gradient(to bottom, transparent, #000 5%, #000 88%, transparent);
   mask-composite: intersect;
 }
+/* Phones and tablets: Radware's cookie notice is taller there (iPhone and iPad text autosizing), so the map is
+   cut off higher, at RADWARE_VISIBLE_H_TOUCH (520) for TOUCH_QUERY in app/radware-sales-cover.tsx. */
+@media (pointer: coarse) {
+  .tm-stage {
+    aspect-ratio: 1240 / 520;
+  }
+}
 /* Full screen shows the whole map, solid and edge to edge. */
 .tm-stage:fullscreen {
   height: 100%;

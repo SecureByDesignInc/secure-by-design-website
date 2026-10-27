@@ -14,6 +14,15 @@ export const SALES_BOX = { left: 762, top: 22, width: 150, height: 52 };
 // notice up, lower this number.
 export const RADWARE_VISIBLE_H = 648;
 
+// On touch screens the notice is taller. iPhone and iPad browsers (all of them use Apple's WebKit) enlarge the
+// text of wide paragraphs inside the 1240-wide frame ("text autosizing", up to about 1.7× for this size of
+// text), and the notice grows upward from the bottom of the page. On an iPhone it started at about y = 552
+// (owner's screenshot, 27 October 2026), above the 648 line, so it showed. Touch screens are cut off at
+// RADWARE_VISIBLE_H_TOUCH instead, with room to spare; the same number is in the .tm-stage aspect ratio for
+// TOUCH_QUERY in app/threat-map/threat-map.css. If the notice shows on a phone again, lower this number.
+export const RADWARE_VISIBLE_H_TOUCH = 520;
+export const TOUCH_QUERY = '(pointer: coarse)';
+
 const pct = (value: number, of: number) => `${(value / of) * 100}%`;
 
 // The frame comes from Radware's servers, so this site can't change anything inside it. Instead, a frosted
