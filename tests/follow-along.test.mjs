@@ -79,7 +79,11 @@ test('the React layout and the generated Community shells render App availabilit
   const header = layout.slice(layout.indexOf('<header'), layout.indexOf('</header>'));
   const footer = layout.slice(layout.indexOf('<footer'), layout.indexOf('</footer>'));
   assert.doesNotMatch(header, /footerConnect|header-connect|BookingLink/, 'the header holds only the branding and the navigation');
-  assert.match(footer, /<div className="footer-top">[\s\S]*<div className="footer-connect" dangerouslySetInnerHTML=\{\{__html: footerConnect\}\} \/>/);
+  assert.match(footer, /<footer className="site-footer container">\s*<div className="footer-connect" dangerouslySetInnerHTML=\{\{__html: footerConnect\}\} \/>/);
+  // Owner direction, 27 October 2026: "Secure By Design © 2026" replaces "About Secure By Design", once in the footer.
+  assert.match(footer, /<div className="footer-actions"><a href="\/">Secure By Design © 2026<\/a><a href="\/privacy">Privacy<\/a><FooterShare \/><\/div>/);
+  assert.equal((footer.match(/Secure By Design/g) || []).length, 1, 'the name appears once in the footer');
+  assert.doesNotMatch(footer, /About Secure By Design|footer-brand/);
   assert.doesNotMatch(footer, /BookingLink/, 'Book a call is listed once, at the end of Follow along');
   assert.doesNotMatch(layout, /logo-pill-icon|\/social\//, 'no hand-written social markup in the layout');
 
@@ -90,7 +94,9 @@ test('the React layout and the generated Community shells render App availabilit
     const shellHeader = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
     assert.doesNotMatch(shellHeader, /header-connect|footer-connect|app-store|logo-pill/, name + ' header');
     const shellFooter = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'));
-    assert.match(shellFooter, /<div class="footer-top">[\s\S]*<div class="footer-connect"><section class="footer-apps"[\s\S]*<nav class="footer-follow"/, name + ' footer');
+    assert.match(shellFooter, /^<footer class="site-footer container"><div class="footer-connect"><section class="footer-apps"[\s\S]*<nav class="footer-follow"/, name + ' footer');
+    assert.match(shellFooter, /<div class="footer-actions"><a href="\/">Secure By Design © 2026<\/a><a href="\/privacy">Privacy<\/a>/, name + ' copyright');
+    assert.doesNotMatch(shellFooter, /About Secure By Design|footer-brand/, name + ' has no About link or second brand');
     assert.equal((shellFooter.match(/booking_click/g) || []).length, 1, name + ' lists Book a call once');
   }
 
