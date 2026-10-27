@@ -24,18 +24,21 @@ for(const name of pages){
  if(!/<div class="site-header-identity">/.test(html))throw new Error('Shared header missing: '+name);
  const current=['career-explorer','careers'].includes(name)?'/careers':'';
  const links=JSON.parse(readFileSync(new URL('content/navigation.json',root),'utf8'));
- const navigation='<nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${escape(label)}</a>`).join('')+'</nav>';
+ // The calmer header (owner direction, 27 October 2026): the same block as app/navigation.tsx, toggled by /site-menu.mjs.
+ const menuIcon='<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+ const navigation='<div class="site-menu" data-open="false"><button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu-list" aria-label="Open menu">'+menuIcon+'</button><div id="site-menu-list" class="site-menu-list"><nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${escape(label)}</a>`).join('')+'</nav><a href="/my-progress" class="nav-account">My Account</a></div></div>';
  const footerPattern=/<footer class="site-footer container">[\s\S]*?<\/footer>/;
  if(!footerPattern.test(html))throw new Error('Shared footer missing: '+name);
  const footer='<footer class="site-footer container">'+connectMarkup+'<div class="footer-bottom">'+partnerMarkup+'<div class="footer-actions"><a href="/">Secure By Design © 2026</a><a href="/privacy">Privacy</a>'+renderFooterShare()+'</div></div></footer>';
  // The header keeps only the branding and the navigation; drop the connect block older shells carried in the header.
  const headerConnectPattern=/<div class="header-connect">[\s\S]*?<\/nav><\/div>/;
- const updated=html.replace(headerConnectPattern,'').replace(/<nav aria-label="Main navigation">[\s\S]*?<\/nav>/,navigation).replace(footerPattern,footer);
+ const updated=html.replace(headerConnectPattern,'').replace(/<div class="site-menu"[\s\S]*?<\/nav><a href="\/my-progress" class="nav-account">My Account<\/a><\/div><\/div>|<nav aria-label="Main navigation">[\s\S]*?<\/nav>/,navigation).replace(footerPattern,footer);
  if(/header-connect|header-socials|header-app-stores/.test(updated))throw new Error('Header connect block left behind: '+name);
- const shared=updated.includes('src="/footer-share-boot.mjs"')?updated:updated.replace('</body>','<script type="module" src="/footer-share-boot.mjs"></script></body>');
+ let shared=updated.includes('src="/footer-share-boot.mjs"')?updated:updated.replace('</body>','<script type="module" src="/footer-share-boot.mjs"></script></body>');
+ if(!shared.includes('src="/site-menu.mjs"'))shared=shared.replace('</body>','<script type="module" src="/site-menu.mjs"></script></body>');
  writeFileSync(file,stripTracking(shared));
 }
-const include=s=>/^(?:\*|:root|body|a|a:hover)$/.test(s)||/^body\.site-editorial$/.test(s)||/\.(?:site-header|site-footer|brand(?:-logo|-wordmark)?|container|skip-link)(?![\w-])/.test(s)||/^body\.site-editorial [ab][^,]*:focus-visible$/.test(s);
+const include=s=>/^(?:\*|:root|body|a|a:hover)$/.test(s)||/^body\.site-editorial$/.test(s)||/\.(?:site-header|site-footer|site-menu(?:-list)?|menu-toggle|nav-account|brand(?:-logo|-wordmark)?|container|skip-link)(?![\w-])/.test(s)||/^body\.site-editorial [ab][^,]*:focus-visible$/.test(s);
 const out=postcss.root();
 for(const file of ['app/globals.css','app/brand-glow.css','app/editorial.css']){
  const css=postcss.parse(readFileSync(new URL(file,root),'utf8'));

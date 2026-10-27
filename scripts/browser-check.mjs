@@ -106,6 +106,32 @@ for (const [from, label, to] of [
   await page.close();
 }
 
+// The calmer header and the ATO Package Builder in the Training Hub (owner direction, 27 October 2026): the old hub address
+// lands on the Training Hub's Tools, which hold the builder and the seven RMF steps; the header has four menu items and a
+// My Account button, and on phones a menu button opens them.
+{
+  const page = await context.newPage();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  try {
+    await page.goto(base + '/grc-rmf-training', { waitUntil: 'load', timeout: 60000 });
+    if (!/\/technical-training#ato-package-builder$/.test(page.url())) throw new Error(`/grc-rmf-training landed on ${page.url()}`);
+    await page.locator('#ato-package-builder').waitFor({ timeout: 15000 });
+    const rows = await page.locator('[data-rmf-step]').count();
+    if (rows !== 7) throw new Error(`the Training Hub shows ${rows} RMF steps, expected 7`);
+    if (!(await page.locator('#ato-package-builder a[href="/grc-rmf-training/workspace"]').count())) throw new Error('the Tools card does not open the builder');
+    const items = await page.locator('.site-header nav .nav-link').count();
+    if (items !== 4 || !(await page.locator('.site-header a.nav-account').isVisible())) throw new Error(`the header shows ${items} menu items and ${await page.locator('.site-header a.nav-account').count()} account buttons`);
+    await page.screenshot({ path: 'guide-screens/training-hub-tools-desktop.png' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    if (await page.locator('.site-header nav').isVisible()) throw new Error('the phone menu is open before the menu button is pressed');
+    await page.locator('.site-header .menu-toggle').click();
+    if (!(await page.locator('.site-header nav').isVisible()) || !(await page.locator('.site-header a.nav-account').isVisible())) throw new Error('the phone menu does not open');
+    await page.screenshot({ path: 'guide-screens/header-phone-menu.png' });
+    results.push({ path: '/grc-rmf-training → Training Hub tools', status: 200, problems: [], notes: ['7 RMF steps, 4 menu items and the account button, phone menu opens'] });
+  } catch (error) { results.push({ path: '/grc-rmf-training → Training Hub tools', status: 0, problems: [String(error.message || error).split('\n')[0].slice(0, 200)], notes: [] }); blocking++; }
+  await page.close();
+}
+
 // Course guides 1.2–1.10: static pages in the course 1.1 guide's design (scripts/prepare-course-guides.mjs).
 // Open each from its old address with a lesson link, walk the three tabs, and keep screenshots for review.
 const guides = [];
@@ -165,7 +191,8 @@ for (const path of ['/training/identity-foundation/', '/training/linux-repositor
 // 1.1's lessons), rows of tiles, and a View all page per group; a tile opens the shared expanded tile beneath
 // its row. The ATO Package Builder Hub is the seven-step builder panel with the course's two links (course 2.1 in the Training Hub
 // and module 01), and choosing Assess must show that step and its three lessons. Screenshots are kept for review.
-for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'training-hub', 12, 0], ['/grc-rmf-training', 'ato-package-builder-hub', 0, 7]]) {
+// 27 October 2026: the ATO Package Builder Hub page is retired into the Training Hub (checked below the loop).
+for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'training-hub', 12, 0]]) {
   for (const [label, size] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const page = await context.newPage();
     await page.setViewportSize(size);

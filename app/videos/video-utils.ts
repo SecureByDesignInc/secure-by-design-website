@@ -9,7 +9,7 @@ export function isReferenceLibrary(entry: CatalogEntry): entry is ReferenceLibra
 }
 
 // One Training Hub (owner direction, 19 October 2026): the network build, Network Authorization and the ATO Template
-// Library share one library page at /technical-training. The ATO Package Builder Hub (/grc-rmf-training) is the tool.
+// Library share one library page at /technical-training. The ATO Package Builder (/grc-rmf-training/workspace) is a tool in it.
 // The sidebar lists each category, with the Build the Network topic groups (content/videos.json, `collections`) under it.
 export type HubGroup = { id: string; title: string; description: string; parent?: string; entries: CatalogEntry[] };
 export function getHubGroups(library: Library): HubGroup[] {

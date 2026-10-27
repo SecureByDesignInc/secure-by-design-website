@@ -10,7 +10,7 @@ const library = read('content/videos.json');
 const configuration = read('content/configuration-courses.json');
 const communityStates = read('content/community-states.json');
 // My Account is noindex (it is an account page), so it stays out of the sitemap.
-const paths = ['/', '/inside-the-network', '/technical-training', '/grc-rmf-training', '/community', '/cyber-range', '/privacy'];
+const paths = ['/', '/inside-the-network', '/technical-training', '/grc-rmf-training/workspace', '/community', '/cyber-range', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
   // List the address a guide is served at: /grc-rmf-training/rmf/index.html redirects to /grc-rmf-training/rmf/.
