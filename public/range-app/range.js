@@ -51,7 +51,11 @@ const frame = (operator, { size = 48, threat = false, tier = 'Operator', hit = f
 const typeChip = (type, extra = '') => `<span class="chip"><span class="dot" style="background:${typeColor(type)};box-shadow:0 0 8px ${typeColor(type)}"></span>${esc(type)}${extra}</span>`;
 const sysArt = (id, { size = 56, down = false, threat = false } = {}) => { const s = systemOf(id); return systemSvg(s.glyph, { size, down, color: threat ? '#ff4fd8' : typeColor(s.type), label: s.name }); };
 const kindLabel = (move, E) => { const r = E.rules[move.kind]; return move.kind === 'light' ? `light, ${r.damage}` : move.kind === 'heavy' ? `heavy, ${r.damage}` : move.kind === 'repair' ? `repair, +${r.heal}` : `status: ${move.status}`; };
-const signInNote = (what = 'keep your operator, points and badges') => `<p class="note">Playing as a guest: everything lasts until you leave this page. <a href="/my-progress" target="_top">Sign in</a> with a free Community account to ${what}.</p>`;
+// In the native app (?app=1) the Range plays as a guest for now; sign-in opens the website in the browser.
+const inApp = new URLSearchParams(location.search).get('app') === '1';
+const signInNote = (what = 'keep your operator, points and badges') => inApp
+ ? `<p class="note">Playing as a guest in the app: everything lasts until you leave this tab. <a href="https://securebydesigninc.com/cyber-range" target="_top">Open the Range on the website</a> and sign in there to ${what}.</p>`
+ : `<p class="note">Playing as a guest: everything lasts until you leave this page. <a href="/my-progress" target="_top">Sign in</a> with a free Community account to ${what}.</p>`;
 function setView(view) { S.view = view; render(); window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' }); }
 
 function renderTop() {
