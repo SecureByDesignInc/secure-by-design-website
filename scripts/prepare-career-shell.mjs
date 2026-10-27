@@ -27,7 +27,7 @@ for(const name of pages){
  const navigation='<nav aria-label="Main navigation">'+links.map(([href,label])=>`<a href="${href}" class="nav-link"${href===current?' aria-current="page"':''}>${escape(label)}</a>`).join('')+'</nav>';
  const footerPattern=/<footer class="site-footer container">[\s\S]*?<\/footer>/;
  if(!footerPattern.test(html))throw new Error('Shared footer missing: '+name);
- const footer='<footer class="site-footer container"><div class="footer-top"><a href="/" class="footer-brand">Secure By Design<span>© 2026</span></a>'+connectMarkup+'</div><div class="footer-bottom">'+partnerMarkup+'<div class="footer-actions"><a href="/#about">About Secure By Design</a><a href="/privacy">Privacy</a>'+renderFooterShare()+'</div></div></footer>';
+ const footer='<footer class="site-footer container">'+connectMarkup+'<div class="footer-bottom">'+partnerMarkup+'<div class="footer-actions"><a href="/">Secure By Design © 2026</a><a href="/privacy">Privacy</a>'+renderFooterShare()+'</div></div></footer>';
  // The header keeps only the branding and the navigation; drop the connect block older shells carried in the header.
  const headerConnectPattern=/<div class="header-connect">[\s\S]*?<\/nav><\/div>/;
  const updated=html.replace(headerConnectPattern,'').replace(/<nav aria-label="Main navigation">[\s\S]*?<\/nav>/,navigation).replace(footerPattern,footer);
@@ -35,7 +35,7 @@ for(const name of pages){
  const shared=updated.includes('src="/footer-share-boot.mjs"')?updated:updated.replace('</body>','<script type="module" src="/footer-share-boot.mjs"></script></body>');
  writeFileSync(file,stripTracking(shared));
 }
-const include=s=>/^(?:\*|:root|body|a|a:hover)$/.test(s)||/^body\.site-editorial$/.test(s)||/\.(?:site-header|site-footer|brand(?:-logo|-wordmark)?|footer-brand|container|skip-link)(?![\w-])/.test(s)||/^body\.site-editorial [ab][^,]*:focus-visible$/.test(s);
+const include=s=>/^(?:\*|:root|body|a|a:hover)$/.test(s)||/^body\.site-editorial$/.test(s)||/\.(?:site-header|site-footer|brand(?:-logo|-wordmark)?|container|skip-link)(?![\w-])/.test(s)||/^body\.site-editorial [ab][^,]*:focus-visible$/.test(s);
 const out=postcss.root();
 for(const file of ['app/globals.css','app/brand-glow.css','app/editorial.css']){
  const css=postcss.parse(readFileSync(new URL(file,root),'utf8'));

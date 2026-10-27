@@ -19,8 +19,6 @@ a, a:hover { text-decoration:none !important; }
 .site-header nav .nav-link:hover { border-color:var(--primary); text-decoration:none; }
 .site-header nav .nav-link[aria-current=page] { color:var(--primary); border-color:var(--primary); font-weight:600;    }
 .site-footer { border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:22px; padding:32px 0 36px; font-size:13px; color:var(--muted-foreground); }
-.footer-brand { font-size:15px; color:var(--foreground); font-weight:550; }
-.footer-brand span { display:block; font-size:12px; font-weight:400; color:var(--muted-foreground); margin-top:6px; }
 .site-footer p { margin:0; }
 .site-footer > a:last-child { color:var(--foreground); }
 .site-footer > a:last-child span { margin-left:15px; }
@@ -195,7 +193,7 @@ body.site-editorial{--primary:#1269b9;--ring:#147bad;--border:#c2d9e8;--font-edi
 body.site-editorial .site-header.container{width:100%;max-width:none;display:flex;flex-direction:column;gap:14px;align-items:stretch;padding:16px max(24px,calc((100% - 1180px)/2)) 14px;background:#050b14;border-bottom:1px solid #29405a;color:#f3f7ff;box-shadow:none}
 body.site-editorial .site-header .brand{color:#f3f7ff;font-size:2.25rem;letter-spacing:-.05em}.site-header .brand-logo{border-radius:50%}body.site-editorial .site-header .brand small{color:#a4b9d1;font-size:.75rem;letter-spacing:.025em;max-width:300px}
 body.site-editorial .site-header nav{border:1px solid #2a405b;border-radius:12px;background:#0c1828;gap:7px;justify-content:center;padding:5px;margin:0}body.site-editorial .site-header nav .nav-link{font-size:.875rem;color:#b4c7df;border-radius:8px;padding:10px 20px;background:transparent;border:1px solid transparent;box-shadow:none}body.site-editorial .site-header nav .nav-link:hover{background:#152b45;border-color:#2c5077;color:#eff8ff}body.site-editorial .site-header nav .nav-link[aria-current=page]{background:linear-gradient(115deg,#174675,#102a47);border-color:#4386b9;color:white;box-shadow:none}
-body.site-editorial .site-footer.container{width:100%;max-width:none;padding:30px max(24px,calc((100% - 1180px)/2));background:#050b14;color:#a4b8d1;border-top:1px solid #29405a}body.site-editorial .site-footer .footer-brand,body.site-editorial .site-footer>a:last-child{color:#dcecff}body.site-editorial .site-footer .footer-brand span{color:#93abc7}
+body.site-editorial .site-footer.container{width:100%;max-width:none;padding:30px max(24px,calc((100% - 1180px)/2));background:#050b14;color:#a4b8d1;border-top:1px solid #29405a}
 body.site-editorial :is(.article-header,.rmf-hero,.learning-hero,.range-intro,.career-intro){background:radial-gradient(ellipse at 95% 85%,#106fa14d,transparent 70%),#08192b;border-color:#285479}
 body.site-editorial .article-header{box-shadow:0 15px 35px #092d4910}body.site-editorial .article-body{color:#2b455d}body.site-editorial .article-body h2{color:#0b2e4e}body.site-editorial .article-contents{border-color:#b3d5e8;background:#eef7fc}
 body.site-editorial .career-intro{padding:30px;border:1px solid #285479;border-radius:18px;color:white;margin-bottom:28px}body.site-editorial .career-intro h1{color:white}body.site-editorial .career-intro :is(p,.eyebrow){color:#c3d9ed}body.site-editorial .career-tabs{border-color:#bdd4e8}body.site-editorial .career-tabs [aria-selected=true]{background:linear-gradient(115deg,#176bb7,#145276);color:white;border-color:#2b87bb}body.site-editorial .career-hub button[type=submit]{background:linear-gradient(115deg,#176bb7,#145276);border-color:#2b87bb;color:white;border-radius:10px}body.site-editorial .career-hub :is(input,textarea,select):focus-visible{outline:3px solid #249bc7;outline-offset:2px}
@@ -223,17 +221,16 @@ body.site-editorial a.app-store-badge:focus-visible{outline:2px solid #8ed5e6;ou
 
 
 
-/* Footer (owner direction, 26 October 2026): the top row pairs the brand with App availability and Follow along,
-   moved here from the header in the same label column; a hairline separates the partners and the site links below.
-   Follow along uses the site's logo pills with their names showing, ending with Book a call. */
-body.site-editorial .site-footer.container{display:grid;gap:24px}
-body.site-editorial .footer-top{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:24px 40px}
+/* Footer (owner direction, 26 October 2026): App availability and Follow along, moved here from the header, in one
+   label column; a hairline separates the partners and the site links below. Follow along uses the site's logo pills
+   with their names showing, ending with Book a call. 27 October 2026: "Secure By Design © 2026" is the first of the
+   site links (it replaced "About Secure By Design") and the footer doesn't repeat it above. */
+body.site-editorial .site-footer.container{display:grid;grid-template-columns:minmax(0,1fr);justify-content:stretch;gap:24px}
 body.site-editorial .footer-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;padding-top:24px;border-top:1px solid #1b2d42}
-body.site-editorial .footer-connect{--connect-label:7.5rem;display:grid;gap:16px;min-width:0;justify-self:end}
+body.site-editorial .footer-connect{--connect-label:7.5rem;display:grid;gap:16px;min-width:0;justify-self:start}
 body.site-editorial :is(.footer-apps,.footer-follow){display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:8px 14px;min-width:0;text-align:left}
 body.site-editorial .footer-connect-label{font-size:14px;font-weight:700;line-height:1.5;color:#f3f7ff}
 body.site-editorial .footer-follow>div{display:flex;flex-wrap:wrap;gap:8px}
-@media(max-width:1000px){body.site-editorial .footer-top{grid-template-columns:minmax(0,1fr)}body.site-editorial .footer-connect{justify-self:start}}
 @media(max-width:620px){body.site-editorial .site-footer.container{gap:20px}body.site-editorial :is(.footer-apps,.footer-follow){grid-template-columns:minmax(0,1fr);gap:8px}body.site-editorial .footer-connect{gap:18px}body.site-editorial .footer-bottom{padding-top:20px}}
 body.site-editorial .footer-partners{display:flex;flex-wrap:wrap;align-items:center;gap:20px;max-width:100%}
 body.site-editorial .footer-partner{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0}

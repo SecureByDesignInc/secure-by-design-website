@@ -28,8 +28,6 @@ h1,h2,h3 { font-weight:570; }
 .eyebrow { color:var(--muted-foreground); font-size:13px; letter-spacing:.045em; line-height:1.6; margin-bottom:25px; }
 .text-link { display:inline-flex; gap:10px; align-items:center; color:var(--primary); font-size:15px; line-height:1.6; font-weight:500; }
 .site-footer { border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:22px; padding:32px 0 36px; font-size:13px; color:var(--muted-foreground); }
-.footer-brand { font-size:15px; color:var(--foreground); font-weight:550; }
-.footer-brand span { display:block; font-size:12px; font-weight:400; color:var(--muted-foreground); margin-top:6px; }
 .site-footer p { margin:0; }
 .site-footer > a:last-child { color:var(--foreground); }
 .site-footer > a:last-child span { margin-left:15px; }
