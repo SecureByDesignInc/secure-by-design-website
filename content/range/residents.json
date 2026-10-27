@@ -1,0 +1,36 @@
+{
+  "_": "Checkpoint residents (owner direction, 26 October 2026): six original operators, any order, a badge on the first win. signoff draws every question from the RMF pool. Levels make their systems tougher than a fresh stack.",
+  "residents": [
+    {
+      "id": "fsmo", "callsign": "fsmo", "type": "Identity", "base": "visor", "glow": "cyan", "mark": "trace",
+      "line": "Name the role before you move it.",
+      "stack": [{ "system": "sbd-dc01", "level": 3 }, { "system": "sbd-dc02", "level": 2 }, { "system": "epo", "level": 2 }]
+    },
+    {
+      "id": "ttl_zero", "callsign": "ttl_zero", "type": "Network", "base": "headset", "glow": "blue", "mark": "node",
+      "line": "Every packet crosses me. Say which rule lets it.",
+      "stack": [{ "system": "l3-router", "level": 3 }, { "system": "splunk", "level": 2 }, { "system": "sbd-dc02", "level": 2 }]
+    },
+    {
+      "id": "root_ca", "callsign": "root_ca", "type": "Trust", "base": "goggles", "glow": "ice", "mark": "none",
+      "line": "A certificate is only as good as its chain, and its clock.",
+      "stack": [{ "system": "sbd-pki-mgmt01", "level": 3 }, { "system": "sbd-dc01", "level": 2 }, { "system": "l3-router", "level": 2 }]
+    },
+    {
+      "id": "pcap", "callsign": "pcap", "type": "Visibility", "base": "hood", "glow": "magenta", "mark": "trace",
+      "line": "If it isn't in the log, it didn't happen. Prove me wrong.",
+      "stack": [{ "system": "splunk", "level": 3 }, { "system": "nessus", "level": 3 }, { "system": "l3-router", "level": 2 }]
+    },
+    {
+      "id": "baseline", "callsign": "baseline", "type": "Endpoint", "base": "headset", "glow": "cyan", "mark": "node",
+      "line": "A finding is a to-do. Tell me the setting that closes it.",
+      "stack": [{ "system": "epo", "level": 3 }, { "system": "sbd-dc01", "level": 2 }, { "system": "nessus", "level": 2 }]
+    },
+    {
+      "id": "signoff", "callsign": "signoff", "type": "Authorization", "base": "visor", "glow": "ice", "mark": "none",
+      "line": "Show me the control, the evidence, and who accepted the risk.",
+      "pool": "rmf",
+      "stack": [{ "system": "sbd-dc01", "level": 4 }, { "system": "splunk", "level": 3 }, { "system": "sbd-pki-mgmt01", "level": 3 }]
+    }
+  ]
+}

@@ -11,6 +11,8 @@ export async function deleteAccount(env,account,{fetcher=fetch}={}){
   // ATO Package Builder systems and everything recorded in them.
   ...['auth_history','auth_packages','auth_poam','auth_artifacts','auth_controls'].map(table=>env.DB.prepare(`DELETE FROM ${table} WHERE system_id IN ${systems}`).bind(account.id)),
   env.DB.prepare('DELETE FROM auth_systems WHERE account_id=?').bind(account.id),
+  // Cyber Range: operator, stack, levels, badges, points, results and deck schedules (26 October 2026).
+  ...['range_cards','range_daily','range_results','range_points','range_badges','range_system_progress','range_operators'].map(table=>env.DB.prepare(`DELETE FROM ${table} WHERE account_id=?`).bind(account.id)),
   env.DB.prepare('DELETE FROM reader_progress WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_bookmarks WHERE user_id=?').bind(account.id),
   env.DB.prepare('DELETE FROM reader_guide_state WHERE user_id=?').bind(account.id),

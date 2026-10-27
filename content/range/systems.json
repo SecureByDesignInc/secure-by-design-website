@@ -1,0 +1,427 @@
+{
+  "_": "Cyber Range stack duels (owner direction, 26 October 2026). The seven systems are the System Hub's; no others. A system is weak to the types it depends on in the real network. Numbers follow the rules doc: light 20, heavy 50 with 15 backfire, repair 25, counter 10 (20 under five seconds), super effective 1.5x, 12 turns, 15 s to pick, 20 s to answer.",
+  "types": {
+    "Identity": {
+      "color": "#83dcfa",
+      "about": "Active Directory, Group Policy, tiered administration"
+    },
+    "Network": {
+      "color": "#238df5",
+      "about": "The L3 router, VLANs, DHCP relay"
+    },
+    "Resolution": {
+      "color": "#77d8fc",
+      "about": "DNS. A move type only; the zones live on the domain controllers"
+    },
+    "Trust": {
+      "color": "#c2ddfa",
+      "about": "PKI and time"
+    },
+    "Visibility": {
+      "color": "#c084fc",
+      "about": "Splunk and Nessus"
+    },
+    "Endpoint": {
+      "color": "#8fb4de",
+      "about": "ePO and STIG baselines"
+    },
+    "Authorization": {
+      "color": "#c2ddfa",
+      "about": "RMF questions; asked only at the signoff checkpoint"
+    }
+  },
+  "chart": {
+    "Identity": [
+      "Resolution",
+      "Trust"
+    ],
+    "Network": [
+      "Visibility"
+    ],
+    "Trust": [
+      "Resolution",
+      "Network"
+    ],
+    "Visibility": [
+      "Network",
+      "Identity"
+    ],
+    "Endpoint": [
+      "Identity",
+      "Network"
+    ]
+  },
+  "why": {
+    "Identity": "Active Directory can't be found without DNS; Kerberos and certificates fail when time drifts.",
+    "Network": "A network you can't see, you can't defend: flow and log questions expose it.",
+    "Trust": "pki.sbd.test has to resolve, and VLAN 30 has to be reachable.",
+    "Visibility": "Forwarding crosses VLANs; both run on domain-joined Linux.",
+    "Endpoint": "Agents deploy through Group Policy and report across VLANs."
+  },
+  "rules": {
+    "light": {
+      "damage": 20,
+      "difficulty": "easy"
+    },
+    "heavy": {
+      "damage": 50,
+      "backfire": 15,
+      "difficulty": "hard"
+    },
+    "repair": {
+      "heal": 25,
+      "difficulty": "medium"
+    },
+    "status": {
+      "difficulty": "medium"
+    },
+    "counter": 10,
+    "fastCounter": 20,
+    "fastMs": 5000,
+    "superEffective": 1.5,
+    "pickMs": 15000,
+    "answerMs": 20000,
+    "driftAnswerMs": 12000,
+    "maxTurns": 12,
+    "levelCards": 20,
+    "levelIntegrity": 5,
+    "maxLevel": 5,
+    "fourthMoveLevel": 4,
+    "level5AnswerBonusMs": 2000,
+    "statuses": {
+      "Drift": {
+        "turns": 2,
+        "about": "Your answer windows shrink from 20 seconds to 12."
+      },
+      "Noisy": {
+        "turns": 1,
+        "about": "Your next pick is shown to the other side before they pick."
+      },
+      "Isolated": {
+        "turns": 1,
+        "about": "You can't swap on your next pick."
+      }
+    }
+  },
+  "bot": {
+    "resist": {
+      "easy": 0.7,
+      "medium": 0.55,
+      "hard": 0.4
+    }
+  },
+  "points": {
+    "duelWin": 40,
+    "duelLoss": 10,
+    "sparringWin": 10,
+    "checkpointFirst": 60,
+    "checkpointRematch": 15,
+    "runPerResident": 20,
+    "dailyCorrect": 5,
+    "dailyStreakBonus": 5,
+    "drillScored": 10,
+    "deckPerTenCards": 2,
+    "deckDailyCap": 10
+  },
+  "tiers": [
+    {
+      "name": "Recruit",
+      "badges": 0
+    },
+    {
+      "name": "Operator",
+      "badges": 1
+    },
+    {
+      "name": "Defender",
+      "badges": 3
+    },
+    {
+      "name": "Hardened",
+      "badges": 5
+    },
+    {
+      "name": "Authorized",
+      "badges": 6
+    }
+  ],
+  "ranks": [
+    0,
+    300,
+    800
+  ],
+  "systems": [
+    {
+      "id": "sbd-dc01",
+      "name": "SBD-DC01",
+      "type": "Identity",
+      "integrity": 90,
+      "glyph": "dc",
+      "lab": "First domain controller, PDC emulator, the domain's time source",
+      "moves": [
+        {
+          "id": "fsmo-check",
+          "name": "FSMO check",
+          "type": "Identity",
+          "kind": "light",
+          "about": "A quick roles question. Hard to miss, easy to resist."
+        },
+        {
+          "id": "replication-storm",
+          "name": "Replication storm",
+          "type": "Identity",
+          "kind": "heavy",
+          "about": "A hard replication question. Miss it and you take 15 yourself."
+        },
+        {
+          "id": "time-sync",
+          "name": "Time sync",
+          "type": "Trust",
+          "kind": "repair",
+          "about": "Answer a time question to restore 25 integrity."
+        },
+        {
+          "id": "event-trail",
+          "name": "Event trail",
+          "type": "Visibility",
+          "kind": "status",
+          "status": "Noisy",
+          "about": "A log question. Leaves them Noisy for a turn."
+        }
+      ]
+    },
+    {
+      "id": "sbd-dc02",
+      "name": "SBD-DC02",
+      "type": "Identity",
+      "integrity": 80,
+      "glyph": "dc2",
+      "lab": "Second domain controller, on a different host",
+      "moves": [
+        {
+          "id": "site-link",
+          "name": "Site link",
+          "type": "Identity",
+          "kind": "light",
+          "about": "A replication-topology question."
+        },
+        {
+          "id": "tombstone",
+          "name": "Tombstone",
+          "type": "Identity",
+          "kind": "heavy",
+          "about": "A hard question about deletions and restores."
+        },
+        {
+          "id": "sysvol-sync",
+          "name": "SYSVOL sync",
+          "type": "Identity",
+          "kind": "repair",
+          "about": "Answer a SYSVOL question to restore 25 integrity."
+        },
+        {
+          "id": "zone-transfer",
+          "name": "Zone transfer",
+          "type": "Resolution",
+          "kind": "light",
+          "about": "A DNS question, opened at level 4. Super effective against Identity and Trust."
+        }
+      ]
+    },
+    {
+      "id": "l3-router",
+      "name": "L3 router",
+      "type": "Network",
+      "integrity": 80,
+      "glyph": "router",
+      "lab": "The learner-built virtual router at the core",
+      "moves": [
+        {
+          "id": "dhcp-relay",
+          "name": "DHCP relay",
+          "type": "Network",
+          "kind": "light",
+          "about": "An addressing question."
+        },
+        {
+          "id": "inter-vlan-rule",
+          "name": "Inter-VLAN rule",
+          "type": "Network",
+          "kind": "heavy",
+          "about": "A hard question about what the router lets through."
+        },
+        {
+          "id": "route-table",
+          "name": "Route table",
+          "type": "Network",
+          "kind": "repair",
+          "about": "Answer a routing question to restore 25 integrity."
+        },
+        {
+          "id": "isolate",
+          "name": "Isolate",
+          "type": "Network",
+          "kind": "status",
+          "status": "Isolated",
+          "about": "A containment question. They can't swap next turn."
+        }
+      ]
+    },
+    {
+      "id": "sbd-pki-mgmt01",
+      "name": "SBD-PKI-MGMT01",
+      "type": "Trust",
+      "integrity": 70,
+      "glyph": "pki",
+      "lab": "Publishes pki.sbd.test on VLAN 30",
+      "moves": [
+        {
+          "id": "autoenroll",
+          "name": "Autoenroll",
+          "type": "Trust",
+          "kind": "light",
+          "about": "A certificate enrollment question."
+        },
+        {
+          "id": "chain-of-trust",
+          "name": "Chain of trust",
+          "type": "Trust",
+          "kind": "heavy",
+          "about": "Hard. Miss and you take 15."
+        },
+        {
+          "id": "crl-refresh",
+          "name": "CRL refresh",
+          "type": "Trust",
+          "kind": "repair",
+          "about": "Answer a revocation question to restore 25 integrity."
+        },
+        {
+          "id": "publish",
+          "name": "Publish",
+          "type": "Network",
+          "kind": "status",
+          "status": "Isolated",
+          "about": "A publication question. They can't swap next turn."
+        }
+      ]
+    },
+    {
+      "id": "splunk",
+      "name": "Splunk",
+      "type": "Visibility",
+      "integrity": 70,
+      "glyph": "splunk",
+      "lab": "Single instance on domain-joined Linux",
+      "moves": [
+        {
+          "id": "index-search",
+          "name": "Index search",
+          "type": "Visibility",
+          "kind": "light",
+          "about": "A search question. Super effective against Network."
+        },
+        {
+          "id": "forwarder-down",
+          "name": "Forwarder down",
+          "type": "Network",
+          "kind": "heavy",
+          "about": "A hard question about log delivery."
+        },
+        {
+          "id": "retention",
+          "name": "Retention",
+          "type": "Visibility",
+          "kind": "repair",
+          "about": "Answer a retention question to restore 25 integrity."
+        },
+        {
+          "id": "alert",
+          "name": "Alert",
+          "type": "Visibility",
+          "kind": "status",
+          "status": "Noisy",
+          "about": "An alerting question. Leaves them Noisy for a turn."
+        }
+      ]
+    },
+    {
+      "id": "nessus",
+      "name": "Nessus",
+      "type": "Visibility",
+      "integrity": 70,
+      "glyph": "nessus",
+      "lab": "Single instance on domain-joined Linux",
+      "moves": [
+        {
+          "id": "scan-sweep",
+          "name": "Scan sweep",
+          "type": "Visibility",
+          "kind": "light",
+          "about": "A scanning question. Super effective against Network."
+        },
+        {
+          "id": "credentialed-scan",
+          "name": "Credentialed scan",
+          "type": "Identity",
+          "kind": "heavy",
+          "about": "A hard question about scanning with an account."
+        },
+        {
+          "id": "plugin-update",
+          "name": "Plugin update",
+          "type": "Visibility",
+          "kind": "repair",
+          "about": "Answer an update question to restore 25 integrity."
+        },
+        {
+          "id": "false-positive",
+          "name": "False positive",
+          "type": "Visibility",
+          "kind": "status",
+          "status": "Drift",
+          "about": "A triage question. Their timers shrink for two turns."
+        }
+      ]
+    },
+    {
+      "id": "epo",
+      "name": "ePO",
+      "type": "Endpoint",
+      "integrity": 80,
+      "glyph": "epo",
+      "lab": "Single instance; policies and repository for every endpoint",
+      "moves": [
+        {
+          "id": "agent-push",
+          "name": "Agent push",
+          "type": "Endpoint",
+          "kind": "light",
+          "about": "An agent deployment question."
+        },
+        {
+          "id": "policy-enforce",
+          "name": "Policy enforce",
+          "type": "Identity",
+          "kind": "heavy",
+          "about": "A hard question about policies and the system tree."
+        },
+        {
+          "id": "repository-sync",
+          "name": "Repository sync",
+          "type": "Endpoint",
+          "kind": "repair",
+          "about": "Answer a content-update question to restore 25 integrity."
+        },
+        {
+          "id": "quarantine",
+          "name": "Quarantine",
+          "type": "Endpoint",
+          "kind": "status",
+          "status": "Isolated",
+          "about": "A containment question. They can't swap next turn."
+        }
+      ]
+    }
+  ]
+}
