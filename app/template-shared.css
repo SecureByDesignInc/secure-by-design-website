@@ -16,7 +16,9 @@ body.site-editorial .footer-actions>a{display:inline-flex;align-items:center;gap
 .footer-share-manual input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;margin-bottom:10px;padding:9px;border:1px solid #719ead;border-radius:7px;background:#f5fbfd;color:#17394d;font:inherit;font-size:12px}
 @media(max-width:620px){body.site-editorial .footer-actions{flex-basis:100%;justify-content:space-between}.footer-share{max-width:100%}}
 @media(forced-colors:active){.footer-share-button{background:ButtonFace;color:ButtonText;border-color:ButtonText}.footer-share-status{color:CanvasText}}
-body.site-editorial .site-header .site-header-identity{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px}
+/* The header holds only the branding and the navigation (owner direction, 26 October 2026: App availability and
+   Follow along moved to the footer). */
+body.site-editorial .site-header .site-header-identity{display:flex;align-items:center;min-width:0}
 body.site-editorial .site-header .brand{justify-self:start;align-self:center;flex-direction:row;justify-content:flex-start;text-align:left;gap:18px;min-width:0;max-width:100%}
 body.site-editorial .site-header .brand-logo{width:128px;height:128px;object-fit:contain;flex:none;border-radius:12px}
 /* Chromium on Linux applies the system's full hinting to web fonts and grid-fits each Geist glyph, which opened
@@ -38,21 +40,7 @@ body.site-editorial .career-intro{padding:30px;border:1px solid #285479;border-r
 @media(max-width:620px){body.site-editorial .site-header.container{padding:12px 16px;gap:10px}body.site-editorial .site-header nav{justify-content:flex-start;gap:3px}body.site-editorial .site-header nav .nav-link{font-size:.8125rem;padding:10px 12px}body.site-editorial .site-footer.container{padding:26px 18px}body.site-editorial .career-intro{padding:24px}}
 @media print,(forced-colors:active){body.site-editorial .site-header.container,body.site-editorial .site-footer.container{background:Canvas;color:CanvasText}body.site-editorial .site-header .brand,body.site-editorial .footer-partner-name{color:CanvasText}}
 
-@media(max-width:1000px){body.site-editorial .site-header .site-header-identity{grid-template-columns:minmax(0,1fr);gap:14px}body.site-editorial .header-connect{justify-self:start}body.site-editorial .site-header .brand{grid-column:1 / -1}body.site-editorial .site-header .header-socials{grid-column:1 / -1}}
 
-body.site-editorial .site-header nav.header-socials{display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:6px 14px;min-width:0;width:100%;padding:0;border:0;border-radius:0;background:transparent;font-size:.875rem}
-body.site-editorial .header-socials>span,body.site-editorial .app-store-heading>strong{font-family:var(--font-geist-sans),Arial,sans-serif;font-size:14px;font-weight:700;line-height:1.5;color:#f3f7ff}
-body.site-editorial .header-socials>div{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px}
-body.site-editorial .header-socials a{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:5px 8px;border:1px solid #355b7c;border-radius:12px;background:linear-gradient(115deg,#12314e,#0c1d31);color:#e5f3ff;text-decoration:none;font-weight:600;box-shadow:inset 0 1px 0 #a6e8ff0a;transition:background .16s,border-color .16s,transform .16s,box-shadow .16s}
-body.site-editorial .header-socials a:hover{background:linear-gradient(115deg,#174675,#102a47);border-color:#77cce6;color:#fff;transform:translateY(-2px);box-shadow:0 4px 16px #42c7ee18}
-body.site-editorial .header-socials a:active{transform:translateY(0)}
-body.site-editorial .header-socials a:focus-visible{outline:2px solid #8ed5e6;outline-offset:4px}
-/* Logo artwork (18 October 2026): each logo is cut from its tile with the frame removed, so it sits on the pill's gradient; 22px fills the pill's 22px content box. */
-body.site-editorial .header-social-icon{display:block;width:22px;height:22px;flex:none;object-fit:contain}
-body.site-editorial .header-connect{--connect-label:7.5rem;display:grid;gap:10px;min-width:0;justify-self:end}
-body.site-editorial .header-app-stores{display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:4px 14px;min-width:0;text-align:left}
-body.site-editorial .app-store-heading{display:block;margin:0;font-size:16px;color:#f3f7ff}
-body.site-editorial .app-store-heading span{color:#8ed5e6;font-size:14px}
 body.site-editorial .request-access-link{color:#8ed5e6;font-size:14px;font-weight:600}
 body.site-editorial .request-access-link:hover{color:#c7f3ff}
 body.site-editorial .request-access-link:focus-visible{outline:2px solid #8ed5e6;outline-offset:4px}
@@ -68,9 +56,19 @@ body.site-editorial a.app-store-badge:focus-visible{outline:2px solid #8ed5e6;ou
 @media(max-width:620px){body.site-editorial .site-header .brand{gap:12px;font-size:clamp(1.25rem,5.5vw,1.5rem)}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .site-header .brand small{font-size:.75rem;line-height:1.5;margin-top:5px}}
 
 
-@media(prefers-reduced-motion:reduce){body.site-editorial .header-socials a{transition:none}body.site-editorial .header-socials a:hover{transform:none}}
-@media(forced-colors:active){body.site-editorial .header-social-icon{filter:none}body.site-editorial .header-socials a{color:LinkText}}
 
+/* Footer (owner direction, 26 October 2026): the top row pairs the brand with App availability and Follow along,
+   moved here from the header in the same label column; a hairline separates the partners and the site links below.
+   Follow along uses the site's logo pills with their names showing, ending with Book a call. */
+body.site-editorial .site-footer.container{display:grid;gap:24px}
+body.site-editorial .footer-top{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:24px 40px}
+body.site-editorial .footer-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;padding-top:24px;border-top:1px solid #1b2d42}
+body.site-editorial .footer-connect{--connect-label:7.5rem;display:grid;gap:16px;min-width:0;justify-self:end}
+body.site-editorial :is(.footer-apps,.footer-follow){display:grid;grid-template-columns:var(--connect-label) minmax(0,1fr);align-items:center;gap:8px 14px;min-width:0;text-align:left}
+body.site-editorial .footer-connect-label{font-size:14px;font-weight:700;line-height:1.5;color:#f3f7ff}
+body.site-editorial .footer-follow>div{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:1000px){body.site-editorial .footer-top{grid-template-columns:minmax(0,1fr)}body.site-editorial .footer-connect{justify-self:start}}
+@media(max-width:620px){body.site-editorial .site-footer.container{gap:20px}body.site-editorial :is(.footer-apps,.footer-follow){grid-template-columns:minmax(0,1fr);gap:8px}body.site-editorial .footer-connect{gap:18px}body.site-editorial .footer-bottom{padding-top:20px}}
 body.site-editorial .footer-partners{display:flex;flex-wrap:wrap;align-items:center;gap:20px;max-width:100%}
 body.site-editorial .footer-partner{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0}
 body.site-editorial .footer-partner-logo{display:block;flex:none;width:108px;height:40px;padding:6px 8px;border-radius:5px;background:#f8fcff;color-scheme:light}
@@ -98,15 +96,10 @@ body.site-editorial .logo-pill-icon{display:block;width:22px;height:22px;flex:no
 @media(forced-colors:active){body.site-editorial a.logo-pill{color:LinkText;border-color:LinkText}body.site-editorial .logo-pill-icon{forced-color-adjust:none}}
 
 
-/* Compact header on phones: store badges above the social row, each row headed in a shared label column,
-   icon-only social buttons (names stay in the accessible name), and the navigation as one scrollable row. */
-@media(max-width:620px){body.site-editorial .site-header .site-header-identity{gap:10px}body.site-editorial .header-connect{--connect-label:6.25rem;gap:8px;width:100%;justify-self:stretch}body.site-editorial .header-socials>span,body.site-editorial .app-store-heading>strong{font-size:12px;line-height:1.35}body.site-editorial .app-store-badges{gap:2px 8px}body.site-editorial .app-store-item>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}body.site-editorial .site-header>nav{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}body.site-editorial .site-header>nav::-webkit-scrollbar{display:none}body.site-editorial .site-header>nav .nav-link{flex:none;white-space:nowrap}body.site-editorial .site-header>nav .nav-link:focus-visible{outline:2px solid #8ed5e6;outline-offset:-3px}}
-/* Six icon-only pills (Book a call added 18 October 2026) fit one row down to 360px: 20px tiles in 32px pills
-   that grow to 40px when there is room, 4px apart, under a 6.25rem label column with 12px labels. */
-@media(max-width:620px),(max-width:1000px) and (max-height:540px){body.site-editorial .header-socials>div{gap:4px}body.site-editorial .header-socials a{flex:1 1 32px;max-width:40px;justify-content:center;gap:0;min-width:32px;min-height:36px;padding:0 5px}body.site-editorial .header-social-icon{width:20px;height:20px}body.site-editorial .header-social-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
-@media(max-width:359px){body.site-editorial :is(.header-app-stores,.site-header nav.header-socials){grid-template-columns:minmax(0,1fr)}}
-/* Landscape phones: the 88px logo with the store and social rows beside it. */
-@media(min-width:621px) and (max-width:1000px) and (max-height:540px){body.site-editorial .site-header .site-header-identity{grid-template-columns:minmax(0,1fr) auto}body.site-editorial .site-header .brand{grid-column:auto;font-size:1.5rem}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .header-connect{justify-self:end}body.site-editorial .site-header.container{padding-block:12px;gap:10px}}
+/* Compact header on phones: the navigation is one scrollable row. */
+@media(max-width:620px){body.site-editorial .site-header>nav{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}body.site-editorial .site-header>nav::-webkit-scrollbar{display:none}body.site-editorial .site-header>nav .nav-link{flex:none;white-space:nowrap}body.site-editorial .site-header>nav .nav-link:focus-visible{outline:2px solid #8ed5e6;outline-offset:-3px}}
+/* Landscape phones: the 88px logo keeps the header short. */
+@media(min-width:621px) and (max-width:1000px) and (max-height:540px){body.site-editorial .site-header .brand{font-size:1.5rem}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .site-header.container{padding-block:12px;gap:10px}}
 
 /* Frosted panel over Radware's "Contact sales" button in the homepage's Live Threat Map section
    (app/radware-sales-cover.tsx). It blurs what sits beneath it and catches clicks meant for the button. */

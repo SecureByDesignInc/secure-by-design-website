@@ -26,8 +26,11 @@ test('static markup opens in a new tab and is counted by placement', () => {
 });
 
 test('the link appears in the footer, the hub and My Account, and nowhere is embedded', () => {
-  assert.match(read('app/layout.tsx'), /<BookingLink placement="footer" \/>/);
-  assert.match(read('scripts/prepare-career-shell.mjs'), /renderBookingLink\(/);
+  // Owner direction, 26 October 2026: the footer's Book a call is the last pill of Follow along (lib/follow-along.mjs),
+  // rendered with renderBookingLink and placement "footer" by the layout and the generated Community shells.
+  assert.match(read('lib/follow-along.mjs'), /renderBookingLink\(bookingConfig, placement\)/);
+  assert.match(read('app/layout.tsx'), /renderFollowAlong\(videoLibrary\.platforms,bookingConfig,'footer'\)/);
+  assert.match(read('scripts/prepare-career-shell.mjs'), /renderFollowAlong\(platforms,bookingConfig,'footer'\)/);
   assert.match(read('app/community/page.tsx'), /<BookingLink placement="community_hub" \/>/);
   assert.match(read('app/my-progress/progress-dashboard.tsx'), /<BookingLink placement="my_account" \/>/);
   // Every Book a call is the pill: no page renders its own plain or underlined booking link.
