@@ -93,7 +93,7 @@ test('Radware’s “Contact sales” button is blurred', () => {
   assert.match(cover, /export const SALES_BOX = \{ left: \d+, top: \d+, width: \d+, height: \d+ \};/);
   const frame = read('app/threat-map/threat-map-frame.tsx');
   assert.match(frame, /<div className="tm-canvas"[\s\S]*<iframe[\s\S]*<RadwareSalesCover show=\{ready\} \/>[\s\S]*<\/div>/, 'the cover sits in the same scaled box as the map');
-  assert.match(frame, /Math\.min\(width \/ RADWARE_W, height \/ RADWARE_VISIBLE_H\)/);
+  assert.match(frame, /Math\.min\(width \/ RADWARE_W, height \/ visibleH\)/);
   assert.match(read('app/threat-map/threat-map.css'), /\.tm-canvas \{[\s\S]*width: 1240px;[\s\S]*height: 800px;/);
   const css = read('app/template-shared.css');
   assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
@@ -107,7 +107,16 @@ test('Radware’s cookie notice never shows: the map is cut off above it', () =>
   const cover = read('app/radware-sales-cover.tsx');
   const visible = Number((cover.match(/export const RADWARE_VISIBLE_H = (\d+);/) || [])[1]);
   assert.ok(visible > 600 && visible <= 652, 'the visible map stops above the notice, which starts near y = 656');
+  // 27 October 2026: on an iPhone, text autosizing made the notice taller; it started near y = 552.
+  const touch = Number((cover.match(/export const RADWARE_VISIBLE_H_TOUCH = (\d+);/) || [])[1]);
+  assert.ok(touch >= 480 && touch <= 530, 'touch screens stop well above the taller notice');
+  assert.match(cover, /export const TOUCH_QUERY = '\(pointer: coarse\)';/);
   const frame = read('app/threat-map/threat-map-frame.tsx');
-  assert.match(frame, /clipPath: `inset\(0 0 \$\{RADWARE_H - RADWARE_VISIBLE_H\}px 0\)`/, 'nothing below the line can be seen or clicked');
-  assert.match(read('app/threat-map/threat-map.css'), /\.tm-stage \{[\s\S]*aspect-ratio: 1240 \/ 648;/);
+  assert.match(frame, /clipPath: `inset\(0 0 \$\{RADWARE_H - visibleH\}px 0\)`/, 'nothing below the line can be seen or clicked');
+  assert.match(frame, /setVisibleH\(touch\.matches \? RADWARE_VISIBLE_H_TOUCH : RADWARE_VISIBLE_H\)/);
+  assert.match(frame, /useState\(RADWARE_VISIBLE_H\)/);
+  assert.ok(frame.indexOf('window.matchMedia?.(TOUCH_QUERY)') < frame.indexOf('new IntersectionObserver'), 'the cut-off is chosen before the frame is added');
+  const css = read('app/threat-map/threat-map.css');
+  assert.match(css, new RegExp(`\\.tm-stage \\{[\\s\\S]*aspect-ratio: 1240 \\/ ${visible};`));
+  assert.match(css, new RegExp(`@media \\(pointer: coarse\\) \\{\\s*\\.tm-stage \\{\\s*aspect-ratio: 1240 \\/ ${touch};`), 'the stage matches the touch cut-off');
 });

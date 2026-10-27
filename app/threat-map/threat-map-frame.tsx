@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
-import RadwareSalesCover, { RADWARE_H, RADWARE_VISIBLE_H, RADWARE_W } from '../radware-sales-cover';
+import RadwareSalesCover, { RADWARE_H, RADWARE_VISIBLE_H, RADWARE_VISIBLE_H_TOUCH, RADWARE_W, TOUCH_QUERY } from '../radware-sales-cover';
 
 const threatMapUrl = 'https://livethreatmap.radware.com/';
 
@@ -10,7 +10,8 @@ const threatMapUrl = 'https://livethreatmap.radware.com/';
 // page has loaded. The direct link stays visible in case the frame can't load. The map is drawn at a fixed
 // 1240 × 800 and scaled to fit, so Radware always shows the same layout and the blur over its "Contact
 // sales" button lands in the right place on any screen (and in full screen). Only the top RADWARE_VISIBLE_H
-// pixels are shown, which keeps Radware's cookie notice at the bottom of its page out of sight.
+// pixels are shown (RADWARE_VISIBLE_H_TOUCH on phones and tablets, where the notice is taller), which keeps
+// Radware's cookie notice at the bottom of its page out of sight.
 export default function ThreatMapFrame() {
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
@@ -18,6 +19,18 @@ export default function ThreatMapFrame() {
   const [fullscreen, setFullscreen] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
   const [fit, setFit] = useState({ scale: 0, x: 0, y: 0 });
+  const [visibleH, setVisibleH] = useState(RADWARE_VISIBLE_H);
+
+  // Touch screens show less of the map, because Radware's cookie notice is taller there. This effect comes
+  // before the one that adds the frame, so the frame is never shown with the desktop cut-off on a phone.
+  useEffect(() => {
+    const touch = window.matchMedia?.(TOUCH_QUERY);
+    if (!touch) return;
+    const sync = () => setVisibleH(touch.matches ? RADWARE_VISIBLE_H_TOUCH : RADWARE_VISIBLE_H);
+    sync();
+    touch.addEventListener?.('change', sync);
+    return () => touch.removeEventListener?.('change', sync);
+  }, []);
 
   // Add Radware's frame as the map comes near the screen (on the homepage it sits just below the hero), so
   // nothing loads from Radware during hydration or for visitors who never reach it.
@@ -43,14 +56,14 @@ export default function ThreatMapFrame() {
     if (!element) return;
     const measure = () => {
       const width = element.clientWidth, height = element.clientHeight;
-      const scale = Math.min(width / RADWARE_W, height / RADWARE_VISIBLE_H);
-      setFit({ scale, x: (width - RADWARE_W * scale) / 2, y: (height - RADWARE_VISIBLE_H * scale) / 2 });
+      const scale = Math.min(width / RADWARE_W, height / visibleH);
+      setFit({ scale, x: (width - RADWARE_W * scale) / 2, y: (height - visibleH * scale) / 2 });
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(element);
     return () => observer.disconnect();
-  }, []);
+  }, [visibleH]);
 
   useEffect(() => {
     if (ready || !mounted) return;
@@ -94,7 +107,7 @@ export default function ThreatMapFrame() {
           {slow && <p>Taking a while? <a href={threatMapUrl} target="_blank" rel="noopener noreferrer">Open it on Radware</a>.</p>}
         </div>
       </div>
-      <div className="tm-canvas" style={{ transform: `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`, clipPath: `inset(0 0 ${RADWARE_H - RADWARE_VISIBLE_H}px 0)` }}>
+      <div className="tm-canvas" style={{ transform: `translate(${fit.x}px, ${fit.y}px) scale(${fit.scale})`, clipPath: `inset(0 0 ${RADWARE_H - visibleH}px 0)` }}>
         {mounted && <iframe
           className={ready ? 'is-ready' : undefined}
           src={threatMapUrl}
