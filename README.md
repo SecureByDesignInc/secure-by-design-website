@@ -8,9 +8,9 @@ Home combines the mission statement and About page. It leads with a compact “C
 
 The Technical Blog shows the first article of each series and standalone posts. The Foundations parent article links to Parts 2–6, while child articles retain previous/next links and a return link to the parent’s series list. Article pages retain serif headlines, a centered reading column, and expandable contents. The white background, navy text, and restrained blue accents continue throughout the reading pages.
 
-The Cyber Range login sits beside the heading on desktop and directly below it on mobile. It is an interface preview: nonempty fields open a sample workspace. No identity is authenticated, no data is sent to a login service or persisted, and no lab systems are started. The password is discarded after submission. Logout or refresh resets the preview. Live accounts and labs are marked coming soon.
+The Cyber Range (`/cyber-range`, and `/range-app/` for the native app) is one battle against the computer: seven multiple-choice rounds from the lab question bank, open to everyone. Every player gets a random operator and callsign (kept in the browser for visitors, on the account for signed-in learners). Questions come from `/api/range` without their answers (`lib/range/api.mjs`).
 
-Cyber Range (`/cyber-range`, with `/how-to` and `/guides-and-labs`) and the Community and career pages (`/careers`, `/career-explorer`, `/career-goals`, `/resources`) are offline until the owner relaunches them; they return the site’s not-found page and their source is retained. The `/cyber-range` page combines planned walkthroughs and sandbox exercises, reusing the existing login preview. The site navigation shows a single “Cyber Range” item. The former `/how-to` and `/guides-and-labs` addresses redirect to it. Each topic links to an existing background article; unfinished guides and labs remain marked as coming soon.
+The old `/how-to` and `/guides-and-labs` routes and the Community and career pages (`/careers`, `/career-explorer`, `/career-goals`, `/resources`) are offline until the owner relaunches them; they return the site’s not-found page and their source is retained. The `/cyber-range` page combines planned walkthroughs and sandbox exercises, reusing the existing login preview. The site navigation shows a single “Cyber Range” item. The former `/how-to` and `/guides-and-labs` addresses redirect to it. Each topic links to an existing background article; unfinished guides and labs remain marked as coming soon.
 
 ## Editing
 
@@ -26,7 +26,7 @@ Cyber Range (`/cyber-range`, with `/how-to` and `/guides-and-labs`) and the Comm
 - `content/*.md`: source writing. Edit Foundations metadata and reading order in `content/series.json`; edit standalone post metadata in `content/posts.json`. Standalone posts appear after the featured introduction and do not change the six-part series navigation.
 - `content/articles.json`: generated content; rebuild after changing the Markdown.
 - `content/cissp-domains.json`: shared CISSP domain names. Every entry in `series.json` and `posts.json` must specify a numeric `cisspDomain` from 1 to 8; content preparation rejects missing or invalid categories. Classify each new post by its main focus rather than inheriting its series category.
-- `app/cyber-range/page.tsx` and `app/cyber-range/lab-access.tsx`: Cyber Range description and local login preview.
+- `app/cyber-range/`: the Range page, its battle (`range-core.js`), artwork (`avatars.js`) and styles; `scripts/prepare-range.mjs` copies them to `public/range-app/`. Operator sprite sets are rendered with `scripts/range-sprites/`.
 - `app/rmf-series/` and `content/rmf.ts`: RMF chapters and the system profile.
 - `app/rmf-series/phases-and-evidence/` and `content/rmf-evidence.ts`: consolidated phase, artifact, responsibility, authorization-package, and evidence-maintenance guide.
 - `app/technical-training/page.tsx`, `app/videos/training-hub.tsx` and `content/videos.json`: the Training Hub at `/technical-training` (the old `/training` and `/videos` addresses redirect), one library for every course, and the editable training/channel catalog.
