@@ -8,7 +8,9 @@
 .cr-page a { text-decoration: none; touch-action: manipulation; color: #8ae5ef; }
 .cr-page a:hover { color: #c4f4f9; }
 .cr-page :is(a, button, input, select):focus-visible { outline: 3px solid #f7bd68; outline-offset: 4px; }
-.cr-page button, .cr-page input { font: inherit; color: inherit; }
+.cr-page button, .cr-page input { font: inherit; }
+/* Zero specificity, so each button's own text color (.cr-btn-primary's dark ink on cyan) wins over this reset. */
+.cr-page :where(button, input) { color: inherit; }
 .cr-page button { cursor: pointer; }
 .cr-page button:disabled { cursor: default; opacity: .55; }
 .cr-page h1, .cr-page h2, .cr-page h3, .cr-page p, .cr-page ul, .cr-page ol { margin: 0; }

@@ -3,9 +3,8 @@
 import { useEffect, useRef } from 'react';
 import { mountRange } from './range-core.js';
 
-// Mounts the Range (range-core.js) under the page's own intro, in the site shell, with no frame: the page is as tall
-// as its content and the layout answers the viewport like every other hub. A #view hash (for example
-// /cyber-range#decks) opens that section.
+// Mounts the Range's battle (range-core.js) under the page's own intro, in the site shell, with no frame: the page is
+// as tall as its content and the layout answers the viewport like every other hub.
 export default function RangeMount() {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
