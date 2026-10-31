@@ -24,7 +24,10 @@ test('the Range page is published: route, menu, sitemap, Community shells and th
  for(const file of ['index.html','range.css','battle.css','range-core.js','avatars.js'])assert.ok(fs.existsSync('public/range-app/'+file),file);
  assert.match(read('public/range-app/index.html'),/\/range-app\/battle\.css/);
  assert.match(read('app/cyber-range/page.tsx'),/import '\.\/battle\.css'/);
- assert.match(read('public/range-app/index.html'),/mountRange\(document\.getElementById\('range'\), \{ standalone: true \}\)/);
+ // The page's policy is script-src 'self', so the start script is a file: an inline one never runs (31 October 2026).
+ assert.match(read('public/range-app/index.html'),/<script type="module" src="\/range-app\/start\.js"><\/script>/);
+ assert.doesNotMatch(read('public/range-app/index.html'),/<script(?![^>]*\bsrc=)[^>]*>/,'no inline script on /range-app/');
+ assert.match(read('public/range-app/start.js'),/mountRange\(document\.getElementById\('range'\), \{ standalone: true \}\)/);
  assert.match(read('public/_headers'),/\/range-app\/\*\n  Content-Security-Policy: default-src 'self'; script-src 'self' https:\/\/static\.cloudflareinsights\.com;/);
 });
 
