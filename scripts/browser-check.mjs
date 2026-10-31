@@ -106,7 +106,7 @@ for (const [from, label, to] of [
 }
 
 // The calmer header and the ATO Package Builder in the Training Hub (owner direction, 27 October 2026): the old hub address
-// lands on the Training Hub's Tools, which hold the builder and the seven RMF steps; the header has four menu items and a
+// lands on the Training Hub's Tools, which hold the builder and the seven RMF steps; the header has three menu items (the Cyber Range item was removed on 31 October 2026) and a
 // My Account button, and on phones a menu button opens them.
 {
   const page = await context.newPage();
@@ -119,14 +119,14 @@ for (const [from, label, to] of [
     if (rows !== 7) throw new Error(`the Training Hub shows ${rows} RMF steps, expected 7`);
     if (!(await page.locator('#ato-package-builder a[href="/grc-rmf-training/workspace"]').count())) throw new Error('the Tools card does not open the builder');
     const items = await page.locator('.site-header nav .nav-link').count();
-    if (items !== 4 || !(await page.locator('.site-header a.nav-account').isVisible())) throw new Error(`the header shows ${items} menu items and ${await page.locator('.site-header a.nav-account').count()} account buttons`);
+    if (items !== 3 || !(await page.locator('.site-header a.nav-account').isVisible())) throw new Error(`the header shows ${items} menu items and ${await page.locator('.site-header a.nav-account').count()} account buttons`);
     await page.screenshot({ path: 'guide-screens/training-hub-tools-desktop.png' });
     await page.setViewportSize({ width: 390, height: 844 });
     if (await page.locator('.site-header nav').isVisible()) throw new Error('the phone menu is open before the menu button is pressed');
     await page.locator('.site-header .menu-toggle').click();
     if (!(await page.locator('.site-header nav').isVisible()) || !(await page.locator('.site-header a.nav-account').isVisible())) throw new Error('the phone menu does not open');
     await page.screenshot({ path: 'guide-screens/header-phone-menu.png' });
-    results.push({ path: '/grc-rmf-training → Training Hub tools', status: 200, problems: [], notes: ['7 RMF steps, 4 menu items and the account button, phone menu opens'] });
+    results.push({ path: '/grc-rmf-training → Training Hub tools', status: 200, problems: [], notes: ['7 RMF steps, 3 menu items and the account button, phone menu opens'] });
   } catch (error) { results.push({ path: '/grc-rmf-training → Training Hub tools', status: 0, problems: [String(error.message || error).split('\n')[0].slice(0, 200)], notes: [] }); blocking++; }
   await page.close();
 }
