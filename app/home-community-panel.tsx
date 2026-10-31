@@ -5,7 +5,7 @@ import { ArrowRight, Share2 } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
 import { copyPublicLink, homepageShareUrl } from '../public/footer-share.mjs';
 
-// The community panel: the only homepage section after the Live Threat Map (owner's request, 17 October 2026).
+// The community panel: the only homepage section after the Cyber Range taster (owner's requests, 17 and 31 October 2026).
 // Pay what you can, ways to help without paying, and the supporter wall. It replaced "More ways to figure it
 // out", "Choose your next step" and "There's always more to understand".
 

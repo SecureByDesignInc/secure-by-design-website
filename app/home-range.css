@@ -1,18 +1,7 @@
-/* Homepage: the Cyber Range taster and the card to the Live Threat Map (owner's request, 31 October 2026). The taster
-   and card use the Range's styles (cyber-range/range.css, battle.css); these rules only fit them into the homepage. */
-/* The homepage's own width (.container), so the taster and the card line up with the sections around them. */
-.cr-page.home-range .cr-container, .cr-page.home-tm-card .cr-container { width: min(1180px, calc(100% - 48px)); }
-.cr-page.home-range { padding: 56px 0 8px; }
+/* Homepage: the Cyber Range taster, right after the hero (owner's requests, 31 October 2026; the Live Threat Map was
+   removed). The taster uses the Range's styles (cyber-range/range.css, battle.css); these rules only fit it in. */
+/* The homepage's own width (.container), so the taster lines up with the sections around it. */
+.cr-page.home-range .cr-container { width: min(1180px, calc(100% - 48px)); }
+.cr-page.home-range { padding: 56px 0 64px; }
 .cr-page.home-range .cr-section-first { padding-top: 0; }
-.cr-page.home-tm-card { padding: 20px 0 64px; }
-.cr-page .home-tm-link { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 26px; color: #eef7fc; text-decoration: none; transition: border-color .2s ease, background .2s ease; }
-.cr-page .home-tm-link:hover { border-color: #8ae5ef; background: #13304a; color: #eef7fc; }
-.home-tm-copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.home-tm-title { color: #f1f8ff; font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; letter-spacing: -.03em; line-height: 1.2; }
-.home-tm-title em { font-style: normal; color: #8bdde9; }
-.home-tm-text { color: #adc3d2; font-size: 15px; line-height: 1.6; max-width: 640px; }
-.home-tm-cta { flex: none; }
-@media (max-width: 700px) {
-  .cr-page.home-range { padding-top: 36px; }
-  .cr-page .home-tm-link { flex-direction: column; align-items: stretch; padding: 20px; }
-}
+@media (max-width: 700px) { .cr-page.home-range { padding: 36px 0 48px; } }
