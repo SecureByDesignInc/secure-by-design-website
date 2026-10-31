@@ -29,6 +29,8 @@ test('the Range page is published: route, menu, sitemap, Community shells and th
  assert.doesNotMatch(read('public/range-app/index.html'),/<script(?![^>]*\bsrc=)[^>]*>/,'no inline script on /range-app/');
  assert.match(read('public/range-app/start.js'),/mountRange\(document\.getElementById\('range'\), \{ standalone: true \}\)/);
  assert.match(read('public/_headers'),/\/range-app\/\*\n  Content-Security-Policy: default-src 'self'; script-src 'self' https:\/\/static\.cloudflareinsights\.com;/);
+ // The app's WebView revalidates the Range's files, so an update is never stuck behind a cached copy.
+ assert.match(read('public/_headers'),/\/range-app\/\*\n  Content-Security-Policy: [^\n]+\n  Cache-Control: no-cache\n/);
 });
 
 test('the page is the battle alone, a copy of one core, and never bundles answers',()=>{
