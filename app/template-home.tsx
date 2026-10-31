@@ -2,7 +2,8 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { ArrowRight, Network } from 'lucide-react';
 import { GradientButton } from '../components/saleshook/gradient-button';
-import HomeThreatMap from './home-threat-map';
+import HomeRangeTaster from './home-range-taster';
+import HomeThreatMapCard from './home-threat-map-card';
 import HomeCommunityPanel from './home-community-panel';
 
 // The decorative WebGL layer (three.js) loads only once the page is idle.
@@ -52,7 +53,8 @@ export default function TemplateHome() {
       <div className="sbd-hero-actions"><GradientButton asChild><a href="/technical-training">Find your starting point <ArrowRight size={18}/></a></GradientButton><a className="sbd-secondary-button" href="/inside-the-network"><Network size={18}/> Step inside the network</a></div>
       <small>For the first question. The next challenge. And everything in between.</small>
     </div></section>
-    <HomeThreatMap/>
+    <HomeRangeTaster/>
+    <HomeThreatMapCard/>
     <HomeCommunityPanel/>
   </main>;
 }

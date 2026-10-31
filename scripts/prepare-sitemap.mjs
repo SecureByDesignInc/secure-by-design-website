@@ -1,6 +1,7 @@
 // Writes public/sitemap.xml from the published pages: the main sections and every Training Hub course.
 // Offline sections (Security Journal, the retired /careers Community pages) are deliberately left out.
-// The Cyber Range returned on 26 October 2026 as the stack-duel arena at /cyber-range.
+// The Cyber Range is at /cyber-range (26 October 2026; one battle since 30 October). The Live Threat Map has its own
+// page again at /threat-map (31 October 2026).
 // Community & Careers at /community and its state pages are published.
 import { readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../', import.meta.url);
@@ -10,7 +11,7 @@ const library = read('content/videos.json');
 const configuration = read('content/configuration-courses.json');
 const communityStates = read('content/community-states.json');
 // My Account is noindex (it is an account page), so it stays out of the sitemap.
-const paths = ['/', '/inside-the-network', '/technical-training', '/grc-rmf-training/workspace', '/community', '/cyber-range', '/privacy'];
+const paths = ['/', '/inside-the-network', '/technical-training', '/grc-rmf-training/workspace', '/community', '/cyber-range', '/threat-map', '/privacy'];
 for (const entry of [...library.episodes, ...library.courses]) {
   const guide = entry.training?.guide;
   // List the address a guide is served at: /grc-rmf-training/rmf/index.html redirects to /grc-rmf-training/rmf/.

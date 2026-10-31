@@ -4,7 +4,8 @@
 // in this browser, a signed-in learner's on the account (/api/range/me). Questions come from /api/range/battle without
 // their answers and each choice is checked by POST /api/range/answer. The computer's play is simulated here; nothing is
 // scored or saved. mountRange() renders into a root element: the site route (app/cyber-range) mounts it under the
-// page's own intro; the app's standalone page (public/range-app, a copy) mounts it alone.
+// page's own intro; the app's standalone page (public/range-app, a copy) mounts it alone; the homepage mounts it with
+// { taster: true } (owner's request, 31 October 2026): one round, then "Play the full battle".
 import { bust, figure, spriteHtml, spriteSetFor, SPRITES, BASES, GLOWS, MARKS } from './avatars.js';
 
 const API = '/api/range';
@@ -36,7 +37,7 @@ function guestOperator() {
  return o;
 }
 
-export function mountRange(root, { standalone = false } = {}) {
+export function mountRange(root, { standalone = false, taster = false } = {}) {
  const S = { catalog: null, me: null, op: null, level: 'normal', sound: false, b: null, error: '' };
  const inApp = standalone || new URLSearchParams(location.search).get('app') === '1';
  root.classList.add('cr-page');
@@ -55,8 +56,19 @@ export function mountRange(root, { standalone = false } = {}) {
  }
 
  // ---- Setup ------------------------------------------------------------------------------------------------------
+ function renderTaster() {
+  shell(`<div class="cr-container"><section class="cr-section cr-section-first bt-taster">
+   <div class="cr-heading"><div><p class="cr-kicker">Cyber Range</p><h2>Try one round.</h2><p>One question from the lab network against a resident operator. Answer right to hit; answer fast to hit harder.</p></div></div>
+   ${S.error ? `<p class="cr-note bt-error" role="alert">${esc(S.error)}</p>` : ''}
+   <div class="cr-tile bt-taster-start">
+    <div class="bt-taster-fig">${figure(S.op, { height: 150, label: 'Your operator' })}</div>
+    <div class="bt-taster-copy"><span class="cr-label">You are</span><b class="bt-taster-name">${esc(S.op.callsign)}</b><p>Fifteen seconds, four answers. Your operator and callsign are assigned at random and stay yours.</p>
+     <div class="cr-row"><button type="button" class="cr-btn cr-btn-primary" data-act="start">Start the round</button>${siteLink('/cyber-range', 'Play the full battle').replace('<a ', '<a class="cr-btn cr-btn-quiet" ')}</div></div>
+   </div></section></div>`);
+ }
  function renderSetup() {
   stopTimer(); S.b = null;
+  if (taster) return renderTaster();
   const signedIn = !!S.me?.reader;
   const keep = signedIn ? 'They’re kept on your account.' : inApp ? `They’re kept on this device. ${siteLink('/my-progress', 'Sign in on the website')} to keep them on an account.` : `They’re kept in this browser. ${siteLink('/my-progress', 'Sign in')} with a free Community account to keep them everywhere.`;
   const levels = Object.entries(LEVELS).map(([k, l]) => `<button type="button" class="cr-pick bt-level" data-act="level" data-v="${k}" aria-pressed="${S.level === k}"><b>${l.label}</b><span>${l.about}</span></button>`).join('');
@@ -85,6 +97,7 @@ export function mountRange(root, { standalone = false } = {}) {
   stopTimer();
   let qs;
   try { qs = (await api('/battle')).questions; } catch (e) { S.error = e.message; renderSetup(); return; }
+  if (taster) qs = qs.slice(0, 1);
   S.error = '';
   const r = pickOne(S.catalog.residents);
   const opp = { callsign: r.callsign, operator: { base: r.base, glow: r.glow, mark: r.mark, sprite: SPRITES[r.id] ? r.id : null } };
@@ -103,7 +116,7 @@ export function mountRange(root, { standalone = false } = {}) {
   const n = S.b.qs.length;
   shell(`<div class="cr-container bt-wrap"><section class="cr-section cr-section-first">
    <div class="cr-tile cr-tile-accent bt-arena" id="bt-arena">
-    <div class="bt-hud">${hudSide('a')}<div class="bt-clockbox"><span class="bt-round" id="bt-round">Round 1/${n}</span><b class="bt-clock" id="bt-clock">${TIME / 1000}</b><div class="bt-tbar" id="bt-tbarwrap"><i id="bt-tbar"></i></div></div>${hudSide('b')}</div>
+    <div class="bt-hud">${hudSide('a')}<div class="bt-clockbox"><span class="bt-round" id="bt-round">${taster ? 'One round' : `Round 1/${n}`}</span><b class="bt-clock" id="bt-clock">${TIME / 1000}</b><div class="bt-tbar" id="bt-tbarwrap"><i id="bt-tbar"></i></div></div>${hudSide('b')}</div>
     <div class="rs-scene bt-scene" id="bt-scene" aria-hidden="true"><div class="rs-camera" id="bt-camera"><div class="rs-floor"></div><div class="rs-haze"></div><div class="rs-platform a"></div><div class="rs-platform b"></div>
      <div class="rs-lane a"><div class="bt-fighter" id="bt-f-a">${fighterArt('a')}</div></div><div class="rs-lane b"><div class="bt-fighter" id="bt-f-b">${fighterArt('b')}</div></div>
      <div class="rs-fx" id="bt-fx"></div></div><div class="rs-flash" id="bt-flash"></div><div class="rs-banner" id="bt-banner"></div></div>
@@ -111,7 +124,7 @@ export function mountRange(root, { standalone = false } = {}) {
      <div class="bt-q"><span class="cr-chip bt-topic" id="bt-topic"></span><p class="bt-prompt" id="bt-prompt" aria-live="polite">Get ready.</p><p class="bt-status" id="bt-status" aria-live="polite"></p></div>
      <div class="bt-opts" id="bt-opts"></div>
     </div>
-    <div class="bt-foot"><button type="button" class="cr-btn cr-btn-small bt-forfeit" data-act="forfeit">Forfeit</button><span class="bt-keys">Keys: A to D, or 1 to 4</span><button type="button" class="cr-btn cr-btn-small cr-btn-quiet" data-act="sound" aria-pressed="${S.sound}">Sound ${S.sound ? 'on' : 'off'}</button></div>
+    <div class="bt-foot">${taster ? '<span></span>' : '<button type="button" class="cr-btn cr-btn-small bt-forfeit" data-act="forfeit">Forfeit</button>'}<span class="bt-keys">Keys: A to D, or 1 to 4</span><button type="button" class="cr-btn cr-btn-small cr-btn-quiet" data-act="sound" aria-pressed="${S.sound}">Sound ${S.sound ? 'on' : 'off'}</button></div>
    </div>
    <div id="bt-result"></div>
   </section></div>`);
@@ -131,7 +144,7 @@ export function mountRange(root, { standalone = false } = {}) {
   const q = b.qs[b.round]; b.round++;
   const L = LEVELS[S.level];
   b.cur = { q, botCorrect: Math.random() < L.acc, botMs: L.min + Math.random() * (L.max - L.min), botShown: false };
-  $('#bt-round').textContent = `Round ${b.round}/${b.qs.length}`;
+  $('#bt-round').textContent = taster ? 'One round' : `Round ${b.round}/${b.qs.length}`;
   $('#bt-topic').innerHTML = `<span class="cr-dot" style="background:${typeColor(q.topic)}"></span>${esc(q.topic)}`;
   $('#bt-prompt').textContent = q.prompt;
   $('#bt-status').textContent = '';
@@ -219,11 +232,11 @@ export function mountRange(root, { standalone = false } = {}) {
   $('#bt-play').innerHTML = '';
   const foot = $('.bt-foot'); if (foot) foot.hidden = true;
   const right = b.log.filter(r => r.correct).length;
-  const head = forfeit ? 'You forfeited.' : winner === 'a' ? `You win with ${b.hp.a} HP left.` : winner === 'b' ? `${esc(b.opp.callsign)} wins with ${b.hp.b} HP left.` : 'A draw.';
+  const head = taster ? (winner === 'a' ? 'You win the round.' : winner === 'b' ? `${esc(b.opp.callsign)} takes the round.` : 'No winner this round.') : forfeit ? 'You forfeited.' : winner === 'a' ? `You win with ${b.hp.a} HP left.` : winner === 'b' ? `${esc(b.opp.callsign)} wins with ${b.hp.b} HP left.` : 'A draw.';
   const optText = (q, k) => k ? esc(q.options[KEYS.indexOf(k)]) : 'no answer';
   $('#bt-result').innerHTML = `<div class="cr-tile bt-result">
-   <div class="cr-row cr-between"><div><h3>${head}</h3><p>You answered ${right} of ${b.log.length} right.</p></div>
-    <div class="cr-row"><button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button><button type="button" class="cr-btn cr-btn-quiet" data-act="setup">Change difficulty</button></div></div>
+   <div class="cr-row cr-between"><div><h3>${head}</h3><p>${taster ? 'The full battle is seven rounds against the same clock, at the difficulty you choose.' : `You answered ${right} of ${b.log.length} right.`}</p></div>
+    <div class="cr-row">${taster ? `${siteLink('/cyber-range', 'Play the full battle').replace('<a ', '<a class="cr-btn cr-btn-primary" ')}<button type="button" class="cr-btn cr-btn-quiet" data-act="start">Try another round</button>` : '<button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button><button type="button" class="cr-btn cr-btn-quiet" data-act="setup">Change difficulty</button>'}</div></div>
    ${b.log.length ? `<ol class="bt-recap">${b.log.map((r, i) => `<li class="${r.correct ? 'ok' : 'miss'}"><span class="bt-rn">${i + 1}</span><div><b>${esc(r.q.prompt)}</b><p>${r.correct ? 'You got it' : `You: ${optText(r.q, r.choice)}`}.${r.check ? ` Answer: <b>${optText(r.q, r.check.answer)}</b>. ${esc(r.check.explanation || '')} ${r.check.lesson ? siteLink(r.check.lesson, 'See the lesson') : ''}` : ''}</p></div></li>`).join('')}</ol>` : ''}
   </div>`;
  }

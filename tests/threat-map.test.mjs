@@ -13,15 +13,19 @@ test('only Radware’s map host is added to the frames the site may load', () =>
   assert.match(contentSecurityPolicy, /frame-ancestors 'self'/);
 });
 
-test('the Threat Map lives on the homepage; its old page is gone from the menu and sitemap and redirects there', () => {
-  // Owner's request (15 October 2026): the Threat Map moved onto the homepage and the separate page was removed.
+test('the Threat Map has its own page again, in the sitemap, and the homepage links to it', () => {
+  // Owner's request (15 October 2026): the Threat Map moved onto the homepage. 31 October 2026: it moved back to its own
+  // page at /threat-map, and the Cyber Range taster took its homepage place, with a card linking to the map.
   const links = JSON.parse(read('content/navigation.json'));
-  assert.ok(!links.some(([href]) => href === '/threat-map'));
-  for (const name of ['careers', 'career-records', 'resource-preferences', 'community-contributions']) assert.doesNotMatch(read(`server/career-pages/${name}.html`), /\/threat-map/, name);
-  assert.doesNotMatch(read('public/sitemap.xml'), /threat-map/);
-  assert.doesNotMatch(read('scripts/prepare-sitemap.mjs'), /threat-map/);
-  assert.throws(() => read('app/threat-map/page.tsx'));
-  assert.match(read('server/index.js'), /if\(path==='\/threat-map'\|\|path==='\/threat-map\/'\)return new URL\('\/#threat-map',url\)/);
+  assert.ok(!links.some(([href]) => href === '/threat-map'), 'not in the menu');
+  assert.match(read('app/threat-map/page.tsx'), /<ThreatMapSection \/>/);
+  assert.match(read('app/threat-map/page.tsx'), /import '\.\/threat-map\.css'/);
+  assert.match(read('app/threat-map/threat-map-section.tsx'), /<h1 id="threat-map-title"/);
+  assert.doesNotMatch(read('server/index.js'), /path==='\/threat-map'/, 'no redirect to the homepage');
+  assert.match(read('public/sitemap.xml'), /securebydesigninc\.com\/threat-map</);
+  assert.match(read('scripts/prepare-sitemap.mjs'), /'\/threat-map'/);
+  assert.match(read('app/home-threat-map-card.tsx'), /href="\/threat-map"/);
+  assert.doesNotMatch(read('app/home-threat-map-card.tsx') + read('app/template-home.tsx'), /ThreatMapFrame|radware\.com/i, 'nothing from Radware loads on the homepage');
 });
 
 test('the map loads automatically, sandboxed, over a placeholder, with a direct link', () => {
@@ -42,11 +46,11 @@ test('the homepage credits Radware without implying a partnership, and privacy d
   // The credit sits just under "Live · Radware" in the map's toolbar (owner's request, 15 October 2026).
   const section = read('app/threat-map/threat-map-frame.tsx');
   assert.match(section, /<div className="tm-source">\s*<span className="tm-live">[\s\S]*?Live · Radware<\/span>\s*<p className="tm-credit">The live map is provided by Radware\. Secure By Design is not affiliated with Radware\.<\/p>/);
-  assert.doesNotMatch(read('app/home-threat-map.tsx'), /tm-credit/);
+  assert.doesNotMatch(read('app/threat-map/threat-map-section.tsx'), /tm-credit/);
   const privacy = read('app/privacy/page.tsx');
   assert.match(privacy, /<strong>Radware<\/strong>/);
-  assert.match(privacy, /loads from Radware when you open the homepage/);
-  assert.doesNotMatch(privacy, /Threat Map page|live threat window/);
+  assert.match(privacy, /loads from Radware when you open the Live Threat Map page/);
+  assert.doesNotMatch(privacy, /live threat window/);
   assert.doesNotMatch(privacy + section, /Check Point/);
 });
 
@@ -56,13 +60,14 @@ test('the browser check ignores only Radware’s own frame, not this site’s er
   assert.match(check, /livethreatmap\\.radware\\.com/);
 });
 
-test('the homepage: hero, Live Threat Map, then the community panel and nothing else', () => {
+test('the homepage: hero, the Cyber Range taster, the Threat Map card, then the community panel and nothing else', () => {
   // Owner's request (15 October 2026): the Threat Map replaced "A note from Secure By Design" and "Start building
   // your network"; the live threat window was removed so the map shows once.
   // Owner's request (17 October 2026): the community panel is the only section after the map; "More ways to
   // figure it out", "Choose your next step" and "There's always more to understand" were removed.
   const home = read('app/template-home.tsx');
-  const order = ['sbd-hero-title', '<HomeThreatMap/>', '<HomeCommunityPanel/>'].map(marker => home.indexOf(marker));
+  // Owner's request (31 October 2026): the Cyber Range's one-round taster takes the map's place, then a card to /threat-map.
+  const order = ['sbd-hero-title', '<HomeRangeTaster/>', '<HomeThreatMapCard/>', '<HomeCommunityPanel/>'].map(marker => home.indexOf(marker));
   assert.ok(order.every(index => index >= 0), 'every homepage section is present');
   assert.deepEqual([...order].sort((a, b) => a - b), order);
   assert.doesNotMatch(home, /HomeThreatWindow|sbd-creator-note|sbd-start|Start building/);
@@ -74,14 +79,19 @@ test('the homepage: hero, Live Threat Map, then the community panel and nothing 
   assert.match(read('app/page.tsx'), /'\.\/home-community-panel\.css'/);
   assert.throws(() => read('app/home-threat-window.tsx'));
   assert.doesNotMatch(read('app/template-home.css'), /sbd-monitor|sbd-watch|sbd-creator|sbd-start/);
-  const section = read('app/home-threat-map.tsx');
+  assert.match(read('app/home-range-taster.tsx'), /mountRange\(root\.current, \{ taster: true \}\)/);
+  const section = read('app/threat-map/threat-map-section.tsx');
   assert.match(section, /id="threat-map"/);
   assert.match(section, /<ThreatMapFrame \/>/);
   assert.match(section, /HOW TO READ IT/);
-  assert.doesNotMatch(section, /<h1/, 'the hero keeps the page’s only main heading');
-  // The section's styles load after the homepage's so they keep their own type.
+  // On its own page the map's title is the page's main heading; on the homepage the hero keeps the only one.
+  assert.match(section, /<h1 id="threat-map-title"/);
+  assert.equal((home.match(/<h1/g) || []).length, 1, 'the hero keeps the homepage’s only main heading');
+  assert.doesNotMatch(read('app/home-threat-map-card.tsx'), /<h1/);
+  // The Range's styles load after the homepage's so the taster keeps its own type.
   const page = read('app/page.tsx');
-  assert.ok(page.indexOf("'./template-home.css'") < page.indexOf("'./threat-map/threat-map.css'"));
+  assert.ok(page.indexOf("'./template-home.css'") < page.indexOf("'./cyber-range/range.css'"));
+  assert.doesNotMatch(page, /threat-map\.css/, 'the map’s styles load on its own page only');
 });
 
 
@@ -99,7 +109,7 @@ test('Radware’s “Contact sales” button is blurred', () => {
   assert.match(css, /\.sbd-sales-cover\{[^}]*backdrop-filter:blur\(/);
   assert.match(css, /\.sbd-sales-cover\.is-shown\{[^}]*pointer-events:auto/, 'the cover catches clicks meant for the button');
   // Owner's request (15 October 2026): the page doesn't mention the blur or call the map unchanged.
-  assert.doesNotMatch(read('app/home-threat-map.tsx') + read('app/threat-map/threat-map-frame.tsx'), /blurred|unchanged/i);
+  assert.doesNotMatch(read('app/threat-map/threat-map-section.tsx') + read('app/threat-map/threat-map-frame.tsx'), /blurred|unchanged/i);
 });
 
 test('Radware’s cookie notice never shows: the map is cut off above it', () => {

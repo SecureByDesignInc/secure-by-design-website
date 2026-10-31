@@ -1,15 +1,15 @@
-import ThreatMapFrame from './threat-map/threat-map-frame';
+import ThreatMapFrame from './threat-map-frame';
 
-// The Live Threat Map, on the homepage right after the hero (owner's request, 15 October 2026; it replaced
-// "A note from Secure By Design", "Start building your network", the live threat window and the separate
-// /threat-map page, which now redirects here). Radware's map loads in a sandboxed frame when the page opens
-// (it comes from Radware's servers, under their analytics and cookies), with a direct link that always works.
-export default function HomeThreatMap() {
+// The Live Threat Map (owner's request, 15 October 2026: on the homepage right after the hero; 31 October 2026: back on
+// its own page at /threat-map, with the Cyber Range's one-round taster in its homepage place and a card linking here).
+// Radware's map loads in a sandboxed frame when the page opens (it comes from Radware's servers, under their analytics
+// and cookies), with a direct link that always works.
+export default function ThreatMapSection() {
   return <div id="threat-map" className="tm-page tm-home" role="region" aria-labelledby="threat-map-title">
     <section className="container tm-intro">
       <div>
         <p className="tm-kicker">LIVE THREAT MAP</p>
-        <h2 id="threat-map-title" className="tm-title">The internet, under attack.<br /><em>Right now.</em></h2>
+        <h1 id="threat-map-title" className="tm-title">The internet, under attack.<br /><em>Right now.</em></h1>
       </div>
       <div className="tm-intro-copy">
         <p>Each line on this map is an attack that Radware recorded moments ago. Watch where attacks start, where they land, and which kinds are most common today.</p>

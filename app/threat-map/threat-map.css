@@ -374,3 +374,6 @@
   visibility: hidden;
   transition: opacity 0.5s ease, visibility 0s linear 0.5s;
 }
+
+/* Its own page again (31 October 2026): the homepage's dark ground behind the map, as it had there. */
+.tm-standalone { --sbd-ink: #f3f7ff; --sbd-muted: #aebdd0; --sbd-cyan: #83dcfa; --sbd-border: #2b3d53; background: #050b14; color: var(--sbd-ink); font-family: var(--font-geist-sans), Arial, sans-serif; padding-bottom: 48px; }
