@@ -83,6 +83,8 @@ function retiredCourse(url){
  // The ATO Package Builder Hub page was retired on 27 October 2026: the builder lives in the Training Hub's Tools, with the
  // seven RMF steps beside it. Its address lands there; the builder (/workspace), course 2.1 and the template library keep theirs.
  if(path==='/grc-rmf-training'||path==='/grc-rmf-training/')return new URL('/technical-training#ato-package-builder',url).toString();
+ // The Live Threat Map was removed (owner's request, 31 October 2026); old links land on the homepage.
+ if(path==='/threat-map'||path==='/threat-map/')return new URL('/',url).toString();
  const foundation=/^\/training\/(dc01-dc02|dns-configuration|domain-time|stig-scap|harden-baseline|two-tier-pki|dhcp|tiered-admin)(?:\/(.*))?$/.exec(path);
  if(foundation){
   const part={'dc01-dc02':'dc','dns-configuration':'dns','domain-time':'time','stig-scap':'stig','harden-baseline':'gpo','two-tier-pki':'pki',dhcp:'dhcp','tiered-admin':'tier'}[foundation[1]];
@@ -93,7 +95,6 @@ function retiredCourse(url){
   return new URL(`/training/identity-foundation/?part=${part}`,url).toString();
  }
  // The Live Threat Map moved onto the homepage (15 October 2026); old links land on that section.
- if(path==='/threat-map'||path==='/threat-map/')return new URL('/#threat-map',url).toString();
  return null;
 }
 // Course guides 1.2–1.10 are static pages at /training/<id>/ (scripts/prepare-course-guides.mjs). Cloudflare's

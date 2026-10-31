@@ -41,7 +41,13 @@ test('the page is the battle alone, a copy of one core, and never bundles answer
  assert.match(app,/\/battle/);assert.match(app,/\/answer/);assert.match(app,/\/me/);
  // One battle: no tabs, checkpoints, stacks, decks, ladder, daily encounter or operator picker.
  assert.doesNotMatch(app,/cr-tabs|data-view|checkpoint|sparring|ladder|deck|daily|data-act="(base|glow|mark)"|<input/i);
- for(const word of ['Round','Forfeit','Start battle','Play again'])assert.ok(app.includes(word),word);
+ for(const word of ['Round','Forfeit','Play again'])assert.ok(app.includes(word),word);
+ // 31 October 2026: straight into a question, no setup screen or difficulty choice; the clock waits until it's in view.
+ assert.doesNotMatch(app,/data-act="level"|Change difficulty|Start battle|Start the round|renderSetup/);
+ assert.match(app,/start\(true\)/);assert.match(app,/new IntersectionObserver/);
+ // The homepage taster (31 October 2026): one round from the same core, then the way to the full battle.
+ assert.match(app,/taster = false/);assert.match(app,/qs = qs\.slice\(0, 1\)/);
+ for(const word of ['Try one round.','Play the full battle','Try another round'])assert.ok(app.includes(word),word);
  // A visitor's random operator and callsign stay in this browser; a signed-in learner's come from the account.
  assert.match(app,/localStorage/);assert.doesNotMatch(app,/sessionStorage/);
  // BASES and MARKS are maps of drawing functions, not lists (a returning visitor's saved operator is checked against them).

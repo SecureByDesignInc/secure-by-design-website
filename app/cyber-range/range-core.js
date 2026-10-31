@@ -4,7 +4,8 @@
 // in this browser, a signed-in learner's on the account (/api/range/me). Questions come from /api/range/battle without
 // their answers and each choice is checked by POST /api/range/answer. The computer's play is simulated here; nothing is
 // scored or saved. mountRange() renders into a root element: the site route (app/cyber-range) mounts it under the
-// page's own intro; the app's standalone page (public/range-app, a copy) mounts it alone.
+// page's own intro; the app's standalone page (public/range-app, a copy) mounts it alone; the homepage mounts it with
+// { taster: true } (owner's request, 31 October 2026): one round, then "Play the full battle".
 import { bust, figure, spriteHtml, spriteSetFor, SPRITES, BASES, GLOWS, MARKS } from './avatars.js';
 
 const API = '/api/range';
@@ -36,7 +37,7 @@ function guestOperator() {
  return o;
 }
 
-export function mountRange(root, { standalone = false } = {}) {
+export function mountRange(root, { standalone = false, taster = false } = {}) {
  const S = { catalog: null, me: null, op: null, level: 'normal', sound: false, b: null, error: '' };
  const inApp = standalone || new URLSearchParams(location.search).get('app') === '1';
  root.classList.add('cr-page');
@@ -55,55 +56,41 @@ export function mountRange(root, { standalone = false } = {}) {
  }
 
  // ---- Setup ------------------------------------------------------------------------------------------------------
- function renderSetup() {
+ // Owner's request (31 October 2026): no setup screen or difficulty choice. The Range and the taster open straight on a
+ // question; the computer plays at Normal. This is only shown if a battle could not be loaded.
+ function renderError() {
   stopTimer(); S.b = null;
-  const signedIn = !!S.me?.reader;
-  const keep = signedIn ? 'They’re kept on your account.' : inApp ? `They’re kept on this device. ${siteLink('/my-progress', 'Sign in on the website')} to keep them on an account.` : `They’re kept in this browser. ${siteLink('/my-progress', 'Sign in')} with a free Community account to keep them everywhere.`;
-  const levels = Object.entries(LEVELS).map(([k, l]) => `<button type="button" class="cr-pick bt-level" data-act="level" data-v="${k}" aria-pressed="${S.level === k}"><b>${l.label}</b><span>${l.about}</span></button>`).join('');
-  shell(`<div class="cr-container"><section class="cr-section cr-section-first">
-   <div class="cr-heading"><div><p class="cr-kicker">Battle</p><h2>You against the computer.</h2><p>Seven rounds of multiple choice from the lab network. Answer right to hit; answer fast to hit harder.</p></div></div>
-   ${S.error ? `<p class="cr-note bt-error" role="alert">${esc(S.error)}</p>` : ''}
-   <div class="cr-grid cr-grid-2 bt-setup">
-    <div class="cr-tile"><h3>Your operator</h3><p>Your operator and callsign are assigned at random the first time you play. ${keep}</p>
-     <div class="bt-preview">${figure(S.op, { height: 190, label: 'Your operator' })}</div>
-     <div class="bt-callsign"><span class="cr-label">Callsign</span><b>${esc(S.op.callsign)}</b></div>
-    </div>
-    <div class="cr-tile"><h3>The computer</h3><p>A resident operator picked at random answers the same questions on its own clock.</p>
-     <div class="bt-levels">${levels}</div>
-     <ul class="bt-rules">
-      <li><b>${S.catalog.rounds} rounds, ${TIME / 1000} seconds each.</b> You both answer the same question.</li>
-      <li><b>Right answer, you hit.</b> 10 to 22 damage: the faster you answer, the harder it lands. Whoever answered right first hits first.</li>
-      <li><b>Wrong or out of time, no hit.</b> First to 0 HP loses; otherwise the most HP after round ${S.catalog.rounds} wins.</li>
-     </ul>
-     <div class="cr-row" style="margin-top:auto"><button type="button" class="cr-btn cr-btn-primary" data-act="start">Start battle</button><button type="button" class="cr-btn cr-btn-quiet" data-act="sound" aria-pressed="${S.sound}">Sound ${S.sound ? 'on' : 'off'}</button></div>
-    </div>
-   </div></section></div>`);
+  shell(`<div class="cr-container"><section class="cr-section cr-section-first"><div class="cr-tile"><p class="cr-note" role="alert">${esc(S.error || 'The Range is unavailable. Please try again.')}</p><div class="cr-row"><button type="button" class="cr-btn cr-btn-primary" data-act="start">Try again</button></div></div></section></div>`);
  }
+ const keepNote = () => S.me?.reader ? 'Your operator and callsign are kept on your account.' : inApp ? `Your operator and callsign are kept on this device. ${siteLink('/my-progress', 'Sign in on the website')} to keep them on an account.` : `Your operator and callsign are kept in this browser. ${siteLink('/my-progress', 'Sign in')} with a free Community account to keep them everywhere.`;
 
  // ---- Battle -----------------------------------------------------------------------------------------------------
- async function start() {
+ async function start(auto = false) {
   stopTimer();
   let qs;
-  try { qs = (await api('/battle')).questions; } catch (e) { S.error = e.message; renderSetup(); return; }
+  try { qs = (await api('/battle')).questions; } catch (e) { S.error = e.message; renderError(); return; }
+  if (taster) qs = qs.slice(0, 1);
   S.error = '';
   const r = pickOne(S.catalog.residents);
   const opp = { callsign: r.callsign, operator: { base: r.base, glow: r.glow, mark: r.mark, sprite: SPRITES[r.id] ? r.id : null } };
   const b = S.b = { opp, qs, round: 0, hp: { a: HP, b: HP }, log: [], over: null, phase: 'intro', cur: null };
   renderBattle();
-  $('#bt-arena')?.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
-  await sleep(500);
+  // Opening the page starts on the question in place; Play again brings the arena back into view.
+  if (!auto) $('#bt-arena')?.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+  if (!auto) await sleep(400);
   if (S.b === b) nextRound();
  }
  const fighterArt = who => { const op = who === 'a' ? S.op : S.b.opp.operator, set = spriteSetFor(op); return set ? spriteHtml(set) : figure(op, { height: 150, threat: who === 'b' }); };
  function hudSide(who) {
   const name = who === 'a' ? S.op.callsign : S.b.opp.callsign, op = who === 'a' ? S.op : S.b.opp.operator;
-  return `<div class="bt-side ${who}"><span class="bt-ava">${bust(op, { size: 40, threat: who === 'b' })}</span><b class="bt-name">${esc(name)}</b><span class="bt-sub">${who === 'a' ? 'You' : `Computer, ${LEVELS[S.level].label.toLowerCase()}`}</span><div class="bt-hp"><s id="bt-ghost-${who}"></s><i id="bt-hp-${who}"></i></div><span class="bt-hpnum" id="bt-hpn-${who}">${HP} HP</span></div>`;
+  return `<div class="bt-side ${who}"><span class="bt-ava">${bust(op, { size: 40, threat: who === 'b' })}</span><b class="bt-name">${esc(name)}</b><span class="bt-sub">${who === 'a' ? 'You' : 'Computer'}</span><div class="bt-hp"><s id="bt-ghost-${who}"></s><i id="bt-hp-${who}"></i></div><span class="bt-hpnum" id="bt-hpn-${who}">${HP} HP</span></div>`;
  }
  function renderBattle() {
   const n = S.b.qs.length;
   shell(`<div class="cr-container bt-wrap"><section class="cr-section cr-section-first">
+   ${taster ? '<div class="cr-heading bt-taster-head"><div><p class="cr-kicker">Cyber Range</p><h2>Try one round.</h2></div></div>' : ''}
    <div class="cr-tile cr-tile-accent bt-arena" id="bt-arena">
-    <div class="bt-hud">${hudSide('a')}<div class="bt-clockbox"><span class="bt-round" id="bt-round">Round 1/${n}</span><b class="bt-clock" id="bt-clock">${TIME / 1000}</b><div class="bt-tbar" id="bt-tbarwrap"><i id="bt-tbar"></i></div></div>${hudSide('b')}</div>
+    <div class="bt-hud">${hudSide('a')}<div class="bt-clockbox"><span class="bt-round" id="bt-round">${taster ? 'One round' : `Round 1/${n}`}</span><b class="bt-clock" id="bt-clock">${TIME / 1000}</b><div class="bt-tbar" id="bt-tbarwrap"><i id="bt-tbar"></i></div></div>${hudSide('b')}</div>
     <div class="rs-scene bt-scene" id="bt-scene" aria-hidden="true"><div class="rs-camera" id="bt-camera"><div class="rs-floor"></div><div class="rs-haze"></div><div class="rs-platform a"></div><div class="rs-platform b"></div>
      <div class="rs-lane a"><div class="bt-fighter" id="bt-f-a">${fighterArt('a')}</div></div><div class="rs-lane b"><div class="bt-fighter" id="bt-f-b">${fighterArt('b')}</div></div>
      <div class="rs-fx" id="bt-fx"></div></div><div class="rs-flash" id="bt-flash"></div><div class="rs-banner" id="bt-banner"></div></div>
@@ -111,7 +98,7 @@ export function mountRange(root, { standalone = false } = {}) {
      <div class="bt-q"><span class="cr-chip bt-topic" id="bt-topic"></span><p class="bt-prompt" id="bt-prompt" aria-live="polite">Get ready.</p><p class="bt-status" id="bt-status" aria-live="polite"></p></div>
      <div class="bt-opts" id="bt-opts"></div>
     </div>
-    <div class="bt-foot"><button type="button" class="cr-btn cr-btn-small bt-forfeit" data-act="forfeit">Forfeit</button><span class="bt-keys">Keys: A to D, or 1 to 4</span><button type="button" class="cr-btn cr-btn-small cr-btn-quiet" data-act="sound" aria-pressed="${S.sound}">Sound ${S.sound ? 'on' : 'off'}</button></div>
+    <div class="bt-foot">${taster ? '<span></span>' : '<button type="button" class="cr-btn cr-btn-small bt-forfeit" data-act="forfeit">Forfeit</button>'}<span class="bt-keys">Right answers hit; faster ones hit harder. Keys A to D.</span><button type="button" class="cr-btn cr-btn-small cr-btn-quiet" data-act="sound" aria-pressed="${S.sound}">Sound ${S.sound ? 'on' : 'off'}</button></div>
    </div>
    <div id="bt-result"></div>
   </section></div>`);
@@ -131,14 +118,24 @@ export function mountRange(root, { standalone = false } = {}) {
   const q = b.qs[b.round]; b.round++;
   const L = LEVELS[S.level];
   b.cur = { q, botCorrect: Math.random() < L.acc, botMs: L.min + Math.random() * (L.max - L.min), botShown: false };
-  $('#bt-round').textContent = `Round ${b.round}/${b.qs.length}`;
+  $('#bt-round').textContent = taster ? 'One round' : `Round ${b.round}/${b.qs.length}`;
   $('#bt-topic').innerHTML = `<span class="cr-dot" style="background:${typeColor(q.topic)}"></span>${esc(q.topic)}`;
   $('#bt-prompt').textContent = q.prompt;
   $('#bt-status').textContent = '';
   $('#bt-opts').innerHTML = q.options.map((o, i) => `<button type="button" class="cr-opt bt-opt" data-act="answer" data-choice="${KEYS[i]}"><span class="cr-key">${KEYS[i]}</span><span>${esc(o)}</span></button>`).join('');
   pose('a', 'idle'); pose('b', 'idle');
-  b.phase = 'answer'; b.cur.t0 = performance.now();
-  startTimer();
+  const clock = $('#bt-clock'); clock.textContent = String(TIME / 1000); clock.classList.remove('idle', 'low'); $('#bt-tbar').style.width = '100%'; $('#bt-tbarwrap').classList.remove('low');
+  // The question shows at once; its clock starts when the arena is in view, so a round never runs out unseen.
+  b.phase = 'ready';
+  whenVisible($('#bt-arena'), () => { if (S.b === b && b.cur?.q === q && b.phase === 'ready') begin(b); });
+ }
+ function begin(b) { b.phase = 'answer'; b.cur.t0 = performance.now(); startTimer(); }
+ let io = null;
+ function whenVisible(el, cb) {
+  io?.disconnect(); io = null;
+  if (!el || typeof IntersectionObserver !== 'function') return cb();
+  io = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { io?.disconnect(); io = null; cb(); } }, { threshold: 0.35 });
+  io.observe(el);
  }
 
  let raf = null;
@@ -164,7 +161,9 @@ export function mountRange(root, { standalone = false } = {}) {
  function stopTimer() { if (raf) cancelAnimationFrame(raf); raf = null; }
 
  async function answer(choice) {
-  const b = S.b; if (!b || b.phase !== 'answer') return;
+  const b = S.b; if (!b) return;
+  if (b.phase === 'ready' && choice) begin(b);
+  if (b.phase !== 'answer') return;
   const c = b.cur; b.phase = 'checking'; stopTimer();
   const ms = choice ? performance.now() - c.t0 : TIME;
   root.querySelectorAll('#bt-opts .bt-opt').forEach(o => { o.disabled = true; o.classList.toggle('picked', o.dataset.choice === choice); });
@@ -219,11 +218,12 @@ export function mountRange(root, { standalone = false } = {}) {
   $('#bt-play').innerHTML = '';
   const foot = $('.bt-foot'); if (foot) foot.hidden = true;
   const right = b.log.filter(r => r.correct).length;
-  const head = forfeit ? 'You forfeited.' : winner === 'a' ? `You win with ${b.hp.a} HP left.` : winner === 'b' ? `${esc(b.opp.callsign)} wins with ${b.hp.b} HP left.` : 'A draw.';
+  const head = taster ? (winner === 'a' ? 'You win the round.' : winner === 'b' ? `${esc(b.opp.callsign)} takes the round.` : 'No winner this round.') : forfeit ? 'You forfeited.' : winner === 'a' ? `You win with ${b.hp.a} HP left.` : winner === 'b' ? `${esc(b.opp.callsign)} wins with ${b.hp.b} HP left.` : 'A draw.';
   const optText = (q, k) => k ? esc(q.options[KEYS.indexOf(k)]) : 'no answer';
   $('#bt-result').innerHTML = `<div class="cr-tile bt-result">
-   <div class="cr-row cr-between"><div><h3>${head}</h3><p>You answered ${right} of ${b.log.length} right.</p></div>
-    <div class="cr-row"><button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button><button type="button" class="cr-btn cr-btn-quiet" data-act="setup">Change difficulty</button></div></div>
+   <div class="cr-row cr-between"><div><h3>${head}</h3><p>${taster ? 'The full battle is seven rounds against the same clock.' : `You answered ${right} of ${b.log.length} right.`}</p></div>
+    <div class="cr-row">${taster ? `${siteLink('/cyber-range', 'Play the full battle').replace('<a ', '<a class="cr-btn cr-btn-primary" ')}<button type="button" class="cr-btn cr-btn-quiet" data-act="start">Try another round</button>` : '<button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button>'}</div></div>
+   <p class="cr-note bt-keep">${keepNote()}</p>
    ${b.log.length ? `<ol class="bt-recap">${b.log.map((r, i) => `<li class="${r.correct ? 'ok' : 'miss'}"><span class="bt-rn">${i + 1}</span><div><b>${esc(r.q.prompt)}</b><p>${r.correct ? 'You got it' : `You: ${optText(r.q, r.choice)}`}.${r.check ? ` Answer: <b>${optText(r.q, r.check.answer)}</b>. ${esc(r.check.explanation || '')} ${r.check.lesson ? siteLink(r.check.lesson, 'See the lesson') : ''}` : ''}</p></div></li>`).join('')}</ol>` : ''}
   </div>`;
  }
@@ -305,10 +305,8 @@ export function mountRange(root, { standalone = false } = {}) {
  const onClick = ev => {
   const btn = ev.target.closest('[data-act]'); if (!btn || !root.contains(btn)) return;
   const act = btn.dataset.act;
-  if (act === 'level') { S.level = btn.dataset.v; renderSetup(); return; }
   if (act === 'sound') { S.sound = !S.sound; root.querySelectorAll('[data-act="sound"]').forEach(x => { x.setAttribute('aria-pressed', String(S.sound)); x.textContent = `Sound ${S.sound ? 'on' : 'off'}`; }); if (S.sound) sfx('good'); return; }
   if (act === 'start') { start(); return; }
-  if (act === 'setup') { renderSetup(); return; }
   if (act === 'forfeit') { if (S.b && !S.b.over) finish(true); return; }
   if (act === 'answer') { answer(btn.dataset.choice); return; }
  };
@@ -326,11 +324,11 @@ export function mountRange(root, { standalone = false } = {}) {
    const [catalog, me] = await Promise.all([api('/catalog'), api('/me').catch(() => ({ reader: false }))]);
    S.catalog = catalog; S.me = me;
    S.op = me.reader && me.operator ? me.operator : guestOperator();
-   renderSetup();
+   start(true);
   } catch (e) {
    shell(`<div class="cr-container"><p class="cr-note" role="alert" style="padding:24px 0">${esc(e.message)}</p></div>`);
   }
  })();
 
- return () => { stopTimer(); S.b = null; root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); };
+ return () => { stopTimer(); io?.disconnect(); S.b = null; root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); };
 }

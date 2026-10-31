@@ -20,11 +20,10 @@ const extra = ['/my-progress', '/grc-rmf-training/workspace', '/account?returnTo
 const pages = [...new Set([...fromSitemap, ...extra])];
 const protections = ['x-content-type-options', 'referrer-policy', 'x-frame-options', 'permissions-policy'];
 const ignoredRequest = url => /cloudflareinsights\.com|\/cdn-cgi\/|youtube-nocookie\.com|ytimg\.com|googlevideo\.com/.test(url);
-// Radware's live threat map (on the homepage) is a third-party page in a sandboxed frame: its own requests,
-// console output and script errors are Radware's, not this site's. Our page's policy blocking the frame
-// itself still shows up as a CSP violation in the main frame.
-const thirdPartyFrame = frame => { try { return /^https:\/\/livethreatmap\.radware\.com\//.test(frame?.url() || ''); } catch { return false; } };
-const fromThirdParty = (url, frame) => /^https:\/\/livethreatmap\.radware\.com\//.test(url || '') || thirdPartyFrame(frame);
+// No third-party frames load on the site since the Live Threat Map was removed (owner's request, 31 October 2026), so every
+// request, console message and script error checked here is this site's own.
+const thirdPartyFrame = () => false;
+const fromThirdParty = () => false;
 
 const annotate = (level, title, message) => console.log(`::${level} title=${title}::${String(message).replace(/\r?\n/g, ' | ').slice(0, 3800)}`);
 const results = [];

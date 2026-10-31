@@ -1,0 +1,7 @@
+/* Homepage: the Cyber Range taster, right after the hero (owner's requests, 31 October 2026; the Live Threat Map was
+   removed). The taster uses the Range's styles (cyber-range/range.css, battle.css); these rules only fit it in. */
+/* The homepage's own width (.container), so the taster lines up with the sections around it. */
+.cr-page.home-range .cr-container { width: min(1180px, calc(100% - 48px)); }
+.cr-page.home-range { padding: 56px 0 64px; }
+.cr-page.home-range .cr-section-first { padding-top: 0; }
+@media (max-width: 700px) { .cr-page.home-range { padding: 36px 0 48px; } }

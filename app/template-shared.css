@@ -100,11 +100,6 @@ body.site-editorial .logo-pill-icon{display:block;width:22px;height:22px;flex:no
 /* Landscape phones: the 88px logo keeps the header short. */
 @media(min-width:621px) and (max-width:1000px) and (max-height:540px){body.site-editorial .site-header .brand{font-size:1.5rem}body.site-editorial .site-header .brand-logo{width:88px;height:88px}body.site-editorial .site-header.container{padding-block:12px;gap:10px}}
 
-/* Frosted panel over Radware's "Contact sales" button in the homepage's Live Threat Map section
-   (app/radware-sales-cover.tsx). It blurs what sits beneath it and catches clicks meant for the button. */
-.sbd-sales-cover{position:absolute;z-index:1;display:block;border-radius:6px;background:rgba(6,18,30,.35);-webkit-backdrop-filter:blur(12px) saturate(.6);backdrop-filter:blur(12px) saturate(.6);opacity:0;pointer-events:none;transition:opacity .4s ease}
-.sbd-sales-cover.is-shown{opacity:1;pointer-events:auto;cursor:default}
-
 /* No underlines anywhere on the site (owner direction, 20 October 2026): links keep their color and weight. */
 body.site-editorial a,body.site-editorial a:hover,body.site-editorial a:focus,body.site-editorial a:active,body.site-editorial a:visited{text-decoration:none!important}
 

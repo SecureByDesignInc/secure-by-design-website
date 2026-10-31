@@ -274,3 +274,37 @@
 }
 
 .bt-error { color: #f7bd68; margin-bottom: 12px; }
+
+/* The homepage taster (owner's request, 31 October 2026): a heading over the same arena. */
+.bt-taster-head { margin-bottom: 14px; }
+@media (max-width: 700px) { .cr-page .bt-taster-start { flex-direction: column; align-items: stretch; text-align: center; padding: 18px; } .bt-taster-copy .cr-row { justify-content: center; } }
+
+/* Links styled as buttons (the taster's "Play the full battle"): .cr-page a's cyan would otherwise win over the button's ink. */
+.cr-page a.cr-btn { text-decoration: none; }
+.cr-page a.cr-btn-primary, .cr-page a.cr-btn-primary:hover { color: #082337; }
+.cr-page a.cr-btn-quiet, .cr-page a.cr-btn:not(.cr-btn-primary) { color: #d2e7f2; }
+.bt-keep { margin-top: -4px; }
+
+/* No box around the battle (owner's request, 31 October 2026): it sits on the page's own ground. The tile, its border and
+   its shadow go; the stage's glow, floor grid and scan lines fade out at every edge instead of stopping at a line; the
+   clock and the answers are glass over the page. Applies on /cyber-range, the app's page and the homepage taster. */
+.cr-page .cr-tile.bt-arena { background: transparent; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
+.cr-page .bt-hud { padding: 8px 0 4px; }
+.cr-page .bt-scene { background: radial-gradient(60% 75% at 50% 78%, rgba(23,64,91,.55), rgba(8,27,43,.25) 55%, transparent 80%); border: 0;
+  -webkit-mask-image: radial-gradient(72% 80% at 50% 48%, #000 52%, transparent 98%); mask-image: radial-gradient(72% 80% at 50% 48%, #000 52%, transparent 98%); }
+.cr-page .bt-scene::after { opacity: .18; }
+.cr-page .bt-clockbox { background: rgba(8,28,43,.55); border-color: rgba(125,216,230,.22); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.cr-page .bt-hp { background: rgba(8,28,43,.6); border-color: rgba(125,216,230,.2); }
+.cr-page .bt-ava, .cr-page .bt-mark { background: rgba(14,37,53,.7); }
+.cr-page .bt-q { padding: 8px 0 4px; }
+.cr-page .bt-opts { padding: 12px 0 8px; }
+.cr-page .bt-opt { background: rgba(14,37,53,.5); border-color: rgba(125,216,230,.18); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.cr-page .bt-opt:hover:not(:disabled) { border-color: #8ae5ef; background: rgba(21,56,77,.6); }
+.cr-page .bt-opt.right { background: rgba(19,64,86,.7); }
+.cr-page .bt-opt.wrong { background: rgba(42,36,24,.6); }
+.cr-page .bt-foot { border-top: 0; padding: 4px 0 0; }
+.cr-page .bt-result { background: rgba(14,37,53,.4); border-color: rgba(125,216,230,.16); }
+.cr-page .bt-recap li { background: rgba(14,37,53,.45); }
+/* On the homepage the taster sits on the homepage's ground, not the Range's. */
+.cr-page.home-range { background: transparent; }
+@media (max-width: 760px) { .cr-page .bt-hud { padding: 4px 0 0; } .cr-page .bt-opts { padding: 10px 0 6px; } }
