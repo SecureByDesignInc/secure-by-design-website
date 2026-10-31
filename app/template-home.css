@@ -27,3 +27,9 @@ body.site-editorial:has(.sbd-home){background:#050b14;color:#f4f8ff}
 .sbd-hero-stage .sbd-hero:after{background:linear-gradient(180deg,#050b1455,transparent 30%)}
 .sbd-hero-stage>.home-range{position:relative;z-index:1}
 .sbd-hero-stage.sbd-hero-static{background:radial-gradient(ellipse at 50% 30%,#0d417555,transparent 70%),#050b14}
+
+/* 31 October 2026, later: the wave runs behind the whole homepage (the stage now holds the community panel too) and fades
+   out only at its foot; the hero has no buttons. */
+.sbd-wave{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 82%,transparent 100%)}
+.sbd-hero-stage>.sbd-support{position:relative;z-index:1}
+.sbd-hero small{margin-top:28px}

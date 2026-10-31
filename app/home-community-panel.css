@@ -58,3 +58,10 @@
 
 @media(max-width:700px){.sbd-support{padding:12px 0 60px}.sbd-support-panel{padding:24px 18px;gap:28px}.sbd-support-help-grid{grid-template-columns:1fr}.sbd-support-form{max-width:none;padding:22px 18px}.sbd-support-wall{padding:24px 18px}}
 @media(forced-colors:active){.sbd-support-frequency button[aria-pressed=true],.sbd-support-amounts button[aria-pressed=true]{border-color:Highlight;outline:2px solid Highlight}}
+
+/* No box (owner's request, 31 October 2026): the panel sits on the homepage's wave. Its border, shadow and corners go;
+   a soft dark glow behind the text keeps it readable and fades out with no edge. The cards inside keep their outlines. */
+.sbd-support-panel{position:relative;isolation:isolate;background:none;border:0;border-radius:0;box-shadow:none}
+.sbd-support-panel::before{content:'';position:absolute;inset:-56px -72px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(8,20,34,.82) 0,rgba(8,20,34,.7) 45%,rgba(8,20,34,0) 72%)}
+.sbd-support-help-grid article{background:rgba(12,24,40,.6);border-color:rgba(59,100,140,.55)}
+@media(max-width:700px){.sbd-support-panel{padding:24px 4px}.sbd-support-panel::before{inset:-40px -24px}}
