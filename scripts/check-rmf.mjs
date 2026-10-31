@@ -20,7 +20,7 @@ assert.equal(evidencePhases[0].step, null);
 assert.deepEqual(evidencePhases.slice(1).map(s=>s.step), [1,2,3,4,5,6]);
 const articles = JSON.parse(readFileSync(new URL('../content/articles.json', import.meta.url), 'utf8'));
 const technical = ['/blog', ...articles.map(a=>'/blog/'+a.slug)];
-const paths = [...new Set(['/', '/blogs', '/videos', '/cyber-range', '/rmf-series', '/rmf-series/concepts/dns', ...technical])];
+const paths = [...new Set(['/', '/blogs', '/videos', '/rmf-series', '/rmf-series/concepts/dns', ...technical])];
 const pages = new Map();
 for (const path of paths) {
   const response = await request(path);

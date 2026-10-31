@@ -221,8 +221,8 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   const head = taster ? (winner === 'a' ? 'You win the round.' : winner === 'b' ? `${esc(b.opp.callsign)} takes the round.` : 'No winner this round.') : forfeit ? 'You forfeited.' : winner === 'a' ? `You win with ${b.hp.a} HP left.` : winner === 'b' ? `${esc(b.opp.callsign)} wins with ${b.hp.b} HP left.` : 'A draw.';
   const optText = (q, k) => k ? esc(q.options[KEYS.indexOf(k)]) : 'no answer';
   $('#bt-result').innerHTML = `<div class="cr-tile bt-result">
-   <div class="cr-row cr-between"><div><h3>${head}</h3><p>${taster ? 'The full battle is seven rounds against the same clock.' : `You answered ${right} of ${b.log.length} right.`}</p></div>
-    <div class="cr-row">${taster ? `${siteLink('/cyber-range', 'Play the full battle').replace('<a ', '<a class="cr-btn cr-btn-primary" ')}<button type="button" class="cr-btn cr-btn-quiet" data-act="start">Try another round</button>` : '<button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button>'}</div></div>
+   <div class="cr-row cr-between"><div><h3>${head}</h3><p>${taster ? 'One question from the lab network, against the clock.' : `You answered ${right} of ${b.log.length} right.`}</p></div>
+    <div class="cr-row">${taster ? '<button type="button" class="cr-btn cr-btn-primary" data-act="start">Try another round</button>' : '<button type="button" class="cr-btn cr-btn-primary" data-act="start">Play again</button>'}</div></div>
    <p class="cr-note bt-keep">${keepNote()}</p>
    ${b.log.length ? `<ol class="bt-recap">${b.log.map((r, i) => `<li class="${r.correct ? 'ok' : 'miss'}"><span class="bt-rn">${i + 1}</span><div><b>${esc(r.q.prompt)}</b><p>${r.correct ? 'You got it' : `You: ${optText(r.q, r.choice)}`}.${r.check ? ` Answer: <b>${optText(r.q, r.check.answer)}</b>. ${esc(r.check.explanation || '')} ${r.check.lesson ? siteLink(r.check.lesson, 'See the lesson') : ''}` : ''}</p></div></li>`).join('')}</ol>` : ''}
   </div>`;

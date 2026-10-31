@@ -265,9 +265,10 @@ test('monitoring flags expiry, the annual review, overdue POA&M items, lapsed pr
 // Owner direction, 19 October 2026: the Training Hub and the ATO Package Builder Hub replace the Configuration Hub and the Compliance Hub.
 // Owner direction, 27 October 2026 (the calmer header): four menu items and a My Account button; the ATO Package Builder
 // Hub page is retired into the Training Hub, and its address lands on the builder's place there.
-test('the main menu has four items and an account button, the same on the Community shells',()=>{
+test('the main menu has three items and an account button, the same on the Community shells',()=>{
  const nav=JSON.parse(fs.readFileSync('content/navigation.json','utf8'));
- assert.deepEqual(nav,[['/inside-the-network','System Hub'],['/technical-training','Training Hub'],['/community','Community & Careers Hub'],['/cyber-range','Cyber Range']]);
+ // 31 October 2026: the Cyber Range section is removed for now.
+ assert.deepEqual(nav,[['/inside-the-network','System Hub'],['/technical-training','Training Hub'],['/community','Community & Careers Hub']]);
  const menu=fs.readFileSync('app/navigation.tsx','utf8');
  assert.match(menu,/className="nav-account"/);assert.match(menu,/className="menu-toggle"/);
  for(const name of ['careers','career-records','resource-preferences','community-contributions']){

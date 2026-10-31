@@ -992,3 +992,7 @@ Owner direction: the battle is the ONLY content of the Cyber Range, on the websi
 ## Homepage and the Live Threat Map — October 31, 2026
 
 Owner direction: the homepage is the hero, the Cyber Range's one-round taster (app/home-range-taster.tsx, the Range's own core in taster mode), then the community panel. The Live Threat Map is removed entirely, from the site and the app: no map, page, card, Radware frame, frame-src entry or privacy entry; /threat-map redirects to the homepage. The Range and the taster open straight on a question (no setup screen or difficulty choice; the computer plays at Normal); the clock starts when the arena comes into view.
+
+## Cyber Range section removed; one wave behind the hero and taster — October 31, 2026
+
+Owner direction: the Cyber Range section is removed for now: no /cyber-range page (it redirects to the homepage), no menu item, no app tab. The homepage keeps the one-round taster (app/home-range-taster.tsx), which now ends with Try another round only. The Range's code (app/cyber-range/range-core.js, avatars.js, range.css, battle.css) and /api/range stay for the taster; /range-app/ stays published so app builds from before this change keep working. The hero's blue wave (HeroShaderGradient) now fills one stage behind both the hero and the taster (.sbd-hero-stage, .sbd-wave) and fades into the page below.
