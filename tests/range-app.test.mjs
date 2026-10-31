@@ -38,6 +38,7 @@ test('the page is the battle alone, a copy of one core, and never bundles answer
  // The homepage taster (31 October 2026): one round from the same core, then the way to the full battle.
  assert.match(app,/taster = false/);assert.match(app,/qs = qs\.slice\(0, 1\)/);
  for(const word of ['Try one round.','Try another round'])assert.ok(app.includes(word),word);
+ assert.match(app,/data-act="topic"/);assert.ok(app.includes('All topics'));assert.match(app,/\/battle' \+ \(S\.topic/);
  // A visitor's random operator and callsign stay in this browser; a signed-in learner's come from the account.
  assert.match(app,/localStorage/);assert.doesNotMatch(app,/sessionStorage/);
  // BASES and MARKS are maps of drawing functions, not lists (a returning visitor's saved operator is checked against them).

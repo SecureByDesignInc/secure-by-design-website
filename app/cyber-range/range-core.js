@@ -38,7 +38,7 @@ function guestOperator() {
 }
 
 export function mountRange(root, { standalone = false, taster = false } = {}) {
- const S = { catalog: null, me: null, op: null, level: 'normal', sound: false, b: null, error: '' };
+ const S = { catalog: null, me: null, op: null, level: 'normal', topic: '', sound: false, b: null, error: '' };
  const inApp = standalone || new URLSearchParams(location.search).get('app') === '1';
  root.classList.add('cr-page');
  if (standalone) root.classList.add('cr-standalone');
@@ -68,7 +68,7 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
  async function start(auto = false) {
   stopTimer();
   let qs;
-  try { qs = (await api('/battle')).questions; } catch (e) { S.error = e.message; renderError(); return; }
+  try { qs = (await api('/battle' + (S.topic ? '?topic=' + encodeURIComponent(S.topic) : ''))).questions; } catch (e) { S.error = e.message; renderError(); return; }
   if (taster) qs = qs.slice(0, 1);
   S.error = '';
   const r = pickOne(S.catalog.residents);
@@ -80,6 +80,8 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   if (!auto) await sleep(400);
   if (S.b === b) nextRound();
  }
+ // The topics the questions come from (owner's request, 31 October 2026): All topics, or one, for this and later rounds.
+ const topicsBar = () => `<div class="bt-topics" role="group" aria-label="Question topic">${[['', 'All topics'], ...(S.catalog.topics || []).map(t => [t.name, t.name])].map(([v, l]) => `<button type="button" class="cr-chip bt-topic-pick" data-act="topic" data-v="${esc(v)}" aria-pressed="${S.topic === v}">${v ? `<span class="cr-dot" style="background:${typeColor(v)}"></span>` : ''}${esc(l)}</button>`).join('')}</div>`;
  const fighterArt = who => { const op = who === 'a' ? S.op : S.b.opp.operator, set = spriteSetFor(op); return set ? spriteHtml(set) : figure(op, { height: 150, threat: who === 'b' }); };
  function hudSide(who) {
   const name = who === 'a' ? S.op.callsign : S.b.opp.callsign, op = who === 'a' ? S.op : S.b.opp.operator;
@@ -89,6 +91,7 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   const n = S.b.qs.length;
   shell(`<div class="cr-container bt-wrap"><section class="cr-section cr-section-first">
    ${taster ? '<div class="cr-heading bt-taster-head"><div><p class="cr-kicker">Cyber Range</p><h2>Try one round.</h2></div></div>' : ''}
+   ${topicsBar()}
    <div class="cr-tile cr-tile-accent bt-arena" id="bt-arena">
     <div class="bt-hud">${hudSide('a')}<div class="bt-clockbox"><span class="bt-round" id="bt-round">${taster ? 'One round' : `Round 1/${n}`}</span><b class="bt-clock" id="bt-clock">${TIME / 1000}</b><div class="bt-tbar" id="bt-tbarwrap"><i id="bt-tbar"></i></div></div>${hudSide('b')}</div>
     <div class="rs-scene bt-scene" id="bt-scene" aria-hidden="true"><div class="rs-camera" id="bt-camera"><div class="rs-floor"></div><div class="rs-haze"></div><div class="rs-platform a"></div><div class="rs-platform b"></div>
@@ -307,6 +310,7 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   const act = btn.dataset.act;
   if (act === 'sound') { S.sound = !S.sound; root.querySelectorAll('[data-act="sound"]').forEach(x => { x.setAttribute('aria-pressed', String(S.sound)); x.textContent = `Sound ${S.sound ? 'on' : 'off'}`; }); if (S.sound) sfx('good'); return; }
   if (act === 'start') { start(); return; }
+  if (act === 'topic') { S.topic = btn.dataset.v || ''; start(true); return; }
   if (act === 'forfeit') { if (S.b && !S.b.over) finish(true); return; }
   if (act === 'answer') { answer(btn.dataset.choice); return; }
  };
