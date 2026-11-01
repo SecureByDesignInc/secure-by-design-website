@@ -238,10 +238,11 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   const w = $(`#bt-f-${who}`); if (!w) return;
   const sp = w.querySelector('.rs-sprite');
   if (sp) {
-   const act = SPRITE_ACT[p] || 'idle', m = SPRITES[sp.dataset.set][act] || SPRITES[sp.dataset.set].idle;
-   sp.className = 'rs-sprite act-' + act; sp.style.setProperty('--n', m.frames); sp.style.setProperty('--fw', m.w); sp.style.setProperty('--fh', m.h);
+   // A still: battle.css moves it (idle sway, attack lunge, hit recoil, slump, victory raise); restart the move each time.
+   const act = SPRITE_ACT[p] || 'idle';
+   sp.className = 'rs-sprite rs-still'; void sp.offsetWidth; sp.classList.add('act-' + act);
    clearTimeout(sp._t);
-   if (act === 'hit' || act === 'attack') sp._t = setTimeout(() => { if (sp.classList.contains('act-' + act) && !S.b?.over) pose(who, 'idle'); }, 1000 * m.frames / m.fps + 60);
+   if (act === 'hit' || act === 'attack') sp._t = setTimeout(() => { if (sp.classList.contains('act-' + act) && !S.b?.over) pose(who, 'idle'); }, act === 'attack' ? 620 : 520);
    return;
   }
   const svg = w.querySelector('svg'); if (!svg) return;

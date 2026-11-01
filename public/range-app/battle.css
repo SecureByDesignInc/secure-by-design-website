@@ -164,7 +164,10 @@
    to 100% in n-1 steps and holds its last frame. */
 .rs-sprite { --fw: 256; --fh: 384; --n: 12; height: calc(var(--op-h) * 1.2); width: calc(var(--op-h) * 1.2 * var(--fw) / var(--fh)); margin-bottom: calc(var(--op-h) * -0.13); background-repeat: no-repeat; background-size: calc(100% * var(--n)) 100%; background-position: 0 0; filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
 .rs-lane.b .rs-sprite { transform: scaleX(-1); }
-.rs-sprite[data-set="ttl_zero"] { --sheet-idle: url("/range-app/sprites/ttl_zero/idle.webp"); --sheet-attack: url("/range-app/sprites/ttl_zero/attack.webp"); --sheet-hit: url("/range-app/sprites/ttl_zero/hit.webp"); --sheet-down: url("/range-app/sprites/ttl_zero/down.webp"); --sheet-victory: url("/range-app/sprites/ttl_zero/victory.webp"); --sheet-command: url("/range-app/sprites/ttl_zero/command.webp"); }
+/* Stills (31 October 2026): one anime key-art image per fighter, moved by the rules below. */
+.rs-sprite.rs-still[data-set="ttl_zero"] { background-image: url("/range-app/sprites/ttl_zero/still.webp"); }
+.rs-sprite.rs-still[data-set="root_ca"] { background-image: url("/range-app/sprites/root_ca/still.webp"); }
+.rs-sprite.rs-still[data-set="signoff"] { background-image: url("/range-app/sprites/signoff/still.webp"); }
 
 .rs-sprite.act-idle { background-image: var(--sheet-idle); animation: rs-sprite-loop calc(var(--n) * 1s / 6) steps(var(--n)) infinite; }
 .rs-sprite.act-attack { background-image: var(--sheet-attack); animation: rs-sprite-once calc((var(--n) - 1) * 1s / 12) steps(calc(var(--n) - 1)) 1 forwards; }
@@ -315,3 +318,23 @@
 .cr-page .bt-topic-pick:hover { border-color: #8ae5ef; }
 .cr-page .bt-topic-pick[aria-pressed="true"] { background: rgba(21,56,77,.85); border-color: #7dd8e6; color: #f1f8ff; box-shadow: 0 0 0 1px rgba(125,216,230,.35); }
 @media (max-width: 700px) { .bt-topics { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; margin-inline: -4px; padding-inline: 4px; scrollbar-width: none; } .cr-page .bt-topic-pick { flex: none; } }
+
+/* Moving a still (31 October 2026). The wrapper mirrors a fighter to face its opponent by the way the art faces;
+   the still itself carries the move, so the two transforms never fight. */
+.rs-still-wrap { display: inline-block; }
+.rs-lane.b .rs-still-wrap[data-faces="right"], .rs-lane.a .rs-still-wrap[data-faces="left"] { transform: scaleX(-1); }
+.rs-lane.b .rs-sprite.rs-still { transform: none; }
+.rs-sprite.rs-still { background-size: 100% 100%; background-position: 0 0; transform-origin: 50% 100%; margin-bottom: calc(var(--op-h) * -0.06); }
+.rs-sprite.rs-still.act-idle { animation: st-idle 2.6s ease-in-out infinite; }
+.rs-sprite.rs-still.act-attack { animation: st-attack .6s cubic-bezier(.2,.8,.3,1) 1 forwards; }
+.rs-sprite.rs-still.act-hit { animation: st-hit .5s ease-out 1 forwards; }
+.rs-sprite.rs-still.act-down { animation: st-down .9s cubic-bezier(.4,0,.8,.4) 1 forwards; }
+.rs-sprite.rs-still.act-victory { animation: st-victory 1.2s ease-in-out infinite; }
+.rs-sprite.rs-still.act-command { animation: st-command .8s ease-out 1 forwards; }
+@keyframes st-idle { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-3%) rotate(-1.2deg) scaleY(1.015); } }
+@keyframes st-attack { 0% { transform: translateX(0); } 35% { transform: translateX(22%) rotate(4deg) scale(1.06); } 100% { transform: translateX(0); } }
+@keyframes st-hit { 0% { transform: translateX(0); filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)) brightness(1); } 20% { transform: translateX(-12%) rotate(-6deg); filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)) brightness(1.9) saturate(.4); } 100% { transform: translateX(0); filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)) brightness(1); } }
+@keyframes st-down { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(18%) rotate(-78deg) translateX(-30%); opacity: .55; } }
+@keyframes st-victory { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-9%) scale(1.04); } }
+@keyframes st-command { 0% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3%); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .rs-sprite.rs-still { animation: none !important; } }

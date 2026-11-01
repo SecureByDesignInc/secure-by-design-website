@@ -45,10 +45,16 @@ export function figure(op = {}, { height = 150, threat = false, label = '' } = {
  return `<svg class="op-fig" viewBox="0 0 96 178" width="${w}" height="${height}" ${label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"'}><g class="op-pose"><g class="op-kick"><g class="op-jitter"><g class="op-idle">${DEFS(g, id)}${base === 'hood' ? '' : NECK}${BODY(g, id)}${BASES[base](g, id)}${(MARKS[op.mark] || MARKS.none)(g)}${SCAN(g, true)}</g></g></g></g></svg>`;
 }
 
-// One sheet per action, frames left to right (range.css steps through them).
-export const SPRITES = { ttl_zero: {"idle": {"frames": 12, "w": 256, "h": 384, "fps": 6}, "attack": {"frames": 9, "w": 256, "h": 384, "fps": 12}, "hit": {"frames": 7, "w": 256, "h": 384, "fps": 12}, "down": {"frames": 9, "w": 256, "h": 384, "fps": 12}, "victory": {"frames": 9, "w": 256, "h": 384, "fps": 12}, "command": {"frames": 1, "w": 256, "h": 384, "fps": 1}} };
+// Fighter art (owner direction, 31 October 2026): hand-drawn anime key art for each resident, one still per
+// operator (public/range-app/sprites/<id>/still.webp), moved by CSS in the battle. `faces` says which way the still
+// looks, so lane b mirrors only the ones that face right. The Blender sprite sheets this replaces stay in git history.
+export const SPRITES = {
+ ttl_zero: { still: true, w: 476, h: 768, faces: 'right' },
+ root_ca: { still: true, w: 351, h: 768, faces: 'left' },
+ signoff: { still: true, w: 419, h: 768, faces: 'left' },
+};
 export const spriteSetFor = op => (op && op.sprite && SPRITES[op.sprite] ? op.sprite : null);
 export function spriteHtml(set) {
- const m = SPRITES[set].idle;
- return `<div class="rs-sprite act-idle" data-set="${set}" style="--n:${m.frames};--fw:${m.w};--fh:${m.h}" aria-hidden="true"></div>`;
+ const m = SPRITES[set];
+ return `<div class="rs-still-wrap" data-faces="${m.faces}"><div class="rs-sprite rs-still act-idle" data-set="${set}" style="--fw:${m.w};--fh:${m.h}" aria-hidden="true"></div></div>`;
 }

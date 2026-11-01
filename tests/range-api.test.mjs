@@ -30,8 +30,9 @@ const ok=async(promise,status=200)=>{const r=await promise;assert.equal(r.status
 test('visitors get the catalog and a battle of seven questions without answers, then check each choice',async()=>{
  const env=setup();
  const catalog=await ok(call(env,null,'GET','/catalog'));
- assert.equal(catalog.rounds,7);assert.equal(catalog.residents.length,6);
- assert.deepEqual(catalog.residents.map(r=>r.id),['fsmo','ttl_zero','root_ca','pcap','baseline','signoff']);
+ // 31 October 2026: only the residents with anime art battle for now.
+ assert.equal(catalog.rounds,7);assert.equal(catalog.residents.length,3);
+ assert.deepEqual(catalog.residents.map(r=>r.id),['ttl_zero','root_ca','signoff']);
  assert.ok(!JSON.stringify(catalog).includes('"answer"'));
  const battle=await ok(call(env,null,'GET','/battle'));
  assert.equal(battle.questions.length,7);
