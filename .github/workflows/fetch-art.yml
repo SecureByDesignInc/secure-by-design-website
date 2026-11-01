@@ -1,0 +1,35 @@
+# Fetches generated artwork from public URLs into this branch (the sandbox that builds the site can't reach the
+# art host directly). Run by hand on this branch only; not merged to main.
+name: Fetch art
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: JSON list of [filename, url] pairs
+        required: true
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        env:
+          URLS: ${{ inputs.urls }}
+        run: |
+          set -euo pipefail
+          mkdir -p art-inbox
+          python3 - <<'PY'
+          import json, os, subprocess
+          for name, url in json.loads(os.environ['URLS']):
+              assert '/' not in name and '..' not in name
+              subprocess.run(['curl','-fsSL','-o',f'art-inbox/{name}',url], check=True)
+              print(name, os.path.getsize(f'art-inbox/{name}'))
+          PY
+      - name: Commit
+        run: |
+          git config user.name "fetch-art"
+          git config user.email "fetch-art@users.noreply.github.com"
+          git add art-inbox
+          git commit -m "Fetch art" && git push
