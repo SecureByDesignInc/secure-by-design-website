@@ -213,8 +213,10 @@ for (const [path, name, minTiles, builderSteps] of [['/technical-training', 'tra
         const systems = await page.locator('.th-open .vc-explorer .vc-system-buttons button').count(), chapters = await page.locator('.th-open .vc-explorer .vc-chapters button').count();
         if (systems < 1 || chapters < 1) throw new Error(`the expanded course tile shows ${systems} systems and ${chapters} lessons`);
         await page.locator('.th-open').first().screenshot({ path: `guide-screens/${name}-open-tile.png` });
-        // View all: the whole Build the Network path, 1.1 to 1.12 (renumbered 20 October 2026).
-        await page.locator('.th-view-all', { hasText: 'View all 12' }).click();
+        // The whole Build the Network path, 1.1 to 1.12 (renumbered 20 October 2026), is the Hub's first row since
+        // 1 November 2026; its library page opens from the sidebar.
+        if ((await page.locator('[aria-labelledby="th-shelf-path"] .th-tile').count()) !== 12) throw new Error('the Hub does not open on all 12 build courses');
+        await page.locator('.th-side-list button', { hasText: 'Build the Network' }).first().click();
         await page.locator('#th-group-title').waitFor({ timeout: 10000 });
         const path19 = await page.locator('.th-tile').count();
         if (path19 !== 12) throw new Error(`View all shows ${path19} tiles, expected 12`);

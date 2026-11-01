@@ -27,7 +27,7 @@ import { useReaderProgress } from '../reader-progress';
 import trainingProgress from '../../content/training-progress.json';
 
 type Open = { id: string; place: string } | null;
-type Shelf = { id: string; title: string; entries: CatalogEntry[]; view?: string; viewLabel?: string; meta?: (entry: CatalogEntry) => string; tool?: boolean };
+type Shelf = { id: string; title: string; entries: CatalogEntry[]; view?: string; viewLabel?: string; note?: string; meta?: (entry: CatalogEntry) => string; tool?: boolean };
 
 // The ATO Package Builder Hub page is retired (27 October 2026): the builder is a Tools entry here, with the seven-step
 // panel (hub-tools.tsx); /grc-rmf-training redirects to #ato-package-builder.
@@ -181,19 +181,30 @@ export default function TrainingHub({ library }: { library: Library }) {
   const currentFamily = family(current.entry);
 
   const group = (id: string) => groups.find(item => item.id === id);
+  const countLabel = (item: HubGroup) => {
+    const later = item.entries.filter(comingSoon).length;
+    if (item.id === 'templates-references') return `${item.entries.length} ${item.entries.length === 1 ? 'library' : 'libraries'}`;
+    if (item.id === 'design-references') return `${item.entries.length} design references`;
+    const courses = `${item.entries.length} course${item.entries.length === 1 ? '' : 's'}`;
+    return item.id === 'network-build' ? `${courses} · take them in order` : later ? `${courses} · ${later} coming soon` : item.parent ? `${courses} · in course order` : courses;
+  };
   const shelves: Shelf[] = [];
   if (signedIn && inProgress.length) shelves.push({ id: 'continue', title: 'Continue where you left off', entries: inProgress.slice(0, 4), meta: entry => { const progress = progressOf(entry); return `${progress.done} of ${progress.total} ${isRmf(entry) ? 'modules' : 'lessons'} complete`; } });
-  shelves.push({ id: 'recent', title: 'Recently updated', entries: getRecentlyUpdated(library, 4), meta: entry => `Updated ${entry.training.updated}` });
+  // Owner direction, 1 November 2026: the Hub opens on Build the Network, not the Tools. The whole build path, every
+  // course in order with its coming-soon tiles in place, is the first row (after a signed-in learner's own courses in
+  // progress); the Tools and the seven RMF steps follow it (toolsAfter).
   const build = group('network-build');
-  if (build) shelves.push({ id: 'path', title: 'The network build, in order', entries: build.entries.slice(0, 4), view: build.id, viewLabel: `View all ${build.entries.length}` });
+  if (build) shelves.push({ id: 'path', title: build.title, entries: build.entries, note: countLabel(build) });
+  const toolsAfter = build ? 'path' : 'recent';
+  shelves.push({ id: 'recent', title: 'Recently updated', entries: getRecentlyUpdated(library, 4), meta: entry => `Updated ${entry.training.updated}` });
   const logging = group('logging');
   if (logging) shelves.push({ id: 'logging', title: logging.title, entries: logging.entries, view: logging.id, viewLabel: 'View all' });
   const authorize = [...(group('network-authorization')?.entries ?? []), ...(group('templates-references')?.entries ?? [])];
   if (authorize.length) shelves.push({ id: 'authorize', title: 'Authorize the network', entries: authorize, view: 'network-authorization', viewLabel: 'View all', tool: true });
   const designs = group('design-references');
   if (designs?.entries.length) shelves.push({ id: 'design', title: designs.title, entries: designs.entries.slice(0, 4), view: designs.id, viewLabel: `View all ${designs.entries.length}` });
-  const soon = entries.filter(comingSoon);
-  if (soon.length) shelves.push({ id: 'soon', title: 'Coming soon', entries: soon });
+  // The coming-soon courses (1.9 and 1.10) sit in their place in the Build the Network row, so there is no separate
+  // Coming soon row (1 November 2026).
 
   const searching = query.trim().length > 0;
   const results = searching ? filterEpisodes(entries, query, '') : [];
@@ -219,13 +230,6 @@ export default function TrainingHub({ library }: { library: Library }) {
       <span className="th-tool-go">Open the builder <ArrowRight size={14} aria-hidden="true" /></span>
     </Link>
   );
-  const countLabel = (item: HubGroup) => {
-    const later = item.entries.filter(comingSoon).length;
-    if (item.id === 'templates-references') return `${item.entries.length} ${item.entries.length === 1 ? 'library' : 'libraries'}`;
-    if (item.id === 'design-references') return `${item.entries.length} design references`;
-    const courses = `${item.entries.length} course${item.entries.length === 1 ? '' : 's'}`;
-    return item.id === 'network-build' ? `${courses} · take them in order` : later ? `${courses} · ${later} coming soon` : item.parent ? `${courses} · in course order` : courses;
-  };
   const numberOf = (entry?: CatalogEntry) => entry && 'number' in entry ? entry.number : '';
   const kickerFor = (item: HubGroup) => item.parent ? `${group(item.parent)?.title ?? ''} · Topic` : item.id === 'templates-references' || item.id === 'design-references' ? 'Reference' : `Learning path · ${item.entries.length > 1 ? `Courses ${numberOf(item.entries[0])}–${numberOf(item.entries[item.entries.length - 1])}` : `Course ${numberOf(item.entries[0])}`}`;
 
@@ -295,7 +299,8 @@ export default function TrainingHub({ library }: { library: Library }) {
             </div>
           </section> : <>
             {/* Owner direction, 27 October 2026 (the calmer Training Hub): the featured course shows only to a signed-in
-                learner with a course in progress; everyone gets the Tools and the seven RMF steps. */}
+                learner with a course in progress; everyone gets the Tools and the seven RMF steps. Since 1 November 2026
+                the Hub opens on the Build the Network row, and the Tools and the steps sit beneath it. */}
             {upNext && <>
             <section className={`th-feature th-art-${currentFamily}`} aria-roledescription="carousel" aria-label="Featured courses">
               <div className="th-feature-body" aria-live="polite">
@@ -330,19 +335,24 @@ export default function TrainingHub({ library }: { library: Library }) {
             </section>
             {expanded(current.entry, 'featured')}
             </>}
-            <HubTools />
-            <RmfStepsPanel library={library} />
 
-            {shelves.map(shelf => <section className="th-shelf" key={shelf.id} aria-labelledby={`th-shelf-${shelf.id}`}>
-              <div className="th-shelf-head">
-                <h2 id={`th-shelf-${shelf.id}`} className="th-shelf-title">{shelf.title}</h2>
-                {shelf.view && <button type="button" className="th-view-all" onClick={() => go(shelf.view!)}>{shelf.viewLabel}<ArrowRight size={14} aria-hidden="true" /></button>}
-              </div>
-              <div className="th-grid">
-                {tiles(shelf.entries, shelf.id, shelf.meta)}
-                {shelf.tool && toolCard}
-              </div>
-            </section>)}
+            {shelves.map(shelf => <Fragment key={shelf.id}>
+              <section className="th-shelf" aria-labelledby={`th-shelf-${shelf.id}`}>
+                <div className="th-shelf-head">
+                  <h2 id={`th-shelf-${shelf.id}`} className="th-shelf-title">{shelf.title}</h2>
+                  {shelf.view && <button type="button" className="th-view-all" onClick={() => go(shelf.view!)}>{shelf.viewLabel}<ArrowRight size={14} aria-hidden="true" /></button>}
+                  {shelf.note && <span className="th-shelf-note">{shelf.note}</span>}
+                </div>
+                <div className="th-grid">
+                  {tiles(shelf.entries, shelf.id, shelf.meta)}
+                  {shelf.tool && toolCard}
+                </div>
+              </section>
+              {shelf.id === toolsAfter && <>
+                <HubTools />
+                <RmfStepsPanel library={library} />
+              </>}
+            </Fragment>)}
           </>}
 
           <section className="th-mobile-tools" aria-label="Tools">

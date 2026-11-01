@@ -252,6 +252,7 @@
   font-weight: 600;
 }
 .th-page .th-view-all:hover { color: #ffffff; }
+.th-shelf-note { color: #a9bfce; font: 500 12px/1.4 var(--font-geist-mono), monospace; text-align: right; } /* the Build the Network row's count (1 November 2026) */
 .th-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -461,6 +462,7 @@
 
 /* Tools and the seven RMF steps (owner direction, 27 October 2026): the ATO Package Builder lives in the Training Hub. */
 .th-tools { margin-top: 24px; scroll-margin-top: 20px; }
+section.th-tools { margin-top: 34px; } /* beneath the Build the Network row (1 November 2026), spaced like the rows */
 .th-tools-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; margin-top: 14px; }
 .th-tools-card { display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid #1f4157; border-radius: 20px; background: #0b1d2c; }
 .th-tools-builder { background: radial-gradient(ellipse at 85% 10%, #1c5371 0%, transparent 55%), linear-gradient(130deg, #0b1a2b, #0b2f49); }
