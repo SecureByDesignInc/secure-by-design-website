@@ -1,12 +1,10 @@
-# Fetches generated artwork from public URLs into this branch (the sandbox that builds the site can't reach the
-# art host directly). Run by hand on this branch only; not merged to main.
+# Fetches generated artwork listed in art-inbox/manifest.json into this branch (the sandbox that builds the site can't
+# reach the art host directly). Runs on pushes to this branch only; never merged to main.
 name: Fetch art
 on:
-  workflow_dispatch:
-    inputs:
-      urls:
-        description: JSON list of [filename, url] pairs
-        required: true
+  push:
+    branches: [range-art-inbox]
+    paths: [art-inbox/manifest.json]
 permissions:
   contents: write
 jobs:
@@ -15,14 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download
-        env:
-          URLS: ${{ inputs.urls }}
         run: |
           set -euo pipefail
-          mkdir -p art-inbox
           python3 - <<'PY'
           import json, os, subprocess
-          for name, url in json.loads(os.environ['URLS']):
+          for name, url in json.load(open('art-inbox/manifest.json')):
               assert '/' not in name and '..' not in name
               subprocess.run(['curl','-fsSL','-o',f'art-inbox/{name}',url], check=True)
               print(name, os.path.getsize(f'art-inbox/{name}'))
