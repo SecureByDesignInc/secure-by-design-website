@@ -49,7 +49,12 @@ test('visitors get the catalog and a battle of seven questions without answers, 
  assert.equal(timedOut.correct,false);
  await ok(call(env,null,'POST','/answer',{id:'nope',choice:'A'}),400);
  // Topics (31 October 2026): listed in the catalog, and a battle can be drawn from one.
- assert.deepEqual(catalog.topics.map(t=>t.name),['Identity','Network','Trust','Visibility','Endpoint','Authorization']);
+ // 1 November 2026: no Network questions in the battle.
+ assert.deepEqual(catalog.topics.map(t=>t.name),['Identity','Trust','Visibility','Endpoint','Authorization']);
+ await ok(call(env,null,'GET','/battle?topic=Network'),400);
+ for(let i=0;i<20;i++)assert.ok((await ok(call(env,null,'GET','/battle'))).questions.every(q=>q.topic!=='Network'));
+ const network=questions.find(q=>q.system==='l3-router');
+ await ok(call(env,null,'POST','/answer',{id:network.id,choice:network.answer}),400);
  for(const t of catalog.topics){
   assert.ok(t.questions>=7,t.name);
   const one=await ok(call(env,null,'GET','/battle?topic='+encodeURIComponent(t.name)));
