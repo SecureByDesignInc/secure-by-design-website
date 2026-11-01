@@ -338,3 +338,10 @@
 @keyframes st-victory { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-9%) scale(1.04); } }
 @keyframes st-command { 0% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3%); } 100% { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .rs-sprite.rs-still { animation: none !important; } }
+
+/* The fighter's face in the HUD and on the answer marks: the top of its still, cropped round. */
+.bt-face { display: block; width: 100%; height: 100%; border-radius: 50%; background-size: 230% auto; background-position: 50% 4%; background-repeat: no-repeat; }
+.bt-face[data-set="ttl_zero"] { background-image: url("/range-app/sprites/ttl_zero/still.webp"); background-size: 240% auto; }
+.bt-face[data-set="root_ca"] { background-image: url("/range-app/sprites/root_ca/still.webp"); background-size: 300% auto; background-position: 50% 5%; }
+.bt-face[data-set="signoff"] { background-image: url("/range-app/sprites/signoff/still.webp"); background-size: 260% auto; background-position: 38% 5%; }
+.bt-mark .bt-face { width: 22px; height: 22px; }

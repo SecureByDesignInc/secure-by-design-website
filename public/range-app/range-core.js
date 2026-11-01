@@ -33,8 +33,16 @@ function guestOperator() {
  try { o = JSON.parse(localStorage.getItem(GUEST_KEY) || 'null'); } catch { /* storage may be off */ }
  if (!(o && BASES[o.base] && GLOWS[o.glow] && o.glow !== 'magenta' && MARKS[o.mark])) o = { base: pickOne(Object.keys(BASES)), glow: pickOne(['cyan', 'ice', 'blue']), mark: pickOne(Object.keys(MARKS)) };
  if (typeof o.callsign !== 'string' || !/^[a-z]+_[a-z]+\d{2,4}$/.test(o.callsign)) o.callsign = `${pickOne(CALL_A)}_${pickOne(CALL_B)}${Math.floor(Math.random() * 90) + 10}`;
+ if (!SPRITES[o.sprite]) o.sprite = pickOne(Object.keys(SPRITES));
  try { localStorage.setItem(GUEST_KEY, JSON.stringify(o)); } catch { /* storage may be off */ }
  return o;
+}
+// Only the drawn fighters are published (owner direction, 31 October 2026): every operator plays as one of them.
+// A signed-in operator's fighter follows from its callsign, so it is the same on every device without a database change.
+function withFighter(op) {
+ if (SPRITES[op.sprite]) return op;
+ const names = Object.keys(SPRITES); let h = 0; for (const ch of String(op.callsign || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+ return { ...op, sprite: names[h % names.length] };
 }
 
 export function mountRange(root, { standalone = false, taster = false } = {}) {
@@ -71,7 +79,8 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   try { qs = (await api('/battle' + (S.topic ? '?topic=' + encodeURIComponent(S.topic) : ''))).questions; } catch (e) { S.error = e.message; renderError(); return; }
   if (taster) qs = qs.slice(0, 1);
   S.error = '';
-  const r = pickOne(S.catalog.residents);
+  const others = S.catalog.residents.filter(x => x.id !== S.op.sprite);
+  const r = pickOne(others.length ? others : S.catalog.residents);
   const opp = { callsign: r.callsign, operator: { base: r.base, glow: r.glow, mark: r.mark, sprite: SPRITES[r.id] ? r.id : null } };
   const b = S.b = { opp, qs, round: 0, hp: { a: HP, b: HP }, log: [], over: null, phase: 'intro', cur: null };
   renderBattle();
@@ -82,10 +91,12 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
  }
  // The topics the questions come from (owner's request, 31 October 2026): All topics, or one, for this and later rounds.
  const topicsBar = () => `<div class="bt-topics" role="group" aria-label="Question topic">${[['', 'All topics'], ...(S.catalog.topics || []).map(t => [t.name, t.name])].map(([v, l]) => `<button type="button" class="cr-chip bt-topic-pick" data-act="topic" data-v="${esc(v)}" aria-pressed="${S.topic === v}">${v ? `<span class="cr-dot" style="background:${typeColor(v)}"></span>` : ''}${esc(l)}</button>`).join('')}</div>`;
+ // The fighter's head, cut from its still, for the HUD and the answer marks.
+ const face = op => { const set = spriteSetFor(op); return set ? `<span class="bt-face" data-set="${set}" aria-hidden="true"></span>` : bust(op, { size: 40 }); };
  const fighterArt = who => { const op = who === 'a' ? S.op : S.b.opp.operator, set = spriteSetFor(op); return set ? spriteHtml(set) : figure(op, { height: 150, threat: who === 'b' }); };
  function hudSide(who) {
   const name = who === 'a' ? S.op.callsign : S.b.opp.callsign, op = who === 'a' ? S.op : S.b.opp.operator;
-  return `<div class="bt-side ${who}"><span class="bt-ava">${bust(op, { size: 40, threat: who === 'b' })}</span><b class="bt-name">${esc(name)}</b><span class="bt-sub">${who === 'a' ? 'You' : 'Computer'}</span><div class="bt-hp"><s id="bt-ghost-${who}"></s><i id="bt-hp-${who}"></i></div><span class="bt-hpnum" id="bt-hpn-${who}">${HP} HP</span></div>`;
+  return `<div class="bt-side ${who}"><span class="bt-ava">${face(op)}</span><b class="bt-name">${esc(name)}</b><span class="bt-sub">${who === 'a' ? 'You' : 'Computer'}</span><div class="bt-hp"><s id="bt-ghost-${who}"></s><i id="bt-hp-${who}"></i></div><span class="bt-hpnum" id="bt-hpn-${who}">${HP} HP</span></div>`;
  }
  function renderBattle() {
   const n = S.b.qs.length;
@@ -183,8 +194,8 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
     const k = o.dataset.choice;
     o.classList.toggle('right', k === check.answer); o.classList.toggle('wrong', k === choice && k !== check.answer);
     const marks = [];
-    if (k === choice) marks.push(`<span class="bt-mark a" title="You">${bust(S.op, { size: 22 })}</span>`);
-    if (k === botChoice) marks.push(`<span class="bt-mark b" title="${esc(b.opp.callsign)}">${bust(b.opp.operator, { size: 22, threat: true })}</span>`);
+    if (k === choice) marks.push(`<span class="bt-mark a" title="You">${face(S.op)}</span>`);
+    if (k === botChoice) marks.push(`<span class="bt-mark b" title="${esc(b.opp.callsign)}">${face(b.opp.operator)}</span>`);
     if (marks.length) o.insertAdjacentHTML('beforeend', `<span class="bt-marks">${marks.join('')}</span>`);
    });
    const you = choice ? (correct ? `<b class="ok">Right${ms <= FAST ? ', under 5 s' : ''}.</b>` : '<b class="bad">Wrong.</b>') : '<b class="bad">Out of time.</b>';
@@ -328,7 +339,7 @@ export function mountRange(root, { standalone = false, taster = false } = {}) {
   try {
    const [catalog, me] = await Promise.all([api('/catalog'), api('/me').catch(() => ({ reader: false }))]);
    S.catalog = catalog; S.me = me;
-   S.op = me.reader && me.operator ? me.operator : guestOperator();
+   S.op = withFighter(me.reader && me.operator ? me.operator : guestOperator());
    start(true);
   } catch (e) {
    shell(`<div class="cr-container"><p class="cr-note" role="alert" style="padding:24px 0">${esc(e.message)}</p></div>`);
