@@ -43,7 +43,12 @@ test('the page is the battle alone, a copy of one core, and never bundles answer
  assert.match(app,/localStorage/);assert.doesNotMatch(app,/sessionStorage/);
  // BASES and MARKS are maps of drawing functions, not lists (a returning visitor's saved operator is checked against them).
  assert.doesNotMatch(app,/(BASES|MARKS)\.includes|pickOne\((BASES|MARKS)\)/);
- for(const sheet of ['idle','attack','hit','down','victory','command'])assert.ok(fs.existsSync(`public/range-app/sprites/ttl_zero/${sheet}.webp`),sheet);
+ // 31 October 2026: one anime still per resident, moved by CSS; no sprite sheets.
+ for(const id of ['ttl_zero','root_ca','signoff'])assert.ok(fs.existsSync(`public/range-app/sprites/${id}/still.webp`),id);
+ assert.ok(!fs.existsSync('public/range-app/sprites/ttl_zero/idle.webp'));
+ assert.match(read('app/cyber-range/avatars.js'),/ttl_zero: \{ still: true/);
+ // Only the drawn fighters are published: the player plays as one of them too, and the computer picks a different one.
+ assert.match(app,/function withFighter/);assert.match(app,/x\.id !== S\.op\.sprite/);assert.match(app,/class="bt-face"/);assert.match(read('app/cyber-range/battle.css'),/@keyframes st-attack/);
  assert.match(read('server/index.js'),/\/api\\\/range/);
  assert.match(read('server/account-deletion.js'),/range_operators/);
  assert.match(read('scripts/prepare-content.mjs'),/prepare-range\.mjs/);
