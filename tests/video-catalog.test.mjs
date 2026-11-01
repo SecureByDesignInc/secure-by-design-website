@@ -472,7 +472,11 @@ test('the Training Hub groups every course, in course order, under its learning 
 
 test('the Training Hub holds the ATO Package Builder and the seven RMF steps', () => {
   const hub = readFileSync(new URL('../app/videos/training-hub.tsx', import.meta.url), 'utf8');
-  for (const piece of ['Continue where you left off', 'Recently updated', 'The network build, in order', 'Authorize the network', 'Coming soon', 'data-hub-entries', 'data-hub-tile', '<EpisodeTile', 'Saved materials', 'Create a free Community account']) assert.ok(hub.includes(piece), piece);
+  for (const piece of ['Continue where you left off', 'Recently updated', "title: build.title", 'Authorize the network', 'Coming soon', 'data-hub-entries', 'data-hub-tile', '<EpisodeTile', 'Saved materials', 'Create a free Community account']) assert.ok(hub.includes(piece), piece);
+  // Owner direction, 1 November 2026: the Hub opens on the Build the Network row; the Tools and the seven RMF steps follow it.
+  assert.ok(hub.indexOf("id: 'path'") < hub.indexOf("id: 'recent'"), 'the Build the Network row comes before Recently updated');
+  assert.match(hub, /const toolsAfter = build \? 'path' : 'recent'/);
+  assert.match(hub, /shelf\.id === toolsAfter && <>\s*<HubTools \/>\s*<RmfStepsPanel library=\{library\} \/>/);
   assert.match(readFileSync(new URL('../app/technical-training/page.tsx', import.meta.url), 'utf8'), /title: 'Training Hub'/);
   // Owner direction, 27 October 2026: the ATO Package Builder Hub page is retired into the Training Hub, as its Tools and
   // the seven RMF steps; the statement from 19 October 2026 closes the steps panel.
