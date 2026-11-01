@@ -13,7 +13,6 @@ const paths = [
   '/career-explorer/roles',
   '/resources',
   '/resource-options',
-  '/cyber-range',
   '/how-to',
   '/guides-and-labs',
   '/rmf-series',

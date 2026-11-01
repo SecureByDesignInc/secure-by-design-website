@@ -1,7 +1,5 @@
 'use client';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { ArrowRight, Network } from 'lucide-react';
-import { GradientButton } from '../components/saleshook/gradient-button';
 import HomeRangeTaster from './home-range-taster';
 import HomeCommunityPanel from './home-community-panel';
 
@@ -45,14 +43,18 @@ export default function TemplateHome() {
       connection?.removeEventListener?.('change', update);
     };
   }, []);
+  // One blue wave behind the whole homepage, the hero, the Cyber Range taster and the community panel (owner's requests,
+  // 31 October 2026), fading out only at the foot of the page. The hero has no buttons since 31 October 2026.
   return <main id="main" className="sbd-home">
-    <section className={hero === 'static' ? 'sbd-hero sbd-hero-static' : 'sbd-hero'} aria-labelledby="sbd-hero-title">{hero === 'shader' && <Suspense fallback={null}><HeroShaderGradient/></Suspense>}<div className="sbd-hero-content container">
+    <div className={hero === 'static' ? 'sbd-hero-stage sbd-hero-static' : 'sbd-hero-stage'}>
+    <div className="sbd-wave" aria-hidden="true">{hero === 'shader' && <Suspense fallback={null}><HeroShaderGradient/></Suspense>}</div>
+    <section className="sbd-hero" aria-labelledby="sbd-hero-title"><div className="sbd-hero-content container">
       <h1 id="sbd-hero-title">Cybersecurity starts<br/>with <span>curiosity.</span></h1>
       <p>Cybersecurity isn’t some exclusive club for geniuses. It really just takes a healthy dose of curiosity and a drive to figure out how things work under the hood.</p>
-      <div className="sbd-hero-actions"><GradientButton asChild><a href="/technical-training">Find your starting point <ArrowRight size={18}/></a></GradientButton><a className="sbd-secondary-button" href="/inside-the-network"><Network size={18}/> Step inside the network</a></div>
       <small>For the first question. The next challenge. And everything in between.</small>
     </div></section>
     <HomeRangeTaster/>
     <HomeCommunityPanel/>
+    </div>
   </main>;
 }

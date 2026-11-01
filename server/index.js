@@ -85,6 +85,8 @@ function retiredCourse(url){
  if(path==='/grc-rmf-training'||path==='/grc-rmf-training/')return new URL('/technical-training#ato-package-builder',url).toString();
  // The Live Threat Map was removed (owner's request, 31 October 2026); old links land on the homepage.
  if(path==='/threat-map'||path==='/threat-map/')return new URL('/',url).toString();
+ // The Cyber Range section is removed for now (owner's request, 31 October 2026); its one-round taster stays on the homepage.
+ if(path==='/cyber-range'||path==='/cyber-range/')return new URL('/',url).toString();
  const foundation=/^\/training\/(dc01-dc02|dns-configuration|domain-time|stig-scap|harden-baseline|two-tier-pki|dhcp|tiered-admin)(?:\/(.*))?$/.exec(path);
  if(foundation){
   const part={'dc01-dc02':'dc','dns-configuration':'dns','domain-time':'time','stig-scap':'stig','harden-baseline':'gpo','two-tier-pki':'pki',dhcp:'dhcp','tiered-admin':'tier'}[foundation[1]];
